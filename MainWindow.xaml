@@ -93,13 +93,25 @@
                                   Click="ShowReport_Click"/>
                 </StackPanel>
 
-                <Button Grid.Column="2" Content="Legend">
-                    <Button.Flyout>
-                        <Flyout>
-                            <views:LegendView/>
-                        </Flyout>
-                    </Button.Flyout>
-                </Button>
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6">
+                    <DropDownButton Content="Export">
+                        <DropDownButton.Flyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem Text="PDF — full reading…" Click="ExportPdf_Click"/>
+                                <MenuFlyoutItem Text="PNG — chart image…" Click="ExportPng_Click"/>
+                                <MenuFlyoutItem Text="JSON — chart data…" Click="ExportJson_Click"/>
+                                <MenuFlyoutItem Text="XML — chart data…" Click="ExportXml_Click"/>
+                            </MenuFlyout>
+                        </DropDownButton.Flyout>
+                    </DropDownButton>
+                    <Button Content="Legend">
+                        <Button.Flyout>
+                            <Flyout>
+                                <views:LegendView/>
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
+                </StackPanel>
             </Grid>
 
             <!-- Body: chart or report -->

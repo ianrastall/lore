@@ -27,6 +27,8 @@
                             PlaceholderText="Start typing a city…"
                             TextChanged="CityBox_TextChanged"
                             SuggestionChosen="CityBox_SuggestionChosen"
+                            DisplayMemberPath="Display"
+                            TextMemberPath="Display"
                             QueryIcon="Find"/>
 
             <TextBox x:Name="PlaceBox" Header="Birthplace label"
