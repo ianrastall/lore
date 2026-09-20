@@ -15,8 +15,12 @@ public sealed partial class AddChartDialog : ContentDialog
         _cities = cities;
         InitializeComponent();
 
+        // DateTimeOffset(dateTime, offset) throws if dateTime.Kind == Local and the
+        // offset doesn't match the machine's local offset. DateTime.Today is Local, so
+        // force Unspecified (as the literal dates below already are) before pairing with
+        // a zero offset. This crash was aborting the whole Add-Chart dialog.
         DateField.MinYear = new DateTimeOffset(new DateTime(1000, 1, 1), TimeSpan.Zero);
-        DateField.MaxYear = new DateTimeOffset(DateTime.Today, TimeSpan.Zero);
+        DateField.MaxYear = new DateTimeOffset(DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Unspecified), TimeSpan.Zero);
         DateField.SelectedDate = new DateTimeOffset(new DateTime(1990, 1, 1), TimeSpan.Zero);
         TimeField.SelectedTime = new TimeSpan(12, 0, 0);
         UtcBox.Value = 0;

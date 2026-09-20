@@ -66,15 +66,21 @@ public sealed partial class MainViewModel : ObservableObject
         StatusMessage = "Loading data…";
         try
         {
+            Diagnostics.Log($"Init: dataPath={dataPath} exists={File.Exists(dataPath)}; " +
+                            $"citiesPath={citiesPath} exists={File.Exists(citiesPath)}");
             await _celebrities.LoadAsync(dataPath);
             await _userCharts.LoadAsync();
             await Cities.LoadAsync(citiesPath);
             RebuildPool();
             StatusMessage = $"{_all.Count} people loaded.";
+            Diagnostics.Log($"Init OK: celebrities={_celebrities.All.Count}, " +
+                            $"userCharts={_userCharts.Charts.Count}, categories={Categories.Count}, " +
+                            $"displayed={DisplayedCelebrities.Count}");
         }
         catch (Exception ex)
         {
-            StatusMessage = $"Error: {ex.Message}";
+            StatusMessage = $"Error loading data: {ex.Message}";
+            Diagnostics.Log($"Init FAILED: {ex}");
         }
         finally
         {

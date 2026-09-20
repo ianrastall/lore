@@ -18,15 +18,23 @@ public sealed partial class MainWindow : Window
         if (AppWindow.Presenter is OverlappedPresenter presenter)
             presenter.Maximize();
 
+        // One-time data load. Window.Activated proved unreliable here (it never fired,
+        // so the app started with empty lists), so drive it from the root element's
+        // Loaded event, with Activated kept as a fallback. The guard runs it once.
         bool initialized = false;
-        Activated += async (_, _) =>
+        async void InitOnce(string via)
         {
             if (initialized) return;
             initialized = true;
+            Services.Diagnostics.Log($"InitOnce via {via}");
             string dataPath   = Path.Combine(AppContext.BaseDirectory, "Data", "celebrities.json");
             string citiesPath = Path.Combine(AppContext.BaseDirectory, "Data", "cities.json");
             await ViewModel.InitializeAsync(dataPath, citiesPath);
-        };
+        }
+
+        if (Content is FrameworkElement root)
+            root.Loaded += (_, _) => InitOnce("Loaded");
+        Activated += (_, _) => InitOnce("Activated");
     }
 
     private async void AddChart_Click(object sender, RoutedEventArgs e)
