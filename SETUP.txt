@@ -1,0 +1,132 @@
+LORE — NATAL CHARTS  ·  Setup
+==========================================================
+
+PREREQUISITES
+──────────────────────────────────────────
+  • .NET 10 SDK
+  • Windows App SDK 1.7+  (via NuGet, fetched automatically on restore)
+  • Visual Studio 2019/2022 Build Tools with "C++ Desktop" workload
+    (needed once to compile sweph.dll — the Swiss Ephemeris C library)
+
+STEP 1 — COMPILE SWEPH.DLL  (one-time)
+──────────────────────────────────────────
+  The Swiss Ephemeris source and all ephemeris data files are bundled in
+  Data\swisseph-2.10.3bfinal\.  Run the build script from the project root:
+
+      .\Build-SwephDll.ps1
+
+  This produces  Native\sweph.dll  (~600 KB).  If the script can't find
+  Visual Studio, install the "Build Tools for Visual Studio 2022" package
+  (free) from https://visualstudio.microsoft.com/downloads/ and re-run.
+
+STEP 2 — BUILD THE APP
+──────────────────────────────────────────
+  From the project root:
+
+      dotnet restore
+      dotnet build -c Release -r win-x64
+
+  Or open Lore.sln in Visual Studio 2022 (17.11+).
+
+  The .csproj automatically copies sweph.dll and all needed .se1 ephemeris
+  files to the build output — no manual file placement required.
+
+STEP 3 — PORTABLE BUILD (to hand to someone else)
+──────────────────────────────────────────
+  Produce a self-contained folder that runs with no install, no .NET, and no
+  VC++ redistributable required on the target machine:
+
+      .\scripts\build-portable.ps1
+
+  Output: artifacts\Lore-0.2-portable\  — zip it and send it; the recipient
+  just runs Lore.exe.
+
+STEP 4 — INSTALLER  (double-click install, Start-menu entry)
+──────────────────────────────────────────
+  Produces a single LoreSetup-<version>.exe that installs Lore per-user (no
+  admin prompt), adds a Start-menu shortcut, and registers a clean uninstall
+  entry in Add/Remove Programs.
+
+  One-time: install the Inno Setup compiler —
+      winget install --id JRSoftware.InnoSetup -e
+
+  Then, from the project root:
+      .\scripts\build-installer.ps1
+
+  Output: artifacts\LoreSetup-<version>.exe  — attach it to a GitHub Release;
+  the recipient downloads and double-clicks. (Unsigned, so Windows SmartScreen
+  shows "Windows protected your PC" the first time — click "More info" →
+  "Run anyway". No certificate or extra runtime needed.)
+
+  The installer script wraps the self-contained build from Step 3, so nothing
+  else must be installed on the target machine.
+
+  To regenerate the app icon (indigo/gold "L"), run:
+
+      .\scripts\build-icons.ps1     (requires ImageMagick)
+
+WHAT'S NEW IN 0.2
+──────────────────────────────────────────
+  • Add Chart button — enter any name/date/time/place; a city search autofills
+    coordinates and UTC offset. Saved charts persist under a "My Charts"
+    category to  %LOCALAPPDATA%\Lore\mycharts.json.
+  • ~220 bundled figures across 13 categories, including Philosophers.
+  • Starts maximized.
+  • Legend button explains every glyph, aspect colour, and chart angle.
+  • Report view — a generated natural-language reading of the chart.
+  • Ships as a portable, self-contained build (see Step 3).
+
+FOLDER LAYOUT (after build)
+──────────────────────────────────────────
+  Lore\
+  ├── Data\
+  │   ├── celebrities.json                 ← 110 bundled entries
+  │   └── swisseph-2.10.3bfinal\           ← Swiss Ephemeris source + data
+  │       └── swisseph-2.10.3bfinal\
+  │           ├── *.c                      ← compiled by Build-SwephDll.ps1
+  │           ├── ephe\
+  │           │   ├── sepl_12.se1          ← planets 1200–1800 CE
+  │           │   ├── sepl_18.se1          ← planets 1800–2400 CE
+  │           │   ├── semo_12.se1          ← moon 1200–1800 CE
+  │           │   ├── semo_18.se1          ← moon 1800–2400 CE
+  │           │   ├── seas_12.se1          ← Chiron 1200–1800 CE
+  │           │   └── seas_18.se1          ← Chiron 1800–2400 CE
+  │           └── seleapsec.txt
+  └── Native\
+      └── sweph.dll                        ← produced by Build-SwephDll.ps1
+
+CELEBRITY DATA
+──────────────────────────────────────────
+  celebrities.json contains ~110 entries across 12 categories.
+  Each entry includes:
+      birthDate          ISO date, e.g. "1935-01-08"
+      birthTime          "HH:mm" local time, or null
+      birthTimeKnown     true/false
+      latitude/longitude birth location (decimal degrees)
+      utcOffsetHours     standard UTC offset (not DST-adjusted)
+      bio                one-sentence description
+
+  birthTimeKnown=false → chart uses 12:00 noon; ASC/house cusps
+  will be unreliable for those charts.
+
+HOUSE SYSTEM
+──────────────────────────────────────────
+  Placidus is the default.  Change the HouseSystem constant in
+  Services\ChartService.cs to any letter Swiss Ephemeris accepts:
+      'P'  Placidus   (default)
+      'W'  Whole Sign
+      'K'  Koch
+      'E'  Equal
+
+TROUBLESHOOTING
+──────────────────────────────────────────
+  "DLL not found" at runtime
+      → Run Build-SwephDll.ps1 first; verify Native\sweph.dll exists.
+
+  "Ephemeris file not found" / SE_ERR in chart
+      → Rebuild the project so the .se1 files are copied to the output
+        Assets\Ephemeris\ folder (the .csproj handles this automatically).
+
+  Calculation error for pre-1800 birthdays
+      → The _12 ephemeris files are required; they are included in the
+        Data folder and copied automatically. Check the build output.

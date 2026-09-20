@@ -1,0 +1,33 @@
+# ---- .NET build output --------------------------------------------------
+bin/
+obj/
+artifacts/
+*.user
+.vs/
+
+# ---- Generated native library (built by Build-SwephDll.ps1) -------------
+Native/sweph.dll
+
+# ---- Large re-downloadable raw data (NOT redistributed in the repo) ------
+# Full Swiss Ephemeris data set (452 MB) -- download from astro.com if needed.
+/Data/ephe/
+# simplemaps raw world-cities download (5.3 MB CSV + xlsx) -- source for the
+# city database; the processed/trimmed data is what gets committed.
+/Data/simplemaps_worldcities_basicv1.91.4/
+
+# ---- Swiss Ephemeris source distribution ---------------------------------
+# Keep the C source + Makefile + license (needed to build sweph.dll) and the
+# 6 ephemeris files the app actually ships, but drop the bulky extras.
+/Data/swisseph-2.10.3bfinal/swisseph-2.10.3bfinal/windows/
+/Data/swisseph-2.10.3bfinal/swisseph-2.10.3bfinal/setest/
+/Data/swisseph-2.10.3bfinal/swisseph-2.10.3bfinal/doc/
+/Data/swisseph-2.10.3bfinal/swisseph-2.10.3bfinal/contrib/
+/Data/swisseph-2.10.3bfinal/swisseph-2.10.3bfinal/bin/
+# Ignore the swisseph copy of the ephe folder EXCEPT the 6 files we bundle.
+/Data/swisseph-2.10.3bfinal/swisseph-2.10.3bfinal/ephe/*
+!/Data/swisseph-2.10.3bfinal/swisseph-2.10.3bfinal/ephe/sepl_12.se1
+!/Data/swisseph-2.10.3bfinal/swisseph-2.10.3bfinal/ephe/sepl_18.se1
+!/Data/swisseph-2.10.3bfinal/swisseph-2.10.3bfinal/ephe/semo_12.se1
+!/Data/swisseph-2.10.3bfinal/swisseph-2.10.3bfinal/ephe/semo_18.se1
+!/Data/swisseph-2.10.3bfinal/swisseph-2.10.3bfinal/ephe/seas_12.se1
+!/Data/swisseph-2.10.3bfinal/swisseph-2.10.3bfinal/ephe/seas_18.se1

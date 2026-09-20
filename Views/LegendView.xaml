@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="Lore.Views.LegendView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="520">
+        <Grid ColumnDefinitions="Auto,Auto" ColumnSpacing="28" RowSpacing="6" Padding="4" Width="440">
+
+            <!-- Planets -->
+            <StackPanel Grid.Column="0" Grid.Row="0" Spacing="3">
+                <TextBlock Text="Planets &amp; points" FontWeight="SemiBold" Margin="0,0,0,4"/>
+                <TextBlock Text="☉  Sun — identity, vitality"/>
+                <TextBlock Text="☽  Moon — emotions, needs"/>
+                <TextBlock Text="☿  Mercury — mind, speech"/>
+                <TextBlock Text="♀  Venus — love, values"/>
+                <TextBlock Text="♂  Mars — drive, action"/>
+                <TextBlock Text="♃  Jupiter — growth, luck"/>
+                <TextBlock Text="♄  Saturn — discipline, limits"/>
+                <TextBlock Text="♅  Uranus — change, freedom"/>
+                <TextBlock Text="♆  Neptune — dreams, ideals"/>
+                <TextBlock Text="♇  Pluto — power, transformation"/>
+                <TextBlock Text="☊  North Node — life direction"/>
+                <TextBlock Text="⚷  Chiron — wound &amp; healing"/>
+                <TextBlock Text="℞  Retrograde — turned inward"/>
+            </StackPanel>
+
+            <!-- Signs -->
+            <StackPanel Grid.Column="1" Grid.Row="0" Spacing="3">
+                <TextBlock Text="Zodiac signs" FontWeight="SemiBold" Margin="0,0,0,4"/>
+                <TextBlock Text="♈  Aries — Fire"/>
+                <TextBlock Text="♉  Taurus — Earth"/>
+                <TextBlock Text="♊  Gemini — Air"/>
+                <TextBlock Text="♋  Cancer — Water"/>
+                <TextBlock Text="♌  Leo — Fire"/>
+                <TextBlock Text="♍  Virgo — Earth"/>
+                <TextBlock Text="♎  Libra — Air"/>
+                <TextBlock Text="♏  Scorpio — Water"/>
+                <TextBlock Text="♐  Sagittarius — Fire"/>
+                <TextBlock Text="♑  Capricorn — Earth"/>
+                <TextBlock Text="♒  Aquarius — Air"/>
+                <TextBlock Text="♓  Pisces — Water"/>
+            </StackPanel>
+
+            <!-- Aspects -->
+            <StackPanel Grid.Column="0" Grid.Row="1" Spacing="5" Margin="0,14,0,0">
+                <TextBlock Text="Aspects (line colours)" FontWeight="SemiBold" Margin="0,0,0,4"/>
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <Rectangle Width="24" Height="3" VerticalAlignment="Center">
+                        <Rectangle.Fill><SolidColorBrush Color="#DCDCDC"/></Rectangle.Fill>
+                    </Rectangle>
+                    <TextBlock Text="☌  Conjunction — 0°, blends"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <Rectangle Width="24" Height="3" VerticalAlignment="Center">
+                        <Rectangle.Fill><SolidColorBrush Color="#5AA0E6"/></Rectangle.Fill>
+                    </Rectangle>
+                    <TextBlock Text="⚹  Sextile — 60°, easy"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <Rectangle Width="24" Height="3" VerticalAlignment="Center">
+                        <Rectangle.Fill><SolidColorBrush Color="#DC3C3C"/></Rectangle.Fill>
+                    </Rectangle>
+                    <TextBlock Text="□  Square — 90°, tension"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <Rectangle Width="24" Height="3" VerticalAlignment="Center">
+                        <Rectangle.Fill><SolidColorBrush Color="#50C864"/></Rectangle.Fill>
+                    </Rectangle>
+                    <TextBlock Text="△  Trine — 120°, flowing"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <Rectangle Width="24" Height="3" VerticalAlignment="Center">
+                        <Rectangle.Fill><SolidColorBrush Color="#DC8C28"/></Rectangle.Fill>
+                    </Rectangle>
+                    <TextBlock Text="☍  Opposition — 180°, balance"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- Angles -->
+            <StackPanel Grid.Column="1" Grid.Row="1" Spacing="3" Margin="0,14,0,0">
+                <TextBlock Text="Chart angles" FontWeight="SemiBold" Margin="0,0,0,4"/>
+                <TextBlock Text="ASC — Ascendant (left, 9 o'clock)"/>
+                <TextBlock Text="DSC — Descendant (right)"/>
+                <TextBlock Text="MC — Midheaven (career/public)"/>
+                <TextBlock Text="IC — Imum Coeli (home/roots)"/>
+                <TextBlock Text="Gold lines mark the four angles." Opacity="0.7" Margin="0,4,0,0"/>
+                <TextBlock Text="Numbers 1–12 mark the houses." Opacity="0.7"/>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

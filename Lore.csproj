@@ -1,0 +1,113 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <RootNamespace>Lore</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\AppIcon.ico</ApplicationIcon>
+    <Platforms>x64</Platforms>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <UseWinUI>true</UseWinUI>
+    <WindowsPackageType>None</WindowsPackageType>
+    <!-- Bundle the Windows App SDK runtime so the portable build needs no installed runtime.
+         With the SDK-generated entry point (no custom Program.cs) this bootstraps correctly. -->
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>preview</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Configurations>Debug;Release</Configurations>
+    <Version>0.2.0</Version>
+    <AssemblyVersion>0.2.0.0</AssemblyVersion>
+    <FileVersion>0.2.0.0</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Update these via NuGet Package Manager to get the latest compatible versions -->
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.*" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.*" PrivateAssets="all" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />
+    <PackageReference Include="Microsoft.Graphics.Win2D" Version="1.*" />
+  </ItemGroup>
+
+  <!-- Convenience property: root of the bundled Swiss Ephemeris source tree -->
+  <PropertyGroup>
+    <SweRoot>Data\swisseph-2.10.3bfinal\swisseph-2.10.3bfinal</SweRoot>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Data\celebrities.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+
+    <!-- App icon + bundled reference data (cities for custom entry, interpretation corpus) -->
+    <Content Include="Assets\AppIcon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Assets\AppIcon.ico</TargetPath>
+    </Content>
+    <Content Include="Data\cities.json" Condition="Exists('Data\cities.json')">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\interpretations.json" Condition="Exists('Data\interpretations.json')">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+
+    <!-- sweph.dll built by Build-SwephDll.ps1; lives in Native\ but must sit next to
+         the exe (the DLL loader searches the app root, not subfolders) -->
+    <Content Include="Native\sweph.dll" Condition="Exists('Native\sweph.dll')">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>sweph.dll</TargetPath>
+    </Content>
+
+    <!--
+      Ephemeris data files copied from the bundled source tree.
+      Each pair covers a 600-year window:
+        _12  = 1200–1800 CE  (needed for da Vinci, Shakespeare, Newton, Mozart…)
+        _18  = 1800–2400 CE  (needed for nearly everyone else)
+      seleapsec.txt carries leap-second data for UTC↔TT conversion.
+    -->
+    <Content Include="$(SweRoot)\ephe\sepl_12.se1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Assets\Ephemeris\sepl_12.se1</TargetPath>
+    </Content>
+    <Content Include="$(SweRoot)\ephe\sepl_18.se1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Assets\Ephemeris\sepl_18.se1</TargetPath>
+    </Content>
+    <Content Include="$(SweRoot)\ephe\semo_12.se1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Assets\Ephemeris\semo_12.se1</TargetPath>
+    </Content>
+    <Content Include="$(SweRoot)\ephe\semo_18.se1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Assets\Ephemeris\semo_18.se1</TargetPath>
+    </Content>
+    <Content Include="$(SweRoot)\ephe\seas_12.se1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Assets\Ephemeris\seas_12.se1</TargetPath>
+    </Content>
+    <Content Include="$(SweRoot)\ephe\seas_18.se1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Assets\Ephemeris\seas_18.se1</TargetPath>
+    </Content>
+    <Content Include="$(SweRoot)\seleapsec.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Assets\Ephemeris\seleapsec.txt</TargetPath>
+    </Content>
+  </ItemGroup>
+
+  <!-- The unpackaged WinUI build emits these after normal content discovery.
+       Explicitly include them so the self-contained publish layout keeps its resources. -->
+  <Target Name="IncludeWinUIResourcesInPublish" AfterTargets="ComputeFilesToPublish">
+    <ItemGroup>
+      <_WinUIResource Include="$(TargetDir)$(AssemblyName).pri;$(TargetDir)**/*.xbf" />
+      <ResolvedFileToPublish Include="@(_WinUIResource)">
+        <RelativePath>%(_WinUIResource.RecursiveDir)%(_WinUIResource.Filename)%(_WinUIResource.Extension)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
+
+</Project>

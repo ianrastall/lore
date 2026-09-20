@@ -1,0 +1,92 @@
+{
+  "_comment": "Editable interpretation corpus for Lore's natal report. Sign/planet/house names must match the app's enum names. Text is combined generatively by ChartInterpreter.",
+
+  "signTraits": {
+    "Aries": "bold, direct, and eager to lead",
+    "Taurus": "steady, sensual, and devoted to comfort and security",
+    "Gemini": "curious, talkative, and mentally restless",
+    "Cancer": "nurturing, sensitive, and deeply loyal",
+    "Leo": "warm, proud, and naturally expressive",
+    "Virgo": "precise, helpful, and quietly discerning",
+    "Libra": "charming, fair-minded, and drawn to harmony",
+    "Scorpio": "intense, perceptive, and emotionally powerful",
+    "Sagittarius": "adventurous, optimistic, and truth-seeking",
+    "Capricorn": "disciplined, ambitious, and resilient",
+    "Aquarius": "original, independent, and future-minded",
+    "Pisces": "imaginative, compassionate, and dreamy"
+  },
+
+  "roleFraming": {
+    "Sun": "At the core, {name} is {trait}.",
+    "Moon": "Emotionally, {name} tends to be {trait}, and needs security that honours that nature.",
+    "Rising": "To the world, {name} first comes across as {trait}."
+  },
+
+  "planetThemes": {
+    "Sun": "core identity and vitality",
+    "Moon": "emotions and inner needs",
+    "Mercury": "thinking and communication",
+    "Venus": "love, beauty, and values",
+    "Mars": "drive, desire, and action",
+    "Jupiter": "growth, luck, and meaning",
+    "Saturn": "discipline, limits, and life lessons",
+    "Uranus": "independence and the urge to break convention",
+    "Neptune": "dreams, imagination, and ideals",
+    "Pluto": "transformation, depth, and power",
+    "North Node": "the evolving direction of this life",
+    "Chiron": "a core wound and the capacity to heal it"
+  },
+
+  "signStyles": {
+    "Aries": "with bold, pioneering drive",
+    "Taurus": "with steady, grounded patience",
+    "Gemini": "with curious, quick-witted versatility",
+    "Cancer": "with protective, feeling sensitivity",
+    "Leo": "with warm, expressive confidence",
+    "Virgo": "with precise, practical care",
+    "Libra": "with gracious, relationship-minded balance",
+    "Scorpio": "with intense, probing depth",
+    "Sagittarius": "with expansive, freedom-seeking optimism",
+    "Capricorn": "with disciplined, ambitious resolve",
+    "Aquarius": "with inventive, independent originality",
+    "Pisces": "with imaginative, compassionate softness"
+  },
+
+  "houseAreas": {
+    "1": "self-image and how they meet the world",
+    "2": "resources, money, and sense of worth",
+    "3": "thinking, learning, and daily communication",
+    "4": "home, roots, and private life",
+    "5": "creativity, romance, and self-expression",
+    "6": "work, habits, and health",
+    "7": "partnerships and close relationships",
+    "8": "shared resources, intimacy, and transformation",
+    "9": "travel, higher learning, and belief",
+    "10": "career, reputation, and public role",
+    "11": "friendships, groups, and hopes for the future",
+    "12": "the unconscious, solitude, and what stays hidden"
+  },
+
+  "aspectDynamics": {
+    "Conjunction": "fuses with",
+    "Sextile": "works harmoniously with",
+    "Square": "sits in dynamic tension with",
+    "Trine": "flows easily with",
+    "Opposition": "pulls in balance against"
+  },
+
+  "aspectNotes": {
+    "Conjunction": "These energies blend and amplify each other.",
+    "Sextile": "An easy, supportive link that offers opportunity when used.",
+    "Square": "Friction here pushes growth through effort and challenge.",
+    "Trine": "A natural, effortless flow of talent between the two.",
+    "Opposition": "A push-pull that seeks balance between opposite needs."
+  },
+
+  "elements": {
+    "Fire": "a fiery temperament — driven, enthusiastic, and quick to act",
+    "Earth": "an earthy temperament — practical, grounded, and reliable",
+    "Air": "an airy temperament — intellectual, social, and idea-driven",
+    "Water": "a watery temperament — emotional, intuitive, and empathetic"
+  }
+}

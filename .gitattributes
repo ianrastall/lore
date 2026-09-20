@@ -1,0 +1,11 @@
+# Normalize text line endings in the repo; check out native on each platform.
+* text=auto
+
+# Binary assets -- never apply line-ending conversion (would corrupt them).
+*.se1  binary
+*.ico  binary
+*.png  binary
+*.jpg  binary
+*.pdf  binary
+*.dll  binary
+*.xlsx binary
