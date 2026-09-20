@@ -26,8 +26,12 @@ public sealed class CityService
         string q = query.Trim();
         return _cities
             .Where(c => c.Name.Contains(q, StringComparison.OrdinalIgnoreCase) ||
+                        c.Admin.Contains(q, StringComparison.OrdinalIgnoreCase) ||
                         c.Country.Contains(q, StringComparison.OrdinalIgnoreCase))
+            // Rank: names that start with the query first, then by population so the
+            // major city (Paris, France) beats the small one (Paris, Texas).
             .OrderBy(c => c.Name.StartsWith(q, StringComparison.OrdinalIgnoreCase) ? 0 : 1)
+            .ThenByDescending(c => c.Population)
             .ThenBy(c => c.Name)
             .Take(max)
             .ToList();

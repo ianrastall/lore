@@ -109,6 +109,24 @@ CELEBRITY DATA
   birthTimeKnown=false → chart uses 12:00 noon; ASC/house cusps
   will be unreliable for those charts.
 
+CITY DATABASE
+──────────────────────────────────────────
+  cities.json powers the Add-Chart city search (autofills lat/lon and a
+  suggested UTC offset). It is generated from the simplemaps world-cities
+  CSV, which has no timezone data — the build script maps each city's
+  lat/lon to its IANA timezone and bakes in the standard (non-DST) offset.
+
+  To regenerate (e.g. after updating the simplemaps download):
+      pip install --user timezonefinder tzdata      (one-time)
+      python scripts\build-cities.py
+
+  Output: Data\cities.json  (~50,250 cities, ~5.4 MB). The suggested UTC
+  offset is standard time; the Add-Chart dialog lets the user adjust it
+  (e.g. for a summer/DST birth) before saving.
+
+  Attribution: city data © simplemaps.com "World Cities Database" (Basic),
+  licensed CC BY 4.0 (https://simplemaps.com/data/world-cities).
+
 HOUSE SYSTEM
 ──────────────────────────────────────────
   Placidus is the default.  Change the HouseSystem constant in
