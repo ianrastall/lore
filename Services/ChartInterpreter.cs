@@ -13,6 +13,9 @@ public sealed class ChartInterpreter
         public Dictionary<string, string> RoleFraming { get; init; } = new();
         public Dictionary<string, string> PlanetThemes { get; init; } = new();
         public Dictionary<string, string> SignStyles { get; init; } = new();
+        // Bespoke "Planet in Sign" lines keyed "Planet|Sign" (e.g. "Sun|Aries").
+        // Preferred when present; otherwise PlanetThemes + SignStyles are combined.
+        public Dictionary<string, string> PlanetInSign { get; init; } = new();
         public Dictionary<string, string> HouseAreas { get; init; } = new();
         public Dictionary<string, string> AspectDynamics { get; init; } = new();
         public Dictionary<string, string> AspectNotes { get; init; } = new();
@@ -75,14 +78,25 @@ public sealed class ChartInterpreter
         var paras = new List<string>();
         foreach (var p in chart.Planets)
         {
-            string theme = Lookup(_c.PlanetThemes, p.PlanetName, "this energy");
-            string style = Lookup(_c.SignStyles, p.Sign.Name(), "in its own way");
             int house = chart.GetHouseForLongitude(p.Longitude);
             string area = Lookup(_c.HouseAreas, house.ToString(), "this area of life");
             string retro = p.IsRetrograde ? " Retrograde here, its lessons turn inward before they express outward." : "";
 
-            paras.Add($"{p.PlanetSymbol} {p.PlanetName} in {p.Sign.Name()} ({Ordinal(house)} house): " +
-                      $"{theme} expressed {style}, colouring {area}.{retro}");
+            // Prefer a bespoke Planet-in-Sign line; fall back to the templated blend.
+            string core;
+            if (_c.PlanetInSign.TryGetValue($"{p.PlanetName}|{p.Sign.Name()}", out var bespoke)
+                && !string.IsNullOrWhiteSpace(bespoke))
+            {
+                core = $"{bespoke.TrimEnd('.')}, colouring {area}.";
+            }
+            else
+            {
+                string theme = Lookup(_c.PlanetThemes, p.PlanetName, "this energy");
+                string style = Lookup(_c.SignStyles, p.Sign.Name(), "in its own way");
+                core = $"{theme} expressed {style}, colouring {area}.";
+            }
+
+            paras.Add($"{p.PlanetSymbol} {p.PlanetName} in {p.Sign.Name()} ({Ordinal(house)} house): {core}{retro}");
         }
         return new ReportSection { Heading = "The Planets", Paragraphs = paras };
     }
