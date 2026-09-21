@@ -68,8 +68,21 @@ public static class ExportService
         var vm = chart.Celebrity;
         string subtitle = $"{vm.BirthDate}  ·  {vm.BirthPlace}" +
             (vm.BirthTimeKnown ? $"  ·  {vm.BirthTime}" : "  ·  time unknown");
-        string ascSign = ZodiacSignExtensions.FromLongitude(chart.Ascendant).Name();
-        string mcSign = ZodiacSignExtensions.FromLongitude(chart.Midheaven).Name();
+        // Lead with the "Big Three" (Sun first — that's the everyday "sign"); keep the
+        // Ascendant/Midheaven as a small, clearly-labelled technical line so the MC can't
+        // be mistaken for someone's sign.
+        string rising = ZodiacSignExtensions.FromLongitude(chart.Ascendant).Name();
+        var bigParts = new List<string>();
+        if (chart.GetPlanet(Planet.Sun) is { } sunP)  bigParts.Add($"☉ Sun {sunP.Sign.Name()}");
+        if (chart.GetPlanet(Planet.Moon) is { } moonP) bigParts.Add($"☽ Moon {moonP.Sign.Name()}");
+        bigParts.Add($"↑ Rising {rising}");
+        string bigThree = string.Join("     ·     ", bigParts);
+        string angles = $"Ascendant {rising}   ·   Midheaven " +
+                        ZodiacSignExtensions.FromLongitude(chart.Midheaven).Name();
+
+        var score = DignityService.Compute(chart);
+        string verdictHex = score.Verdict.ColorHex();
+        string verdictLine = $"Chart assessment:  {score.Total:+#;-#;0}  —  {score.Verdict.Label()}";
 
         var doc = Document.Create(container =>
         {
@@ -95,8 +108,11 @@ public static class ExportService
                     if (chartPng is { Length: > 0 })
                         col.Item().AlignCenter().Width(340).Image(chartPng);
 
-                    col.Item().Text($"Ascendant {ascSign}   ·   Midheaven {mcSign}")
-                        .FontSize(11).FontColor(Colors.Grey.Darken1);
+                    col.Item().AlignCenter().Text(bigThree).FontSize(13).SemiBold();
+                    col.Item().AlignCenter().Text(angles)
+                        .FontSize(9).FontColor(Colors.Grey.Darken1);
+                    col.Item().AlignCenter().Text(verdictLine)
+                        .FontSize(12).SemiBold().FontColor(verdictHex);
 
                     foreach (var section in report)
                     {
@@ -104,6 +120,8 @@ public static class ExportService
                         foreach (var para in section.Paragraphs)
                             col.Item().Text(para).FontSize(11).LineHeight(1.35f);
                     }
+
+                    ChartAssessment(col, score);
                 });
 
                 page.Footer().AlignCenter().Text(x =>
@@ -115,6 +133,60 @@ public static class ExportService
         });
 
         return doc.GeneratePdf();
+    }
+
+    // Traditional dignity breakdown: the verdict, a plain-language note, and a per-planet
+    // table showing where each planet's points came from.
+    private static void ChartAssessment(QuestPDF.Fluent.ColumnDescriptor col, ChartScore score)
+    {
+        col.Item().PaddingTop(10).Text("Chart Assessment").FontSize(15).SemiBold();
+        col.Item().Text(
+            "A traditional dignity score for the seven classical planets (Sun–Saturn): essential " +
+            "dignity by sign and degree, plus accidental dignity by house, motion, and closeness to " +
+            "the Sun. Higher means more traditionally dignified. Most charts fall between roughly +15 " +
+            "and +35; the bands flag the strongest (Extraordinary) and most afflicted (Alarming).")
+            .FontSize(9).FontColor(Colors.Grey.Darken1).LineHeight(1.3f);
+
+        col.Item().PaddingTop(2).Text(t =>
+        {
+            t.Span($"Total {score.Total:+#;-#;0} — {score.Verdict.Label()}")
+                .SemiBold().FontColor(score.Verdict.ColorHex());
+            t.Span($"   ({(score.IsDayChart ? "day chart" : "night chart")})")
+                .FontSize(9).FontColor(Colors.Grey.Medium);
+        });
+
+        col.Item().PaddingTop(4).Table(table =>
+        {
+            table.ColumnsDefinition(c =>
+            {
+                c.RelativeColumn(3);    // planet
+                c.RelativeColumn(1.5f); // essential
+                c.RelativeColumn(1.6f); // accidental
+                c.RelativeColumn(1.2f); // total
+                c.RelativeColumn(6);    // notes
+            });
+
+            static IContainer Head(IContainer c) =>
+                c.PaddingVertical(2).BorderBottom(1).BorderColor(Colors.Grey.Lighten1);
+
+            table.Header(h =>
+            {
+                h.Cell().Element(Head).Text("Planet").SemiBold().FontSize(9);
+                h.Cell().Element(Head).AlignRight().Text("Essential").SemiBold().FontSize(9);
+                h.Cell().Element(Head).AlignRight().Text("Accidental").SemiBold().FontSize(9);
+                h.Cell().Element(Head).AlignRight().Text("Total").SemiBold().FontSize(9);
+                h.Cell().Element(Head).Text("Why").SemiBold().FontSize(9);
+            });
+
+            foreach (var pd in score.Planets)
+            {
+                table.Cell().PaddingVertical(1).Text($"{pd.Planet.Symbol()} {pd.Planet.Name()}").FontSize(9);
+                table.Cell().PaddingVertical(1).AlignRight().Text($"{pd.Essential:+#;-#;0}").FontSize(9);
+                table.Cell().PaddingVertical(1).AlignRight().Text($"{pd.Accidental:+#;-#;0}").FontSize(9);
+                table.Cell().PaddingVertical(1).AlignRight().Text($"{pd.Total:+#;-#;0}").SemiBold().FontSize(9);
+                table.Cell().PaddingVertical(1).Text(pd.Notes).FontSize(8).FontColor(Colors.Grey.Darken1);
+            }
+        });
     }
 
     // ── DTO ───────────────────────────────────────────────────────────────────

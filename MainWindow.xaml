@@ -8,6 +8,11 @@
 
     <Grid RequestedTheme="Dark" ColumnDefinitions="320,Auto,*">
 
+        <Grid.Resources>
+            <views:HexBrushConverter x:Key="HexBrush"/>
+        </Grid.Resources>
+
+
         <!-- Left: celebrity + my-charts browser -->
         <Grid Grid.Column="0" RowDefinitions="Auto,Auto,Auto,Auto,*"
               Background="{ThemeResource LayerFillColorDefaultBrush}">
@@ -57,17 +62,29 @@
                       x:Name="CelebrityList"
                       ItemsSource="{x:Bind ViewModel.DisplayedCelebrities, Mode=OneWay}"
                       SelectedItem="{x:Bind ViewModel.SelectedCelebrity, Mode=TwoWay}">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="Padding" Value="0"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="models:Celebrity">
-                        <StackPanel Padding="4,6">
-                            <TextBlock Text="{x:Bind Name}" FontSize="13"/>
-                            <TextBlock FontSize="11"
-                                       Foreground="{ThemeResource TextFillColorSecondaryBrush}">
-                                <Run Text="{x:Bind Category}"/>
-                                <Run Text="·"/>
-                                <Run Text="{x:Bind BirthDate}"/>
-                            </TextBlock>
-                        </StackPanel>
+                        <!-- Whole-row notability wash: green (Extraordinary) / red
+                             (Alarming), transparent for Ordinary. -->
+                        <Grid Padding="10,6" CornerRadius="4"
+                              Background="{Binding VerdictColorHex, Converter={StaticResource HexBrush}}"
+                              ToolTipService.ToolTip="{x:Bind VerdictLabel}">
+                            <StackPanel>
+                                <TextBlock Text="{x:Bind Name}" FontSize="13"/>
+                                <TextBlock FontSize="11"
+                                           Foreground="{ThemeResource TextFillColorSecondaryBrush}">
+                                    <Run Text="{x:Bind Category}"/>
+                                    <Run Text="·"/>
+                                    <Run Text="{x:Bind BirthDate}"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

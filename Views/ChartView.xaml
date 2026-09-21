@@ -15,12 +15,18 @@
             <TextBlock Text="{x:Bind ViewModel.SubTitle, Mode=OneWay}"
                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                        FontSize="12" Margin="0,2,0,0"/>
-            <StackPanel Orientation="Horizontal" Spacing="16" Margin="0,4,0,0">
-                <TextBlock Text="{x:Bind ViewModel.AscendantText, Mode=OneWay}"
-                           FontSize="13" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
-                <TextBlock Text="{x:Bind ViewModel.MidheavenText, Mode=OneWay}"
-                           FontSize="13" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
-            </StackPanel>
+            <TextBlock Text="{x:Bind ViewModel.BigThreeText, Mode=OneWay}"
+                       FontSize="15" FontWeight="SemiBold" Margin="0,6,0,0"
+                       Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
+            <TextBlock Text="{x:Bind ViewModel.AnglesText, Mode=OneWay}"
+                       FontSize="11" Margin="0,2,0,0"
+                       Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+            <Border Margin="0,6,0,0" Padding="9,3" CornerRadius="10"
+                    HorizontalAlignment="Left"
+                    Background="{x:Bind ViewModel.ScoreBrush, Mode=OneWay}">
+                <TextBlock Text="{x:Bind ViewModel.ScoreText, Mode=OneWay}"
+                           FontSize="12" FontWeight="SemiBold" Foreground="#111318"/>
+            </Border>
         </StackPanel>
 
         <!-- Chart + side panel -->

@@ -11,7 +11,11 @@ Run from the project root:
     python scripts/build-cities.py
 
 Output schema (matches Models/City.cs):
-    {"name","admin","country","lat","lon","utc","pop"}
+    {"name","admin","country","lat","lon","utc","tz","pop"}
+
+"tz" is the IANA zone id (e.g. "Europe/London"); the app resolves the historical,
+DST-aware offset from it. "utc" is kept as a standard-time fallback for display and
+for the rare city that maps to no zone.
 
 Data (c) simplemaps.com, "World Cities Database" (Basic), CC BY 4.0.
 """
@@ -80,6 +84,7 @@ def main() -> int:
                 utc = standard_offset_hours(tz_name)
             else:
                 # Rare (mid-ocean coords); approximate from longitude.
+                tz_name = ""
                 utc = round(lon / 15.0)
                 missing_tz += 1
 
@@ -96,6 +101,7 @@ def main() -> int:
                 "lat": round(lat, 4),
                 "lon": round(lon, 4),
                 "utc": utc,
+                "tz": tz_name,
                 "pop": pop,
             })
 

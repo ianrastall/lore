@@ -18,6 +18,7 @@ public sealed class ChartService
         (Planet.Pluto,     SwissEphemeris.SE_PLUTO),
         (Planet.NorthNode, SwissEphemeris.SE_MEAN_NODE),
         (Planet.Chiron,    SwissEphemeris.SE_CHIRON),
+        (Planet.Lilith,    SwissEphemeris.SE_MEAN_APOG),
     ];
 
     private const int HouseSystem = 'P'; // Placidus
@@ -29,7 +30,7 @@ public sealed class ChartService
 
     public NatalChart Calculate(Celebrity celebrity)
     {
-        var utc = celebrity.GetUtcBirthDateTime();
+        var utc = BirthTimeResolver.ToUtc(celebrity);
         double jd = SwissEphemeris.DateTimeToJulianDay(utc);
 
         var planets = CalculatePlanets(jd);

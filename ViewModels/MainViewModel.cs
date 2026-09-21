@@ -91,18 +91,53 @@ public sealed partial class MainViewModel : ObservableObject
     private void RebuildPool()
     {
         _all = [.. _celebrities.All, .. _userCharts.Charts];
+        ComputeVerdicts();
         RefreshCategories();
         ApplyFilter();
     }
 
+    // Score every chart so the browse list can highlight the notable ones. Only
+    // Extraordinary/Alarming get a coloured bar; Ordinary stays clear so the outliers
+    // stand out. Runs once at load (fast) before the displayed list is built, since the
+    // list bindings read these values at item realisation.
+    private void ComputeVerdicts()
+    {
+        foreach (var c in _all)
+        {
+            try
+            {
+                var score = DignityService.Compute(_charts.Calculate(c));
+                // Translucent wash for the whole row: green (Extraordinary) / red
+                // (Alarming), transparent for Ordinary so the notable rows stand out.
+                c.VerdictColorHex = score.Verdict switch
+                {
+                    Models.ChartVerdict.Extraordinary => "#553FB84F",
+                    Models.ChartVerdict.Alarming      => "#55E5534B",
+                    _                                 => "#00000000",
+                };
+                c.VerdictLabel = $"Dignity {score.Total:+#;-#;0} · {score.Verdict.Label()}";
+            }
+            catch
+            {
+                c.VerdictColorHex = "#00000000";
+                c.VerdictLabel = "";
+            }
+        }
+    }
+
+    // First entry in the category dropdown: clears the filter to show everyone.
+    public const string AllCategories = "All Categories";
+
     private void RefreshCategories()
     {
         var cats = _all.Select(c => c.Category).Distinct().ToList();
-        // My Charts first (if any), then the rest alphabetically.
-        var ordered = cats.Where(c => c == UserChartService.MyChartsCategory)
-            .Concat(cats.Where(c => c != UserChartService.MyChartsCategory).OrderBy(c => c))
-            .ToList();
+        // "All Categories" first, then My Charts (if any), then the rest alphabetically.
+        var ordered = new List<string> { AllCategories };
+        ordered.AddRange(cats.Where(c => c == UserChartService.MyChartsCategory));
+        ordered.AddRange(cats.Where(c => c != UserChartService.MyChartsCategory).OrderBy(c => c));
         Categories = new ObservableCollection<string>(ordered);
+        if (string.IsNullOrEmpty(SelectedCategory))
+            SelectedCategory = AllCategories;
     }
 
     partial void OnSelectedCelebrityChanged(Celebrity? value)
@@ -119,7 +154,7 @@ public sealed partial class MainViewModel : ObservableObject
     {
         IEnumerable<Celebrity> q = _all;
 
-        if (!string.IsNullOrWhiteSpace(SelectedCategory))
+        if (!string.IsNullOrWhiteSpace(SelectedCategory) && SelectedCategory != AllCategories)
             q = q.Where(c => c.Category == SelectedCategory);
 
         if (!string.IsNullOrWhiteSpace(SearchText))
@@ -134,7 +169,7 @@ public sealed partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void ClearCategory() => SelectedCategory = null;
+    private void ClearCategory() => SelectedCategory = AllCategories;
 
     public async Task AddCustomChartAsync(Celebrity chart)
     {

@@ -31,6 +31,12 @@
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.*" />
     <PackageReference Include="Microsoft.Graphics.Win2D" Version="1.*" />
     <PackageReference Include="QuestPDF" Version="2025.*" />
+    <!-- NodaTime bundles the IANA tz database (historical DST, incl. the 1968–71 UK
+         year-round-BST experiment) so a birth instant resolves to the offset actually
+         in force on that date; GeoTimeZone maps lat/lon → IANA zone id offline, used to
+         backfill charts saved with only a numeric offset. -->
+    <PackageReference Include="NodaTime" Version="3.*" />
+    <PackageReference Include="GeoTimeZone" Version="5.*" />
   </ItemGroup>
 
   <!-- Convenience property: root of the bundled Swiss Ephemeris source tree -->

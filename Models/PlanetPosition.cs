@@ -4,18 +4,18 @@ public enum Planet
 {
     Sun = 0, Moon, Mercury, Venus, Mars,
     Jupiter, Saturn, Uranus, Neptune, Pluto,
-    NorthNode, Chiron
+    NorthNode, Chiron, Lilith
 }
 
 public static class PlanetExtensions
 {
     private static readonly string[] Symbols =
-        ["☉", "☽", "☿", "♀", "♂", "♃", "♄", "♅", "♆", "♇", "☊", "⚷"];
+        ["☉", "☽", "☿", "♀", "♂", "♃", "♄", "♅", "♆", "♇", "☊", "⚷", "⚸"];
 
     private static readonly string[] Names =
         ["Sun", "Moon", "Mercury", "Venus", "Mars",
          "Jupiter", "Saturn", "Uranus", "Neptune", "Pluto",
-         "North Node", "Chiron"];
+         "North Node", "Chiron", "Lilith"];
 
     public static string Symbol(this Planet p) => Symbols[(int)p];
     public static string Name(this Planet p) => Names[(int)p];

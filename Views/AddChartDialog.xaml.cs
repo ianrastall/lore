@@ -8,6 +8,10 @@ public sealed partial class AddChartDialog : ContentDialog
 {
     private readonly CityService _cities;
 
+    // IANA zone id of the chosen city; null until a city is picked (then the resolver
+    // backfills from lat/lon). Latitude/longitude drive the geographic fallback.
+    private string? _timeZoneId;
+
     public Celebrity? Result { get; private set; }
 
     public AddChartDialog(CityService cities)
@@ -24,6 +28,10 @@ public sealed partial class AddChartDialog : ContentDialog
         DateField.SelectedDate = new DateTimeOffset(new DateTime(1990, 1, 1), TimeSpan.Zero);
         TimeField.SelectedTime = new TimeSpan(12, 0, 0);
         UtcBox.Value = 0;
+
+        // Re-resolve the historical offset whenever the date or time changes.
+        DateField.SelectedDateChanged += (_, _) => RefreshResolvedOffset();
+        TimeField.SelectedTimeChanged += (_, _) => RefreshResolvedOffset();
 
         PrimaryButtonClick += OnCreate;
     }
@@ -47,7 +55,33 @@ public sealed partial class AddChartDialog : ContentDialog
             PlaceBox.Text = city.Display;
             LatBox.Value = city.Latitude;
             LonBox.Value = city.Longitude;
-            UtcBox.Value = city.UtcOffsetHours;
+            UtcBox.Value = city.UtcOffsetHours; // fallback only
+            _timeZoneId = string.IsNullOrWhiteSpace(city.TimeZoneId) ? null : city.TimeZoneId;
+            RefreshResolvedOffset();
+        }
+    }
+
+    // Show the offset that will actually be applied for the selected place + date, and
+    // mirror it into the fallback box so it stays meaningful if no zone is found.
+    private void RefreshResolvedOffset()
+    {
+        if (double.IsNaN(LatBox.Value) || double.IsNaN(LonBox.Value))
+        {
+            ResolvedOffsetText.Text = "Pick a birthplace to resolve its time zone.";
+            return;
+        }
+
+        var date = DateField.SelectedDate?.DateTime ?? new DateTime(1990, 1, 1);
+        var time = TimeField.SelectedTime ?? new TimeSpan(12, 0, 0);
+        var (offset, label, zoneId) = BirthTimeResolver.Describe(
+            _timeZoneId, LatBox.Value, LonBox.Value,
+            date.Year, date.Month, date.Day, time.Hours, time.Minutes);
+
+        ResolvedOffsetText.Text = zoneId is null ? label : $"{label} · {zoneId}";
+        if (zoneId is not null)
+        {
+            _timeZoneId = zoneId;   // record the geographically-resolved zone too
+            UtcBox.Value = offset;  // keep the fallback in sync with what will be used
         }
     }
 
@@ -78,6 +112,7 @@ public sealed partial class AddChartDialog : ContentDialog
             Latitude = LatBox.Value,
             Longitude = LonBox.Value,
             UtcOffsetHours = UtcBox.Value,
+            TimeZoneId = _timeZoneId,
             Bio = NoteBox.Text.Trim()
         };
     }

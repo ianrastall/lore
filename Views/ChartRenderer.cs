@@ -55,27 +55,39 @@ internal static class ChartRenderer
         DrawAspects(ds, cx, cy, r * AspectInner, chart);
         DrawPlanets(ds, cx, cy, r, chart);
         DrawAngles(ds, cx, cy, r, chart);
+        DrawVerdictRim(ds, cx, cy, r, chart);
+    }
+
+    // A coloured halo just outside the zodiac ring for a notable chart — green for an
+    // Extraordinary dignity score, red for an Alarming one. Ordinary charts get nothing,
+    // so the outliers read at a glance (and it carries into the exported PNG/PDF).
+    private static void DrawVerdictRim(CanvasDrawingSession ds, float cx, float cy, float r, NatalChart chart)
+    {
+        var verdict = Services.DignityService.Compute(chart).Verdict;
+        Color? rim = verdict switch
+        {
+            ChartVerdict.Extraordinary => Color.FromArgb(255, 63, 184, 79),  // green
+            ChartVerdict.Alarming      => Color.FromArgb(255, 229, 83, 75),  // red
+            _                          => null,
+        };
+        if (rim is { } c)
+            ds.DrawEllipse(cx, cy, r * (SignOuter + 0.03f), r * (SignOuter + 0.03f), c, 4f);
     }
 
     // ── Coordinate helpers ───────────────────────────────────────────────────
 
-    // Maps an ecliptic longitude to a point on a circle of given radius.
-    // ASC is always placed at 9 o'clock (left).
+    // Maps an ecliptic longitude to a point on a circle of given radius, in the standard
+    // Western layout: Ascendant pinned at 9 o'clock (left) and the zodiac running
+    // counter-clockwise (increasing longitude downward from the ASC). That places the
+    // Midheaven near the top and the IC near the bottom — matching astro.com and the
+    // familiar wheel. Screen y grows downward, so the sin term is ADDED (a vertical
+    // mirror of the naive math layout, which would otherwise put the MC at the bottom).
     private static Vector2 ToPoint(float cx, float cy, float r, double longitude, double asc)
     {
         double relative = ((longitude - asc) % 360 + 360) % 360;
         double mathDeg = 180.0 - relative;
         double rad = mathDeg * Math.PI / 180.0;
-        return new Vector2(cx + r * (float)Math.Cos(rad), cy - r * (float)Math.Sin(rad));
-    }
-
-    private static float ToAngleWin2D(double longitude, double asc)
-    {
-        // Win2D angles: 0 = right (3 o'clock), clockwise positive
-        double relative = ((longitude - asc) % 360 + 360) % 360;
-        double mathDeg = 180.0 - relative;
-        // Win2D = -mathDeg (clockwise = negative in math)
-        return (float)((-mathDeg + 360) % 360);
+        return new Vector2(cx + r * (float)Math.Cos(rad), cy + r * (float)Math.Sin(rad));
     }
 
     // ── Zodiac ring ──────────────────────────────────────────────────────────
@@ -93,7 +105,7 @@ internal static class ChartRenderer
             // Segment boundary line
             var inner = ToPoint(cx, cy, r * SignInner, startLon, asc);
             var outer = ToPoint(cx, cy, r * SignOuter, startLon, asc);
-            ds.DrawLine(inner, outer, LineColor, 1f);
+            ds.DrawLine(inner, outer, LineColor, 1.5f);
 
             // Sign symbol at mid-segment
             var mid = ToPoint(cx, cy, r * (SignInner + (SignOuter - SignInner) / 2f), midLon, asc);
@@ -102,8 +114,8 @@ internal static class ChartRenderer
         }
 
         // Outer and inner ring circles
-        ds.DrawEllipse(cx, cy, r * SignOuter, r * SignOuter, RingOuter, 1.5f);
-        ds.DrawEllipse(cx, cy, r * SignInner, r * SignInner, RingOuter, 1f);
+        ds.DrawEllipse(cx, cy, r * SignOuter, r * SignOuter, RingOuter, 2.5f);
+        ds.DrawEllipse(cx, cy, r * SignInner, r * SignInner, RingOuter, 1.5f);
     }
 
     // ── Houses ───────────────────────────────────────────────────────────────
@@ -119,7 +131,7 @@ internal static class ChartRenderer
 
             // House cusp line from center to inner ring
             var pt = ToPoint(cx, cy, r * HouseOuter, cusp.Longitude, chart.Ascendant);
-            ds.DrawLine(new Vector2(cx, cy), pt, HouseColor, 0.75f);
+            ds.DrawLine(new Vector2(cx, cy), pt, HouseColor, 1.25f);
 
             // House number at midpoint of sector
             double mid = MidArc(cusp.Longitude, nextCusp.Longitude);
@@ -153,7 +165,7 @@ internal static class ChartRenderer
     {
         var outer = ToPoint(cx, cy, r * SignOuter, longitude, asc);
         var inner = ToPoint(cx, cy, r * SignInner, longitude, asc);
-        ds.DrawLine(new Vector2(cx, cy), outer, AngularColor, 1.5f);
+        ds.DrawLine(new Vector2(cx, cy), outer, AngularColor, 2.5f);
         var labelPt = ToPoint(cx, cy, r * (SignOuter + 0.03f), longitude, asc);
         ds.DrawText(label, labelPt, AngularColor, fmt);
     }
@@ -176,7 +188,7 @@ internal static class ChartRenderer
             byte alpha = (byte)(160 - (int)(aspect.Orb / aspect.Type.Orb() * 100));
             color = Color.FromArgb(alpha, color.R, color.G, color.B);
 
-            ds.DrawLine(ptA, ptB, color, 0.75f);
+            ds.DrawLine(ptA, ptB, color, 1.25f);
         }
     }
 
@@ -201,8 +213,8 @@ internal static class ChartRenderer
 
             // Small dot at exact position
             var exactPt = ToPoint(cx, cy, r * HouseOuter * 0.88f, planet.Longitude, chart.Ascendant);
-            ds.FillEllipse(exactPt, 2.5f, 2.5f, color);
-            ds.DrawLine(exactPt, pt, Color.FromArgb(60, color.R, color.G, color.B), 0.5f);
+            ds.FillEllipse(exactPt, 3f, 3f, color);
+            ds.DrawLine(exactPt, pt, Color.FromArgb(90, color.R, color.G, color.B), 0.75f);
 
             ds.DrawText(planet.Planet.Symbol(), pt, color, symFmt);
 

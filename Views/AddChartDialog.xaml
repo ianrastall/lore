@@ -41,7 +41,12 @@
                            SpinButtonPlacementMode="Inline" SmallChange="0.01" LargeChange="1"/>
             </Grid>
 
-            <NumberBox x:Name="UtcBox" Header="UTC offset (hours, standard time — not DST)"
+            <TextBlock x:Name="ResolvedOffsetText"
+                       Foreground="{ThemeResource SystemFillColorSuccessBrush}"
+                       TextWrapping="Wrap" FontSize="12"
+                       Text="Pick a birthplace to resolve its time zone."/>
+
+            <NumberBox x:Name="UtcBox" Header="Fallback UTC offset (used only if no time zone is found)"
                        SpinButtonPlacementMode="Inline" SmallChange="0.5" LargeChange="1"
                        Minimum="-12" Maximum="14"/>
 

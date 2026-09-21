@@ -10,6 +10,7 @@ public sealed class City
     [JsonPropertyName("lat")]     public double Latitude { get; init; }
     [JsonPropertyName("lon")]     public double Longitude { get; init; }
     [JsonPropertyName("utc")]     public double UtcOffsetHours { get; init; }
+    [JsonPropertyName("tz")]      public string TimeZoneId { get; init; } = "";
     [JsonPropertyName("pop")]     public long Population { get; init; }
 
     // "Paris, Île-de-France, France" -- the admin region disambiguates the many

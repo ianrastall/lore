@@ -103,18 +103,27 @@ CELEBRITY DATA
       birthTime          "HH:mm" local time, or null
       birthTimeKnown     true/false
       latitude/longitude birth location (decimal degrees)
-      utcOffsetHours     standard UTC offset (not DST-adjusted)
+      utcOffsetHours     fixed UTC offset — fallback only (see below)
+      timeZoneId         IANA zone id, e.g. "Europe/London" (optional)
       bio                one-sentence description
+
+  The birth instant is resolved by Services/BirthTimeResolver: it prefers
+  timeZoneId (or, if absent, a lat/lon lookup) and applies the HISTORICAL,
+  DST-aware offset in force on the birth date via the IANA tz database
+  (NodaTime). utcOffsetHours is used only when no zone can be resolved.
+  Entries without timeZoneId are backfilled from their coordinates, so the
+  bundled corpus gets correct DST automatically.
 
   birthTimeKnown=false → chart uses 12:00 noon; ASC/house cusps
   will be unreliable for those charts.
 
 CITY DATABASE
 ──────────────────────────────────────────
-  cities.json powers the Add-Chart city search (autofills lat/lon and a
-  suggested UTC offset). It is generated from the simplemaps world-cities
-  CSV, which has no timezone data — the build script maps each city's
-  lat/lon to its IANA timezone and bakes in the standard (non-DST) offset.
+  cities.json powers the Add-Chart city search (autofills lat/lon, the IANA
+  timeZoneId, and a fallback UTC offset). It is generated from the simplemaps
+  world-cities CSV, which has no timezone data — the build script maps each
+  city's lat/lon to its IANA timezone (stored as "tz") and also bakes in the
+  standard non-DST offset ("utc") as a display/fallback value.
 
   To regenerate (e.g. after updating the simplemaps download):
       pip install --user timezonefinder tzdata      (one-time)
