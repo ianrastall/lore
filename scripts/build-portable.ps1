@@ -5,12 +5,18 @@
     App SDK runtime + Swiss Ephemeris) that runs by double-clicking Lore.exe -- no
     install, no VC++ redistributable, no separately installed runtime.
 
-    Output: artifacts\Lore-0.2-portable\
+    Output: artifacts\Lore-<version>-portable\  (version read from Lore.csproj)
 #>
 $ErrorActionPreference = 'Stop'
 $root    = Split-Path -Parent $PSScriptRoot
 $csproj  = Join-Path $root 'Lore.csproj'
-$outDir  = Join-Path $root 'artifacts\Lore-0.2-portable'
+
+# Name the output folder after the csproj <Version> so it always matches the build.
+$version = '1.0.0'
+if ((Get-Content -LiteralPath $csproj -Raw) -match '<Version>([^<]+)</Version>') {
+    $version = $Matches[1]
+}
+$outDir  = Join-Path $root "artifacts\Lore-$version-portable"
 
 # sweph.dll must exist before publishing (built once by Build-SwephDll.ps1).
 if (-not (Test-Path -LiteralPath (Join-Path $root 'Native\sweph.dll'))) {

@@ -16,11 +16,11 @@
 
 ; --- Defines (overridable from the command line via ISCC /D...) -------------
 #ifndef AppVersion
-  #define AppVersion "0.2.0"
+  #define AppVersion "1.0.0"
 #endif
 #ifndef SourceDir
   ; Path (relative to this .iss) to the published self-contained folder.
-  #define SourceDir "..\artifacts\Lore-0.2-portable"
+  #define SourceDir "..\artifacts\Lore-1.0.0-portable"
 #endif
 #ifndef OutputDir
   #define OutputDir "..\artifacts"

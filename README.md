@@ -1,5 +1,7 @@
 # Lore — Natal Chart Generator
 
+![Lore logo](Assets/logo.jpg)
+
 > A Windows desktop application for computing and exploring astrological natal charts, powered by the Swiss Ephemeris. Browse ~220 bundled historical figures, or add your own.
 
 ---

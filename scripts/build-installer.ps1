@@ -31,14 +31,14 @@ $iss       = Join-Path $root 'installer\Lore.iss'
 $artifacts = Join-Path $root 'artifacts'
 
 # --- Version (read from the .csproj so everything stays in sync) ------------
-$version = '0.2.0'
+$version = '1.0.0'
 $csprojText = Get-Content -LiteralPath $csproj -Raw
 if ($csprojText -match '<Version>([^<]+)</Version>') {
     $version = $Matches[1].Trim()
 }
 
 # build-portable.ps1 emits this exact folder name.
-$portableDir = Join-Path $artifacts 'Lore-0.2-portable'
+$portableDir = Join-Path $artifacts "Lore-$version-portable"
 
 # --- 1. Publish the self-contained build ------------------------------------
 if (-not $SkipPublish) {
