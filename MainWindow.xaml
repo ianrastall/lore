@@ -121,27 +121,25 @@
                             </MenuFlyout>
                         </DropDownButton.Flyout>
                     </DropDownButton>
-                    <Button Content="Legend">
-                        <Button.Flyout>
-                            <Flyout>
-                                <views:LegendView/>
-                            </Flyout>
-                        </Button.Flyout>
-                    </Button>
+                    <Button Content="Legend" Click="ShowLegend_Click"/>
                 </StackPanel>
             </Grid>
 
-            <!-- Body: chart or report -->
+            <!-- Body: chart, report, or the full-page legend -->
             <Grid Grid.Row="1">
                 <views:ChartView Grid.Row="0"
                                  x:Name="ChartViewControl"
                                  ViewModel="{x:Bind ViewModel.ChartVM}"
                                  RequestedTheme="Dark"
-                                 Visibility="{x:Bind VisIfNot(ViewModel.ShowReport), Mode=OneWay}"/>
+                                 Visibility="{x:Bind VisChartBody(ViewModel.ShowReport, ViewModel.ShowLegend), Mode=OneWay}"/>
                 <views:ReportView x:Name="ReportViewControl"
                                   ViewModel="{x:Bind ViewModel.ChartVM}"
                                   RequestedTheme="Dark"
-                                  Visibility="{x:Bind VisIf(ViewModel.ShowReport), Mode=OneWay}"/>
+                                  Visibility="{x:Bind VisReportBody(ViewModel.ShowReport, ViewModel.ShowLegend), Mode=OneWay}"/>
+                <views:LegendView x:Name="LegendViewControl"
+                                  RequestedTheme="Dark"
+                                  CloseRequested="Legend_CloseRequested"
+                                  Visibility="{x:Bind VisIf(ViewModel.ShowLegend), Mode=OneWay}"/>
             </Grid>
 
             <!-- Status bar -->

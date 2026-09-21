@@ -49,8 +49,20 @@ public sealed partial class MainWindow : Window
             await ViewModel.AddCustomChartAsync(chart);
     }
 
-    private void ShowChart_Click(object sender, RoutedEventArgs e) => ViewModel.ShowReport = false;
-    private void ShowReport_Click(object sender, RoutedEventArgs e) => ViewModel.ShowReport = true;
+    private void ShowChart_Click(object sender, RoutedEventArgs e)
+    {
+        ViewModel.ShowLegend = false;
+        ViewModel.ShowReport = false;
+    }
+
+    private void ShowReport_Click(object sender, RoutedEventArgs e)
+    {
+        ViewModel.ShowLegend = false;
+        ViewModel.ShowReport = true;
+    }
+
+    private void ShowLegend_Click(object sender, RoutedEventArgs e) => ViewModel.ShowLegend = true;
+    private void Legend_CloseRequested(object sender, EventArgs e) => ViewModel.ShowLegend = false;
 
     // ── Export ────────────────────────────────────────────────────────────────
     private async void ExportPdf_Click(object sender, RoutedEventArgs e) => await ExportAsync("pdf");
@@ -114,8 +126,14 @@ public sealed partial class MainWindow : Window
         return string.IsNullOrEmpty(cleaned) ? "chart" : cleaned;
     }
 
-    // x:Bind helpers for the Chart/Report toggle (instance methods so x:Bind can call them).
+    // x:Bind helpers for the Chart/Report/Legend view switch (instance methods so x:Bind can call them).
     public Visibility VisIf(bool b) => b ? Visibility.Visible : Visibility.Collapsed;
     public Visibility VisIfNot(bool b) => b ? Visibility.Collapsed : Visibility.Visible;
     public bool Not(bool b) => !b;
+
+    // Body panes: the legend, when shown, hides both chart and report.
+    public Visibility VisChartBody(bool showReport, bool showLegend) =>
+        !showReport && !showLegend ? Visibility.Visible : Visibility.Collapsed;
+    public Visibility VisReportBody(bool showReport, bool showLegend) =>
+        showReport && !showLegend ? Visibility.Visible : Visibility.Collapsed;
 }

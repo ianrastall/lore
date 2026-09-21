@@ -43,6 +43,10 @@ public sealed partial class MainViewModel : ObservableObject
     [ObservableProperty]
     public partial bool ShowReport { get; set; }
 
+    // Full-page Legend / reference view over the chart+report body.
+    [ObservableProperty]
+    public partial bool ShowLegend { get; set; }
+
     // True when the selected entry is a user-created chart (so it can be deleted).
     public bool SelectedIsCustom => SelectedCelebrity?.Category == UserChartService.MyChartsCategory;
 
@@ -144,7 +148,10 @@ public sealed partial class MainViewModel : ObservableObject
     {
         OnPropertyChanged(nameof(SelectedIsCustom));
         if (value is not null)
+        {
+            ShowLegend = false; // picking a person returns from the legend to their chart
             _ = LoadChartAsync(value);
+        }
     }
 
     partial void OnSearchTextChanged(string value) => ApplyFilter();

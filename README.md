@@ -35,7 +35,7 @@
 |---|---|
 | **Chart Wheel** | Rendered chart wheel (Win2D / Direct2D), drawn on-screen and exportable as a high-resolution PNG. |
 | **Report** | Natural-language reading: Overview (Sun/Moon/Rising), planet-by-sign-and-house paragraphs, major aspects, and elemental balance. |
-| **Legend** | Explains every glyph, aspect colour, and chart angle. |
+| **Legend** | Full-page reference — a grouped list of every glyph, colour, angle, house, and term; click any item for a fuller explanation. |
 
 ### Traditional Dignity Scoring
 Every chart is scored against the **Lilly/Dorothean rubric**:
@@ -286,6 +286,7 @@ The `_12` files are required for historical figures such as Leonardo da Vinci, S
 - **Black Moon Lilith** added as a 13th body.
 - **Curated, fully-timed figure library** — trimmed to figures with documented (Rodden-rated) birth times and rebalanced across categories (99 figures, 12 categories); added Scientists, Writers, Artists, Philosophers, and political/historical figures.
 - **Chart wheel corrected and clarified** — standard orientation (MC at top), thicker lines, and a header that leads with the **Big Three** (Sun / Moon / Rising) so the Sun sign isn't confused with the Midheaven.
+- **Full-page Legend & Reference** — click any glyph, colour, angle, house, or term for a fuller explanation (replaces the old cramped pop-up).
 - **All Categories** filter option.
 
 ### 0.2
