@@ -2,7 +2,11 @@
 
 ![Lore logo](Assets/logo.jpg)
 
-> A Windows desktop application for computing and exploring astrological natal charts, powered by the Swiss Ephemeris. Browse ~220 bundled historical figures, or add your own.
+> A Windows desktop application for computing and exploring astrological natal charts, powered by the Swiss Ephemeris. Browse a curated library of historical figures — every one with a documented birth time — or add your own.
+
+**Latest release: v1.0.0** · [Download](../../releases/latest)
+
+![Lore showing the Abraham Lincoln report](Assets/screenshot-lincoln-report.png)
 
 ---
 
@@ -15,11 +19,10 @@
 - Detects **five major aspects** (conjunction ☌, sextile ⚹, square □, trine △, opposition ☍) with per-aspect orbs, and flags each as applying or separating.
 - Retrograde detection for all five non-luminary classical planets.
 
-### Bundled Figure Library
-- **~220 figures** across **13 categories** including Artists, Athletes, Musicians, Scientists, Politicians, Philosophers, and more.
-- Each entry stores birth date, time (or `null` when unknown), birth place, geographic coordinates, and a one-sentence bio.
-- Birth instants are resolved with **historical, DST-aware UTC offsets** via the IANA timezone database (NodaTime), not just fixed offsets — correctly handling anomalies like the UK's 1968–71 year-round BST experiment.
-- Charts with unknown birth times use 12:00 noon; the app flags them and notes that house placements and Moon degree may be unreliable.
+- **99 figures** across **12 categories** — Actors, Musicians, Writers, Artists, Scientists, Philosophers, Political, Historical, and more.
+- **Every figure has a documented, recorded birth time** (Astro-Databank / Rodden-rated). Entries without a reliable birth time were removed, so no chart relies on a noon guess.
+- Each entry stores birth date, time, birth place, geographic coordinates, IANA time zone, and a one-sentence bio.
+- Birth instants are resolved with **historical, DST-aware UTC offsets** via the IANA timezone database (NodaTime), not just fixed offsets — correctly handling anomalies like the UK's 1968–71 year-round BST experiment and 1940s US wartime time.
 
 ### My Charts (Custom Entry)
 - **Add Chart** button opens a dialog to enter any name, date, time, and place.
@@ -47,7 +50,7 @@ Applied to the seven classical planets (Sun–Saturn). The aggregate score yield
 - ⚪ **Ordinary**
 - 🔴 **Alarming** (≤ 13)
 
-Notable charts are highlighted in the browse list (green / red wash); the full per-planet breakdown appears in the exported PDF.
+The verdict is surfaced everywhere: a coloured pill in the chart header, a **whole-row green / red wash** on notable figures in the browse list, a coloured rim on the chart wheel, and a full per-planet breakdown table in the exported PDF. Bands are calibrated against the bundled corpus so roughly a quarter read Extraordinary, a sixth Alarming, and the rest Ordinary — a fair chance of finding something notable when you look someone up.
 
 ### Export
 Charts can be exported in four formats:
@@ -89,7 +92,7 @@ Lore/
 │   ├── LegendView.xaml/.cs    # Glyph + colour legend
 │   └── AddChartDialog.xaml/.cs# Custom chart entry dialog
 ├── Data/
-│   ├── celebrities.json       # ~220 bundled figures
+│   ├── celebrities.json       # 99 bundled figures (all with recorded birth times)
 │   ├── cities.json            # ~50,250 cities (lat/lon + IANA tz)
 │   ├── interpretations.json   # Corpus for the natural-language report
 │   └── swisseph-2.10.3bfinal/ # Swiss Ephemeris C source + .se1 ephemeris files
@@ -156,7 +159,7 @@ Produces a self-contained folder that runs with no installed .NET or VC++ runtim
 .\scripts\build-portable.ps1
 ```
 
-Output: `artifacts\Lore-0.2-portable\` — zip and share; the recipient runs `Lore.exe` directly.
+Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-1.0.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
 
 ### Step 4 — Installer
 
@@ -184,7 +187,7 @@ Output: `artifacts\LoreSetup-<version>.exe`.
 
 ### `Data\celebrities.json`
 
-~220 figures in 13 categories. Each entry:
+99 figures in 12 categories, each with a documented birth time. Each entry:
 
 ```jsonc
 {
@@ -277,9 +280,16 @@ The `_12` files are required for historical figures such as Leonardo da Vinci, S
 
 ## Version History
 
-### 0.2 (current)
+### 1.0.0 (current)
+- **Traditional dignity scoring** — every chart scored against the Lilly/Dorothean rubric and rated Extraordinary / Ordinary / Alarming, surfaced as a header pill, a whole-row colour wash in the browse list, a chart-wheel rim, and a per-planet table in the PDF.
+- **Historical, DST-aware birth-time resolution** — birth instants converted via the IANA time zone database (NodaTime + GeoTimeZone), correctly handling historical anomalies (UK 1968–71 BST, 1940s US war time) rather than a single fixed offset.
+- **Black Moon Lilith** added as a 13th body.
+- **Curated, fully-timed figure library** — trimmed to figures with documented (Rodden-rated) birth times and rebalanced across categories (99 figures, 12 categories); added Scientists, Writers, Artists, Philosophers, and political/historical figures.
+- **Chart wheel corrected and clarified** — standard orientation (MC at top), thicker lines, and a header that leads with the **Big Three** (Sun / Moon / Rising) so the Sun sign isn't confused with the Midheaven.
+- **All Categories** filter option.
+
+### 0.2
 - **Add Chart** — custom chart entry with city-search autocomplete; charts persist to `mycharts.json`.
-- **~220 bundled figures** across 13 categories, including Philosophers.
 - **Legend** — explains every glyph, aspect colour, and chart angle.
 - **Report view** — natural-language reading generated from an editable corpus.
 - **Portable build** — self-contained, no install required.
