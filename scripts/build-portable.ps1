@@ -12,7 +12,7 @@ $root    = Split-Path -Parent $PSScriptRoot
 $csproj  = Join-Path $root 'Lore.csproj'
 
 # Name the output folder after the csproj <Version> so it always matches the build.
-$version = '1.0.0'
+$version = '1.1.0'
 if ((Get-Content -LiteralPath $csproj -Raw) -match '<Version>([^<]+)</Version>') {
     $version = $Matches[1]
 }

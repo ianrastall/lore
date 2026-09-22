@@ -185,12 +185,50 @@ public sealed partial class LegendView : UserControl
         new("12", "12th House", "Houses", "the hidden",
             "The unconscious, solitude, retreat, and what stays hidden — endings and things behind the scenes."),
 
-        // Dignity score
+        // Sect & triplicity
+        new("☀", "Sect (day / night)", "Sect & triplicity", "the chart's basic team",
+            "The oldest split in traditional astrology. A chart is diurnal (a “day chart”) if the Sun is above the horizon at birth, and nocturnal (a “night chart”) if it is below. Lore reads this from the Sun’s house — above the horizon is houses 7–12. Sect decides which planets are “at home” in the chart and which order the triplicity rulers take."),
+        new("△", "Triplicity rulers", "Sect & triplicity", "three lords per element",
+            "Each element (Fire, Earth, Air, Water) is governed by three planets — the Dorothean triumvirate: a day ruler, a night ruler, and a third participating ruler that helps continuously. Fire: Sun / Jupiter / Saturn. Earth: Venus / Moon / Mars. Air: Saturn / Mercury / Jupiter. Water: Venus / Mars / Moon. A planet standing in an element it rules has “the wind at its back” — outside support and resources — and earns +3."),
+        new("⚖", "In / out of sect", "Sect & triplicity", "right team, right time",
+            "A planet is “in sect” when it belongs to the chart’s ruling faction — the diurnal planets (Sun, Jupiter, Saturn) in a day chart, the nocturnal ones (Moon, Venus, Mars) in a night chart, with Mercury adapting to either. A planet in its own sect works with ease; one out of sect (a night planet doing day’s work) is more prone to trouble unless well placed. Sect sets which triplicity ruler leads."),
+
+        // Essential dignity — a planet's strength by sign and degree
+        new("+5", "Domicile", "Essential dignity", "at home · +5",
+            "The strongest essential dignity: a planet in a sign it rules (e.g. Mars in Aries, the Moon in Cancer). Fully at home, autonomous, and able to act on its own terms. Worth +5."),
+        new("+4", "Exaltation", "Essential dignity", "honoured guest · +4",
+            "A planet in its sign of exaltation (e.g. the Sun in Aries, Jupiter in Cancer) — welcomed and elevated, like an honoured guest given the best seat. Strong and dignified, worth +4."),
+        new("+3", "Triplicity", "Essential dignity", "friends & support · +3",
+            "A planet standing in an element (triplicity) it rules, as one of the three Dorothean lords — day, night, or participating. It has external support and favourable conditions, even if it doesn’t own the sign outright. Worth +3. See “Triplicity rulers.”"),
+        new("+2", "Term (bound)", "Essential dignity", "a say in the degree · +2",
+            "Each sign is divided into five unequal segments called terms (or bounds), each ruled by a planet. Lore uses the Egyptian terms. A planet sitting in a term it rules has a measure of dignity in that exact degree — a quieter, more technical strength worth +2."),
+        new("+1", "Face (decan)", "Essential dignity", "a toehold · +1",
+            "Each sign splits into three 10° faces (decans), ruled in the old Chaldean planetary order beginning with Mars at 0° Aries. A planet in a face it rules has the slightest foothold of dignity — enough to keep it from being wholly a stranger. Worth +1."),
+        new("−5", "Detriment", "Essential dignity", "hostile ground · −5",
+            "A planet in the sign opposite one it rules (e.g. Mars in Libra, opposite its Aries) — working against its own grain, in uncongenial territory. A serious weakness, scored −5."),
+        new("−4", "Fall", "Essential dignity", "brought low · −4",
+            "A planet in the sign opposite its exaltation (e.g. the Sun in Libra, opposite Aries) — undervalued and out of favour, the honoured guest turned away. Scored −4."),
+        new("−5", "Peregrine", "Essential dignity", "a wanderer · −5",
+            "A planet with no share at all in the sign or degree it occupies — none of the five dignities above, and not in its detriment or fall either. A “wanderer” with no resources of its own, easily swayed by whatever it meets. Scored −5."),
+
+        // Accidental dignity — a planet's strength by placement and condition
+        new("◇", "House strength", "Accidental dignity", "how prominent",
+            "Where a planet sits in the houses shapes how strongly it acts. Angular houses (1, 4, 7, 10) are the loudest and most effective; succedent houses (2, 5, 8, 11) are moderate; cadent houses (3, 6, 9, 12) are the weakest and most hidden. Lore follows Lilly’s point table for each house."),
+        new("℞", "Direct / retrograde", "Accidental dignity", "forward or turned in",
+            "A planet moving direct (forward) acts freely and adds a little strength; a retrograde planet (marked ℞) turns its energy inward or meets delay, and loses points. Applies to the five non-luminaries — the Sun and Moon are never retrograde."),
+        new("★", "Cazimi", "Accidental dignity", "heart of the Sun · +5",
+            "A planet within about 17 arc-minutes of the Sun — “in the heart” of the Sun. Far from being harmed, it is enthroned and greatly strengthened. A rare, powerful placement worth +5."),
+        new("☌", "Combust", "Accidental dignity", "burned by the Sun · −5",
+            "A planet within about 8½° of the Sun (but not cazimi) is “combust” — scorched and overwhelmed by its glare, its own nature hard to express. A notable affliction, −5."),
+        new("○", "Under the beams", "Accidental dignity", "dimmed by the Sun · −4",
+            "A planet within about 17° of the Sun, beyond combustion, is “under the Sun’s beams” — dimmed and obscured, though less severely than when combust. Scored −4."),
+
+        // Chart assessment — the overall verdict
         new("🟢", "Extraordinary", "Chart assessment", "strong dignity",
-            "A high traditional dignity score: the seven classical planets (Sun–Saturn) are largely strong and well-placed by sign, house, and condition. Highlighted with a green wash in the browse list."),
+            "A high overall score: summing the full essential dignities (domicile, exaltation, triplicity, term, face, minus detriment, fall, and peregrine) and accidental condition (house, motion, solar phase) of the seven classical planets (Sun–Saturn), they come out largely strong and well-placed. Highlighted with a green wash in the browse list."),
         new("⚪", "Ordinary", "Chart assessment", "typical",
-            "A middling dignity score — the common, balanced case that most charts fall into. No highlight in the list."),
+            "A middling total — the common, balanced case that most charts fall into. No highlight in the list. Most people, including many remarkable ones, land here: the score measures classical planetary ease, not fame or worth."),
         new("🔴", "Alarming", "Chart assessment", "afflicted",
-            "A low dignity score: notable weakness or affliction among the classical planets. “Interesting,” not doom — many remarkable lives score here. Highlighted with a red wash in the list."),
+            "A low total: notable weakness or affliction among the classical planets by sign, house, and condition. “Interesting,” not doom — many remarkable lives score here. Highlighted with a red wash in the list."),
     ];
 }

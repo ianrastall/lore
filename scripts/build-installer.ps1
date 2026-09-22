@@ -31,7 +31,7 @@ $iss       = Join-Path $root 'installer\Lore.iss'
 $artifacts = Join-Path $root 'artifacts'
 
 # --- Version (read from the .csproj so everything stays in sync) ------------
-$version = '1.0.0'
+$version = '1.1.0'
 $csprojText = Get-Content -LiteralPath $csproj -Raw
 if ($csprojText -match '<Version>([^<]+)</Version>') {
     $version = $Matches[1].Trim()

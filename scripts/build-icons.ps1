@@ -1,7 +1,7 @@
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-    Generates Lore's app icon in the shared Adobe-suite style of the sibling apps
+    Generates Lore\'s app icon in the shared Adobe-suite style of the sibling apps
     (Board Meeting / CTML Workspace / Minerva): a dark square field, a thin bright
     inset frame, and a bold centered letter -- here an "L" in gold on deep indigo.
 

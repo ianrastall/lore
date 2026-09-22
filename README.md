@@ -4,7 +4,7 @@
 
 > A Windows desktop application for computing and exploring astrological natal charts, powered by the Swiss Ephemeris. Browse a curated library of historical figures — every one with a documented birth time — or add your own.
 
-**Latest release: v1.0.0** · [Download](../../releases/latest)
+**Latest release: v1.1.0** · [Download](../../releases/latest)
 
 ![Lore showing the Abraham Lincoln report](Assets/screenshot-lincoln-report.png)
 
@@ -280,7 +280,12 @@ The `_12` files are required for historical figures such as Leonardo da Vinci, S
 
 ## Version History
 
-### 1.0.0 (current)
+### 1.1.0 (current)
+- **Deeper dignity scoring** — the essential-dignity engine now scores the full classical five-tier system: the complete Dorothean triplicity triumvirate (day, night, **and** participating ruler), **Terms** (Egyptian bounds, +2), **Faces** (Chaldean decans, +1), and the **Peregrine** penalty (−5) for a planet with no share in its sign. Verdict bands recalibrated against the expanded timed corpus.
+- **Fuller Legend & Reference** — new sections documenting the whole scoring system: sect (day/night charts), the triplicity rulers, every essential dignity (domicile → face, detriment/fall/peregrine), and the accidental dignities (house strength, motion, solar phase).
+- **More figures** — the timed-figure library grows from 99 to **150**, all with documented (Rodden-rated) birth times, adding **Director** and **Athlete** categories alongside more actors, musicians, and world figures.
+
+### 1.0.0
 - **Traditional dignity scoring** — every chart scored against the Lilly/Dorothean rubric and rated Extraordinary / Ordinary / Alarming, surfaced as a header pill, a whole-row colour wash in the browse list, a chart-wheel rim, and a per-planet table in the PDF.
 - **Historical, DST-aware birth-time resolution** — birth instants converted via the IANA time zone database (NodaTime + GeoTimeZone), correctly handling historical anomalies (UK 1968–71 BST, 1940s US war time) rather than a single fixed offset.
 - **Black Moon Lilith** added as a 13th body.
