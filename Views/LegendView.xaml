@@ -79,7 +79,7 @@
                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                         </StackPanel>
                     </StackPanel>
-                    <TextBlock x:Name="DetailText" FontSize="15" TextWrapping="Wrap" LineHeight="23"/>
+                    <StackPanel x:Name="DetailContent" Spacing="12"/>
                 </StackPanel>
             </ScrollViewer>
         </Grid>
