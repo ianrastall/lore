@@ -47,6 +47,9 @@ foreach ($r in $required) {
     }
 }
 
+# Safety gate: never package personal (user-entered) charts. Throws to abort the build.
+& (Join-Path $PSScriptRoot 'assert-clean-release.ps1') -StageDir $outDir
+
 Write-Host ""
 Write-Host "Portable build ready: $outDir" -ForegroundColor Green
 Write-Host "Zip that folder and hand it to anyone -- they run Lore.exe." -ForegroundColor Green

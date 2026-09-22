@@ -51,6 +51,10 @@ if (-not (Test-Path -LiteralPath (Join-Path $portableDir 'Lore.exe'))) {
     throw "Published build not found at: $portableDir`nRun without -SkipPublish, or run .\scripts\build-portable.ps1 first."
 }
 
+# Safety gate: never package personal (user-entered) charts. Re-checked here so the
+# -SkipPublish path (reusing an existing portable folder) is also verified. Throws to abort.
+& (Join-Path $PSScriptRoot 'assert-clean-release.ps1') -StageDir $portableDir
+
 # --- 2. Locate ISCC.exe (Inno Setup compiler) -------------------------------
 function Find-Iscc {
     $cmd = Get-Command iscc.exe -ErrorAction SilentlyContinue
