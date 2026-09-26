@@ -25,7 +25,8 @@ public partial class App : Application
         var interpreter = new ChartInterpreter(interpPath);
         var userCharts  = new UserChartService();
         var cities      = new CityService();
-        var mainVm      = new MainViewModel(celebSvc, chartSvc, interpreter, userCharts, cities);
+        var hospitals   = new HospitalService();
+        var mainVm      = new MainViewModel(celebSvc, chartSvc, interpreter, userCharts, cities, hospitals);
 
         _mainWindow = new MainWindow(mainVm);
         _mainWindow.Activate();

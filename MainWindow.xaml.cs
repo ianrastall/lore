@@ -31,9 +31,10 @@ public sealed partial class MainWindow : Window
             if (initialized) return;
             initialized = true;
             Services.Diagnostics.Log($"InitOnce via {via}");
-            string dataPath   = Path.Combine(AppContext.BaseDirectory, "Data", "celebrities.json");
-            string citiesPath = Path.Combine(AppContext.BaseDirectory, "Data", "cities.json");
-            await ViewModel.InitializeAsync(dataPath, citiesPath);
+            string dataPath      = Path.Combine(AppContext.BaseDirectory, "Data", "celebrities.json");
+            string citiesPath    = Path.Combine(AppContext.BaseDirectory, "Data", "cities.json");
+            string hospitalsPath = Path.Combine(AppContext.BaseDirectory, "Data", "hospitals.json");
+            await ViewModel.InitializeAsync(dataPath, citiesPath, hospitalsPath);
         }
 
         if (Content is FrameworkElement root)
@@ -43,7 +44,7 @@ public sealed partial class MainWindow : Window
 
     private async void AddChart_Click(object sender, RoutedEventArgs e)
     {
-        var dialog = new AddChartDialog(ViewModel.Cities) { XamlRoot = Content.XamlRoot };
+        var dialog = new AddChartDialog(ViewModel.Cities, ViewModel.Hospitals) { XamlRoot = Content.XamlRoot };
         var result = await dialog.ShowAsync();
         if (result == Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary && dialog.Result is { } chart)
             await ViewModel.AddCustomChartAsync(chart);
