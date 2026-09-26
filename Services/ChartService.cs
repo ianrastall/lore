@@ -23,6 +23,15 @@ public sealed class ChartService
 
     private const int HouseSystem = 'P'; // Placidus
 
+    // Swiss Ephemeris (sweph.dll) keeps global internal state and is NOT thread-safe:
+    // swe_calc_ut / swe_houses share buffers and the ephemeris-file cache. This app hits
+    // the native layer from more than one thread — chart selection calculates on a
+    // thread-pool thread (Task.Run), while startup/add/delete re-scoring runs its own
+    // pass — so two calculations can otherwise overlap and corrupt each other's results
+    // or crash. Every native call is funnelled through this single lock; the calls are
+    // sub-millisecond, so serialising them costs nothing perceptible.
+    private static readonly object SweLock = new();
+
     public ChartService(string ephemerisPath)
     {
         SwissEphemeris.SetEphePath(ephemerisPath);
@@ -33,8 +42,17 @@ public sealed class ChartService
         var utc = BirthTimeResolver.ToUtc(celebrity);
         double jd = SwissEphemeris.DateTimeToJulianDay(utc);
 
-        var planets = CalculatePlanets(jd);
-        var (houses, asc, mc) = CalculateHouses(jd, celebrity.Latitude, celebrity.Longitude);
+        List<PlanetPosition> planets;
+        List<HouseCusp> houses;
+        double asc, mc;
+        lock (SweLock)
+        {
+            planets = CalculatePlanets(jd);
+            (houses, asc, mc) = CalculateHouses(jd, celebrity.Latitude, celebrity.Longitude);
+        }
+
+        // Aspect detection is pure managed arithmetic on the results above — no native
+        // state — so it stays outside the lock.
         var aspects = CalculateAspects(planets);
 
         return new NatalChart
@@ -129,9 +147,8 @@ public sealed class ChartService
 
     private static bool IsApplying(PlanetPosition a, PlanetPosition b, AspectType type)
     {
-        // The faster-moving planet applies to the aspect if the angle is decreasing
-        var faster = Math.Abs(a.SpeedLongitude) >= Math.Abs(b.SpeedLongitude) ? a : b;
-        var slower = faster == a ? b : a;
+        // Applying = the separation to the exact angle is shrinking. Advance both planets
+        // by their own hourly motion (so relative speed is captured) and compare.
         double currentAngle = AngleBetween(a.Longitude, b.Longitude);
         double nextA = a.Longitude + a.SpeedLongitude / 24.0; // advance 1 hour
         double nextB = b.Longitude + b.SpeedLongitude / 24.0;

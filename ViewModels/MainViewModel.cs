@@ -75,7 +75,7 @@ public sealed partial class MainViewModel : ObservableObject
             await _celebrities.LoadAsync(dataPath);
             await _userCharts.LoadAsync();
             await Cities.LoadAsync(citiesPath);
-            RebuildPool();
+            await RebuildPoolAsync();
             StatusMessage = $"{_all.Count} people loaded.";
             Diagnostics.Log($"Init OK: celebrities={_celebrities.All.Count}, " +
                             $"userCharts={_userCharts.Charts.Count}, categories={Categories.Count}, " +
@@ -92,18 +92,21 @@ public sealed partial class MainViewModel : ObservableObject
         }
     }
 
-    private void RebuildPool()
+    private async Task RebuildPoolAsync()
     {
         _all = [.. _celebrities.All, .. _userCharts.Charts];
-        ComputeVerdicts();
+        // Scoring runs the native Swiss Ephemeris calculation for every chart (150+),
+        // so keep it off the UI thread. It only writes plain string fields on each
+        // Celebrity, which the list bindings read afterwards at item realisation.
+        await Task.Run(ComputeVerdicts);
         RefreshCategories();
         ApplyFilter();
     }
 
     // Score every chart so the browse list can highlight the notable ones. Only
     // Extraordinary/Alarming get a coloured bar; Ordinary stays clear so the outliers
-    // stand out. Runs once at load (fast) before the displayed list is built, since the
-    // list bindings read these values at item realisation.
+    // stand out. Runs on a background thread (see RebuildPoolAsync) before the displayed
+    // list is built, since the list bindings read these values at item realisation.
     private void ComputeVerdicts()
     {
         foreach (var c in _all)
@@ -181,7 +184,7 @@ public sealed partial class MainViewModel : ObservableObject
     public async Task AddCustomChartAsync(Celebrity chart)
     {
         await _userCharts.AddAsync(chart);
-        RebuildPool();
+        await RebuildPoolAsync();
         SelectedCategory = UserChartService.MyChartsCategory;
         SelectedCelebrity = DisplayedCelebrities.FirstOrDefault(c => c.Id == chart.Id);
     }
@@ -194,7 +197,7 @@ public sealed partial class MainViewModel : ObservableObject
         await _userCharts.RemoveAsync(c);
         SelectedCelebrity = null;
         ChartVM.Chart = null;
-        RebuildPool();
+        await RebuildPoolAsync();
     }
 
     private async Task LoadChartAsync(Celebrity celebrity)

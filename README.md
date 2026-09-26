@@ -19,7 +19,7 @@
 - Detects **five major aspects** (conjunction ☌, sextile ⚹, square □, trine △, opposition ☍) with per-aspect orbs, and flags each as applying or separating.
 - Retrograde detection for all five non-luminary classical planets.
 
-- **99 figures** across **12 categories** — Actors, Musicians, Writers, Artists, Scientists, Philosophers, Political, Historical, and more.
+- **150 figures** across **14 categories** — Actors, Musicians, Writers, Artists, Scientists, Philosophers, Directors, Athletes, Political, Historical, and more.
 - **Every figure has a documented, recorded birth time** (Astro-Databank / Rodden-rated). Entries without a reliable birth time were removed, so no chart relies on a noon guess.
 - Each entry stores birth date, time, birth place, geographic coordinates, IANA time zone, and a one-sentence bio.
 - Birth instants are resolved with **historical, DST-aware UTC offsets** via the IANA timezone database (NodaTime), not just fixed offsets — correctly handling anomalies like the UK's 1968–71 year-round BST experiment and 1940s US wartime time.
@@ -187,7 +187,7 @@ Output: `artifacts\LoreSetup-<version>.exe`.
 
 ### `Data\celebrities.json`
 
-99 figures in 12 categories, each with a documented birth time. Each entry:
+150 figures in 14 categories, each with a documented birth time. Each entry:
 
 ```jsonc
 {

@@ -21,26 +21,6 @@ public sealed class CelebrityService
         return _celebrities;
     }
 
-    public IReadOnlyList<string> GetCategories() =>
-        _celebrities?.Select(c => c.Category).Distinct().Order().ToList() ?? [];
-
-    public IReadOnlyList<Celebrity> Filter(string? category, string? searchText)
-    {
-        if (_celebrities is null) return [];
-
-        IEnumerable<Celebrity> q = _celebrities;
-
-        if (!string.IsNullOrWhiteSpace(category))
-            q = q.Where(c => c.Category == category);
-
-        if (!string.IsNullOrWhiteSpace(searchText))
-        {
-            string lower = searchText.ToLowerInvariant();
-            q = q.Where(c =>
-                c.Name.Contains(lower, StringComparison.OrdinalIgnoreCase) ||
-                c.BirthPlace.Contains(lower, StringComparison.OrdinalIgnoreCase));
-        }
-
-        return q.OrderBy(c => c.Name).ToList();
-    }
+    // Category listing and filtering live in MainViewModel, which also folds in the
+    // user's custom charts; this service just loads and exposes the bundled corpus.
 }
