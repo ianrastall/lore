@@ -17,6 +17,7 @@
 - Computes positions for **13 bodies**: Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North Node, Chiron, and Black Moon Lilith (Mean Apogee).
 - Calculates **12 Placidus house cusps**, Ascendant, and Midheaven.
 - Detects **five major aspects** (conjunction ☌, sextile ⚹, square □, trine △, opposition ☍) with per-aspect orbs, and flags each as applying or separating.
+- Detects **major configurations** — stellium, grand trine, T-square, and grand cross — from the positions and aspects (a T-square that is one arm of a grand cross is not reported twice).
 - Retrograde detection for all five non-luminary classical planets.
 
 - **99 figures** across **12 categories** — Actors, Musicians, Writers, Artists, Scientists, Philosophers, Political, Historical, and more.
@@ -35,7 +36,7 @@
 | View | Description |
 |---|---|
 | **Chart Wheel** | Rendered chart wheel (Win2D / Direct2D), drawn on-screen and exportable as a high-resolution PNG. |
-| **Report** | Natural-language reading: Overview (Sun/Moon/Rising), planet-by-sign-degree-and-house paragraphs, major aspects, and elemental and modal balance. The Ascendant/Midheaven line shows their degrees and names the Placidus house system. |
+| **Report** | Natural-language reading: Overview (Sun/Moon/Rising), planet-by-sign-degree-and-house paragraphs, major aspects, chart patterns (stellium, grand trine, T-square, grand cross), and elemental and modal balance. The Ascendant/Midheaven line shows their degrees and names the Placidus house system. |
 | **Legend** | Full-page reference — a grouped list of every glyph, colour, angle, house, and term; click any item for a fuller explanation. |
 
 ### Traditional Dignity Scoring

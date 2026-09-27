@@ -47,6 +47,7 @@ public sealed class ChartInterpreter
             Overview(chart),
             Planets(chart),
             Aspects(chart),
+            Patterns(chart),
             Balance(chart),
             ModalBalance(chart),
         };
@@ -122,6 +123,58 @@ public sealed class ChartInterpreter
             paras.Add(line);
         }
         return new ReportSection { Heading = "Major Aspects", Paragraphs = paras };
+    }
+
+    private ReportSection Patterns(NatalChart chart)
+    {
+        var patterns = AspectPatternService.Detect(chart);
+        var paras = new List<string>();
+
+        if (patterns.Count == 0)
+        {
+            paras.Add("No major configuration (stellium, grand trine, T-square, or grand cross) " +
+                      "stands out — the aspects act more as individual links than a single locked figure.");
+            return new ReportSection { Heading = "Chart Patterns", Paragraphs = paras };
+        }
+
+        foreach (var p in patterns)
+        {
+            string names = JoinNames(p.Planets);
+            switch (p.Type)
+            {
+                case PatternType.Stellium:
+                    paras.Add($"Stellium in {p.Sign!.Value.Name()} — {p.Planets.Count} bodies " +
+                              $"({names}) gather in one sign, concentrating its themes into a dominant focus of the chart.");
+                    break;
+                case PatternType.GrandTrine:
+                    paras.Add($"Grand Trine in {p.Element} — {names} form a closed triangle of trines, " +
+                              "an easy, self-reinforcing circuit of talent that flows so naturally it can be taken for granted.");
+                    break;
+                case PatternType.TSquare:
+                    var ends = p.Planets.Where(x => x != p.Apex).Select(x => x.Name());
+                    paras.Add($"T-Square in {p.Modality} signs — {p.Apex!.Value.Name()} stands at the apex, " +
+                              $"squaring the opposition between {string.Join(" and ", ends)}. " +
+                              "A focal point of dynamic tension that pushes hard toward action and achievement.");
+                    break;
+                case PatternType.GrandCross:
+                    paras.Add($"Grand Cross in {p.Modality} signs — {names} form two oppositions locked by four squares, " +
+                              "a demanding but powerful figure that seeks balance on all four fronts.");
+                    break;
+            }
+        }
+        return new ReportSection { Heading = "Chart Patterns", Paragraphs = paras };
+    }
+
+    private static string JoinNames(IReadOnlyList<Planet> ps)
+    {
+        var names = ps.Select(p => p.Name()).ToList();
+        return names.Count switch
+        {
+            0 => "",
+            1 => names[0],
+            2 => $"{names[0]} and {names[1]}",
+            _ => string.Join(", ", names.Take(names.Count - 1)) + ", and " + names[^1]
+        };
     }
 
     private ReportSection Balance(NatalChart chart)
