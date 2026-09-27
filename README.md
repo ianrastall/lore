@@ -261,7 +261,7 @@ python scripts\wikidata_hospitals.py -o Data\hospitals_wikidata.csv --checkpoint
 python scripts\build-hospitals.py
 ```
 
-The OSM fetch caches each country's result under `Data\.osm_cache\` (gitignored), so a re-run or an interrupted run resumes instead of refetching; pass `--refresh` to ignore the cache. The Overpass endpoint can be overridden with `--endpoint` or the `OVERPASS_URL` environment variable.
+The OSM fetch caches each country's result under `Data\.osm_cache\` (gitignored), so a re-run or an interrupted run resumes instead of refetching; pass `--refresh` to ignore the cache. Public Overpass servers are often busy and answer with `504`/`429`; the script treats those as transient, backs off, and rotates across several mirrors automatically, so just re-running the build picks up any countries that failed. Pin a single server with `--endpoint` or the `OVERPASS_URL` environment variable.
 
 > The **OECD** data API cannot feed this file: it is a *statistics* store (GDP, prices, health aggregates such as beds-per-1,000), with no directory of individual hospitals and coordinates.
 
