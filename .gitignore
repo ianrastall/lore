@@ -14,6 +14,9 @@ Native/sweph.dll
 # simplemaps raw world-cities download (5.3 MB CSV + xlsx) -- source for the
 # city database; the processed/trimmed data is what gets committed.
 /Data/simplemaps_worldcities_basicv1.91.4/
+# Per-country OpenStreetMap hospital cache written by scripts/build-hospitals.py
+# (resume/refetch scratch space; the merged hospitals.json is what gets committed).
+/Data/.osm_cache/
 
 # ---- Swiss Ephemeris source distribution ---------------------------------
 # Keep the C source + Makefile + license (needed to build sweph.dll) and the
@@ -31,3 +34,6 @@ Native/sweph.dll
 !/Data/swisseph-2.10.3bfinal/swisseph-2.10.3bfinal/ephe/semo_18.se1
 !/Data/swisseph-2.10.3bfinal/swisseph-2.10.3bfinal/ephe/seas_12.se1
 !/Data/swisseph-2.10.3bfinal/swisseph-2.10.3bfinal/ephe/seas_18.se1
+
+# ---- Python bytecode cache -----------------------------------------------
+__pycache__/

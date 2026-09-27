@@ -108,7 +108,7 @@ Lore/
     ├── build-installer.ps1    # Inno Setup installer
     ├── build-icons.ps1        # Icon generation (requires ImageMagick)
     ├── build-cities.py        # Regenerate cities.json from simplemaps CSV
-    └── build-hospitals.py     # Regenerate hospitals.json from the Wikidata CSV
+    └── build-hospitals.py     # Regenerate hospitals.json from Wikidata + OpenStreetMap
 ```
 
 ### Key Dependencies
@@ -227,15 +227,24 @@ python scripts\build-cities.py
 
 ### `Data\hospitals.json`
 
-~26,400 hospitals with `name`, `city`, `country`, `lat`, and `lon`. Powers the hospital autocomplete in the Add Chart dialog, an alternative to city search that gives more precise birthplace coordinates. Unlike `cities.json` there is no timezone or population field: the app resolves the historical, DST-aware zone from the chosen coordinates (GeoTimeZone + NodaTime), and prefix search ranks by name.
+Hospitals with `name`, `city`, `country`, `lat`, and `lon`. Powers the hospital autocomplete in the Add Chart dialog, an alternative to city search that gives more precise birthplace coordinates. Unlike `cities.json` there is no timezone or population field: the app resolves the historical, DST-aware zone from the chosen coordinates (GeoTimeZone + NodaTime), and prefix search ranks by name.
 
-Generated from a Wikidata export of hospitals with coordinates (`Data\hospitals_wikidata.csv`, columns `Hospital,City,Country,Latitude,Longitude`) via `scripts\build-hospitals.py`. Wikidata content is released under CC0 1.0 (public domain).
+Built by `scripts\build-hospitals.py` from two merged sources:
 
-To regenerate after updating the source CSV:
+- **Wikidata** (`Data\hospitals_wikidata.csv`, columns `Hospital,City,Country,Latitude,Longitude`, CC0 1.0) — ~26,400 curated hospitals. This set is *notability-filtered*: it holds only hospitals with a Wikidata item, so it misses most small or local hospitals. Committed to the repo.
+- **OpenStreetMap** via the [Overpass API](https://dev.overpass-api.de/overpass-doc/) (© OpenStreetMap contributors, ODbL) — every `amenity=hospital` / `healthcare=hospital` feature worldwide, fetched one country at a time so each row is labelled with the country whose administrative boundary the query used. Adds the small local hospitals Wikidata lacks (hundreds of thousands globally).
+
+The two are merged and de-duplicated (same name within ~111 m collapses; Wikidata's curated country label wins ties). The script uses only the Python standard library — no `pip install`.
 
 ```powershell
-python scripts\build-hospitals.py
+python scripts\build-hospitals.py                 # Wikidata + all countries (needs network)
+python scripts\build-hospitals.py --countries US,GB,DE
+python scripts\build-hospitals.py --no-osm        # Wikidata CSV only
 ```
+
+The OSM fetch caches each country's result under `Data\.osm_cache\` (gitignored), so a re-run or an interrupted run resumes instead of refetching; pass `--refresh` to ignore the cache. The Overpass endpoint can be overridden with `--endpoint` or the `OVERPASS_URL` environment variable.
+
+> The **OECD** data API cannot feed this file: it is a *statistics* store (GDP, prices, health aggregates such as beds-per-1,000), with no directory of individual hospitals and coordinates.
 
 ### `Data\interpretations.json`
 
@@ -287,6 +296,7 @@ The `_12` files are required for historical figures such as Leonardo da Vinci, S
 | [Swiss Ephemeris](https://www.astro.com/swisseph/) | AGPL-3.0 / Astrodienst commercial licence |
 | [simplemaps World Cities Database](https://simplemaps.com/data/world-cities) | CC BY 4.0 |
 | [Wikidata](https://www.wikidata.org/) (hospital coordinates) | CC0 1.0 |
+| [OpenStreetMap](https://www.openstreetmap.org/copyright) (hospital coordinates) | ODbL |
 | [NodaTime](https://nodatime.org/) | Apache-2.0 |
 | [GeoTimeZone](https://github.com/mattjohnsonpint/GeoTimeZone) | MIT |
 | [QuestPDF](https://www.questpdf.com/) | Community licence (free for individuals / < $1 M revenue) |
