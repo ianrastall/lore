@@ -61,7 +61,7 @@ Charts can be exported in four formats:
 |---|---|
 | **PNG** | High-resolution chart wheel (1600 × 1600 px, offscreen Win2D render) |
 | **PDF** | Full reading — birth data, chart wheel image, Big Three, written report, and per-planet dignity table |
-| **JSON** | Structured chart data (planets, houses, aspects, angles) |
+| **JSON** | Structured chart data (planets, houses, aspects, angles, and detected patterns) |
 | **XML** | Same structured data in XML |
 
 ---

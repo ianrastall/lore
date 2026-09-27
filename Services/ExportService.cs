@@ -235,6 +235,15 @@ public static class ExportService
                 ExactAngle = a.Type.Angle(),
                 Orb = Round(a.Orb),
                 Applying = a.IsApplying
+            }).ToList(),
+            Patterns = AspectPatternService.Detect(chart).Select(p => new PatternExport
+            {
+                Type = p.Type.ToString(),
+                Planets = p.Planets.Select(x => x.Name()).ToList(),
+                Sign = p.Sign.HasValue ? p.Sign.Value.Name() : "",
+                Element = p.Element.HasValue ? p.Element.Value.ToString() : "",
+                Modality = p.Modality.HasValue ? p.Modality.Value.ToString() : "",
+                Apex = p.Apex.HasValue ? p.Apex.Value.Name() : ""
             }).ToList()
         };
     }
@@ -263,6 +272,7 @@ public sealed class ChartExport
     public List<PlanetExport> Planets { get; set; } = [];
     public List<HouseExport> Houses { get; set; } = [];
     public List<AspectExport> Aspects { get; set; } = [];
+    public List<PatternExport> Patterns { get; set; } = [];
 }
 
 public sealed class PlanetExport
@@ -291,4 +301,15 @@ public sealed class AspectExport
     public double ExactAngle { get; set; }
     public double Orb { get; set; }
     public bool Applying { get; set; }
+}
+
+public sealed class PatternExport
+{
+    public string Type { get; set; } = "";                 // Stellium / GrandTrine / TSquare / GrandCross
+    [XmlArrayItem("Planet")]
+    public List<string> Planets { get; set; } = [];
+    public string Sign { get; set; } = "";                 // Stellium: the shared sign
+    public string Element { get; set; } = "";              // Grand Trine: the shared element
+    public string Modality { get; set; } = "";             // T-Square / Grand Cross: the shared modality
+    public string Apex { get; set; } = "";                 // T-Square: the body squaring both ends
 }
