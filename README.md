@@ -108,7 +108,9 @@ Lore/
     ├── build-installer.ps1    # Inno Setup installer
     ├── build-icons.ps1        # Icon generation (requires ImageMagick)
     ├── build-cities.py        # Regenerate cities.json from simplemaps CSV
-    └── build-hospitals.py     # Regenerate hospitals.json from Wikidata + OpenStreetMap
+    ├── build-hospitals.bat    # Double-click pipeline: rebuild hospitals.json
+    ├── build-hospitals.py     # Stage 2: merge Wikidata CSV + OpenStreetMap -> hospitals.json
+    └── wikidata_hospitals.py  # Stage 1: query Wikidata -> hospitals_wikidata.csv
 ```
 
 ### Key Dependencies
@@ -229,17 +231,34 @@ python scripts\build-cities.py
 
 Hospitals with `name`, `city`, `country`, `lat`, and `lon`. Powers the hospital autocomplete in the Add Chart dialog, an alternative to city search that gives more precise birthplace coordinates. Unlike `cities.json` there is no timezone or population field: the app resolves the historical, DST-aware zone from the chosen coordinates (GeoTimeZone + NodaTime), and prefix search ranks by name.
 
-Built by `scripts\build-hospitals.py` from two merged sources:
+Built from two merged sources by a two-stage pipeline:
 
-- **Wikidata** (`Data\hospitals_wikidata.csv`, columns `Hospital,City,Country,Latitude,Longitude`, CC0 1.0) — ~26,400 curated hospitals. This set is *notability-filtered*: it holds only hospitals with a Wikidata item, so it misses most small or local hospitals. Committed to the repo.
-- **OpenStreetMap** via the [Overpass API](https://dev.overpass-api.de/overpass-doc/) (© OpenStreetMap contributors, ODbL) — every `amenity=hospital` / `healthcare=hospital` feature worldwide, fetched one country at a time so each row is labelled with the country whose administrative boundary the query used. Adds the small local hospitals Wikidata lacks (hundreds of thousands globally).
+- **Stage 1 — Wikidata** (`scripts\wikidata_hospitals.py` → `Data\hospitals_wikidata.csv`, columns `Hospital,City,Country,Latitude,Longitude`, CC0 1.0) — ~26,400 curated hospitals. This set is *notability-filtered*: it holds only hospitals with a Wikidata item, so it misses most small or local hospitals. The CSV is committed to the repo, so Stage 1 rarely needs re-running.
+- **Stage 2 — OpenStreetMap** (`scripts\build-hospitals.py`) via the [Overpass API](https://dev.overpass-api.de/overpass-doc/) (© OpenStreetMap contributors, ODbL) — merges the Wikidata CSV with every `amenity=hospital` / `healthcare=hospital` feature worldwide, fetched one country at a time so each row is labelled with the country whose administrative boundary the query used. Adds the small local hospitals Wikidata lacks (hundreds of thousands globally).
 
-The two are merged and de-duplicated (same name within ~111 m collapses; Wikidata's curated country label wins ties). The script uses only the Python standard library — no `pip install`.
+The two are merged and de-duplicated (same name within ~111 m collapses; Wikidata's curated country label wins ties). Both scripts use only the Python standard library — no `pip install`.
+
+#### The easy way: double-click `scripts\build-hospitals.bat`
+
+It self-updates (`git pull --ff-only`), then offers three options:
+
+1. **Quick build** — merge the committed Wikidata CSV with OpenStreetMap worldwide (Stage 2 only). Recommended; a few minutes.
+2. **Full refresh** — re-download the Wikidata list (Stage 1), then merge OpenStreetMap (Stage 2). Slow (30+ minutes).
+3. **Offline** — rebuild from the committed Wikidata CSV only, no network.
+
+After it finishes, commit and push `Data\hospitals.json`; the app needs no code changes.
+
+#### The manual way
 
 ```powershell
+# Stage 2 only (uses the committed CSV):
 python scripts\build-hospitals.py                 # Wikidata + all countries (needs network)
 python scripts\build-hospitals.py --countries US,GB,DE
-python scripts\build-hospitals.py --no-osm        # Wikidata CSV only
+python scripts\build-hospitals.py --no-osm        # Wikidata CSV only, no network
+
+# Stage 1 (refresh the Wikidata CSV first), then Stage 2:
+python scripts\wikidata_hospitals.py -o Data\hospitals_wikidata.csv --checkpoint Data\.wikidata_progress.json
+python scripts\build-hospitals.py
 ```
 
 The OSM fetch caches each country's result under `Data\.osm_cache\` (gitignored), so a re-run or an interrupted run resumes instead of refetching; pass `--refresh` to ignore the cache. The Overpass endpoint can be overridden with `--endpoint` or the `OVERPASS_URL` environment variable.

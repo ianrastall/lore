@@ -37,3 +37,6 @@ Native/sweph.dll
 
 # ---- Python bytecode cache -----------------------------------------------
 __pycache__/
+# Wikidata builder checkpoints (scratch; the CSV/JSON outputs are what matter)
+/Data/.wikidata_progress.json
+scripts/wikidata_progress.json
