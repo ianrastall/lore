@@ -33,6 +33,18 @@ public static class ZodiacSignExtensions
         return normalized % 30;
     }
 
+    // Position within its sign as degrees and arc-minutes, e.g. "12°39'".
+    // Shared by the report, the on-screen angles line, and the PDF export so
+    // they all print the same format.
+    public static string FormatDegreeInSign(double eclipticLongitude)
+    {
+        double d = DegreeInSign(eclipticLongitude);
+        int deg = (int)d;
+        int min = (int)Math.Round((d - deg) * 60);
+        if (min == 60) { deg += 1; min = 0; } // carry a minute that rounds up to 60'
+        return $"{deg}°{min:D2}'";
+    }
+
     public static Element GetElement(this ZodiacSign s) => s switch
     {
         ZodiacSign.Aries or ZodiacSign.Leo or ZodiacSign.Sagittarius => Element.Fire,

@@ -20,6 +20,7 @@ public sealed class ChartInterpreter
         public Dictionary<string, string> AspectDynamics { get; init; } = new();
         public Dictionary<string, string> AspectNotes { get; init; } = new();
         public Dictionary<string, string> Elements { get; init; } = new();
+        public Dictionary<string, string> Modalities { get; init; } = new();
     }
 
     private static readonly JsonSerializerOptions JsonOpts = new() { PropertyNameCaseInsensitive = true };
@@ -47,6 +48,7 @@ public sealed class ChartInterpreter
             Planets(chart),
             Aspects(chart),
             Balance(chart),
+            ModalBalance(chart),
         };
         return sections;
     }
@@ -96,7 +98,8 @@ public sealed class ChartInterpreter
                 core = $"{theme} expressed {style}, colouring {area}.";
             }
 
-            paras.Add($"{p.PlanetSymbol} {p.PlanetName} in {p.Sign.Name()} ({Ordinal(house)} house): {core}{retro}");
+            string pos = ZodiacSignExtensions.FormatDegreeInSign(p.Longitude);
+            paras.Add($"{p.PlanetSymbol} {p.PlanetName} in {p.Sign.Name()} {pos} ({Ordinal(house)} house): {core}{retro}");
         }
         return new ReportSection { Heading = "The Planets", Paragraphs = paras };
     }
@@ -149,6 +152,41 @@ public sealed class ChartInterpreter
         }
         return new ReportSection { Heading = "Elemental Balance", Paragraphs = paras };
     }
+
+    private ReportSection ModalBalance(NatalChart chart)
+    {
+        var counts = new Dictionary<Modality, int>
+        {
+            [Modality.Cardinal] = 0, [Modality.Fixed] = 0, [Modality.Mutable] = 0
+        };
+        foreach (var p in chart.Planets)
+            counts[p.Sign.GetModality()]++;
+
+        int total = counts.Values.Sum();
+        var paras = new List<string>();
+        if (total > 0)
+        {
+            var dominant = counts.OrderByDescending(kv => kv.Value).First();
+            var lacking = counts.OrderBy(kv => kv.Value).First();
+
+            string domText = Lookup(_c.Modalities, dominant.Key.ToString(), ModalityFallback(dominant.Key));
+            paras.Add($"The chart leans toward {dominant.Key} ({dominant.Value} of {total} bodies) — {domText}.");
+
+            if (lacking.Value == 0)
+                paras.Add($"There is little or no {lacking.Key} energy, which may be an area that needs conscious cultivation.");
+
+            paras.Add($"Modality tally — Cardinal: {counts[Modality.Cardinal]}, " +
+                      $"Fixed: {counts[Modality.Fixed]}, Mutable: {counts[Modality.Mutable]}.");
+        }
+        return new ReportSection { Heading = "Modal Balance", Paragraphs = paras };
+    }
+
+    private static string ModalityFallback(Modality m) => m switch
+    {
+        Modality.Cardinal => "an initiating temperament — active, enterprising, and quick to begin",
+        Modality.Fixed => "a steadfast temperament — persistent, determined, and resistant to change",
+        _ => "an adaptable temperament — flexible, versatile, and at ease with change"
+    };
 
     private string Frame(string role, string name, ZodiacSign sign)
     {

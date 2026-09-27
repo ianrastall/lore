@@ -35,7 +35,7 @@
 | View | Description |
 |---|---|
 | **Chart Wheel** | Rendered chart wheel (Win2D / Direct2D), drawn on-screen and exportable as a high-resolution PNG. |
-| **Report** | Natural-language reading: Overview (Sun/Moon/Rising), planet-by-sign-and-house paragraphs, major aspects, and elemental balance. |
+| **Report** | Natural-language reading: Overview (Sun/Moon/Rising), planet-by-sign-degree-and-house paragraphs, major aspects, and elemental and modal balance. The Ascendant/Midheaven line shows their degrees and names the Placidus house system. |
 | **Legend** | Full-page reference — a grouped list of every glyph, colour, angle, house, and term; click any item for a fuller explanation. |
 
 ### Traditional Dignity Scoring

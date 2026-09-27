@@ -77,8 +77,9 @@ public static class ExportService
         if (chart.GetPlanet(Planet.Moon) is { } moonP) bigParts.Add($"☽ Moon {moonP.Sign.Name()}");
         bigParts.Add($"↑ Rising {rising}");
         string bigThree = string.Join("     ·     ", bigParts);
-        string angles = $"Ascendant {rising}   ·   Midheaven " +
-                        ZodiacSignExtensions.FromLongitude(chart.Midheaven).Name();
+        string angles = $"Ascendant {rising} {ZodiacSignExtensions.FormatDegreeInSign(chart.Ascendant)}" +
+                        $"   ·   Midheaven {ZodiacSignExtensions.FromLongitude(chart.Midheaven).Name()} {ZodiacSignExtensions.FormatDegreeInSign(chart.Midheaven)}" +
+                        $"   ·   Placidus houses";
 
         var score = DignityService.Compute(chart);
         string verdictHex = score.Verdict.ColorHex();

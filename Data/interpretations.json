@@ -204,5 +204,10 @@
     "Earth": "an earthy temperament — practical, grounded, and reliable",
     "Air": "an airy temperament — intellectual, social, and idea-driven",
     "Water": "a watery temperament — emotional, intuitive, and empathetic"
+  },
+  "modalities": {
+    "Cardinal": "an initiating temperament — active, enterprising, and quick to start things in motion",
+    "Fixed": "a steadfast temperament — persistent, determined, and slow to change course",
+    "Mutable": "an adaptable temperament — flexible, versatile, and at ease with change"
   }
 }

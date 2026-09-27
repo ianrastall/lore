@@ -46,8 +46,9 @@ public sealed partial class ChartViewModel : ObservableObject
     // Technical chart angles — secondary, shown small. The Midheaven is NOT the "sign";
     // it lives here so it can't be mistaken for one.
     public string AnglesText => Chart is null ? "" :
-        $"Ascendant {ZodiacSignExtensions.FromLongitude(Chart.Ascendant).Name()}" +
-        $"   ·   Midheaven {ZodiacSignExtensions.FromLongitude(Chart.Midheaven).Name()}";
+        $"Ascendant {ZodiacSignExtensions.FromLongitude(Chart.Ascendant).Name()} {ZodiacSignExtensions.FormatDegreeInSign(Chart.Ascendant)}" +
+        $"   ·   Midheaven {ZodiacSignExtensions.FromLongitude(Chart.Midheaven).Name()} {ZodiacSignExtensions.FormatDegreeInSign(Chart.Midheaven)}" +
+        $"   ·   Placidus houses";
 
     // Traditional dignity score + verdict, shown as a coloured pill.
     private ChartScore? _score;
