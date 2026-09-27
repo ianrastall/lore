@@ -22,8 +22,17 @@
                           Checked="TimeUnknown_Changed" Unchecked="TimeUnknown_Changed"/>
             </StackPanel>
 
+            <AutoSuggestBox x:Name="HospitalBox"
+                            Header="Birthplace hospital (search to autofill precise coordinates)"
+                            PlaceholderText="Start typing a hospital…"
+                            TextChanged="HospitalBox_TextChanged"
+                            SuggestionChosen="HospitalBox_SuggestionChosen"
+                            DisplayMemberPath="Display"
+                            TextMemberPath="Display"
+                            QueryIcon="Find"/>
+
             <AutoSuggestBox x:Name="CityBox"
-                            Header="Birthplace (search to autofill coordinates)"
+                            Header="Or search a city (if the hospital isn't listed)"
                             PlaceholderText="Start typing a city…"
                             TextChanged="CityBox_TextChanged"
                             SuggestionChosen="CityBox_SuggestionChosen"

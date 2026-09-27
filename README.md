@@ -4,7 +4,7 @@
 
 > A Windows desktop application for computing and exploring astrological natal charts, powered by the Swiss Ephemeris. Browse a curated library of historical figures — every one with a documented birth time — or add your own.
 
-**Latest release: v1.1.0** · [Download](../../releases/latest)
+**Latest release: v1.2.0** · [Download](../../releases/latest)
 
 ![Lore showing the Abraham Lincoln report](Assets/screenshot-lincoln-report.png)
 
@@ -27,6 +27,7 @@
 ### My Charts (Custom Entry)
 - **Add Chart** button opens a dialog to enter any name, date, time, and place.
 - City search autofills latitude, longitude, and IANA timezone from a bundled database of ~50,250 cities.
+- **Hospital search** autofills more precise coordinates from a bundled database of ~26,400 hospitals worldwide — hospitals are where people are born, and precise coordinates sharpen the Ascendant and house cusps. The timezone is derived from the chosen coordinates.
 - Custom charts persist to `%LOCALAPPDATA%\Lore\mycharts.json` and appear under a dedicated **My Charts** category.
 - Custom charts can be deleted from the browse list.
 
@@ -81,7 +82,8 @@ Lore/
 │   ├── ExportService.cs       # PNG / PDF / JSON / XML export
 │   ├── CelebrityService.cs    # Loads celebrities.json
 │   ├── UserChartService.cs    # Loads/saves mycharts.json
-│   └── CityService.cs         # City autocomplete for Add-Chart dialog
+│   ├── CityService.cs         # City autocomplete for Add-Chart dialog
+│   └── HospitalService.cs     # Hospital autocomplete for Add-Chart dialog
 ├── ViewModels/
 │   ├── MainViewModel.cs       # Browse list, search/filter, category, add/delete
 │   └── ChartViewModel.cs      # Chart + report state for the detail pane
@@ -94,6 +96,7 @@ Lore/
 ├── Data/
 │   ├── celebrities.json       # 99 bundled figures (all with recorded birth times)
 │   ├── cities.json            # ~50,250 cities (lat/lon + IANA tz)
+│   ├── hospitals.json         # ~26,400 hospitals (lat/lon), Add-Chart birthplace search
 │   ├── interpretations.json   # Corpus for the natural-language report
 │   └── swisseph-2.10.3bfinal/ # Swiss Ephemeris C source + .se1 ephemeris files
 ├── Native/
@@ -104,7 +107,8 @@ Lore/
     ├── build-portable.ps1     # Self-contained portable build
     ├── build-installer.ps1    # Inno Setup installer
     ├── build-icons.ps1        # Icon generation (requires ImageMagick)
-    └── build-cities.py        # Regenerate cities.json from simplemaps CSV
+    ├── build-cities.py        # Regenerate cities.json from simplemaps CSV
+    └── build-hospitals.py     # Regenerate hospitals.json from the Wikidata CSV
 ```
 
 ### Key Dependencies
@@ -221,6 +225,18 @@ pip install --user timezonefinder tzdata
 python scripts\build-cities.py
 ```
 
+### `Data\hospitals.json`
+
+~26,400 hospitals with `name`, `city`, `country`, `lat`, and `lon`. Powers the hospital autocomplete in the Add Chart dialog, an alternative to city search that gives more precise birthplace coordinates. Unlike `cities.json` there is no timezone or population field: the app resolves the historical, DST-aware zone from the chosen coordinates (GeoTimeZone + NodaTime), and prefix search ranks by name.
+
+Generated from a Wikidata export of hospitals with coordinates (`Data\hospitals_wikidata.csv`, columns `Hospital,City,Country,Latitude,Longitude`) via `scripts\build-hospitals.py`. Wikidata content is released under CC0 1.0 (public domain).
+
+To regenerate after updating the source CSV:
+
+```powershell
+python scripts\build-hospitals.py
+```
+
 ### `Data\interpretations.json`
 
 Editable corpus for the natural-language report. Keyed dictionaries for sign traits, role framing, planet themes, sign styles, bespoke planet-in-sign lines (`"Planet|Sign"` keys), house area descriptions, aspect dynamics, and elemental descriptions. Edit this file to customise the generated text without touching C# code.
@@ -270,6 +286,7 @@ The `_12` files are required for historical figures such as Leonardo da Vinci, S
 |---|---|
 | [Swiss Ephemeris](https://www.astro.com/swisseph/) | AGPL-3.0 / Astrodienst commercial licence |
 | [simplemaps World Cities Database](https://simplemaps.com/data/world-cities) | CC BY 4.0 |
+| [Wikidata](https://www.wikidata.org/) (hospital coordinates) | CC0 1.0 |
 | [NodaTime](https://nodatime.org/) | Apache-2.0 |
 | [GeoTimeZone](https://github.com/mattjohnsonpint/GeoTimeZone) | MIT |
 | [QuestPDF](https://www.questpdf.com/) | Community licence (free for individuals / < $1 M revenue) |
@@ -280,7 +297,10 @@ The `_12` files are required for historical figures such as Leonardo da Vinci, S
 
 ## Version History
 
-### 1.1.0 (current)
+### 1.2.0 (current)
+- **Hospital birthplace search** — the Add Chart dialog gains a hospital autocomplete alongside city search, backed by a bundled database of ~26,400 hospitals worldwide (Wikidata, CC0). Picking a hospital autofills precise coordinates; the timezone is resolved from those coordinates as before. Useful because a hospital pinpoints a birthplace more tightly than a city centre, sharpening the Ascendant and house cusps.
+
+### 1.1.0
 - **Deeper dignity scoring** — the essential-dignity engine now scores the full classical five-tier system: the complete Dorothean triplicity triumvirate (day, night, **and** participating ruler), **Terms** (Egyptian bounds, +2), **Faces** (Chaldean decans, +1), and the **Peregrine** penalty (−5) for a planet with no share in its sign. Verdict bands recalibrated against the expanded timed corpus.
 - **Fuller Legend & Reference** — new sections documenting the whole scoring system: sect (day/night charts), the triplicity rulers, every essential dignity (domicile → face, detriment/fall/peregrine), and the accidental dignities (house strength, motion, solar phase).
 - **More figures** — the timed-figure library grows from 99 to **150**, all with documented (Rodden-rated) birth times, adding **Director** and **Athlete** categories alongside more actors, musicians, and world figures.

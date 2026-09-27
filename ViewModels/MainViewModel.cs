@@ -19,6 +19,10 @@ public sealed partial class MainViewModel : ObservableObject
     // Exposed so the Add-Chart dialog (owned by the window) can offer city autocomplete.
     public CityService Cities { get; }
 
+    // Exposed alongside Cities so the Add-Chart dialog can also offer hospital search
+    // (a precise birthplace: hospitals are where people are born).
+    public HospitalService Hospitals { get; }
+
     [ObservableProperty]
     public partial ObservableCollection<Celebrity> DisplayedCelebrities { get; set; } = [];
 
@@ -55,26 +59,30 @@ public sealed partial class MainViewModel : ObservableObject
         ChartService charts,
         ChartInterpreter interpreter,
         UserChartService userCharts,
-        CityService cities)
+        CityService cities,
+        HospitalService hospitals)
     {
         _celebrities = celebrities;
         _charts = charts;
         _userCharts = userCharts;
         Cities = cities;
+        Hospitals = hospitals;
         ChartVM = new ChartViewModel(interpreter);
     }
 
-    public async Task InitializeAsync(string dataPath, string citiesPath)
+    public async Task InitializeAsync(string dataPath, string citiesPath, string hospitalsPath)
     {
         IsLoading = true;
         StatusMessage = "Loading data…";
         try
         {
             Diagnostics.Log($"Init: dataPath={dataPath} exists={File.Exists(dataPath)}; " +
-                            $"citiesPath={citiesPath} exists={File.Exists(citiesPath)}");
+                            $"citiesPath={citiesPath} exists={File.Exists(citiesPath)}; " +
+                            $"hospitalsPath={hospitalsPath} exists={File.Exists(hospitalsPath)}");
             await _celebrities.LoadAsync(dataPath);
             await _userCharts.LoadAsync();
             await Cities.LoadAsync(citiesPath);
+            await Hospitals.LoadAsync(hospitalsPath);
             RebuildPool();
             StatusMessage = $"{_all.Count} people loaded.";
             Diagnostics.Log($"Init OK: celebrities={_celebrities.All.Count}, " +

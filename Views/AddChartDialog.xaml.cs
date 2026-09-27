@@ -7,6 +7,7 @@ namespace Lore.Views;
 public sealed partial class AddChartDialog : ContentDialog
 {
     private readonly CityService _cities;
+    private readonly HospitalService _hospitals;
 
     // IANA zone id of the chosen city; null until a city is picked (then the resolver
     // backfills from lat/lon). Latitude/longitude drive the geographic fallback.
@@ -14,9 +15,10 @@ public sealed partial class AddChartDialog : ContentDialog
 
     public Celebrity? Result { get; private set; }
 
-    public AddChartDialog(CityService cities)
+    public AddChartDialog(CityService cities, HospitalService hospitals)
     {
         _cities = cities;
+        _hospitals = hospitals;
         InitializeComponent();
 
         // DateTimeOffset(dateTime, offset) throws if dateTime.Kind == Local and the
@@ -57,6 +59,27 @@ public sealed partial class AddChartDialog : ContentDialog
             LonBox.Value = city.Longitude;
             UtcBox.Value = city.UtcOffsetHours; // fallback only
             _timeZoneId = string.IsNullOrWhiteSpace(city.TimeZoneId) ? null : city.TimeZoneId;
+            RefreshResolvedOffset();
+        }
+    }
+
+    private void HospitalBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+    {
+        if (args.Reason != AutoSuggestionBoxTextChangeReason.UserInput) return;
+        sender.ItemsSource = _hospitals.Search(sender.Text);
+    }
+
+    private void HospitalBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+    {
+        if (args.SelectedItem is Hospital hospital)
+        {
+            sender.Text = hospital.Display;
+            PlaceBox.Text = hospital.Display;
+            LatBox.Value = hospital.Latitude;
+            LonBox.Value = hospital.Longitude;
+            // Hospitals carry no time-zone data, so clear any zone from a prior city
+            // pick and let RefreshResolvedOffset resolve it from these coordinates.
+            _timeZoneId = null;
             RefreshResolvedOffset();
         }
     }
