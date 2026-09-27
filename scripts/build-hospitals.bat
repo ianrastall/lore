@@ -65,7 +65,23 @@ if "%PICK%"=="2" goto refresh
 if "%PICK%"=="1" goto quick
 goto end
 
+rem Ask which countries to pull from OpenStreetMap. Blank = whole world.
+:ask_countries
+echo Which countries should I pull from OpenStreetMap?
+echo   - Leave BLANK and press Enter for the whole world (slow; public servers
+echo     are often busy, but it resumes where it left off if you re-run).
+echo   - Or type one or more 2-letter codes, e.g.  US   or   US,CA,GB
+echo     (US = United States, CA = Canada, GB = United Kingdom, etc.)
+echo.
+set "COUNTRIES="
+set /p "COUNTRIES=Countries (blank = world): "
+set "CFLAG="
+if defined COUNTRIES set "CFLAG=--countries %COUNTRIES%"
+echo.
+goto :eof
+
 :refresh
+call :ask_countries
 echo -- Step 1 of 2: querying Wikidata for hospitals worldwide --
 echo    (this is the slow part; progress is saved after each country,
 echo     so you can re-run and it resumes)
@@ -77,11 +93,12 @@ if errorlevel 1 (
 )
 echo.
 echo -- Step 2 of 2: merging with OpenStreetMap --
-python scripts\build-hospitals.py
+python scripts\build-hospitals.py %CFLAG%
 goto report
 
 :quick
-python scripts\build-hospitals.py
+call :ask_countries
+python scripts\build-hospitals.py %CFLAG%
 goto report
 
 :offline

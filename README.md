@@ -242,9 +242,11 @@ The two are merged and de-duplicated (same name within ~111 m collapses; Wikidat
 
 It self-updates (`git pull --ff-only`), then offers three options:
 
-1. **Quick build** — merge the committed Wikidata CSV with OpenStreetMap worldwide (Stage 2 only). Recommended; a few minutes.
+1. **Quick build** — merge the committed Wikidata CSV with OpenStreetMap (Stage 2 only). Recommended.
 2. **Full refresh** — re-download the Wikidata list (Stage 1), then merge OpenStreetMap (Stage 2). Slow (30+ minutes).
 3. **Offline** — rebuild from the committed Wikidata CSV only, no network.
+
+Options 1 and 2 then ask which countries to pull from OpenStreetMap. Leave it **blank for the whole world** (slow; resumes from cache if a busy server interrupts it), or type one or more codes such as `US` or `US,CA,GB` to fetch just those — a single country is one quick, reliable query, the fastest way to add local hospitals for one place.
 
 After it finishes, commit and push `Data\hospitals.json`; the app needs no code changes.
 

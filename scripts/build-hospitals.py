@@ -162,23 +162,83 @@ def _overpass(endpoints: list[str], query: str,
     raise last_err if last_err else RuntimeError("Overpass request failed")
 
 
-def fetch_countries(endpoints: list[str]) -> list[tuple[str, str]]:
-    """Return [(ISO 3166-1 alpha-2, English country name), ...] from OSM."""
-    query = (
-        "[out:json][timeout:300];"
-        'relation["ISO3166-1"]["admin_level"="2"]["boundary"="administrative"];'
-        "out tags;"
-    )
-    payload = _overpass(endpoints, query)
-    seen: dict[str, str] = {}
-    for el in payload.get("elements", []):
-        tags = el.get("tags", {})
-        iso = (tags.get("ISO3166-1") or "").strip().upper()
-        name = (tags.get("name:en") or tags.get("int_name")
-                or tags.get("name") or "").strip()
-        if len(iso) == 2 and name and iso not in seen:
-            seen[iso] = name
-    return sorted(seen.items())
+# ISO 3166-1 alpha-2 -> English name. Static on purpose: asking Overpass for
+# every country boundary on Earth is one heavy global query that reliably 504s
+# on busy public servers, and it is the same list every run. The per-country
+# hospital fetches below resolve each boundary server-side from its ISO code.
+COUNTRIES: dict[str, str] = {
+    "AD": "Andorra", "AE": "United Arab Emirates", "AF": "Afghanistan",
+    "AG": "Antigua and Barbuda", "AI": "Anguilla", "AL": "Albania",
+    "AM": "Armenia", "AO": "Angola", "AR": "Argentina", "AS": "American Samoa",
+    "AT": "Austria", "AU": "Australia", "AW": "Aruba", "AX": "Åland Islands",
+    "AZ": "Azerbaijan", "BA": "Bosnia and Herzegovina", "BB": "Barbados",
+    "BD": "Bangladesh", "BE": "Belgium", "BF": "Burkina Faso", "BG": "Bulgaria",
+    "BH": "Bahrain", "BI": "Burundi", "BJ": "Benin", "BL": "Saint Barthélemy",
+    "BM": "Bermuda", "BN": "Brunei", "BO": "Bolivia", "BQ": "Caribbean Netherlands",
+    "BR": "Brazil", "BS": "Bahamas", "BT": "Bhutan", "BW": "Botswana",
+    "BY": "Belarus", "BZ": "Belize", "CA": "Canada", "CD": "DR Congo",
+    "CF": "Central African Republic", "CG": "Republic of the Congo",
+    "CH": "Switzerland", "CI": "Côte d'Ivoire", "CK": "Cook Islands",
+    "CL": "Chile", "CM": "Cameroon", "CN": "China", "CO": "Colombia",
+    "CR": "Costa Rica", "CU": "Cuba", "CV": "Cape Verde", "CW": "Curaçao",
+    "CY": "Cyprus", "CZ": "Czechia", "DE": "Germany", "DJ": "Djibouti",
+    "DK": "Denmark", "DM": "Dominica", "DO": "Dominican Republic", "DZ": "Algeria",
+    "EC": "Ecuador", "EE": "Estonia", "EG": "Egypt", "EH": "Western Sahara",
+    "ER": "Eritrea", "ES": "Spain", "ET": "Ethiopia", "FI": "Finland",
+    "FJ": "Fiji", "FK": "Falkland Islands", "FM": "Micronesia",
+    "FO": "Faroe Islands", "FR": "France", "GA": "Gabon", "GB": "United Kingdom",
+    "GD": "Grenada", "GE": "Georgia", "GF": "French Guiana", "GG": "Guernsey",
+    "GH": "Ghana", "GI": "Gibraltar", "GL": "Greenland", "GM": "Gambia",
+    "GN": "Guinea", "GP": "Guadeloupe", "GQ": "Equatorial Guinea", "GR": "Greece",
+    "GT": "Guatemala", "GU": "Guam", "GW": "Guinea-Bissau", "GY": "Guyana",
+    "HK": "Hong Kong", "HN": "Honduras", "HR": "Croatia", "HT": "Haiti",
+    "HU": "Hungary", "ID": "Indonesia", "IE": "Ireland", "IL": "Israel",
+    "IM": "Isle of Man", "IN": "India", "IQ": "Iraq", "IR": "Iran",
+    "IS": "Iceland", "IT": "Italy", "JE": "Jersey", "JM": "Jamaica",
+    "JO": "Jordan", "JP": "Japan", "KE": "Kenya", "KG": "Kyrgyzstan",
+    "KH": "Cambodia", "KI": "Kiribati", "KM": "Comoros",
+    "KN": "Saint Kitts and Nevis", "KP": "North Korea", "KR": "South Korea",
+    "KW": "Kuwait", "KY": "Cayman Islands", "KZ": "Kazakhstan", "LA": "Laos",
+    "LB": "Lebanon", "LC": "Saint Lucia", "LI": "Liechtenstein", "LK": "Sri Lanka",
+    "LR": "Liberia", "LS": "Lesotho", "LT": "Lithuania", "LU": "Luxembourg",
+    "LV": "Latvia", "LY": "Libya", "MA": "Morocco", "MC": "Monaco",
+    "MD": "Moldova", "ME": "Montenegro", "MF": "Saint Martin", "MG": "Madagascar",
+    "MH": "Marshall Islands", "MK": "North Macedonia", "ML": "Mali",
+    "MM": "Myanmar", "MN": "Mongolia", "MO": "Macau", "MP": "Northern Mariana Islands",
+    "MQ": "Martinique", "MR": "Mauritania", "MS": "Montserrat", "MT": "Malta",
+    "MU": "Mauritius", "MV": "Maldives", "MW": "Malawi", "MX": "Mexico",
+    "MY": "Malaysia", "MZ": "Mozambique", "NA": "Namibia", "NC": "New Caledonia",
+    "NE": "Niger", "NF": "Norfolk Island", "NG": "Nigeria", "NI": "Nicaragua",
+    "NL": "Netherlands", "NO": "Norway", "NP": "Nepal", "NR": "Nauru",
+    "NU": "Niue", "NZ": "New Zealand", "OM": "Oman", "PA": "Panama",
+    "PE": "Peru", "PF": "French Polynesia", "PG": "Papua New Guinea",
+    "PH": "Philippines", "PK": "Pakistan", "PL": "Poland",
+    "PM": "Saint Pierre and Miquelon", "PR": "Puerto Rico", "PS": "Palestine",
+    "PT": "Portugal", "PW": "Palau", "PY": "Paraguay", "QA": "Qatar",
+    "RE": "Réunion", "RO": "Romania", "RS": "Serbia", "RU": "Russia",
+    "RW": "Rwanda", "SA": "Saudi Arabia", "SB": "Solomon Islands",
+    "SC": "Seychelles", "SD": "Sudan", "SE": "Sweden", "SG": "Singapore",
+    "SH": "Saint Helena", "SI": "Slovenia", "SJ": "Svalbard and Jan Mayen",
+    "SK": "Slovakia", "SL": "Sierra Leone", "SM": "San Marino", "SN": "Senegal",
+    "SO": "Somalia", "SR": "Suriname", "SS": "South Sudan",
+    "ST": "São Tomé and Príncipe", "SV": "El Salvador", "SX": "Sint Maarten",
+    "SY": "Syria", "SZ": "Eswatini", "TC": "Turks and Caicos Islands",
+    "TD": "Chad", "TG": "Togo", "TH": "Thailand", "TJ": "Tajikistan",
+    "TL": "Timor-Leste", "TM": "Turkmenistan", "TN": "Tunisia", "TO": "Tonga",
+    "TR": "Turkey", "TT": "Trinidad and Tobago", "TV": "Tuvalu", "TW": "Taiwan",
+    "TZ": "Tanzania", "UA": "Ukraine", "UG": "Uganda", "US": "United States",
+    "UY": "Uruguay", "UZ": "Uzbekistan", "VA": "Vatican City",
+    "VC": "Saint Vincent and the Grenadines", "VE": "Venezuela",
+    "VG": "British Virgin Islands", "VI": "United States Virgin Islands",
+    "VN": "Vietnam", "VU": "Vanuatu", "WF": "Wallis and Futuna", "WS": "Samoa",
+    "YE": "Yemen", "YT": "Mayotte", "ZA": "South Africa", "ZM": "Zambia",
+    "ZW": "Zimbabwe",
+}
+
+
+def fetch_countries() -> list[tuple[str, str]]:
+    """Return [(ISO 3166-1 alpha-2, English country name), ...] (static)."""
+    return sorted(COUNTRIES.items())
 
 
 def fetch_country_hospitals(endpoints: list[str], iso: str, country_name: str,
@@ -226,14 +286,13 @@ def fetch_country_hospitals(endpoints: list[str], iso: str, country_name: str,
 
 def load_osm(endpoints: list[str], only: list[str] | None, refresh: bool,
              delay: float) -> list[dict]:
-    print("  Fetching country list from OpenStreetMap...")
-    countries = fetch_countries(endpoints)
+    countries = fetch_countries()
     if only:
         wanted = {c.upper() for c in only}
         countries = [(iso, nm) for iso, nm in countries if iso in wanted]
         missing = wanted - {iso for iso, _ in countries}
         if missing:
-            print(f"  WARNING: no OSM boundary for: {', '.join(sorted(missing))}")
+            print(f"  WARNING: unknown country code(s): {', '.join(sorted(missing))}")
     print(f"  Querying {len(countries)} countries "
           f"(cached under {CACHE_DIR.relative_to(ROOT)}/)")
 
