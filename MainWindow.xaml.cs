@@ -61,16 +61,18 @@ public sealed partial class MainWindow : Window
             await ViewModel.AddCustomChartAsync(chart);
     }
 
-    private void ShowChart_Click(object sender, RoutedEventArgs e)
-    {
-        ViewModel.ShowLegend = false;
-        ViewModel.ShowReport = false;
-    }
+    private void ShowChart_Click(object sender, RoutedEventArgs e) => ShowBody(report: false, daily: false);
+    private void ShowReport_Click(object sender, RoutedEventArgs e) => ShowBody(report: true, daily: false);
+    private void ShowDaily_Click(object sender, RoutedEventArgs e) => ShowBody(report: false, daily: true);
 
-    private void ShowReport_Click(object sender, RoutedEventArgs e)
+    private void ShowBody(bool report, bool daily)
     {
         ViewModel.ShowLegend = false;
-        ViewModel.ShowReport = true;
+        ViewModel.ShowReport = report;
+        ViewModel.ShowDaily = daily;
+        ChartToggle.IsChecked = !report && !daily;
+        ReportToggle.IsChecked = report;
+        DailyToggle.IsChecked = daily;
     }
 
     private void ShowLegend_Click(object sender, RoutedEventArgs e) => ViewModel.ShowLegend = true;
@@ -81,6 +83,8 @@ public sealed partial class MainWindow : Window
     private async void ExportPng_Click(object sender, RoutedEventArgs e) => await ExportAsync("png");
     private async void ExportJson_Click(object sender, RoutedEventArgs e) => await ExportAsync("json");
     private async void ExportXml_Click(object sender, RoutedEventArgs e) => await ExportAsync("xml");
+    private async void ExportDailyPdf_Click(object sender, RoutedEventArgs e) => await ExportAsync("dailypdf");
+    private async void ExportDailyText_Click(object sender, RoutedEventArgs e) => await ExportAsync("dailytxt");
 
     private async Task ExportAsync(string kind)
     {
@@ -88,6 +92,16 @@ public sealed partial class MainWindow : Window
         if (chart is null)
         {
             ViewModel.StatusMessage = "Select a chart first, then export.";
+            return;
+        }
+
+        // The daily exports write the reading already on screen (for whatever date the
+        // Daily view is set to) rather than recalculating it.
+        var reading = ViewModel.DailyVM.Reading;
+        bool daily = kind.StartsWith("daily", StringComparison.Ordinal);
+        if (daily && reading is null)
+        {
+            ViewModel.StatusMessage = "The daily horoscope is not ready yet — try again in a moment.";
             return;
         }
 
@@ -99,13 +113,17 @@ public sealed partial class MainWindow : Window
                 "png"  => ("PNG image", ".png"),
                 "json" => ("JSON data", ".json"),
                 "xml"  => ("XML data", ".xml"),
+                "dailypdf" => ("PDF document", ".pdf"),
+                "dailytxt" => ("Text file", ".txt"),
                 _      => throw new ArgumentOutOfRangeException(nameof(kind)),
             };
 
             var picker = new FileSavePicker { SuggestedStartLocation = PickerLocationId.DocumentsLibrary };
             InitializeWithWindow.Initialize(picker, WindowNative.GetWindowHandle(this));
             picker.FileTypeChoices.Add(label, [ext]);
-            picker.SuggestedFileName = SafeFileName(chart.Celebrity.Name);
+            picker.SuggestedFileName = daily
+                ? SafeFileName($"{chart.Celebrity.Name} - daily {reading!.Date:yyyy-MM-dd}")
+                : SafeFileName(chart.Celebrity.Name);
 
             var file = await picker.PickSaveFileAsync();
             if (file is null) return; // user cancelled
@@ -118,6 +136,8 @@ public sealed partial class MainWindow : Window
                 "png"  => await ExportService.RenderChartPngAsync(chart),
                 "json" => ExportService.ToJson(chart),
                 "xml"  => ExportService.ToXml(chart),
+                "dailypdf" => DailyExportService.ToPdf(reading!),
+                "dailytxt" => DailyExportService.ToText(reading!),
                 _      => throw new ArgumentOutOfRangeException(nameof(kind)),
             };
 
@@ -143,9 +163,9 @@ public sealed partial class MainWindow : Window
     public Visibility VisIfNot(bool b) => b ? Visibility.Collapsed : Visibility.Visible;
     public bool Not(bool b) => !b;
 
-    // Body panes: the legend, when shown, hides both chart and report.
-    public Visibility VisChartBody(bool showReport, bool showLegend) =>
-        !showReport && !showLegend ? Visibility.Visible : Visibility.Collapsed;
-    public Visibility VisReportBody(bool showReport, bool showLegend) =>
-        showReport && !showLegend ? Visibility.Visible : Visibility.Collapsed;
+    // Body panes: the legend, when shown, hides the chart, report and daily views.
+    public Visibility VisChartBody(bool showReport, bool showDaily, bool showLegend) =>
+        !showReport && !showDaily && !showLegend ? Visibility.Visible : Visibility.Collapsed;
+    public Visibility VisReportBody(bool show, bool showLegend) =>
+        show && !showLegend ? Visibility.Visible : Visibility.Collapsed;
 }

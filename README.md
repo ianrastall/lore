@@ -37,7 +37,22 @@
 |---|---|
 | **Chart Wheel** | Rendered chart wheel (Win2D / Direct2D), drawn on-screen and exportable as a high-resolution PNG. |
 | **Report** | Natural-language reading: Overview (Sun/Moon/Rising), planet-by-sign-degree-and-house paragraphs, major aspects, chart patterns (stellium, grand trine, T-square, grand cross), and elemental and modal balance. The Ascendant/Midheaven line shows their degrees and names the Placidus house system. |
+| **Daily** | Daily horoscope for the selected chart on any date — generated from that day's transits. See below. |
 | **Legend** | Full-page reference — a grouped list of every glyph, colour, angle, house, and term; click any item for a fuller explanation. |
+
+### Daily Horoscope
+The **Daily** view writes a horoscope for the selected chart, for today or any date you step to, from that day's **transits** — the aspects the moving planets make to the fixed points of the birth chart.
+
+- **Whole-day scan.** The sky is sampled across the local calendar day (midnight to midnight in your own time zone, so 23- and 25-hour daylight-saving days come out right) and each contact is refined to its exact time. A single noon or midnight snapshot would miss lunar contacts that form and pass in between.
+- **All thirteen bodies, both ways.** Sun through Pluto plus the North Node, Chiron, and Lilith are tracked as movers, against the same thirteen natal positions plus the Ascendant and Midheaven — including each body's return to its own natal place (solar return, Saturn return, and so on).
+- **A tight 1° orb** (against 6–8° natally), so a transit marks particular days rather than a whole season.
+- **Foreground and background.** Fast movers (Sun–Mars) make up *Today's highlights*; slow movers (Jupiter outward, and the slow points) make up *Longer-running themes*, each marked as building, exact, or easing with the date it peaks.
+- **The day at a glance.** Moon sign and phase (with sign changes and exact New/Quarter/Full Moons timed), the natal houses the Moon and Sun are passing through, retrogrades and stations, and an overall **day tone** — Flowing, Mixed, Demanding, Focused, or Quiet.
+- **Deterministic and offline.** The same chart and date always give the same reading. Every sentence comes from an editable corpus (`Data\daily.json`, 585 bespoke transit lines); nothing is generated at run time.
+- **Explainable.** *Why this reading?* lists every transit in effect that day, how close it gets, and which ones the reading used.
+- **Honest about unknowns.** For a chart with no birth time, the houses, angles, and contacts to the natal Moon are left out rather than read from a noon guess.
+
+It is a prompt for reflection, not a prediction: the ranking of transits is an editorial priority, not a probability.
 
 ### Traditional Dignity Scoring
 Every chart is scored against the **Lilly/Dorothean rubric**:
@@ -63,6 +78,7 @@ Charts can be exported in four formats:
 | **PDF** | Full reading — birth data, chart wheel image, Big Three, written report, and per-planet dignity table |
 | **JSON** | Structured chart data (planets, houses, aspects, angles, and detected patterns) |
 | **XML** | Same structured data in XML |
+| **PDF / Text — daily horoscope** | The daily reading for the date shown in the Daily view, with the full list of that day's transits |
 
 ---
 
@@ -80,6 +96,9 @@ Lore/
 │   ├── BirthTimeResolver.cs   # UTC conversion using NodaTime + GeoTimeZone
 │   ├── DignityService.cs      # Traditional dignity scoring (Lilly/Dorothean)
 │   ├── ChartInterpreter.cs    # Report generation from interpretations.json corpus
+│   ├── TransitService.cs      # Daily horoscope, astronomy: a day's transits to a natal chart
+│   ├── DailyInterpreter.cs    # Daily horoscope, wording: rank, select, compose from daily.json
+│   ├── DailyExportService.cs  # Daily horoscope PDF / text export
 │   ├── ExportService.cs       # PNG / PDF / JSON / XML export
 │   ├── CelebrityService.cs    # Loads celebrities.json
 │   ├── UserChartService.cs    # Loads/saves mycharts.json
@@ -87,19 +106,22 @@ Lore/
 │   └── HospitalService.cs     # Hospital autocomplete for Add-Chart dialog
 ├── ViewModels/
 │   ├── MainViewModel.cs       # Browse list, search/filter, category, add/delete
-│   └── ChartViewModel.cs      # Chart + report state for the detail pane
+│   ├── ChartViewModel.cs      # Chart + report state for the detail pane
+│   └── DailyViewModel.cs      # Daily horoscope state: chart, date, generated reading
 ├── SplashWindow.xaml/.cs      # Launch splash: artwork + "Lore <version>", up while data loads
 ├── Views/
 │   ├── ChartRenderer.cs       # Win2D Direct2D chart wheel drawing
 │   ├── ChartView.xaml/.cs     # Chart wheel + export controls
 │   ├── ReportView.xaml/.cs    # Natural-language report display
+│   ├── DailyView.xaml/.cs     # Daily horoscope with date navigation
 │   ├── LegendView.xaml/.cs    # Glyph + colour legend
 │   └── AddChartDialog.xaml/.cs# Custom chart entry dialog
 ├── Data/
-│   ├── celebrities.json       # 99 bundled figures (all with recorded birth times)
+│   ├── celebrities.json       # 150 bundled figures (all with recorded birth times)
 │   ├── cities.json            # ~50,250 cities (lat/lon + IANA tz)
 │   ├── hospitals.json         # ~26,400 hospitals (lat/lon), Add-Chart birthplace search
 │   ├── interpretations.json   # Corpus for the natural-language report
+│   ├── daily.json             # Corpus for the daily horoscope (transit lines, Moon/Sun/house text)
 │   └── swisseph-2.10.3bfinal/ # Swiss Ephemeris C source + .se1 ephemeris files
 ├── Native/
 │   └── sweph.dll              # Built by Build-SwephDll.ps1 (not in repo)
@@ -270,6 +292,17 @@ The OSM fetch caches each country's result under `Data\.osm_cache\` (gitignored)
 
 > The **OECD** data API cannot feed this file: it is a *statistics* store (GDP, prices, health aggregates such as beds-per-1,000), with no directory of individual hospitals and coordinates.
 
+### `Data\daily.json`
+
+Editable corpus for the daily horoscope. Edit it to change what the Daily view says without touching C# code.
+
+- `transits` — 585 bespoke lines keyed `Mover|Tone|Target`, e.g. `"Mars|Tension|Midheaven"`. *Mover* is the planet moving today, *Target* the natal point it touches (any of the thirteen bodies, `Ascendant`, or `Midheaven`), and *Tone* is `Conjunction`, `Flow` (sextile or trine), or `Tension` (square or opposition). The key is directional: `Saturn|Tension|Mercury` (weeks of pressure on your thinking) and `Mercury|Tension|Saturn` (one serious-minded day) are different lines.
+- `moverThemes`, `toneLinks`, `targetThemes` — building blocks used to assemble a plainer sentence for any pair whose bespoke line is missing or empty.
+- `moonInSign`, `moonInHouse`, `sunInHouse`, `moonPhases`, `houses` — the "day at a glance" text.
+- `dayTones`, `retrogrades`, `stations`, `notes` — the overall tone sentence, retrograde and station notes, and the quiet-day / unknown-birth-time messages.
+
+Names must match the app's display names (`North Node`, not `NorthNode`). The orb, the number of transits shown, and the ranking weights are constants in `Services\TransitService.cs` and `Services\DailyInterpreter.cs`.
+
 ### `Data\interpretations.json`
 
 Editable corpus for the natural-language report. Keyed dictionaries for sign traits, role framing, planet themes, sign styles, bespoke planet-in-sign lines (`"Planet|Sign"` keys), house area descriptions, aspect dynamics, and elemental descriptions. Edit this file to customise the generated text without touching C# code.
@@ -331,7 +364,16 @@ The `_12` files are required for historical figures such as Leonardo da Vinci, S
 
 ## Version History
 
-### 1.2.0 (current)
+### 1.3.0 (current)
+- **Daily horoscope** — a new **Daily** view generates a horoscope for any chart on any date from that day's transits: the whole local day is scanned, every contact between the thirteen moving bodies and the chart's thirteen natal positions plus Ascendant and Midheaven is found to within a 1° orb and timed, and the closest and weightiest few are written up from a new editable corpus (`Data\daily.json`, 585 bespoke transit lines). Includes Moon sign, phase and house, the Sun's house, retrogrades and stations, an overall day tone, date navigation, and a full "Why this reading?" list of the day's transits. Chiron, Lilith, and the North Node take part both as moving bodies and as natal points.
+- **Daily export** — the reading on screen can be saved as a PDF or plain text.
+- **Legend** — new *Daily horoscope* section explaining transits, the fast/slow split, building/exact/easing, and the day tone.
+- **Chart patterns** — stelliums, grand trines, T-squares, and grand crosses are detected, described in the report, and included in the JSON/XML export.
+- **Fuller report** — planet positions to the degree and minute, modal balance (cardinal / fixed / mutable), and the house system.
+- **Splash screen** — Lore opens with its artwork and version while the data loads.
+- **Fixes** — Swiss Ephemeris calls are serialised, fixing a threading race, and startup scoring no longer stalls the window; a chart calculation that finishes after a newer selection has been made no longer overwrites it; the Chart / Report view buttons can no longer be left looking unselected by clicking the active one.
+
+### 1.2.0
 - **Hospital birthplace search** — the Add Chart dialog gains a hospital autocomplete alongside city search, backed by a bundled database of ~26,400 hospitals worldwide (Wikidata, CC0). Picking a hospital autofills precise coordinates; the timezone is resolved from those coordinates as before. Useful because a hospital pinpoints a birthplace more tightly than a city centre, sharpening the Ascendant and house cusps.
 
 ### 1.1.0

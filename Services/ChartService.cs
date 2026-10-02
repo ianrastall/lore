@@ -66,6 +66,40 @@ public sealed class ChartService
         };
     }
 
+    // Every body's position at an arbitrary instant (the "transit sky"), with the same
+    // bodies, flags and lock as a natal calculation.
+    public IReadOnlyList<PlanetPosition> CalculateSky(double jd)
+    {
+        lock (SweLock)
+        {
+            return CalculatePlanets(jd);
+        }
+    }
+
+    // One body at one instant — what the transit solver refines exact times with.
+    // Null if the ephemeris cannot supply it (same condition under which a natal
+    // calculation skips the body).
+    public PlanetPosition? CalculateBody(double jd, Planet planet)
+    {
+        int sweBody = PlanetMap[(int)planet].sweBody;
+        var xx = new double[6];
+        int flags = SwissEphemeris.SEFLG_SWIEPH | SwissEphemeris.SEFLG_SPEED;
+
+        lock (SweLock)
+        {
+            if (SwissEphemeris.CalcUt(jd, sweBody, flags, xx, nint.Zero) < 0)
+                return null;
+        }
+
+        return new PlanetPosition
+        {
+            Planet = planet,
+            Longitude = xx[0],
+            Latitude = xx[1],
+            SpeedLongitude = xx[3],
+        };
+    }
+
     private static List<PlanetPosition> CalculatePlanets(double jd)
     {
         var result = new List<PlanetPosition>(PlanetMap.Length);

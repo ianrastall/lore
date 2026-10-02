@@ -16,6 +16,13 @@ public sealed partial class MainViewModel : ObservableObject
 
     public ChartViewModel ChartVM { get; }
 
+    // The Daily view's state; follows whichever chart ChartVM is showing.
+    public DailyViewModel DailyVM { get; }
+
+    // Bumped per chart load; a calculation that finishes after a newer selection has
+    // started is dropped instead of overwriting the newer chart.
+    private int _loadGeneration;
+
     // Exposed so the Add-Chart dialog (owned by the window) can offer city autocomplete.
     public CityService Cities { get; }
 
@@ -47,6 +54,10 @@ public sealed partial class MainViewModel : ObservableObject
     [ObservableProperty]
     public partial bool ShowReport { get; set; }
 
+    // The Daily horoscope view (mutually exclusive with ShowReport; neither = the chart).
+    [ObservableProperty]
+    public partial bool ShowDaily { get; set; }
+
     // Full-page Legend / reference view over the chart+report body.
     [ObservableProperty]
     public partial bool ShowLegend { get; set; }
@@ -60,7 +71,9 @@ public sealed partial class MainViewModel : ObservableObject
         ChartInterpreter interpreter,
         UserChartService userCharts,
         CityService cities,
-        HospitalService hospitals)
+        HospitalService hospitals,
+        TransitService transits,
+        DailyInterpreter dailyInterpreter)
     {
         _celebrities = celebrities;
         _charts = charts;
@@ -68,6 +81,7 @@ public sealed partial class MainViewModel : ObservableObject
         Cities = cities;
         Hospitals = hospitals;
         ChartVM = new ChartViewModel(interpreter);
+        DailyVM = new DailyViewModel(transits, dailyInterpreter);
     }
 
     public async Task InitializeAsync(string dataPath, string citiesPath, string hospitalsPath)
@@ -205,26 +219,32 @@ public sealed partial class MainViewModel : ObservableObject
         await _userCharts.RemoveAsync(c);
         SelectedCelebrity = null;
         ChartVM.Chart = null;
+        DailyVM.Chart = null;
         await RebuildPoolAsync();
     }
 
     private async Task LoadChartAsync(Celebrity celebrity)
     {
+        int generation = ++_loadGeneration;
         IsLoading = true;
         StatusMessage = $"Calculating chart for {celebrity.Name}…";
         try
         {
             var chart = await Task.Run(() => _charts.Calculate(celebrity));
+            if (generation != _loadGeneration) return; // superseded by a newer selection
             ChartVM.Chart = chart;
+            DailyVM.Chart = chart;
             StatusMessage = "";
         }
         catch (Exception ex)
         {
-            StatusMessage = $"Chart error: {ex.Message}";
+            if (generation == _loadGeneration)
+                StatusMessage = $"Chart error: {ex.Message}";
         }
         finally
         {
-            IsLoading = false;
+            if (generation == _loadGeneration)
+                IsLoading = false;
         }
     }
 }

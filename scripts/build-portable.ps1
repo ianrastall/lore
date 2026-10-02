@@ -34,10 +34,10 @@ if ($LASTEXITCODE -ne 0) { throw 'Self-contained publish failed.' }
 # Verify the layout carries everything the app needs at runtime.
 $required = @(
     'Lore.exe', 'Lore.dll', 'Lore.pri',
-    'App.xbf', 'MainWindow.xbf', 'SplashWindow.xbf', 'Views\ChartView.xbf',
+    'App.xbf', 'MainWindow.xbf', 'SplashWindow.xbf', 'Views\ChartView.xbf', 'Views\DailyView.xbf',
     'coreclr.dll', 'Microsoft.UI.Xaml.dll', 'Microsoft.Graphics.Canvas.dll',
     'sweph.dll',
-    'Data\celebrities.json',
+    'Data\celebrities.json', 'Data\daily.json',
     'Assets\splash.png',
     'Assets\Ephemeris\sepl_18.se1', 'Assets\Ephemeris\semo_18.se1', 'Assets\Ephemeris\seas_18.se1',
     'Assets\Ephemeris\sepl_12.se1'

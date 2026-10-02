@@ -78,4 +78,9 @@ internal static partial class SwissEphemeris
         double hour = utc.Hour + utc.Minute / 60.0 + utc.Second / 3600.0;
         return JulDay(utc.Year, utc.Month, utc.Day, hour, SE_GREG_CAL);
     }
+
+    // Inverse of the above for dates in the Gregorian calendar: JD 2440587.5 is the
+    // Unix epoch, and a Julian day is exactly 86,400 seconds.
+    public static DateTime JulianDayToDateTime(double jd) =>
+        DateTime.UnixEpoch.AddSeconds((jd - 2440587.5) * 86400.0);
 }

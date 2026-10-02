@@ -23,6 +23,7 @@ public partial class App : Application
         string baseDir       = AppContext.BaseDirectory;
         string ephemerisPath = Path.Combine(baseDir, "Assets", "Ephemeris");
         string interpPath    = Path.Combine(baseDir, "Data", "interpretations.json");
+        string dailyPath     = Path.Combine(baseDir, "Data", "daily.json");
 
         var celebSvc    = new CelebrityService();
         var chartSvc    = new ChartService(ephemerisPath);
@@ -30,7 +31,10 @@ public partial class App : Application
         var userCharts  = new UserChartService();
         var cities      = new CityService();
         var hospitals   = new HospitalService();
-        var mainVm      = new MainViewModel(celebSvc, chartSvc, interpreter, userCharts, cities, hospitals);
+        var transits    = new TransitService(chartSvc);
+        var daily       = new DailyInterpreter(dailyPath);
+        var mainVm      = new MainViewModel(celebSvc, chartSvc, interpreter, userCharts, cities, hospitals,
+                                            transits, daily);
 
         _mainWindow = new MainWindow(mainVm);
         _mainWindow.Activate();

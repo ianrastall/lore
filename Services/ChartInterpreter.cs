@@ -258,7 +258,7 @@ public sealed class ChartInterpreter
         return parts.Length > 0 ? parts[0] : full;
     }
 
-    private static string Ordinal(int n) => n switch
+    internal static string Ordinal(int n) => n switch
     {
         1 => "1st", 2 => "2nd", 3 => "3rd", 21 => "21st", 22 => "22nd", 23 => "23rd",
         _ => $"{n}th"

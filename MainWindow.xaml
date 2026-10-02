@@ -101,13 +101,16 @@
             <!-- Toolbar -->
             <Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Padding="12,8"
                   Background="{ThemeResource LayerFillColorDefaultBrush}">
+                <!-- View switch. IsChecked is set from code (SyncViewToggles) so a click on
+                     the already-selected button can't leave it visually unchecked. -->
                 <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="6">
-                    <ToggleButton Content="Chart"
-                                  IsChecked="{x:Bind Not(ViewModel.ShowReport), Mode=OneWay}"
+                    <ToggleButton x:Name="ChartToggle" Content="Chart" IsChecked="True"
                                   Click="ShowChart_Click"/>
-                    <ToggleButton Content="Report"
-                                  IsChecked="{x:Bind ViewModel.ShowReport, Mode=OneWay}"
+                    <ToggleButton x:Name="ReportToggle" Content="Report"
                                   Click="ShowReport_Click"/>
+                    <ToggleButton x:Name="DailyToggle" Content="Daily"
+                                  Click="ShowDaily_Click"
+                                  ToolTipService.ToolTip="Daily horoscope from today's transits"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6">
@@ -118,6 +121,9 @@
                                 <MenuFlyoutItem Text="PNG — chart image…" Click="ExportPng_Click"/>
                                 <MenuFlyoutItem Text="JSON — chart data…" Click="ExportJson_Click"/>
                                 <MenuFlyoutItem Text="XML — chart data…" Click="ExportXml_Click"/>
+                                <MenuFlyoutSeparator/>
+                                <MenuFlyoutItem Text="PDF — daily horoscope…" Click="ExportDailyPdf_Click"/>
+                                <MenuFlyoutItem Text="Text — daily horoscope…" Click="ExportDailyText_Click"/>
                             </MenuFlyout>
                         </DropDownButton.Flyout>
                     </DropDownButton>
@@ -131,11 +137,15 @@
                                  x:Name="ChartViewControl"
                                  ViewModel="{x:Bind ViewModel.ChartVM}"
                                  RequestedTheme="Dark"
-                                 Visibility="{x:Bind VisChartBody(ViewModel.ShowReport, ViewModel.ShowLegend), Mode=OneWay}"/>
+                                 Visibility="{x:Bind VisChartBody(ViewModel.ShowReport, ViewModel.ShowDaily, ViewModel.ShowLegend), Mode=OneWay}"/>
                 <views:ReportView x:Name="ReportViewControl"
                                   ViewModel="{x:Bind ViewModel.ChartVM}"
                                   RequestedTheme="Dark"
                                   Visibility="{x:Bind VisReportBody(ViewModel.ShowReport, ViewModel.ShowLegend), Mode=OneWay}"/>
+                <views:DailyView x:Name="DailyViewControl"
+                                 ViewModel="{x:Bind ViewModel.DailyVM}"
+                                 RequestedTheme="Dark"
+                                 Visibility="{x:Bind VisReportBody(ViewModel.ShowDaily, ViewModel.ShowLegend), Mode=OneWay}"/>
                 <views:LegendView x:Name="LegendViewControl"
                                   RequestedTheme="Dark"
                                   CloseRequested="Legend_CloseRequested"
