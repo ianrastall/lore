@@ -2,9 +2,21 @@
 
 ![Lore](Assets/splash.png)
 
-> A Windows desktop application for computing and exploring astrological natal charts, powered by the Swiss Ephemeris. Browse a curated library of historical figures — every one with a documented birth time — or add your own.
+> A Windows desktop application for computing and exploring astrological natal charts — and reading a daily horoscope from them — powered by the Swiss Ephemeris. Browse a curated library of historical figures — every one with a documented birth time — or add your own.
 
-**Latest release: v1.2.0** · [Download](../../releases/latest)
+**Latest release: v1.3.0** · [Download](../../releases/latest)
+
+### Installing
+
+1. From the [latest release](../../releases/latest), download **`LoreSetup-1.3.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
+2. Double-click it. It installs for the current user only (no administrator prompt), adds a Start-menu shortcut, and can be removed from *Settings → Apps* like any other program.
+
+> **The installer is not code-signed.** Lore is a free hobby project and does not carry a paid signing certificate, so Windows cannot verify who published it and will warn you:
+> - Your browser may say the file *"isn't commonly downloaded"* — choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
+> - On first run, Windows SmartScreen shows *"Windows protected your PC"* — click **More info → Run anyway**.
+>
+> These warnings appear for any unsigned program, and only the first time. If you would rather not run an unsigned installer, you can [build Lore from source](#building-from-source) instead.
+
 
 ![Lore showing the Abraham Lincoln report](Assets/screenshot-lincoln-report.png)
 
@@ -190,7 +202,7 @@ Produces a self-contained folder that runs with no installed .NET or VC++ runtim
 .\scripts\build-portable.ps1
 ```
 
-Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-1.0.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
+Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-1.3.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
 
 ### Step 4 — Installer
 
@@ -210,7 +222,7 @@ Then:
 
 Output: `artifacts\LoreSetup-<version>.exe`.
 
-> **Note:** The installer is unsigned. Windows SmartScreen will show *"Windows protected your PC"* the first time. Click **More info → Run anyway**.
+> **Note:** The installer is unsigned, so Windows will warn about it the first time — see [Installing](#installing). The `.exe` is complete on its own; it does not need to be zipped with anything else to be shared.
 
 ---
 
