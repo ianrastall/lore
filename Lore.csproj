@@ -54,6 +54,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>Assets\AppIcon.ico</TargetPath>
     </Content>
+    <!-- Splash-screen artwork; SplashWindow draws the name + version over it at runtime -->
+    <Content Include="Assets\splash.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Assets\splash.png</TargetPath>
+    </Content>
     <Content Include="Data\cities.json" Condition="Exists('Data\cities.json')">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

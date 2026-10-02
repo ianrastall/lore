@@ -1,0 +1,26 @@
+<Window
+    x:Class="Lore.SplashWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Lore">
+
+    <!-- Laid out on a fixed 600-unit square and scaled as one piece, so the lettering
+         keeps its place on the artwork whatever size the window ends up. -->
+    <Viewbox Stretch="Uniform">
+        <!-- Background matches the artwork's own, so nothing flashes while it decodes. -->
+        <Grid Width="600" Height="600" Background="#F5A68B">
+            <Image x:Name="Art" Stretch="UniformToFill"/>
+
+            <!-- Name + version, set in the clear space under the shoulder line. One
+                 TextBlock so both runs share a baseline. -->
+            <TextBlock HorizontalAlignment="Left"
+                       VerticalAlignment="Bottom"
+                       Margin="34,0,0,12"
+                       FontFamily="Georgia"
+                       Foreground="#241610"
+                       IsHitTestVisible="False">
+                <Run Text="Lore" FontSize="84" FontStyle="Italic"/><Run x:Name="VersionRun" FontSize="30"/>
+            </TextBlock>
+        </Grid>
+    </Viewbox>
+</Window>

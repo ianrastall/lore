@@ -1,6 +1,6 @@
 # Lore — Natal Chart Generator
 
-![Lore logo](Assets/logo.jpg)
+![Lore](Assets/splash.png)
 
 > A Windows desktop application for computing and exploring astrological natal charts, powered by the Swiss Ephemeris. Browse a curated library of historical figures — every one with a documented birth time — or add your own.
 
@@ -88,6 +88,7 @@ Lore/
 ├── ViewModels/
 │   ├── MainViewModel.cs       # Browse list, search/filter, category, add/delete
 │   └── ChartViewModel.cs      # Chart + report state for the detail pane
+├── SplashWindow.xaml/.cs      # Launch splash: artwork + "Lore <version>", up while data loads
 ├── Views/
 │   ├── ChartRenderer.cs       # Win2D Direct2D chart wheel drawing
 │   ├── ChartView.xaml/.cs     # Chart wheel + export controls
@@ -103,7 +104,8 @@ Lore/
 ├── Native/
 │   └── sweph.dll              # Built by Build-SwephDll.ps1 (not in repo)
 ├── Assets/
-│   └── AppIcon.ico            # Indigo/gold "L" icon
+│   ├── AppIcon.ico            # Indigo/gold "L" icon
+│   └── splash.png             # Splash-screen artwork (name + version drawn over it at launch)
 └── scripts/
     ├── build-portable.ps1     # Self-contained portable build
     ├── build-installer.ps1    # Inno Setup installer

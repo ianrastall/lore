@@ -14,8 +14,12 @@ public partial class App : Application
         UnhandledException += OnUnhandledException;
     }
 
-    protected override void OnLaunched(LaunchActivatedEventArgs args)
+    protected override async void OnLaunched(LaunchActivatedEventArgs args)
     {
+        // Splash goes up first and is painted before anything else is built; it then
+        // stays over the main window until the one-time data load has finished.
+        SplashWindow? splash = await SplashWindow.ShowAsync();
+
         string baseDir       = AppContext.BaseDirectory;
         string ephemerisPath = Path.Combine(baseDir, "Assets", "Ephemeris");
         string interpPath    = Path.Combine(baseDir, "Data", "interpretations.json");
@@ -30,6 +34,9 @@ public partial class App : Application
 
         _mainWindow = new MainWindow(mainVm);
         _mainWindow.Activate();
+
+        if (splash is not null)
+            await splash.CloseWhenAsync(_mainWindow.Initialized);
     }
 
     private static void OnUnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)

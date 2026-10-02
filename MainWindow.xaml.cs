@@ -13,6 +13,10 @@ public sealed partial class MainWindow : Window
 {
     public MainViewModel ViewModel { get; }
 
+    // Completes when the one-time data load below has finished (the splash waits on it).
+    private readonly TaskCompletionSource _initialized = new();
+    public Task Initialized => _initialized.Task;
+
     public MainWindow(MainViewModel vm)
     {
         ViewModel = vm;
@@ -34,7 +38,14 @@ public sealed partial class MainWindow : Window
             string dataPath      = Path.Combine(AppContext.BaseDirectory, "Data", "celebrities.json");
             string citiesPath    = Path.Combine(AppContext.BaseDirectory, "Data", "cities.json");
             string hospitalsPath = Path.Combine(AppContext.BaseDirectory, "Data", "hospitals.json");
-            await ViewModel.InitializeAsync(dataPath, citiesPath, hospitalsPath);
+            try
+            {
+                await ViewModel.InitializeAsync(dataPath, citiesPath, hospitalsPath);
+            }
+            finally
+            {
+                _initialized.TrySetResult();
+            }
         }
 
         if (Content is FrameworkElement root)
