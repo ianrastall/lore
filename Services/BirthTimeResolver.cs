@@ -15,6 +15,9 @@ namespace Lore.Services;
 //      backfills legacy charts saved before zone ids existed, else
 //   3. the stored numeric UtcOffsetHours as a last-resort fixed fallback (e.g. mid-
 //      ocean coordinates that map to no zone).
+//
+// One exception to "whatever tzdb says": a birth from before standard time existed
+// uses the local mean time of the birthplace's own longitude (see IsLocalMeanTime).
 public static class BirthTimeResolver
 {
     private static readonly IDateTimeZoneProvider Tzdb = DateTimeZoneProviders.Tzdb;
@@ -27,14 +30,38 @@ public static class BirthTimeResolver
 
         var zone = ResolveZone(c.TimeZoneId, c.Latitude, c.Longitude);
         if (zone is not null)
+        {
             // Lenient: a birth time that never existed (spring-forward gap) shifts
             // forward; an ambiguous one (fall-back overlap) takes the earlier instant.
-            return zone.AtLeniently(local).ToDateTimeUtc();
+            var zoned = zone.AtLeniently(local);
+            if (IsLocalMeanTime(zone, zoned.ToInstant()))
+                return DateTime.SpecifyKind(
+                    local.ToDateTimeUnspecified().AddSeconds(-LocalMeanTimeSeconds(c.Longitude)),
+                    DateTimeKind.Utc);
+            return zoned.ToDateTimeUtc();
+        }
 
         // No zone available — fall back to the stored fixed offset.
         var unspecified = new DateTime(d.Year, d.Month, d.Day, t.Hour, t.Minute, 0, DateTimeKind.Unspecified);
         return unspecified.AddHours(-c.UtcOffsetHours);
     }
+
+    // Before standard time, every town kept its own clock by the Sun. The tz database
+    // marks that era "LMT" but can only give the mean time of the zone's reference city
+    // (Rome for all of Italy, say), which is minutes off anywhere else — and four minutes
+    // of clock time is a degree on the Ascendant. So for an LMT-era birth the offset is
+    // taken from the birthplace's own longitude instead. Later city-based legal times
+    // (Paris, Prague, Bern or Dublin Mean Time) were real nationwide clocks and are left
+    // to tzdb. India is the exception: its "Howrah" and "Madras" times before 1906 were
+    // railway timetables, and towns went on keeping local time.
+    private static bool IsLocalMeanTime(DateTimeZone zone, Instant instant)
+    {
+        string era = zone.GetZoneInterval(instant).Name;
+        return era == "LMT" || (zone.Id == "Asia/Kolkata" && era is "HMT" or "MMT");
+    }
+
+    // Local mean time runs four minutes ahead of UTC per degree of east longitude.
+    private static double LocalMeanTimeSeconds(double longitude) => Math.Round(longitude * 240);
 
     // Resolve the effective IANA zone id: explicit first, then geographic. Returns null
     // when neither yields a zone (caller then uses a fixed offset).
@@ -60,6 +87,11 @@ public static class BirthTimeResolver
 
         var local = new LocalDateTime(year, month, day, hour, minute);
         var zoned = zone.AtLeniently(local);
+        if (IsLocalMeanTime(zone, zoned.ToInstant()))
+        {
+            double lmt = LocalMeanTimeSeconds(lon) / 3600.0;
+            return (lmt, $"Offset for this date: {FormatOffset(lmt)} (local mean time at this longitude)", zoneId);
+        }
         double hours = zoned.Offset.Milliseconds / 3_600_000.0;
         string abbr = zone.GetZoneInterval(zoned.ToInstant()).Name;
         return (hours, $"Offset for this date: {FormatOffset(hours)} ({abbr})", zoneId);

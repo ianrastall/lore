@@ -37,7 +37,7 @@
 - **150 figures** across **14 categories** — Actors, Musicians, Writers, Artists, Scientists, Philosophers, Directors, Athletes, Political, Historical, and more.
 - **Every figure has a documented, recorded birth time** (Astro-Databank / Rodden-rated). Entries without a reliable birth time were removed, so no chart relies on a noon guess.
 - Each entry stores birth date, time, birth place, geographic coordinates, IANA time zone, and a one-sentence bio.
-- Birth instants are resolved with **historical, DST-aware UTC offsets** via the IANA timezone database (NodaTime), not just fixed offsets — correctly handling anomalies like the UK's 1968–71 year-round BST experiment and 1940s US wartime time.
+- Birth instants are resolved with **historical, DST-aware UTC offsets** via the IANA timezone database (NodaTime), not just fixed offsets — correctly handling anomalies like the UK's 1968–71 year-round BST experiment and 1940s US wartime time. For births before standard time existed, the birthplace's own local mean time (from its longitude) is used, as astrological sources record them.
 
 ### My Charts (Custom Entry)
 - **Add Chart** button opens a dialog to enter any name, date, time, and place.
@@ -386,6 +386,9 @@ The `_12` files are required for historical figures such as Leonardo da Vinci, S
 - **Fuller report** — planet positions to the degree and minute, modal balance (cardinal / fixed / mutable), and the house system.
 - **Splash screen** — Lore opens with its artwork and version while the data loads.
 - **Fixes** — Swiss Ephemeris calls are serialised, fixing a threading race, and startup scoring no longer stalls the window; a chart calculation that finishes after a newer selection has been made no longer overwrites it; the Chart / Report view buttons can no longer be left looking unselected by clicking the active one.
+- **Older charts corrected** — births from before standard time zones existed now use the local mean time of the birthplace itself, not of the zone's reference city. This moves the Ascendant and houses of 28 older figures, most by a degree or two; Abraham Lincoln, Karl Marx, and Mahatma Gandhi shift by 12–17°. Checked against Astro-Databank.
+- **Leonardo da Vinci** — birth date corrected from the Old Style (Julian) date to its Gregorian equivalent, 23 April 1452 at 21:40; his Sun is now correctly in Taurus.
+- **Carl Jung** — birthplace now resolves to Swiss rather than German time.
 
 ### 1.2.0
 - **Hospital birthplace search** — the Add Chart dialog gains a hospital autocomplete alongside city search, backed by a bundled database of ~26,400 hospitals worldwide (Wikidata, CC0). Picking a hospital autofills precise coordinates; the timezone is resolved from those coordinates as before. Useful because a hospital pinpoints a birthplace more tightly than a city centre, sharpening the Ascendant and house cusps.

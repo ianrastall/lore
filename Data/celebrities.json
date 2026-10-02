@@ -464,6 +464,7 @@
     "birthPlace": "Kesswil, Switzerland",
     "latitude": 47.5936,
     "longitude": 9.3183,
+    "timeZoneId": "Europe/Zurich",
     "utcOffsetHours": 1.0,
     "bio": "Founder of analytical psychology; archetypes, the collective unconscious, and synchronicity."
   },
@@ -484,8 +485,8 @@
     "id": "leonardo-da-vinci",
     "name": "Leonardo da Vinci",
     "category": "Artist",
-    "birthDate": "1452-04-15",
-    "birthTime": "22:30",
+    "birthDate": "1452-04-23",
+    "birthTime": "21:40",
     "birthTimeKnown": true,
     "birthPlace": "Vinci, Italy",
     "latitude": 43.7991,
