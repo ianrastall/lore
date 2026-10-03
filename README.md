@@ -42,7 +42,7 @@
 ### My Charts (Custom Entry)
 - **Add Chart** button opens a dialog to enter any name, date, time, and place.
 - City search autofills latitude, longitude, and IANA timezone from a bundled database of ~50,250 cities.
-- **Hospital search** autofills more precise coordinates from a bundled database of ~26,400 hospitals worldwide — hospitals are where people are born, and precise coordinates sharpen the Ascendant and house cusps. The timezone is derived from the chosen coordinates.
+- **Hospital search** autofills more precise coordinates from a bundled database of ~235,000 hospitals worldwide — including former names of renamed hospitals and hospitals that have since closed — because hospitals are where people are born, and precise coordinates sharpen the Ascendant and house cusps. The timezone is derived from the chosen coordinates.
 - Custom charts persist to `%LOCALAPPDATA%\Lore\mycharts.json` and appear under a dedicated **My Charts** category.
 - Custom charts can be deleted from the browse list.
 
@@ -133,7 +133,7 @@ Lore/
 ├── Data/
 │   ├── celebrities.json       # 150 bundled figures (all with recorded birth times)
 │   ├── cities.json            # ~50,250 cities (lat/lon + IANA tz)
-│   ├── hospitals.json         # ~26,400 hospitals (lat/lon), Add-Chart birthplace search
+│   ├── hospitals.json         # ~235,000 hospitals (lat/lon), Add-Chart birthplace search
 │   ├── interpretations.json   # Corpus for the natural-language report
 │   ├── daily.json             # Corpus for the daily horoscope (transit lines, Moon/Sun/house text)
 │   └── swisseph-2.10.3bfinal/ # Swiss Ephemeris C source + .se1 ephemeris files
@@ -383,6 +383,9 @@ The `_12` files are required for historical figures such as Leonardo da Vinci, S
 ---
 
 ## Version History
+
+### Unreleased
+- **Hospital search, nine times larger** — the birthplace hospital list grows from ~26,400 to ~235,000 entries by adding OpenStreetMap worldwide. It also adds ~11,000 entries for older hospitals: former names of renamed hospitals (e.g. *Waterford Regional Hospital (now University Hospital Waterford)*), buildings that used to be hospitals, and closed hospitals with their years from OpenHistoricalMap. Most entries now show their town. Search starts from the second letter typed.
 
 ### 1.3.0 (current)
 - **Daily horoscope** — a new **Daily** view generates a horoscope for any chart on any date from that day's transits: the whole local day is scanned, every contact between the thirteen moving bodies and the chart's thirteen natal positions plus Ascendant and Midheaven is found to within a 1° orb and timed, and the closest and weightiest few are written up from a new editable corpus (`Data\daily.json`, 585 bespoke transit lines). Includes Moon sign, phase and house, the Sun's house, retrogrades and stations, an overall day tone, date navigation, and a full "Why this reading?" list of the day's transits. Chiron, Lilith, and the North Node take part both as moving bodies and as natal points.

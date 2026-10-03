@@ -6,7 +6,7 @@ This prompt asks for **sources**, not for hospitals one by one: a research tool 
 
 ---
 
-I maintain a free, open-source desktop astrology application. When a user enters a birth, they can search for the **hospital they were born in** to get precise birthplace coordinates. Today the app has about 26,400 hospitals, drawn from Wikidata, and coverage is far too thin for most users. I want to grow it to roughly **60,000–80,000 hospitals**, with much better coverage of the countries where most people live.
+I maintain a free, open-source desktop astrology application. When a user enters a birth, they can search for the **hospital they were born in** to get precise birthplace coordinates. Today the app has about 235,000 hospitals, drawn from Wikidata and OpenStreetMap, plus about 11,000 former names and closed hospitals from OpenStreetMap, Wikidata and OpenHistoricalMap. What it still lacks is official coverage in some large countries and, above all, **hospitals that have closed or been renamed** — most users were born decades ago.
 
 I need you to find **downloadable, machine-readable datasets that list individual hospitals**, which I can import by script. I do NOT want you to list hospitals yourself.
 
@@ -39,7 +39,7 @@ I need you to find **downloadable, machine-readable datasets that list individua
 | Colombia | 20 |
 | Argentina | 140 |
 
-Netherlands, Ethiopia, Tanzania, the Democratic Republic of the Congo and Myanmar have almost none.
+For comparison: Netherlands 207, Ethiopia 350, Tanzania 1,071, DR Congo 571, Myanmar 1,683.
 
 ## What to look for
 
@@ -54,7 +54,7 @@ Also look specifically for **historical** sources, since users were born decades
 - Datasets or registers that include **closed, merged, or renamed hospitals**, with dates.
 - Lists of former **maternity hospitals and maternity homes** (many people born 1920–1980 were born in these rather than in general hospitals).
 
-Do NOT include OpenStreetMap, Wikidata, or datasets derived from them (such as healthsites.io); I already use those.
+Do NOT include OpenStreetMap, OpenHistoricalMap, Wikidata, or datasets derived from them (such as healthsites.io); I already use those. Give historical sources (closed hospitals, maternity homes) as much weight as current ones.
 
 ## For each dataset, report
 
