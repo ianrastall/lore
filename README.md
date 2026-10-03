@@ -384,9 +384,6 @@ The `_12` files are required for historical figures such as Leonardo da Vinci, S
 
 ## Version History
 
-### Unreleased
-- **Hospital search, nine times larger** — the birthplace hospital list grows from ~26,400 to ~235,000 entries by adding OpenStreetMap worldwide. It also adds ~11,000 entries for older hospitals: former names of renamed hospitals (e.g. *Waterford Regional Hospital (now University Hospital Waterford)*), buildings that used to be hospitals, and closed hospitals with their years from OpenHistoricalMap. Most entries now show their town. Search starts from the second letter typed.
-
 ### 1.3.0 (current)
 - **Daily horoscope** — a new **Daily** view generates a horoscope for any chart on any date from that day's transits: the whole local day is scanned, every contact between the thirteen moving bodies and the chart's thirteen natal positions plus Ascendant and Midheaven is found to within a 1° orb and timed, and the closest and weightiest few are written up from a new editable corpus (`Data\daily.json`, 585 bespoke transit lines). Includes Moon sign, phase and house, the Sun's house, retrogrades and stations, an overall day tone, date navigation, and a full "Why this reading?" list of the day's transits. Chiron, Lilith, and the North Node take part both as moving bodies and as natal points.
 - **Daily export** — the reading on screen can be saved as a PDF or plain text.
@@ -398,6 +395,7 @@ The `_12` files are required for historical figures such as Leonardo da Vinci, S
 - **Older charts corrected** — births from before standard time zones existed now use the local mean time of the birthplace itself, not of the zone's reference city. This moves the Ascendant and houses of 28 older figures, most by a degree or two; Abraham Lincoln, Karl Marx, and Mahatma Gandhi shift by 12–17°. Checked against Astro-Databank.
 - **Leonardo da Vinci** — birth date corrected from the Old Style (Julian) date to its Gregorian equivalent, 23 April 1452 at 21:40; his Sun is now correctly in Taurus.
 - **Carl Jung** — birthplace now resolves to Swiss rather than German time.
+- **Hospital search, nine times larger** — the birthplace hospital list grows from ~26,400 to ~235,000 entries by adding OpenStreetMap worldwide. It also adds ~11,000 entries for older hospitals: former names of renamed hospitals (e.g. *Waterford Regional Hospital (now University Hospital Waterford)*), buildings that used to be hospitals, and closed hospitals with their years from OpenHistoricalMap. Most entries now show their town. Search starts from the second letter typed.
 
 ### 1.2.0
 - **Hospital birthplace search** — the Add Chart dialog gains a hospital autocomplete alongside city search, backed by a bundled database of ~26,400 hospitals worldwide (Wikidata, CC0). Picking a hospital autofills precise coordinates; the timezone is resolved from those coordinates as before. Useful because a hospital pinpoints a birthplace more tightly than a city centre, sharpening the Ascendant and house cusps.
