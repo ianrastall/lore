@@ -34,7 +34,7 @@
 - Detects **major configurations** — stellium, grand trine, T-square, and grand cross — from the positions and aspects (a T-square that is one arm of a grand cross is not reported twice).
 - Retrograde detection for all five non-luminary classical planets.
 
-- **150 figures** across **14 categories** — Actors, Musicians, Writers, Artists, Scientists, Philosophers, Directors, Athletes, Political, Historical, and more.
+- **183 figures** across **14 categories** — Actors, Musicians, Writers, Artists, Scientists, Philosophers, Directors, Athletes, Political, Historical, and more.
 - **Every figure has a documented, recorded birth time** (Astro-Databank / Rodden-rated). Entries without a reliable birth time were removed, so no chart relies on a noon guess.
 - Each entry stores birth date, time, birth place, geographic coordinates, IANA time zone, and a one-sentence bio.
 - Birth instants are resolved with **historical, DST-aware UTC offsets** via the IANA timezone database (NodaTime), not just fixed offsets — correctly handling anomalies like the UK's 1968–71 year-round BST experiment and 1940s US wartime time. For births before standard time existed, the birthplace's own local mean time (from its longitude) is used, as astrological sources record them.
@@ -131,7 +131,7 @@ Lore/
 │   ├── LegendView.xaml/.cs    # Glyph + colour legend
 │   └── AddChartDialog.xaml/.cs# Custom chart entry dialog
 ├── Data/
-│   ├── celebrities.json       # 150 bundled figures (all with recorded birth times)
+│   ├── celebrities.json       # 183 bundled figures (all with recorded birth times)
 │   ├── cities.json            # ~50,250 cities (lat/lon + IANA tz)
 │   ├── hospitals.json         # ~235,000 hospitals (lat/lon), Add-Chart birthplace search
 │   ├── interpretations.json   # Corpus for the natural-language report
@@ -232,7 +232,7 @@ Output: `artifacts\LoreSetup-<version>.exe`.
 
 ### `Data\celebrities.json`
 
-150 figures in 14 categories, each with a documented birth time. Each entry:
+183 figures in 14 categories, each with a documented birth time. Each entry:
 
 ```jsonc
 {
@@ -383,6 +383,9 @@ The `_12` files are required for historical figures such as Leonardo da Vinci, S
 ---
 
 ## Version History
+
+### Unreleased
+- **33 more figures** — the library grows from 150 to **183**, adding philosophers, writers, scientists, artists, athletes and historical figures such as Kant, Goethe, Jules Verne, Alan Turing, Neil Armstrong, Marie Antoinette, Pelé, and Steffi Graf. Every one was checked against Astro-Databank (Rodden rating AA or A), and each computed birth moment matches Astro-Databank's to the minute.
 
 ### 1.3.0 (current)
 - **Daily horoscope** — a new **Daily** view generates a horoscope for any chart on any date from that day's transits: the whole local day is scanned, every contact between the thirteen moving bodies and the chart's thirteen natal positions plus Ascendant and Midheaven is found to within a 1° orb and timed, and the closest and weightiest few are written up from a new editable corpus (`Data\daily.json`, 585 bespoke transit lines). Includes Moon sign, phase and house, the Sun's house, retrogrades and stations, an overall day tone, date navigation, and a full "Why this reading?" list of the day's transits. Chiron, Lilith, and the North Node take part both as moving bodies and as natal points.
