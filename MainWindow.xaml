@@ -24,8 +24,8 @@
                        Margin="16,16,16,8"
                        Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
 
-            <!-- Add / delete custom charts -->
-            <Grid Grid.Row="1" ColumnDefinitions="*,Auto" Margin="12,0,12,8" ColumnSpacing="6">
+            <!-- Add / edit / delete custom charts -->
+            <Grid Grid.Row="1" ColumnDefinitions="*,Auto,Auto" Margin="12,0,12,8" ColumnSpacing="6">
                 <Button Grid.Column="0" HorizontalAlignment="Stretch"
                         Click="AddChart_Click">
                     <StackPanel Orientation="Horizontal" Spacing="6">
@@ -34,9 +34,17 @@
                     </StackPanel>
                 </Button>
                 <Button Grid.Column="1"
-                        Command="{x:Bind ViewModel.DeleteSelectedCommand}"
+                        Click="EditChart_Click"
                         Visibility="{x:Bind VisIf(ViewModel.SelectedIsCustom), Mode=OneWay}"
-                        ToolTipService.ToolTip="Delete this custom chart">
+                        AutomationProperties.Name="Edit this chart"
+                        ToolTipService.ToolTip="Edit this chart">
+                    <FontIcon Glyph="&#xE70F;" FontSize="14"/>
+                </Button>
+                <Button Grid.Column="2"
+                        Click="DeleteChart_Click"
+                        Visibility="{x:Bind VisIf(ViewModel.SelectedIsCustom), Mode=OneWay}"
+                        AutomationProperties.Name="Delete this chart"
+                        ToolTipService.ToolTip="Delete this chart">
                     <FontIcon Glyph="&#xE74D;" FontSize="14"/>
                 </Button>
             </Grid>

@@ -9,6 +9,7 @@
     "birthPlace": "Tupelo, MS",
     "latitude": 34.2581,
     "longitude": -88.6797,
+    "timeZoneId": "America/Chicago",
     "utcOffsetHours": -6.0,
     "bio": "The King of Rock and Roll, whose fusion of country, blues, and gospel transformed popular music."
   },
@@ -22,6 +23,7 @@
     "birthPlace": "Los Angeles, CA",
     "latitude": 34.0583,
     "longitude": -118.2078,
+    "timeZoneId": "America/Los_Angeles",
     "utcOffsetHours": -8.0,
     "bio": "Iconic actress and cultural phenomenon of the 1950s and early '60s."
   },
@@ -30,65 +32,28 @@
     "name": "Michael Jackson",
     "category": "Musician",
     "birthDate": "1958-08-29",
-    "birthTime": "23:53",
+    "birthTime": "19:33",
     "birthTimeKnown": true,
     "birthPlace": "Gary, IN",
     "latitude": 41.5997,
     "longitude": -87.3408,
+    "timeZoneId": "America/Chicago",
     "utcOffsetHours": -6.0,
     "bio": "The King of Pop, whose Thriller remains the best-selling album of all time."
-  },
-  {
-    "id": "lady-gaga",
-    "name": "Lady Gaga",
-    "category": "Musician",
-    "birthDate": "1986-03-28",
-    "birthTime": "09:53",
-    "birthTimeKnown": true,
-    "birthPlace": "Manhattan, NY",
-    "latitude": 40.7736,
-    "longitude": -73.9609,
-    "utcOffsetHours": -5.0,
-    "bio": "Pop icon and actress known for theatrical artistry and songs like Just Dance and Bad Romance."
   },
   {
     "id": "beyonce",
     "name": "Beyoncé",
     "category": "Musician",
     "birthDate": "1981-09-04",
-    "birthTime": "10:00",
+    "birthTime": "21:47",
     "birthTimeKnown": true,
     "birthPlace": "Houston, TX",
     "latitude": 29.7234,
     "longitude": -95.3874,
+    "timeZoneId": "America/Chicago",
     "utcOffsetHours": -6.0,
     "bio": "Globally celebrated singer and performer; one of the best-selling music artists of all time."
-  },
-  {
-    "id": "taylor-swift",
-    "name": "Taylor Swift",
-    "category": "Musician",
-    "birthDate": "1989-12-13",
-    "birthTime": "08:36",
-    "birthTimeKnown": true,
-    "birthPlace": "West Reading, PA",
-    "latitude": 40.3348,
-    "longitude": -75.9436,
-    "utcOffsetHours": -5.0,
-    "bio": "Singer-songwriter who broke record after record across country and pop genres."
-  },
-  {
-    "id": "rihanna",
-    "name": "Rihanna",
-    "category": "Musician",
-    "birthDate": "1988-02-20",
-    "birthTime": "08:50",
-    "birthTimeKnown": true,
-    "birthPlace": "Saint Michael, Barbados",
-    "latitude": 13.0902,
-    "longitude": -59.604,
-    "utcOffsetHours": -4.0,
-    "bio": "Barbadian singer and entrepreneur; founder of the Fenty beauty empire."
   },
   {
     "id": "madonna",
@@ -100,21 +65,9 @@
     "birthPlace": "Bay City, MI",
     "latitude": 43.5858,
     "longitude": -83.8762,
+    "timeZoneId": "America/Detroit",
     "utcOffsetHours": -5.0,
     "bio": "Queen of Pop; a defining force in music, fashion, and culture since the early 1980s."
-  },
-  {
-    "id": "john-lennon",
-    "name": "John Lennon",
-    "category": "Musician",
-    "birthDate": "1940-10-09",
-    "birthTime": "18:30",
-    "birthTimeKnown": true,
-    "birthPlace": "Liverpool, UK",
-    "latitude": 53.4002,
-    "longitude": -2.9644,
-    "utcOffsetHours": 1.0,
-    "bio": "Co-founder of The Beatles and peace activist; one of the most influential figures in rock history."
   },
   {
     "id": "mick-jagger",
@@ -126,6 +79,7 @@
     "birthPlace": "Dartford, UK",
     "latitude": 51.4442,
     "longitude": 0.2289,
+    "timeZoneId": "Europe/London",
     "utcOffsetHours": 1.0,
     "bio": "Frontman of the Rolling Stones; the archetype of rock-and-roll swagger."
   },
@@ -139,6 +93,7 @@
     "birthPlace": "Aberdeen, WA",
     "latitude": 46.9806,
     "longitude": -123.8344,
+    "timeZoneId": "America/Los_Angeles",
     "utcOffsetHours": -8.0,
     "bio": "Lead singer of Nirvana; his raw songwriting defined 1990s grunge."
   },
@@ -152,6 +107,7 @@
     "birthPlace": "Melbourne, FL",
     "latitude": 28.0706,
     "longitude": -80.6125,
+    "timeZoneId": "America/New_York",
     "utcOffsetHours": -5.0,
     "bio": "Frontman of The Doors; poet and rock legend of the psychedelic era."
   },
@@ -165,6 +121,7 @@
     "birthPlace": "Seattle, WA",
     "latitude": 47.6044,
     "longitude": -122.3244,
+    "timeZoneId": "America/Los_Angeles",
     "utcOffsetHours": -8.0,
     "bio": "Widely regarded as the greatest guitarist of all time; redefined what the electric guitar could do."
   },
@@ -178,6 +135,7 @@
     "birthPlace": "Minneapolis, MN",
     "latitude": 44.9608,
     "longitude": -93.2636,
+    "timeZoneId": "America/Chicago",
     "utcOffsetHours": -6.0,
     "bio": "Minneapolis genius who fused funk, rock, R&B, and pop into an unclassifiable sound."
   },
@@ -191,6 +149,7 @@
     "birthPlace": "Newark, NJ",
     "latitude": 40.7094,
     "longitude": -74.2081,
+    "timeZoneId": "America/New_York",
     "utcOffsetHours": -5.0,
     "bio": "One of the greatest vocalists in pop history; I Will Always Love You remains iconic."
   },
@@ -204,6 +163,7 @@
     "birthPlace": "Memphis, TN",
     "latitude": 35.1189,
     "longitude": -90.0483,
+    "timeZoneId": "America/Chicago",
     "utcOffsetHours": -6.0,
     "bio": "The Queen of Soul; her voice and activism are inseparable from American cultural history."
   },
@@ -217,6 +177,7 @@
     "birthPlace": "Hoboken, NJ",
     "latitude": 40.7431,
     "longitude": -74.0372,
+    "timeZoneId": "America/New_York",
     "utcOffsetHours": -5.0,
     "bio": "Ol' Blue Eyes; the Chairman of the Board who defined mid-century American cool."
   },
@@ -230,6 +191,7 @@
     "birthPlace": "Port Arthur, TX",
     "latitude": 29.8978,
     "longitude": -93.9331,
+    "timeZoneId": "America/Chicago",
     "utcOffsetHours": -6.0,
     "bio": "Blues-rock powerhouse whose raw emotion made her the voice of a generation."
   },
@@ -243,6 +205,7 @@
     "birthPlace": "Southgate, London, UK",
     "latitude": 51.6664,
     "longitude": -0.0989,
+    "timeZoneId": "Europe/London",
     "utcOffsetHours": 1.0,
     "bio": "Jazz-inflected soul singer whose Back to Black album became a modern classic."
   },
@@ -256,6 +219,7 @@
     "birthPlace": "Summit, NJ",
     "latitude": 40.7158,
     "longitude": -74.3497,
+    "timeZoneId": "America/New_York",
     "utcOffsetHours": -5.0,
     "bio": "Three-time Academy Award winner widely considered the greatest living actress."
   },
@@ -269,6 +233,7 @@
     "birthPlace": "Ixelles, Belgium",
     "latitude": 50.8358,
     "longitude": 4.3644,
+    "timeZoneId": "Europe/Brussels",
     "utcOffsetHours": 1.0,
     "bio": "Breakfast at Tiffany's star and UNICEF Goodwill Ambassador; epitome of elegance."
   },
@@ -277,11 +242,12 @@
     "name": "Elizabeth Taylor",
     "category": "Actor",
     "birthDate": "1932-02-27",
-    "birthTime": "02:00",
+    "birthTime": "02:30",
     "birthTimeKnown": true,
     "birthPlace": "Hampstead, London, UK",
     "latitude": 51.5747,
     "longitude": -0.1878,
+    "timeZoneId": "Europe/London",
     "utcOffsetHours": 0.0,
     "bio": "Two-time Oscar winner and silver-screen legend whose violet eyes captivated the world."
   },
@@ -290,11 +256,12 @@
     "name": "James Dean",
     "category": "Actor",
     "birthDate": "1931-02-08",
-    "birthTime": "02:00",
+    "birthTime": "09:00",
     "birthTimeKnown": true,
     "birthPlace": "Marion, IN",
     "latitude": 40.5608,
     "longitude": -85.6603,
+    "timeZoneId": "America/Indiana/Indianapolis",
     "utcOffsetHours": -6.0,
     "bio": "Hollywood's original rebel without a cause; only three films, eternal cultural impact."
   },
@@ -303,11 +270,12 @@
     "name": "Al Pacino",
     "category": "Actor",
     "birthDate": "1940-04-25",
-    "birthTime": "11:25",
+    "birthTime": "11:02",
     "birthTimeKnown": true,
     "birthPlace": "Manhattan, NY",
     "latitude": 40.7957,
     "longitude": -73.9389,
+    "timeZoneId": "America/New_York",
     "utcOffsetHours": -5.0,
     "bio": "Iconic for The Godfather trilogy, Scarface, and Serpico; a towering figure of American cinema."
   },
@@ -321,6 +289,7 @@
     "birthPlace": "Manhattan, NY",
     "latitude": 40.7336,
     "longitude": -74.0027,
+    "timeZoneId": "America/New_York",
     "utcOffsetHours": -5.0,
     "bio": "Two-time Oscar winner; Taxi Driver, Raging Bull, and The Godfather Part II define his legacy."
   },
@@ -334,6 +303,7 @@
     "birthPlace": "Los Angeles, CA",
     "latitude": 34.095,
     "longitude": -118.2917,
+    "timeZoneId": "America/Los_Angeles",
     "utcOffsetHours": -8.0,
     "bio": "Oscar winner for The Revenant; acclaimed for Titanic, The Aviator, and environmental activism."
   },
@@ -347,6 +317,7 @@
     "birthPlace": "Los Angeles, CA",
     "latitude": 34.0763,
     "longitude": -118.3802,
+    "timeZoneId": "America/Los_Angeles",
     "utcOffsetHours": -7.0,
     "bio": "Oscar-winning actress and UN goodwill ambassador; Maleficent, Girl Interrupted, and Mr. & Mrs. Smith."
   },
@@ -360,21 +331,9 @@
     "birthPlace": "Concord, CA",
     "latitude": 37.9744,
     "longitude": -122.0286,
+    "timeZoneId": "America/Los_Angeles",
     "utcOffsetHours": -8.0,
     "bio": "Back-to-back Oscar winner; Forrest Gump, Cast Away, and Saving Private Ryan."
-  },
-  {
-    "id": "keanu-reeves",
-    "name": "Keanu Reeves",
-    "category": "Actor",
-    "birthDate": "1964-09-02",
-    "birthTime": "09:17",
-    "birthTimeKnown": true,
-    "birthPlace": "Beirut, Lebanon",
-    "latitude": 33.8978,
-    "longitude": 35.4883,
-    "utcOffsetHours": 2.0,
-    "bio": "Actor and cultural icon known for The Matrix trilogy, John Wick, and his reputation for kindness."
   },
   {
     "id": "robin-williams",
@@ -386,34 +345,9 @@
     "birthPlace": "Chicago, IL",
     "latitude": 41.8628,
     "longitude": -87.6242,
+    "timeZoneId": "Etc/GMT+6",
     "utcOffsetHours": -6.0,
     "bio": "Oscar-winning comedian and actor; Mrs. Doubtfire, Good Will Hunting, Aladdin."
-  },
-  {
-    "id": "heath-ledger",
-    "name": "Heath Ledger",
-    "category": "Actor",
-    "birthDate": "1979-04-04",
-    "birthTime": "06:30",
-    "birthTimeKnown": true,
-    "birthPlace": "Perth, Australia",
-    "latitude": -31.9486,
-    "longitude": 115.8239,
-    "utcOffsetHours": 8.0,
-    "bio": "Posthumous Oscar winner for his Joker in The Dark Knight; celebrated for Brokeback Mountain."
-  },
-  {
-    "id": "abraham-lincoln",
-    "name": "Abraham Lincoln",
-    "category": "Historical",
-    "birthDate": "1809-02-12",
-    "birthTime": "06:54",
-    "birthTimeKnown": true,
-    "birthPlace": "Hardin County, KY",
-    "latitude": 37.5286,
-    "longitude": -85.7339,
-    "utcOffsetHours": -6.0,
-    "bio": "16th US President who steered the nation through the Civil War and ended slavery."
   },
   {
     "id": "winston-churchill",
@@ -425,21 +359,9 @@
     "birthPlace": "Woodstock, Oxfordshire, UK",
     "latitude": 51.8414,
     "longitude": -1.361,
+    "timeZoneId": "Europe/London",
     "utcOffsetHours": 0.0,
     "bio": "British Prime Minister who led the Allies against Nazi Germany with oratory and resolve."
-  },
-  {
-    "id": "mahatma-gandhi",
-    "name": "Mahatma Gandhi",
-    "category": "Historical",
-    "birthDate": "1869-10-02",
-    "birthTime": "07:11",
-    "birthTimeKnown": true,
-    "birthPlace": "Porbandar, India",
-    "latitude": 21.6414,
-    "longitude": 69.6028,
-    "utcOffsetHours": 5.5,
-    "bio": "Father of the Indian nation; his philosophy of nonviolent resistance changed the world."
   },
   {
     "id": "albert-einstein",
@@ -451,22 +373,9 @@
     "birthPlace": "Ulm, Germany",
     "latitude": 48.3995,
     "longitude": 9.9856,
+    "timeZoneId": "Europe/Berlin",
     "utcOffsetHours": 1.0,
     "bio": "Theoretical physicist who developed the theory of relativity; winner of the 1921 Nobel Prize."
-  },
-  {
-    "id": "carl-jung",
-    "name": "Carl Jung",
-    "category": "Scientist",
-    "birthDate": "1875-07-26",
-    "birthTime": "19:32",
-    "birthTimeKnown": true,
-    "birthPlace": "Kesswil, Switzerland",
-    "latitude": 47.5936,
-    "longitude": 9.3183,
-    "timeZoneId": "Europe/Zurich",
-    "utcOffsetHours": 1.0,
-    "bio": "Founder of analytical psychology; archetypes, the collective unconscious, and synchronicity."
   },
   {
     "id": "sigmund-freud",
@@ -478,6 +387,7 @@
     "birthPlace": "Příbor, Czech Republic",
     "latitude": 49.6419,
     "longitude": 18.1444,
+    "timeZoneId": "Europe/Prague",
     "utcOffsetHours": 1.0,
     "bio": "Founder of psychoanalysis; his theories on the unconscious transformed how we understand the mind."
   },
@@ -491,6 +401,7 @@
     "birthPlace": "Vinci, Italy",
     "latitude": 43.7991,
     "longitude": 10.9382,
+    "timeZoneId": "Europe/Rome",
     "utcOffsetHours": 0.0,
     "bio": "Renaissance polymath: painter of the Mona Lisa and The Last Supper, and visionary inventor."
   },
@@ -504,6 +415,7 @@
     "birthPlace": "Málaga, Spain",
     "latitude": 36.7233,
     "longitude": -4.4178,
+    "timeZoneId": "Europe/Madrid",
     "utcOffsetHours": 0.0,
     "bio": "Co-founder of Cubism and one of the most prolific and influential artists of the 20th century."
   },
@@ -517,6 +429,7 @@
     "birthPlace": "Coyoacán, Mexico City, Mexico",
     "latitude": 19.3551,
     "longitude": -99.1625,
+    "timeZoneId": "America/Mexico_City",
     "utcOffsetHours": -6.0,
     "bio": "Mexican painter renowned for raw self-portraits intertwining personal pain with political identity."
   },
@@ -530,6 +443,7 @@
     "birthPlace": "Figueres, Spain",
     "latitude": 42.2662,
     "longitude": 2.9631,
+    "timeZoneId": "Europe/Madrid",
     "utcOffsetHours": 1.0,
     "bio": "Surrealist master known for The Persistence of Memory and his theatrical public persona."
   },
@@ -543,6 +457,7 @@
     "birthPlace": "Salzburg, Austria",
     "latitude": 47.8,
     "longitude": 13.0436,
+    "timeZoneId": "Europe/Vienna",
     "utcOffsetHours": 1.0,
     "bio": "Child prodigy who composed over 800 works; The Magic Flute and Symphony No. 40 endure."
   },
@@ -556,21 +471,9 @@
     "birthPlace": "Oak Park, IL",
     "latitude": 41.8893,
     "longitude": -87.7944,
+    "timeZoneId": "America/Chicago",
     "utcOffsetHours": -6.0,
     "bio": "Nobel laureate whose spare prose and adventurous life defined 20th-century American literature."
-  },
-  {
-    "id": "oscar-wilde",
-    "name": "Oscar Wilde",
-    "category": "Writer",
-    "birthDate": "1854-10-16",
-    "birthTime": "03:00",
-    "birthTimeKnown": true,
-    "birthPlace": "Dublin, Ireland",
-    "latitude": 53.3432,
-    "longitude": -6.2497,
-    "utcOffsetHours": 0.0,
-    "bio": "Playwright and wit whose Importance of Being Earnest remains a comic masterpiece."
   },
   {
     "id": "oprah-winfrey",
@@ -582,6 +485,7 @@
     "birthPlace": "Kosciusko, MS",
     "latitude": 33.0555,
     "longitude": -89.578,
+    "timeZoneId": "America/Chicago",
     "utcOffsetHours": -6.0,
     "bio": "Media mogul, talk show legend, and philanthropist; the most influential woman in entertainment."
   },
@@ -595,6 +499,7 @@
     "birthPlace": "San Francisco, CA",
     "latitude": 37.7483,
     "longitude": -122.4211,
+    "timeZoneId": "America/Los_Angeles",
     "utcOffsetHours": -8.0,
     "bio": "Apple co-founder whose vision of personal computing and the iPhone changed the world."
   },
@@ -608,6 +513,7 @@
     "birthPlace": "Honolulu, HI",
     "latitude": 21.3002,
     "longitude": -157.834,
+    "timeZoneId": "Pacific/Honolulu",
     "utcOffsetHours": -10.0,
     "bio": "44th President of the United States; first African American to hold the office."
   },
@@ -621,6 +527,7 @@
     "birthPlace": "Sandringham, Norfolk, UK",
     "latitude": 52.8277,
     "longitude": 0.5113,
+    "timeZoneId": "Europe/London",
     "utcOffsetHours": 1.0,
     "bio": "People's Princess; her humanitarian work and tragic death made her a global icon."
   },
@@ -634,6 +541,7 @@
     "birthPlace": "Mayfair, London, UK",
     "latitude": 51.5106,
     "longitude": -0.1447,
+    "timeZoneId": "Europe/London",
     "utcOffsetHours": 0.0,
     "bio": "Britain's longest-reigning monarch, who guided the Crown through seven decades of change."
   },
@@ -647,6 +555,7 @@
     "birthPlace": "Southampton, NY",
     "latitude": 40.8872,
     "longitude": -72.3883,
+    "timeZoneId": "America/New_York",
     "utcOffsetHours": -5.0,
     "bio": "First Lady of Camelot; her grace, intelligence, and poise remain the gold standard."
   },
@@ -660,6 +569,7 @@
     "birthPlace": "Duluth, MN",
     "latitude": 46.7936,
     "longitude": -92.0947,
+    "timeZoneId": "Etc/GMT+6",
     "utcOffsetHours": -6.0,
     "bio": "Nobel Prize-winning songwriter; Blowin' in the Wind and Like a Rolling Stone defined an era."
   },
@@ -673,6 +583,7 @@
     "birthPlace": "Long Branch, NJ",
     "latitude": 40.3017,
     "longitude": -73.9828,
+    "timeZoneId": "America/New_York",
     "utcOffsetHours": -5.0,
     "bio": "The Boss; Born to Run and Born in the U.S.A. made him the voice of working-class America."
   },
@@ -686,21 +597,9 @@
     "birthPlace": "Trier, Germany",
     "latitude": 49.7538,
     "longitude": 6.6359,
+    "timeZoneId": "Europe/Berlin",
     "utcOffsetHours": 0.0,
     "bio": "Philosopher and economist whose Communist Manifesto and Das Kapital shaped the 20th century."
-  },
-  {
-    "id": "friedrich-nietzsche",
-    "name": "Friedrich Nietzsche",
-    "category": "Historical",
-    "birthDate": "1844-10-15",
-    "birthTime": "10:00",
-    "birthTimeKnown": true,
-    "birthPlace": "Röcken, Germany",
-    "latitude": 51.2407,
-    "longitude": 12.1164,
-    "utcOffsetHours": 1.0,
-    "bio": "Philosopher of the will to power, eternal recurrence, and God is dead."
   },
   {
     "id": "will-smith",
@@ -712,6 +611,7 @@
     "birthPlace": "Philadelphia, PA",
     "latitude": 39.9504,
     "longitude": -75.1934,
+    "timeZoneId": "America/New_York",
     "utcOffsetHours": -5.0,
     "bio": "Oscar-winning actor and rapper; Fresh Prince, Ali, and the Men in Black franchise."
   },
@@ -725,6 +625,7 @@
     "birthPlace": "Smyrna, GA",
     "latitude": 33.7694,
     "longitude": -84.3861,
+    "timeZoneId": "America/New_York",
     "utcOffsetHours": -5.0,
     "bio": "Oscar winner for Erin Brockovich; America's Sweetheart through the 1990s and beyond."
   },
@@ -738,6 +639,7 @@
     "birthPlace": "Shawnee, OK",
     "latitude": 35.334,
     "longitude": -96.922,
+    "timeZoneId": "America/Chicago",
     "utcOffsetHours": -6.0,
     "bio": "Oscar winner for Once Upon a Time in Hollywood; Fight Club and Se7en are defining films."
   },
@@ -751,21 +653,9 @@
     "birthPlace": "Sherman Oaks, CA",
     "latitude": 34.1601,
     "longitude": -118.4485,
+    "timeZoneId": "America/Los_Angeles",
     "utcOffsetHours": -8.0,
     "bio": "Friends star beloved as Rachel Green; remained a box-office draw for three decades."
-  },
-  {
-    "id": "tom-cruise",
-    "name": "Tom Cruise",
-    "category": "Actor",
-    "birthDate": "1962-07-03",
-    "birthTime": "15:06",
-    "birthTimeKnown": true,
-    "birthPlace": "Syracuse, NY",
-    "latitude": 43.0568,
-    "longitude": -76.1481,
-    "utcOffsetHours": -5.0,
-    "bio": "Action superstar of Top Gun and Mission: Impossible; one of Hollywood's most bankable stars."
   },
   {
     "id": "johnny-depp",
@@ -777,6 +667,7 @@
     "birthPlace": "Owensboro, KY",
     "latitude": 37.7633,
     "longitude": -87.1089,
+    "timeZoneId": "America/Chicago",
     "utcOffsetHours": -6.0,
     "bio": "Character actor known for eccentric roles: Captain Jack Sparrow, Edward Scissorhands, Ed Wood."
   },
@@ -790,21 +681,9 @@
     "birthPlace": "Beverly Hills, CA",
     "latitude": 34.1561,
     "longitude": -118.3242,
+    "timeZoneId": "America/Los_Angeles",
     "utcOffsetHours": -8.0,
     "bio": "Princess Leia and fearless memoirist; her candor about mental illness helped destigmatize it."
-  },
-  {
-    "id": "cary-grant",
-    "name": "Cary Grant",
-    "category": "Actor",
-    "birthDate": "1904-01-18",
-    "birthTime": "01:07",
-    "birthTimeKnown": true,
-    "birthPlace": "Bristol, UK",
-    "latitude": 51.4795,
-    "longitude": -2.5847,
-    "utcOffsetHours": 0.0,
-    "bio": "The definitive leading man of Hollywood's Golden Age; North by Northwest and Bringing Up Baby."
   },
   {
     "id": "grace-kelly",
@@ -816,21 +695,9 @@
     "birthPlace": "Philadelphia, PA",
     "latitude": 39.9575,
     "longitude": -75.1611,
+    "timeZoneId": "America/New_York",
     "utcOffsetHours": -5.0,
     "bio": "Oscar-winning actress who became Princess of Monaco; epitome of cool Grace."
-  },
-  {
-    "id": "charlie-chaplin",
-    "name": "Charlie Chaplin",
-    "category": "Actor",
-    "birthDate": "1889-04-16",
-    "birthTime": "20:00",
-    "birthTimeKnown": true,
-    "birthPlace": "Walworth, London, UK",
-    "latitude": 51.4892,
-    "longitude": -0.0894,
-    "utcOffsetHours": 0.0,
-    "bio": "Silent-film genius whose Little Tramp character made the world laugh and think."
   },
   {
     "id": "jim-carrey",
@@ -842,6 +709,7 @@
     "birthPlace": "Newmarket, Ontario, Canada",
     "latitude": 44.0601,
     "longitude": -79.4475,
+    "timeZoneId": "America/Toronto",
     "utcOffsetHours": -5.0,
     "bio": "Rubber-faced comedian who became a dramatic actor; The Truman Show and Eternal Sunshine."
   },
@@ -850,26 +718,14 @@
     "name": "Steve Martin",
     "category": "Actor",
     "birthDate": "1945-08-14",
-    "birthTime": "06:40",
+    "birthTime": "05:54",
     "birthTimeKnown": true,
     "birthPlace": "Waco, TX",
     "latitude": 31.5542,
     "longitude": -97.165,
+    "timeZoneId": "America/Chicago",
     "utcOffsetHours": -6.0,
     "bio": "Comedian, playwright, and banjo player; a versatile talent who redefined American comedy."
-  },
-  {
-    "id": "vivien-leigh",
-    "name": "Vivien Leigh",
-    "category": "Actor",
-    "birthDate": "1913-11-05",
-    "birthTime": "17:09",
-    "birthTimeKnown": true,
-    "birthPlace": "Darjeeling, India",
-    "latitude": 27.0333,
-    "longitude": 88.268,
-    "utcOffsetHours": 5.5,
-    "bio": "Two-time Oscar winner for Gone with the Wind and A Streetcar Named Desire."
   },
   {
     "id": "greta-garbo",
@@ -881,6 +737,7 @@
     "birthPlace": "Stockholm, Sweden",
     "latitude": 59.3106,
     "longitude": 18.0711,
+    "timeZoneId": "Europe/Stockholm",
     "utcOffsetHours": 1.0,
     "bio": "Swedish-American screen goddess of Hollywood's silent and early sound era."
   },
@@ -889,26 +746,14 @@
     "name": "Bette Davis",
     "category": "Actor",
     "birthDate": "1908-04-05",
-    "birthTime": "21:16",
+    "birthTime": "21:00",
     "birthTimeKnown": true,
     "birthPlace": "Lowell, MA",
     "latitude": 42.6375,
     "longitude": -71.3283,
+    "timeZoneId": "America/New_York",
     "utcOffsetHours": -5.0,
     "bio": "Two-time Oscar winner famed for electrifying performances and her battles with the studio system."
-  },
-  {
-    "id": "dalai-lama",
-    "name": "Dalai Lama (14th)",
-    "category": "Spiritual",
-    "birthDate": "1935-07-06",
-    "birthTime": "04:38",
-    "birthTimeKnown": true,
-    "birthPlace": "Taktser, Amdo, Tibet",
-    "latitude": 36.3811,
-    "longitude": 101.8683,
-    "utcOffsetHours": 8.0,
-    "bio": "Tibetan Buddhist spiritual leader and Nobel Peace Prize laureate; ambassador of compassion."
   },
   {
     "id": "edith-piaf",
@@ -920,6 +765,7 @@
     "birthPlace": "Paris, France",
     "latitude": 48.8661,
     "longitude": 2.4019,
+    "timeZoneId": "Europe/Paris",
     "utcOffsetHours": 1.0,
     "bio": "The Little Sparrow; Non, je ne regrette rien is the anthem of defiant resilience."
   },
@@ -933,32 +779,21 @@
     "birthPlace": "Boston, MA",
     "latitude": 42.3353,
     "longitude": -71.0719,
+    "timeZoneId": "America/New_York",
     "utcOffsetHours": -5.0,
     "bio": "Confessional poet and novelist; The Bell Jar and Ariel sear with psychological intensity."
-  },
-  {
-    "id": "stephen-hawking",
-    "name": "Stephen Hawking",
-    "category": "Scientist",
-    "birthDate": "1942-01-08",
-    "birthTime": "21:15",
-    "birthTimeKnown": true,
-    "birthPlace": "Oxford, UK",
-    "latitude": 51.7606,
-    "longitude": -1.2628,
-    "utcOffsetHours": 0.0,
-    "bio": "Theoretical physicist who transformed our understanding of black holes despite living with ALS."
   },
   {
     "id": "ellen-degeneres",
     "name": "Ellen DeGeneres",
     "category": "Media",
     "birthDate": "1958-01-26",
-    "birthTime": "21:25",
+    "birthTime": "08:43",
     "birthTimeKnown": true,
     "birthPlace": "Metairie, LA",
     "latitude": 30.0158,
     "longitude": -90.1831,
+    "timeZoneId": "America/Chicago",
     "utcOffsetHours": -6.0,
     "bio": "Comedian and talk-show host whose coming out in 1997 was a cultural watershed moment."
   },
@@ -981,7 +816,7 @@
     "name": "Louis Pasteur",
     "category": "Scientist",
     "birthDate": "1822-12-27",
-    "birthTime": "01:38",
+    "birthTime": "02:00",
     "birthTimeKnown": true,
     "birthPlace": "Dole, France",
     "latitude": 47.0908,
@@ -995,7 +830,7 @@
     "name": "Henri Poincaré",
     "category": "Scientist",
     "birthDate": "1854-04-29",
-    "birthTime": "00:35",
+    "birthTime": "01:00",
     "birthTimeKnown": true,
     "birthPlace": "Nancy, France",
     "latitude": 48.6917,
@@ -1009,7 +844,7 @@
     "name": "Claude Bernard",
     "category": "Scientist",
     "birthDate": "1813-07-12",
-    "birthTime": "03:08",
+    "birthTime": "03:30",
     "birthTimeKnown": true,
     "birthPlace": "Saint-Julien, France",
     "latitude": 46.0278,
@@ -1037,7 +872,7 @@
     "name": "Henri Matisse",
     "category": "Artist",
     "birthDate": "1869-12-31",
-    "birthTime": "19:46",
+    "birthTime": "20:00",
     "birthTimeKnown": true,
     "birthPlace": "Le Cateau-Cambrésis, France",
     "latitude": 50.1042,
@@ -1051,7 +886,7 @@
     "name": "Paul Cézanne",
     "category": "Artist",
     "birthDate": "1839-01-19",
-    "birthTime": "00:38",
+    "birthTime": "01:00",
     "birthTimeKnown": true,
     "birthPlace": "Aix-en-Provence, France",
     "latitude": 43.5269,
@@ -1065,7 +900,7 @@
     "name": "Paul Gauguin",
     "category": "Artist",
     "birthDate": "1848-06-07",
-    "birthTime": "09:51",
+    "birthTime": "10:00",
     "birthTimeKnown": true,
     "birthPlace": "Paris, France",
     "latitude": 48.8786,
@@ -1079,7 +914,7 @@
     "name": "Pierre-Auguste Renoir",
     "category": "Artist",
     "birthDate": "1841-02-25",
-    "birthTime": "05:55",
+    "birthTime": "06:00",
     "birthTimeKnown": true,
     "birthPlace": "Limoges, France",
     "latitude": 45.8286,
@@ -1121,7 +956,7 @@
     "name": "Émile Zola",
     "category": "Writer",
     "birthDate": "1840-04-02",
-    "birthTime": "22:51",
+    "birthTime": "23:00",
     "birthTimeKnown": true,
     "birthPlace": "Paris, France",
     "latitude": 48.8686,
@@ -1135,7 +970,7 @@
     "name": "Victor Hugo",
     "category": "Writer",
     "birthDate": "1802-02-26",
-    "birthTime": "22:06",
+    "birthTime": "22:30",
     "birthTimeKnown": true,
     "birthPlace": "Besançon, France",
     "latitude": 47.2347,
@@ -1149,7 +984,7 @@
     "name": "Honoré de Balzac",
     "category": "Writer",
     "birthDate": "1799-05-20",
-    "birthTime": "10:57",
+    "birthTime": "11:00",
     "birthTimeKnown": true,
     "birthPlace": "Tours, France",
     "latitude": 47.3931,
@@ -1163,7 +998,7 @@
     "name": "George Sand",
     "category": "Writer",
     "birthDate": "1804-07-01",
-    "birthTime": "14:51",
+    "birthTime": "15:00",
     "birthTimeKnown": true,
     "birthPlace": "Paris, France",
     "latitude": 48.8683,
@@ -1275,7 +1110,7 @@
     "name": "Georges Clemenceau",
     "category": "Political",
     "birthDate": "1841-09-28",
-    "birthTime": "21:33",
+    "birthTime": "21:30",
     "birthTimeKnown": true,
     "birthPlace": "Mouilleron-en-Pareds, France",
     "latitude": 46.6744,
@@ -1283,20 +1118,6 @@
     "timeZoneId": "Europe/Paris",
     "utcOffsetHours": 0.0,
     "bio": "French statesman and journalist who led France to victory in the First World War."
-  },
-  {
-    "id": "theodore-roosevelt",
-    "name": "Theodore Roosevelt",
-    "category": "Political",
-    "birthDate": "1858-10-27",
-    "birthTime": "19:45",
-    "birthTimeKnown": true,
-    "birthPlace": "New York, United States",
-    "latitude": 40.7386,
-    "longitude": -73.989,
-    "timeZoneId": "America/New_York",
-    "utcOffsetHours": 0.0,
-    "bio": "26th U.S. president, trust-buster, conservationist, and Rough Rider."
   },
   {
     "id": "martin-luther-king-jr",
@@ -1308,8 +1129,8 @@
     "birthPlace": "Atlanta, United States",
     "latitude": 33.7558,
     "longitude": -84.3731,
-    "timeZoneId": "America/New_York",
-    "utcOffsetHours": 0.0,
+    "timeZoneId": "Etc/GMT+6",
+    "utcOffsetHours": -6.0,
     "bio": "Baptist minister and leader of the American civil-rights movement; Nobel laureate."
   },
   {
@@ -1425,20 +1246,6 @@
     "bio": "Welsh actor of icy precision, unforgettable as Hannibal Lecter and an Oscar winner late in life for The Father."
   },
   {
-    "id": "bob-marley",
-    "name": "Bob Marley",
-    "category": "Musician",
-    "birthDate": "1945-02-06",
-    "birthTime": "02:30",
-    "birthTimeKnown": true,
-    "birthPlace": "St. Ann's Bay, Jamaica",
-    "latitude": 18.4342,
-    "longitude": -77.2011,
-    "timeZoneId": "America/Jamaica",
-    "utcOffsetHours": -5.0,
-    "bio": "Jamaican reggae legend who carried Rastafari and songs of liberation to the world."
-  },
-  {
     "id": "stevie-wonder",
     "name": "Stevie Wonder",
     "category": "Musician",
@@ -1476,8 +1283,8 @@
     "birthPlace": "Sevierville, TN",
     "latitude": 35.8681,
     "longitude": -83.5619,
-    "timeZoneId": "America/New_York",
-    "utcOffsetHours": -5.0,
+    "timeZoneId": "Etc/GMT+6",
+    "utcOffsetHours": -6.0,
     "bio": "Beloved country songwriter, performer, and philanthropist behind 'Jolene' and 'I Will Always Love You'."
   },
   {
@@ -1579,20 +1386,6 @@
     "bio": "Six-time NBA champion widely regarded as the greatest basketball player of all time."
   },
   {
-    "id": "che-guevara",
-    "name": "Che Guevara",
-    "category": "Political",
-    "birthDate": "1928-05-14",
-    "birthTime": "03:05",
-    "birthTimeKnown": true,
-    "birthPlace": "Rosario, Argentina",
-    "latitude": -32.9442,
-    "longitude": -60.6505,
-    "timeZoneId": "America/Argentina/Cordoba",
-    "utcOffsetHours": -3.0,
-    "bio": "Marxist revolutionary and physician whose image became a global emblem of rebellion."
-  },
-  {
     "id": "margaret-thatcher",
     "name": "Margaret Thatcher",
     "category": "Political",
@@ -1616,23 +1409,9 @@
     "birthPlace": "Omaha, NE",
     "latitude": 41.2565,
     "longitude": -95.9345,
-    "timeZoneId": "America/Chicago",
+    "timeZoneId": "Etc/GMT+6",
     "utcOffsetHours": -6.0,
     "bio": "Fiery orator and human-rights leader whose autobiography became a landmark of American thought."
-  },
-  {
-    "id": "andy-warhol",
-    "name": "Andy Warhol",
-    "category": "Artist",
-    "birthDate": "1928-08-06",
-    "birthTime": "06:30",
-    "birthTimeKnown": true,
-    "birthPlace": "Pittsburgh, PA",
-    "latitude": 40.4406,
-    "longitude": -79.9959,
-    "timeZoneId": "America/New_York",
-    "utcOffsetHours": -5.0,
-    "bio": "Pope of Pop Art, who turned soup cans and celebrity into mirrors of modern culture."
   },
   {
     "id": "maya-angelou",
@@ -1700,7 +1479,7 @@
     "birthPlace": "Lexington, KY",
     "latitude": 38.0406,
     "longitude": -84.5037,
-    "timeZoneId": "America/New_York",
+    "timeZoneId": "Etc/GMT+5",
     "utcOffsetHours": -5.0,
     "bio": "Suave, socially engaged actor and director, an Oscar winner and modern Hollywood leading man."
   },
@@ -1742,7 +1521,7 @@
     "birthPlace": "Memphis, TN",
     "latitude": 35.1495,
     "longitude": -90.049,
-    "timeZoneId": "America/Chicago",
+    "timeZoneId": "Etc/GMT+6",
     "utcOffsetHours": -6.0,
     "bio": "Gravel-voiced, universally admired actor of The Shawshank Redemption and Million Dollar Baby."
   },
@@ -1840,7 +1619,7 @@
     "birthPlace": "Alton, IL",
     "latitude": 38.8906,
     "longitude": -90.1843,
-    "timeZoneId": "America/Chicago",
+    "timeZoneId": "Etc/GMT+6",
     "utcOffsetHours": -6.0,
     "bio": "Restless jazz trumpeter who reinvented the music again and again, from bebop to fusion."
   },

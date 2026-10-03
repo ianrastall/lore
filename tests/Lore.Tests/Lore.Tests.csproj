@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Tests for Lore's calculation and data layer (no WinUI): the Swiss Ephemeris
+       wrapper, birth-time resolution, transits, the daily interpreter, the saved-chart
+       store, and the bundled figure library checked against Astro-Databank.
+       Run from the repository root:  dotnet test tests\Lore.Tests -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>false</SelfContained>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>preview</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <IsPackable>false</IsPackable>
+    <RootNamespace>Lore.Tests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
+    <PackageReference Include="NodaTime" Version="3.*" />
+    <PackageReference Include="GeoTimeZone" Version="5.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <!-- The app's own source, compiled in: everything that doesn't need WinUI. -->
+  <ItemGroup>
+    <Compile Include="..\..\Models\*.cs" LinkBase="App\Models" />
+    <Compile Include="..\..\Services\SwissEphemeris.cs;..\..\Services\ChartService.cs;..\..\Services\BirthTimeResolver.cs;..\..\Services\TransitService.cs;..\..\Services\DailyInterpreter.cs;..\..\Services\ChartInterpreter.cs;..\..\Services\AspectPatternService.cs;..\..\Services\DignityService.cs;..\..\Services\UserChartService.cs;..\..\Services\HospitalService.cs;..\..\Services\Diagnostics.cs" LinkBase="App\Services" />
+    <None Include="..\..\Native\sweph.dll" Link="sweph.dll" CopyToOutputDirectory="PreserveNewest" Condition="Exists('..\..\Native\sweph.dll')" />
+    <None Include="Reference\*.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

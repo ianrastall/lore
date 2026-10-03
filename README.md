@@ -34,7 +34,7 @@
 - Detects **major configurations** — stellium, grand trine, T-square, and grand cross — from the positions and aspects (a T-square that is one arm of a grand cross is not reported twice).
 - Retrograde detection for all five non-luminary classical planets.
 
-- **183 figures** across **14 categories** — Actors, Musicians, Writers, Artists, Scientists, Philosophers, Directors, Athletes, Political, Historical, and more.
+- **162 figures** across **14 categories** — Actors, Musicians, Writers, Artists, Scientists, Philosophers, Directors, Athletes, Political, Historical, and more.
 - **Every figure has a documented, recorded birth time** (Astro-Databank / Rodden-rated). Entries without a reliable birth time were removed, so no chart relies on a noon guess.
 - Each entry stores birth date, time, birth place, geographic coordinates, IANA time zone, and a one-sentence bio.
 - Birth instants are resolved with **historical, DST-aware UTC offsets** via the IANA timezone database (NodaTime), not just fixed offsets — correctly handling anomalies like the UK's 1968–71 year-round BST experiment and 1940s US wartime time. For births before standard time existed, the birthplace's own local mean time (from its longitude) is used, as astrological sources record them.
@@ -44,7 +44,8 @@
 - City search autofills latitude, longitude, and IANA timezone from a bundled database of ~50,250 cities.
 - **Hospital search** autofills more precise coordinates from a bundled database of ~235,000 hospitals worldwide — including former names of renamed hospitals and hospitals that have since closed — because hospitals are where people are born, and precise coordinates sharpen the Ascendant and house cusps. The timezone is derived from the chosen coordinates.
 - Custom charts persist to `%LOCALAPPDATA%\Lore\mycharts.json` and appear under a dedicated **My Charts** category.
-- Custom charts can be deleted from the browse list.
+- Custom charts can be **edited** (pencil button) or **deleted** (bin button, which asks first) from the browse list.
+- Saving is crash-safe: a save is written to a temporary file before it replaces the real one, the previous version is kept as `mycharts.json.bak`, and a file that can't be read is never overwritten — it is set aside under a dated name and the backup restored, with a note in the status bar.
 
 ### Chart Views
 | View | Description |
@@ -131,7 +132,7 @@ Lore/
 │   ├── LegendView.xaml/.cs    # Glyph + colour legend
 │   └── AddChartDialog.xaml/.cs# Custom chart entry dialog
 ├── Data/
-│   ├── celebrities.json       # 183 bundled figures (all with recorded birth times)
+│   ├── celebrities.json       # 162 bundled figures (all with recorded birth times)
 │   ├── cities.json            # ~50,250 cities (lat/lon + IANA tz)
 │   ├── hospitals.json         # ~235,000 hospitals (lat/lon), Add-Chart birthplace search
 │   ├── interpretations.json   # Corpus for the natural-language report
@@ -139,6 +140,8 @@ Lore/
 │   └── swisseph-2.10.3bfinal/ # Swiss Ephemeris C source + .se1 ephemeris files
 ├── Native/
 │   └── sweph.dll              # Built by Build-SwephDll.ps1 (not in repo)
+├── tests/
+│   └── Lore.Tests/            # xUnit tests: calculations, transits, saved charts, figures vs Astro-Databank
 ├── Assets/
 │   ├── AppIcon.ico            # Indigo/gold "L" icon
 │   └── splash.png             # Splash-screen artwork (name + version drawn over it at launch)
@@ -196,6 +199,14 @@ Or open the project in **Visual Studio 2022 (17.11+)**.
 
 The `.csproj` automatically copies `sweph.dll` and the required `.se1` ephemeris files to the build output; no manual file placement is needed.
 
+#### Running the tests
+
+```powershell
+dotnet test tests\Lore.Tests
+```
+
+The tests cover the parts that must stay right: birth-time resolution (daylight saving, local mean time, historical city times), planet and Ascendant positions checked against Astro-Databank's published values, the daily transit scan checked against an independent calculation, the daily-horoscope corpus and wording, crash-safe saving of My Charts (including recovery from a damaged file), and hospital search. `FigureLibraryTests` checks every bundled figure against its Astro-Databank record in `tests\Lore.Tests\Reference\adb-reference.json`: each well-documented (AA/A) birth time must match, and Lore must turn it into the same instant Astro-Databank does. Run them after editing `Data\celebrities.json`.
+
 ### Step 3 — Portable Build
 
 Produces a self-contained folder that runs with no installed .NET or VC++ runtime on the target machine:
@@ -232,7 +243,7 @@ Output: `artifacts\LoreSetup-<version>.exe`.
 
 ### `Data\celebrities.json`
 
-183 figures in 14 categories, each with a documented birth time. Each entry:
+162 figures in 14 categories, each with a documented birth time (Astro-Databank Rodden rating AA or A). Each entry:
 
 ```jsonc
 {
@@ -385,7 +396,12 @@ The `_12` files are required for historical figures such as Leonardo da Vinci, S
 ## Version History
 
 ### Unreleased
-- **33 more figures** — the library grows from 150 to **183**, adding philosophers, writers, scientists, artists, athletes and historical figures such as Kant, Goethe, Jules Verne, Alan Turing, Neil Armstrong, Marie Antoinette, Pelé, and Steffi Graf. Every one was checked against Astro-Databank (Rodden rating AA or A), and each computed birth moment matches Astro-Databank's to the minute.
+- **Edit saved charts** — My Charts entries can now be edited as well as deleted, and deleting asks for confirmation first.
+- **Crash-safe saving** — My Charts is written via a temporary file with a `.bak` of the previous version; a damaged file is kept aside and the backup restored instead of being silently replaced by an empty list.
+- **Figure library audited** — all 150 original figures checked against Astro-Databank. 20 recorded birth times corrected (some by hours, e.g. Beyoncé, James Dean, Ellen DeGeneres); every figure given an explicit time zone, with fixed standard time where the birth record says so; and 21 figures removed whose birth times aren't documented to the library's standard (rated B, C or DD, or with no recorded time at all — among them Lincoln, John Lennon, Gandhi, Jung, Taylor Swift and Tom Cruise). The library is now **162** figures, every one rated AA or A, and each matches Astro-Databank's birth moment to the minute.
+- **Automated tests** — a new `tests\Lore.Tests` project (41 tests) guards the calculations, transits, saved charts, and the figure library.
+- **Fix** — the Add Chart dialog's default date displayed as the previous day west of Greenwich.
+- **33 more figures** — philosophers, writers, scientists, artists, athletes and historical figures such as Kant, Goethe, Jules Verne, Alan Turing, Neil Armstrong, Marie Antoinette, Pelé, and Steffi Graf, each checked against Astro-Databank (Rodden rating AA or A); every computed birth moment matches Astro-Databank's to the minute.
 
 ### 1.3.0 (current)
 - **Daily horoscope** — a new **Daily** view generates a horoscope for any chart on any date from that day's transits: the whole local day is scanned, every contact between the thirteen moving bodies and the chart's thirteen natal positions plus Ascendant and Midheaven is found to within a 1° orb and timed, and the closest and weightiest few are written up from a new editable corpus (`Data\daily.json`, 585 bespoke transit lines). Includes Moon sign, phase and house, the Sun's house, retrogrades and stations, an overall day tone, date navigation, and a full "Why this reading?" list of the day's transits. Chiron, Lilith, and the North Node take part both as moving bodies and as natal points.

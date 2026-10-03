@@ -61,6 +61,33 @@ public sealed partial class MainWindow : Window
             await ViewModel.AddCustomChartAsync(chart);
     }
 
+    private async void EditChart_Click(object sender, RoutedEventArgs e)
+    {
+        if (ViewModel.SelectedCelebrity is not { } existing || !ViewModel.SelectedIsCustom) return;
+        var dialog = new AddChartDialog(ViewModel.Cities, ViewModel.Hospitals, existing) { XamlRoot = Content.XamlRoot };
+        var result = await dialog.ShowAsync();
+        if (result == Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary && dialog.Result is { } chart)
+            await ViewModel.UpdateCustomChartAsync(chart);
+    }
+
+    // Deleting a chart can't be undone from inside the app, so ask first.
+    private async void DeleteChart_Click(object sender, RoutedEventArgs e)
+    {
+        if (ViewModel.SelectedCelebrity is not { } chart || !ViewModel.SelectedIsCustom) return;
+        var confirm = new Microsoft.UI.Xaml.Controls.ContentDialog
+        {
+            Title = $"Delete {chart.Name}?",
+            Content = "This removes the chart from My Charts. It can't be undone from inside Lore.",
+            PrimaryButtonText = "Delete",
+            CloseButtonText = "Cancel",
+            DefaultButton = Microsoft.UI.Xaml.Controls.ContentDialogButton.Close,
+            RequestedTheme = ElementTheme.Dark,
+            XamlRoot = Content.XamlRoot,
+        };
+        if (await confirm.ShowAsync() == Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary)
+            await ViewModel.DeleteSelectedCommand.ExecuteAsync(null);
+    }
+
     private void ShowChart_Click(object sender, RoutedEventArgs e) => ShowBody(report: false, daily: false);
     private void ShowReport_Click(object sender, RoutedEventArgs e) => ShowBody(report: true, daily: false);
     private void ShowDaily_Click(object sender, RoutedEventArgs e) => ShowBody(report: false, daily: true);

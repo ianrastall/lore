@@ -1,0 +1,1465 @@
+{
+  "_comment": "Astro-Databank record for every bundled figure (birth date, recorded local time, time standard, Rodden rating), used by FigureLibraryTests to check Lore's data. expectedUtc is the instant Astro-Databank's stated time standard implies. Checked October 2026.",
+  "figures": {
+    "agatha-christie": {
+      "adbTitle": "Christie, Agatha",
+      "date": "1890-09-15",
+      "time": "14:14",
+      "zone": "GMT h0e",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1890-09-15T14:14:00"
+    },
+    "al-pacino": {
+      "adbTitle": "Pacino, Al",
+      "date": "1940-04-25",
+      "time": "11:02",
+      "zone": "EST h5w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1940-04-25T16:02:00"
+    },
+    "alan-turing": {
+      "adbTitle": "Turing, Alan",
+      "date": "1912-06-23",
+      "time": "02:15",
+      "zone": "GMT h0e",
+      "rating": "A",
+      "source": "",
+      "expectedUtc": "1912-06-23T02:15:00"
+    },
+    "albert-camus": {
+      "adbTitle": "Camus, Albert",
+      "date": "1913-11-07",
+      "time": "02:00",
+      "zone": "GMT h0e",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1913-11-07T02:00:00",
+      "note": "Astro-Databank's latitude for Mondovi (Dréan) is a degree off; Lore keeps the correct coordinates (GMT, so the instant is unaffected)."
+    },
+    "albert-einstein": {
+      "adbTitle": "Einstein, Albert",
+      "date": "1879-03-14",
+      "time": "11:30",
+      "zone": "LMT m10e0",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1879-03-14T10:50:00"
+    },
+    "alexander-fleming": {
+      "adbTitle": "Fleming, Alexander",
+      "date": "1881-08-06",
+      "time": "02:00",
+      "zone": "GMT h0e",
+      "rating": "AA",
+      "source": "",
+      "expectedUtc": "1881-08-06T02:00:00"
+    },
+    "alexandre-dumas": {
+      "adbTitle": "Dumas, Alexandre",
+      "date": "1802-07-24",
+      "time": "05:30",
+      "zone": "LMT m3e05",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1802-07-24T05:17:40"
+    },
+    "amy-winehouse": {
+      "adbTitle": "Winehouse, Amy",
+      "date": "1983-09-14",
+      "time": "22:25",
+      "zone": "GDT h1e",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1983-09-14T21:25:00"
+    },
+    "angelina-jolie": {
+      "adbTitle": "Jolie, Angelina",
+      "date": "1975-06-04",
+      "time": "09:09",
+      "zone": "PDT h7w",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1975-06-04T16:09:00"
+    },
+    "anthony-hopkins": {
+      "adbTitle": "Hopkins, Anthony",
+      "date": "1937-12-31",
+      "time": "09:15",
+      "zone": "GMT h0e",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1937-12-31T09:15:00"
+    },
+    "aretha-franklin": {
+      "adbTitle": "Franklin, Aretha",
+      "date": "1942-03-25",
+      "time": "22:30",
+      "zone": "CWT h5w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1942-03-26T03:30:00"
+    },
+    "arnold-schwarzenegger": {
+      "adbTitle": "Schwarzenegger, Arnold",
+      "date": "1947-07-30",
+      "time": "04:10",
+      "zone": "MEDT h2e",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1947-07-30T02:10:00"
+    },
+    "audrey-hepburn": {
+      "adbTitle": "Hepburn, Audrey",
+      "date": "1929-05-04",
+      "time": "03:00",
+      "zone": "GDT h1e",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1929-05-04T02:00:00"
+    },
+    "ayrton-senna": {
+      "adbTitle": "Senna, Ayrton",
+      "date": "1960-03-21",
+      "time": "02:35",
+      "zone": "BZT h3w",
+      "rating": "AA",
+      "source": "",
+      "expectedUtc": "1960-03-21T05:35:00"
+    },
+    "barack-obama": {
+      "adbTitle": "Obama, Barack",
+      "date": "1961-08-04",
+      "time": "19:24",
+      "zone": "AHST h10w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1961-08-05T05:24:00"
+    },
+    "barbra-streisand": {
+      "adbTitle": "Streisand, Barbra",
+      "date": "1942-04-24",
+      "time": "05:08",
+      "zone": "EWT h4w",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1942-04-24T09:08:00"
+    },
+    "bette-davis": {
+      "adbTitle": "Davis, Bette",
+      "date": "1908-04-05",
+      "time": "21:00",
+      "zone": "EST h5w",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1908-04-06T02:00:00"
+    },
+    "beyonce": {
+      "adbTitle": "Beyoncé",
+      "date": "1981-09-04",
+      "time": "21:47",
+      "zone": "CDT h5w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1981-09-05T02:47:00"
+    },
+    "bill-gates": {
+      "adbTitle": "Gates, Bill",
+      "date": "1955-10-28",
+      "time": "22:00",
+      "zone": "PST h8w",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1955-10-29T06:00:00"
+    },
+    "bob-dylan": {
+      "adbTitle": "Dylan, Bob",
+      "date": "1941-05-24",
+      "time": "21:05",
+      "zone": "CST h6w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1941-05-25T03:05:00"
+    },
+    "brad-pitt": {
+      "adbTitle": "Pitt, Brad",
+      "date": "1963-12-18",
+      "time": "06:31",
+      "zone": "CST h6w",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1963-12-18T12:31:00"
+    },
+    "brigitte-bardot": {
+      "adbTitle": "Bardot, Brigitte",
+      "date": "1934-09-28",
+      "time": "13:15",
+      "zone": "GDT h1e",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1934-09-28T12:15:00"
+    },
+    "bruce-lee": {
+      "adbTitle": "Lee, Bruce",
+      "date": "1940-11-27",
+      "time": "07:12",
+      "zone": "PST h8w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1940-11-27T15:12:00"
+    },
+    "bruce-springsteen": {
+      "adbTitle": "Springsteen, Bruce",
+      "date": "1949-09-23",
+      "time": "22:50",
+      "zone": "EDT h4w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1949-09-24T02:50:00"
+    },
+    "carl-sagan": {
+      "adbTitle": "Sagan, Carl",
+      "date": "1934-11-09",
+      "time": "17:05",
+      "zone": "EST h5w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1934-11-09T22:05:00"
+    },
+    "carrie-fisher": {
+      "adbTitle": "Fisher, Carrie",
+      "date": "1956-10-21",
+      "time": "12:49",
+      "zone": "PST h8w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1956-10-21T20:49:00"
+    },
+    "charles-de-gaulle": {
+      "adbTitle": "De Gaulle, Charles",
+      "date": "1890-11-22",
+      "time": "04:00",
+      "zone": "LMT m3e04",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1890-11-22T03:47:44"
+    },
+    "charles-dickens": {
+      "adbTitle": "Dickens, Charles",
+      "date": "1812-02-07",
+      "time": "19:50",
+      "zone": "LMT m1w05",
+      "rating": "A",
+      "source": "",
+      "expectedUtc": "1812-02-07T19:54:20"
+    },
+    "claude-bernard": {
+      "adbTitle": "Bernard, Claude",
+      "date": "1813-07-12",
+      "time": "03:30",
+      "zone": "LMT m5e27",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1813-07-12T03:11:23",
+      "note": "Astro-Databank's coordinates are for Saint-Julien (Jura); the birthplace is Saint-Julien (Rhône), so LMT uses Lore's longitude."
+    },
+    "clint-eastwood": {
+      "adbTitle": "Eastwood, Clint",
+      "date": "1930-05-31",
+      "time": "17:35",
+      "zone": "PST h8w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1930-06-01T01:35:00"
+    },
+    "coco-chanel": {
+      "adbTitle": "Chanel, Coco",
+      "date": "1883-08-19",
+      "time": "16:00",
+      "zone": "LMT m0w05",
+      "rating": "AA",
+      "source": "",
+      "expectedUtc": "1883-08-19T16:00:20"
+    },
+    "david-bowie": {
+      "adbTitle": "Bowie, David",
+      "date": "1947-01-08",
+      "time": "09:00",
+      "zone": "GMT h0e",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1947-01-08T09:00:00"
+    },
+    "denzel-washington": {
+      "adbTitle": "Washington, Denzel",
+      "date": "1954-12-28",
+      "time": "00:09",
+      "zone": "EST h5w",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1954-12-28T05:09:00"
+    },
+    "diana-princess": {
+      "adbTitle": "Diana, Princess of Wales",
+      "date": "1961-07-01",
+      "time": "19:45",
+      "zone": "BST h1e",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1961-07-01T18:45:00"
+    },
+    "diego-maradona": {
+      "adbTitle": "Maradona, Diego",
+      "date": "1960-10-30",
+      "time": "07:05",
+      "zone": "-03 h3w",
+      "rating": "AA",
+      "source": "",
+      "expectedUtc": "1960-10-30T10:05:00"
+    },
+    "dolly-parton": {
+      "adbTitle": "Parton, Dolly",
+      "date": "1946-01-19",
+      "time": "20:25",
+      "zone": "CST h6w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1946-01-20T02:25:00"
+    },
+    "dustin-hoffman": {
+      "adbTitle": "Hoffman, Dustin",
+      "date": "1937-08-08",
+      "time": "17:07",
+      "zone": "PST h8w",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1937-08-09T01:07:00"
+    },
+    "edith-piaf": {
+      "adbTitle": "Piaf, Édith",
+      "date": "1915-12-19",
+      "time": "05:00",
+      "zone": "GMT h0e",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1915-12-19T05:00:00"
+    },
+    "elizabeth-taylor": {
+      "adbTitle": "Taylor, Elizabeth",
+      "date": "1932-02-27",
+      "time": "02:30",
+      "zone": "GMT h0e",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1932-02-27T02:30:00"
+    },
+    "ellen-degeneres": {
+      "adbTitle": "DeGeneres, Ellen",
+      "date": "1958-01-26",
+      "time": "08:43",
+      "zone": "CST h6w",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1958-01-26T14:43:00"
+    },
+    "elvis-presley": {
+      "adbTitle": "Presley, Elvis",
+      "date": "1935-01-08",
+      "time": "04:35",
+      "zone": "CST h6w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1935-01-08T10:35:00"
+    },
+    "emile-zola": {
+      "adbTitle": "Zola, Émile",
+      "date": "1840-04-02",
+      "time": "23:00",
+      "zone": "LMT m2e20",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1840-04-02T22:50:40"
+    },
+    "ernest-hemingway": {
+      "adbTitle": "Hemingway, Ernest",
+      "date": "1899-07-21",
+      "time": "08:00",
+      "zone": "CST h6w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1899-07-21T14:00:00"
+    },
+    "francois-truffaut": {
+      "adbTitle": "Truffaut, François",
+      "date": "1932-02-06",
+      "time": "06:00",
+      "zone": "GMT h0e",
+      "rating": "AA",
+      "source": "",
+      "expectedUtc": "1932-02-06T06:00:00"
+    },
+    "frank-sinatra": {
+      "adbTitle": "Sinatra, Frank",
+      "date": "1915-12-12",
+      "time": "03:00",
+      "zone": "EST h5w",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1915-12-12T08:00:00"
+    },
+    "franklin-d-roosevelt": {
+      "adbTitle": "Roosevelt, Franklin D.",
+      "date": "1882-01-30",
+      "time": "20:45",
+      "zone": "LMT m73w56",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1882-01-31T01:40:44"
+    },
+    "frida-kahlo": {
+      "adbTitle": "Kahlo, Frida",
+      "date": "1907-07-06",
+      "time": "08:30",
+      "zone": "LMT m99w10",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1907-07-06T15:06:40"
+    },
+    "george-clooney": {
+      "adbTitle": "Clooney, George",
+      "date": "1961-05-06",
+      "time": "02:58",
+      "zone": "EST h5w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1961-05-06T07:58:00"
+    },
+    "george-harrison": {
+      "adbTitle": "Harrison, George",
+      "date": "1943-02-25",
+      "time": "00:10",
+      "zone": "GDT h1e",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1943-02-24T23:10:00"
+    },
+    "george-sand": {
+      "adbTitle": "Sand, George",
+      "date": "1804-07-01",
+      "time": "15:00",
+      "zone": "LMT m2e20",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1804-07-01T14:50:40"
+    },
+    "georges-clemenceau": {
+      "adbTitle": "Clemenceau, Georges",
+      "date": "1841-09-28",
+      "time": "21:30",
+      "zone": "LMT m0w51",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1841-09-28T21:33:24"
+    },
+    "grace-kelly": {
+      "adbTitle": "Kelly, Grace",
+      "date": "1929-11-12",
+      "time": "05:31",
+      "zone": "EST h5w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1929-11-12T10:31:00"
+    },
+    "greta-garbo": {
+      "adbTitle": "Garbo, Greta",
+      "date": "1905-09-18",
+      "time": "19:30",
+      "zone": "MET h1e",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1905-09-18T18:30:00"
+    },
+    "halle-berry": {
+      "adbTitle": "Berry, Halle",
+      "date": "1966-08-14",
+      "time": "23:59",
+      "zone": "EDT h4w",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1966-08-15T03:59:00"
+    },
+    "hannah-arendt": {
+      "adbTitle": "Arendt, Hannah",
+      "date": "1906-10-14",
+      "time": "21:15",
+      "zone": "MET h1e",
+      "rating": "AA",
+      "source": "",
+      "expectedUtc": "1906-10-14T20:15:00"
+    },
+    "henri-de-toulouse-lautrec": {
+      "adbTitle": "Toulouse-Lautrec, Henri",
+      "date": "1864-11-24",
+      "time": "06:00",
+      "zone": "LMT m2e09",
+      "rating": "AA",
+      "source": "",
+      "expectedUtc": "1864-11-24T05:51:24"
+    },
+    "henri-matisse": {
+      "adbTitle": "Matisse, Henri",
+      "date": "1869-12-31",
+      "time": "20:00",
+      "zone": "LMT m3e33",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1869-12-31T19:45:48"
+    },
+    "henri-poincare": {
+      "adbTitle": "Poincaré, Henri",
+      "date": "1854-04-29",
+      "time": "01:00",
+      "zone": "LMT m6e12",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1854-04-29T00:35:12"
+    },
+    "hermann-hesse": {
+      "adbTitle": "Hesse, Hermann",
+      "date": "1877-07-02",
+      "time": "18:30",
+      "zone": "LMT m8e44",
+      "rating": "AA",
+      "source": "",
+      "expectedUtc": "1877-07-02T17:55:04"
+    },
+    "honore-de-balzac": {
+      "adbTitle": "Balzac, Honoré de",
+      "date": "1799-05-20",
+      "time": "11:00",
+      "zone": "LMT m0e41",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1799-05-20T10:57:16"
+    },
+    "immanuel-kant": {
+      "adbTitle": "Kant, Immanuel",
+      "date": "1724-04-22",
+      "time": "05:00",
+      "zone": "LMT m20e30",
+      "rating": "AA",
+      "source": "",
+      "expectedUtc": "1724-04-22T03:38:00"
+    },
+    "jack-nicholson": {
+      "adbTitle": "Nicholson, Jack",
+      "date": "1937-04-22",
+      "time": "11:00",
+      "zone": "EST h5w",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1937-04-22T16:00:00"
+    },
+    "jackie-kennedy": {
+      "adbTitle": "Onassis, Jacqueline Kennedy",
+      "date": "1929-07-28",
+      "time": "14:30",
+      "zone": "EDT h4w",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1929-07-28T18:30:00"
+    },
+    "james-dean": {
+      "adbTitle": "Dean, James",
+      "date": "1931-02-08",
+      "time": "09:00",
+      "zone": "CST h6w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1931-02-08T15:00:00"
+    },
+    "james-joyce": {
+      "adbTitle": "Joyce, James",
+      "date": "1882-02-02",
+      "time": "06:00",
+      "zone": "DMT m6w2015",
+      "rating": "A",
+      "source": "",
+      "expectedUtc": "1882-02-02T06:25:21"
+    },
+    "jane-fonda": {
+      "adbTitle": "Fonda, Jane",
+      "date": "1937-12-21",
+      "time": "09:14",
+      "zone": "EST h5w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1937-12-21T14:14:00"
+    },
+    "janis-joplin": {
+      "adbTitle": "Joplin, Janis",
+      "date": "1943-01-19",
+      "time": "09:45",
+      "zone": "CWT h5w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1943-01-19T14:45:00"
+    },
+    "jean-paul-sartre": {
+      "adbTitle": "Sartre, Jean-Paul",
+      "date": "1905-06-21",
+      "time": "18:45",
+      "zone": "PMT m2e2015",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1905-06-21T18:35:39"
+    },
+    "jennifer-aniston": {
+      "adbTitle": "Aniston, Jennifer",
+      "date": "1969-02-11",
+      "time": "22:22",
+      "zone": "PST h8w",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1969-02-12T06:22:00"
+    },
+    "jennifer-lawrence": {
+      "adbTitle": "Lawrence, Jennifer",
+      "date": "1990-08-15",
+      "time": "15:20",
+      "zone": "EDT h4w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1990-08-15T19:20:00"
+    },
+    "jim-carrey": {
+      "adbTitle": "Carrey, Jim",
+      "date": "1962-01-17",
+      "time": "02:30",
+      "zone": "EST h5w",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1962-01-17T07:30:00"
+    },
+    "jim-morrison": {
+      "adbTitle": "Morrison, Jim",
+      "date": "1943-12-08",
+      "time": "11:55",
+      "zone": "EWT h4w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1943-12-08T15:55:00"
+    },
+    "jimi-hendrix": {
+      "adbTitle": "Hendrix, Jimi",
+      "date": "1942-11-27",
+      "time": "10:15",
+      "zone": "PWT h7w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1942-11-27T17:15:00"
+    },
+    "jodie-foster": {
+      "adbTitle": "Foster, Jodie",
+      "date": "1962-11-19",
+      "time": "08:14",
+      "zone": "PST h8w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1962-11-19T16:14:00"
+    },
+    "johann-wolfgang-von-goethe": {
+      "adbTitle": "Goethe, Johann Wolfgang von",
+      "date": "1749-08-28",
+      "time": "12:30",
+      "zone": "LMT m8e40",
+      "rating": "AA",
+      "source": "",
+      "expectedUtc": "1749-08-28T11:55:20"
+    },
+    "john-f-kennedy": {
+      "adbTitle": "Kennedy, John F.",
+      "date": "1917-05-29",
+      "time": "15:00",
+      "zone": "EST h5w",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1917-05-29T20:00:00"
+    },
+    "john-travolta": {
+      "adbTitle": "Travolta, John",
+      "date": "1954-02-18",
+      "time": "14:53",
+      "zone": "EST h5w",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1954-02-18T19:53:00"
+    },
+    "johnny-cash": {
+      "adbTitle": "Cash, Johnny",
+      "date": "1932-02-26",
+      "time": "07:30",
+      "zone": "CST h6w",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1932-02-26T13:30:00"
+    },
+    "johnny-depp": {
+      "adbTitle": "Depp, Johnny",
+      "date": "1963-06-09",
+      "time": "08:44",
+      "zone": "CDT h5w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1963-06-09T13:44:00"
+    },
+    "joni-mitchell": {
+      "adbTitle": "Mitchell, Joni",
+      "date": "1943-11-07",
+      "time": "22:00",
+      "zone": "MWT h6w",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1943-11-08T04:00:00"
+    },
+    "jorge-luis-borges": {
+      "adbTitle": "Borges, Jorge Luis",
+      "date": "1899-08-24",
+      "time": "03:30",
+      "zone": "CMT m64w12",
+      "rating": "AA",
+      "source": "",
+      "expectedUtc": "1899-08-24T07:46:48"
+    },
+    "jules-verne": {
+      "adbTitle": "Verne, Jules",
+      "date": "1828-02-08",
+      "time": "12:00",
+      "zone": "LMT m1w33",
+      "rating": "AA",
+      "source": "",
+      "expectedUtc": "1828-02-08T12:06:12"
+    },
+    "julia-roberts": {
+      "adbTitle": "Roberts, Julia",
+      "date": "1967-10-28",
+      "time": "00:16",
+      "zone": "EDT h4w",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1967-10-28T04:16:00"
+    },
+    "justin-timberlake": {
+      "adbTitle": "Timberlake, Justin",
+      "date": "1981-01-31",
+      "time": "18:30",
+      "zone": "CST h6w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1981-02-01T00:30:00"
+    },
+    "karl-marx": {
+      "adbTitle": "Marx, Karl",
+      "date": "1818-05-05",
+      "time": "02:00",
+      "zone": "LMT m6e38",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1818-05-05T01:33:28"
+    },
+    "katharine-hepburn": {
+      "adbTitle": "Hepburn, Katharine",
+      "date": "1907-05-12",
+      "time": "17:47",
+      "zone": "EST h5w",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1907-05-12T22:47:00"
+    },
+    "kurt-cobain": {
+      "adbTitle": "Cobain, Kurt",
+      "date": "1967-02-20",
+      "time": "19:38",
+      "zone": "PST h8w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1967-02-21T03:38:00"
+    },
+    "leonard-cohen": {
+      "adbTitle": "Cohen, Leonard",
+      "date": "1934-09-21",
+      "time": "06:45",
+      "zone": "EDT h4w",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1934-09-21T10:45:00"
+    },
+    "leonardo-da-vinci": {
+      "adbTitle": "Da Vinci, Leonardo",
+      "date": "1452-04-23",
+      "time": "21:40",
+      "zone": "LMT m10e55",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1452-04-23T20:56:20"
+    },
+    "leonardo-dicaprio": {
+      "adbTitle": "DiCaprio, Leonardo",
+      "date": "1974-11-11",
+      "time": "02:47",
+      "zone": "PST h8w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1974-11-11T10:47:00"
+    },
+    "lionel-messi": {
+      "adbTitle": "Messi, Lionel",
+      "date": "1987-06-24",
+      "time": "20:30",
+      "zone": "-03 h3w",
+      "rating": "AA",
+      "source": "",
+      "expectedUtc": "1987-06-24T23:30:00"
+    },
+    "louis-armstrong": {
+      "adbTitle": "Armstrong, Louis",
+      "date": "1901-08-04",
+      "time": "22:00",
+      "zone": "CST h6w",
+      "rating": "A",
+      "source": "News report",
+      "expectedUtc": "1901-08-05T04:00:00"
+    },
+    "louis-pasteur": {
+      "adbTitle": "Pasteur, Louis",
+      "date": "1822-12-27",
+      "time": "02:00",
+      "zone": "LMT m5e30",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1822-12-27T01:38:00"
+    },
+    "louis-xiv": {
+      "adbTitle": "Louis XIV, King of France",
+      "date": "1638-09-05",
+      "time": "11:13",
+      "zone": "LMT m2e04",
+      "rating": "AA",
+      "source": "",
+      "expectedUtc": "1638-09-05T11:04:44"
+    },
+    "madonna": {
+      "adbTitle": "Madonna",
+      "date": "1958-08-16",
+      "time": "07:05",
+      "zone": "EST h5w",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1958-08-16T12:05:00"
+    },
+    "malcolm-x": {
+      "adbTitle": "Malcolm X",
+      "date": "1925-05-19",
+      "time": "22:25",
+      "zone": "CST h6w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1925-05-20T04:25:00"
+    },
+    "marcel-proust": {
+      "adbTitle": "Proust, Marcel",
+      "date": "1871-07-10",
+      "time": "23:30",
+      "zone": "LMT m2e20",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1871-07-10T23:20:40"
+    },
+    "margaret-thatcher": {
+      "adbTitle": "Thatcher, Margaret",
+      "date": "1925-10-13",
+      "time": "09:00",
+      "zone": "GMT h0e",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1925-10-13T09:00:00"
+    },
+    "marie-antoinette": {
+      "adbTitle": "Marie Antoinette, Queen Consort",
+      "date": "1755-11-02",
+      "time": "19:30",
+      "zone": "LMT m16e2223",
+      "rating": "A",
+      "source": "",
+      "expectedUtc": "1755-11-02T18:24:30"
+    },
+    "marie-curie": {
+      "adbTitle": "Curie, Marie",
+      "date": "1867-11-07",
+      "time": "12:00",
+      "zone": "LMT m21e0",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1867-11-07T10:36:00"
+    },
+    "marilyn-monroe": {
+      "adbTitle": "Monroe, Marilyn",
+      "date": "1926-06-01",
+      "time": "09:30",
+      "zone": "PST h8w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1926-06-01T17:30:00"
+    },
+    "marlon-brando": {
+      "adbTitle": "Brando, Marlon",
+      "date": "1924-04-03",
+      "time": "23:00",
+      "zone": "CST h6w",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1924-04-04T05:00:00"
+    },
+    "martin-heidegger": {
+      "adbTitle": "Heidegger, Martin",
+      "date": "1889-09-26",
+      "time": "11:30",
+      "zone": "LMT m9e07",
+      "rating": "AA",
+      "source": "",
+      "expectedUtc": "1889-09-26T10:53:32"
+    },
+    "martin-luther-king-jr": {
+      "adbTitle": "King, Martin Luther",
+      "date": "1929-01-15",
+      "time": "12:00",
+      "zone": "CST h6w",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1929-01-15T18:00:00"
+    },
+    "martin-scorsese": {
+      "adbTitle": "Scorsese, Martin",
+      "date": "1942-11-17",
+      "time": "00:24",
+      "zone": "EWT h4w",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1942-11-17T04:24:00"
+    },
+    "mary-shelley": {
+      "adbTitle": "Shelley, Mary",
+      "date": "1797-08-30",
+      "time": "23:20",
+      "zone": "LMT m0w10",
+      "rating": "AA",
+      "source": "",
+      "expectedUtc": "1797-08-30T23:20:40"
+    },
+    "maximilien-robespierre": {
+      "adbTitle": "Robespierre, Maximilien",
+      "date": "1758-05-06",
+      "time": "02:00",
+      "zone": "LMT m2e47",
+      "rating": "AA",
+      "source": "",
+      "expectedUtc": "1758-05-06T01:48:52"
+    },
+    "maya-angelou": {
+      "adbTitle": "Angelou, Maya",
+      "date": "1928-04-04",
+      "time": "14:10",
+      "zone": "CST h6w",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1928-04-04T20:10:00"
+    },
+    "meryl-streep": {
+      "adbTitle": "Streep, Meryl",
+      "date": "1949-06-22",
+      "time": "08:05",
+      "zone": "EDT h4w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1949-06-22T12:05:00"
+    },
+    "michael-jackson": {
+      "adbTitle": "Jackson, Michael (1958)",
+      "date": "1958-08-29",
+      "time": "19:33",
+      "zone": "CDT h5w",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1958-08-30T00:33:00"
+    },
+    "michael-jordan": {
+      "adbTitle": "Jordan, Michael",
+      "date": "1963-02-17",
+      "time": "13:40",
+      "zone": "EST h5w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1963-02-17T18:40:00"
+    },
+    "michel-foucault": {
+      "adbTitle": "Foucault, Michel",
+      "date": "1926-10-15",
+      "time": "07:30",
+      "zone": "GMT h0w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1926-10-15T07:30:00"
+    },
+    "mick-jagger": {
+      "adbTitle": "Jagger, Mick",
+      "date": "1943-07-26",
+      "time": "02:30",
+      "zone": "BDST h2e",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1943-07-26T00:30:00"
+    },
+    "miles-davis": {
+      "adbTitle": "Davis, Miles",
+      "date": "1926-05-26",
+      "time": "05:00",
+      "zone": "CST h6w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1926-05-26T11:00:00"
+    },
+    "morgan-freeman": {
+      "adbTitle": "Freeman, Morgan",
+      "date": "1937-06-01",
+      "time": "02:00",
+      "zone": "CST h6w",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1937-06-01T08:00:00"
+    },
+    "mozart": {
+      "adbTitle": "Mozart",
+      "date": "1756-01-27",
+      "time": "20:00",
+      "zone": "LMT m13e02",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1756-01-27T19:07:52"
+    },
+    "muhammad-ali": {
+      "adbTitle": "Ali, Muhammad",
+      "date": "1942-01-17",
+      "time": "18:35",
+      "zone": "CST h6w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1942-01-18T00:35:00"
+    },
+    "neil-armstrong": {
+      "adbTitle": "Armstrong, Neil",
+      "date": "1930-08-05",
+      "time": "00:31",
+      "zone": "EST h5w",
+      "rating": "AA",
+      "source": "",
+      "expectedUtc": "1930-08-05T05:31:00"
+    },
+    "nicole-kidman": {
+      "adbTitle": "Kidman, Nicole",
+      "date": "1967-06-20",
+      "time": "15:15",
+      "zone": "AHST h10w",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1967-06-21T01:15:00"
+    },
+    "oprah-winfrey": {
+      "adbTitle": "Winfrey, Oprah",
+      "date": "1954-01-29",
+      "time": "04:30",
+      "zone": "CST h6w",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1954-01-29T10:30:00"
+    },
+    "otto-von-bismarck": {
+      "adbTitle": "Bismarck, Otto von",
+      "date": "1815-04-01",
+      "time": "13:00",
+      "zone": "LMT m12e02",
+      "rating": "AA",
+      "source": "",
+      "expectedUtc": "1815-04-01T12:11:52"
+    },
+    "pablo-picasso": {
+      "adbTitle": "Picasso, Pablo",
+      "date": "1881-10-25",
+      "time": "23:15",
+      "zone": "LMT m4w25",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1881-10-25T23:32:40"
+    },
+    "paul-cezanne": {
+      "adbTitle": "Cézanne, Paul",
+      "date": "1839-01-19",
+      "time": "01:00",
+      "zone": "LMT m5e26",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1839-01-19T00:38:16"
+    },
+    "paul-gauguin": {
+      "adbTitle": "Gauguin, Paul",
+      "date": "1848-06-07",
+      "time": "10:00",
+      "zone": "LMT m2e20",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1848-06-07T09:50:40"
+    },
+    "paul-mccartney": {
+      "adbTitle": "McCartney, Paul",
+      "date": "1942-06-18",
+      "time": "14:00",
+      "zone": "BDST h2e",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1942-06-18T12:00:00"
+    },
+    "pele": {
+      "adbTitle": "Pelé",
+      "date": "1940-10-21",
+      "time": "03:00",
+      "zone": "BZT h3w",
+      "rating": "AA",
+      "source": "",
+      "expectedUtc": "1940-10-21T06:00:00"
+    },
+    "pierre-auguste-renoir": {
+      "adbTitle": "Renoir, Pierre-Auguste",
+      "date": "1841-02-25",
+      "time": "06:00",
+      "zone": "LMT m1e16",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1841-02-25T05:54:56"
+    },
+    "pope-john-paul-ii": {
+      "adbTitle": "Pope John Paul II",
+      "date": "1920-05-18",
+      "time": "17:30",
+      "zone": "EET h2e",
+      "rating": "A",
+      "source": "",
+      "expectedUtc": "1920-05-18T15:30:00"
+    },
+    "prince": {
+      "adbTitle": "Prince (musician)",
+      "date": "1958-06-07",
+      "time": "18:17",
+      "zone": "CDT h5w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1958-06-07T23:17:00"
+    },
+    "queen-elizabeth-ii": {
+      "adbTitle": "Elizabeth II, Queen of the United Kingdom",
+      "date": "1926-04-21",
+      "time": "02:40",
+      "zone": "GDT h1e",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1926-04-21T01:40:00"
+    },
+    "queen-victoria": {
+      "adbTitle": "Victoria, Queen of the United Kingdom",
+      "date": "1819-05-24",
+      "time": "04:15",
+      "zone": "LMT m0w10",
+      "rating": "AA",
+      "source": "",
+      "expectedUtc": "1819-05-24T04:15:40"
+    },
+    "rafael-nadal": {
+      "adbTitle": "Nadal, Rafael",
+      "date": "1986-06-03",
+      "time": "18:20",
+      "zone": "MEDT h2e",
+      "rating": "AA",
+      "source": "",
+      "expectedUtc": "1986-06-03T16:20:00"
+    },
+    "rene-magritte": {
+      "adbTitle": "Magritte, René",
+      "date": "1898-11-21",
+      "time": "07:30",
+      "zone": "GMT h0e",
+      "rating": "AA",
+      "source": "",
+      "expectedUtc": "1898-11-21T07:30:00"
+    },
+    "ringo-starr": {
+      "adbTitle": "Starr, Ringo",
+      "date": "1940-07-07",
+      "time": "00:05",
+      "zone": "GDT h1e",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1940-07-06T23:05:00"
+    },
+    "robert-de-niro": {
+      "adbTitle": "De Niro, Robert",
+      "date": "1943-08-17",
+      "time": "03:00",
+      "zone": "EWT h4w",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1943-08-17T07:00:00"
+    },
+    "robert-redford": {
+      "adbTitle": "Redford, Robert",
+      "date": "1936-08-18",
+      "time": "20:02",
+      "zone": "PST h8w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1936-08-19T04:02:00"
+    },
+    "robin-williams": {
+      "adbTitle": "Williams, Robin",
+      "date": "1951-07-21",
+      "time": "13:34",
+      "zone": "CST h6w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1951-07-21T19:34:00"
+    },
+    "roger-federer": {
+      "adbTitle": "Federer, Roger",
+      "date": "1981-08-08",
+      "time": "08:40",
+      "zone": "MEDT h2e",
+      "rating": "A",
+      "source": "",
+      "expectedUtc": "1981-08-08T06:40:00"
+    },
+    "salvador-dali": {
+      "adbTitle": "Dali, Salvador",
+      "date": "1904-05-11",
+      "time": "08:45",
+      "zone": "GMT h0e",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1904-05-11T08:45:00"
+    },
+    "sean-connery": {
+      "adbTitle": "Connery, Sean",
+      "date": "1930-08-25",
+      "time": "18:05",
+      "zone": "GDT h1e",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1930-08-25T17:05:00"
+    },
+    "serena-williams": {
+      "adbTitle": "Williams, Serena",
+      "date": "1981-09-26",
+      "time": "20:28",
+      "zone": "EDT h4w",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1981-09-27T00:28:00"
+    },
+    "sigmund-freud": {
+      "adbTitle": "Freud, Sigmund",
+      "date": "1856-05-06",
+      "time": "18:30",
+      "zone": "LST m14e26",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1856-05-06T17:32:16"
+    },
+    "simone-de-beauvoir": {
+      "adbTitle": "Beauvoir, Simone de",
+      "date": "1908-01-09",
+      "time": "04:30",
+      "zone": "PMT m2e2015",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1908-01-09T04:20:39"
+    },
+    "simone-weil": {
+      "adbTitle": "Weil, Simone",
+      "date": "1909-02-03",
+      "time": "05:00",
+      "zone": "PMT m2e2015",
+      "rating": "AA",
+      "source": "",
+      "expectedUtc": "1909-02-03T04:50:39"
+    },
+    "snoop-dogg": {
+      "adbTitle": "Snoop Dogg",
+      "date": "1971-10-20",
+      "time": "18:20",
+      "zone": "PDT h7w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1971-10-21T01:20:00"
+    },
+    "sophia-loren": {
+      "adbTitle": "Loren, Sophia",
+      "date": "1934-09-20",
+      "time": "14:10",
+      "zone": "MET h1e",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1934-09-20T13:10:00"
+    },
+    "steffi-graf": {
+      "adbTitle": "Graf, Steffi",
+      "date": "1969-06-14",
+      "time": "04:40",
+      "zone": "MET h1e",
+      "rating": "AA",
+      "source": "",
+      "expectedUtc": "1969-06-14T03:40:00"
+    },
+    "steve-jobs": {
+      "adbTitle": "Jobs, Steve",
+      "date": "1955-02-24",
+      "time": "19:15",
+      "zone": "PST h8w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1955-02-25T03:15:00"
+    },
+    "steve-martin": {
+      "adbTitle": "Martin, Steve",
+      "date": "1945-08-14",
+      "time": "05:54",
+      "zone": "CWT h5w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1945-08-14T10:54:00"
+    },
+    "steven-spielberg": {
+      "adbTitle": "Spielberg, Steven",
+      "date": "1946-12-18",
+      "time": "18:16",
+      "zone": "EST h5w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1946-12-18T23:16:00"
+    },
+    "stevie-wonder": {
+      "adbTitle": "Wonder, Stevie",
+      "date": "1950-05-13",
+      "time": "16:15",
+      "zone": "EST h5w",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1950-05-13T21:15:00"
+    },
+    "sylvia-plath": {
+      "adbTitle": "Plath, Sylvia",
+      "date": "1932-10-27",
+      "time": "14:10",
+      "zone": "EST h5w",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1932-10-27T19:10:00"
+    },
+    "tina-turner": {
+      "adbTitle": "Turner, Tina",
+      "date": "1939-11-26",
+      "time": "22:10",
+      "zone": "CST h6w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1939-11-27T04:10:00"
+    },
+    "tom-hanks": {
+      "adbTitle": "Hanks, Tom",
+      "date": "1956-07-09",
+      "time": "11:17",
+      "zone": "PDT h7w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1956-07-09T18:17:00"
+    },
+    "victor-hugo": {
+      "adbTitle": "Hugo, Victor",
+      "date": "1802-02-26",
+      "time": "22:30",
+      "zone": "LMT m6e02",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1802-02-26T22:05:52"
+    },
+    "vincent-van-gogh": {
+      "adbTitle": "Van Gogh, Vincent",
+      "date": "1853-03-30",
+      "time": "11:00",
+      "zone": "LMT m4e40",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1853-03-30T10:41:20"
+    },
+    "walt-disney": {
+      "adbTitle": "Disney, Walt",
+      "date": "1901-12-05",
+      "time": "00:35",
+      "zone": "CST h6w",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1901-12-05T06:35:00"
+    },
+    "warren-buffett": {
+      "adbTitle": "Buffett, Warren",
+      "date": "1930-08-30",
+      "time": "15:00",
+      "zone": "CST h6w",
+      "rating": "A",
+      "source": "",
+      "expectedUtc": "1930-08-30T21:00:00"
+    },
+    "werner-heisenberg": {
+      "adbTitle": "Heisenberg, Werner",
+      "date": "1901-12-05",
+      "time": "16:45",
+      "zone": "MET h1e",
+      "rating": "AA",
+      "source": "",
+      "expectedUtc": "1901-12-05T15:45:00"
+    },
+    "whitney-houston": {
+      "adbTitle": "Houston, Whitney",
+      "date": "1963-08-09",
+      "time": "20:55",
+      "zone": "EDT h4w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1963-08-10T00:55:00"
+    },
+    "will-smith": {
+      "adbTitle": "Smith, Will",
+      "date": "1968-09-25",
+      "time": "21:47",
+      "zone": "EDT h4w",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1968-09-26T01:47:00"
+    },
+    "winston-churchill": {
+      "adbTitle": "Churchill, Winston",
+      "date": "1874-11-30",
+      "time": "01:30",
+      "zone": "GMT h0e",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1874-11-30T01:30:00"
+    }
+  }
+}

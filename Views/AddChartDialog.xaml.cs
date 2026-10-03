@@ -15,10 +15,14 @@ public sealed partial class AddChartDialog : ContentDialog
 
     public Celebrity? Result { get; private set; }
 
-    public AddChartDialog(CityService cities, HospitalService hospitals)
+    // Set when editing an existing chart: its Id is kept so the save replaces it.
+    private readonly Celebrity? _existing;
+
+    public AddChartDialog(CityService cities, HospitalService hospitals, Celebrity? existing = null)
     {
         _cities = cities;
         _hospitals = hospitals;
+        _existing = existing;
         InitializeComponent();
 
         // DateTimeOffset(dateTime, offset) throws if dateTime.Kind == Local and the
@@ -27,7 +31,7 @@ public sealed partial class AddChartDialog : ContentDialog
         // a zero offset. This crash was aborting the whole Add-Chart dialog.
         DateField.MinYear = new DateTimeOffset(new DateTime(1000, 1, 1), TimeSpan.Zero);
         DateField.MaxYear = new DateTimeOffset(DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Unspecified), TimeSpan.Zero);
-        DateField.SelectedDate = new DateTimeOffset(new DateTime(1990, 1, 1), TimeSpan.Zero);
+        DateField.SelectedDate = PickerDate(new DateOnly(1990, 1, 1));
         TimeField.SelectedTime = new TimeSpan(12, 0, 0);
         UtcBox.Value = 0;
 
@@ -36,7 +40,40 @@ public sealed partial class AddChartDialog : ContentDialog
         TimeField.SelectedTimeChanged += (_, _) => RefreshResolvedOffset();
 
         PrimaryButtonClick += OnCreate;
+
+        if (existing is not null)
+            LoadExisting(existing);
     }
+
+    // Fill the form from a saved chart. Coordinates go in before the date so the
+    // date-changed handler can already resolve the time zone.
+    private void LoadExisting(Celebrity c)
+    {
+        Title = "Edit chart";
+        PrimaryButtonText = "Save";
+
+        NameBox.Text = c.Name;
+        PlaceBox.Text = c.BirthPlace;
+        LatBox.Value = c.Latitude;
+        LonBox.Value = c.Longitude;
+        UtcBox.Value = c.UtcOffsetHours;
+        _timeZoneId = string.IsNullOrWhiteSpace(c.TimeZoneId) ? null : c.TimeZoneId;
+        NoteBox.Text = c.Bio;
+
+        DateField.SelectedDate = PickerDate(c.GetBirthDate());
+        var t = c.GetBirthTime();
+        TimeField.SelectedTime = new TimeSpan(t.Hour, t.Minute, 0);
+        TimeUnknownCheck.IsChecked = !c.BirthTimeKnown;
+        TimeField.IsEnabled = c.BirthTimeKnown;
+
+        RefreshResolvedOffset();
+    }
+
+    // The DatePicker shows its value in the machine's local time zone, so a calendar
+    // date must be given as local noon: midnight UTC would display (and save) as the
+    // previous day anywhere west of Greenwich.
+    private static DateTimeOffset PickerDate(DateOnly d) =>
+        new(new DateTime(d.Year, d.Month, d.Day, 12, 0, 0, DateTimeKind.Unspecified));
 
     private void TimeUnknown_Changed(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
@@ -125,7 +162,7 @@ public sealed partial class AddChartDialog : ContentDialog
 
         Result = new Celebrity
         {
-            Id = "user-" + Guid.NewGuid().ToString("N"),
+            Id = _existing?.Id ?? "user-" + Guid.NewGuid().ToString("N"),
             Name = NameBox.Text.Trim(),
             Category = UserChartService.MyChartsCategory,
             BirthDate = date.ToString("yyyy-MM-dd"),

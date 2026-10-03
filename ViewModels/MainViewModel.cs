@@ -62,7 +62,7 @@ public sealed partial class MainViewModel : ObservableObject
     [ObservableProperty]
     public partial bool ShowLegend { get; set; }
 
-    // True when the selected entry is a user-created chart (so it can be deleted).
+    // True when the selected entry is a user-created chart (so it can be edited or deleted).
     public bool SelectedIsCustom => SelectedCelebrity?.Category == UserChartService.MyChartsCategory;
 
     public MainViewModel(
@@ -98,7 +98,7 @@ public sealed partial class MainViewModel : ObservableObject
             await Cities.LoadAsync(citiesPath);
             await Hospitals.LoadAsync(hospitalsPath);
             await RebuildPoolAsync();
-            StatusMessage = $"{_all.Count} people loaded.";
+            StatusMessage = _userCharts.LoadProblem ?? $"{_all.Count} people loaded.";
             Diagnostics.Log($"Init OK: celebrities={_celebrities.All.Count}, " +
                             $"userCharts={_userCharts.Charts.Count}, categories={Categories.Count}, " +
                             $"displayed={DisplayedCelebrities.Count}");
@@ -205,10 +205,20 @@ public sealed partial class MainViewModel : ObservableObject
 
     public async Task AddCustomChartAsync(Celebrity chart)
     {
-        await _userCharts.AddAsync(chart);
+        if (!await TrySaveAsync(() => _userCharts.AddAsync(chart), $"add {chart.Name}")) return;
         await RebuildPoolAsync();
         SelectedCategory = UserChartService.MyChartsCategory;
         SelectedCelebrity = DisplayedCelebrities.FirstOrDefault(c => c.Id == chart.Id);
+    }
+
+    // Saves an edited chart (same Id) and shows it again, recalculated.
+    public async Task UpdateCustomChartAsync(Celebrity chart)
+    {
+        if (!await TrySaveAsync(() => _userCharts.UpdateAsync(chart), $"save changes to {chart.Name}")) return;
+        await RebuildPoolAsync();
+        SelectedCategory = UserChartService.MyChartsCategory;
+        SelectedCelebrity = DisplayedCelebrities.FirstOrDefault(c => c.Id == chart.Id);
+        StatusMessage = $"Saved changes to {chart.Name}.";
     }
 
     [RelayCommand]
@@ -216,11 +226,29 @@ public sealed partial class MainViewModel : ObservableObject
     {
         if (SelectedCelebrity is not { } c || c.Category != UserChartService.MyChartsCategory)
             return;
-        await _userCharts.RemoveAsync(c);
+        if (!await TrySaveAsync(() => _userCharts.RemoveAsync(c), $"delete {c.Name}")) return;
         SelectedCelebrity = null;
         ChartVM.Chart = null;
         DailyVM.Chart = null;
         await RebuildPoolAsync();
+        StatusMessage = $"Deleted {c.Name}.";
+    }
+
+    // Runs a My Charts save, reporting a failure in the status bar instead of losing
+    // it (the save itself never damages the existing file; see UserChartService).
+    private async Task<bool> TrySaveAsync(Func<Task> save, string what)
+    {
+        try
+        {
+            await save();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Couldn't {what}: {ex.Message}";
+            Diagnostics.Log($"My Charts save failed ({what}): {ex}");
+            return false;
+        }
     }
 
     private async Task LoadChartAsync(Celebrity celebrity)
