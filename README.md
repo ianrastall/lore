@@ -20,7 +20,7 @@
 > These warnings appear for any unsigned program, and only the first time. If you would rather not run an unsigned installer, you can [build Lore from source](#building-from-source) instead.
 
 
-![Lore showing the Abraham Lincoln report](Assets/screenshot-lincoln-report.png)
+![Lore showing the Albert Einstein report](Assets/screenshot-einstein-report.png)
 
 ---
 
