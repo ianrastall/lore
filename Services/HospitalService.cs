@@ -26,6 +26,10 @@ public sealed class HospitalService
     {
         if (string.IsNullOrWhiteSpace(query)) return [];
         string q = query.Trim();
+        // With a couple of hundred thousand entries, one letter matches most of the
+        // list and its suggestions are arbitrary anyway; wait for a second letter so
+        // each keystroke stays quick.
+        if (q.Length < 2) return [];
         return _hospitals
             .Where(h => h.Name.Contains(q, StringComparison.OrdinalIgnoreCase) ||
                         h.City.Contains(q, StringComparison.OrdinalIgnoreCase) ||

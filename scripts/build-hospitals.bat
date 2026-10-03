@@ -47,7 +47,9 @@ if errorlevel 1 (
 echo What would you like to do?
 echo.
 echo   [1] Quick build    Merge the committed Wikidata list with OpenStreetMap
-echo                      worldwide. Recommended. Needs internet. A few minutes.
+echo                      worldwide, plus former names and closed hospitals.
+echo                      Recommended. Needs internet. An hour or more for the
+echo                      whole world; a single country takes a minute or two.
 echo.
 echo   [2] Full refresh   Re-download the Wikidata list first, THEN merge
 echo                      OpenStreetMap. Slow (30+ minutes). Needs internet.

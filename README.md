@@ -270,18 +270,22 @@ python scripts\build-cities.py
 
 Hospitals with `name`, `city`, `country`, `lat`, and `lon`. Powers the hospital autocomplete in the Add Chart dialog, an alternative to city search that gives more precise birthplace coordinates. Unlike `cities.json` there is no timezone or population field: the app resolves the historical, DST-aware zone from the chosen coordinates (GeoTimeZone + NodaTime), and prefix search ranks by name.
 
-Built from two merged sources by a two-stage pipeline:
+Built from several merged sources by a two-stage pipeline:
 
 - **Stage 1 — Wikidata** (`scripts\wikidata_hospitals.py` → `Data\hospitals_wikidata.csv`, columns `Hospital,City,Country,Latitude,Longitude`, CC0 1.0) — ~26,400 curated hospitals. This set is *notability-filtered*: it holds only hospitals with a Wikidata item, so it misses most small or local hospitals. The CSV is committed to the repo, so Stage 1 rarely needs re-running.
-- **Stage 2 — OpenStreetMap** (`scripts\build-hospitals.py`) via the [Overpass API](https://dev.overpass-api.de/overpass-doc/) (© OpenStreetMap contributors, ODbL) — merges the Wikidata CSV with every `amenity=hospital` / `healthcare=hospital` feature worldwide, fetched one country at a time so each row is labelled with the country whose administrative boundary the query used. Adds the small local hospitals Wikidata lacks (hundreds of thousands globally).
+- **Stage 2 — OpenStreetMap** (`scripts\build-hospitals.py`) via the [Overpass API](https://dev.overpass-api.de/overpass-doc/) (© OpenStreetMap contributors, ODbL) — merges the Wikidata CSV with every `amenity=hospital` / `healthcare=hospital` feature worldwide, fetched one country at a time so each row is labelled with the country whose administrative boundary the query used. Adds the small local hospitals Wikidata lacks.
+- **Older hospitals** (also Stage 2; leave out with `--no-history`). Most users were born decades ago, often in hospitals that have since been renamed or closed, so the build also adds:
+  - **Former names** of today's hospitals — OpenStreetMap's `old_name` / `was:name` tags and Wikidata's aliases and dated former official names — each as its own searchable entry at the hospital's location, e.g. *Waterford Regional Hospital (now University Hospital Waterford)*.
+  - **Former hospitals** in OpenStreetMap — buildings tagged `disused:`, `abandoned:`, `was:` or `historic:amenity=hospital`, or `historic=hospital` — labelled *(former hospital)*.
+  - **[OpenHistoricalMap](https://www.openhistoricalmap.org/)** (CC0), OpenStreetMap's historical sister project, whose hospitals carry opening and closing years, e.g. *Adelaide Hospital (1839–1998)*.
 
-The two are merged and de-duplicated (same name within ~111 m collapses; Wikidata's curated country label wins ties). Both scripts use only the Python standard library — no `pip install`.
+Everything is merged and de-duplicated (same name within ~111 m collapses; Wikidata's curated country label wins ties). Entries with no town get the nearest one from `Data\cities.json` (within 25 km), and entries with no country get that town's country. Both scripts use only the Python standard library — no `pip install`.
 
 #### The easy way: double-click `scripts\build-hospitals.bat`
 
 It self-updates (`git pull --ff-only`), then offers three options:
 
-1. **Quick build** — merge the committed Wikidata CSV with OpenStreetMap (Stage 2 only). Recommended.
+1. **Quick build** — merge the committed Wikidata CSV with OpenStreetMap and the older-hospital sources (Stage 2 only). Recommended. The whole world takes an hour or more on the busy public servers.
 2. **Full refresh** — re-download the Wikidata list (Stage 1), then merge OpenStreetMap (Stage 2). Slow (30+ minutes).
 3. **Offline** — rebuild from the committed Wikidata CSV only, no network.
 
@@ -296,6 +300,7 @@ After it finishes, commit and push `Data\hospitals.json`; the app needs no code 
 python scripts\build-hospitals.py                 # Wikidata + all countries (needs network)
 python scripts\build-hospitals.py --countries US,GB,DE
 python scripts\build-hospitals.py --no-osm        # Wikidata CSV only, no network
+python scripts\build-hospitals.py --no-history    # current hospitals only (no former names / closed hospitals)
 
 # Stage 1 (refresh the Wikidata CSV first), then Stage 2:
 python scripts\wikidata_hospitals.py -o Data\hospitals_wikidata.csv --checkpoint Data\.wikidata_progress.json
@@ -368,6 +373,7 @@ The `_12` files are required for historical figures such as Leonardo da Vinci, S
 | [simplemaps World Cities Database](https://simplemaps.com/data/world-cities) | CC BY 4.0 |
 | [Wikidata](https://www.wikidata.org/) (hospital coordinates) | CC0 1.0 |
 | [OpenStreetMap](https://www.openstreetmap.org/copyright) (hospital coordinates) | ODbL |
+| [OpenHistoricalMap](https://www.openhistoricalmap.org/) (historical hospitals) | CC0 1.0 |
 | [NodaTime](https://nodatime.org/) | Apache-2.0 |
 | [GeoTimeZone](https://github.com/mattjohnsonpint/GeoTimeZone) | MIT |
 | [QuestPDF](https://www.questpdf.com/) | Community licence (free for individuals / < $1 M revenue) |
