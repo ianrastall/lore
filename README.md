@@ -4,14 +4,14 @@
 
 > A Windows desktop application for computing and exploring astrological natal charts — and reading a daily horoscope from them — powered by the Swiss Ephemeris. Browse a curated library of historical figures — every one with a documented birth time — or add your own.
 
-**Latest release: v2.2.0** · [Download](../../releases/latest)
+**Latest release: v2.3.0** · [Download](../../releases/latest)
 
 ### Installing
 
-1. From the [latest release](../../releases/latest), download **`LoreSetup-2.2.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`LoreSetup-2.3.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user only (no administrator prompt), adds a Start-menu shortcut, and can be removed from *Settings → Apps* like any other program.
 
-**Prefer not to install?** Download **`Lore-2.2.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
+**Prefer not to install?** Download **`Lore-2.3.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
 
 > **The installer is not code-signed.** Lore is a free hobby project and does not carry a paid signing certificate, so Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"* — choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -61,6 +61,8 @@
 | **Synastry** | The selected chart compared with a second person's: a written reading and a bi-wheel of the two charts. See below. |
 | **Legend** | Full-page reference — a grouped list of every glyph, colour, angle, house, and term; click any item for a fuller explanation. |
 
+![Lore showing the Worksheet's measurements for Albert Einstein: the Moon's phase, distance from the Sun, and declination](Assets/screenshot-einstein-worksheet.png)
+
 ### Daily Horoscope
 The **Daily** view writes a horoscope for the selected chart, for today or any date you step to, from that day's **transits** — the aspects the moving planets make to the fixed points of the birth chart.
 
@@ -82,14 +84,17 @@ The **Synastry** view compares the selected chart with a second person's — any
 
 - **Every contact between the two charts.** Each person's thirteen bodies, Ascendant, and Midheaven are tried against the other's, within a **6° orb** (4° for a sextile) — a little tighter than the 8°/6° used inside one chart.
 - **A short, ranked reading.** *Closest bonds* (up to three conjunctions), *What comes easily* (up to four trines and sextiles), and *What takes work* (up to four squares and oppositions), chosen by closeness and by how personal the points are. Contacts between two slow planets, shared by everyone born in the same years, are listed but not written up.
-- **At a glance.** The two Sun signs and Moon signs compared by element, and an overall tone — Harmonious, Mixed, or Challenging.
+- **At a glance.** The two Sun signs and Moon signs compared by element, and an overall tone on a five-step scale (see below).
 - **House overlays.** Where each person's Sun, Moon, Venus, and Mars fall in the other's houses.
 - **Bi-wheel.** The selected chart drawn inside, the second person's planets in a band around it on the same zodiac, with the contacts between them as aspect lines (the ones the reading uses drawn heavier).
 - **Deterministic and offline.** Every sentence comes from an editable corpus (`Data\synastry.json`): 144 bespoke lines for the pairs that matter most, and assembled sentences for the rest.
 - **Explainable.** *Why this reading?* lists every contact found and which ones the reading used.
 - **Honest about unknowns.** A chart with no birth time contributes no Ascendant, Midheaven, houses, or Moon.
 
-It describes the symbolism between two charts; it is not a compatibility score.
+- **Best and worst matches.** Before you choose anyone, the view compares the selected chart with every figure in the library and every chart of your own, and lists the twelve best and twelve worst matches. Click one to read the comparison.
+- **A five-step scale.** Each pair is placed at **Soulmates** (+2), **Harmonious** (+1), **Mixed** (0), **Challenging** (−1) or **Adversaries** (−2), by the share of the contacts between the two charts that are easy ones, each counted by how close and how personal it is. The steps are set against every pair in the library, so about half of all pairs are Mixed and about one in fourteen falls at each end.
+
+Astrology has no agreed compatibility score; the scale is Lore's own, and it describes the symbolism between two charts rather than forecasting a relationship.
 
 ### Traditional Dignity Scoring
 Every chart is scored against the **Lilly/Dorothean rubric**:
@@ -145,6 +150,7 @@ Lore/
 │   ├── DailyExportService.cs  # Daily horoscope PDF / text export
 │   ├── SynastryService.cs     # Synastry, astronomy: aspects and house overlays between two charts
 │   ├── SynastryInterpreter.cs # Synastry, wording: rank, select, compose from synastry.json
+│   ├── SynastryScoring.cs     # Synastry, weighing: the five-step scale and the best/worst match search
 │   ├── SynastryExportService.cs # Synastry PDF export
 │   ├── ExportService.cs       # PNG / PDF / JSON / XML export
 │   ├── CelebrityService.cs    # Loads celebrities.json
@@ -253,7 +259,7 @@ Produces a self-contained folder that runs with no installed .NET or VC++ runtim
 .\scripts\build-portable.ps1
 ```
 
-Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-2.2.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
+Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-2.3.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
 
 ### Step 4 — Installer
 
@@ -383,9 +389,9 @@ Editable corpus for the synastry reading. Edit it to change what the Synastry vi
 - `pointThemes`, `toneLinks` — building blocks used to assemble a plainer sentence for any other pair, or one whose bespoke line is empty.
 - `sunElements`, `moonElements` — the two Sun (or Moon) signs compared by element, keyed `Element|Element` in the order Fire, Earth, Air, Water.
 - `overlayHouses`, `overlayPlanets`, `houses` — one person's planets in the other's houses; `{guest}` owns the planets, `{host}` the house.
-- `tones`, `notes` — the overall tone sentence and the unknown-birth-time messages.
+- `tones`, `notes` — the overall tone sentence for each step of the scale (`Soulmates`, `Harmonious`, `Mixed`, `Challenging`, `Adversaries`, and `Light` for two charts with no contacts), and the unknown-birth-time messages.
 
-The orbs, the number of contacts shown, and the ranking weights are constants in `Services\SynastryService.cs` and `Services\SynastryInterpreter.cs`.
+The orbs, the number of contacts shown, and the ranking weights are constants in `Services\SynastryService.cs`, `Services\SynastryScoring.cs` and `Services\SynastryInterpreter.cs`.
 
 ### `Data\interpretations.json`
 
@@ -461,7 +467,13 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 2.2.0 (current)
+### 2.3.0 (current)
+- **Best and worst matches** — the Synastry view now opens on a search: the selected chart compared with every figure in the library and every chart of your own, with the twelve best and twelve worst matches listed and a count of how many charts fall on each step of the scale. Click a name to read the comparison.
+- **A five-step compatibility scale** — the overall tone of a pair is now one of **Soulmates** (+2), **Harmonious** (+1), **Mixed** (0), **Challenging** (−1) or **Adversaries** (−2), where before there were three. It comes from the share of the contacts between two charts that are easy ones, each counted by how close and how personal it is. The scale is Lore's own — astrology has no agreed one — and its steps are set against all 22,366 pairs of figures in the library: about half read as Mixed, about a fifth each as Harmonious and Challenging, and about one in fourteen at each end.
+- **Some pairs change tone** — the old lines were drawn either side of an even split, which left four pairs in five Mixed and almost none Challenging, because easy aspects are simply more common than hard ones. The new lines are measured from the typical pair, so more pairs now read as Harmonious or Challenging than did before.
+- The tone and its number are shown on the Synastry view and in its PDF, and the Legend explains the scale and the search.
+
+### 2.2.0
 - **Fifty more figures** — the library grows from 162 to **212**, with contemporary names from music, sport and film: Billie Eilish, Kendrick Lamar, Dua Lipa, Zendaya, Timothée Chalamet, Margot Robbie, LeBron James, Simone Biles, Kylian Mbappé, Novak Djokovic and others. Every one is rated AA or A by Astro-Databank and is checked against its record by the tests; figures whose times are conflicting, inferred from a rising sign or undocumented were left out.
 - **More points on the Worksheet** — the South Node, Descendant, IC, Vertex and Part of Spirit join the Part of Fortune in the Positions table.
 - **The Moon's phase at birth** — how far the Moon was ahead of the Sun, the phase that falls in, and how much of the disc was lit.

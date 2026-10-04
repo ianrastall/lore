@@ -51,6 +51,13 @@ public sealed partial class SynastryView : UserControl
         sender.ItemsSource = null;
     }
 
+    // A name clicked in the best or worst matches: compare with that person.
+    private void Match_ItemClick(object sender, ItemClickEventArgs e)
+    {
+        if (e.ClickedItem is SynastryMatch match)
+            ViewModel.Partner = match.Person;
+    }
+
     // ── Bi-wheel ──────────────────────────────────────────────────────────────
 
     private void WheelCanvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
@@ -67,6 +74,15 @@ public sealed partial class SynastryView : UserControl
     }
 
     // x:Bind helpers.
+    public bool Either(bool a, bool b) => a || b;
+
+    // The pill colour of a match, from its "#RRGGBB".
+    public static Microsoft.UI.Xaml.Media.SolidColorBrush BrushOf(string hex)
+    {
+        hex = hex.TrimStart('#');
+        return new(Color.FromArgb(255,
+            Convert.ToByte(hex[..2], 16), Convert.ToByte(hex.Substring(2, 2), 16), Convert.ToByte(hex.Substring(4, 2), 16)));
+    }
     public Visibility VisIf(bool b) => b ? Visibility.Visible : Visibility.Collapsed;
     public Visibility HasText(string? s) => string.IsNullOrEmpty(s) ? Visibility.Collapsed : Visibility.Visible;
 }

@@ -41,7 +41,7 @@ public static class SynastryExportService
                     if (wheelPng is { Length: > 0 })
                         col.Item().AlignCenter().Width(340).Image(wheelPng);
 
-                    col.Item().Text($"The connection reads as {reading.Tone.Label()}")
+                    col.Item().Text($"The connection reads as {reading.Tone.Label()} ({reading.Tone.LevelText()})")
                         .FontSize(12).SemiBold().FontColor(reading.Tone.ColorHex());
 
                     foreach (var section in reading.Sections)

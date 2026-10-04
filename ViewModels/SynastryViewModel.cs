@@ -12,6 +12,7 @@ namespace Lore.ViewModels;
 public sealed partial class SynastryViewModel : ObservableObject
 {
     private const int MaxSuggestions = 12;
+    private const int MatchesShown = 12;   // how many of the best, and of the worst, are listed
 
     private readonly ChartService? _charts;
     private readonly SynastryInterpreter? _interpreter;
@@ -22,6 +23,9 @@ public sealed partial class SynastryViewModel : ObservableObject
 
     // Everyone who can be picked as the partner (the bundled figures and My Charts).
     private IReadOnlyList<Celebrity> _people = [];
+
+    // As _generation, for the search of everyone against the selected chart.
+    private int _matchGeneration;
 
     public SynastryViewModel(ChartService? charts = null, SynastryInterpreter? interpreter = null)
     {
@@ -55,9 +59,44 @@ public sealed partial class SynastryViewModel : ObservableObject
     // What to do next, shown in place of a reading until two different people are chosen.
     public string PromptText =>
         Chart is null ? "Select a chart from the list, then choose someone to compare it with." :
-        Partner is null ? $"Choose someone to compare with {Chart.Celebrity.Name}: type a name in the box above." :
+        Partner is null ? $"Choose someone to compare with {Chart.Celebrity.Name}: type a name in the box above, or pick one of the matches below." :
         Partner.Id == Chart.Celebrity.Id ? $"That is {Chart.Celebrity.Name}'s own chart. Choose someone else to compare it with." :
         "";
+
+    // The search: everyone else compared with the selected chart, best match first.
+    // Shown, as its best and worst few, until someone is chosen to compare with.
+    [ObservableProperty]
+    public partial IReadOnlyList<SynastryMatch> Matches { get; set; } = [];
+
+    [ObservableProperty]
+    public partial bool IsSearching { get; set; }
+
+    public IReadOnlyList<SynastryMatch> BestMatches => Matches.Take(MatchesShown).ToList();
+
+    // Worst first. Never the same people as the best, however few charts there are.
+    public IReadOnlyList<SynastryMatch> WorstMatches =>
+        Matches.Skip(Math.Max(MatchesShown, Matches.Count - MatchesShown)).Reverse().ToList();
+
+    public bool ShowMatches => Chart is not null && Partner is null && Matches.Count > 0;
+
+    public string MatchesHeading => Chart is null ? "" : $"Best and worst matches for {Chart.Celebrity.Name}";
+
+    // "Compared with 211 charts: 14 Soulmates (+2) · 39 Harmonious (+1) · …"
+    public string MatchesSummary
+    {
+        get
+        {
+            if (Matches.Count == 0) return "";
+            SynastryTone[] scale =
+            [
+                SynastryTone.Soulmates, SynastryTone.Harmonious, SynastryTone.Mixed,
+                SynastryTone.Challenging, SynastryTone.Adversaries,
+            ];
+            var counts = scale.Select(t =>
+                $"{Matches.Count(m => m.Compatibility.Level == t.Level())} {t.Label()} ({t.LevelText()})");
+            return $"Compared with {Matches.Count} charts:  {string.Join("  ·  ", counts)}";
+        }
+    }
 
     public string PartnerText => Partner is null ? "" : $"Compared with {Partner.Name}";
     public bool HasPartner => Partner is not null;
@@ -65,7 +104,8 @@ public sealed partial class SynastryViewModel : ObservableObject
     public string WheelCaption => Comparison is null ? "" :
         $"Inner wheel: {Comparison.First.Celebrity.Name}   ·   Outer wheel: {Comparison.Second.Celebrity.Name}";
 
-    public string ToneText => Reading is null ? "" : $"The connection reads as {Reading.Tone.Label()}";
+    public string ToneText => Reading is null ? "" :
+        $"The connection reads as {Reading.Tone.Label()} ({Reading.Tone.LevelText()})";
     public SolidColorBrush ToneBrush => new(ParseHex(Reading?.Tone.ColorHex() ?? "#9AA0A6"));
 
     public IReadOnlyList<DailySection> Sections => Reading?.Sections ?? [];
@@ -84,6 +124,7 @@ public sealed partial class SynastryViewModel : ObservableObject
             if (!ReferenceEquals(match, current))
                 Partner = match;
         }
+        RebuildMatches();
     }
 
     // Names for the partner picker: those starting with the typed text first, then those
@@ -105,13 +146,60 @@ public sealed partial class SynastryViewModel : ObservableObject
     [RelayCommand]
     private void ClearPartner() => Partner = null;
 
-    partial void OnChartChanged(NatalChart? value) => Rebuild();
+    partial void OnChartChanged(NatalChart? value)
+    {
+        OnPropertyChanged(nameof(MatchesHeading));
+        Rebuild();
+        RebuildMatches();
+    }
 
     partial void OnPartnerChanged(Celebrity? value)
     {
         OnPropertyChanged(nameof(PartnerText));
         OnPropertyChanged(nameof(HasPartner));
+        OnPropertyChanged(nameof(ShowMatches));
         Rebuild();
+    }
+
+    partial void OnMatchesChanged(IReadOnlyList<SynastryMatch> value)
+    {
+        OnPropertyChanged(nameof(BestMatches));
+        OnPropertyChanged(nameof(WorstMatches));
+        OnPropertyChanged(nameof(MatchesSummary));
+        OnPropertyChanged(nameof(ShowMatches));
+    }
+
+    // Compares the selected chart with everyone else (off the UI thread: a chart is
+    // calculated for each person). A search overtaken by a newer one is discarded.
+    private async void RebuildMatches()
+    {
+        int generation = ++_matchGeneration;
+        var chart = Chart;
+        var people = _people;
+        Matches = [];
+
+        if (chart is null || _charts is null || people.Count == 0)
+        {
+            IsSearching = false;
+            return;
+        }
+
+        IsSearching = true;
+        try
+        {
+            var matches = await Task.Run(() => SynastryScoring.Rank(_charts, chart, people));
+            if (generation == _matchGeneration)
+                Matches = matches;
+        }
+        catch (Exception ex)
+        {
+            Diagnostics.Log($"Synastry search for {chart.Celebrity.Name} failed: {ex}");
+        }
+        finally
+        {
+            if (generation == _matchGeneration)
+                IsSearching = false;
+        }
     }
 
     partial void OnComparisonChanged(Synastry? value) => OnPropertyChanged(nameof(WheelCaption));

@@ -63,21 +63,22 @@ public sealed class SynastryInterpreter
 
         foreach (var x in s.Aspects)
         {
-            x.Score = Score(x);
+            x.Score = SynastryScoring.Priority(x);
             x.Shown = false;
         }
         var ranked = s.Aspects.OrderByDescending(x => x.Score).ToList();
 
         // Two slow bodies in aspect (her Neptune, his Pluto) link everyone born in the
         // same years, so they say nothing about these two people in particular.
-        var personal = ranked.Where(x => !(IsGenerational(x.First) && IsGenerational(x.Second))).ToList();
+        var personal = ranked.Where(x => !SynastryScoring.IsGenerational(x)).ToList();
 
         var bonds = Pick(personal.Where(x => x.Tone == TransitTone.Conjunction), MaxBonds);
         var easy = Pick(personal.Where(x => x.Tone == TransitTone.Flow), MaxEasy);
         var hard = Pick(personal.Where(x => x.Tone == TransitTone.Tension), MaxHard);
         foreach (var x in bonds.Concat(easy).Concat(hard)) x.Shown = true;
 
-        SynastryTone tone = ToneOf(personal);
+        var compatibility = SynastryScoring.Assess(ranked);
+        SynastryTone tone = compatibility.Tone;
 
         var sections = new List<DailySection> { Glance(s, a, b, tone) };
         AddAspects(sections, "Closest bonds", bonds, a, b);
@@ -93,6 +94,7 @@ public sealed class SynastryInterpreter
             FirstName = s.First.Celebrity.Name,
             SecondName = s.Second.Celebrity.Name,
             Tone = tone,
+            Compatibility = compatibility,
             Sections = sections,
             Aspects = ranked,
             Trace = ranked.Select(x => TraceLine(x, a, b)).ToList(),
@@ -100,9 +102,7 @@ public sealed class SynastryInterpreter
     }
 
     // ── Ranking ───────────────────────────────────────────────────────────────
-    // An editorial priority — which contacts the reading should spend its few slots on —
-    // not a compatibility score. Closer contacts, more personal points and harder-edged
-    // aspects rank higher.
+    // Which contacts the reading spends its few slots on (the weights are in SynastryScoring).
 
     // The best-ranked few, with a cap on how often either person's same point appears.
     private static List<SynastryAspect> Pick(IEnumerable<SynastryAspect> ranked, int max)
@@ -117,76 +117,6 @@ public sealed class SynastryInterpreter
         }
         return picked;
     }
-
-    private static double Score(SynastryAspect x)
-    {
-        double closeness = 1 - 0.7 * Math.Min(1, x.Orb / SynastryService.Orb(x.Type));
-        return PointWeight(x.First) * PointWeight(x.Second) * AspectWeight(x.Type) * closeness;
-    }
-
-    private static double PointWeight(NatalPoint p) => p.Kind switch
-    {
-        NatalPointKind.Ascendant => 0.9,
-        NatalPointKind.Midheaven => 0.5,
-        _ => p.Body switch
-        {
-            Planet.Sun or Planet.Moon => 1.0,
-            Planet.Venus or Planet.Mars => 0.9,
-            Planet.Mercury => 0.75,
-            Planet.Saturn => 0.7,
-            Planet.Jupiter => 0.65,
-            Planet.Pluto => 0.5,
-            Planet.Uranus or Planet.Neptune or Planet.NorthNode => 0.45,
-            Planet.Chiron => 0.4,
-            _ => 0.3
-        }
-    };
-
-    private static double AspectWeight(AspectType a) => a switch
-    {
-        AspectType.Conjunction => 1.0,
-        AspectType.Opposition or AspectType.Square => 0.9,
-        AspectType.Trine => 0.85,
-        _ => 0.6
-    };
-
-    private static bool IsGenerational(NatalPoint p) =>
-        !p.IsAngle && p.Body is Planet.Uranus or Planet.Neptune or Planet.Pluto
-                                or Planet.NorthNode or Planet.Chiron or Planet.Lilith;
-
-    // The balance of easy and hard across every personal contact, each counted by how
-    // much it matters. (Not just the ones shown: those are chosen in fixed numbers of
-    // each kind, which would make every pair of charts come out Mixed.)
-    private static SynastryTone ToneOf(List<SynastryAspect> personal)
-    {
-        double flow = 0, tension = 0;
-        foreach (var x in personal)
-        {
-            // The ranking favours hard aspects (they are the more noticeable); take that
-            // back out here, or the same bias would tip every reading toward Challenging.
-            double weight = x.Score / AspectWeight(x.Type);
-            switch (x.Tone)
-            {
-                case TransitTone.Flow: flow += weight; break;
-                case TransitTone.Tension: tension += weight; break;
-                default:
-                    // A conjunction takes its colour from the planets meeting; between
-                    // neutral points it binds more than it grates.
-                    if (Involves(x, Planet.Venus, Planet.Jupiter)) flow += weight;
-                    else if (Involves(x, Planet.Mars, Planet.Saturn, Planet.Pluto)) tension += weight;
-                    else flow += weight / 2;
-                    break;
-            }
-        }
-
-        double total = flow + tension;
-        if (total <= 0) return SynastryTone.Light;
-        double share = flow / total;
-        return share >= 0.62 ? SynastryTone.Harmonious : share <= 0.38 ? SynastryTone.Challenging : SynastryTone.Mixed;
-    }
-
-    private static bool Involves(SynastryAspect x, params Planet[] bodies) =>
-        (!x.First.IsAngle && bodies.Contains(x.First.Body)) || (!x.Second.IsAngle && bodies.Contains(x.Second.Body));
 
     // ── Sections ──────────────────────────────────────────────────────────────
 

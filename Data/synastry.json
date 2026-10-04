@@ -231,9 +231,11 @@
     "12": "solitude, rest and the hidden side of life"
   },
   "tones": {
-    "Harmonious": "Taken together, the contacts between these two charts are mostly easy ones: there is more that flows than that grates.",
+    "Soulmates": "The contacts between these two charts are overwhelmingly easy ones, and there are plenty of them. Few pairs of charts fit together this smoothly: what one reaches for, the other tends to offer.",
+    "Adversaries": "The contacts between these two charts are dominated by the difficult aspects. Few pairs of charts rub against each other this much. It describes friction, rivalry and strong reactions, which can bind two people as surely as ease does, but rarely comfortably.",
+    "Harmonious": "Taken together, the contacts between these two charts are easier than most: there is more that flows than that grates.",
     "Mixed": "The contacts between these two charts are a fairly even mix of easy and difficult: attraction and friction in about equal measure, which is the usual case for people who matter to each other.",
-    "Challenging": "The contacts between these two charts lean toward the difficult aspects. That means intensity and friction rather than incompatibility: these charts push each other.",
+    "Challenging": "The contacts between these two charts include more of the difficult aspects than most pairs have. That means intensity and friction rather than incompatibility: these charts push each other.",
     "Light": "Few close contacts link these two charts. In astrological terms the connection is a light one."
   },
   "notes": {
