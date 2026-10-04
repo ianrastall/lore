@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="Lore.Views.WorksheetView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:models="using:Lore.Models">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Padding="24,16,24,24">
+        <StackPanel Spacing="18" HorizontalAlignment="Left">
+
+            <TextBlock Text="{x:Bind ViewModel.WorksheetTitle, Mode=OneWay}"
+                       Style="{StaticResource TitleTextBlockStyle}"/>
+            <TextBlock Text="The numbers behind the chart, and how they were arrived at. Nothing here is interpreted."
+                       Opacity="0.7" FontSize="12" Margin="0,-10,0,0"/>
+
+            <!-- How this was calculated -->
+            <StackPanel Spacing="6">
+                <TextBlock Text="How this was calculated"
+                           Style="{StaticResource SubtitleTextBlockStyle}"
+                           Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
+                <ItemsControl ItemsSource="{x:Bind ViewModel.Worksheet.Facts, Mode=OneWay, FallbackValue={x:Null}}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="models:WorksheetFact">
+                            <Grid ColumnDefinitions="150,*" Padding="0,2">
+                                <TextBlock Grid.Column="0" Text="{x:Bind Label}"
+                                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                <TextBlock Grid.Column="1" Text="{x:Bind Value}" TextWrapping="Wrap"
+                                           MaxWidth="640" IsTextSelectionEnabled="True"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+
+            <!-- Positions -->
+            <StackPanel Spacing="6">
+                <TextBlock Text="Positions"
+                           Style="{StaticResource SubtitleTextBlockStyle}"
+                           Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
+                <Grid ColumnDefinitions="34,150,200,100,100,110,60,40" Padding="0,2"
+                      BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}" BorderThickness="0,0,0,1">
+                    <TextBlock Grid.Column="2" Text="Position" FontSize="12" Opacity="0.7"/>
+                    <TextBlock Grid.Column="3" Text="Latitude" FontSize="12" Opacity="0.7" HorizontalAlignment="Right"/>
+                    <TextBlock Grid.Column="4" Text="Declination" FontSize="12" Opacity="0.7" HorizontalAlignment="Right"/>
+                    <TextBlock Grid.Column="5" Text="Speed per day" FontSize="12" Opacity="0.7" HorizontalAlignment="Right"/>
+                    <TextBlock Grid.Column="6" Text="House" FontSize="12" Opacity="0.7" HorizontalAlignment="Right"/>
+                </Grid>
+                <ItemsControl ItemsSource="{x:Bind ViewModel.Worksheet.Positions, Mode=OneWay, FallbackValue={x:Null}}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="models:WorksheetRow">
+                            <Grid ColumnDefinitions="34,150,200,100,100,110,60,40" Padding="0,3">
+                                <TextBlock Grid.Column="0" Text="{x:Bind Symbol}" FontSize="15"/>
+                                <TextBlock Grid.Column="1" Text="{x:Bind Name}"/>
+                                <TextBlock Grid.Column="2" Text="{x:Bind Position}" IsTextSelectionEnabled="True"/>
+                                <TextBlock Grid.Column="3" Text="{x:Bind Latitude}" HorizontalAlignment="Right"/>
+                                <TextBlock Grid.Column="4" Text="{x:Bind Declination}" HorizontalAlignment="Right"/>
+                                <TextBlock Grid.Column="5" Text="{x:Bind Speed}" HorizontalAlignment="Right"/>
+                                <TextBlock Grid.Column="6" Text="{x:Bind House}" HorizontalAlignment="Right"/>
+                                <TextBlock Grid.Column="7" Text="{x:Bind Motion}" HorizontalAlignment="Center"
+                                           Foreground="#C8A064"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <TextBlock FontSize="11" Opacity="0.7" TextWrapping="Wrap" MaxWidth="790" HorizontalAlignment="Left"
+                           Text="Latitude is measured from the ecliptic, declination from the celestial equator; + is north. A negative speed means the body is moving backwards through the zodiac."/>
+            </StackPanel>
+
+            <!-- House cusps -->
+            <StackPanel Spacing="6" Visibility="{x:Bind VisIf(ViewModel.WorksheetHasCusps), Mode=OneWay}">
+                <TextBlock Text="House cusps"
+                           Style="{StaticResource SubtitleTextBlockStyle}"
+                           Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
+                <ItemsControl ItemsSource="{x:Bind ViewModel.Worksheet.Cusps, Mode=OneWay, FallbackValue={x:Null}}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ItemsWrapGrid Orientation="Vertical" MaximumRowsOrColumns="6"
+                                           ItemWidth="260" ItemHeight="26"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="models:WorksheetCusp">
+                            <Grid ColumnDefinitions="34,*">
+                                <TextBlock Grid.Column="0" Text="{x:Bind House}"
+                                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                <TextBlock Grid.Column="1" Text="{x:Bind Position}" IsTextSelectionEnabled="True"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+
+            <!-- Aspect grid (built in code: one cell per pair of points) -->
+            <StackPanel Spacing="6">
+                <TextBlock Text="Aspects"
+                           Style="{StaticResource SubtitleTextBlockStyle}"
+                           Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
+                <Grid x:Name="AspectGrid" HorizontalAlignment="Left"/>
+                <TextBlock FontSize="11" Opacity="0.7" TextWrapping="Wrap" MaxWidth="790" HorizontalAlignment="Left"
+                           Text="Each cell shows the aspect between the two points, how far it is from exact, and whether it is applying (a, closing) or separating (s, opening). ☌ conjunction · ⚹ sextile · □ square · △ trine · ☍ opposition."/>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

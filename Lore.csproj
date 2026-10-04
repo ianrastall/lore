@@ -19,9 +19,9 @@
     <LangVersion>preview</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Configurations>Debug;Release</Configurations>
-    <Version>1.4.1</Version>
-    <AssemblyVersion>1.4.1.0</AssemblyVersion>
-    <FileVersion>1.4.1.0</FileVersion>
+    <Version>1.5.0</Version>
+    <AssemblyVersion>1.5.0.0</AssemblyVersion>
+    <FileVersion>1.5.0.0</FileVersion>
   </PropertyGroup>
 
   <!-- The test project lives under tests\ and builds separately; keep its files
@@ -54,6 +54,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- Lore's own licence (AGPL-3.0) travels with every build -->
+    <Content Include="LICENSE">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>LICENSE.txt</TargetPath>
+    </Content>
     <Content Include="Data\celebrities.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

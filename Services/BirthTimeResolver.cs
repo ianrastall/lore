@@ -47,6 +47,28 @@ public static class BirthTimeResolver
         return unspecified.AddHours(-c.UtcOffsetHours);
     }
 
+    // The same conversion, spelled out for the worksheet: the instant, and the offset
+    // that produced it with where that offset came from — "UTC-6 (CST, America/Chicago)".
+    public static (DateTime utc, string offset) Explain(Celebrity c)
+    {
+        var utc = ToUtc(c);
+        if (c.UtcOffsetFixed)
+            return (utc, $"{FormatOffset(c.UtcOffsetHours)} (set by hand)");
+
+        string? zoneId = ResolveZoneId(c.TimeZoneId, c.Latitude, c.Longitude);
+        var zone = zoneId is null ? null : Tzdb.GetZoneOrNull(zoneId);
+        if (zone is null)
+            return (utc, $"{FormatOffset(c.UtcOffsetHours)} (no time zone found for this place)");
+
+        var instant = Instant.FromDateTimeUtc(utc);
+        if (IsLocalMeanTime(zone, instant))
+            return (utc, $"{FormatOffset(LocalMeanTimeSeconds(c.Longitude) / 3600.0)} " +
+                         "(local mean time at the birthplace's longitude; standard time zones did not exist yet)");
+
+        var interval = zone.GetZoneInterval(instant);
+        return (utc, $"{FormatOffset(interval.WallOffset.Seconds / 3600.0)} ({interval.Name}, {zoneId})");
+    }
+
     // Before standard time, every town kept its own clock by the Sun. The tz database
     // marks that era "LMT" but can only give the mean time of the zone's reference city
     // (Rome for all of Italy, say), which is minutes off anywhere else — and four minutes
@@ -116,9 +138,10 @@ public static class BirthTimeResolver
     private static string FormatOffset(double hours)
     {
         string sign = hours < 0 ? "-" : "+";
-        int totalMin = (int)Math.Round(Math.Abs(hours) * 60);
-        return totalMin % 60 == 0
-            ? $"UTC{sign}{totalMin / 60}"
-            : $"UTC{sign}{totalMin / 60}:{totalMin % 60:D2}";
+        int totalSec = (int)Math.Round(Math.Abs(hours) * 3600);
+        int h = totalSec / 3600, m = totalSec / 60 % 60, s = totalSec % 60;
+        return s != 0 ? $"UTC{sign}{h}:{m:D2}:{s:D2}"
+             : m != 0 ? $"UTC{sign}{h}:{m:D2}"
+             : $"UTC{sign}{h}";
     }
 }

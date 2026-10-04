@@ -22,6 +22,11 @@ public sealed partial class MainWindow : Window
         ViewModel = vm;
         InitializeComponent();
 
+        // Show the saved calculation settings (index order matches the enums).
+        HouseSystemCombo.SelectedIndex = (int)vm.Settings.Houses;
+        NodeTypeCombo.SelectedIndex = (int)vm.Settings.Node;
+        _settingsReady = true;
+
         AppWindow.Title = "Lore — Natal Charts";
         if (AppWindow.Presenter is OverlappedPresenter presenter)
             presenter.Maximize();
@@ -90,19 +95,33 @@ public sealed partial class MainWindow : Window
 
     private void ShowChart_Click(object sender, RoutedEventArgs e) => ShowBody();
     private void ShowReport_Click(object sender, RoutedEventArgs e) => ShowBody(report: true);
+    private void ShowWorksheet_Click(object sender, RoutedEventArgs e) => ShowBody(worksheet: true);
     private void ShowDaily_Click(object sender, RoutedEventArgs e) => ShowBody(daily: true);
     private void ShowSynastry_Click(object sender, RoutedEventArgs e) => ShowBody(synastry: true);
 
-    private void ShowBody(bool report = false, bool daily = false, bool synastry = false)
+    private void ShowBody(bool report = false, bool worksheet = false, bool daily = false, bool synastry = false)
     {
         ViewModel.ShowLegend = false;
         ViewModel.ShowReport = report;
+        ViewModel.ShowWorksheet = worksheet;
         ViewModel.ShowDaily = daily;
         ViewModel.ShowSynastry = synastry;
-        ChartToggle.IsChecked = !report && !daily && !synastry;
+        ChartToggle.IsChecked = !report && !worksheet && !daily && !synastry;
         ReportToggle.IsChecked = report;
+        WorksheetToggle.IsChecked = worksheet;
         DailyToggle.IsChecked = daily;
         SynastryToggle.IsChecked = synastry;
+    }
+
+    // False while the constructor is filling the two settings boxes in.
+    private readonly bool _settingsReady;
+
+    private async void Settings_Changed(object sender, Microsoft.UI.Xaml.Controls.SelectionChangedEventArgs e)
+    {
+        if (!_settingsReady || HouseSystemCombo.SelectedIndex < 0 || NodeTypeCombo.SelectedIndex < 0) return;
+        await ViewModel.ApplySettingsAsync(new Models.ChartSettings(
+            (Models.HouseSystem)HouseSystemCombo.SelectedIndex,
+            (Models.NodeType)NodeTypeCombo.SelectedIndex));
     }
 
     private void ShowLegend_Click(object sender, RoutedEventArgs e) => ViewModel.ShowLegend = true;
@@ -113,6 +132,7 @@ public sealed partial class MainWindow : Window
     private async void ExportPng_Click(object sender, RoutedEventArgs e) => await ExportAsync("png");
     private async void ExportJson_Click(object sender, RoutedEventArgs e) => await ExportAsync("json");
     private async void ExportXml_Click(object sender, RoutedEventArgs e) => await ExportAsync("xml");
+    private async void ExportWorksheet_Click(object sender, RoutedEventArgs e) => await ExportAsync("worksheettxt");
     private async void ExportDailyPdf_Click(object sender, RoutedEventArgs e) => await ExportAsync("dailypdf");
     private async void ExportDailyText_Click(object sender, RoutedEventArgs e) => await ExportAsync("dailytxt");
     private async void ExportSynastryPdf_Click(object sender, RoutedEventArgs e) => await ExportAsync("synastrypdf");
@@ -155,6 +175,7 @@ public sealed partial class MainWindow : Window
                 "png"  => ("PNG image", ".png"),
                 "json" => ("JSON data", ".json"),
                 "xml"  => ("XML data", ".xml"),
+                "worksheettxt" => ("Text file", ".txt"),
                 "dailypdf" => ("PDF document", ".pdf"),
                 "dailytxt" => ("Text file", ".txt"),
                 "synastrypdf" => ("PDF document", ".pdf"),
@@ -168,6 +189,7 @@ public sealed partial class MainWindow : Window
             picker.SuggestedFileName =
                 daily ? SafeFileName($"{chart.Celebrity.Name} - daily {reading!.Date:yyyy-MM-dd}") :
                 synastry ? SafeFileName($"{synastryReading!.FirstName} and {synastryReading.SecondName} - synastry") :
+                kind == "worksheettxt" ? SafeFileName($"{chart.Celebrity.Name} - worksheet") :
                 SafeFileName(chart.Celebrity.Name);
 
             var file = await picker.PickSaveFileAsync();
@@ -181,6 +203,7 @@ public sealed partial class MainWindow : Window
                 "png"  => await ExportService.RenderChartPngAsync(chart),
                 "json" => ExportService.ToJson(chart),
                 "xml"  => ExportService.ToXml(chart),
+                "worksheettxt" => WorksheetService.ToText(WorksheetService.Build(chart)),
                 "dailypdf" => DailyExportService.ToPdf(reading!),
                 "dailytxt" => DailyExportService.ToText(reading!),
                 "synastrypdf" => SynastryExportService.ToPdf(comparison!, synastryReading!,
@@ -212,8 +235,8 @@ public sealed partial class MainWindow : Window
     public bool Not(bool b) => !b;
 
     // Body panes: the legend, when shown, hides the chart, report, daily and synastry views.
-    public Visibility VisChartBody(bool showReport, bool showDaily, bool showSynastry, bool showLegend) =>
-        !showReport && !showDaily && !showSynastry && !showLegend ? Visibility.Visible : Visibility.Collapsed;
+    public Visibility VisChartBody(bool showReport, bool showWorksheet, bool showDaily, bool showSynastry, bool showLegend) =>
+        !showReport && !showWorksheet && !showDaily && !showSynastry && !showLegend ? Visibility.Visible : Visibility.Collapsed;
     public Visibility VisReportBody(bool show, bool showLegend) =>
         show && !showLegend ? Visibility.Visible : Visibility.Collapsed;
 }

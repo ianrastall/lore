@@ -11,6 +11,7 @@ public sealed partial class MainViewModel : ObservableObject
     private readonly CelebrityService _celebrities;
     private readonly ChartService _charts;
     private readonly UserChartService _userCharts;
+    private readonly SettingsService? _settings;
 
     private List<Celebrity> _all = [];
 
@@ -65,6 +66,10 @@ public sealed partial class MainViewModel : ObservableObject
     [ObservableProperty]
     public partial bool ShowSynastry { get; set; }
 
+    // The Worksheet view (likewise).
+    [ObservableProperty]
+    public partial bool ShowWorksheet { get; set; }
+
     // Full-page Legend / reference view over the chart+report body.
     [ObservableProperty]
     public partial bool ShowLegend { get; set; }
@@ -81,8 +86,10 @@ public sealed partial class MainViewModel : ObservableObject
         HospitalService hospitals,
         TransitService transits,
         DailyInterpreter dailyInterpreter,
-        SynastryInterpreter synastryInterpreter)
+        SynastryInterpreter synastryInterpreter,
+        SettingsService? settings = null)
     {
+        _settings = settings;
         _celebrities = celebrities;
         _charts = charts;
         _userCharts = userCharts;
@@ -218,6 +225,28 @@ public sealed partial class MainViewModel : ObservableObject
 
     [RelayCommand]
     private void ClearCategory() => SelectedCategory = AllCategories;
+
+    // The house system and node type in force (see ChartSettings).
+    public ChartSettings Settings => _charts.Settings;
+
+    // Changes a calculation setting: saved, then everything on screen is recalculated
+    // with it — the browse list's dignity verdicts and the chart being shown.
+    public async Task ApplySettingsAsync(ChartSettings settings)
+    {
+        if (settings == _charts.Settings) return;
+        _charts.Settings = settings;
+        _settings?.Save(settings);
+
+        string? selectedId = SelectedCelebrity?.Id;
+        await RebuildPoolAsync();
+        if (selectedId is not null &&
+            DisplayedCelebrities.FirstOrDefault(c => c.Id == selectedId) is { } again)
+        {
+            SelectedCelebrity = again;
+            await LoadChartAsync(again);
+        }
+        StatusMessage = $"Now using {settings.Houses.Name()} houses and the {settings.Node.Name().ToLowerInvariant()}.";
+    }
 
     public async Task AddCustomChartAsync(Celebrity chart)
     {

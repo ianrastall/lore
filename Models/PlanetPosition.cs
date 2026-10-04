@@ -29,6 +29,7 @@ public sealed class PlanetPosition
     public required Planet Planet { get; init; }
     public double Longitude { get; init; }    // ecliptic longitude, 0–360°
     public double Latitude { get; init; }     // ecliptic latitude
+    public double Declination { get; init; }  // degrees north (+) or south (−) of the celestial equator
     public double SpeedLongitude { get; init; } // degrees/day; negative = retrograde
     // The mean node always runs backwards and mean Lilith always forwards; neither has
     // retrograde periods, so neither is ever marked.

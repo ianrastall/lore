@@ -27,7 +27,8 @@ public partial class App : Application
         string synastryPath  = Path.Combine(baseDir, "Data", "synastry.json");
 
         var celebSvc    = new CelebrityService();
-        var chartSvc    = new ChartService(ephemerisPath);
+        var settings    = new SettingsService();
+        var chartSvc    = new ChartService(ephemerisPath) { Settings = settings.Load() };
         var interpreter = new ChartInterpreter(interpPath);
         var userCharts  = new UserChartService();
         var cities      = new CityService();
@@ -36,7 +37,7 @@ public partial class App : Application
         var daily       = new DailyInterpreter(dailyPath);
         var synastry    = new SynastryInterpreter(synastryPath);
         var mainVm      = new MainViewModel(celebSvc, chartSvc, interpreter, userCharts, cities, hospitals,
-                                            transits, daily, synastry);
+                                            transits, daily, synastry, settings);
 
         _mainWindow = new MainWindow(mainVm);
         _mainWindow.Activate();

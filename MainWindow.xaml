@@ -116,6 +116,9 @@
                                   Click="ShowChart_Click"/>
                     <ToggleButton x:Name="ReportToggle" Content="Report"
                                   Click="ShowReport_Click"/>
+                    <ToggleButton x:Name="WorksheetToggle" Content="Worksheet"
+                                  Click="ShowWorksheet_Click"
+                                  ToolTipService.ToolTip="The numbers behind the chart, and how they were calculated"/>
                     <ToggleButton x:Name="DailyToggle" Content="Daily"
                                   Click="ShowDaily_Click"
                                   ToolTipService.ToolTip="Daily horoscope from today's transits"/>
@@ -132,6 +135,7 @@
                                 <MenuFlyoutItem Text="PNG — chart image…" Click="ExportPng_Click"/>
                                 <MenuFlyoutItem Text="JSON — chart data…" Click="ExportJson_Click"/>
                                 <MenuFlyoutItem Text="XML — chart data…" Click="ExportXml_Click"/>
+                                <MenuFlyoutItem Text="Text — worksheet…" Click="ExportWorksheet_Click"/>
                                 <MenuFlyoutSeparator/>
                                 <MenuFlyoutItem Text="PDF — daily horoscope…" Click="ExportDailyPdf_Click"/>
                                 <MenuFlyoutItem Text="Text — daily horoscope…" Click="ExportDailyText_Click"/>
@@ -139,6 +143,32 @@
                                 <MenuFlyoutItem Text="PDF — synastry reading…" Click="ExportSynastryPdf_Click"/>
                                 <MenuFlyoutItem Text="PNG — synastry bi-wheel…" Click="ExportSynastryPng_Click"/>
                             </MenuFlyout>
+                        </DropDownButton.Flyout>
+                    </DropDownButton>
+                    <DropDownButton Content="Settings"
+                                    ToolTipService.ToolTip="How charts are calculated">
+                        <DropDownButton.Flyout>
+                            <Flyout>
+                                <StackPanel Spacing="12" Width="250">
+                                    <ComboBox x:Name="HouseSystemCombo" Header="House system"
+                                              HorizontalAlignment="Stretch"
+                                              SelectionChanged="Settings_Changed">
+                                        <ComboBoxItem Content="Placidus"/>
+                                        <ComboBoxItem Content="Whole Sign"/>
+                                        <ComboBoxItem Content="Equal"/>
+                                        <ComboBoxItem Content="Koch"/>
+                                    </ComboBox>
+                                    <ComboBox x:Name="NodeTypeCombo" Header="North Node"
+                                              HorizontalAlignment="Stretch"
+                                              SelectionChanged="Settings_Changed">
+                                        <ComboBoxItem Content="Mean node"/>
+                                        <ComboBoxItem Content="True node"/>
+                                    </ComboBox>
+                                    <TextBlock TextWrapping="Wrap" FontSize="11"
+                                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                               Text="These apply to every chart, the daily horoscope and synastry. Each chart shows which were used."/>
+                                </StackPanel>
+                            </Flyout>
                         </DropDownButton.Flyout>
                     </DropDownButton>
                     <Button Content="Legend" Click="ShowLegend_Click"/>
@@ -151,11 +181,15 @@
                                  x:Name="ChartViewControl"
                                  ViewModel="{x:Bind ViewModel.ChartVM}"
                                  RequestedTheme="Dark"
-                                 Visibility="{x:Bind VisChartBody(ViewModel.ShowReport, ViewModel.ShowDaily, ViewModel.ShowSynastry, ViewModel.ShowLegend), Mode=OneWay}"/>
+                                 Visibility="{x:Bind VisChartBody(ViewModel.ShowReport, ViewModel.ShowWorksheet, ViewModel.ShowDaily, ViewModel.ShowSynastry, ViewModel.ShowLegend), Mode=OneWay}"/>
                 <views:ReportView x:Name="ReportViewControl"
                                   ViewModel="{x:Bind ViewModel.ChartVM}"
                                   RequestedTheme="Dark"
                                   Visibility="{x:Bind VisReportBody(ViewModel.ShowReport, ViewModel.ShowLegend), Mode=OneWay}"/>
+                <views:WorksheetView x:Name="WorksheetViewControl"
+                                     ViewModel="{x:Bind ViewModel.ChartVM}"
+                                     RequestedTheme="Dark"
+                                     Visibility="{x:Bind VisReportBody(ViewModel.ShowWorksheet, ViewModel.ShowLegend), Mode=OneWay}"/>
                 <views:DailyView x:Name="DailyViewControl"
                                  ViewModel="{x:Bind ViewModel.DailyVM}"
                                  RequestedTheme="Dark"

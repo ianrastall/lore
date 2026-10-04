@@ -125,7 +125,7 @@ public static class DignityService
     public static ChartScore Compute(NatalChart chart)
     {
         var sun = chart.GetPlanet(Planet.Sun);
-        bool isDay = sun is not null && chart.GetHouseForLongitude(sun.Longitude) is >= 7 and <= 12;
+        bool isDay = chart.IsDayChart;
 
         var rows = new List<PlanetDignity>(Classical.Length);
         int total = 0;

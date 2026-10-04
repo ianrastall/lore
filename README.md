@@ -4,14 +4,14 @@
 
 > A Windows desktop application for computing and exploring astrological natal charts — and reading a daily horoscope from them — powered by the Swiss Ephemeris. Browse a curated library of historical figures — every one with a documented birth time — or add your own.
 
-**Latest release: v1.4.1** · [Download](../../releases/latest)
+**Latest release: v1.5.0** · [Download](../../releases/latest)
 
 ### Installing
 
-1. From the [latest release](../../releases/latest), download **`LoreSetup-1.4.1.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`LoreSetup-1.5.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user only (no administrator prompt), adds a Start-menu shortcut, and can be removed from *Settings → Apps* like any other program.
 
-**Prefer not to install?** Download **`Lore-1.4.1-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
+**Prefer not to install?** Download **`Lore-1.5.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
 
 > **The installer is not code-signed.** Lore is a free hobby project and does not carry a paid signing certificate, so Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"* — choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -28,8 +28,8 @@
 
 ### Chart Calculation
 - **Swiss Ephemeris** (`sweph.dll`) provides high-precision planetary positions for dates from 1200 CE to 2400 CE.
-- Computes positions for **13 bodies**: Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North Node, Chiron, and Black Moon Lilith (Mean Apogee).
-- Calculates **12 Placidus house cusps**, Ascendant, and Midheaven.
+- Computes positions for **13 bodies**: Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North Node (mean or true), Chiron, and Black Moon Lilith (Mean Apogee).
+- Calculates the **12 house cusps** (Placidus, Whole Sign, Equal, or Koch — your choice), Ascendant, and Midheaven.
 - Detects **five major aspects** (conjunction ☌, sextile ⚹, square □, trine △, opposition ☍) with per-aspect orbs, and flags each as applying or separating.
 - Detects **major configurations** — stellium, grand trine, T-square, and grand cross — from the positions and aspects (a T-square that is one arm of a grand cross is not reported twice).
 - Retrograde detection for every planet from Mercury to Pluto, and Chiron.
@@ -52,6 +52,7 @@
 |---|---|
 | **Chart Wheel** | Rendered chart wheel (Win2D / Direct2D), drawn on-screen and exportable as a high-resolution PNG. |
 | **Report** | Natural-language reading: Overview (Sun/Moon/Rising), planet-by-sign-degree-and-house paragraphs, major aspects, chart patterns (stellium, grand trine, T-square, grand cross), and elemental and modal balance. The Ascendant/Midheaven line shows their degrees and names the house system. |
+| **Worksheet** | The numbers behind the chart, uninterpreted: how the birth time became Universal Time, every position to the arc-second with latitude, declination, daily speed and house, the twelve house cusps, the Part of Fortune, and a grid of every aspect — including those to the Ascendant and Midheaven — with orb and applying/separating. |
 | **Daily** | Daily horoscope for the selected chart on any date — generated from that day's transits. See below. |
 | **Synastry** | The selected chart compared with a second person's: a written reading and a bi-wheel of the two charts. See below. |
 | **Legend** | Full-page reference — a grouped list of every glyph, colour, angle, house, and term; click any item for a fuller explanation. |
@@ -110,6 +111,7 @@ Charts can be exported in four formats:
 | **PDF** | Full reading — birth data, chart wheel image, Big Three, written report, and per-planet dignity table |
 | **JSON** | Structured chart data (planets, houses, aspects, angles, and detected patterns) |
 | **XML** | Same structured data in XML |
+| **Text — worksheet** | The Worksheet view as plain text, for pasting into notes or checking against another program |
 | **PDF / Text — daily horoscope** | The daily reading for the date shown in the Daily view, with the full list of that day's transits |
 | **PDF — synastry reading** | The synastry reading on screen, with the bi-wheel and the full list of contacts between the two charts |
 | **PNG — synastry bi-wheel** | The bi-wheel alone (1600 × 1600 px) |
@@ -126,6 +128,8 @@ Lore/
 │                    #   Aspect, HouseCusp, ZodiacSign, DignityScore, …
 ├── Services/
 │   ├── SwissEphemeris.cs      # P/Invoke wrapper around Native\sweph.dll
+│   ├── SettingsService.cs     # House system / node type, saved to settings.json
+│   ├── WorksheetService.cs    # The Worksheet view's tables and its text export
 │   ├── ChartService.cs        # Orchestrates planet + house + aspect calculation
 │   ├── BirthTimeResolver.cs   # UTC conversion using NodaTime + GeoTimeZone
 │   ├── DignityService.cs      # Traditional dignity scoring (Lilly/Dorothean)
@@ -175,6 +179,7 @@ Lore/
     ├── build-installer.ps1    # Inno Setup installer
     ├── build-icons.ps1        # Icon generation (requires ImageMagick)
     ├── build-cities.py        # Regenerate cities.json from simplemaps CSV
+    ├── build-swetest-reference.py # Regenerate the swetest comparison values for the tests
     ├── build-hospitals.bat    # Double-click pipeline: rebuild hospitals.json
     ├── build-hospitals.py     # Stage 2: merge Wikidata CSV + OpenStreetMap -> hospitals.json
     └── wikidata_hospitals.py  # Stage 1: query Wikidata -> hospitals_wikidata.csv
@@ -232,6 +237,8 @@ dotnet test tests\Lore.Tests
 
 The tests cover the parts that must stay right: birth-time resolution (daylight saving, local mean time, historical city times), planet and Ascendant positions checked against Astro-Databank's published values, the daily transit scan checked against an independent calculation, the daily-horoscope corpus and wording, synastry (the contacts found between two charts, and the corpus and wording of the reading), crash-safe saving of My Charts (including recovery from a damaged file), and hospital search. `FigureLibraryTests` checks every bundled figure against its Astro-Databank record in `tests\Lore.Tests\Reference\adb-reference.json`: each well-documented (AA/A) birth time must match, and Lore must turn it into the same instant Astro-Databank does. Run them after editing `Data\celebrities.json`.
 
+`SwetestReferenceTests` checks Lore against **swetest**, the Swiss Ephemeris's own command-line program, for fourteen moments and places chosen to be awkward: both ephemeris files and the seam between them, both hemispheres, the equator, the date line, and both polar circles. Every body's longitude, latitude, speed and declination, the Ascendant and Midheaven, and all twelve cusps under each of the four house systems must agree to a millionth of a degree. Because the two share an engine this checks that Lore asks it the right question, not the astronomy itself (the Astro-Databank comparison does that). The expected values live in `tests\Lore.Tests\Reference\swetest-reference.json`; `python scriptsuild-swetest-reference.py` regenerates them (it needs `swetest64.exe` from the full Swiss Ephemeris download).
+
 ### Step 3 — Portable Build
 
 Produces a self-contained folder that runs with no installed .NET or VC++ runtime on the target machine:
@@ -240,7 +247,7 @@ Produces a self-contained folder that runs with no installed .NET or VC++ runtim
 .\scripts\build-portable.ps1
 ```
 
-Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-1.4.1-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
+Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-1.5.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
 
 ### Step 4 — Installer
 
@@ -378,18 +385,18 @@ Editable corpus for the natural-language report. Keyed dictionaries for sign tra
 
 ---
 
-## House System
+## Calculation Settings
 
-Placidus is the default. To switch, change the `HouseSystem` constant in `Services\ChartService.cs`:
+The **Settings** button in the toolbar holds the choices astrologers disagree on. They apply to every chart, the daily horoscope and synastry, are remembered between sessions (`%LOCALAPPDATA%\Lore\settings.json`), and are named on each chart and in every export.
 
-| Letter | System |
+| Setting | Choices |
 |---|---|
-| `'P'` | Placidus *(default)* |
-| `'W'` | Whole Sign |
-| `'K'` | Koch |
-| `'E'` | Equal |
+| **House system** | Placidus *(default)*, Whole Sign, Equal, Koch |
+| **North Node** | Mean node *(default)*, True node |
 
-Any letter accepted by the Swiss Ephemeris `swe_houses` function can be used.
+Changing the house system moves no planet and neither angle — only which house each planet falls in, and so the house part of the dignity score. Whether a chart is a day or night chart is taken from the Sun's position above or below the horizon, so it is the same under every system.
+
+Inside the polar circles Placidus and Koch cannot be calculated; the chart then shows Porphyry houses and says so.
 
 ---
 
@@ -436,7 +443,13 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 1.4.1 (current)
+### 1.5.0 (current)
+- **Calculation settings** — a new **Settings** button chooses the house system (Placidus, Whole Sign, Equal, or Koch) and the North Node (mean or true). The choice applies everywhere, is remembered, and is named on each chart and in the PDF, JSON and XML exports.
+- **Worksheet** — a new **Worksheet** view shows the numbers behind the chart with nothing interpreted: the time conversion (clock time, the offset applied and where it came from, Universal Time), every position to the arc-second with latitude, declination, daily speed and house, the house cusps, the Part of Fortune (reversed by night), and an aspect grid that includes the Ascendant and Midheaven. Exports as plain text.
+- **Checked against swetest** — the test suite (now 107 tests) compares Lore with the Swiss Ephemeris's own test program for fourteen awkward moments and places, including both polar circles, under all four house systems.
+- **Day and night charts** are now decided by whether the Sun is above the horizon, not by its house number, so the dignity score's sect is right under every house system.
+
+### 1.4.1
 - **Licence** — Lore is now explicitly released under the AGPL-3.0, the licence of the Swiss Ephemeris it is built on (`LICENSE`).
 - **Charts with no birth time are shown honestly** — the wheel no longer draws an Ascendant, Midheaven or houses from a noon guess, the header and report leave out the Rising sign and house placements, and no dignity score is given (it depends on the houses).
 - **Set the UTC offset yourself** — the Add / Edit Chart dialog has a new tick-box for births where the time-zone database is wrong or the clock time is ambiguous. Previously the offset box was overwritten whenever a zone was found.

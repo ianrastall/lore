@@ -26,6 +26,14 @@ public sealed partial class ChartViewModel : ObservableObject
 
     public string Title => Chart is null ? "" : Chart.Celebrity.Name;
 
+    // The numbers behind the chart, for the Worksheet view.
+    [ObservableProperty]
+    public partial Worksheet? Worksheet { get; set; }
+
+    public bool WorksheetHasCusps => Worksheet?.HasCusps == true;
+
+    public string WorksheetTitle => Chart is null ? "" : $"{Chart.Celebrity.Name} — Worksheet";
+
     public string SubTitle => Chart is null ? "" :
         $"{Chart.Celebrity.BirthDate}  ·  {Chart.Celebrity.BirthPlace}" +
         (Chart.Celebrity.BirthTimeKnown ? $"  ·  {Chart.Celebrity.BirthTime}" : "  ·  time unknown");
@@ -50,10 +58,10 @@ public sealed partial class ChartViewModel : ObservableObject
 
     // Shared with the PDF export so both print the same line.
     public static string FormatAngles(NatalChart chart) => !chart.Timed
-        ? "Birth time unknown — planets are placed for noon; no Ascendant, Midheaven or houses"
+        ? $"Birth time unknown — planets are placed for noon; no Ascendant, Midheaven or houses   ·   {chart.Settings.Node.Name()}"
         : $"Ascendant {ZodiacSignExtensions.FromLongitude(chart.Ascendant).Name()} {ZodiacSignExtensions.FormatDegreeInSign(chart.Ascendant)}" +
           $"   ·   Midheaven {ZodiacSignExtensions.FromLongitude(chart.Midheaven).Name()} {ZodiacSignExtensions.FormatDegreeInSign(chart.Midheaven)}" +
-          $"   ·   {chart.HouseSystemLabel}";
+          $"   ·   {chart.HouseSystemLabel}   ·   {chart.Settings.Node.Name()}";
 
     // Traditional dignity score + verdict, shown as a coloured pill.
     private ChartScore? _score;
@@ -82,6 +90,8 @@ public sealed partial class ChartViewModel : ObservableObject
             ? _interpreter.Interpret(value)
             : [];
         OnPropertyChanged(nameof(Title));
+        OnPropertyChanged(nameof(WorksheetTitle));
+        Worksheet = value is null ? null : WorksheetService.Build(value);
         OnPropertyChanged(nameof(SubTitle));
         OnPropertyChanged(nameof(BigThreeText));
         OnPropertyChanged(nameof(AnglesText));

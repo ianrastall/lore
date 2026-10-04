@@ -217,6 +217,7 @@ public static class ExportService
             Longitude = c.Longitude,
             UtcOffsetHours = c.UtcOffsetHours,
             HouseSystem = chart.HouseSystemLabel,
+            NodeType = chart.Settings.Node.Name(),
             Ascendant = Round(chart.Ascendant),
             AscendantSign = ZodiacSignExtensions.FromLongitude(chart.Ascendant).Name(),
             Midheaven = Round(chart.Midheaven),
@@ -276,6 +277,7 @@ public sealed class ChartExport
     public double Longitude { get; set; }
     public double UtcOffsetHours { get; set; }
     public string HouseSystem { get; set; } = "";
+    public string NodeType { get; set; } = "";
     public double Ascendant { get; set; }
     public string AscendantSign { get; set; } = "";
     public double Midheaven { get; set; }

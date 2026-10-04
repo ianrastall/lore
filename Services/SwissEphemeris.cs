@@ -21,12 +21,14 @@ internal static partial class SwissEphemeris
     public const int SE_NEPTUNE    = 8;
     public const int SE_PLUTO      = 9;
     public const int SE_MEAN_NODE  = 10; // North Node (mean)
+    public const int SE_TRUE_NODE  = 11; // North Node (true / osculating)
     public const int SE_MEAN_APOG  = 12; // Black Moon Lilith (mean lunar apogee)
     public const int SE_CHIRON     = 15;
 
     // Calculation flags (iflag)
     public const int SEFLG_SWIEPH = 2;   // use Swiss Ephemeris data files
     public const int SEFLG_SPEED  = 256; // include speed in result array
+    public const int SEFLG_EQUATORIAL = 2048; // right ascension / declination instead of longitude / latitude
 
     // ascmc array indices
     public const int SE_ASC    = 0;

@@ -16,21 +16,19 @@ public sealed class ChartService
         (Planet.Uranus,    SwissEphemeris.SE_URANUS),
         (Planet.Neptune,   SwissEphemeris.SE_NEPTUNE),
         (Planet.Pluto,     SwissEphemeris.SE_PLUTO),
-        (Planet.NorthNode, SwissEphemeris.SE_MEAN_NODE),
+        (Planet.NorthNode, SwissEphemeris.SE_MEAN_NODE), // or the true node: see SweBody
         (Planet.Chiron,    SwissEphemeris.SE_CHIRON),
         (Planet.Lilith,    SwissEphemeris.SE_MEAN_APOG),
     ];
 
-    private const int HouseSystem = 'P'; // Placidus
+    // The house system and node type every calculation uses. Replaced as a whole when
+    // the user changes a setting; each calculation reads it once.
+    public ChartSettings Settings { get; set; } = ChartSettings.Default;
 
-    private static string HouseSystemName => (char)HouseSystem switch
-    {
-        'P' => "Placidus",
-        'K' => "Koch",
-        'W' => "Whole Sign",
-        'E' => "Equal",
-        var other => $"'{other}'",
-    };
+    private static int SweBody(Planet planet, NodeType node) =>
+        planet == Planet.NorthNode && node == NodeType.True
+            ? SwissEphemeris.SE_TRUE_NODE
+            : PlanetMap[(int)planet].sweBody;
 
     // Swiss Ephemeris (sweph.dll) keeps global internal state and is NOT thread-safe:
     // swe_calc_ut / swe_houses share buffers and the ephemeris-file cache. This app hits
@@ -48,6 +46,7 @@ public sealed class ChartService
 
     public NatalChart Calculate(Celebrity celebrity)
     {
+        var settings = Settings;
         var utc = BirthTimeResolver.ToUtc(celebrity);
         double jd = SwissEphemeris.DateTimeToJulianDay(utc);
 
@@ -57,8 +56,8 @@ public sealed class ChartService
         bool substituted;
         lock (SweLock)
         {
-            planets = CalculatePlanets(jd);
-            (houses, asc, mc, substituted) = CalculateHouses(jd, celebrity.Latitude, celebrity.Longitude);
+            planets = CalculatePlanets(jd, settings.Node);
+            (houses, asc, mc, substituted) = CalculateHouses(jd, celebrity.Latitude, celebrity.Longitude, settings.Houses);
         }
 
         // Aspect detection is pure managed arithmetic on the results above — no native
@@ -73,9 +72,10 @@ public sealed class ChartService
             Aspects = aspects,
             Ascendant = asc,
             Midheaven = mc,
+            Settings = settings,
             HouseSystemLabel = substituted
-                ? $"Porphyry houses ({HouseSystemName} cannot be calculated at this latitude)"
-                : $"{HouseSystemName} houses",
+                ? $"Porphyry houses ({settings.Houses.Name()} cannot be calculated at this latitude)"
+                : $"{settings.Houses.Name()} houses",
         };
     }
 
@@ -83,9 +83,10 @@ public sealed class ChartService
     // bodies, flags and lock as a natal calculation.
     public IReadOnlyList<PlanetPosition> CalculateSky(double jd)
     {
+        var node = Settings.Node;
         lock (SweLock)
         {
-            return CalculatePlanets(jd);
+            return CalculatePlanets(jd, node);
         }
     }
 
@@ -94,7 +95,7 @@ public sealed class ChartService
     // calculation skips the body).
     public PlanetPosition? CalculateBody(double jd, Planet planet)
     {
-        int sweBody = PlanetMap[(int)planet].sweBody;
+        int sweBody = SweBody(planet, Settings.Node);
         var xx = new double[6];
         int flags = SwissEphemeris.SEFLG_SWIEPH | SwissEphemeris.SEFLG_SPEED;
 
@@ -113,23 +114,29 @@ public sealed class ChartService
         };
     }
 
-    private static List<PlanetPosition> CalculatePlanets(double jd)
+    private static List<PlanetPosition> CalculatePlanets(double jd, NodeType node)
     {
         var result = new List<PlanetPosition>(PlanetMap.Length);
         var xx = new double[6];
+        var eq = new double[6];
         int flags = SwissEphemeris.SEFLG_SWIEPH | SwissEphemeris.SEFLG_SPEED;
 
-        foreach (var (planet, sweBody) in PlanetMap)
+        foreach (var (planet, _) in PlanetMap)
         {
-            int ret = SwissEphemeris.CalcUt(jd, sweBody, flags, xx, nint.Zero);
+            int ret = SwissEphemeris.CalcUt(jd, SweBody(planet, node), flags, xx, nint.Zero);
             if (ret < 0)
                 continue; // skip bodies that fail (e.g., Chiron outside data range)
+
+            // A second pass in equatorial coordinates, for the declination only.
+            double declination = SwissEphemeris.CalcUt(jd, SweBody(planet, node),
+                flags | SwissEphemeris.SEFLG_EQUATORIAL, eq, nint.Zero) < 0 ? 0 : eq[1];
 
             result.Add(new PlanetPosition
             {
                 Planet = planet,
                 Longitude = xx[0],
                 Latitude = xx[1],
+                Declination = declination,
                 SpeedLongitude = xx[3],
             });
         }
@@ -140,12 +147,12 @@ public sealed class ChartService
     // `substituted` is set when the Swiss Ephemeris could not calculate the requested
     // system at this latitude and returned Porphyry cusps in its place.
     private static (List<HouseCusp> houses, double asc, double mc, bool substituted) CalculateHouses(
-        double jd, double lat, double lon)
+        double jd, double lat, double lon, HouseSystem system)
     {
         var cusps = new double[13];
         var ascmc = new double[10];
 
-        bool substituted = SwissEphemeris.Houses(jd, lat, lon, HouseSystem, cusps, ascmc) < 0;
+        bool substituted = SwissEphemeris.Houses(jd, lat, lon, system.SweCode(), cusps, ascmc) < 0;
 
         var houses = Enumerable.Range(1, 12)
             .Select(i => new HouseCusp { House = i, Longitude = cusps[i] })

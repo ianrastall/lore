@@ -13,6 +13,15 @@ public sealed class NatalChart
     // e.g. "Placidus houses" — or a note that another system had to stand in for it.
     public string HouseSystemLabel { get; init; } = "Placidus houses";
 
+    // The settings this chart was calculated with.
+    public ChartSettings Settings { get; init; } = ChartSettings.Default;
+
+    // True when the Sun is above the horizon. The Sun sits on the ecliptic, so it is up
+    // exactly when its longitude lies in the half running from the Descendant over the
+    // Midheaven to the Ascendant — whatever the house system. Meaningless if not Timed.
+    public bool IsDayChart =>
+        GetPlanet(Planet.Sun) is { } sun && (((sun.Longitude - Ascendant) % 360) + 360) % 360 >= 180;
+
     // Without a birth time the planets are placed for noon and the Ascendant, Midheaven
     // and houses are unknown; nothing should be read from them.
     public bool Timed => Celebrity.BirthTimeKnown;
