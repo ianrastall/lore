@@ -21,6 +21,34 @@ public sealed class ChartInterpreter
         public Dictionary<string, string> AspectNotes { get; init; } = new();
         public Dictionary<string, string> Elements { get; init; } = new();
         public Dictionary<string, string> Modalities { get; init; } = new();
+
+        // Overview paragraphs keyed by sign; SunMoonBlend is keyed "SunElement|MoonElement".
+        public Dictionary<string, string> SunSigns { get; init; } = new();
+        public Dictionary<string, string> MoonSigns { get; init; } = new();
+        public Dictionary<string, string> RisingSigns { get; init; } = new();
+        public Dictionary<string, string> SunMoonBlend { get; init; } = new();
+
+        // The sentence after each Planet-in-Sign line, keyed "Planet|House" (e.g. "Venus|7").
+        public Dictionary<string, string> PlanetInHouse { get; init; } = new();
+        public Dictionary<string, string> Retrogrades { get; init; } = new();
+
+        // Bespoke lines for the major aspects keyed "Point|Tone|Point" with the two points
+        // in standard order (e.g. "Moon|Tension|Saturn"), and the blocks for the rest.
+        public Dictionary<string, string> Aspects { get; init; } = new();
+        public Dictionary<string, string> AngleThemes { get; init; } = new();
+        public Dictionary<string, string> AspectToneLinks { get; init; } = new();
+
+        public Dictionary<string, string> ElementStrong { get; init; } = new();
+        public Dictionary<string, string> ElementWeak { get; init; } = new();
+        public Dictionary<string, string> ModalityStrong { get; init; } = new();
+        public Dictionary<string, string> ModalityWeak { get; init; } = new();
+        public Dictionary<string, string> BalanceNotes { get; init; } = new();
+
+        public Dictionary<string, string> StelliumSigns { get; init; } = new();
+        public Dictionary<string, string> GrandTrines { get; init; } = new();
+        public Dictionary<string, string> TSquares { get; init; } = new();
+        public Dictionary<string, string> GrandCrosses { get; init; } = new();
+        public Dictionary<string, string> ApexPoints { get; init; } = new();
     }
 
     private static readonly JsonSerializerOptions JsonOpts = new() { PropertyNameCaseInsensitive = true };
@@ -67,16 +95,24 @@ public sealed class ChartInterpreter
         var risingSign = ZodiacSignExtensions.FromLongitude(chart.Ascendant);
 
         if (sun is not null)
-            paras.Add(Frame("Sun", name, sun.Sign));
+            paras.Add(Frame("Sun", _c.SunSigns, name, sun.Sign));
         bool moonUnsure = !chart.Timed && moonSigns is { Count: > 1 };
         if (moonUnsure)
             paras.Add($"The Moon changed sign on the day {name} was born — it was in " +
                       $"{string.Join(" or ", moonSigns!.Select(s => s.Name()))} depending on the hour — so without a " +
                       "birth time the Moon sign can't be given. The Moon line under The Planets below is for noon.");
         else if (moon is not null)
-            paras.Add(Frame("Moon", name, moon.Sign));
+        {
+            paras.Add(Frame("Moon", _c.MoonSigns, name, moon.Sign));
+            // How the two fit together, by element.
+            if (sun is not null)
+            {
+                string blend = Lookup(_c.SunMoonBlend, $"{sun.Sign.GetElement()}|{moon.Sign.GetElement()}", "");
+                if (blend.Length > 0) paras.Add(blend);
+            }
+        }
         if (chart.Timed)
-            paras.Add(Frame("Rising", name, risingSign));
+            paras.Add(Frame("Rising", _c.RisingSigns, name, risingSign));
         else
             paras.Add("Note: the birth time is unknown, so the planets are placed for noon. The Rising " +
                       "sign and the houses can't be known without a time and are left out, and the Moon " +
@@ -92,23 +128,26 @@ public sealed class ChartInterpreter
         {
             // Houses need a birth time; without one the line stops at the sign.
             int house = chart.Timed ? chart.GetHouseForLongitude(p.Longitude) : 0;
-            string colouring = chart.Timed
-                ? $", colouring {Lookup(_c.HouseAreas, house.ToString(), "this area of life")}."
-                : ".";
-            string retro = p.IsRetrograde ? " Retrograde here, its lessons turn inward before they express outward." : "";
+            string inHouse = chart.Timed
+                ? " " + Lookup(_c.PlanetInHouse, $"{p.PlanetName}|{house}",
+                    $"This colours {Lookup(_c.HouseAreas, house.ToString(), "this area of life")}.")
+                : "";
+            string retro = p.IsRetrograde
+                ? " " + Lookup(_c.Retrogrades, p.PlanetName, "Retrograde here, its lessons turn inward before they express outward.")
+                : "";
 
             // Prefer a bespoke Planet-in-Sign line; fall back to the templated blend.
             string core;
             if (_c.PlanetInSign.TryGetValue($"{p.PlanetName}|{p.Sign.Name()}", out var bespoke)
                 && !string.IsNullOrWhiteSpace(bespoke))
             {
-                core = $"{bespoke.TrimEnd('.')}{colouring}";
+                core = $"{bespoke.TrimEnd('.')}.{inHouse}";
             }
             else
             {
                 string theme = Lookup(_c.PlanetThemes, p.PlanetName, "this energy");
                 string style = Lookup(_c.SignStyles, p.Sign.Name(), "in its own way");
-                core = $"{theme} expressed {style}{colouring}";
+                core = $"{Capitalise(theme)} expressed {style}.{inHouse}";
             }
 
             string pos = ZodiacSignExtensions.FormatDegreeInSign(p.Longitude);
@@ -129,22 +168,50 @@ public sealed class ChartInterpreter
 
         // Planet to planet, and planet to the Ascendant or Midheaven, closest first.
         string SignOf(NatalPoint p) => ZodiacSignExtensions.FromLongitude(chart.LongitudeOf(p) ?? 0).Name();
-        var all = chart.Aspects.Select(a => (First: a.PlanetA.Name(), Second: a.PlanetB.Name(), a.Type, a.Orb, a.OutOfSign,
-                Signs: $"{SignOf(NatalPoint.Of(a.PlanetA))} and {SignOf(NatalPoint.Of(a.PlanetB))}"))
-            .Concat(chart.AngleAspects.Select(a => (First: a.Planet.Name(), Second: "the " + a.Angle.Name, a.Type, a.Orb, a.OutOfSign,
-                Signs: $"{SignOf(NatalPoint.Of(a.Planet))} and {SignOf(a.Angle)}")));
+        var all = chart.Aspects.Select(a => (A: NatalPoint.Of(a.PlanetA), B: NatalPoint.Of(a.PlanetB), a.Type, a.Orb, a.OutOfSign))
+            .Concat(chart.AngleAspects.Select(a => (A: NatalPoint.Of(a.Planet), B: a.Angle, a.Type, a.Orb, a.OutOfSign)));
         foreach (var a in all.OrderBy(a => a.Orb))
         {
             string dynamic = Lookup(_c.AspectDynamics, a.Type.ToString(), "connects with");
-            string note = Lookup(_c.AspectNotes, a.Type.ToString(), "");
-            string line = $"{a.First} {dynamic} {a.Second} ({a.Type.Name()} {a.Type.Symbol()}, orb {a.Orb:F1}°).";
-            if (!string.IsNullOrEmpty(note)) line += " " + note;
+            string line = $"{Named(a.A)} {dynamic} {Named(a.B)} ({a.Type.Name()} {a.Type.Symbol()}, orb {a.Orb:F1}°).";
+            string text = AspectText(a.A, a.B, a.Type);
+            if (text.Length > 0) line += " " + text;
             if (a.OutOfSign)
-                line += $" Out of sign: the two are in {a.Signs}, which are not in this aspect to each other, so tradition reads it as weaker.";
+                line += $" Out of sign: the two are in {SignOf(a.A)} and {SignOf(a.B)}, which are not in this aspect to each other, so tradition reads it as weaker.";
             paras.Add(line);
         }
         return new ReportSection { Heading = "Major Aspects", Paragraphs = paras };
     }
+
+    // What an aspect means for this particular pair. A major aspect gets the bespoke line
+    // for the two points and its tone if the corpus has one; failing that, a plainer
+    // sentence assembled from the building blocks. Minor aspects, and anything the blocks
+    // can't cover, get the general note for that kind of aspect.
+    private string AspectText(NatalPoint a, NatalPoint b, AspectType type)
+    {
+        string note = Lookup(_c.AspectNotes, type.ToString(), "");
+        if (!type.IsMajor()) return note;
+
+        // Corpus keys name the two points in standard order.
+        var (lo, hi) = Order(b) < Order(a) ? (b, a) : (a, b);
+        if (_c.Aspects.TryGetValue($"{lo.Name}|{type.Tone()}|{hi.Name}", out var bespoke) && !string.IsNullOrWhiteSpace(bespoke))
+            return bespoke;
+
+        string first = Theme(a), second = Theme(b), link = Lookup(_c.AspectToneLinks, type.Tone().ToString(), "");
+        if (first.Length == 0 || second.Length == 0 || link.Length == 0) return note;
+        return $"{Capitalise(first)} {link} {second}. {note}".TrimEnd();
+    }
+
+    private string Theme(NatalPoint p) =>
+        Lookup(p.IsAngle ? _c.AngleThemes : _c.PlanetThemes, p.Name, "");
+
+    // Sun, Moon … Lilith, then the Ascendant and Midheaven.
+    private static int Order(NatalPoint p) => p.Kind switch
+    {
+        NatalPointKind.Ascendant => 13,
+        NatalPointKind.Midheaven => 14,
+        _ => (int)p.Body
+    };
 
     private ReportSection Patterns(NatalChart chart)
     {
@@ -165,27 +232,32 @@ public sealed class ChartInterpreter
             {
                 case PatternType.Stellium:
                     paras.Add($"Stellium in {p.Sign!.Value.Name()} — {p.Points.Count} bodies " +
-                              $"({names}) gather in one sign, concentrating its themes into a dominant focus of the chart.");
+                              $"({names}) gather in one sign, concentrating its themes into a dominant focus of the chart." +
+                              More(_c.StelliumSigns, p.Sign.Value.Name()));
                     break;
                 case PatternType.GrandTrine:
                     paras.Add($"Grand Trine in {p.Element} — {names} form a closed triangle of trines, " +
-                              "an easy, self-reinforcing circuit of talent that flows so naturally it can be taken for granted.");
+                              "an easy, self-reinforcing circuit of talent that flows so naturally it can be taken for granted." +
+                              More(_c.GrandTrines, p.Element?.ToString()));
                     break;
                 case PatternType.TSquare:
                     var ends = p.Points.Where(x => x != p.Apex).Select(Named);
                     paras.Add($"T-Square in {p.Modality} signs — {Named(p.Apex!.Value)} stands at the apex, " +
                               $"squaring the opposition between {string.Join(" and ", ends)}. " +
-                              "A focal point of dynamic tension that pushes hard toward action and achievement.");
+                              "A focal point of dynamic tension that pushes hard toward action and achievement." +
+                              More(_c.TSquares, p.Modality?.ToString()) + More(_c.ApexPoints, p.Apex.Value.Name));
                     break;
                 case PatternType.Yod:
                     var feet = p.Points.Where(x => x != p.Apex).Select(Named);
                     paras.Add($"Yod — {string.Join(" and ", feet)}, in sextile, both stand quincunx to {Named(p.Apex!.Value)}. " +
                               "Sometimes called the Finger of God: a point of persistent adjustment, where two compatible " +
-                              "drives keep pressing on a third that fits neither.");
+                              "drives keep pressing on a third that fits neither." +
+                              More(_c.ApexPoints, p.Apex.Value.Name));
                     break;
                 case PatternType.GrandCross:
                     paras.Add($"Grand Cross in {p.Modality} signs — {names} form two oppositions locked by four squares, " +
-                              "a demanding but powerful figure that seeks balance on all four fronts.");
+                              "a demanding but powerful figure that seeks balance on all four fronts." +
+                              More(_c.GrandCrosses, p.Modality?.ToString()));
                     break;
             }
         }
@@ -217,23 +289,44 @@ public sealed class ChartInterpreter
         foreach (var p in chart.Planets)
             counts[p.Sign.GetElement()]++;
 
-        int total = counts.Values.Sum();
-        var paras = new List<string>();
-        if (total > 0)
-        {
-            var dominant = counts.OrderByDescending(kv => kv.Value).First();
-            var lacking = counts.OrderBy(kv => kv.Value).First();
-
-            string domText = Lookup(_c.Elements, dominant.Key.ToString(), dominant.Key.ToString());
-            paras.Add($"The chart leans toward {dominant.Key} ({dominant.Value} of {total} bodies) — {domText}.");
-
-            if (lacking.Value == 0)
-                paras.Add($"There is little or no {lacking.Key}, which may be an area that needs conscious cultivation.");
-
+        var paras = Spread(counts, "elementsEven", _c.Elements, _c.ElementStrong, _c.ElementWeak,
+            e => e.ToString(),
+            e => $"There is little or no {e}, which may be an area that needs conscious cultivation.");
+        if (paras.Count > 0)
             paras.Add($"Element tally — Fire: {counts[Element.Fire]}, Earth: {counts[Element.Earth]}, " +
                       $"Air: {counts[Element.Air]}, Water: {counts[Element.Water]}.");
-        }
         return new ReportSection { Heading = "Elemental Balance", Paragraphs = paras };
+    }
+
+    // The paragraphs for one tally (elements or modalities): what the chart leans toward —
+    // more than one where they tie — then every one that is empty. An even spread gets a
+    // single note instead.
+    private List<string> Spread<T>(Dictionary<T, int> counts, string evenNote,
+        Dictionary<string, string> labels, Dictionary<string, string> strong, Dictionary<string, string> weak,
+        Func<T, string> labelFallback, Func<T, string> weakFallback) where T : notnull
+    {
+        var paras = new List<string>();
+        int total = counts.Values.Sum();
+        if (total == 0) return paras;
+
+        int max = counts.Values.Max(), min = counts.Values.Min();
+        string even = Lookup(_c.BalanceNotes, evenNote, "");
+        if (max - min <= 1 && even.Length > 0)
+        {
+            paras.Add(even);
+            return paras;
+        }
+
+        var top = counts.Where(kv => kv.Value == max).Select(kv => kv.Key).ToList();
+        foreach (var key in top)
+        {
+            string lead = top.Count == 1 ? "The chart leans toward" : paras.Count == 0 ? "The chart leans equally toward" : "And toward";
+            paras.Add($"{lead} {key} ({max} of {total} bodies) — {Lookup(labels, key.ToString()!, labelFallback(key))}." +
+                      More(strong, key.ToString()));
+        }
+        foreach (var key in counts.Where(kv => kv.Value == 0).Select(kv => kv.Key))
+            paras.Add(Lookup(weak, key.ToString()!, weakFallback(key)));
+        return paras;
     }
 
     private ReportSection ModalBalance(NatalChart chart)
@@ -245,22 +338,12 @@ public sealed class ChartInterpreter
         foreach (var p in chart.Planets)
             counts[p.Sign.GetModality()]++;
 
-        int total = counts.Values.Sum();
-        var paras = new List<string>();
-        if (total > 0)
-        {
-            var dominant = counts.OrderByDescending(kv => kv.Value).First();
-            var lacking = counts.OrderBy(kv => kv.Value).First();
-
-            string domText = Lookup(_c.Modalities, dominant.Key.ToString(), ModalityFallback(dominant.Key));
-            paras.Add($"The chart leans toward {dominant.Key} ({dominant.Value} of {total} bodies) — {domText}.");
-
-            if (lacking.Value == 0)
-                paras.Add($"There is little or no {lacking.Key} energy, which may be an area that needs conscious cultivation.");
-
+        var paras = Spread(counts, "modalitiesEven", _c.Modalities, _c.ModalityStrong, _c.ModalityWeak,
+            ModalityFallback,
+            m => $"There is little or no {m} energy, which may be an area that needs conscious cultivation.");
+        if (paras.Count > 0)
             paras.Add($"Modality tally — Cardinal: {counts[Modality.Cardinal]}, " +
                       $"Fixed: {counts[Modality.Fixed]}, Mutable: {counts[Modality.Mutable]}.");
-        }
         return new ReportSection { Heading = "Modal Balance", Paragraphs = paras };
     }
 
@@ -271,16 +354,28 @@ public sealed class ChartInterpreter
         _ => "an adaptable temperament — flexible, versatile, and at ease with change"
     };
 
-    private string Frame(string role, string name, ZodiacSign sign)
+    // The authored paragraph for this sign in this role if the corpus has one; otherwise
+    // the one-line framing of the sign's traits.
+    private string Frame(string role, Dictionary<string, string> paragraphs, string name, ZodiacSign sign)
     {
-        string trait = Lookup(_c.SignTraits, sign.Name(), "distinctive in their own way");
-        string framing = Lookup(_c.RoleFraming, role, "{name} carries {trait}.");
-        return framing.Replace("{name}", name).Replace("{trait}", trait)
-               + $" ({role} in {sign.Name()}.)";
+        string text = Lookup(paragraphs, sign.Name(), "");
+        if (text.Length == 0)
+        {
+            string trait = Lookup(_c.SignTraits, sign.Name(), "distinctive in their own way");
+            text = Lookup(_c.RoleFraming, role, "{name} carries {trait}.").Replace("{trait}", trait);
+        }
+        return text.Replace("{name}", name) + $" ({role} in {sign.Name()}.)";
     }
 
     private static string Lookup(Dictionary<string, string> map, string key, string fallback) =>
         map.TryGetValue(key, out var v) && !string.IsNullOrWhiteSpace(v) ? v : fallback;
+
+    // A further sentence from the corpus, with its leading space, or nothing.
+    private static string More(Dictionary<string, string> map, string? key) =>
+        key is not null && map.TryGetValue(key, out var v) && !string.IsNullOrWhiteSpace(v) ? " " + v : "";
+
+    private static string Capitalise(string s) =>
+        s.Length == 0 ? s : char.ToUpperInvariant(s[0]) + s[1..];
 
     private static string FirstName(string full)
     {

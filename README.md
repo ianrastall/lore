@@ -386,7 +386,16 @@ The orbs, the number of contacts shown, and the ranking weights are constants in
 
 ### `Data\interpretations.json`
 
-Editable corpus for the natural-language report. Keyed dictionaries for sign traits, role framing, planet themes, sign styles, bespoke planet-in-sign lines (`"Planet|Sign"` keys), house area descriptions, aspect dynamics, and elemental descriptions. Edit this file to customise the generated text without touching C# code.
+Editable corpus for the natural-language report. Edit it to change what the Report view says without touching C# code.
+
+- `sunSigns`, `moonSigns`, `risingSigns` — the Overview paragraphs, one per sign, with `{name}` for the first name. `sunMoonBlend`, keyed `SunElement|MoonElement`, says how the two fit together.
+- `planetInSign` — 156 lines keyed `Planet|Sign`, and `planetInHouse` — 156 sentences keyed `Planet|House` (`"Venus|7"`), which follow them when the birth time is known. `retrogrades` adds a line for a planet that was retrograde at birth.
+- `aspects` — 307 bespoke lines keyed `Point|Tone|Point`, e.g. `"Moon|Tension|Saturn"`, with *Tone* as in `daily.json` and the two points in the app's standard order, as in `synastry.json`. Every pair among the thirteen bodies, and each body with the Ascendant and Midheaven. `aspectDynamics` supplies the opening words ("flows easily with"); `aspectNotes` is the general line used for the minor aspects.
+- `stelliumSigns`, `grandTrines`, `tSquares`, `grandCrosses`, `apexPoints` — what each chart pattern means in that sign, element or mode, and with that planet at its apex.
+- `elements`, `elementStrong`, `elementWeak`, `modalities`, `modalityStrong`, `modalityWeak`, `balanceNotes` — the two balance sections.
+- `signTraits`, `roleFraming`, `planetThemes`, `signStyles`, `houseAreas`, `angleThemes`, `aspectToneLinks` — building blocks, used to assemble a plainer sentence wherever a bespoke entry is missing or empty.
+
+Names must match the app's display names (`North Node`, not `NorthNode`).
 
 ---
 
@@ -449,7 +458,10 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 2.0.0 (current)
+### 2.1.0 (in progress)
+- **A fuller Report** — the written report on a birth chart no longer reads as one sentence pattern repeated. The Overview gives a full paragraph each to the Sun, Moon and Rising signs, and a new one on how the Sun and Moon fit together. Each planet's line now says what it means in its house, rather than ending with the same phrase every time. Every major aspect has text written for that particular pair of planets — 307 lines in all — in place of one stock sentence per kind of aspect. Chart patterns say what the pattern means in that sign, element or mode, and with that planet at its apex. The element and mode sections say more, name both when two tie, and mention every element that is missing rather than only the first.
+
+### 2.0.0
 A round of fixes from two outside code reviews, and the start of some interface work.
 - **Timing: solar returns and progressions** — a new **Timing** view carries the birth chart forward to any date. It casts the **solar return** in force on that date (the chart for the moment the Sun came back to its place at birth, for the birthplace), draws its wheel, and lists its angles and the planets by return house. It also **progresses** the chart a day for each year of life: the progressed Sun, Moon, Mercury, Venus and Mars, the Midheaven by solar arc with the Ascendant that goes with it, the progressed lunar phase, and every progressed point within a degree of an aspect to the birth chart. Saves as plain text.
 - **Picks up where you left off** — Lore reopens on the chart and view you last had open.
