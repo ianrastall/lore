@@ -32,6 +32,48 @@
                 </ItemsControl>
             </StackPanel>
 
+            <!-- What if the birth time is off? -->
+            <StackPanel Spacing="6" Visibility="{x:Bind VisIf(ViewModel.HasChart), Mode=OneWay}">
+                <TextBlock Text="{x:Bind ViewModel.SensitivityHeading, Mode=OneWay}"
+                           Style="{StaticResource SubtitleTextBlockStyle}"
+                           Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
+                <StackPanel Orientation="Horizontal" Spacing="10"
+                            Visibility="{x:Bind VisIf(ViewModel.CanTestTime), Mode=OneWay}">
+                    <NumberBox x:Name="MarginBox" Width="150" VerticalAlignment="Center"
+                               SpinButtonPlacementMode="Inline" SmallChange="5" LargeChange="15"
+                               Minimum="0" Maximum="180"
+                               Value="{x:Bind ViewModel.UncertaintyMinutes, Mode=TwoWay}"/>
+                    <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" MaxWidth="620"
+                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                               Text="minutes either way. Recorded times are often rounded; set a margin to see what would change."/>
+                </StackPanel>
+                <StackPanel Spacing="4" Visibility="{x:Bind VisIf(ViewModel.HasSensitivity), Mode=OneWay}">
+                    <TextBlock Text="{x:Bind ViewModel.Sensitivity.Summary, Mode=OneWay, FallbackValue=''}"
+                               FontWeight="SemiBold" Margin="0,4,0,0"/>
+                    <TextBlock Text="{x:Bind ViewModel.Sensitivity.Window, Mode=OneWay, FallbackValue=''}"
+                               FontSize="12" Opacity="0.7"/>
+                    <TextBlock Text="Depends on the time" FontSize="12" Opacity="0.7" Margin="0,8,0,0"
+                               Visibility="{x:Bind VisIf(ViewModel.SensitivityHasChanges), Mode=OneWay}"/>
+                    <ItemsControl ItemsSource="{x:Bind ViewModel.Sensitivity.Changes, Mode=OneWay, FallbackValue={x:Null}}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="x:String">
+                                <TextBlock Text="{x:Bind}" TextWrapping="Wrap" MaxWidth="790"
+                                           HorizontalAlignment="Left" Padding="0,2" Foreground="#E8B450"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <TextBlock Text="Holds regardless" FontSize="12" Opacity="0.7" Margin="0,8,0,0"/>
+                    <ItemsControl ItemsSource="{x:Bind ViewModel.Sensitivity.Holds, Mode=OneWay, FallbackValue={x:Null}}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="x:String">
+                                <TextBlock Text="{x:Bind}" TextWrapping="Wrap" MaxWidth="790"
+                                           HorizontalAlignment="Left" Padding="0,2"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </StackPanel>
+
             <!-- Positions -->
             <StackPanel Spacing="6">
                 <TextBlock Text="Positions"

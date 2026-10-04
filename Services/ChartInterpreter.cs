@@ -40,11 +40,14 @@ public sealed class ChartInterpreter
         }
     }
 
-    public IReadOnlyList<ReportSection> Interpret(NatalChart chart)
+    // `moonSigns`: for a chart with no birth time, the signs the Moon passed through
+    // that day (see TimeSensitivityService.AnalyseDay). More than one means the Moon's
+    // sign is not known, and the report says so rather than reading the noon guess.
+    public IReadOnlyList<ReportSection> Interpret(NatalChart chart, IReadOnlyList<ZodiacSign>? moonSigns = null)
     {
         var sections = new List<ReportSection>
         {
-            Overview(chart),
+            Overview(chart, moonSigns),
             Planets(chart),
             Aspects(chart),
             Patterns(chart),
@@ -54,7 +57,7 @@ public sealed class ChartInterpreter
         return sections;
     }
 
-    private ReportSection Overview(NatalChart chart)
+    private ReportSection Overview(NatalChart chart, IReadOnlyList<ZodiacSign>? moonSigns)
     {
         string name = FirstName(chart.Celebrity.Name);
         var paras = new List<string>();
@@ -65,7 +68,12 @@ public sealed class ChartInterpreter
 
         if (sun is not null)
             paras.Add(Frame("Sun", name, sun.Sign));
-        if (moon is not null)
+        bool moonUnsure = !chart.Timed && moonSigns is { Count: > 1 };
+        if (moonUnsure)
+            paras.Add($"The Moon changed sign on the day {name} was born — it was in " +
+                      $"{string.Join(" or ", moonSigns!.Select(s => s.Name()))} depending on the hour — so without a " +
+                      "birth time the Moon sign can't be given. The Moon line under The Planets below is for noon.");
+        else if (moon is not null)
             paras.Add(Frame("Moon", name, moon.Sign));
         if (chart.Timed)
             paras.Add(Frame("Rising", name, risingSign));

@@ -95,7 +95,7 @@ public sealed partial class MainViewModel : ObservableObject
         _userCharts = userCharts;
         Cities = cities;
         Hospitals = hospitals;
-        ChartVM = new ChartViewModel(interpreter);
+        ChartVM = new ChartViewModel(interpreter, charts);
         DailyVM = new DailyViewModel(transits, dailyInterpreter);
         SynastryVM = new SynastryViewModel(charts, synastryInterpreter);
     }

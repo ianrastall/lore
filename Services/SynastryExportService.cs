@@ -82,7 +82,7 @@ public static class SynastryExportService
     private static string BirthLine(NatalChart chart)
     {
         var c = chart.Celebrity;
-        return $"{c.Name}:  {c.BirthDate}  ·  {c.BirthPlace}" +
+        return $"{c.Name}:  {c.BirthDateLabel}  ·  {c.BirthPlace}" +
                (c.BirthTimeKnown ? $"  ·  {c.BirthTime}" : "  ·  time unknown");
     }
 }

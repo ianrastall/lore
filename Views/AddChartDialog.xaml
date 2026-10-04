@@ -14,13 +14,30 @@
 
             <TextBox x:Name="NameBox" Header="Name" PlaceholderText="e.g. Jane Doe"/>
 
-            <DatePicker x:Name="DateField" Header="Birth date"/>
+            <StackPanel Spacing="4">
+                <DatePicker x:Name="DateField" Header="Birth date"/>
+                <!-- Shown only for years in which some country was still on the Julian calendar -->
+                <CheckBox x:Name="JulianCheck" Visibility="Collapsed"
+                          Content="This is an Old Style (Julian calendar) date"
+                          Checked="Julian_Changed" Unchecked="Julian_Changed"/>
+                <TextBlock x:Name="JulianText" Visibility="Collapsed" TextWrapping="Wrap" FontSize="12"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+            </StackPanel>
 
             <StackPanel Spacing="4">
                 <TimePicker x:Name="TimeField" Header="Birth time" ClockIdentifier="24HourClock"/>
                 <CheckBox x:Name="TimeUnknownCheck" Content="Birth time unknown (use noon)"
                           Checked="TimeUnknown_Changed" Unchecked="TimeUnknown_Changed"/>
+                <NumberBox x:Name="UncertaintyBox"
+                           Header="The time could be off by up to (minutes either way; 0 if exact)"
+                           SpinButtonPlacementMode="Inline" SmallChange="5" LargeChange="15"
+                           Minimum="0" Maximum="180" Value="0"/>
             </StackPanel>
+
+            <ComboBox x:Name="RatingCombo" HorizontalAlignment="Stretch"
+                      Header="Where the birth time comes from (Rodden rating)"/>
+            <TextBox x:Name="SourceBox" Header="Source (optional)"
+                     PlaceholderText="e.g. birth certificate; mother's memory"/>
 
             <AutoSuggestBox x:Name="HospitalBox"
                             Header="Birthplace hospital (search to autofill precise coordinates)"

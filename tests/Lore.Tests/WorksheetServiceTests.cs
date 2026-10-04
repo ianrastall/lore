@@ -105,4 +105,40 @@ public class WorksheetServiceTests
         Assert.Contains("HOUSE CUSPS", text);
         Assert.Contains("ASPECTS", text);
     }
+
+    [Fact]
+    public void Reliability_and_source_are_shown_or_said_to_be_missing()
+    {
+        var w = For("elvis-presley");
+        Assert.Equal("Rodden rating AA — from a birth certificate or birth record", Fact(w, "Reliability"));
+        Assert.StartsWith("Astro-Databank", Fact(w, "Source"));
+
+        var unrated = WorksheetService.Build(Repo.Charts.Calculate(new Celebrity
+        {
+            Id = "t", Name = "T", BirthDate = "1990-06-21", BirthTime = "12:00", BirthTimeKnown = true,
+            BirthPlace = "London", Latitude = 51.5, Longitude = -0.13, TimeZoneId = "Europe/London",
+        }));
+        Assert.Equal("Not rated", Fact(unrated, "Reliability"));
+        Assert.Equal("Not recorded", Fact(unrated, "Source"));
+    }
+
+    [Fact]
+    public void The_worksheet_lays_out_as_a_PDF_for_timed_untimed_and_polar_charts()
+    {
+        Celebrity Person(bool timed, double latitude) => new()
+        {
+            Id = "t", Name = "T", BirthDate = "1990-06-21", BirthTime = timed ? "12:00" : null, BirthTimeKnown = timed,
+            BirthPlace = "Somewhere", Latitude = latitude, Longitude = 18.96, TimeZoneId = "Europe/Oslo",
+        };
+
+        foreach (var person in new[] { Repo.Figure("elvis-presley"), Person(true, 69.65), Person(false, 51.5) })
+        {
+            var sensitivity = person.BirthTimeKnown
+                ? TimeSensitivityService.Analyse(Repo.Charts, person, 60)
+                : TimeSensitivityService.AnalyseDay(Repo.Charts, person);
+            byte[] pdf = WorksheetPdf.ToPdf(WorksheetService.Build(Repo.Charts.Calculate(person)), sensitivity);
+            Assert.True(pdf.Length > 2000);
+            Assert.Equal("%PDF", System.Text.Encoding.ASCII.GetString(pdf, 0, 4));
+        }
+    }
 }

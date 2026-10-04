@@ -9,10 +9,12 @@ namespace Lore.ViewModels;
 public sealed partial class ChartViewModel : ObservableObject
 {
     private readonly ChartInterpreter? _interpreter;
+    private readonly ChartService? _charts;
 
-    public ChartViewModel(ChartInterpreter? interpreter = null)
+    public ChartViewModel(ChartInterpreter? interpreter = null, ChartService? charts = null)
     {
         _interpreter = interpreter;
+        _charts = charts;
     }
 
     [ObservableProperty]
@@ -32,21 +34,54 @@ public sealed partial class ChartViewModel : ObservableObject
 
     public bool WorksheetHasCusps => Worksheet?.HasCusps == true;
 
+    // "What if the birth time is off?" — the margin being tested, in minutes either way.
+    // Starts at the chart's own stated margin; can be changed to try any other.
+    [ObservableProperty]
+    public partial double UncertaintyMinutes { get; set; }
+
+    [ObservableProperty]
+    public partial TimeSensitivity? Sensitivity { get; set; }
+
+    public bool CanTestTime => Chart?.Timed == true;
+    public bool HasChart => Chart is not null;
+    public string SensitivityHeading => Chart?.Timed == false ? "Without a birth time" : "If the birth time is off";
+    public bool HasSensitivity => Sensitivity is not null;
+    public bool SensitivityHasChanges => Sensitivity?.HasChanges == true;
+
+    partial void OnUncertaintyMinutesChanged(double value) => RebuildSensitivity();
+
+    private void RebuildSensitivity()
+    {
+        int minutes = double.IsNaN(UncertaintyMinutes) ? 0 : (int)UncertaintyMinutes;
+        Sensitivity = Chart is null || _charts is null ? null
+            : Chart.Timed ? TimeSensitivityService.Analyse(_charts, Chart.Celebrity, minutes)
+            : TimeSensitivityService.AnalyseDay(_charts, Chart.Celebrity);
+        OnPropertyChanged(nameof(HasSensitivity));
+        OnPropertyChanged(nameof(SensitivityHasChanges));
+        OnPropertyChanged(nameof(BigThreeText));
+    }
+
     public string WorksheetTitle => Chart is null ? "" : $"{Chart.Celebrity.Name} — Worksheet";
 
     public string SubTitle => Chart is null ? "" :
-        $"{Chart.Celebrity.BirthDate}  ·  {Chart.Celebrity.BirthPlace}" +
-        (Chart.Celebrity.BirthTimeKnown ? $"  ·  {Chart.Celebrity.BirthTime}" : "  ·  time unknown");
+        $"{Chart.Celebrity.BirthDateLabel}  ·  {Chart.Celebrity.BirthPlace}" +
+        (Chart.Celebrity.BirthTimeKnown ? $"  ·  {Chart.Celebrity.BirthTime}" : "  ·  time unknown") +
+        (Chart.Timed && Chart.Celebrity.BirthTimeUncertaintyMinutes > 0
+            ? $" (± {Chart.Celebrity.BirthTimeUncertaintyMinutes} min)" : "") +
+        (string.IsNullOrWhiteSpace(Chart.Celebrity.RoddenRating) ? "" : $"  ·  Rodden {Chart.Celebrity.RoddenRating}");
 
     // The "Big Three" — what people actually mean by their sign. Sun first and foremost:
     // "I'm a Libra" is the Sun sign. Moon and Rising round it out.
-    public string BigThreeText => Chart is null ? "" : BuildBigThree(Chart);
+    public string BigThreeText => Chart is null ? "" : BuildBigThree(Chart, Sensitivity);
 
-    private static string BuildBigThree(NatalChart chart)
+    private static string BuildBigThree(NatalChart chart, TimeSensitivity? sensitivity)
     {
         var parts = new List<string>();
         if (chart.GetPlanet(Planet.Sun) is { } sun)   parts.Add($"☉ Sun {sun.Sign.Name()}");
-        if (chart.GetPlanet(Planet.Moon) is { } moon)  parts.Add($"☽ Moon {moon.Sign.Name()}");
+        // With no birth time the Moon may have changed sign during the day: name both.
+        if (!chart.Timed && sensitivity is { MoonSigns.Count: > 1 } s)
+            parts.Add($"☽ Moon {string.Join(" or ", s.MoonSigns.Select(x => x.Name()))}");
+        else if (chart.GetPlanet(Planet.Moon) is { } moon)  parts.Add($"☽ Moon {moon.Sign.Name()}");
         if (chart.Timed)
             parts.Add($"↑ Rising {ZodiacSignExtensions.FromLongitude(chart.Ascendant).Name()}");
         return string.Join("     ·     ", parts);
@@ -86,12 +121,20 @@ public sealed partial class ChartViewModel : ObservableObject
     {
         SelectedPlanet = null;
         _score = value is null ? null : DignityService.ComputeIfTimed(value);
-        ReportSections = (_interpreter is not null && value is not null)
-            ? _interpreter.Interpret(value)
-            : [];
         OnPropertyChanged(nameof(Title));
         OnPropertyChanged(nameof(WorksheetTitle));
         Worksheet = value is null ? null : WorksheetService.Build(value);
+        OnPropertyChanged(nameof(CanTestTime));
+        OnPropertyChanged(nameof(HasChart));
+        OnPropertyChanged(nameof(SensitivityHeading));
+        // Setting the margin rebuilds the analysis only if the number changed, so
+        // rebuild explicitly: the chart itself has.
+        UncertaintyMinutes = value?.Celebrity.BirthTimeUncertaintyMinutes ?? 0;
+        RebuildSensitivity();
+        // After the analysis above: the report draws on it for an untimed Moon.
+        ReportSections = (_interpreter is not null && value is not null)
+            ? _interpreter.Interpret(value, Sensitivity?.MoonSigns)
+            : [];
         OnPropertyChanged(nameof(SubTitle));
         OnPropertyChanged(nameof(BigThreeText));
         OnPropertyChanged(nameof(AnglesText));

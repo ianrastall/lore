@@ -4,14 +4,14 @@
 
 > A Windows desktop application for computing and exploring astrological natal charts — and reading a daily horoscope from them — powered by the Swiss Ephemeris. Browse a curated library of historical figures — every one with a documented birth time — or add your own.
 
-**Latest release: v1.5.0** · [Download](../../releases/latest)
+**Latest release: v1.6.0** · [Download](../../releases/latest)
 
 ### Installing
 
-1. From the [latest release](../../releases/latest), download **`LoreSetup-1.5.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`LoreSetup-1.6.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user only (no administrator prompt), adds a Start-menu shortcut, and can be removed from *Settings → Apps* like any other program.
 
-**Prefer not to install?** Download **`Lore-1.5.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
+**Prefer not to install?** Download **`Lore-1.6.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
 
 > **The installer is not code-signed.** Lore is a free hobby project and does not carry a paid signing certificate, so Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"* — choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -52,7 +52,7 @@
 |---|---|
 | **Chart Wheel** | Rendered chart wheel (Win2D / Direct2D), drawn on-screen and exportable as a high-resolution PNG. |
 | **Report** | Natural-language reading: Overview (Sun/Moon/Rising), planet-by-sign-degree-and-house paragraphs, major aspects, chart patterns (stellium, grand trine, T-square, grand cross), and elemental and modal balance. The Ascendant/Midheaven line shows their degrees and names the house system. |
-| **Worksheet** | The numbers behind the chart, uninterpreted: how the birth time became Universal Time, every position to the arc-second with latitude, declination, daily speed and house, the twelve house cusps, the Part of Fortune, and a grid of every aspect — including those to the Ascendant and Midheaven — with orb and applying/separating. |
+| **Worksheet** | The numbers behind the chart, uninterpreted: how the birth time became Universal Time, every position to the arc-second with latitude, declination, daily speed and house, the twelve house cusps, the Part of Fortune, and a grid of every aspect — including those to the Ascendant and Midheaven — with orb and applying/separating. A section headed *If the birth time is off* shows what would change, and when, if the recorded time were out by a margin you set. |
 | **Daily** | Daily horoscope for the selected chart on any date — generated from that day's transits. See below. |
 | **Synastry** | The selected chart compared with a second person's: a written reading and a bi-wheel of the two charts. See below. |
 | **Legend** | Full-page reference — a grouped list of every glyph, colour, angle, house, and term; click any item for a fuller explanation. |
@@ -108,7 +108,7 @@ Charts can be exported in four formats:
 | Format | Contents |
 |---|---|
 | **PNG** | High-resolution chart wheel (1600 × 1600 px, offscreen Win2D render) |
-| **PDF** | Full reading — birth data, chart wheel image, Big Three, written report, and per-planet dignity table |
+| **PDF** | Full reading — birth data, chart wheel image, Big Three, written report, per-planet dignity table, and the worksheet |
 | **JSON** | Structured chart data (planets, houses, aspects, angles, and detected patterns) |
 | **XML** | Same structured data in XML |
 | **Text — worksheet** | The Worksheet view as plain text, for pasting into notes or checking against another program |
@@ -130,6 +130,7 @@ Lore/
 │   ├── SwissEphemeris.cs      # P/Invoke wrapper around Native\sweph.dll
 │   ├── SettingsService.cs     # House system / node type, saved to settings.json
 │   ├── WorksheetService.cs    # The Worksheet view's tables and its text export
+│   ├── TimeSensitivityService.cs # "If the birth time is off": what holds and what changes across a margin
 │   ├── ChartService.cs        # Orchestrates planet + house + aspect calculation
 │   ├── BirthTimeResolver.cs   # UTC conversion using NodaTime + GeoTimeZone
 │   ├── DignityService.cs      # Traditional dignity scoring (Lilly/Dorothean)
@@ -247,7 +248,7 @@ Produces a self-contained folder that runs with no installed .NET or VC++ runtim
 .\scripts\build-portable.ps1
 ```
 
-Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-1.5.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
+Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-1.6.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
 
 ### Step 4 — Installer
 
@@ -290,6 +291,8 @@ Output: `artifacts\LoreSetup-<version>.exe`.
   "longitude": -88.7034,
   "utcOffsetHours": -6,
   "timeZoneId": "America/Chicago",
+  "roddenRating": "AA",
+  "source": "Astro-Databank: birth certificate or record in hand",
   "bio": "American singer known as the King of Rock and Roll."
 }
 ```
@@ -443,7 +446,15 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 1.5.0 (current)
+### 1.6.0 (current)
+- **If the birth time is off** — the Worksheet has a new section that asks what would change if the recorded time were out by a margin you choose (up to three hours either way). The chart is recalculated at every minute of that window and each thing a reading leans on is followed across it: the Rising sign, the Midheaven's sign, day or night, and every body's sign and house. What holds is listed, and what changes is listed with the clock time it changes at. A chart of your own can carry its margin (set in the Add / Edit Chart dialog, shown as "± 15 min" beside the birth time), and the analysis is included in the worksheet's text export.
+- **Charts with no birth time, checked across the whole day** — the same analysis runs from midnight to midnight at the birthplace. The Worksheet says where the Moon could be and whether it, or any other body, changed sign that day, with the clock time. When the Moon did change sign, the header shows both ("Moon Taurus or Gemini") and the report declines to name a Moon sign, where before it read the noon position as fact.
+- **Reliability and source** — every chart can carry a Rodden rating (AA, A, B, C, DD, X, XX — where the birth time came from) and a note of its source, set in the Add / Edit Chart dialog. Both are shown beside the birth data, on the Worksheet, and in the PDF, JSON and XML exports. All 162 bundled figures now show the rating and source Astro-Databank gives them.
+- **Old Style dates** — for a birth in or before 1923 the Add / Edit Chart dialog offers "This is an Old Style (Julian calendar) date" and shows the Gregorian date it will be calculated for. Previously such a date was silently read as Gregorian, putting the chart ten to thirteen days out. The date is kept as recorded and marked "O.S." wherever it is shown.
+- **Worksheet in the PDF** — the full-reading PDF now ends with the worksheet: how the chart was calculated, what depends on the birth time, and the positions, house cusps and aspects.
+- **Exports for charts with no birth time** — the JSON and XML no longer contain an Ascendant, Midheaven, house cusps or house placements guessed from noon; those are left empty. Every planet now also carries its latitude, declination and daily speed.
+
+### 1.5.0
 - **Calculation settings** — a new **Settings** button chooses the house system (Placidus, Whole Sign, Equal, or Koch) and the North Node (mean or true). The choice applies everywhere, is remembered, and is named on each chart and in the PDF, JSON and XML exports.
 - **Worksheet** — a new **Worksheet** view shows the numbers behind the chart with nothing interpreted: the time conversion (clock time, the offset applied and where it came from, Universal Time), every position to the arc-second with latitude, declination, daily speed and house, the house cusps, the Part of Fortune (reversed by night), and an aspect grid that includes the Ascendant and Midheaven. Exports as plain text.
 - **Checked against swetest** — the test suite (now 107 tests) compares Lore with the Swiss Ephemeris's own test program for fourteen awkward moments and places, including both polar circles, under all four house systems.

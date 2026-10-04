@@ -16,11 +16,21 @@ public sealed class Celebrity
     [JsonPropertyName("birthDate")]
     public string BirthDate { get; init; } = "";
 
+    // True when BirthDate is an Old Style date, in the Julian calendar that was in use
+    // before the Gregorian reform (1582 in Catholic Europe, 1752 in Britain and its
+    // colonies, 1918 in Russia). It is converted before anything is calculated.
+    [JsonPropertyName("julianCalendar")]
+    public bool JulianCalendar { get; init; }
+
     [JsonPropertyName("birthTime")]
     public string? BirthTime { get; init; }
 
     [JsonPropertyName("birthTimeKnown")]
     public bool BirthTimeKnown { get; init; }
+
+    // How far out the birth time might be, in minutes either way; 0 when not stated.
+    [JsonPropertyName("birthTimeUncertaintyMinutes")]
+    public int BirthTimeUncertaintyMinutes { get; init; }
 
     [JsonPropertyName("birthPlace")]
     public string BirthPlace { get; init; } = "";
@@ -46,6 +56,14 @@ public sealed class Celebrity
     [JsonPropertyName("utcOffsetFixed")]
     public bool UtcOffsetFixed { get; init; }
 
+    // Where the birth time came from: a Rodden rating (see RoddenRating) and a free-text
+    // note of the source. Both optional.
+    [JsonPropertyName("roddenRating")]
+    public string? RoddenRating { get; init; }
+
+    [JsonPropertyName("source")]
+    public string? Source { get; init; }
+
     [JsonPropertyName("bio")]
     public string Bio { get; init; } = "";
 
@@ -54,7 +72,13 @@ public sealed class Celebrity
     [JsonIgnore] public string VerdictColorHex { get; set; } = "#00000000";
     [JsonIgnore] public string VerdictLabel { get; set; } = "";
 
+    // The date as recorded: Old Style if JulianCalendar is set. BirthTimeResolver
+    // turns it into the Gregorian date the calculation uses.
     public DateOnly GetBirthDate() => DateOnly.ParseExact(BirthDate, "yyyy-MM-dd");
+
+    // The recorded date for display, marked when it is Old Style: "1642-12-25 O.S."
+    [JsonIgnore]
+    public string BirthDateLabel => JulianCalendar ? $"{BirthDate} O.S." : BirthDate;
 
     public TimeOnly GetBirthTime()
     {

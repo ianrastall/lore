@@ -38,8 +38,14 @@ public sealed partial class AddChartDialog : ContentDialog
         UtcBox.Value = 0;
 
         // Re-resolve the historical offset whenever the date or time changes.
-        DateField.SelectedDateChanged += (_, _) => RefreshResolvedOffset();
+        DateField.SelectedDateChanged += (_, _) => { RefreshCalendar(); RefreshResolvedOffset(); };
         TimeField.SelectedTimeChanged += (_, _) => RefreshResolvedOffset();
+
+        // First entry is "not rated"; the rest are Rodden's codes, most reliable first.
+        RatingCombo.Items.Add("Not rated");
+        foreach (var (code, _) in RoddenRating.All)
+            RatingCombo.Items.Add(RoddenRating.Describe(code));
+        RatingCombo.SelectedIndex = 0;
 
         PrimaryButtonClick += OnCreate;
 
@@ -62,12 +68,19 @@ public sealed partial class AddChartDialog : ContentDialog
         OffsetFixedCheck.IsChecked = c.UtcOffsetFixed;
         _timeZoneId = string.IsNullOrWhiteSpace(c.TimeZoneId) ? null : c.TimeZoneId;
         NoteBox.Text = c.Bio;
+        SourceBox.Text = c.Source ?? "";
+        int rating = RoddenRating.All.ToList().FindIndex(r => r.Code == c.RoddenRating);
+        RatingCombo.SelectedIndex = rating + 1; // -1 (none, or not one of Rodden's) -> "Not rated"
 
         DateField.SelectedDate = PickerDate(c.GetBirthDate());
         var t = c.GetBirthTime();
         TimeField.SelectedTime = new TimeSpan(t.Hour, t.Minute, 0);
+        JulianCheck.IsChecked = c.JulianCalendar;
+        RefreshCalendar();
         TimeUnknownCheck.IsChecked = !c.BirthTimeKnown;
         TimeField.IsEnabled = c.BirthTimeKnown;
+        UncertaintyBox.Value = c.BirthTimeUncertaintyMinutes;
+        UncertaintyBox.IsEnabled = c.BirthTimeKnown;
 
         RefreshResolvedOffset();
     }
@@ -81,6 +94,39 @@ public sealed partial class AddChartDialog : ContentDialog
     private void TimeUnknown_Changed(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
     {
         TimeField.IsEnabled = TimeUnknownCheck.IsChecked != true;
+        UncertaintyBox.IsEnabled = TimeUnknownCheck.IsChecked != true;
+    }
+
+    // The last country to leave the Julian calendar (Greece) did so in 1923; after that
+    // there is nothing to ask.
+    private const int LastJulianYear = 1923;
+
+    private bool IsJulian => JulianCheck.IsChecked == true &&
+                             (DateField.SelectedDate?.Year ?? int.MaxValue) <= LastJulianYear;
+
+    private void Julian_Changed(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)
+    {
+        RefreshCalendar();
+        RefreshResolvedOffset();
+    }
+
+    // Offer the Old Style tick-box for early dates, and when it is ticked show the
+    // Gregorian date the chart will actually be calculated for.
+    private void RefreshCalendar()
+    {
+        bool early = (DateField.SelectedDate?.Year ?? int.MaxValue) <= LastJulianYear;
+        JulianCheck.Visibility = early ? Microsoft.UI.Xaml.Visibility.Visible : Microsoft.UI.Xaml.Visibility.Collapsed;
+
+        if (IsJulian && DateField.SelectedDate is { } picked)
+        {
+            var gregorian = BirthTimeResolver.GregorianDate(DateOnly.FromDateTime(picked.DateTime), julian: true);
+            JulianText.Text = $"Calculated for {gregorian:d MMMM yyyy} in today's (Gregorian) calendar.";
+            JulianText.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+        }
+        else
+        {
+            JulianText.Visibility = Microsoft.UI.Xaml.Visibility.Collapsed;
+        }
     }
 
     // Ticked: the offset box is the user's own and is used as given. Unticked: it goes
@@ -141,7 +187,8 @@ public sealed partial class AddChartDialog : ContentDialog
             return;
         }
 
-        var date = DateField.SelectedDate?.DateTime ?? new DateTime(1990, 1, 1);
+        var picked = DateField.SelectedDate?.DateTime ?? new DateTime(1990, 1, 1);
+        var date = BirthTimeResolver.GregorianDate(DateOnly.FromDateTime(picked), IsJulian);
         var time = TimeField.SelectedTime ?? new TimeSpan(12, 0, 0);
         var (offset, label, zoneId) = BirthTimeResolver.Describe(
             _timeZoneId, LatBox.Value, LonBox.Value,
@@ -180,14 +227,18 @@ public sealed partial class AddChartDialog : ContentDialog
             Name = NameBox.Text.Trim(),
             Category = UserChartService.MyChartsCategory,
             BirthDate = date.ToString("yyyy-MM-dd"),
+            JulianCalendar = IsJulian,
             BirthTime = timeKnown ? $"{time.Hours:D2}:{time.Minutes:D2}" : null,
             BirthTimeKnown = timeKnown,
+            BirthTimeUncertaintyMinutes = timeKnown && !double.IsNaN(UncertaintyBox.Value) ? (int)UncertaintyBox.Value : 0,
             BirthPlace = string.IsNullOrWhiteSpace(PlaceBox.Text) ? "Unknown" : PlaceBox.Text.Trim(),
             Latitude = LatBox.Value,
             Longitude = LonBox.Value,
             UtcOffsetHours = UtcBox.Value,
             UtcOffsetFixed = OffsetFixedCheck.IsChecked == true,
             TimeZoneId = _timeZoneId,
+            RoddenRating = RatingCombo.SelectedIndex > 0 ? RoddenRating.All[RatingCombo.SelectedIndex - 1].Code : null,
+            Source = string.IsNullOrWhiteSpace(SourceBox.Text) ? null : SourceBox.Text.Trim(),
             Bio = NoteBox.Text.Trim()
         };
     }

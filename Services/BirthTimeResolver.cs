@@ -22,9 +22,22 @@ public static class BirthTimeResolver
 {
     private static readonly IDateTimeZoneProvider Tzdb = DateTimeZoneProviders.Tzdb;
 
+    // The birth date in the Gregorian calendar, which everything is calculated in. An
+    // Old Style (Julian) date is converted: 25 December 1642 becomes 4 January 1643.
+    public static DateOnly GregorianDate(Celebrity c) =>
+        GregorianDate(c.GetBirthDate(), c.JulianCalendar);
+
+    public static DateOnly GregorianDate(DateOnly recorded, bool julian)
+    {
+        if (!julian) return recorded;
+        var iso = new LocalDate(recorded.Year, recorded.Month, recorded.Day, CalendarSystem.Julian)
+            .WithCalendar(CalendarSystem.Iso);
+        return new DateOnly(iso.Year, iso.Month, iso.Day);
+    }
+
     public static DateTime ToUtc(Celebrity c)
     {
-        var d = c.GetBirthDate();
+        var d = GregorianDate(c);
         var t = c.GetBirthTime();
         var local = new LocalDateTime(d.Year, d.Month, d.Day, t.Hour, t.Minute);
 

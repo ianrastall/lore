@@ -44,10 +44,14 @@ public sealed class ChartService
         SwissEphemeris.SetEphePath(ephemerisPath);
     }
 
-    public NatalChart Calculate(Celebrity celebrity)
+    public NatalChart Calculate(Celebrity celebrity) =>
+        CalculateAt(celebrity, BirthTimeResolver.ToUtc(celebrity));
+
+    // The chart for this person's birthplace at a given instant rather than their
+    // recorded birth time — what "if they were born ten minutes later" is tested with.
+    public NatalChart CalculateAt(Celebrity celebrity, DateTime utc)
     {
         var settings = Settings;
-        var utc = BirthTimeResolver.ToUtc(celebrity);
         double jd = SwissEphemeris.DateTimeToJulianDay(utc);
 
         List<PlanetPosition> planets;

@@ -70,18 +70,26 @@ public static class ExportService
     }
 
     // ── PDF (full reading) ────────────────────────────────────────────────────
-    public static byte[] ToPdf(NatalChart chart, IReadOnlyList<ReportSection> report, byte[] chartPng)
+    // `worksheet` and `sensitivity`, when given, add the numbers behind the chart after
+    // the reading: how it was calculated, the positions, cusps and aspects, and what
+    // would change if the birth time were off.
+    public static byte[] ToPdf(NatalChart chart, IReadOnlyList<ReportSection> report, byte[] chartPng,
+        Worksheet? worksheet = null, TimeSensitivity? sensitivity = null)
     {
         var vm = chart.Celebrity;
-        string subtitle = $"{vm.BirthDate}  ·  {vm.BirthPlace}" +
-            (vm.BirthTimeKnown ? $"  ·  {vm.BirthTime}" : "  ·  time unknown");
+        string subtitle = $"{vm.BirthDateLabel}  ·  {vm.BirthPlace}" +
+            (vm.BirthTimeKnown ? $"  ·  {vm.BirthTime}" : "  ·  time unknown") +
+            (string.IsNullOrWhiteSpace(vm.RoddenRating) ? "" : $"  ·  Rodden {vm.RoddenRating}");
         // Lead with the "Big Three" (Sun first — that's the everyday "sign"); keep the
         // Ascendant/Midheaven as a small, clearly-labelled technical line so the MC can't
         // be mistaken for someone's sign.
         string rising = ZodiacSignExtensions.FromLongitude(chart.Ascendant).Name();
         var bigParts = new List<string>();
         if (chart.GetPlanet(Planet.Sun) is { } sunP)  bigParts.Add($"☉ Sun {sunP.Sign.Name()}");
-        if (chart.GetPlanet(Planet.Moon) is { } moonP) bigParts.Add($"☽ Moon {moonP.Sign.Name()}");
+        // With no birth time the Moon may have changed sign during the day: name both.
+        if (!chart.Timed && sensitivity is { MoonSigns.Count: > 1 })
+            bigParts.Add($"☽ Moon {string.Join(" or ", sensitivity.MoonSigns.Select(s => s.Name()))}");
+        else if (chart.GetPlanet(Planet.Moon) is { } moonP) bigParts.Add($"☽ Moon {moonP.Sign.Name()}");
         if (chart.Timed) bigParts.Add($"↑ Rising {rising}");
         string bigThree = string.Join("     ·     ", bigParts);
         string angles = ViewModels.ChartViewModel.FormatAngles(chart);
@@ -132,6 +140,9 @@ public static class ExportService
 
                     if (score is not null)
                         ChartAssessment(col, score);
+
+                    if (worksheet is not null)
+                        WorksheetPdf.Compose(col, worksheet, sensitivity);
                 });
 
                 page.Footer().AlignCenter().Text(x =>
@@ -210,28 +221,37 @@ public static class ExportService
             Name = c.Name,
             Category = c.Category,
             BirthDate = c.BirthDate,
+            Calendar = c.JulianCalendar ? "Julian (Old Style)" : "Gregorian",
+            GregorianBirthDate = BirthTimeResolver.GregorianDate(c).ToString("yyyy-MM-dd"),
             BirthTime = c.BirthTime,
             BirthTimeKnown = c.BirthTimeKnown,
+            BirthTimeUncertaintyMinutes = c.BirthTimeUncertaintyMinutes,
+            RoddenRating = c.RoddenRating ?? "",
+            Source = c.Source ?? "",
             BirthPlace = c.BirthPlace,
             Latitude = c.Latitude,
             Longitude = c.Longitude,
             UtcOffsetHours = c.UtcOffsetHours,
             HouseSystem = chart.HouseSystemLabel,
             NodeType = chart.Settings.Node.Name(),
-            Ascendant = Round(chart.Ascendant),
-            AscendantSign = ZodiacSignExtensions.FromLongitude(chart.Ascendant).Name(),
-            Midheaven = Round(chart.Midheaven),
-            MidheavenSign = ZodiacSignExtensions.FromLongitude(chart.Midheaven).Name(),
+            // The angles and houses are left out, not guessed, when there is no birth time.
+            Ascendant = chart.Timed ? Round(chart.Ascendant) : null,
+            AscendantSign = chart.Timed ? ZodiacSignExtensions.FromLongitude(chart.Ascendant).Name() : "",
+            Midheaven = chart.Timed ? Round(chart.Midheaven) : null,
+            MidheavenSign = chart.Timed ? ZodiacSignExtensions.FromLongitude(chart.Midheaven).Name() : "",
             Planets = chart.Planets.Select(p => new PlanetExport
             {
                 Name = p.PlanetName,
                 Sign = p.Sign.Name(),
                 DegreeInSign = Round(p.DegreeInSign),
                 Longitude = Round(p.Longitude),
-                House = chart.GetHouseForLongitude(p.Longitude),
+                Latitude = Round(p.Latitude),
+                Declination = Round(p.Declination),
+                SpeedPerDay = Round(p.SpeedLongitude),
+                House = chart.Timed ? chart.GetHouseForLongitude(p.Longitude) : null,
                 Retrograde = p.IsRetrograde
             }).ToList(),
-            Houses = chart.Houses.Select(h => new HouseExport
+            Houses = (chart.Timed ? chart.Houses : []).Select(h => new HouseExport
             {
                 House = h.House,
                 Longitude = Round(h.Longitude),
@@ -270,17 +290,22 @@ public sealed class ChartExport
     public string Name { get; set; } = "";
     public string Category { get; set; } = "";
     public string BirthDate { get; set; } = "";
+    public string Calendar { get; set; } = "";
+    public string GregorianBirthDate { get; set; } = "";
     public string? BirthTime { get; set; }
     public bool BirthTimeKnown { get; set; }
+    public int BirthTimeUncertaintyMinutes { get; set; }
+    public string RoddenRating { get; set; } = "";
+    public string Source { get; set; } = "";
     public string BirthPlace { get; set; } = "";
     public double Latitude { get; set; }
     public double Longitude { get; set; }
     public double UtcOffsetHours { get; set; }
     public string HouseSystem { get; set; } = "";
     public string NodeType { get; set; } = "";
-    public double Ascendant { get; set; }
+    public double? Ascendant { get; set; }   // null without a birth time
     public string AscendantSign { get; set; } = "";
-    public double Midheaven { get; set; }
+    public double? Midheaven { get; set; }   // null without a birth time
     public string MidheavenSign { get; set; } = "";
     public List<PlanetExport> Planets { get; set; } = [];
     public List<HouseExport> Houses { get; set; } = [];
@@ -294,7 +319,10 @@ public sealed class PlanetExport
     public string Sign { get; set; } = "";
     public double DegreeInSign { get; set; }
     public double Longitude { get; set; }
-    public int House { get; set; }
+    public double Latitude { get; set; }
+    public double Declination { get; set; }
+    public double SpeedPerDay { get; set; }
+    public int? House { get; set; }          // null without a birth time
     public bool Retrograde { get; set; }
 }
 

@@ -73,6 +73,18 @@ public class FigureLibraryTests
             Assert.True(Reference[f.Id].Rating is "AA" or "A", $"{f.Name} is rated {Reference[f.Id].Rating} on Astro-Databank"));
     }
 
+    // Each figure carries the rating Astro-Databank gives it, and says where it came from.
+    [Fact]
+    public void Every_figure_shows_its_Astro_Databank_rating_and_source()
+    {
+        Assert.All(Repo.Figures, f =>
+        {
+            Assert.True(f.RoddenRating == Reference[f.Id].Rating, $"{f.Name}: {f.RoddenRating} but Astro-Databank says {Reference[f.Id].Rating}");
+            Assert.True(Lore.Models.RoddenRating.IsKnown(f.RoddenRating), f.Name);
+            Assert.StartsWith("Astro-Databank", f.Source);
+        });
+    }
+
     // For every figure whose time Astro-Databank rates AA or A: the recorded clock time
     // matches, and Lore turns it into the same instant Astro-Databank's stated time
     // standard does (within a minute).

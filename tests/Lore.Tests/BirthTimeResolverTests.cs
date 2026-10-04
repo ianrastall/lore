@@ -99,4 +99,29 @@ public class BirthTimeResolverTests
         Assert.Contains("skipped", Label(3, 25, 1));
         Assert.DoesNotContain("clock time", Label(7, 1, 12));
     }
+
+    [Fact]
+    public void An_Old_Style_date_is_converted_to_the_Gregorian_calendar()
+    {
+        // Isaac Newton: 25 December 1642 Old Style is 4 January 1643 (ten days' difference
+        // in the 17th century). Shakespeare's 23 April 1564 is 3 May.
+        Assert.Equal(new DateOnly(1643, 1, 4), BirthTimeResolver.GregorianDate(new DateOnly(1642, 12, 25), julian: true));
+        Assert.Equal(new DateOnly(1564, 5, 3), BirthTimeResolver.GregorianDate(new DateOnly(1564, 4, 23), julian: true));
+        // Thirteen days by the 20th century: Russia's 25 October 1917 is 7 November.
+        Assert.Equal(new DateOnly(1917, 11, 7), BirthTimeResolver.GregorianDate(new DateOnly(1917, 10, 25), julian: true));
+        Assert.Equal(new DateOnly(1642, 12, 25), BirthTimeResolver.GregorianDate(new DateOnly(1642, 12, 25), julian: false));
+
+        Celebrity Newton(string date, bool julian) => new()
+        {
+            Id = "t", Name = "T", BirthDate = date, JulianCalendar = julian, BirthTime = "01:38", BirthTimeKnown = true,
+            Latitude = 52.81, Longitude = -0.63, TimeZoneId = "Europe/London",
+        };
+        Assert.Equal(BirthTimeResolver.ToUtc(Newton("1643-01-04", false)), BirthTimeResolver.ToUtc(Newton("1642-12-25", true)));
+        Assert.Equal("1642-12-25 O.S.", Newton("1642-12-25", true).BirthDateLabel);
+
+        // The Sun was at about 13° Capricorn, not the 3° a Gregorian reading of the date gives.
+        var sun = Repo.Charts.Calculate(Newton("1642-12-25", true)).GetPlanet(Planet.Sun)!;
+        Assert.Equal(ZodiacSign.Capricorn, sun.Sign);
+        Assert.InRange(sun.DegreeInSign, 13, 14.5);
+    }
 }

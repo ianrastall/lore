@@ -26,6 +26,11 @@ public sealed partial class WorksheetView : UserControl
                     Bindings.Update();
                     BuildAspectGrid();
                 }
+                else if (e.PropertyName is nameof(ChartViewModel.Sensitivity) or nameof(ChartViewModel.CanTestTime)
+                         or nameof(ChartViewModel.SensitivityHeading))
+                {
+                    Bindings.Update();
+                }
             };
             Bindings.Update();
             BuildAspectGrid();

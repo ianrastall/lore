@@ -199,11 +199,12 @@ public sealed partial class MainWindow : Window
             byte[] bytes = kind switch
             {
                 "pdf"  => ExportService.ToPdf(chart, ViewModel.ChartVM.ReportSections,
-                                              await ExportService.RenderChartPngAsync(chart)),
+                                              await ExportService.RenderChartPngAsync(chart),
+                                              ViewModel.ChartVM.Worksheet, ViewModel.ChartVM.Sensitivity),
                 "png"  => await ExportService.RenderChartPngAsync(chart),
                 "json" => ExportService.ToJson(chart),
                 "xml"  => ExportService.ToXml(chart),
-                "worksheettxt" => WorksheetService.ToText(WorksheetService.Build(chart)),
+                "worksheettxt" => WorksheetService.ToText(WorksheetService.Build(chart), ViewModel.ChartVM.Sensitivity),
                 "dailypdf" => DailyExportService.ToPdf(reading!),
                 "dailytxt" => DailyExportService.ToText(reading!),
                 "synastrypdf" => SynastryExportService.ToPdf(comparison!, synastryReading!,
