@@ -4,14 +4,14 @@
 
 > A Windows desktop application for computing and exploring astrological natal charts — and reading a daily horoscope from them — powered by the Swiss Ephemeris. Browse a curated library of historical figures — every one with a documented birth time — or add your own.
 
-**Latest release: v1.8.0** · [Download](../../releases/latest)
+**Latest release: v2.0.0** · [Download](../../releases/latest)
 
 ### Installing
 
-1. From the [latest release](../../releases/latest), download **`LoreSetup-1.8.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`LoreSetup-2.0.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user only (no administrator prompt), adds a Start-menu shortcut, and can be removed from *Settings → Apps* like any other program.
 
-**Prefer not to install?** Download **`Lore-1.8.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
+**Prefer not to install?** Download **`Lore-2.0.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
 
 > **The installer is not code-signed.** Lore is a free hobby project and does not carry a paid signing certificate, so Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"* — choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -250,7 +250,7 @@ Produces a self-contained folder that runs with no installed .NET or VC++ runtim
 .\scripts\build-portable.ps1
 ```
 
-Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-1.8.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
+Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-2.0.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
 
 ### Step 4 — Installer
 
@@ -449,7 +449,7 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 2.0.0 (in progress)
+### 2.0.0 (current)
 A round of fixes from two outside code reviews, and the start of some interface work.
 - **Timing: solar returns and progressions** — a new **Timing** view carries the birth chart forward to any date. It casts the **solar return** in force on that date (the chart for the moment the Sun came back to its place at birth, for the birthplace), draws its wheel, and lists its angles and the planets by return house. It also **progresses** the chart a day for each year of life: the progressed Sun, Moon, Mercury, Venus and Mars, the Midheaven by solar arc with the Ascendant that goes with it, the progressed lunar phase, and every progressed point within a degree of an aspect to the birth chart. Saves as plain text.
 - **Picks up where you left off** — Lore reopens on the chart and view you last had open.
@@ -466,7 +466,7 @@ A round of fixes from two outside code reviews, and the start of some interface 
 - **Missing ephemeris data is reported** — if the data files cannot be read, Lore now says so in the status bar and on the Worksheet instead of quietly using a rougher model and dropping Chiron. Folders with accented letters in their names now work.
 - **Errors** are logged wherever they happen, and the status bar says when something went wrong.
 
-### 1.8.0 (current)
+### 1.8.0
 - **Forecast** — a new **Forecast** view lists the transits coming up for the selected chart over the next month, three months, six months or year, starting from any date. For each one it gives when it comes into orb, when it is exact (more than once if the planet turns retrograde while in orb; or how close it gets if it turns back just short), and when it leaves — with the same written line the Daily view uses, month by month. The Sun, Mercury, Venus and Mars can be switched off to leave only the slow, weightier transits. The Moon is left to the Daily view. Saves as plain text.
 
 ### 1.7.0
