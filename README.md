@@ -4,14 +4,14 @@
 
 > A Windows desktop application for computing and exploring astrological natal charts — and reading a daily horoscope from them — powered by the Swiss Ephemeris. Browse a curated library of historical figures — every one with a documented birth time — or add your own.
 
-**Latest release: v2.0.0** · [Download](../../releases/latest)
+**Latest release: v2.1.0** · [Download](../../releases/latest)
 
 ### Installing
 
-1. From the [latest release](../../releases/latest), download **`LoreSetup-2.0.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`LoreSetup-2.1.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user only (no administrator prompt), adds a Start-menu shortcut, and can be removed from *Settings → Apps* like any other program.
 
-**Prefer not to install?** Download **`Lore-2.0.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
+**Prefer not to install?** Download **`Lore-2.1.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
 
 > **The installer is not code-signed.** Lore is a free hobby project and does not carry a paid signing certificate, so Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"* — choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -250,7 +250,7 @@ Produces a self-contained folder that runs with no installed .NET or VC++ runtim
 .\scripts\build-portable.ps1
 ```
 
-Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-2.0.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
+Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-2.1.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
 
 ### Step 4 — Installer
 
@@ -458,7 +458,7 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 2.1.0 (in progress)
+### 2.1.0 (current)
 - **A fuller Report** — the written report on a birth chart no longer reads as one sentence pattern repeated. The Overview gives a full paragraph each to the Sun, Moon and Rising signs, and a new one on how the Sun and Moon fit together. Each planet's line now says what it means in its house, rather than ending with the same phrase every time. Every major aspect has text written for that particular pair of planets — 307 lines in all — in place of one stock sentence per kind of aspect. Chart patterns say what the pattern means in that sign, element or mode, and with that planet at its apex. The element and mode sections say more, name both when two tie, and mention every element that is missing rather than only the first.
 
 ### 2.0.0
