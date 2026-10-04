@@ -29,6 +29,12 @@ public sealed partial class MainWindow : Window
         _settingsReady = true;
 
         AppWindow.Title = "Lore — Natal Charts";
+        // The window (and so the taskbar) names whoever's chart is open.
+        vm.ChartVM.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(ChartViewModel.Chart))
+                AppWindow.Title = vm.ChartVM.Chart is { } c ? $"{c.Celebrity.Name} — Lore" : "Lore — Natal Charts";
+        };
         if (AppWindow.Presenter is OverlappedPresenter presenter)
             presenter.Maximize();
 
@@ -47,6 +53,7 @@ public sealed partial class MainWindow : Window
             try
             {
                 await ViewModel.InitializeAsync(dataPath, citiesPath, hospitalsPath);
+                ShowView(ViewModel.LastView); // back to the view the last session ended in
             }
             finally
             {
@@ -59,21 +66,78 @@ public sealed partial class MainWindow : Window
         Activated += (_, _) => InitOnce("Activated");
     }
 
-    private async void AddChart_Click(object sender, RoutedEventArgs e)
+    // Only one dialog can be open at a time; a second Ctrl+N while one is up does nothing.
+    private bool _dialogOpen;
+
+    private async void AddChart_Click(object sender, RoutedEventArgs e) => await AddChartAsync();
+
+    private async Task AddChartAsync()
     {
-        var dialog = new AddChartDialog(ViewModel.Cities, ViewModel.Hospitals) { XamlRoot = Content.XamlRoot };
-        var result = await dialog.ShowAsync();
-        if (result == Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary && dialog.Result is { } chart)
-            await ViewModel.AddCustomChartAsync(chart);
+        if (_dialogOpen) return;
+        _dialogOpen = true;
+        try
+        {
+            var dialog = new AddChartDialog(ViewModel.Cities, ViewModel.Hospitals) { XamlRoot = Content.XamlRoot };
+            var result = await dialog.ShowAsync();
+            if (result == Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary && dialog.Result is { } chart)
+                await ViewModel.AddCustomChartAsync(chart);
+        }
+        finally
+        {
+            _dialogOpen = false;
+        }
     }
+
+    // ── Keyboard shortcuts ────────────────────────────────────────────────────
+
+    private async void AddShortcut_Invoked(Microsoft.UI.Xaml.Input.KeyboardAccelerator sender, Microsoft.UI.Xaml.Input.KeyboardAcceleratorInvokedEventArgs args)
+    {
+        args.Handled = true;
+        await AddChartAsync();
+    }
+
+    private void SearchShortcut_Invoked(Microsoft.UI.Xaml.Input.KeyboardAccelerator sender, Microsoft.UI.Xaml.Input.KeyboardAcceleratorInvokedEventArgs args)
+    {
+        args.Handled = true;
+        SearchBox.Focus(FocusState.Keyboard);
+        SearchBox.SelectAll();
+    }
+
+    private void LegendShortcut_Invoked(Microsoft.UI.Xaml.Input.KeyboardAccelerator sender, Microsoft.UI.Xaml.Input.KeyboardAcceleratorInvokedEventArgs args)
+    {
+        args.Handled = true;
+        ViewModel.ShowLegend = !ViewModel.ShowLegend;
+    }
+
+    // Ctrl+1 … Ctrl+7, in the order the buttons run across the toolbar.
+    private static readonly string[] Views = ["Chart", "Report", "Worksheet", "Daily", "Forecast", "Timing", "Synastry"];
+
+    private void ViewShortcut_Invoked(Microsoft.UI.Xaml.Input.KeyboardAccelerator sender, Microsoft.UI.Xaml.Input.KeyboardAcceleratorInvokedEventArgs args)
+    {
+        args.Handled = true;
+        int index = sender.Key - Windows.System.VirtualKey.Number1;
+        if (index >= 0 && index < Views.Length) ShowView(Views[index]);
+    }
+
+    private void ShowView(string view) => ShowBody(
+        report: view == "Report", worksheet: view == "Worksheet", daily: view == "Daily",
+        forecast: view == "Forecast", timing: view == "Timing", synastry: view == "Synastry");
 
     private async void EditChart_Click(object sender, RoutedEventArgs e)
     {
-        if (ViewModel.SelectedCelebrity is not { } existing || !ViewModel.SelectedIsCustom) return;
-        var dialog = new AddChartDialog(ViewModel.Cities, ViewModel.Hospitals, existing) { XamlRoot = Content.XamlRoot };
-        var result = await dialog.ShowAsync();
-        if (result == Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary && dialog.Result is { } chart)
-            await ViewModel.UpdateCustomChartAsync(chart);
+        if (ViewModel.SelectedCelebrity is not { } existing || !ViewModel.SelectedIsCustom || _dialogOpen) return;
+        _dialogOpen = true;
+        try
+        {
+            var dialog = new AddChartDialog(ViewModel.Cities, ViewModel.Hospitals, existing) { XamlRoot = Content.XamlRoot };
+            var result = await dialog.ShowAsync();
+            if (result == Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary && dialog.Result is { } chart)
+                await ViewModel.UpdateCustomChartAsync(chart);
+        }
+        finally
+        {
+            _dialogOpen = false;
+        }
     }
 
     // Deleting a chart can't be undone from inside the app, so ask first.
@@ -118,6 +182,10 @@ public sealed partial class MainWindow : Window
         WorksheetToggle.IsChecked = worksheet;
         DailyToggle.IsChecked = daily;
         SynastryToggle.IsChecked = synastry;
+
+        ViewModel.RememberView(
+            report ? "Report" : worksheet ? "Worksheet" : daily ? "Daily" :
+            forecast ? "Forecast" : timing ? "Timing" : synastry ? "Synastry" : "Chart");
     }
 
     // False while the constructor is filling the settings boxes in.

@@ -160,7 +160,7 @@ public static class BirthTimeResolver
         {
             0 => ". This clock time was skipped that day (the clocks went forward), so it is read as the time after the change.",
             2 => ". This clock time happened twice that day (the clocks went back); the earlier one is used. " +
-                 "If it was the later one, set the UTC offset yourself below.",
+                 "If it was the later one, set the UTC offset yourself under Time zone override.",
             _ => "",
         };
         return (hours, $"Offset for this date: {FormatOffset(hours)} ({abbr}){caution}", zoneId);

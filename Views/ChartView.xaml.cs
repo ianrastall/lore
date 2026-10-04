@@ -41,6 +41,10 @@ public sealed partial class ChartView : UserControl
         ChartCanvas.Invalidate();
     }
 
+    // x:Bind helpers.
+    public Visibility VisIf(bool b) => b ? Visibility.Visible : Visibility.Collapsed;
+    public Visibility VisIfNot(bool b) => b ? Visibility.Collapsed : Visibility.Visible;
+
     private void PlanetsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         ChartCanvas.Invalidate();

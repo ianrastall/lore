@@ -12,6 +12,20 @@
             <views:HexBrushConverter x:Key="HexBrush"/>
         </Grid.Resources>
 
+        <!-- Keyboard shortcuts, available anywhere in the window -->
+        <Grid.KeyboardAccelerators>
+            <KeyboardAccelerator Key="N" Modifiers="Control" Invoked="AddShortcut_Invoked"/>
+            <KeyboardAccelerator Key="F" Modifiers="Control" Invoked="SearchShortcut_Invoked"/>
+            <KeyboardAccelerator Key="F1" Invoked="LegendShortcut_Invoked"/>
+            <KeyboardAccelerator Key="Number1" Modifiers="Control" Invoked="ViewShortcut_Invoked"/>
+            <KeyboardAccelerator Key="Number2" Modifiers="Control" Invoked="ViewShortcut_Invoked"/>
+            <KeyboardAccelerator Key="Number3" Modifiers="Control" Invoked="ViewShortcut_Invoked"/>
+            <KeyboardAccelerator Key="Number4" Modifiers="Control" Invoked="ViewShortcut_Invoked"/>
+            <KeyboardAccelerator Key="Number5" Modifiers="Control" Invoked="ViewShortcut_Invoked"/>
+            <KeyboardAccelerator Key="Number6" Modifiers="Control" Invoked="ViewShortcut_Invoked"/>
+            <KeyboardAccelerator Key="Number7" Modifiers="Control" Invoked="ViewShortcut_Invoked"/>
+        </Grid.KeyboardAccelerators>
+
 
         <!-- Left: celebrity + my-charts browser -->
         <Grid Grid.Column="0" RowDefinitions="Auto,Auto,Auto,Auto,*"
@@ -27,7 +41,8 @@
             <!-- Add / edit / delete custom charts -->
             <Grid Grid.Row="1" ColumnDefinitions="*,Auto,Auto" Margin="12,0,12,8" ColumnSpacing="6">
                 <Button Grid.Column="0" HorizontalAlignment="Stretch"
-                        Click="AddChart_Click">
+                        Click="AddChart_Click"
+                        ToolTipService.ToolTip="Add a chart of your own (Ctrl+N)">
                     <StackPanel Orientation="Horizontal" Spacing="6">
                         <FontIcon Glyph="&#xE710;" FontSize="14"/>
                         <TextBlock Text="Add chart"/>
@@ -52,7 +67,7 @@
             <!-- Search -->
             <TextBox Grid.Row="2"
                      x:Name="SearchBox"
-                     PlaceholderText="Search…"
+                     PlaceholderText="Search by name or place  (Ctrl+F)"
                      Text="{x:Bind ViewModel.SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                      Margin="12,0,12,8"/>
 
@@ -112,25 +127,32 @@
                 <!-- View switch. IsChecked is set from code (SyncViewToggles) so a click on
                      the already-selected button can't leave it visually unchecked. -->
                 <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="6">
+                    <!-- The birth chart itself -->
                     <ToggleButton x:Name="ChartToggle" Content="Chart" IsChecked="True"
-                                  Click="ShowChart_Click"/>
+                                  Click="ShowChart_Click"
+                                  ToolTipService.ToolTip="The chart wheel (Ctrl+1)"/>
                     <ToggleButton x:Name="ReportToggle" Content="Report"
-                                  Click="ShowReport_Click"/>
+                                  Click="ShowReport_Click"
+                                  ToolTipService.ToolTip="A written reading of the chart (Ctrl+2)"/>
                     <ToggleButton x:Name="WorksheetToggle" Content="Worksheet"
                                   Click="ShowWorksheet_Click"
-                                  ToolTipService.ToolTip="The numbers behind the chart, and how they were calculated"/>
+                                  ToolTipService.ToolTip="The numbers behind the chart, and how they were calculated (Ctrl+3)"/>
+                    <Border Width="1" Margin="4,6" Background="{ThemeResource DividerStrokeColorDefaultBrush}"/>
+                    <!-- The chart through time -->
                     <ToggleButton x:Name="DailyToggle" Content="Daily"
                                   Click="ShowDaily_Click"
-                                  ToolTipService.ToolTip="Daily horoscope from today's transits"/>
+                                  ToolTipService.ToolTip="Daily horoscope from today's transits (Ctrl+4)"/>
                     <ToggleButton x:Name="ForecastToggle" Content="Forecast"
                                   Click="ShowForecast_Click"
-                                  ToolTipService.ToolTip="The transits coming up over the next weeks and months"/>
+                                  ToolTipService.ToolTip="The transits coming up over the next weeks and months (Ctrl+5)"/>
                     <ToggleButton x:Name="TimingToggle" Content="Timing"
                                   Click="ShowTiming_Click"
-                                  ToolTipService.ToolTip="The solar return for the year, and the chart progressed to a date"/>
+                                  ToolTipService.ToolTip="The solar return for the year, and the chart progressed to a date (Ctrl+6)"/>
+                    <Border Width="1" Margin="4,6" Background="{ThemeResource DividerStrokeColorDefaultBrush}"/>
+                    <!-- The chart beside another -->
                     <ToggleButton x:Name="SynastryToggle" Content="Synastry"
                                   Click="ShowSynastry_Click"
-                                  ToolTipService.ToolTip="Compare this chart with another person's"/>
+                                  ToolTipService.ToolTip="Compare this chart with another person's (Ctrl+7)"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6">
@@ -217,7 +239,8 @@
                             </Flyout>
                         </DropDownButton.Flyout>
                     </DropDownButton>
-                    <Button Content="Legend" Click="ShowLegend_Click"/>
+                    <Button Content="Legend" Click="ShowLegend_Click"
+                            ToolTipService.ToolTip="What every symbol, colour and term means (F1)"/>
                 </StackPanel>
             </Grid>
 

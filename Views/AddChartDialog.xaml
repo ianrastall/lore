@@ -9,10 +9,23 @@
     DefaultButton="Primary"
     RequestedTheme="Dark">
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="560">
-        <StackPanel Spacing="10" Width="360">
+    <ContentDialog.Resources>
+        <!-- The four parts of the form: who, when, where, and how reliable. -->
+        <Style x:Key="SectionHeading" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
+            <Setter Property="Margin" Value="0,8,0,0"/>
+        </Style>
+    </ContentDialog.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="580" Padding="0,0,14,0">
+        <StackPanel Spacing="10" Width="400">
 
             <TextBox x:Name="NameBox" Header="Name" PlaceholderText="e.g. Jane Doe"/>
+
+            <!-- When -->
+            <TextBlock Text="When" Style="{StaticResource SectionHeading}"/>
 
             <StackPanel Spacing="4">
                 <DatePicker x:Name="DateField" Header="Birth date"/>
@@ -26,21 +39,15 @@
 
             <StackPanel Spacing="4">
                 <TimePicker x:Name="TimeField" Header="Birth time" ClockIdentifier="24HourClock"/>
-                <CheckBox x:Name="TimeUnknownCheck" Content="Birth time unknown (use noon)"
+                <CheckBox x:Name="TimeUnknownCheck" Content="Birth time unknown"
                           Checked="TimeUnknown_Changed" Unchecked="TimeUnknown_Changed"/>
-                <NumberBox x:Name="UncertaintyBox"
-                           Header="The time could be off by up to (minutes either way; 0 if exact)"
-                           SpinButtonPlacementMode="Inline" SmallChange="5" LargeChange="15"
-                           Minimum="0" Maximum="180" Value="0"/>
             </StackPanel>
 
-            <ComboBox x:Name="RatingCombo" HorizontalAlignment="Stretch"
-                      Header="Where the birth time comes from (Rodden rating)"/>
-            <TextBox x:Name="SourceBox" Header="Source (optional)"
-                     PlaceholderText="e.g. birth certificate; mother's memory"/>
+            <!-- Where -->
+            <TextBlock Text="Where" Style="{StaticResource SectionHeading}"/>
 
             <AutoSuggestBox x:Name="HospitalBox"
-                            Header="Birthplace hospital (search to autofill precise coordinates)"
+                            Header="Hospital (the most precise; search by name)"
                             PlaceholderText="Start typing a hospital…"
                             TextChanged="HospitalBox_TextChanged"
                             SuggestionChosen="HospitalBox_SuggestionChosen"
@@ -49,7 +56,7 @@
                             QueryIcon="Find"/>
 
             <AutoSuggestBox x:Name="CityBox"
-                            Header="Or search a city (if the hospital isn't listed)"
+                            Header="Or a city or town"
                             PlaceholderText="Start typing a city…"
                             TextChanged="CityBox_TextChanged"
                             SuggestionChosen="CityBox_SuggestionChosen"
@@ -57,7 +64,7 @@
                             TextMemberPath="Display"
                             QueryIcon="Find"/>
 
-            <TextBox x:Name="PlaceBox" Header="Birthplace label"
+            <TextBox x:Name="PlaceBox" Header="Birthplace, as it will be shown"
                      PlaceholderText="e.g. Boston, USA"/>
 
             <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
@@ -72,13 +79,32 @@
                        TextWrapping="Wrap" FontSize="12"
                        Text="Pick a birthplace to resolve its time zone."/>
 
-            <StackPanel Spacing="4">
-                <CheckBox x:Name="OffsetFixedCheck" Content="Set the UTC offset myself"
-                          Checked="OffsetFixed_Changed" Unchecked="OffsetFixed_Changed"/>
-                <NumberBox x:Name="UtcBox" Header="UTC offset in hours (east of Greenwich is positive)"
-                           SpinButtonPlacementMode="Inline" SmallChange="0.5" LargeChange="1"
-                           Minimum="-14" Maximum="14" IsEnabled="False"/>
-            </StackPanel>
+            <!-- How reliable -->
+            <TextBlock Text="How reliable" Style="{StaticResource SectionHeading}"/>
+
+            <NumberBox x:Name="UncertaintyBox"
+                       Header="The time could be off by up to (minutes either way; 0 if exact)"
+                       SpinButtonPlacementMode="Inline" SmallChange="5" LargeChange="15"
+                       Minimum="0" Maximum="180" Value="0"/>
+
+            <ComboBox x:Name="RatingCombo" HorizontalAlignment="Stretch"
+                      Header="Where the birth time comes from (Rodden rating)"/>
+            <TextBox x:Name="SourceBox" Header="Source (optional)"
+                     PlaceholderText="e.g. birth certificate; mother's memory"/>
+
+            <!-- Seldom needed, so tucked away -->
+            <Expander x:Name="OffsetExpander" Header="Time zone override" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                <StackPanel Spacing="6">
+                    <TextBlock TextWrapping="Wrap" FontSize="12"
+                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                               Text="Lore works out the offset from the place and date. Tick this only if you know it is wrong for this birth, or the clock time fell in an hour that was repeated."/>
+                    <CheckBox x:Name="OffsetFixedCheck" Content="Set the UTC offset myself"
+                              Checked="OffsetFixed_Changed" Unchecked="OffsetFixed_Changed"/>
+                    <NumberBox x:Name="UtcBox" Header="UTC offset in hours (east of Greenwich is positive)"
+                               SpinButtonPlacementMode="Inline" SmallChange="0.5" LargeChange="1"
+                               Minimum="-14" Maximum="14" IsEnabled="False"/>
+                </StackPanel>
+            </Expander>
 
             <TextBox x:Name="NoteBox" Header="Note (optional)"
                      PlaceholderText="anything you'd like to remember"

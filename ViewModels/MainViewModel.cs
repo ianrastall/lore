@@ -15,6 +15,17 @@ public sealed partial class MainViewModel : ObservableObject
 
     private List<Celebrity> _all = [];
 
+    // Which chart and view were open, kept between sessions (see SettingsService.UiState).
+    private SettingsService.UiState _ui = new();
+    public string LastView => _ui.LastView;
+
+    public void RememberView(string view)
+    {
+        if (view == _ui.LastView) return;
+        _ui = _ui with { LastView = view };
+        _settings?.SaveUi(_ui);
+    }
+
     public ChartViewModel ChartVM { get; }
 
     // The Daily view's state; follows whichever chart ChartVM is showing.
@@ -131,6 +142,14 @@ public sealed partial class MainViewModel : ObservableObject
             await Hospitals.LoadAsync(hospitalsPath);
             await RebuildPoolAsync();
             StatusMessage = _userCharts.LoadProblem ?? $"{_all.Count} people loaded.";
+
+            // Pick up where the last session left off.
+            if (_settings is not null)
+            {
+                _ui = _settings.LoadUi();
+                if (_ui.LastChartId is { } id && DisplayedCelebrities.FirstOrDefault(c => c.Id == id) is { } last)
+                    SelectedCelebrity = last;
+            }
             Diagnostics.Log($"Init OK: celebrities={_celebrities.All.Count}, " +
                             $"userCharts={_userCharts.Charts.Count}, categories={Categories.Count}, " +
                             $"displayed={DisplayedCelebrities.Count}");
@@ -214,6 +233,11 @@ public sealed partial class MainViewModel : ObservableObject
         // Whatever is selected now (even nothing), a chart still being calculated for
         // the previous selection must not arrive and show itself.
         _loadGeneration++;
+        if (value is not null && value.Id != _ui.LastChartId)
+        {
+            _ui = _ui with { LastChartId = value.Id };
+            _settings?.SaveUi(_ui);
+        }
         if (value is not null)
         {
             ShowLegend = false; // picking a person returns from the legend to their chart

@@ -23,6 +23,7 @@
                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
             <Border Margin="0,6,0,0" Padding="9,3" CornerRadius="10"
                     HorizontalAlignment="Left"
+                    Visibility="{x:Bind VisIf(ViewModel.HasChart), Mode=OneWay}"
                     Background="{x:Bind ViewModel.ScoreBrush, Mode=OneWay}">
                 <TextBlock Text="{x:Bind ViewModel.ScoreText, Mode=OneWay}"
                            FontSize="12" FontWeight="SemiBold" Foreground="#111318"/>
@@ -30,7 +31,7 @@
         </StackPanel>
 
         <!-- Chart + side panel -->
-        <Grid Grid.Row="1" ColumnDefinitions="*,240">
+        <Grid Grid.Row="1" ColumnDefinitions="*,270">
 
             <!-- Win2D chart canvas -->
             <canvas:CanvasControl x:Name="ChartCanvas"
@@ -39,8 +40,20 @@
                                   SizeChanged="ChartCanvas_SizeChanged"
                                   Margin="8"/>
 
+            <!-- Nothing selected yet -->
+            <StackPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8"
+                        Visibility="{x:Bind VisIfNot(ViewModel.HasChart), Mode=OneWay}">
+                <TextBlock Text="✦" FontSize="40" HorizontalAlignment="Center"
+                           Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
+                <TextBlock Text="Choose someone from the list on the left"
+                           Style="{StaticResource SubtitleTextBlockStyle}" HorizontalAlignment="Center"/>
+                <TextBlock Text="or press Add chart (Ctrl+N) to enter a birth of your own."
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}" HorizontalAlignment="Center"/>
+            </StackPanel>
+
             <!-- Planets & aspects panel -->
-            <Grid Grid.Column="1" RowDefinitions="Auto,*,Auto,*" Padding="0,8,8,8">
+            <Grid Grid.Column="1" RowDefinitions="Auto,3*,Auto,2*" Padding="0,8,8,8"
+                  Visibility="{x:Bind VisIf(ViewModel.HasChart), Mode=OneWay}">
 
                 <TextBlock Grid.Row="0" Text="Planets — click one to show its aspects"
                            Style="{StaticResource CaptionTextBlockStyle}"

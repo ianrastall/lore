@@ -45,6 +45,39 @@ public sealed class SettingsService
         return ChartSettings.Default;
     }
 
+    // Where the user left off: which chart was open and in which view. Kept apart from
+    // the calculation settings (ui.json beside settings.json), since it changes with
+    // every click and matters far less.
+    public sealed record UiState(string? LastChartId = null, string LastView = "Chart");
+
+    private string UiPath => Path.Combine(Path.GetDirectoryName(_path)!, "ui.json");
+
+    public UiState LoadUi()
+    {
+        try
+        {
+            if (File.Exists(UiPath) && JsonSerializer.Deserialize<UiState>(File.ReadAllText(UiPath), JsonOpts) is { } ui)
+                return ui with { LastView = ui.LastView ?? "Chart" };
+        }
+        catch (Exception ex) when (ex is JsonException or IOException or UnauthorizedAccessException)
+        {
+            Diagnostics.Log($"Could not read {UiPath}: {ex.Message}");
+        }
+        return new UiState();
+    }
+
+    public void SaveUi(UiState ui)
+    {
+        try
+        {
+            File.WriteAllText(UiPath, JsonSerializer.Serialize(ui, JsonOpts));
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            Diagnostics.Log($"Could not save {UiPath}: {ex.Message}");
+        }
+    }
+
     public void Save(ChartSettings settings)
     {
         try

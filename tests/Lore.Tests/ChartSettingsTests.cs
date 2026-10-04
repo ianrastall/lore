@@ -93,4 +93,26 @@ public class ChartSettingsTests
             Directory.Delete(dir, recursive: true);
         }
     }
+
+    [Fact]
+    public void The_last_chart_and_view_are_remembered()
+    {
+        string dir = Path.Combine(Path.GetTempPath(), "lore-tests-" + Guid.NewGuid().ToString("N"));
+        try
+        {
+            var fresh = new SettingsService(dir).LoadUi();
+            Assert.Null(fresh.LastChartId);
+            Assert.Equal("Chart", fresh.LastView);
+
+            new SettingsService(dir).SaveUi(new SettingsService.UiState("albert-einstein", "Worksheet"));
+            Assert.Equal(new SettingsService.UiState("albert-einstein", "Worksheet"), new SettingsService(dir).LoadUi());
+
+            File.WriteAllText(Path.Combine(dir, "ui.json"), "not json at all");
+            Assert.Equal(new SettingsService.UiState(), new SettingsService(dir).LoadUi());
+        }
+        finally
+        {
+            Directory.Delete(dir, recursive: true);
+        }
+    }
 }

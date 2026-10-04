@@ -65,6 +65,7 @@ public sealed partial class AddChartDialog : ContentDialog
         SetCoordinates(c.Latitude, c.Longitude);
         UtcBox.Value = c.UtcOffsetHours;
         OffsetFixedCheck.IsChecked = c.UtcOffsetFixed;
+        OffsetExpander.IsExpanded = c.UtcOffsetFixed;
         _timeZoneId = string.IsNullOrWhiteSpace(c.TimeZoneId) ? null : c.TimeZoneId;
         NoteBox.Text = c.Bio;
         SourceBox.Text = c.Source ?? "";
@@ -241,6 +242,7 @@ public sealed partial class AddChartDialog : ContentDialog
         if (zoneId is null)
         {
             UtcBox.IsEnabled = true; // nothing to follow, so the box is all there is
+            OffsetExpander.IsExpanded = true; // ... and it needs to be seen
             return;
         }
         _timeZoneId = zoneId;        // record the geographically-resolved zone too

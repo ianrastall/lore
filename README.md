@@ -452,6 +452,10 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 ### 2.0.0 (in progress)
 A round of fixes from two outside code reviews, and the start of some interface work.
 - **Timing: solar returns and progressions** — a new **Timing** view carries the birth chart forward to any date. It casts the **solar return** in force on that date (the chart for the moment the Sun came back to its place at birth, for the birthplace), draws its wheel, and lists its angles and the planets by return house. It also **progresses** the chart a day for each year of life: the progressed Sun, Moon, Mercury, Venus and Mars, the Midheaven by solar arc with the Ascendant that goes with it, the progressed lunar phase, and every progressed point within a degree of an aspect to the birth chart. Saves as plain text.
+- **Picks up where you left off** — Lore reopens on the chart and view you last had open.
+- **Keyboard shortcuts** — Ctrl+N adds a chart, Ctrl+F jumps to the search box, Ctrl+1 to Ctrl+7 switch between the views, and F1 opens the Legend. The toolbar buttons are grouped (the chart itself · through time · beside another), and each tooltip names its shortcut.
+- **A tidier Add Chart form** — laid out as *When*, *Where* and *How reliable*, with the rarely needed time-zone override folded away until it is wanted.
+- **A proper empty state** — with nothing selected, the chart area says what to do next. The window title names whoever's chart is open.
 - **Click a planet to see its aspects** — picking a planet in the list beside the wheel rings it on the wheel and draws its aspects at full strength, with the rest faded back.
 - **No separate runtime needed** — the Swiss Ephemeris library is now built so that Lore does not depend on a separately installed Visual C++ runtime. On a PC without one, earlier portable builds could fail to calculate anything.
 - **Dates no longer depend on the Windows regional calendar** — on a PC set to the Thai, Persian or Arabic calendar, a saved birth date could be read as a different century. Stored dates are now always read and written the same way.
