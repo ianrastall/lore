@@ -131,6 +131,28 @@ public sealed class ChartService
     // Empty when all is well. Read by NatalChart.EphemerisNote.
     [ThreadStatic] private static string? _lastProblem;
 
+    // The Ascendant that belongs with a given Midheaven at a given latitude — the same
+    // geometry a chart is cast with, entered from the Midheaven instead of from a time.
+    // `jd` only fixes the tilt of the Earth's axis, which changes by a hair in a lifetime.
+    // Null if the ephemeris cannot supply that.
+    public double? AscendantFor(double midheaven, double jd, double latitude)
+    {
+        var xx = new double[6];
+        var cusps = new double[13];
+        var ascmc = new double[10];
+        lock (SweLock)
+        {
+            if (SwissEphemeris.CalcUt(jd, SwissEphemeris.SE_ECL_NUT, 0, xx, nint.Zero) < 0) return null;
+            double eps = xx[0] * Math.PI / 180;   // true obliquity of the ecliptic
+            double mc = midheaven * Math.PI / 180;
+            // The Midheaven is the ecliptic degree on the meridian; its right ascension
+            // is the sidereal time.
+            double armc = Math.Atan2(Math.Sin(mc) * Math.Cos(eps), Math.Cos(mc)) * 180 / Math.PI;
+            SwissEphemeris.HousesArmc(((armc % 360) + 360) % 360, latitude, xx[0], 'P', cusps, ascmc);
+        }
+        return ascmc[SwissEphemeris.SE_ASC];
+    }
+
     private static List<PlanetPosition> CalculatePlanets(double jd, NodeType node)
     {
         _lastProblem = null;

@@ -52,7 +52,10 @@ internal static class ChartRenderer
 
     // `selected`: a planet picked in the list beside the wheel. Its glyph is ringed and
     // its aspects drawn at full strength, with every other aspect faded back.
-    public static void Draw(CanvasDrawingSession ds, NatalChart chart, float width, float height, Planet? selected = null)
+    // `showVerdict`: the coloured dignity rim; off for a chart that is not a birth chart
+    // (a solar return), where the score would mean nothing.
+    public static void Draw(CanvasDrawingSession ds, NatalChart chart, float width, float height,
+        Planet? selected = null, bool showVerdict = true)
     {
         float cx = width / 2f;
         float cy = height / 2f;
@@ -70,7 +73,7 @@ internal static class ChartRenderer
             ds.DrawCircle(at, r * 0.022f, AngularColor, 2f);
         }
         if (chart.Timed) DrawAngles(ds, cx, cy, r, chart);
-        DrawVerdictRim(ds, cx, cy, r, chart);
+        if (showVerdict) DrawVerdictRim(ds, cx, cy, r, chart);
     }
 
     // The longitude the wheel is turned to, at 9 o'clock: the Ascendant, or for a chart

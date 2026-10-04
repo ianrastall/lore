@@ -23,6 +23,9 @@ public sealed partial class MainViewModel : ObservableObject
     // The Forecast view's state: the transits coming up for ChartVM's chart.
     public ForecastViewModel ForecastVM { get; }
 
+    // The Timing view's state: the solar return and progressions for ChartVM's chart.
+    public TimingViewModel TimingVM { get; }
+
     // The Synastry view's state: ChartVM's chart compared with a second person.
     public SynastryViewModel SynastryVM { get; }
 
@@ -69,6 +72,10 @@ public sealed partial class MainViewModel : ObservableObject
     [ObservableProperty]
     public partial bool ShowForecast { get; set; }
 
+    // The Timing view (likewise).
+    [ObservableProperty]
+    public partial bool ShowTiming { get; set; }
+
     // The Synastry view (likewise mutually exclusive with the other two).
     [ObservableProperty]
     public partial bool ShowSynastry { get; set; }
@@ -105,6 +112,7 @@ public sealed partial class MainViewModel : ObservableObject
         ChartVM = new ChartViewModel(interpreter, charts);
         DailyVM = new DailyViewModel(transits, dailyInterpreter);
         ForecastVM = new ForecastViewModel(transits, dailyInterpreter);
+        TimingVM = new TimingViewModel(new TimingService(charts));
         SynastryVM = new SynastryViewModel(charts, synastryInterpreter);
     }
 
@@ -288,6 +296,7 @@ public sealed partial class MainViewModel : ObservableObject
         ChartVM.Chart = null;
         DailyVM.Chart = null;
         ForecastVM.Chart = null;
+        TimingVM.Chart = null;
         SynastryVM.Chart = null;
         await RebuildPoolAsync();
         StatusMessage = $"Deleted {c.Name}.";
@@ -322,6 +331,7 @@ public sealed partial class MainViewModel : ObservableObject
             ChartVM.Chart = chart;
             DailyVM.Chart = chart;
             ForecastVM.Chart = chart;
+            TimingVM.Chart = chart;
             SynastryVM.Chart = chart;
             StatusMessage = chart.EphemerisNote; // empty unless the ephemeris data is missing
         }

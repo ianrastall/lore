@@ -24,6 +24,7 @@ internal static partial class SwissEphemeris
     public const int SE_TRUE_NODE  = 11; // North Node (true / osculating)
     public const int SE_MEAN_APOG  = 12; // Black Moon Lilith (mean lunar apogee)
     public const int SE_CHIRON     = 15;
+    public const int SE_ECL_NUT    = -1; // not a body: obliquity of the ecliptic and nutation
 
     // Calculation flags (iflag)
     public const int SEFLG_SWIEPH = 2;   // use Swiss Ephemeris data files
@@ -69,6 +70,18 @@ internal static partial class SwissEphemeris
         double geolon,
         int hsys,
         [MarshalAs(UnmanagedType.LPArray, SizeConst = 13)] double[] cusps, // [0] unused, [1..12] = house cusps
+        [MarshalAs(UnmanagedType.LPArray, SizeConst = 10)] double[] ascmc);
+
+    // Houses from the sidereal time (ARMC) directly, rather than from a moment and a
+    // longitude: what a progressed Midheaven needs to find the Ascendant that goes with it.
+    [LibraryImport(Dll, EntryPoint = "swe_houses_armc")]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
+    public static partial int HousesArmc(
+        double armc,
+        double geolat,
+        double eps,
+        int hsys,
+        [MarshalAs(UnmanagedType.LPArray, SizeConst = 13)] double[] cusps,
         [MarshalAs(UnmanagedType.LPArray, SizeConst = 10)] double[] ascmc);
 
     [LibraryImport(Dll, EntryPoint = "swe_close")]

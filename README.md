@@ -55,6 +55,7 @@
 | **Worksheet** | The numbers behind the chart, uninterpreted: how the birth time became Universal Time, every position to the arc-second with latitude, declination, daily speed and house, the twelve house cusps, the Part of Fortune, and a grid of every aspect — including those to the Ascendant and Midheaven — with orb and applying/separating. A section headed *If the birth time is off* shows what would change, and when, if the recorded time were out by a margin you set. |
 | **Daily** | Daily horoscope for the selected chart on any date — generated from that day's transits. See below. |
 | **Forecast** | The transits coming up for the selected chart over the next month to a year: when each comes into orb, is exact, and leaves, with the Daily view's written line for it. |
+| **Timing** | The solar return in force on a date, with its wheel, and the chart progressed to that date a day for a year. |
 | **Synastry** | The selected chart compared with a second person's: a written reading and a bi-wheel of the two charts. See below. |
 | **Legend** | Full-page reference — a grouped list of every glyph, colour, angle, house, and term; click any item for a fuller explanation. |
 
@@ -450,6 +451,7 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ### 2.0.0 (in progress)
 A round of fixes from two outside code reviews, and the start of some interface work.
+- **Timing: solar returns and progressions** — a new **Timing** view carries the birth chart forward to any date. It casts the **solar return** in force on that date (the chart for the moment the Sun came back to its place at birth, for the birthplace), draws its wheel, and lists its angles and the planets by return house. It also **progresses** the chart a day for each year of life: the progressed Sun, Moon, Mercury, Venus and Mars, the Midheaven by solar arc with the Ascendant that goes with it, the progressed lunar phase, and every progressed point within a degree of an aspect to the birth chart. Saves as plain text.
 - **Click a planet to see its aspects** — picking a planet in the list beside the wheel rings it on the wheel and draws its aspects at full strength, with the rest faded back.
 - **No separate runtime needed** — the Swiss Ephemeris library is now built so that Lore does not depend on a separately installed Visual C++ runtime. On a PC without one, earlier portable builds could fail to calculate anything.
 - **Dates no longer depend on the Windows regional calendar** — on a PC set to the Thai, Persian or Arabic calendar, a saved birth date could be read as a different century. Stored dates are now always read and written the same way.
