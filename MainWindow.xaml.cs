@@ -98,16 +98,19 @@ public sealed partial class MainWindow : Window
     private void ShowReport_Click(object sender, RoutedEventArgs e) => ShowBody(report: true);
     private void ShowWorksheet_Click(object sender, RoutedEventArgs e) => ShowBody(worksheet: true);
     private void ShowDaily_Click(object sender, RoutedEventArgs e) => ShowBody(daily: true);
+    private void ShowForecast_Click(object sender, RoutedEventArgs e) => ShowBody(forecast: true);
     private void ShowSynastry_Click(object sender, RoutedEventArgs e) => ShowBody(synastry: true);
 
-    private void ShowBody(bool report = false, bool worksheet = false, bool daily = false, bool synastry = false)
+    private void ShowBody(bool report = false, bool worksheet = false, bool daily = false, bool forecast = false, bool synastry = false)
     {
+        ViewModel.ShowForecast = forecast;
+        ForecastToggle.IsChecked = forecast;
         ViewModel.ShowLegend = false;
         ViewModel.ShowReport = report;
         ViewModel.ShowWorksheet = worksheet;
         ViewModel.ShowDaily = daily;
         ViewModel.ShowSynastry = synastry;
-        ChartToggle.IsChecked = !report && !worksheet && !daily && !synastry;
+        ChartToggle.IsChecked = !report && !worksheet && !daily && !forecast && !synastry;
         ReportToggle.IsChecked = report;
         WorksheetToggle.IsChecked = worksheet;
         DailyToggle.IsChecked = daily;
@@ -197,6 +200,7 @@ public sealed partial class MainWindow : Window
     private async void ExportWorksheet_Click(object sender, RoutedEventArgs e) => await ExportAsync("worksheettxt");
     private async void ExportDailyPdf_Click(object sender, RoutedEventArgs e) => await ExportAsync("dailypdf");
     private async void ExportDailyText_Click(object sender, RoutedEventArgs e) => await ExportAsync("dailytxt");
+    private async void ExportForecastText_Click(object sender, RoutedEventArgs e) => await ExportAsync("forecasttxt");
     private async void ExportSynastryPdf_Click(object sender, RoutedEventArgs e) => await ExportAsync("synastrypdf");
     private async void ExportSynastryPng_Click(object sender, RoutedEventArgs e) => await ExportAsync("synastrypng");
 
@@ -216,6 +220,13 @@ public sealed partial class MainWindow : Window
         if (daily && reading is null)
         {
             ViewModel.StatusMessage = "The daily horoscope is not ready yet — try again in a moment.";
+            return;
+        }
+
+        var forecast = ViewModel.ForecastVM.Reading;
+        if (kind == "forecasttxt" && forecast is null)
+        {
+            ViewModel.StatusMessage = "Open the Forecast view first, then export.";
             return;
         }
 
@@ -240,6 +251,7 @@ public sealed partial class MainWindow : Window
                 "worksheettxt" => ("Text file", ".txt"),
                 "dailypdf" => ("PDF document", ".pdf"),
                 "dailytxt" => ("Text file", ".txt"),
+                "forecasttxt" => ("Text file", ".txt"),
                 "synastrypdf" => ("PDF document", ".pdf"),
                 "synastrypng" => ("PNG image", ".png"),
                 _      => throw new ArgumentOutOfRangeException(nameof(kind)),
@@ -252,6 +264,7 @@ public sealed partial class MainWindow : Window
                 daily ? SafeFileName($"{chart.Celebrity.Name} - daily {reading!.Date:yyyy-MM-dd}") :
                 synastry ? SafeFileName($"{synastryReading!.FirstName} and {synastryReading.SecondName} - synastry") :
                 kind == "worksheettxt" ? SafeFileName($"{chart.Celebrity.Name} - worksheet") :
+                kind == "forecasttxt" ? SafeFileName($"{chart.Celebrity.Name} - forecast from {forecast!.Start:yyyy-MM-dd}") :
                 SafeFileName(chart.Celebrity.Name);
 
             var file = await picker.PickSaveFileAsync();
@@ -269,6 +282,7 @@ public sealed partial class MainWindow : Window
                 "worksheettxt" => WorksheetService.ToText(WorksheetService.Build(chart), ViewModel.ChartVM.Sensitivity),
                 "dailypdf" => DailyExportService.ToPdf(reading!),
                 "dailytxt" => DailyExportService.ToText(reading!),
+                "forecasttxt" => DailyInterpreter.ForecastToText(forecast!),
                 "synastrypdf" => SynastryExportService.ToPdf(comparison!, synastryReading!,
                                               await ExportService.RenderBiWheelPngAsync(comparison!)),
                 "synastrypng" => await ExportService.RenderBiWheelPngAsync(comparison!),
@@ -298,8 +312,8 @@ public sealed partial class MainWindow : Window
     public bool Not(bool b) => !b;
 
     // Body panes: the legend, when shown, hides the chart, report, daily and synastry views.
-    public Visibility VisChartBody(bool showReport, bool showWorksheet, bool showDaily, bool showSynastry, bool showLegend) =>
-        !showReport && !showWorksheet && !showDaily && !showSynastry && !showLegend ? Visibility.Visible : Visibility.Collapsed;
+    public Visibility VisChartBody(bool showReport, bool showWorksheet, bool showDaily, bool showForecast, bool showSynastry, bool showLegend) =>
+        !showReport && !showWorksheet && !showDaily && !showForecast && !showSynastry && !showLegend ? Visibility.Visible : Visibility.Collapsed;
     public Visibility VisReportBody(bool show, bool showLegend) =>
         show && !showLegend ? Visibility.Visible : Visibility.Collapsed;
 }

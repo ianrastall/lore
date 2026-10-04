@@ -289,16 +289,128 @@ public sealed class DailyInterpreter
 
     // The bespoke line for this mover, tone and natal point if the corpus has one;
     // otherwise a plainer sentence assembled from the three building blocks.
-    private string TransitText(TransitEvent e)
+    private string TransitText(TransitEvent e) => TransitText(e.Mover, e.Tone, e.Target);
+
+    private string TransitText(Planet moving, TransitTone tone, NatalPoint natalPoint)
     {
-        string key = $"{e.Mover.Name()}|{e.Tone}|{e.Target.Name}";
+        string key = $"{moving.Name()}|{tone}|{natalPoint.Name}";
         if (_c.Transits.TryGetValue(key, out var bespoke) && !string.IsNullOrWhiteSpace(bespoke))
             return bespoke;
 
-        string mover = Lookup(_c.MoverThemes, e.Mover.Name(), e.Mover.Name());
-        string link = Lookup(_c.ToneLinks, e.Tone.ToString(), "meets");
-        string target = Lookup(_c.TargetThemes, e.Target.Name, $"natal {e.Target.Name}");
+        string mover = Lookup(_c.MoverThemes, moving.Name(), moving.Name());
+        string link = Lookup(_c.ToneLinks, tone.ToString(), "meets");
+        string target = Lookup(_c.TargetThemes, natalPoint.Name, $"natal {natalPoint.Name}");
         return $"{Capitalise(mover)} {link} your {target}.";
+    }
+
+    // ── Forecast ──────────────────────────────────────────────────────────────
+    // The passes found by TransitService.Forecast, written out month by month in the
+    // order they peak, each with the same line the Daily view would give it.
+    public ForecastReading ComposeForecast(
+        NatalChart natal, IReadOnlyList<TransitPass> passes, DateOnly start, int days, DateTimeZone zone)
+    {
+        LocalDateTime Local(DateTime utc) => Instant.FromDateTimeUtc(DateTime.SpecifyKind(utc, DateTimeKind.Utc)).InZone(zone).LocalDateTime;
+        string Day(DateTime utc) => Local(utc).ToString("d MMM", null);
+        string Moment(DateTime utc) => Local(utc).ToString("d MMM, HH:mm", null);
+
+        // A pass that is never exact inside the forecast either turns back short of it,
+        // or was exact before the forecast began, or will be after it ends.
+        var first = new LocalDate(start.Year, start.Month, start.Day);
+        DateTime startUtc = zone.AtStartOfDay(first).ToDateTimeUtc(), endUtc = zone.AtStartOfDay(first.PlusDays(days)).ToDateTimeUtc();
+        string Closest(TransitPass p) =>
+            p.EnterUtc is null && (p.PeakUtc - startUtc).TotalHours < 1
+                ? $"Already past exact as this forecast begins ({FormatOrb(p.MinOrb)} from it and easing)"
+            : p.LeaveUtc is null && (endUtc - p.PeakUtc).TotalHours < 1
+                ? $"Still building as this forecast ends ({FormatOrb(p.MinOrb)} from exact)"
+            : $"Closest {Day(p.PeakUtc)}, {FormatOrb(p.MinOrb)} from exact, then it turns back";
+
+        DailyItem Item(TransitPass p)
+        {
+            string target = p.Target.IsAngle ? p.Target.Name : $"{p.Target.Symbol} {p.Target.Name}";
+
+            var meta = new List<string>
+            {
+                p.IsExact
+                    ? "Exact " + string.Join(" and ", p.ExactUtc.Select(Moment))
+                    : Closest(p),
+                (p.EnterUtc, p.LeaveUtc) switch
+                {
+                    ({ } e, { } l) => $"in effect {Day(e)} to {Day(l)}",
+                    (null, { } l)  => $"already in effect, until {Day(l)}",
+                    ({ } e, null)  => $"in effect from {Day(e)}, past the end of this forecast",
+                    _              => "in effect throughout",
+                },
+            };
+            if (p.TargetHouse is { } house)
+                meta.Add($"natal {p.Target.Name} is in your {ChartInterpreter.Ordinal(house)} house " +
+                         $"({Lookup(_c.Houses, house.ToString(), "this area of life")})");
+            if (p.MoverRetrograde)
+                meta.Add($"{p.Mover.Name()} is retrograde");
+
+            return new DailyItem
+            {
+                Title = $"{p.Mover.Symbol()} {p.Mover.Name()} {p.Aspect.Verb()} your natal {target}",
+                Meta = string.Join("  ·  ", meta),
+                Text = TransitText(p.Mover, p.Tone, p.Target),
+            };
+        }
+
+        var sections = passes
+            .GroupBy(p => { var d = Local(p.PeakUtc); return (d.Year, d.Month); })
+            .OrderBy(g => g.Key)
+            .Select(g => new DailySection
+            {
+                Heading = new DateOnly(g.Key.Year, g.Key.Month, 1).ToString("MMMM yyyy"),
+                Items = g.Select(Item).ToList(),
+            })
+            .ToList();
+
+        if (sections.Count == 0)
+            sections.Add(new DailySection
+            {
+                Heading = "Nothing in this stretch",
+                Items = [new DailyItem { Text = "No planet comes within a degree of an aspect to this chart in these days. Try a longer stretch, or include the faster planets." }],
+            });
+
+        return new ForecastReading
+        {
+            Name = natal.Celebrity.Name,
+            Start = start,
+            Days = days,
+            ZoneId = zone.Id,
+            Sections = sections,
+            Passes = passes,
+        };
+    }
+
+    // "0°23'"
+    private static string FormatOrb(double orb)
+    {
+        int minutes = (int)Math.Round(orb * 60);
+        return $"{minutes / 60}°{minutes % 60:D2}'";
+    }
+
+    // The forecast as plain text, for saving or pasting into notes.
+    public static byte[] ForecastToText(ForecastReading f)
+    {
+        var sb = new System.Text.StringBuilder();
+        sb.AppendLine($"{f.Name} — Transits ahead");
+        sb.AppendLine(f.RangeText);
+        foreach (var section in f.Sections)
+        {
+            sb.AppendLine();
+            sb.AppendLine(section.Heading.ToUpperInvariant());
+            foreach (var item in section.Items)
+            {
+                sb.AppendLine();
+                if (item.HasTitle) sb.AppendLine(item.Title);
+                if (item.HasMeta) sb.AppendLine($"({item.Meta})");
+                sb.AppendLine(item.Text);
+            }
+        }
+        sb.AppendLine();
+        sb.AppendLine($"Generated by Lore on {DateTime.Now:yyyy-MM-dd} — a prompt for reflection, not a prediction.");
+        return [.. System.Text.Encoding.UTF8.GetPreamble(), .. System.Text.Encoding.UTF8.GetBytes(sb.ToString())];
     }
 
     private List<DailyItem> SkyNotes(NatalChart natal, DaySky sky, bool timed)

@@ -54,6 +54,7 @@
 | **Report** | Natural-language reading: Overview (Sun/Moon/Rising), planet-by-sign-degree-and-house paragraphs, major aspects, chart patterns (stellium, grand trine, T-square, grand cross), and elemental and modal balance. The Ascendant/Midheaven line shows their degrees and names the house system. |
 | **Worksheet** | The numbers behind the chart, uninterpreted: how the birth time became Universal Time, every position to the arc-second with latitude, declination, daily speed and house, the twelve house cusps, the Part of Fortune, and a grid of every aspect — including those to the Ascendant and Midheaven — with orb and applying/separating. A section headed *If the birth time is off* shows what would change, and when, if the recorded time were out by a margin you set. |
 | **Daily** | Daily horoscope for the selected chart on any date — generated from that day's transits. See below. |
+| **Forecast** | The transits coming up for the selected chart over the next month to a year: when each comes into orb, is exact, and leaves, with the Daily view's written line for it. |
 | **Synastry** | The selected chart compared with a second person's: a written reading and a bi-wheel of the two charts. See below. |
 | **Legend** | Full-page reference — a grouped list of every glyph, colour, angle, house, and term; click any item for a fuller explanation. |
 
@@ -446,6 +447,9 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 ---
 
 ## Version History
+
+### 1.8.0 (in progress)
+- **Forecast** — a new **Forecast** view lists the transits coming up for the selected chart over the next month, three months, six months or year, starting from any date. For each one it gives when it comes into orb, when it is exact (more than once if the planet turns retrograde while in orb; or how close it gets if it turns back just short), and when it leaves — with the same written line the Daily view uses, month by month. The Sun, Mercury, Venus and Mars can be switched off to leave only the slow, weightier transits. The Moon is left to the Daily view. Saves as plain text.
 
 ### 1.7.0 (current)
 - **Aspect orbs are yours to set** — the Settings menu now has an orb for each of the five aspects and an extra allowance for the Sun and Moon, with three named sets: *Standard* (8°, sextile 6° — what Lore has always used), *Tight* (6°, sextile 4°, two degrees more with the Sun or Moon) and *Wide* (10°, sextile 6°). The choice changes the aspects on the wheel, in the report, in the patterns found and on the Worksheet, is remembered, and is named on the Worksheet and in the exports. Synastry and the daily horoscope keep their own orbs.

@@ -1,0 +1,131 @@
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Lore.Models;
+using Lore.Services;
+using NodaTime;
+
+namespace Lore.ViewModels;
+
+// State for the Forecast view: the selected chart, the stretch of days being looked at,
+// and the transits found in it. Rebuilt (off the UI thread) whenever an input changes.
+public sealed partial class ForecastViewModel : ObservableObject
+{
+    // The stretches offered, in days, in the order the drop-down lists them.
+    public static readonly int[] Spans = [30, 91, 182, 365];
+
+    private readonly TransitService? _transits;
+    private readonly DailyInterpreter? _interpreter;
+    private readonly DateTimeZone _zone = TransitService.LocalZone();
+
+    // Bumped on every rebuild; a calculation that finishes after a newer one has started
+    // is discarded, so changing the settings quickly never shows a stale list.
+    private int _generation;
+
+    public ForecastViewModel(TransitService? transits = null, DailyInterpreter? interpreter = null)
+    {
+        _transits = transits;
+        _interpreter = interpreter;
+    }
+
+    [ObservableProperty]
+    public partial NatalChart? Chart { get; set; }
+
+    [ObservableProperty]
+    public partial DateOnly Start { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+
+    // Index into Spans; three months to begin with.
+    [ObservableProperty]
+    public partial int SpanIndex { get; set; } = 1;
+
+    // Whether the Sun, Mercury, Venus and Mars are listed along with the slow movers.
+    [ObservableProperty]
+    public partial bool IncludeFast { get; set; } = true;
+
+    [ObservableProperty]
+    public partial ForecastReading? Reading { get; set; }
+
+    [ObservableProperty]
+    public partial bool IsBusy { get; set; }
+
+    [ObservableProperty]
+    public partial string ErrorText { get; set; } = "";
+
+    // CalendarDatePicker speaks DateTimeOffset; noon keeps a daylight-saving edge from
+    // tipping the date either way.
+    public DateTimeOffset? PickerDate
+    {
+        get => new DateTimeOffset(Start.ToDateTime(new TimeOnly(12, 0)));
+        set { if (value is { } v) Start = DateOnly.FromDateTime(v.Date); }
+    }
+
+    public string Title => Chart is null ? "" : $"{Chart.Celebrity.Name} — Transits ahead";
+
+    public string Summary => Reading is null ? "" :
+        $"{Reading.Passes.Count} {(Reading.Passes.Count == 1 ? "transit" : "transits")} from {Reading.RangeText}" +
+        (Chart?.Timed == false ? ". With no birth time, the Ascendant, Midheaven and natal Moon are left out." : ".");
+
+    public IReadOnlyList<DailySection> Sections => Reading?.Sections ?? [];
+
+    [RelayCommand]
+    private void FromToday() => Start = DateOnly.FromDateTime(DateTime.Now);
+
+    partial void OnChartChanged(NatalChart? value)
+    {
+        OnPropertyChanged(nameof(Title));
+        Rebuild();
+    }
+
+    partial void OnStartChanged(DateOnly value)
+    {
+        OnPropertyChanged(nameof(PickerDate));
+        Rebuild();
+    }
+
+    partial void OnSpanIndexChanged(int value) => Rebuild();
+    partial void OnIncludeFastChanged(bool value) => Rebuild();
+
+    partial void OnReadingChanged(ForecastReading? value)
+    {
+        OnPropertyChanged(nameof(Summary));
+        OnPropertyChanged(nameof(Sections));
+    }
+
+    private async void Rebuild()
+    {
+        int generation = ++_generation;
+        var chart = Chart;
+        var start = Start;
+        int days = Spans[Math.Clamp(SpanIndex, 0, Spans.Length - 1)];
+        bool fast = IncludeFast;
+        ErrorText = "";
+
+        if (chart is null || _transits is null || _interpreter is null)
+        {
+            Reading = null;
+            return;
+        }
+
+        IsBusy = true;
+        try
+        {
+            var reading = await Task.Run(() =>
+                _interpreter.ComposeForecast(chart, _transits.Forecast(chart, start, days, _zone, fast), start, days, _zone));
+            if (generation == _generation)
+                Reading = reading;
+        }
+        catch (Exception ex)
+        {
+            Diagnostics.Log($"Forecast for {chart.Celebrity.Name} from {start} failed: {ex}");
+            if (generation == _generation)
+            {
+                Reading = null;
+                ErrorText = $"Could not build the forecast: {ex.Message}";
+            }
+        }
+        finally
+        {
+            if (generation == _generation)
+                IsBusy = false;
+        }
+    }
+}

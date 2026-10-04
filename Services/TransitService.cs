@@ -101,6 +101,115 @@ public sealed class TransitService
         };
     }
 
+    // ── Forecast ──────────────────────────────────────────────────────────────
+    // Every pass a moving body makes within orb of a natal point over a stretch of days,
+    // with the moments it enters orb, is exact, and leaves. The Moon is left out: it
+    // touches every point in the chart several times a month, which is what the Daily
+    // view is for. `includeFast` adds the Sun, Mercury, Venus and Mars to the slow movers.
+    public IReadOnlyList<TransitPass> Forecast(
+        NatalChart natal, DateOnly start, int days, DateTimeZone zone, bool includeFast = true)
+    {
+        var first = new LocalDate(start.Year, start.Month, start.Day);
+        double jd0 = SwissEphemeris.DateTimeToJulianDay(zone.AtStartOfDay(first).ToDateTimeUtc());
+        double jd1 = SwissEphemeris.DateTimeToJulianDay(zone.AtStartOfDay(first.PlusDays(days)).ToDateTimeUtc());
+
+        bool timed = natal.Celebrity.BirthTimeKnown;
+        var targets = Targets(natal, timed);
+        var passes = new List<TransitPass>();
+
+        foreach (var mover in Enum.GetValues<Planet>())
+        {
+            if (mover == Planet.Moon || (!includeFast && mover.IsPersonal())) continue;
+
+            // Half-day samples for the quick planets, daily for the slow: in either case
+            // the body moves less between samples than the 2° an orb spans, so no pass
+            // can slip between two of them.
+            double step = mover.IsPersonal() ? 0.5 : 1.0;
+            int n = Math.Max(1, (int)Math.Ceiling((jd1 - jd0) / step));
+            var jds = new double[n + 1];
+            var lon = new double[n + 1];
+            bool available = true;
+            for (int i = 0; i <= n && available; i++)
+            {
+                jds[i] = Math.Min(jd0 + i * step, jd1);
+                if (_charts.CalculateBody(jds[i], mover) is { } p) lon[i] = p.Longitude; else available = false;
+            }
+            if (!available) continue;
+
+            foreach (var (point, natalLon) in targets)
+                foreach (var aspect in AspectTypeExtensions.Majors)
+                    foreach (double branch in Branches(natalLon, aspect.Angle()))
+                    {
+                        double D(int i) => Signed(lon[i] - branch);
+                        for (int i = 0; i <= n; i++)
+                        {
+                            if (Math.Abs(D(i)) > Orb) continue;
+                            int a = i;
+                            while (i < n && Math.Abs(D(i + 1)) <= Orb) i++;
+                            passes.Add(Pass(natal, timed, mover, point, natalLon, aspect, branch, jds, D, a, i));
+                        }
+                    }
+        }
+
+        passes.Sort((x, y) => x.PeakUtc.CompareTo(y.PeakUtc));
+        return passes;
+    }
+
+    // One run of samples [a..b] inside the orb, refined at both ends and at each crossing.
+    private TransitPass Pass(
+        NatalChart natal, bool timed, Planet mover, NatalPoint point, double natalLon, AspectType aspect,
+        double branch, double[] jds, Func<int, double> d, int a, int b)
+    {
+        int n = jds.Length - 1;
+        double OutBy(double t) => OrbAt(mover, branch, t) - Orb; // negative inside the orb
+
+        double? enter = a > 0 ? Bisect(OutBy, jds[a - 1], jds[a]) : null;
+        double? leave = b < n ? Bisect(OutBy, jds[b], jds[b + 1]) : null;
+
+        // Exact wherever the signed distance changes sign between neighbouring samples.
+        var exact = new List<double>();
+        for (int k = Math.Max(a - 1, 0); k <= Math.Min(b, n - 1); k++)
+        {
+            double x = d(k), y = d(k + 1);
+            if (x == 0) exact.Add(jds[k]);
+            else if ((x < 0) != (y < 0) && y != 0)
+                exact.Add(Bisect(t => SignedAt(mover, branch, t), jds[k], jds[k + 1]));
+            else if (y == 0 && k + 1 == n) exact.Add(jds[n]);
+        }
+        // A crossing found just outside the run's own ends belongs to it only if it
+        // falls between entering and leaving.
+        exact.RemoveAll(t => (enter is { } e && t < e) || (leave is { } l && t > l));
+
+        double peakJd, minOrb;
+        if (exact.Count > 0)
+        {
+            peakJd = exact[0];
+            minOrb = 0;
+        }
+        else
+        {
+            int k = a;
+            for (int i = a; i <= b; i++)
+                if (Math.Abs(d(i)) < Math.Abs(d(k))) k = i;
+            (peakJd, minOrb) = Minimise(mover, branch, jds[Math.Max(k - 1, 0)], jds[Math.Min(k + 1, n)]);
+        }
+
+        return new TransitPass
+        {
+            Mover = mover,
+            Target = point,
+            Aspect = aspect,
+            EnterUtc = enter is { } en ? SwissEphemeris.JulianDayToDateTime(en) : null,
+            LeaveUtc = leave is { } le ? SwissEphemeris.JulianDayToDateTime(le) : null,
+            ExactUtc = exact.Select(SwissEphemeris.JulianDayToDateTime).ToList(),
+            PeakUtc = SwissEphemeris.JulianDayToDateTime(peakJd),
+            MinOrb = minOrb,
+            // The mean node always runs backwards; that is not a retrograde period.
+            MoverRetrograde = _charts.CalculateBody(peakJd, mover) is { IsRetrograde: true },
+            TargetHouse = timed && !point.IsAngle ? natal.GetHouseForLongitude(natalLon) : null,
+        };
+    }
+
     // The natal points a transit can land on. Without a birth time the angles are
     // unknown and the Moon may be several degrees off, which a 1° orb cannot absorb —
     // so those are left out rather than read from a noon guess.

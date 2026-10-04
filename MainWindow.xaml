@@ -122,6 +122,9 @@
                     <ToggleButton x:Name="DailyToggle" Content="Daily"
                                   Click="ShowDaily_Click"
                                   ToolTipService.ToolTip="Daily horoscope from today's transits"/>
+                    <ToggleButton x:Name="ForecastToggle" Content="Forecast"
+                                  Click="ShowForecast_Click"
+                                  ToolTipService.ToolTip="The transits coming up over the next weeks and months"/>
                     <ToggleButton x:Name="SynastryToggle" Content="Synastry"
                                   Click="ShowSynastry_Click"
                                   ToolTipService.ToolTip="Compare this chart with another person's"/>
@@ -139,6 +142,7 @@
                                 <MenuFlyoutSeparator/>
                                 <MenuFlyoutItem Text="PDF — daily horoscope…" Click="ExportDailyPdf_Click"/>
                                 <MenuFlyoutItem Text="Text — daily horoscope…" Click="ExportDailyText_Click"/>
+                                <MenuFlyoutItem Text="Text — forecast…" Click="ExportForecastText_Click"/>
                                 <MenuFlyoutSeparator/>
                                 <MenuFlyoutItem Text="PDF — synastry reading…" Click="ExportSynastryPdf_Click"/>
                                 <MenuFlyoutItem Text="PNG — synastry bi-wheel…" Click="ExportSynastryPng_Click"/>
@@ -219,7 +223,7 @@
                                  x:Name="ChartViewControl"
                                  ViewModel="{x:Bind ViewModel.ChartVM}"
                                  RequestedTheme="Dark"
-                                 Visibility="{x:Bind VisChartBody(ViewModel.ShowReport, ViewModel.ShowWorksheet, ViewModel.ShowDaily, ViewModel.ShowSynastry, ViewModel.ShowLegend), Mode=OneWay}"/>
+                                 Visibility="{x:Bind VisChartBody(ViewModel.ShowReport, ViewModel.ShowWorksheet, ViewModel.ShowDaily, ViewModel.ShowForecast, ViewModel.ShowSynastry, ViewModel.ShowLegend), Mode=OneWay}"/>
                 <views:ReportView x:Name="ReportViewControl"
                                   ViewModel="{x:Bind ViewModel.ChartVM}"
                                   RequestedTheme="Dark"
@@ -232,6 +236,10 @@
                                  ViewModel="{x:Bind ViewModel.DailyVM}"
                                  RequestedTheme="Dark"
                                  Visibility="{x:Bind VisReportBody(ViewModel.ShowDaily, ViewModel.ShowLegend), Mode=OneWay}"/>
+                <views:ForecastView x:Name="ForecastViewControl"
+                                    ViewModel="{x:Bind ViewModel.ForecastVM}"
+                                    RequestedTheme="Dark"
+                                    Visibility="{x:Bind VisReportBody(ViewModel.ShowForecast, ViewModel.ShowLegend), Mode=OneWay}"/>
                 <views:SynastryView x:Name="SynastryViewControl"
                                     ViewModel="{x:Bind ViewModel.SynastryVM}"
                                     RequestedTheme="Dark"

@@ -20,6 +20,9 @@ public sealed partial class MainViewModel : ObservableObject
     // The Daily view's state; follows whichever chart ChartVM is showing.
     public DailyViewModel DailyVM { get; }
 
+    // The Forecast view's state: the transits coming up for ChartVM's chart.
+    public ForecastViewModel ForecastVM { get; }
+
     // The Synastry view's state: ChartVM's chart compared with a second person.
     public SynastryViewModel SynastryVM { get; }
 
@@ -62,6 +65,10 @@ public sealed partial class MainViewModel : ObservableObject
     [ObservableProperty]
     public partial bool ShowDaily { get; set; }
 
+    // The Forecast view (likewise).
+    [ObservableProperty]
+    public partial bool ShowForecast { get; set; }
+
     // The Synastry view (likewise mutually exclusive with the other two).
     [ObservableProperty]
     public partial bool ShowSynastry { get; set; }
@@ -97,6 +104,7 @@ public sealed partial class MainViewModel : ObservableObject
         Hospitals = hospitals;
         ChartVM = new ChartViewModel(interpreter, charts);
         DailyVM = new DailyViewModel(transits, dailyInterpreter);
+        ForecastVM = new ForecastViewModel(transits, dailyInterpreter);
         SynastryVM = new SynastryViewModel(charts, synastryInterpreter);
     }
 
@@ -276,6 +284,7 @@ public sealed partial class MainViewModel : ObservableObject
         SelectedCelebrity = null;
         ChartVM.Chart = null;
         DailyVM.Chart = null;
+        ForecastVM.Chart = null;
         SynastryVM.Chart = null;
         await RebuildPoolAsync();
         StatusMessage = $"Deleted {c.Name}.";
@@ -309,6 +318,7 @@ public sealed partial class MainViewModel : ObservableObject
             if (generation != _loadGeneration) return; // superseded by a newer selection
             ChartVM.Chart = chart;
             DailyVM.Chart = chart;
+            ForecastVM.Chart = chart;
             SynastryVM.Chart = chart;
             StatusMessage = "";
         }
