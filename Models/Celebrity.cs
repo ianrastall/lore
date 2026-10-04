@@ -40,6 +40,12 @@ public sealed class Celebrity
     [JsonPropertyName("timeZoneId")]
     public string? TimeZoneId { get; init; }
 
+    // True when the user set UtcOffsetHours themselves (the time-zone database being
+    // wrong or ambiguous for this birth): the offset is then used as given and the
+    // zone is ignored.
+    [JsonPropertyName("utcOffsetFixed")]
+    public bool UtcOffsetFixed { get; init; }
+
     [JsonPropertyName("bio")]
     public string Bio { get; init; } = "";
 

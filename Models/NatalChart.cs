@@ -9,6 +9,14 @@ public sealed class NatalChart
     public double Ascendant { get; init; }   // ecliptic longitude
     public double Midheaven { get; init; }   // ecliptic longitude
 
+    // The house system the cusps were actually calculated in, as shown to the user,
+    // e.g. "Placidus houses" — or a note that another system had to stand in for it.
+    public string HouseSystemLabel { get; init; } = "Placidus houses";
+
+    // Without a birth time the planets are placed for noon and the Ascendant, Midheaven
+    // and houses are unknown; nothing should be read from them.
+    public bool Timed => Celebrity.BirthTimeKnown;
+
     public PlanetPosition? GetPlanet(Planet p) =>
         Planets.FirstOrDefault(x => x.Planet == p);
 

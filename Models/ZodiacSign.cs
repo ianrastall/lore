@@ -35,13 +35,13 @@ public static class ZodiacSignExtensions
 
     // Position within its sign as degrees and arc-minutes, e.g. "12°39'".
     // Shared by the report, the on-screen angles line, and the PDF export so
-    // they all print the same format.
+    // they all print the same format. The minutes are cut off, not rounded: 29°59'40"
+    // is still 29°59' of its sign, and rounding it up would print a 30th degree.
     public static string FormatDegreeInSign(double eclipticLongitude)
     {
         double d = DegreeInSign(eclipticLongitude);
         int deg = (int)d;
-        int min = (int)Math.Round((d - deg) * 60);
-        if (min == 60) { deg += 1; min = 0; } // carry a minute that rounds up to 60'
+        int min = Math.Min(59, (int)((d - deg) * 60));
         return $"{deg}°{min:D2}'";
     }
 

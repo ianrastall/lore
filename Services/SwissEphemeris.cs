@@ -57,6 +57,8 @@ internal static partial class SwissEphemeris
         [MarshalAs(UnmanagedType.LPArray, SizeConst = 6)] double[] xx,
         nint serr); // pass nint.Zero (null) — error text is not used
 
+    // Returns a negative value when the requested system cannot be calculated at this
+    // latitude (Placidus and Koch inside the polar circles); the cusps are then Porphyry.
     [LibraryImport(Dll, EntryPoint = "swe_houses")]
     [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
     public static partial int Houses(

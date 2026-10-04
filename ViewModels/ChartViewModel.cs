@@ -39,21 +39,28 @@ public sealed partial class ChartViewModel : ObservableObject
         var parts = new List<string>();
         if (chart.GetPlanet(Planet.Sun) is { } sun)   parts.Add($"☉ Sun {sun.Sign.Name()}");
         if (chart.GetPlanet(Planet.Moon) is { } moon)  parts.Add($"☽ Moon {moon.Sign.Name()}");
-        parts.Add($"↑ Rising {ZodiacSignExtensions.FromLongitude(chart.Ascendant).Name()}");
+        if (chart.Timed)
+            parts.Add($"↑ Rising {ZodiacSignExtensions.FromLongitude(chart.Ascendant).Name()}");
         return string.Join("     ·     ", parts);
     }
 
     // Technical chart angles — secondary, shown small. The Midheaven is NOT the "sign";
     // it lives here so it can't be mistaken for one.
-    public string AnglesText => Chart is null ? "" :
-        $"Ascendant {ZodiacSignExtensions.FromLongitude(Chart.Ascendant).Name()} {ZodiacSignExtensions.FormatDegreeInSign(Chart.Ascendant)}" +
-        $"   ·   Midheaven {ZodiacSignExtensions.FromLongitude(Chart.Midheaven).Name()} {ZodiacSignExtensions.FormatDegreeInSign(Chart.Midheaven)}" +
-        $"   ·   Placidus houses";
+    public string AnglesText => Chart is null ? "" : FormatAngles(Chart);
+
+    // Shared with the PDF export so both print the same line.
+    public static string FormatAngles(NatalChart chart) => !chart.Timed
+        ? "Birth time unknown — planets are placed for noon; no Ascendant, Midheaven or houses"
+        : $"Ascendant {ZodiacSignExtensions.FromLongitude(chart.Ascendant).Name()} {ZodiacSignExtensions.FormatDegreeInSign(chart.Ascendant)}" +
+          $"   ·   Midheaven {ZodiacSignExtensions.FromLongitude(chart.Midheaven).Name()} {ZodiacSignExtensions.FormatDegreeInSign(chart.Midheaven)}" +
+          $"   ·   {chart.HouseSystemLabel}";
 
     // Traditional dignity score + verdict, shown as a coloured pill.
     private ChartScore? _score;
 
-    public string ScoreText => _score is null ? "" :
+    public string ScoreText =>
+        Chart is null ? "" :
+        _score is null ? "Dignity score needs a birth time" :
         $"Dignity score {_score.Total:+#;-#;0}  ·  {_score.Verdict.Label()}";
 
     public SolidColorBrush ScoreBrush => new(ParseHex(_score?.Verdict.ColorHex() ?? "#9AA0A6"));
@@ -70,7 +77,7 @@ public sealed partial class ChartViewModel : ObservableObject
     partial void OnChartChanged(NatalChart? value)
     {
         SelectedPlanet = null;
-        _score = value is null ? null : DignityService.Compute(value);
+        _score = value is null ? null : DignityService.ComputeIfTimed(value);
         ReportSections = (_interpreter is not null && value is not null)
             ? _interpreter.Interpret(value)
             : [];

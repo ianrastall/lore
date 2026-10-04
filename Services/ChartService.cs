@@ -23,6 +23,15 @@ public sealed class ChartService
 
     private const int HouseSystem = 'P'; // Placidus
 
+    private static string HouseSystemName => (char)HouseSystem switch
+    {
+        'P' => "Placidus",
+        'K' => "Koch",
+        'W' => "Whole Sign",
+        'E' => "Equal",
+        var other => $"'{other}'",
+    };
+
     // Swiss Ephemeris (sweph.dll) keeps global internal state and is NOT thread-safe:
     // swe_calc_ut / swe_houses share buffers and the ephemeris-file cache. This app hits
     // the native layer from more than one thread — chart selection calculates on a
@@ -45,10 +54,11 @@ public sealed class ChartService
         List<PlanetPosition> planets;
         List<HouseCusp> houses;
         double asc, mc;
+        bool substituted;
         lock (SweLock)
         {
             planets = CalculatePlanets(jd);
-            (houses, asc, mc) = CalculateHouses(jd, celebrity.Latitude, celebrity.Longitude);
+            (houses, asc, mc, substituted) = CalculateHouses(jd, celebrity.Latitude, celebrity.Longitude);
         }
 
         // Aspect detection is pure managed arithmetic on the results above — no native
@@ -63,6 +73,9 @@ public sealed class ChartService
             Aspects = aspects,
             Ascendant = asc,
             Midheaven = mc,
+            HouseSystemLabel = substituted
+                ? $"Porphyry houses ({HouseSystemName} cannot be calculated at this latitude)"
+                : $"{HouseSystemName} houses",
         };
     }
 
@@ -124,19 +137,21 @@ public sealed class ChartService
         return result;
     }
 
-    private static (List<HouseCusp> houses, double asc, double mc) CalculateHouses(
+    // `substituted` is set when the Swiss Ephemeris could not calculate the requested
+    // system at this latitude and returned Porphyry cusps in its place.
+    private static (List<HouseCusp> houses, double asc, double mc, bool substituted) CalculateHouses(
         double jd, double lat, double lon)
     {
         var cusps = new double[13];
         var ascmc = new double[10];
 
-        SwissEphemeris.Houses(jd, lat, lon, HouseSystem, cusps, ascmc);
+        bool substituted = SwissEphemeris.Houses(jd, lat, lon, HouseSystem, cusps, ascmc) < 0;
 
         var houses = Enumerable.Range(1, 12)
             .Select(i => new HouseCusp { House = i, Longitude = cusps[i] })
             .ToList();
 
-        return (houses, ascmc[SwissEphemeris.SE_ASC], ascmc[SwissEphemeris.SE_MC]);
+        return (houses, ascmc[SwissEphemeris.SE_ASC], ascmc[SwissEphemeris.SE_MC], substituted);
     }
 
     private static List<Aspect> CalculateAspects(List<PlanetPosition> planets)

@@ -145,7 +145,13 @@ public sealed partial class MainViewModel : ObservableObject
         {
             try
             {
-                var score = DignityService.Compute(_charts.Calculate(c));
+                // No birth time, no score (see DignityService.ComputeIfTimed).
+                if (DignityService.ComputeIfTimed(_charts.Calculate(c)) is not { } score)
+                {
+                    c.VerdictColorHex = "#00000000";
+                    c.VerdictLabel = "";
+                    continue;
+                }
                 // Translucent wash for the whole row: green (Extraordinary) / red
                 // (Alarming), transparent for Ordinary so the notable rows stand out.
                 c.VerdictColorHex = score.Verdict switch

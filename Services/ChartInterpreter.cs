@@ -67,11 +67,12 @@ public sealed class ChartInterpreter
             paras.Add(Frame("Sun", name, sun.Sign));
         if (moon is not null)
             paras.Add(Frame("Moon", name, moon.Sign));
-        paras.Add(Frame("Rising", name, risingSign));
-
-        if (!chart.Celebrity.BirthTimeKnown)
-            paras.Add("Note: the birth time is unknown, so the chart uses noon. The Ascendant, " +
-                      "house placements, and the Moon's exact degree may not be reliable.");
+        if (chart.Timed)
+            paras.Add(Frame("Rising", name, risingSign));
+        else
+            paras.Add("Note: the birth time is unknown, so the planets are placed for noon. The Rising " +
+                      "sign and the houses can't be known without a time and are left out, and the Moon " +
+                      "may be up to seven degrees from where it is shown.");
 
         return new ReportSection { Heading = "Overview", Paragraphs = paras };
     }
@@ -81,8 +82,11 @@ public sealed class ChartInterpreter
         var paras = new List<string>();
         foreach (var p in chart.Planets)
         {
-            int house = chart.GetHouseForLongitude(p.Longitude);
-            string area = Lookup(_c.HouseAreas, house.ToString(), "this area of life");
+            // Houses need a birth time; without one the line stops at the sign.
+            int house = chart.Timed ? chart.GetHouseForLongitude(p.Longitude) : 0;
+            string colouring = chart.Timed
+                ? $", colouring {Lookup(_c.HouseAreas, house.ToString(), "this area of life")}."
+                : ".";
             string retro = p.IsRetrograde ? " Retrograde here, its lessons turn inward before they express outward." : "";
 
             // Prefer a bespoke Planet-in-Sign line; fall back to the templated blend.
@@ -90,17 +94,18 @@ public sealed class ChartInterpreter
             if (_c.PlanetInSign.TryGetValue($"{p.PlanetName}|{p.Sign.Name()}", out var bespoke)
                 && !string.IsNullOrWhiteSpace(bespoke))
             {
-                core = $"{bespoke.TrimEnd('.')}, colouring {area}.";
+                core = $"{bespoke.TrimEnd('.')}{colouring}";
             }
             else
             {
                 string theme = Lookup(_c.PlanetThemes, p.PlanetName, "this energy");
                 string style = Lookup(_c.SignStyles, p.Sign.Name(), "in its own way");
-                core = $"{theme} expressed {style}, colouring {area}.";
+                core = $"{theme} expressed {style}{colouring}";
             }
 
             string pos = ZodiacSignExtensions.FormatDegreeInSign(p.Longitude);
-            paras.Add($"{p.PlanetSymbol} {p.PlanetName} in {p.Sign.Name()} {pos} ({Ordinal(house)} house): {core}{retro}");
+            string where = chart.Timed ? $" ({Ordinal(house)} house)" : "";
+            paras.Add($"{p.PlanetSymbol} {p.PlanetName} in {p.Sign.Name()} {pos}{where}: {core}{retro}");
         }
         return new ReportSection { Heading = "The Planets", Paragraphs = paras };
     }

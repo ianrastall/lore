@@ -118,6 +118,10 @@ public static class DignityService
     private const int ExtraordinaryAt = 27;
     private const int AlarmingAt       = -1;
 
+    // Null for a chart with no birth time: house placement and day/night sect both
+    // depend on the Ascendant, so a score from a noon guess would mean nothing.
+    public static ChartScore? ComputeIfTimed(NatalChart chart) => chart.Timed ? Compute(chart) : null;
+
     public static ChartScore Compute(NatalChart chart)
     {
         var sun = chart.GetPlanet(Planet.Sun);

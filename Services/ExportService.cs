@@ -82,15 +82,16 @@ public static class ExportService
         var bigParts = new List<string>();
         if (chart.GetPlanet(Planet.Sun) is { } sunP)  bigParts.Add($"☉ Sun {sunP.Sign.Name()}");
         if (chart.GetPlanet(Planet.Moon) is { } moonP) bigParts.Add($"☽ Moon {moonP.Sign.Name()}");
-        bigParts.Add($"↑ Rising {rising}");
+        if (chart.Timed) bigParts.Add($"↑ Rising {rising}");
         string bigThree = string.Join("     ·     ", bigParts);
-        string angles = $"Ascendant {rising} {ZodiacSignExtensions.FormatDegreeInSign(chart.Ascendant)}" +
-                        $"   ·   Midheaven {ZodiacSignExtensions.FromLongitude(chart.Midheaven).Name()} {ZodiacSignExtensions.FormatDegreeInSign(chart.Midheaven)}" +
-                        $"   ·   Placidus houses";
+        string angles = ViewModels.ChartViewModel.FormatAngles(chart);
 
-        var score = DignityService.Compute(chart);
-        string verdictHex = score.Verdict.ColorHex();
-        string verdictLine = $"Chart assessment:  {score.Total:+#;-#;0}  —  {score.Verdict.Label()}";
+        // No dignity score without a birth time (see DignityService.ComputeIfTimed).
+        var score = DignityService.ComputeIfTimed(chart);
+        string verdictHex = score?.Verdict.ColorHex() ?? ChartVerdict.Ordinary.ColorHex();
+        string verdictLine = score is null
+            ? "Chart assessment:  not scored — it needs a birth time"
+            : $"Chart assessment:  {score.Total:+#;-#;0}  —  {score.Verdict.Label()}";
 
         var doc = Document.Create(container =>
         {
@@ -129,7 +130,8 @@ public static class ExportService
                             col.Item().Text(para).FontSize(11).LineHeight(1.35f);
                     }
 
-                    ChartAssessment(col, score);
+                    if (score is not null)
+                        ChartAssessment(col, score);
                 });
 
                 page.Footer().AlignCenter().Text(x =>
@@ -214,6 +216,7 @@ public static class ExportService
             Latitude = c.Latitude,
             Longitude = c.Longitude,
             UtcOffsetHours = c.UtcOffsetHours,
+            HouseSystem = chart.HouseSystemLabel,
             Ascendant = Round(chart.Ascendant),
             AscendantSign = ZodiacSignExtensions.FromLongitude(chart.Ascendant).Name(),
             Midheaven = Round(chart.Midheaven),
@@ -272,6 +275,7 @@ public sealed class ChartExport
     public double Latitude { get; set; }
     public double Longitude { get; set; }
     public double UtcOffsetHours { get; set; }
+    public string HouseSystem { get; set; } = "";
     public double Ascendant { get; set; }
     public string AscendantSign { get; set; } = "";
     public double Midheaven { get; set; }

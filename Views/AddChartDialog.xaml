@@ -55,9 +55,13 @@
                        TextWrapping="Wrap" FontSize="12"
                        Text="Pick a birthplace to resolve its time zone."/>
 
-            <NumberBox x:Name="UtcBox" Header="Fallback UTC offset (used only if no time zone is found)"
-                       SpinButtonPlacementMode="Inline" SmallChange="0.5" LargeChange="1"
-                       Minimum="-12" Maximum="14"/>
+            <StackPanel Spacing="4">
+                <CheckBox x:Name="OffsetFixedCheck" Content="Set the UTC offset myself"
+                          Checked="OffsetFixed_Changed" Unchecked="OffsetFixed_Changed"/>
+                <NumberBox x:Name="UtcBox" Header="UTC offset in hours (east of Greenwich is positive)"
+                           SpinButtonPlacementMode="Inline" SmallChange="0.5" LargeChange="1"
+                           Minimum="-14" Maximum="14" IsEnabled="False"/>
+            </StackPanel>
 
             <TextBox x:Name="NoteBox" Header="Note (optional)"
                      PlaceholderText="anything you'd like to remember"

@@ -40,6 +40,49 @@ public class ChartServiceTests
         Assert.All(Repo.Figures, f => Assert.Equal(13, Repo.Charts.Calculate(f).Planets.Count));
     }
 
+    [Fact]
+    public void Positions_are_cut_to_the_minute_not_rounded_up()
+    {
+        // 29°59'40" of Taurus is still 29°59', never a 30th degree.
+        Assert.Equal("29°59'", ZodiacSignExtensions.FormatDegreeInSign(59 + 59.0 / 60 + 40.0 / 3600));
+        Assert.Equal("0°00'", ZodiacSignExtensions.FormatDegreeInSign(60));
+        Assert.Equal("12°30'", ZodiacSignExtensions.FormatDegreeInSign(12.5));
+    }
+
+    [Fact]
+    public void The_mean_node_is_never_marked_retrograde()
+    {
+        var chart = Repo.Charts.Calculate(Repo.Figure("elvis-presley"));
+        var node = chart.GetPlanet(Planet.NorthNode)!;
+        Assert.True(node.SpeedLongitude < 0);
+        Assert.False(node.IsRetrograde);
+    }
+
+    [Fact]
+    public void A_polar_birth_says_Placidus_was_replaced()
+    {
+        // Tromsø (69°39' N) is inside the Arctic Circle, where Placidus is undefined.
+        var tromso = new Celebrity
+        {
+            Id = "t", Name = "T", BirthDate = "1990-06-21", BirthTime = "12:00", BirthTimeKnown = true,
+            Latitude = 69.65, Longitude = 18.96, TimeZoneId = "Europe/Oslo",
+        };
+        Assert.StartsWith("Porphyry houses", Repo.Charts.Calculate(tromso).HouseSystemLabel);
+        Assert.Equal("Placidus houses", Repo.Charts.Calculate(Repo.Figure("elvis-presley")).HouseSystemLabel);
+    }
+
+    [Fact]
+    public void A_chart_with_no_birth_time_gets_no_dignity_score()
+    {
+        var untimed = new Celebrity
+        {
+            Id = "t", Name = "T", BirthDate = "1990-06-21", BirthTimeKnown = false,
+            Latitude = 51.5, Longitude = -0.13, TimeZoneId = "Europe/London",
+        };
+        Assert.Null(Lore.Services.DignityService.ComputeIfTimed(Repo.Charts.Calculate(untimed)));
+        Assert.NotNull(Lore.Services.DignityService.ComputeIfTimed(Repo.Charts.Calculate(Repo.Figure("elvis-presley"))));
+    }
+
     private static void AssertNear(string expected, double longitude)
     {
         // "Taurus 3°38'" -> ecliptic longitude

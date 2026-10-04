@@ -4,14 +4,14 @@
 
 > A Windows desktop application for computing and exploring astrological natal charts — and reading a daily horoscope from them — powered by the Swiss Ephemeris. Browse a curated library of historical figures — every one with a documented birth time — or add your own.
 
-**Latest release: v1.4.0** · [Download](../../releases/latest)
+**Latest release: v1.4.1** · [Download](../../releases/latest)
 
 ### Installing
 
-1. From the [latest release](../../releases/latest), download **`LoreSetup-1.4.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`LoreSetup-1.4.1.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user only (no administrator prompt), adds a Start-menu shortcut, and can be removed from *Settings → Apps* like any other program.
 
-**Prefer not to install?** Download **`Lore-1.4.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
+**Prefer not to install?** Download **`Lore-1.4.1-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
 
 > **The installer is not code-signed.** Lore is a free hobby project and does not carry a paid signing certificate, so Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"* — choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -32,7 +32,7 @@
 - Calculates **12 Placidus house cusps**, Ascendant, and Midheaven.
 - Detects **five major aspects** (conjunction ☌, sextile ⚹, square □, trine △, opposition ☍) with per-aspect orbs, and flags each as applying or separating.
 - Detects **major configurations** — stellium, grand trine, T-square, and grand cross — from the positions and aspects (a T-square that is one arm of a grand cross is not reported twice).
-- Retrograde detection for all five non-luminary classical planets.
+- Retrograde detection for every planet from Mercury to Pluto, and Chiron.
 
 - **162 figures** across **14 categories** — Actors, Musicians, Writers, Artists, Scientists, Philosophers, Directors, Athletes, Political, Historical, and more.
 - **Every figure has a documented, recorded birth time** (Astro-Databank / Rodden-rated). Entries without a reliable birth time were removed, so no chart relies on a noon guess.
@@ -51,7 +51,7 @@
 | View | Description |
 |---|---|
 | **Chart Wheel** | Rendered chart wheel (Win2D / Direct2D), drawn on-screen and exportable as a high-resolution PNG. |
-| **Report** | Natural-language reading: Overview (Sun/Moon/Rising), planet-by-sign-degree-and-house paragraphs, major aspects, chart patterns (stellium, grand trine, T-square, grand cross), and elemental and modal balance. The Ascendant/Midheaven line shows their degrees and names the Placidus house system. |
+| **Report** | Natural-language reading: Overview (Sun/Moon/Rising), planet-by-sign-degree-and-house paragraphs, major aspects, chart patterns (stellium, grand trine, T-square, grand cross), and elemental and modal balance. The Ascendant/Midheaven line shows their degrees and names the house system. |
 | **Daily** | Daily horoscope for the selected chart on any date — generated from that day's transits. See below. |
 | **Synastry** | The selected chart compared with a second person's: a written reading and a bi-wheel of the two charts. See below. |
 | **Legend** | Full-page reference — a grouped list of every glyph, colour, angle, house, and term; click any item for a fuller explanation. |
@@ -72,6 +72,8 @@ It is a prompt for reflection, not a prediction: the ranking of transits is an e
 
 ### Synastry
 The **Synastry** view compares the selected chart with a second person's — any bundled figure or any of your own charts, chosen in the **Compare with…** box.
+
+![Lore showing the synastry reading and bi-wheel for Albert Einstein and Marie Curie](Assets/screenshot-einstein-curie-synastry.png)
 
 - **Every contact between the two charts.** Each person's thirteen bodies, Ascendant, and Midheaven are tried against the other's, within a **6° orb** (4° for a sextile) — a little tighter than the 8°/6° used inside one chart.
 - **A short, ranked reading.** *Closest bonds* (up to three conjunctions), *What comes easily* (up to four trines and sextiles), and *What takes work* (up to four squares and oppositions), chosen by closeness and by how personal the points are. Contacts between two slow planets, shared by everyone born in the same years, are listed but not written up.
@@ -238,7 +240,7 @@ Produces a self-contained folder that runs with no installed .NET or VC++ runtim
 .\scripts\build-portable.ps1
 ```
 
-Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-1.4.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
+Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-1.4.1-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
 
 ### Step 4 — Installer
 
@@ -287,7 +289,9 @@ Output: `artifacts\LoreSetup-<version>.exe`.
 
 `timeZoneId` (IANA zone) is preferred for historical offset resolution. `utcOffsetHours` is a fallback only. Entries without `timeZoneId` are backfilled from their coordinates at load time.
 
-`birthTimeKnown: false` → noon is used; house cusps and the Ascendant will be unreliable.
+`birthTimeKnown: false` → the planets are placed for noon, and the Ascendant, Midheaven, houses and dignity score are left out.
+
+`utcOffsetFixed: true` (My Charts only) → `utcOffsetHours` is used as given and the time zone is ignored.
 
 ### `Data\cities.json`
 
@@ -413,6 +417,8 @@ The `_12` files are required for historical figures such as Leonardo da Vinci, S
 
 ## Attribution & Licences
 
+Lore itself is free software under the **GNU Affero General Public License v3.0** — see [`LICENSE`](LICENSE). (The Swiss Ephemeris it is built on is offered under the same licence.)
+
 | Component | Licence |
 |---|---|
 | [Swiss Ephemeris](https://www.astro.com/swisseph/) | AGPL-3.0 / Astrodienst commercial licence |
@@ -430,7 +436,15 @@ The `_12` files are required for historical figures such as Leonardo da Vinci, S
 
 ## Version History
 
-### 1.4.0 (current)
+### 1.4.1 (current)
+- **Licence** — Lore is now explicitly released under the AGPL-3.0, the licence of the Swiss Ephemeris it is built on (`LICENSE`).
+- **Charts with no birth time are shown honestly** — the wheel no longer draws an Ascendant, Midheaven or houses from a noon guess, the header and report leave out the Rising sign and house placements, and no dignity score is given (it depends on the houses).
+- **Set the UTC offset yourself** — the Add / Edit Chart dialog has a new tick-box for births where the time-zone database is wrong or the clock time is ambiguous. Previously the offset box was overwritten whenever a zone was found.
+- **Clock-change warnings** — the dialog now says when a birth time fell in the hour that was skipped or repeated as the clocks changed.
+- **Far-north and far-south births** — where Placidus houses cannot be calculated (inside the polar circles), the chart now says it is showing Porphyry houses instead of labelling them Placidus.
+- **Fixes** — a position in the last minute of a sign (29°59′40″) printed as "30°00′" in the report and PDF; the North Node was marked retrograde on the wheel and planet list; the Add Chart dialog allowed years before 1200, which the bundled ephemeris does not cover.
+
+### 1.4.0
 - **Synastry** — a new **Synastry** view compares the selected chart with a second person's. Every contact between the two charts' thirteen bodies, Ascendants, and Midheavens is found (6° orb, 4° for a sextile); the closest and most personal are written up as *Closest bonds*, *What comes easily*, and *What takes work* from a new editable corpus (`Data\synastry.json`, 144 bespoke lines), alongside the Sun and Moon signs compared by element, an overall tone, and each person's Sun, Moon, Venus, and Mars in the other's houses. A **bi-wheel** draws one chart inside the other with the contacts between them. Exports as a PDF reading or a PNG of the bi-wheel, and the Legend has a new *Synastry* section.
 - **Edit saved charts** — My Charts entries can now be edited as well as deleted, and deleting asks for confirmation first.
 - **Crash-safe saving** — My Charts is written via a temporary file with a `.bak` of the previous version; a damaged file is kept aside and the backup restored instead of being silently replaced by an empty list.

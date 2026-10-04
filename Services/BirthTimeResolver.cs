@@ -28,7 +28,8 @@ public static class BirthTimeResolver
         var t = c.GetBirthTime();
         var local = new LocalDateTime(d.Year, d.Month, d.Day, t.Hour, t.Minute);
 
-        var zone = ResolveZone(c.TimeZoneId, c.Latitude, c.Longitude);
+        // An offset the user set themselves overrides the time-zone database.
+        var zone = c.UtcOffsetFixed ? null : ResolveZone(c.TimeZoneId, c.Latitude, c.Longitude);
         if (zone is not null)
         {
             // Lenient: a birth time that never existed (spring-forward gap) shifts
@@ -41,7 +42,7 @@ public static class BirthTimeResolver
             return zoned.ToDateTimeUtc();
         }
 
-        // No zone available — fall back to the stored fixed offset.
+        // No zone available, or overridden — use the stored fixed offset.
         var unspecified = new DateTime(d.Year, d.Month, d.Day, t.Hour, t.Minute, 0, DateTimeKind.Unspecified);
         return unspecified.AddHours(-c.UtcOffsetHours);
     }
@@ -94,7 +95,16 @@ public static class BirthTimeResolver
         }
         double hours = zoned.Offset.Milliseconds / 3_600_000.0;
         string abbr = zone.GetZoneInterval(zoned.ToInstant()).Name;
-        return (hours, $"Offset for this date: {FormatOffset(hours)} ({abbr})", zoneId);
+        // A clock time on the day the clocks changed may have happened twice, or not at
+        // all. ToUtc settles it quietly (see AtLeniently above); say so here.
+        string caution = zone.MapLocal(local).Count switch
+        {
+            0 => ". This clock time was skipped that day (the clocks went forward), so it is read as the time after the change.",
+            2 => ". This clock time happened twice that day (the clocks went back); the earlier one is used. " +
+                 "If it was the later one, set the UTC offset yourself below.",
+            _ => "",
+        };
+        return (hours, $"Offset for this date: {FormatOffset(hours)} ({abbr}){caution}", zoneId);
     }
 
     private static DateTimeZone? ResolveZone(string? explicitId, double lat, double lon)

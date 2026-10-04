@@ -67,4 +67,36 @@ public class BirthTimeResolverTests
         Assert.Contains("local mean time", label);
         Assert.Equal("Europe/Rome", zone);
     }
+
+    [Fact]
+    public void An_offset_the_user_set_overrides_the_time_zone()
+    {
+        // London, July 1990: the zone says BST (UTC+1); the user insists on UTC+0.
+        var c = new Celebrity
+        {
+            Id = "t", Name = "T", BirthDate = "1990-07-01", BirthTime = "12:00", BirthTimeKnown = true,
+            Latitude = 51.5, Longitude = -0.13, TimeZoneId = "Europe/London", UtcOffsetHours = 0,
+        };
+        Assert.Equal(new DateTime(1990, 7, 1, 11, 0, 0), BirthTimeResolver.ToUtc(c));
+
+        var fixedOffset = new Celebrity
+        {
+            Id = "t", Name = "T", BirthDate = "1990-07-01", BirthTime = "12:00", BirthTimeKnown = true,
+            Latitude = 51.5, Longitude = -0.13, TimeZoneId = "Europe/London", UtcOffsetHours = 0,
+            UtcOffsetFixed = true,
+        };
+        Assert.Equal(new DateTime(1990, 7, 1, 12, 0, 0), BirthTimeResolver.ToUtc(fixedOffset));
+    }
+
+    [Fact]
+    public void Clock_change_times_are_pointed_out()
+    {
+        // London, 28 Oct 1990: 01:30 happened twice. 25 Mar 1990: 01:30 never happened.
+        string Label(int month, int day, int hour) =>
+            BirthTimeResolver.Describe("Europe/London", 51.5, -0.13, 1990, month, day, hour, 30).label;
+
+        Assert.Contains("happened twice", Label(10, 28, 1));
+        Assert.Contains("skipped", Label(3, 25, 1));
+        Assert.DoesNotContain("clock time", Label(7, 1, 12));
+    }
 }

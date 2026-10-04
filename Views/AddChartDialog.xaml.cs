@@ -29,7 +29,9 @@ public sealed partial class AddChartDialog : ContentDialog
         // offset doesn't match the machine's local offset. DateTime.Today is Local, so
         // force Unspecified (as the literal dates below already are) before pairing with
         // a zero offset. This crash was aborting the whole Add-Chart dialog.
-        DateField.MinYear = new DateTimeOffset(new DateTime(1000, 1, 1), TimeSpan.Zero);
+        // The bundled ephemeris files begin in 1200; earlier dates would be calculated
+        // from a rougher built-in model, and without Chiron.
+        DateField.MinYear = new DateTimeOffset(new DateTime(1200, 1, 1), TimeSpan.Zero);
         DateField.MaxYear = new DateTimeOffset(DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Unspecified), TimeSpan.Zero);
         DateField.SelectedDate = PickerDate(new DateOnly(1990, 1, 1));
         TimeField.SelectedTime = new TimeSpan(12, 0, 0);
@@ -57,6 +59,7 @@ public sealed partial class AddChartDialog : ContentDialog
         LatBox.Value = c.Latitude;
         LonBox.Value = c.Longitude;
         UtcBox.Value = c.UtcOffsetHours;
+        OffsetFixedCheck.IsChecked = c.UtcOffsetFixed;
         _timeZoneId = string.IsNullOrWhiteSpace(c.TimeZoneId) ? null : c.TimeZoneId;
         NoteBox.Text = c.Bio;
 
@@ -79,6 +82,10 @@ public sealed partial class AddChartDialog : ContentDialog
     {
         TimeField.IsEnabled = TimeUnknownCheck.IsChecked != true;
     }
+
+    // Ticked: the offset box is the user's own and is used as given. Unticked: it goes
+    // back to showing (and following) what the time-zone database says.
+    private void OffsetFixed_Changed(object sender, Microsoft.UI.Xaml.RoutedEventArgs e) => RefreshResolvedOffset();
 
     private void CityBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
     {
@@ -121,10 +128,13 @@ public sealed partial class AddChartDialog : ContentDialog
         }
     }
 
-    // Show the offset that will actually be applied for the selected place + date, and
-    // mirror it into the fallback box so it stays meaningful if no zone is found.
+    // Show the offset the time-zone database gives for the selected place + date, and
+    // mirror it into the offset box unless the user has taken that box over.
     private void RefreshResolvedOffset()
     {
+        bool own = OffsetFixedCheck.IsChecked == true;
+        UtcBox.IsEnabled = own;
+
         if (double.IsNaN(LatBox.Value) || double.IsNaN(LonBox.Value))
         {
             ResolvedOffsetText.Text = "Pick a birthplace to resolve its time zone.";
@@ -138,11 +148,15 @@ public sealed partial class AddChartDialog : ContentDialog
             date.Year, date.Month, date.Day, time.Hours, time.Minutes);
 
         ResolvedOffsetText.Text = zoneId is null ? label : $"{label} · {zoneId}";
-        if (zoneId is not null)
+        if (own)
+            ResolvedOffsetText.Text += " — not used: the offset below is.";
+        if (zoneId is null)
         {
-            _timeZoneId = zoneId;   // record the geographically-resolved zone too
-            UtcBox.Value = offset;  // keep the fallback in sync with what will be used
+            UtcBox.IsEnabled = true; // nothing to follow, so the box is all there is
+            return;
         }
+        _timeZoneId = zoneId;        // record the geographically-resolved zone too
+        if (!own) UtcBox.Value = offset; // show what will be used
     }
 
     private void OnCreate(ContentDialog sender, ContentDialogButtonClickEventArgs args)
@@ -172,6 +186,7 @@ public sealed partial class AddChartDialog : ContentDialog
             Latitude = LatBox.Value,
             Longitude = LonBox.Value,
             UtcOffsetHours = UtcBox.Value,
+            UtcOffsetFixed = OffsetFixedCheck.IsChecked == true,
             TimeZoneId = _timeZoneId,
             Bio = NoteBox.Text.Trim()
         };

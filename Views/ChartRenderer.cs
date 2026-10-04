@@ -50,13 +50,17 @@ internal static class ChartRenderer
 
         ds.Clear(Background);
 
-        DrawZodiacRing(ds, cx, cy, r, chart.Ascendant);
-        DrawHouses(ds, cx, cy, r, chart);
+        DrawZodiacRing(ds, cx, cy, r, WheelAsc(chart));
+        if (chart.Timed) DrawHouses(ds, cx, cy, r, chart);
         DrawAspects(ds, cx, cy, r * AspectInner, chart);
         DrawPlanets(ds, cx, cy, r, chart);
-        DrawAngles(ds, cx, cy, r, chart);
+        if (chart.Timed) DrawAngles(ds, cx, cy, r, chart);
         DrawVerdictRim(ds, cx, cy, r, chart);
     }
+
+    // The longitude the wheel is turned to, at 9 o'clock: the Ascendant, or for a chart
+    // with no birth time (no Ascendant, no houses, no angles drawn) 0° Aries.
+    private static double WheelAsc(NatalChart chart) => chart.Timed ? chart.Ascendant : 0;
 
     // ── Bi-wheel (synastry) ──────────────────────────────────────────────────
     // Two charts on one wheel. The first person's chart is drawn as usual but smaller,
@@ -77,18 +81,18 @@ internal static class ChartRenderer
         float cy = height / 2f;
         float r = Math.Min(cx, cy) * 0.93f;
         NatalChart inner = synastry.First, outer = synastry.Second;
-        double asc = inner.Ascendant;
+        double asc = WheelAsc(inner);
 
         ds.Clear(Background);
 
         DrawZodiacRing(ds, cx, cy, r, asc, BiSignInner, centred: true);
         ds.DrawEllipse(cx, cy, r * BiDivider, r * BiDivider, RingOuter, 1.5f);
-        DrawHouses(ds, cx, cy, r, inner, BiDivider, BiAspect + 0.045f);
+        if (inner.Timed) DrawHouses(ds, cx, cy, r, inner, BiDivider, BiAspect + 0.045f);
         DrawSynastryAspects(ds, cx, cy, r * BiAspect, synastry);
         DrawPlanets(ds, cx, cy, r, inner, asc, BiInnerGlyph, BiDivider - 0.02f, 0.062f, centred: true);
         DrawPlanets(ds, cx, cy, r, outer, asc, BiOuterGlyph, BiSignInner - 0.015f, 0.062f, centred: true);
-        DrawAngles(ds, cx, cy, r, inner);
-        if (outer.Celebrity.BirthTimeKnown)
+        if (inner.Timed) DrawAngles(ds, cx, cy, r, inner);
+        if (outer.Timed)
         {
             DrawOuterAngle(ds, cx, cy, r, outer.Ascendant, asc, "ASC");
             DrawOuterAngle(ds, cx, cy, r, outer.Midheaven, asc, "MC");
@@ -100,7 +104,7 @@ internal static class ChartRenderer
     // the second's. The ones the reading writes up are drawn heavier.
     private static void DrawSynastryAspects(CanvasDrawingSession ds, float cx, float cy, float ringR, Synastry synastry)
     {
-        double asc = synastry.First.Ascendant;
+        double asc = WheelAsc(synastry.First);
         foreach (var aspect in synastry.Aspects)
         {
             if (synastry.First.LongitudeOf(aspect.First) is not { } lonA ||
@@ -147,7 +151,7 @@ internal static class ChartRenderer
     // so the outliers read at a glance (and it carries into the exported PNG/PDF).
     private static void DrawVerdictRim(CanvasDrawingSession ds, float cx, float cy, float r, NatalChart chart)
     {
-        var verdict = Services.DignityService.Compute(chart).Verdict;
+        var verdict = Services.DignityService.ComputeIfTimed(chart)?.Verdict;
         Color? rim = verdict switch
         {
             ChartVerdict.Extraordinary => Color.FromArgb(255, 63, 184, 79),  // green
@@ -267,8 +271,8 @@ internal static class ChartRenderer
             var pB = chart.Planets.FirstOrDefault(p => p.Planet == aspect.PlanetB);
             if (pA is null || pB is null) continue;
 
-            var ptA = ToPoint(cx, cy, innerR, pA.Longitude, chart.Ascendant);
-            var ptB = ToPoint(cx, cy, innerR, pB.Longitude, chart.Ascendant);
+            var ptA = ToPoint(cx, cy, innerR, pA.Longitude, WheelAsc(chart));
+            var ptB = ToPoint(cx, cy, innerR, pB.Longitude, WheelAsc(chart));
             var color = AspectColors[(int)aspect.Type];
 
             // Fade strong-orb aspects
@@ -282,7 +286,7 @@ internal static class ChartRenderer
     // ── Planets ──────────────────────────────────────────────────────────────
 
     private static void DrawPlanets(CanvasDrawingSession ds, float cx, float cy, float r, NatalChart chart) =>
-        DrawPlanets(ds, cx, cy, r, chart, chart.Ascendant, PlanetRing, HouseOuter * 0.88f, 0.072f);
+        DrawPlanets(ds, cx, cy, r, chart, WheelAsc(chart), PlanetRing, HouseOuter * 0.88f, 0.072f);
 
     // `asc` is the Ascendant the wheel is turned to: the chart's own, or in a bi-wheel
     // the inner chart's for both rings. `centred` sets each glyph squarely on its ring

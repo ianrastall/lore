@@ -30,7 +30,9 @@ public sealed class PlanetPosition
     public double Longitude { get; init; }    // ecliptic longitude, 0–360°
     public double Latitude { get; init; }     // ecliptic latitude
     public double SpeedLongitude { get; init; } // degrees/day; negative = retrograde
-    public bool IsRetrograde => SpeedLongitude < 0;
+    // The mean node always runs backwards and mean Lilith always forwards; neither has
+    // retrograde periods, so neither is ever marked.
+    public bool IsRetrograde => SpeedLongitude < 0 && Planet is not (Planet.NorthNode or Planet.Lilith);
 
     public ZodiacSign Sign => ZodiacSignExtensions.FromLongitude(Longitude);
     public double DegreeInSign => ZodiacSignExtensions.DegreeInSign(Longitude);
