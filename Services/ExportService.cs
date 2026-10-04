@@ -164,8 +164,8 @@ public static class ExportService
         col.Item().Text(
             "A traditional dignity score for the seven classical planets (Sun–Saturn): essential " +
             "dignity by sign and degree, plus accidental dignity by house, motion, and closeness to " +
-            "the Sun. Higher means more traditionally dignified. Most charts fall between roughly +15 " +
-            "and +35; the bands flag the strongest (Extraordinary) and most afflicted (Alarming).")
+            "the Sun. Higher means more traditionally dignified. Most charts fall between 0 and +26; " +
+            "27 or more is flagged Extraordinary and −1 or less Alarming.")
             .FontSize(9).FontColor(Colors.Grey.Darken1).LineHeight(1.3f);
 
         col.Item().PaddingTop(2).Text(t =>
@@ -222,7 +222,7 @@ public static class ExportService
             Category = c.Category,
             BirthDate = c.BirthDate,
             Calendar = c.JulianCalendar ? "Julian (Old Style)" : "Gregorian",
-            GregorianBirthDate = BirthTimeResolver.GregorianDate(c).ToString("yyyy-MM-dd"),
+            GregorianBirthDate = BirthTimeResolver.GregorianDate(c).ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture),
             BirthTime = c.BirthTime,
             BirthTimeKnown = c.BirthTimeKnown,
             BirthTimeUncertaintyMinutes = c.BirthTimeUncertaintyMinutes,
@@ -232,6 +232,11 @@ public static class ExportService
             Latitude = c.Latitude,
             Longitude = c.Longitude,
             UtcOffsetHours = c.UtcOffsetHours,
+            UniversalTime = chart.CalculatedForUtc.ToString("yyyy-MM-ddTHH:mm:ssZ", System.Globalization.CultureInfo.InvariantCulture),
+            TimeConversion = BirthTimeResolver.Explain(c).offset,
+            TimeZoneId = c.UtcOffsetFixed ? "" : BirthTimeResolver.ResolveZoneId(c.TimeZoneId, c.Latitude, c.Longitude) ?? "",
+            UtcOffsetSetByHand = c.UtcOffsetFixed,
+            EphemerisNote = chart.EphemerisNote,
             HouseSystem = chart.HouseSystemLabel,
             NodeType = chart.Settings.Node.Name(),
             AspectOrbs = chart.Settings.Orbs.Describe(),
@@ -313,7 +318,14 @@ public sealed class ChartExport
     public string BirthPlace { get; set; } = "";
     public double Latitude { get; set; }
     public double Longitude { get; set; }
+    // The stored fallback offset. It is NOT necessarily the one used: see TimeConversion
+    // and UniversalTime for what the calculation actually did.
     public double UtcOffsetHours { get; set; }
+    public string UniversalTime { get; set; } = "";
+    public string TimeConversion { get; set; } = "";
+    public string TimeZoneId { get; set; } = "";
+    public bool UtcOffsetSetByHand { get; set; }
+    public string EphemerisNote { get; set; } = "";
     public string HouseSystem { get; set; } = "";
     public string NodeType { get; set; } = "";
     public string AspectOrbs { get; set; } = "";

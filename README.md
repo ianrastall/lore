@@ -93,13 +93,13 @@ Every chart is scored against the **Lilly/Dorothean rubric**:
 
 | Component | Factors |
 |---|---|
-| **Essential** | Domicile (+5), Exaltation (+4), Triplicity (+3), Detriment (−5), Fall (−4) |
+| **Essential** | Domicile (+5), Exaltation (+4), Triplicity (+3), Term (+2), Face (+1), Detriment (−5), Fall (−4), Peregrine (−5) |
 | **Accidental** | House placement (Lilly's table), direct motion (+4) / retrograde (−5), solar phase: cazimi (+5) / combust (−5) / under beams (−4) |
 
 Applied to the seven classical planets (Sun–Saturn). The aggregate score yields a verdict:
-- 🟢 **Extraordinary** (≥ 31)
+- 🟢 **Extraordinary** (27 or more)
 - ⚪ **Ordinary**
-- 🔴 **Alarming** (≤ 13)
+- 🔴 **Alarming** (−1 or less)
 
 The verdict is surfaced everywhere: a coloured pill in the chart header, a **whole-row green / red wash** on notable figures in the browse list, a coloured rim on the chart wheel, and a full per-planet breakdown table in the exported PDF. Bands are calibrated against the bundled corpus so roughly a quarter read Extraordinary, a sixth Alarming, and the rest Ordinary — a fair chance of finding something notable when you look someone up.
 
@@ -447,6 +447,18 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 ---
 
 ## Version History
+
+### 2.0.0 (in progress)
+A round of fixes from two outside code reviews, and the start of some interface work.
+- **Click a planet to see its aspects** — picking a planet in the list beside the wheel rings it on the wheel and draws its aspects at full strength, with the rest faded back.
+- **No separate runtime needed** — the Swiss Ephemeris library is now built so that Lore does not depend on a separately installed Visual C++ runtime. On a PC without one, earlier portable builds could fail to calculate anything.
+- **Dates no longer depend on the Windows regional calendar** — on a PC set to the Thai, Persian or Arabic calendar, a saved birth date could be read as a different century. Stored dates are now always read and written the same way.
+- **Saved charts** — a save that fails now changes nothing (before, a failed delete could quietly take effect at the next save), and a charts file that is valid JSON but not a list of charts is treated as damaged and the backup restored.
+- **Add Chart** — typing a latitude or longitude now drops the time zone left over from an earlier city and looks it up afresh (before, London's zone could be saved with New York's coordinates). The hospital and city searches no longer hold up typing.
+- **Exports** — the JSON and XML now state the Universal Time and the offset actually used, not only the stored fallback offset. An export can no longer mix one person's wheel with another's text, or save a reading that was still being calculated.
+- **Calculations** — an aspect a few minutes from exact is no longer called separating; the Forecast now catches a planet that dips into orb and turns back between two samples; a chart with no birth time is checked across the real local day, including the 23- and 25-hour days when the clocks change, and much faster.
+- **Missing ephemeris data is reported** — if the data files cannot be read, Lore now says so in the status bar and on the Worksheet instead of quietly using a rougher model and dropping Chiron. Folders with accented letters in their names now work.
+- **Errors** are logged wherever they happen, and the status bar says when something went wrong.
 
 ### 1.8.0 (current)
 - **Forecast** — a new **Forecast** view lists the transits coming up for the selected chart over the next month, three months, six months or year, starting from any date. For each one it gives when it comes into orb, when it is exact (more than once if the planet turns retrograde while in orb; or how close it gets if it turns back just short), and when it leaves — with the same written line the Daily view uses, month by month. The Sun, Mercury, Venus and Mars can be switched off to leave only the slow, weightier transits. The Moon is left to the Daily view. Saves as plain text.

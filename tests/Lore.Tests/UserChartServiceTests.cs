@@ -99,4 +99,45 @@ public sealed class UserChartServiceTests : IDisposable
         var reloaded = await Fresh();
         Assert.Equal("Ann", Assert.Single(reloaded.Charts).Name);
     }
+
+    [Fact]
+    public async Task A_failed_save_changes_nothing_in_memory_or_on_disk()
+    {
+        var store = await Fresh();
+        await store.AddAsync(Chart("user-1", "Ann"));
+        await store.AddAsync(Chart("user-2", "Ben"));
+
+        // Hold the temporary file open so the next save cannot write it.
+        using (new FileStream(MainFile + ".tmp", FileMode.Create, FileAccess.Write, FileShare.None))
+        {
+            await Assert.ThrowsAnyAsync<IOException>(() => store.RemoveAsync(Chart("user-2", "Ben")));
+            await Assert.ThrowsAnyAsync<IOException>(() => store.AddAsync(Chart("user-9", "Zed")));
+            await Assert.ThrowsAnyAsync<IOException>(() => store.UpdateAsync(Chart("user-1", "Changed")));
+        }
+        Assert.Equal(new[] { "Ann", "Ben" }, store.Charts.Select(c => c.Name));
+
+        // A later, successful save must not carry the failed changes with it.
+        await store.AddAsync(Chart("user-3", "Cy"));
+        Assert.Equal(new[] { "Ann", "Ben", "Cy" }, (await Fresh()).Charts.Select(c => c.Name));
+    }
+
+    [Theory]
+    [InlineData("null")]
+    [InlineData("[null]")]
+    [InlineData("[{}]")]
+    [InlineData("""[{"id":"user-1","name":"Ann","birthDate":"17 May 1980","latitude":53.8,"longitude":-1.55}]""")]
+    [InlineData("""[{"id":"user-1","name":"Ann","birthDate":"1980-05-17","latitude":953.8,"longitude":-1.55}]""")]
+    public async Task A_file_that_is_valid_JSON_but_not_a_chart_list_is_treated_as_unreadable(string contents)
+    {
+        var store = await Fresh();
+        await store.AddAsync(Chart("user-1", "Ann"));
+        await store.AddAsync(Chart("user-2", "Ben")); // the backup now holds Ann alone
+
+        File.WriteAllText(MainFile, contents);
+        var reloaded = await Fresh();
+
+        Assert.NotNull(reloaded.LoadProblem);
+        Assert.Equal(new[] { "Ann" }, reloaded.Charts.Select(c => c.Name)); // restored from the backup
+        Assert.Single(Directory.GetFiles(_dir, "mycharts.unreadable-*.json"));
+    }
 }

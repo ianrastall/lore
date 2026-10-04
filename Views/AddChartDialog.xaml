@@ -61,9 +61,9 @@
                      PlaceholderText="e.g. Boston, USA"/>
 
             <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
-                <NumberBox x:Name="LatBox" Grid.Column="0" Header="Latitude"
+                <NumberBox x:Name="LatBox" Grid.Column="0" Header="Latitude" ValueChanged="Place_ValueChanged"
                            SpinButtonPlacementMode="Inline" SmallChange="0.01" LargeChange="1"/>
-                <NumberBox x:Name="LonBox" Grid.Column="1" Header="Longitude"
+                <NumberBox x:Name="LonBox" Grid.Column="1" Header="Longitude" ValueChanged="Place_ValueChanged"
                            SpinButtonPlacementMode="Inline" SmallChange="0.01" LargeChange="1"/>
             </Grid>
 

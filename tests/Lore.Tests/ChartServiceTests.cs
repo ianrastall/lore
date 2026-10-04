@@ -93,4 +93,24 @@ public class ChartServiceTests
         Assert.True(Repo.ArcMinutesBetween(target, longitude) <= 2.0,
             $"expected {expected}, got {Repo.Position(longitude)}");
     }
+
+    [Fact]
+    public void An_aspect_minutes_from_exact_is_still_applying()
+    {
+        // Moon at 0 deg moving 13 deg a day, closing on a Sun at 0.1 deg moving 1 deg a day: exact
+        // in twelve minutes. Judged over an hour it would have overshot and read as
+        // separating.
+        var isApplying = typeof(Lore.Services.ChartService).GetMethod("IsApplying",
+            System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)!;
+        bool Applying(double moon, double sun) => (bool)isApplying.Invoke(null,
+        [
+            new PlanetPosition { Planet = Planet.Moon, Longitude = moon, SpeedLongitude = 13 },
+            new PlanetPosition { Planet = Planet.Sun, Longitude = sun, SpeedLongitude = 1 },
+            AspectType.Conjunction,
+        ])!;
+
+        Assert.True(Applying(0, 0.1));     // just before exact
+        Assert.False(Applying(0.2, 0.1));  // just after
+        Assert.True(Applying(359.95, 0.05)); // across 0 Aries
+    }
 }

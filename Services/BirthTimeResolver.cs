@@ -60,6 +60,30 @@ public static class BirthTimeResolver
         return unspecified.AddHours(-c.UtcOffsetHours);
     }
 
+    // The calendar day of birth at the birthplace, as two instants — local midnight to the
+    // next local midnight — and a way to turn any instant between them back into the
+    // clock time there. On a day the clocks changed this is 23 or 25 hours long.
+    public static (DateTime startUtc, DateTime endUtc, Func<DateTime, string> clock) LocalDay(Celebrity c)
+    {
+        var d = GregorianDate(c);
+        var date = new LocalDate(d.Year, d.Month, d.Day);
+
+        var zone = c.UtcOffsetFixed ? null : ResolveZone(c.TimeZoneId, c.Latitude, c.Longitude);
+        if (zone is not null && !IsLocalMeanTime(zone, zone.AtStartOfDay(date).ToInstant()))
+        {
+            return (zone.AtStartOfDay(date).ToDateTimeUtc(),
+                    zone.AtStartOfDay(date.PlusDays(1)).ToDateTimeUtc(),
+                    utc => Instant.FromDateTimeUtc(DateTime.SpecifyKind(utc, DateTimeKind.Utc))
+                               .InZone(zone).ToString("HH:mm", System.Globalization.CultureInfo.InvariantCulture));
+        }
+
+        // A fixed offset: set by hand, local mean time, or the fallback when no zone is known.
+        double seconds = zone is not null ? LocalMeanTimeSeconds(c.Longitude) : c.UtcOffsetHours * 3600;
+        var start = DateTime.SpecifyKind(new DateTime(d.Year, d.Month, d.Day).AddSeconds(-seconds), DateTimeKind.Utc);
+        return (start, start.AddDays(1),
+                utc => utc.AddSeconds(seconds).ToString("HH:mm", System.Globalization.CultureInfo.InvariantCulture));
+    }
+
     // The same conversion, spelled out for the worksheet: the instant, and the offset
     // that produced it with where that offset came from — "UTC-6 (CST, America/Chicago)".
     public static (DateTime utc, string offset) Explain(Celebrity c)

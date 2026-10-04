@@ -52,7 +52,14 @@ public sealed partial class ChartViewModel : ObservableObject
     public bool HasSensitivity => Sensitivity is not null;
     public bool SensitivityHasChanges => Sensitivity?.HasChanges == true;
 
-    partial void OnUncertaintyMinutesChanged(double value) => RebuildSensitivity();
+    // Set while a new chart is being taken in, when the margin is reset as part of that
+    // and the analysis is rebuilt once at the end rather than once per change.
+    private bool _loadingChart;
+
+    partial void OnUncertaintyMinutesChanged(double value)
+    {
+        if (!_loadingChart) RebuildSensitivity();
+    }
 
     private void RebuildSensitivity()
     {
@@ -132,9 +139,9 @@ public sealed partial class ChartViewModel : ObservableObject
         OnPropertyChanged(nameof(CanTestTime));
         OnPropertyChanged(nameof(HasChart));
         OnPropertyChanged(nameof(SensitivityHeading));
-        // Setting the margin rebuilds the analysis only if the number changed, so
-        // rebuild explicitly: the chart itself has.
+        _loadingChart = true;
         UncertaintyMinutes = value?.Celebrity.BirthTimeUncertaintyMinutes ?? 0;
+        _loadingChart = false;
         RebuildSensitivity();
         // After the analysis above: the report draws on it for an untimed Moon.
         ReportSections = (_interpreter is not null && value is not null)

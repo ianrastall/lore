@@ -104,6 +104,7 @@ public sealed partial class DailyViewModel : ObservableObject
         if (chart is null || _transits is null || _interpreter is null)
         {
             Reading = null;
+            IsBusy = false; // nothing is running for this (empty) state
             return;
         }
 

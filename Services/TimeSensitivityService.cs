@@ -26,7 +26,7 @@ public static class TimeSensitivityService
 
         // Clock time at the birthplace for sample i, as the birth time itself is given.
         var recorded = person.GetBirthTime();
-        string Clock(int i) => recorded.AddMinutes(i - minutes).ToString("HH:mm");
+        string Clock(int i) => recorded.AddMinutes(i - minutes).ToString("HH:mm", System.Globalization.CultureInfo.InvariantCulture);
 
         var holds = new List<string>();
         var changes = new List<string>();
@@ -85,37 +85,71 @@ public static class TimeSensitivityService
     }
 
     // The same question for a chart with no birth time at all: the whole calendar day at
-    // the birthplace, minute by minute. There are no angles or houses to follow, only
-    // signs — and it is the Moon, covering some 13° in a day, that most often changes.
-    // Null for a chart that has a birth time.
+    // the birthplace. There are no angles or houses to follow, only signs — and it is the
+    // Moon, covering some 13° in a day, that most often changes. Null for a chart that
+    // has a birth time.
+    //
+    // The sky is sampled every ten minutes from local midnight to the next local midnight
+    // (23 or 25 hours on a day the clocks changed). No body can enter a sign and leave it
+    // again in ten minutes, so comparing neighbouring samples finds every change, and
+    // each one is then narrowed to the minute.
     public static TimeSensitivity? AnalyseDay(ChartService charts, Celebrity person)
     {
         if (person.BirthTimeKnown) return null;
 
-        // An untimed chart is calculated for local noon; the day runs twelve hours either
-        // side of it (a daylight-saving change that day shifts one end by an hour, which
-        // does not matter at this scale).
-        const int MinutesInDay = 24 * 60;
-        double noon = SwissEphemeris.DateTimeToJulianDay(BirthTimeResolver.ToUtc(person));
-        var samples = new IReadOnlyList<PlanetPosition>[MinutesInDay];
-        for (int i = 0; i < samples.Length; i++)
-            samples[i] = charts.CalculateSky(noon + (i - MinutesInDay / 2) / (double)MinutesInDay);
+        var (startUtc, endUtc, clock) = BirthTimeResolver.LocalDay(person);
+        const int StepMinutes = 10;
+        int steps = (int)Math.Ceiling((endUtc - startUtc).TotalMinutes / StepMinutes);
+        // The last sample is one minute short of the next midnight: still this day.
+        DateTime At(int i) => i >= steps ? endUtc.AddMinutes(-1) : startUtc.AddMinutes(i * StepMinutes);
+        double Jd(DateTime utc) => SwissEphemeris.DateTimeToJulianDay(utc);
 
-        string Clock(int i) => new TimeOnly(0, 0).AddMinutes(i).ToString("HH:mm");
+        var samples = new IReadOnlyList<PlanetPosition>[steps + 1];
+        for (int i = 0; i <= steps; i++)
+            samples[i] = charts.CalculateSky(Jd(At(i)));
+
         PlanetPosition? Find(IReadOnlyList<PlanetPosition> sky, Planet body) => sky.FirstOrDefault(p => p.Planet == body);
+
+        // The first minute at which `body` is no longer in `from`, between two samples.
+        DateTime ChangeTime(Planet body, ZodiacSign from, DateTime lo, DateTime hi)
+        {
+            while ((hi - lo).TotalMinutes > 1)
+            {
+                var mid = lo.AddMinutes(Math.Floor((hi - lo).TotalMinutes / 2));
+                if (charts.CalculateBody(Jd(mid), body)?.Sign == from) lo = mid; else hi = mid;
+            }
+            return hi;
+        }
 
         var holds = new List<string>();
         var changes = new List<string>();
+        var moonSigns = new List<ZodiacSign>();
         var bodies = samples[0].Select(p => p.Planet).ToList();
         int held = 0;
         foreach (var body in bodies)
         {
-            var before = changes.Count;
-            Follow(body.Name(), samples, sky => Find(sky, body)?.Sign.Name() ?? "", Clock,
-                stable: body != Planet.Moon ? null : sign =>
-                    $"Moon: {sign} all day, somewhere from {Position(Find(samples[0], body)?.Longitude)} to {Position(Find(samples[^1], body)?.Longitude)}",
-                holds, changes);
-            if (changes.Count == before) held++;
+            if (Find(samples[0], body) is not { } first) continue;
+            var current = first.Sign;
+            var parts = new List<string> { current.Name() };
+            if (body == Planet.Moon) moonSigns.Add(current);
+
+            for (int i = 1; i <= steps; i++)
+            {
+                if (Find(samples[i], body)?.Sign is not { } next || next == current) continue;
+                parts[^1] += $" until {clock(ChangeTime(body, current, At(i - 1), At(i)))}";
+                parts.Add(next.Name());
+                current = next;
+                if (body == Planet.Moon) moonSigns.Add(next);
+            }
+
+            if (parts.Count > 1)
+                changes.Add($"{body.Name()}: {string.Join(", then ", parts)}");
+            else
+            {
+                held++;
+                if (body == Planet.Moon)
+                    holds.Add($"Moon: {current.Name()} all day, somewhere from {Position(first.Longitude)} to {Position(Find(samples[^1], body)?.Longitude)}");
+            }
         }
         if (held == bodies.Count)
             holds.Add("Signs: every body keeps its sign all day");
@@ -125,7 +159,7 @@ public static class TimeSensitivityService
 
         return new TimeSensitivity
         {
-            Minutes = MinutesInDay / 2,
+            Minutes = (int)((endUtc - startUtc).TotalMinutes / 2),
             WholeDay = true,
             Window = "The whole day, midnight to midnight at the birthplace",
             Summary = changes.Count == 0
@@ -133,7 +167,7 @@ public static class TimeSensitivityService
                 : $"{changes.Count} {(changes.Count == 1 ? "sign depends" : "signs depend")} on the time of day.",
             Holds = holds,
             Changes = changes,
-            MoonSigns = samples.Select(sky => Find(sky, Planet.Moon)?.Sign).OfType<ZodiacSign>().Distinct().ToList(),
+            MoonSigns = moonSigns.Distinct().ToList(),
         };
     }
 

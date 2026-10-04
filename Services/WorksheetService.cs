@@ -55,7 +55,7 @@ public static class WorksheetService
                 ? $"{c.BirthDate} at {c.BirthTime}, clock time at the birthplace"
                 : $"{c.BirthDate}, time unknown — calculated for 12:00 noon"),
             new("Calendar", c.JulianCalendar
-                ? $"Old Style (Julian) date; in the Gregorian calendar it is {BirthTimeResolver.GregorianDate(c):yyyy-MM-dd}"
+                ? $"Old Style (Julian) date; in the Gregorian calendar it is {BirthTimeResolver.GregorianDate(c).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}"
                 : "Gregorian"),
             new("Place", $"{c.BirthPlace}  ·  {Coordinate(c.Latitude, 'N', 'S')}, {Coordinate(c.Longitude, 'E', 'W')}"),
             new("Reliability", string.IsNullOrWhiteSpace(c.RoddenRating)
@@ -63,7 +63,7 @@ public static class WorksheetService
                 : $"Rodden rating {RoddenRating.Describe(c.RoddenRating)}"),
             new("Source", string.IsNullOrWhiteSpace(c.Source) ? "Not recorded" : c.Source),
             new("Time conversion", offset),
-            new("Universal Time", $"{utc:yyyy-MM-dd HH:mm:ss} UT"),
+            new("Universal Time", utc.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) + " UT"),
             new("Zodiac", "Tropical, geocentric"),
             new("Houses", chart.Timed ? chart.HouseSystemLabel : "None — they need a birth time"),
             new("North Node", chart.Settings.Node.Name()),
@@ -79,7 +79,9 @@ public static class WorksheetService
                 : "Ascendant + Sun − Moon (night formula)"));
         }
         facts.Add(new("Aspect orbs", chart.Settings.Orbs.Describe()));
-        facts.Add(new("Engine", "Swiss Ephemeris 2.10.03"));
+        facts.Add(new("Engine", chart.EphemerisNote.Length == 0
+            ? "Swiss Ephemeris 2.10.03"
+            : $"Swiss Ephemeris 2.10.03 — {chart.EphemerisNote}"));
         return facts;
     }
 

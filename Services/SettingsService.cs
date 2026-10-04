@@ -49,7 +49,11 @@ public sealed class SettingsService
     {
         try
         {
-            File.WriteAllText(_path, JsonSerializer.Serialize(settings, JsonOpts));
+            // Written beside the real file and then swapped in, so a crash mid-write
+            // cannot leave half a settings file behind.
+            string temp = _path + ".tmp";
+            File.WriteAllText(temp, JsonSerializer.Serialize(settings, JsonOpts));
+            File.Move(temp, _path, overwrite: true);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {

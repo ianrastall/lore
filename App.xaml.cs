@@ -10,8 +10,33 @@ public partial class App : Application
 
     public App()
     {
+        UseGregorianCalendar();
         InitializeComponent();
         UnhandledException += OnUnhandledException;
+        // Errors on background threads and in forgotten tasks never reach the handler
+        // above; log those too.
+        AppDomain.CurrentDomain.UnhandledException += (_, e) => Diagnostics.Log($"Unhandled (background): {e.ExceptionObject}");
+        TaskScheduler.UnobservedTaskException += (_, e) =>
+        {
+            Diagnostics.Log($"Unobserved task error: {e.Exception}");
+            e.SetObserved();
+        };
+    }
+
+    // Dates are shown in the Windows regional format, but always in the Gregorian
+    // calendar: a birth year must not appear as a Buddhist or Persian one. (Stored dates
+    // are separately read and written with the invariant culture.)
+    private static void UseGregorianCalendar()
+    {
+        var culture = (System.Globalization.CultureInfo)System.Globalization.CultureInfo.CurrentCulture.Clone();
+        if (culture.DateTimeFormat.Calendar is not System.Globalization.GregorianCalendar)
+        {
+            var gregorian = culture.OptionalCalendars.OfType<System.Globalization.GregorianCalendar>().FirstOrDefault();
+            if (gregorian is not null) culture.DateTimeFormat.Calendar = gregorian;
+            else culture = System.Globalization.CultureInfo.InvariantCulture;
+        }
+        System.Globalization.CultureInfo.CurrentCulture = culture;
+        System.Globalization.CultureInfo.DefaultThreadCurrentCulture = culture;
     }
 
     protected override async void OnLaunched(LaunchActivatedEventArgs args)
@@ -46,14 +71,18 @@ public partial class App : Application
             await splash.CloseWhenAsync(_mainWindow.Initialized);
     }
 
-    private static void OnUnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)
+    // An error in the interface is logged and the app carries on — but not silently:
+    // the status bar says something went wrong and where the details are.
+    private void OnUnhandledException(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)
     {
         e.Handled = true;
+        Diagnostics.Log($"Unhandled: {e.Exception}");
         try
         {
-            string log = Path.Combine(Path.GetTempPath(), "lore-crash.txt");
-            File.AppendAllText(log, $"[{DateTime.Now:s}] {e.Exception}\n\n");
+            if (_mainWindow is not null)
+                _mainWindow.ViewModel.StatusMessage =
+                    $"Something went wrong ({e.Message}). Lore is still running; the details are in {Diagnostics.LogFile}.";
         }
-        catch { }
+        catch { /* reporting must never raise a second error */ }
     }
 }

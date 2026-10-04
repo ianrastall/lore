@@ -203,6 +203,9 @@ public sealed partial class MainViewModel : ObservableObject
     partial void OnSelectedCelebrityChanged(Celebrity? value)
     {
         OnPropertyChanged(nameof(SelectedIsCustom));
+        // Whatever is selected now (even nothing), a chart still being calculated for
+        // the previous selection must not arrive and show itself.
+        _loadGeneration++;
         if (value is not null)
         {
             ShowLegend = false; // picking a person returns from the legend to their chart
@@ -320,7 +323,7 @@ public sealed partial class MainViewModel : ObservableObject
             DailyVM.Chart = chart;
             ForecastVM.Chart = chart;
             SynastryVM.Chart = chart;
-            StatusMessage = "";
+            StatusMessage = chart.EphemerisNote; // empty unless the ephemeris data is missing
         }
         catch (Exception ex)
         {

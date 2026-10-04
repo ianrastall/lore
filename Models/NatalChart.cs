@@ -16,6 +16,13 @@ public sealed class NatalChart
     // e.g. "Placidus houses" — or a note that another system had to stand in for it.
     public string HouseSystemLabel { get; init; } = "Placidus houses";
 
+    // The instant the chart was calculated for, in Universal Time.
+    public DateTime CalculatedForUtc { get; init; }
+
+    // Empty normally. Otherwise what went wrong with the ephemeris: the data files were
+    // missing and a rougher model stood in, or a body could not be calculated at all.
+    public string EphemerisNote { get; init; } = "";
+
     // The settings this chart was calculated with.
     public ChartSettings Settings { get; init; } = ChartSettings.Default;
 

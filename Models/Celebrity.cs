@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.Json.Serialization;
 
 namespace Lore.Models;
@@ -74,7 +75,9 @@ public sealed class Celebrity
 
     // The date as recorded: Old Style if JulianCalendar is set. BirthTimeResolver
     // turns it into the Gregorian date the calculation uses.
-    public DateOnly GetBirthDate() => DateOnly.ParseExact(BirthDate, "yyyy-MM-dd");
+    // (Invariant culture: the stored text is always a Gregorian-style yyyy-MM-dd,
+    // whatever calendar Windows is set to.)
+    public DateOnly GetBirthDate() => DateOnly.ParseExact(BirthDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
 
     // The recorded date for display, marked when it is Old Style: "1642-12-25 O.S."
     [JsonIgnore]
@@ -83,7 +86,7 @@ public sealed class Celebrity
     public TimeOnly GetBirthTime()
     {
         if (BirthTime is { Length: > 0 } t)
-            return TimeOnly.ParseExact(t, "HH:mm");
+            return TimeOnly.ParseExact(t, "HH:mm", CultureInfo.InvariantCulture);
         return new TimeOnly(12, 0); // noon default when unknown
     }
 

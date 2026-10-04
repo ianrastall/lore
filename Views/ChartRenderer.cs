@@ -50,7 +50,9 @@ internal static class ChartRenderer
     private const float PlanetRing  = 0.63f;
     private const float AspectInner = 0.45f;
 
-    public static void Draw(CanvasDrawingSession ds, NatalChart chart, float width, float height)
+    // `selected`: a planet picked in the list beside the wheel. Its glyph is ringed and
+    // its aspects drawn at full strength, with every other aspect faded back.
+    public static void Draw(CanvasDrawingSession ds, NatalChart chart, float width, float height, Planet? selected = null)
     {
         float cx = width / 2f;
         float cy = height / 2f;
@@ -60,8 +62,13 @@ internal static class ChartRenderer
 
         DrawZodiacRing(ds, cx, cy, r, WheelAsc(chart));
         if (chart.Timed) DrawHouses(ds, cx, cy, r, chart);
-        DrawAspects(ds, cx, cy, r * AspectInner, chart);
+        DrawAspects(ds, cx, cy, r * AspectInner, chart, selected);
         DrawPlanets(ds, cx, cy, r, chart);
+        if (selected is { } s && chart.GetPlanet(s) is { } sp)
+        {
+            var at = ToPoint(cx, cy, r * (HouseOuter * 0.88f), sp.Longitude, WheelAsc(chart));
+            ds.DrawCircle(at, r * 0.022f, AngularColor, 2f);
+        }
         if (chart.Timed) DrawAngles(ds, cx, cy, r, chart);
         DrawVerdictRim(ds, cx, cy, r, chart);
     }
@@ -132,7 +139,7 @@ internal static class ChartRenderer
     private static void DrawOuterAngle(CanvasDrawingSession ds, float cx, float cy, float r,
         double longitude, double asc, string label)
     {
-        var fmt = new CanvasTextFormat
+        using var fmt = new CanvasTextFormat
         {
             FontSize = r * 0.03f,
             HorizontalAlignment = CanvasHorizontalAlignment.Center,
@@ -148,7 +155,7 @@ internal static class ChartRenderer
     private static void DrawBiWheelKey(CanvasDrawingSession ds, float r, float height, NatalChart inner, NatalChart outer)
     {
         float size = r * 0.042f;
-        var fmt = new CanvasTextFormat { FontSize = size, WordWrapping = CanvasWordWrapping.NoWrap };
+        using var fmt = new CanvasTextFormat { FontSize = size, WordWrapping = CanvasWordWrapping.NoWrap };
         float x = size * 0.6f;
         ds.DrawText($"Inner wheel: {inner.Celebrity.Name}", x, height - size * 3.2f, HouseColor, fmt);
         ds.DrawText($"Outer wheel: {outer.Celebrity.Name}", x, height - size * 1.8f, OuterAngleColor, fmt);
@@ -191,7 +198,7 @@ internal static class ChartRenderer
     private static void DrawZodiacRing(CanvasDrawingSession ds, float cx, float cy, float r, double asc,
         float signInner = SignInner, bool centred = false)
     {
-        var fmt = new CanvasTextFormat { FontSize = r * 0.07f, HorizontalAlignment = CanvasHorizontalAlignment.Center };
+        using var fmt = new CanvasTextFormat { FontSize = r * 0.07f, HorizontalAlignment = CanvasHorizontalAlignment.Center };
         if (centred) fmt.VerticalAlignment = CanvasVerticalAlignment.Center;
 
         for (int i = 0; i < 12; i++)
@@ -221,7 +228,7 @@ internal static class ChartRenderer
     private static void DrawHouses(CanvasDrawingSession ds, float cx, float cy, float r, NatalChart chart,
         float houseOuter = HouseOuter, float labelRing = AspectInner + 0.06f)
     {
-        var fmt = new CanvasTextFormat { FontSize = r * 0.045f, HorizontalAlignment = CanvasHorizontalAlignment.Center };
+        using var fmt = new CanvasTextFormat { FontSize = r * 0.045f, HorizontalAlignment = CanvasHorizontalAlignment.Center };
 
         for (int i = 0; i < 12; i++)
         {
@@ -252,7 +259,7 @@ internal static class ChartRenderer
 
     private static void DrawAngles(CanvasDrawingSession ds, float cx, float cy, float r, NatalChart chart)
     {
-        var fmt = new CanvasTextFormat { FontSize = r * 0.05f, HorizontalAlignment = CanvasHorizontalAlignment.Center };
+        using var fmt = new CanvasTextFormat { FontSize = r * 0.05f, HorizontalAlignment = CanvasHorizontalAlignment.Center };
         DrawAngleLine(ds, cx, cy, r, chart.Ascendant, chart.Ascendant, "ASC", fmt);
         DrawAngleLine(ds, cx, cy, r, chart.Midheaven, chart.Ascendant, "MC", fmt);
         DrawAngleLine(ds, cx, cy, r, (chart.Ascendant + 180) % 360, chart.Ascendant, "DSC", fmt);
@@ -271,8 +278,12 @@ internal static class ChartRenderer
 
     // ── Aspects ──────────────────────────────────────────────────────────────
 
-    private static void DrawAspects(CanvasDrawingSession ds, float cx, float cy, float innerR, NatalChart chart)
+    private static void DrawAspects(CanvasDrawingSession ds, float cx, float cy, float innerR, NatalChart chart, Planet? selected = null)
     {
+        // With a planet selected: its own aspects at full strength, the rest held back.
+        byte Shade(byte alpha, bool involved) =>
+            selected is null ? alpha : involved ? (byte)230 : (byte)(alpha / 5);
+
         foreach (var aspect in chart.Aspects)
         {
             var pA = chart.Planets.FirstOrDefault(p => p.Planet == aspect.PlanetA);
@@ -286,10 +297,12 @@ internal static class ChartRenderer
             // Fade strong-orb aspects
             double allowed = aspect.Allowed > 0 ? aspect.Allowed : aspect.Type.Orb();
             byte alpha = (byte)(160 - (int)(Math.Min(1, aspect.Orb / allowed) * 100));
-            color = Color.FromArgb(alpha, color.R, color.G, color.B);
+            bool involved = aspect.PlanetA == selected || aspect.PlanetB == selected;
+            color = Color.FromArgb(Shade(alpha, involved), color.R, color.G, color.B);
+            float width = selected is not null && involved ? 2.25f : 1.25f;
 
-            if (aspect.Type.IsMajor()) ds.DrawLine(ptA, ptB, color, 1.25f);
-            else ds.DrawLine(ptA, ptB, color, 1f, MinorStroke);
+            if (aspect.Type.IsMajor()) ds.DrawLine(ptA, ptB, color, width);
+            else ds.DrawLine(ptA, ptB, color, width - 0.25f, MinorStroke);
         }
 
         // Aspects to the Ascendant and Midheaven: from the planet to the angle's own
@@ -302,9 +315,11 @@ internal static class ChartRenderer
             byte alpha = (byte)(120 - (int)(Math.Min(1, aspect.Orb / aspect.Allowed) * 75));
             var from = ToPoint(cx, cy, innerR, p.Longitude, WheelAsc(chart));
             var to = ToPoint(cx, cy, innerR, angleLon, WheelAsc(chart));
-            var faded = Color.FromArgb(alpha, color.R, color.G, color.B);
-            if (aspect.Type.IsMajor()) ds.DrawLine(from, to, faded, 1f);
-            else ds.DrawLine(from, to, faded, 1f, MinorStroke);
+            bool involved = aspect.Planet == selected;
+            var faded = Color.FromArgb(Shade(alpha, involved), color.R, color.G, color.B);
+            float width = selected is not null && involved ? 2f : 1f;
+            if (aspect.Type.IsMajor()) ds.DrawLine(from, to, faded, width);
+            else ds.DrawLine(from, to, faded, width, MinorStroke);
         }
     }
 
@@ -319,7 +334,7 @@ internal static class ChartRenderer
     private static void DrawPlanets(CanvasDrawingSession ds, float cx, float cy, float r, NatalChart chart,
         double asc, float glyphRing, float dotRing, float glyphSize, bool centred = false)
     {
-        var symFmt = new CanvasTextFormat { FontSize = r * glyphSize, HorizontalAlignment = CanvasHorizontalAlignment.Center };
+        using var symFmt = new CanvasTextFormat { FontSize = r * glyphSize, HorizontalAlignment = CanvasHorizontalAlignment.Center };
         if (centred) symFmt.VerticalAlignment = CanvasVerticalAlignment.Center;
 
         // Cluster avoidance: track used angles to offset overlapping planets
@@ -345,7 +360,7 @@ internal static class ChartRenderer
             // Retrograde marker
             if (planet.IsRetrograde)
             {
-                var retFmt = new CanvasTextFormat { FontSize = r * 0.038f };
+                using var retFmt = new CanvasTextFormat { FontSize = r * 0.038f };
                 var retPt = new Vector2(pt.X + r * 0.04f, pt.Y + r * (centred ? 0.008f : 0.05f));
                 ds.DrawText("℞", retPt, Color.FromArgb(180, 200, 160, 100), retFmt);
             }

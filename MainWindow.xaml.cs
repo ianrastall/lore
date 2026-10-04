@@ -213,20 +213,29 @@ public sealed partial class MainWindow : Window
             return;
         }
 
+        // Everything the export will use is taken now, before the save dialog is shown:
+        // while that dialog is open another chart may be selected or a calculation may
+        // finish, and the file must not end up with one person's wheel and another's text.
+        var report = ViewModel.ChartVM.ReportSections;
+        var worksheet = ViewModel.ChartVM.Worksheet;
+        var sensitivity = ViewModel.ChartVM.Sensitivity;
+        string name = chart.Celebrity.Name;
+
         // The daily exports write the reading already on screen (for whatever date the
-        // Daily view is set to) rather than recalculating it.
+        // Daily view is set to) rather than recalculating it — but only once it is the
+        // reading for this chart, not the previous one still showing while this one loads.
         var reading = ViewModel.DailyVM.Reading;
         bool daily = kind.StartsWith("daily", StringComparison.Ordinal);
-        if (daily && reading is null)
+        if (daily && (reading is null || ViewModel.DailyVM.IsBusy || reading.Name != name))
         {
             ViewModel.StatusMessage = "The daily horoscope is not ready yet — try again in a moment.";
             return;
         }
 
         var forecast = ViewModel.ForecastVM.Reading;
-        if (kind == "forecasttxt" && forecast is null)
+        if (kind == "forecasttxt" && (forecast is null || ViewModel.ForecastVM.IsBusy || forecast.Name != name))
         {
-            ViewModel.StatusMessage = "Open the Forecast view first, then export.";
+            ViewModel.StatusMessage = "The forecast is not ready yet — open the Forecast view, then try again in a moment.";
             return;
         }
 
@@ -234,7 +243,8 @@ public sealed partial class MainWindow : Window
         var comparison = ViewModel.SynastryVM.Comparison;
         var synastryReading = ViewModel.SynastryVM.Reading;
         bool synastry = kind.StartsWith("synastry", StringComparison.Ordinal);
-        if (synastry && (comparison is null || synastryReading is null))
+        if (synastry && (comparison is null || synastryReading is null || ViewModel.SynastryVM.IsBusy ||
+                         !ReferenceEquals(comparison.First, chart)))
         {
             ViewModel.StatusMessage = "Open the Synastry view and choose someone to compare with first, then export.";
             return;
@@ -261,10 +271,10 @@ public sealed partial class MainWindow : Window
             InitializeWithWindow.Initialize(picker, WindowNative.GetWindowHandle(this));
             picker.FileTypeChoices.Add(label, [ext]);
             picker.SuggestedFileName =
-                daily ? SafeFileName($"{chart.Celebrity.Name} - daily {reading!.Date:yyyy-MM-dd}") :
+                daily ? SafeFileName($"{chart.Celebrity.Name} - daily {reading!.Date.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture)}") :
                 synastry ? SafeFileName($"{synastryReading!.FirstName} and {synastryReading.SecondName} - synastry") :
                 kind == "worksheettxt" ? SafeFileName($"{chart.Celebrity.Name} - worksheet") :
-                kind == "forecasttxt" ? SafeFileName($"{chart.Celebrity.Name} - forecast from {forecast!.Start:yyyy-MM-dd}") :
+                kind == "forecasttxt" ? SafeFileName($"{chart.Celebrity.Name} - forecast from {forecast!.Start.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture)}") :
                 SafeFileName(chart.Celebrity.Name);
 
             var file = await picker.PickSaveFileAsync();
@@ -273,13 +283,13 @@ public sealed partial class MainWindow : Window
             ViewModel.StatusMessage = $"Exporting {file.Name}…";
             byte[] bytes = kind switch
             {
-                "pdf"  => ExportService.ToPdf(chart, ViewModel.ChartVM.ReportSections,
+                "pdf"  => ExportService.ToPdf(chart, report,
                                               await ExportService.RenderChartPngAsync(chart),
-                                              ViewModel.ChartVM.Worksheet, ViewModel.ChartVM.Sensitivity),
+                                              worksheet, sensitivity),
                 "png"  => await ExportService.RenderChartPngAsync(chart),
                 "json" => ExportService.ToJson(chart),
                 "xml"  => ExportService.ToXml(chart),
-                "worksheettxt" => WorksheetService.ToText(WorksheetService.Build(chart), ViewModel.ChartVM.Sensitivity),
+                "worksheettxt" => WorksheetService.ToText(WorksheetService.Build(chart), sensitivity),
                 "dailypdf" => DailyExportService.ToPdf(reading!),
                 "dailytxt" => DailyExportService.ToText(reading!),
                 "forecasttxt" => DailyInterpreter.ForecastToText(forecast!),

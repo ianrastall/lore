@@ -57,7 +57,8 @@ foreach ($line in $envLines) {
 }
 
 # ── Verify cl.exe is accessible ─────────────────────────────────────────────────
-$clPath = (Get-Command cl.exe -ErrorAction SilentlyContinue)?.Source
+$clCommand = Get-Command cl.exe -ErrorAction SilentlyContinue
+$clPath = if ($clCommand) { $clCommand.Source } else { $null }
 if (-not $clPath) {
     Write-Error "cl.exe not found after setting up MSVC environment."
     exit 1
@@ -75,7 +76,9 @@ try {
 
     # Compile each .c to .obj
     Write-Host "Compiling source files..."
-    $clArgs = @("/nologo", "/O2", "/MD", "/W3",
+    # /MT links the C runtime into sweph.dll itself, so the portable build does not
+    # depend on a separately installed Visual C++ runtime (VCRUNTIME140.dll).
+    $clArgs = @("/nologo", "/O2", "/MT", "/W3",
                 "/DWIN32", "/D_WIN32", "/DMAKE_DLL",
                 "/c") + $sources
     & cl.exe @clArgs

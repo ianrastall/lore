@@ -127,4 +127,38 @@ public class ForecastTests
         string text = System.Text.Encoding.UTF8.GetString(DailyInterpreter.ForecastToText(reading));
         Assert.Contains("NOVEMBER 2026", text);
     }
+
+    [Fact]
+    public void A_planet_that_dips_into_orb_and_turns_back_between_samples_is_still_found()
+    {
+        // Find a moment Mercury stations retrograde: its speed goes from forward to
+        // backward, so its longitude is at a maximum.
+        double Jd(DateTime utc) => SwissEphemeris.DateTimeToJulianDay(utc);
+        double Speed(double jd) => Repo.Charts.CalculateBody(jd, Planet.Mercury)!.SpeedLongitude;
+
+        var day = new DateTime(2026, 1, 1);
+        while (!(Speed(Jd(day)) > 0 && Speed(Jd(day.AddDays(1))) < 0)) day = day.AddDays(1);
+        double lo = Jd(day), hi = Jd(day.AddDays(1));
+        for (int i = 0; i < 40; i++) { double mid = (lo + hi) / 2; if (Speed(mid) > 0) lo = mid; else hi = mid; }
+        double peak = Repo.Charts.CalculateBody(lo, Planet.Mercury)!.Longitude;
+
+        // A natal point 0.9995 deg beyond the furthest Mercury gets: inside the one-degree orb
+        // only for the few hours around the station, and outside it at the half-day samples.
+        var natal = new NatalChart
+        {
+            Celebrity = new Celebrity { Id = "t", Name = "T", BirthDate = "2000-01-01", BirthTimeKnown = false },
+            Planets = [new PlanetPosition { Planet = Planet.Sun, Longitude = (peak + 0.9995) % 360 }],
+            Houses = [],
+            Aspects = [],
+        };
+
+        var start = DateOnly.FromDateTime(day).AddDays(-7);
+        var pass = Assert.Single(Transits.Forecast(natal, start, 14, Zone),
+            p => p.Mover == Planet.Mercury && p.Aspect == AspectType.Conjunction);
+        Assert.False(pass.IsExact);
+        Assert.InRange(pass.MinOrb, 0.999, 1.0);
+        Assert.NotNull(pass.EnterUtc);
+        Assert.NotNull(pass.LeaveUtc);
+        Assert.InRange((pass.PeakUtc - SwissEphemeris.JulianDayToDateTime(lo)).TotalHours, -1, 1);
+    }
 }

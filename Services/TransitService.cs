@@ -128,11 +128,13 @@ public sealed class TransitService
             int n = Math.Max(1, (int)Math.Ceiling((jd1 - jd0) / step));
             var jds = new double[n + 1];
             var lon = new double[n + 1];
+            var speed = new double[n + 1];
             bool available = true;
             for (int i = 0; i <= n && available; i++)
             {
                 jds[i] = Math.Min(jd0 + i * step, jd1);
-                if (_charts.CalculateBody(jds[i], mover) is { } p) lon[i] = p.Longitude; else available = false;
+                if (_charts.CalculateBody(jds[i], mover) is { } p) { lon[i] = p.Longitude; speed[i] = p.SpeedLongitude; }
+                else available = false;
             }
             if (!available) continue;
 
@@ -147,6 +149,34 @@ public sealed class TransitService
                             int a = i;
                             while (i < n && Math.Abs(D(i + 1)) <= Orb) i++;
                             passes.Add(Pass(natal, timed, mover, point, natalLon, aspect, branch, jds, D, a, i));
+                        }
+
+                        // The one case sampling can miss: the body stations between two
+                        // samples, reaching into the orb and turning back before the next
+                        // one. Where it changes direction with both samples just outside
+                        // the orb, look for the closest approach in between.
+                        for (int i = 0; i < n; i++)
+                        {
+                            if ((speed[i] < 0) == (speed[i + 1] < 0)) continue;
+                            double x = Math.Abs(D(i)), y = Math.Abs(D(i + 1));
+                            if (x <= Orb || y <= Orb || Math.Min(x, y) > Orb + 1) continue;
+
+                            var (peakJd, minOrb) = Minimise(mover, branch, jds[i], jds[i + 1]);
+                            if (minOrb > Orb) continue;
+                            double OutBy(double t) => OrbAt(mover, branch, t) - Orb;
+                            passes.Add(new TransitPass
+                            {
+                                Mover = mover,
+                                Target = point,
+                                Aspect = aspect,
+                                EnterUtc = SwissEphemeris.JulianDayToDateTime(Bisect(OutBy, jds[i], peakJd)),
+                                LeaveUtc = SwissEphemeris.JulianDayToDateTime(Bisect(OutBy, peakJd, jds[i + 1])),
+                                ExactUtc = minOrb < ExactTolerance ? [SwissEphemeris.JulianDayToDateTime(peakJd)] : [],
+                                PeakUtc = SwissEphemeris.JulianDayToDateTime(peakJd),
+                                MinOrb = minOrb < ExactTolerance ? 0 : minOrb,
+                                MoverRetrograde = _charts.CalculateBody(peakJd, mover) is { IsRetrograde: true },
+                                TargetHouse = timed && !point.IsAngle ? natal.GetHouseForLongitude(natalLon) : null,
+                            });
                         }
                     }
         }

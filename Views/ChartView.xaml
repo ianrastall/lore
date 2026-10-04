@@ -42,7 +42,7 @@
             <!-- Planets & aspects panel -->
             <Grid Grid.Column="1" RowDefinitions="Auto,*,Auto,*" Padding="0,8,8,8">
 
-                <TextBlock Grid.Row="0" Text="Planets"
+                <TextBlock Grid.Row="0" Text="Planets — click one to show its aspects"
                            Style="{StaticResource CaptionTextBlockStyle}"
                            Margin="0,0,0,4"/>
 

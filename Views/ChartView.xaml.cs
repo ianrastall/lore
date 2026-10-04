@@ -30,7 +30,8 @@ public sealed partial class ChartView : UserControl
     private void ChartCanvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
     {
         if (ViewModel.Chart is { } chart)
-            ChartRenderer.Draw(args.DrawingSession, chart, (float)sender.ActualWidth, (float)sender.ActualHeight);
+            ChartRenderer.Draw(args.DrawingSession, chart, (float)sender.ActualWidth, (float)sender.ActualHeight,
+                (PlanetsList.SelectedItem as Lore.Models.PlanetPosition)?.Planet);
         else
             args.DrawingSession.Clear(Color.FromArgb(255, 18, 18, 30));
     }

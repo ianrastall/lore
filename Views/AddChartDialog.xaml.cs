@@ -62,8 +62,7 @@ public sealed partial class AddChartDialog : ContentDialog
 
         NameBox.Text = c.Name;
         PlaceBox.Text = c.BirthPlace;
-        LatBox.Value = c.Latitude;
-        LonBox.Value = c.Longitude;
+        SetCoordinates(c.Latitude, c.Longitude);
         UtcBox.Value = c.UtcOffsetHours;
         OffsetFixedCheck.IsChecked = c.UtcOffsetFixed;
         _timeZoneId = string.IsNullOrWhiteSpace(c.TimeZoneId) ? null : c.TimeZoneId;
@@ -133,10 +132,54 @@ public sealed partial class AddChartDialog : ContentDialog
     // back to showing (and following) what the time-zone database says.
     private void OffsetFixed_Changed(object sender, Microsoft.UI.Xaml.RoutedEventArgs e) => RefreshResolvedOffset();
 
-    private void CityBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+    // True while code, not the user, is filling in the coordinates.
+    private bool _settingCoordinates;
+
+    private void SetCoordinates(double latitude, double longitude)
+    {
+        _settingCoordinates = true;
+        LatBox.Value = latitude;
+        LonBox.Value = longitude;
+        _settingCoordinates = false;
+    }
+
+    // The user typed a latitude or longitude. Whatever time zone came with the city or
+    // the saved chart no longer applies — the place has moved — so drop it and look the
+    // zone up afresh from the new coordinates.
+    private void Place_ValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs args)
+    {
+        if (_settingCoordinates) return;
+        _timeZoneId = null;
+        RefreshResolvedOffset();
+    }
+
+    // Searching a quarter of a million hospitals takes long enough to feel in the typing,
+    // so both searches wait for a short pause and then run off the UI thread. A newer
+    // keystroke cancels the search before it.
+    private CancellationTokenSource? _searching;
+
+    private async Task SuggestAsync<T>(AutoSuggestBox box, Func<string, IReadOnlyList<T>> search)
+    {
+        _searching?.Cancel();
+        var mine = _searching = new CancellationTokenSource();
+        string query = box.Text;
+        try
+        {
+            await Task.Delay(200, mine.Token);
+            var results = await Task.Run(() => search(query), mine.Token);
+            if (!mine.IsCancellationRequested)
+                box.ItemsSource = results;
+        }
+        catch (OperationCanceledException)
+        {
+            // superseded by a later keystroke
+        }
+    }
+
+    private async void CityBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
     {
         if (args.Reason != AutoSuggestionBoxTextChangeReason.UserInput) return;
-        sender.ItemsSource = _cities.Search(sender.Text);
+        await SuggestAsync(sender, q => _cities.Search(q));
     }
 
     private void CityBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
@@ -145,18 +188,17 @@ public sealed partial class AddChartDialog : ContentDialog
         {
             sender.Text = city.Display;
             PlaceBox.Text = city.Display;
-            LatBox.Value = city.Latitude;
-            LonBox.Value = city.Longitude;
+            SetCoordinates(city.Latitude, city.Longitude);
             UtcBox.Value = city.UtcOffsetHours; // fallback only
             _timeZoneId = string.IsNullOrWhiteSpace(city.TimeZoneId) ? null : city.TimeZoneId;
             RefreshResolvedOffset();
         }
     }
 
-    private void HospitalBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+    private async void HospitalBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
     {
         if (args.Reason != AutoSuggestionBoxTextChangeReason.UserInput) return;
-        sender.ItemsSource = _hospitals.Search(sender.Text);
+        await SuggestAsync(sender, q => _hospitals.Search(q));
     }
 
     private void HospitalBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
@@ -165,8 +207,7 @@ public sealed partial class AddChartDialog : ContentDialog
         {
             sender.Text = hospital.Display;
             PlaceBox.Text = hospital.Display;
-            LatBox.Value = hospital.Latitude;
-            LonBox.Value = hospital.Longitude;
+            SetCoordinates(hospital.Latitude, hospital.Longitude);
             // Hospitals carry no time-zone data, so clear any zone from a prior city
             // pick and let RefreshResolvedOffset resolve it from these coordinates.
             _timeZoneId = null;
@@ -226,7 +267,9 @@ public sealed partial class AddChartDialog : ContentDialog
             Id = _existing?.Id ?? "user-" + Guid.NewGuid().ToString("N"),
             Name = NameBox.Text.Trim(),
             Category = UserChartService.MyChartsCategory,
-            BirthDate = date.ToString("yyyy-MM-dd"),
+            // Built from the numbers, not formatted: a format would follow the Windows
+            // regional calendar and could store a Buddhist or Persian year.
+            BirthDate = $"{date.Year:D4}-{date.Month:D2}-{date.Day:D2}",
             JulianCalendar = IsJulian,
             BirthTime = timeKnown ? $"{time.Hours:D2}:{time.Minutes:D2}" : null,
             BirthTimeKnown = timeKnown,

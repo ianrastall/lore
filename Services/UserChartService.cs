@@ -27,6 +27,9 @@ public sealed class UserChartService
     private List<Celebrity> _charts = [];
     private bool _saveBlocked;
 
+    // One save at a time: two overlapping saves would fight over the same temporary file.
+    private readonly SemaphoreSlim _saving = new(1, 1);
+
     public UserChartService()
         : this(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Lore"))
     {
@@ -102,24 +105,34 @@ public sealed class UserChartService
         }
     }
 
-    public async Task AddAsync(Celebrity chart)
-    {
-        _charts.Add(chart);
-        await SaveAsync();
-    }
+    // Each change is made to a copy, the copy is saved, and only then does it become the
+    // list in memory. If the save fails, memory and disk both stay as they were — so a
+    // failed delete can't quietly take effect the next time something else is saved.
+    public Task AddAsync(Celebrity chart) => CommitAsync(list => list.Add(chart));
 
     // Replaces the saved chart with the same Id (an edit); adds it if none matches.
-    public async Task UpdateAsync(Celebrity chart)
+    public Task UpdateAsync(Celebrity chart) => CommitAsync(list =>
     {
-        int i = _charts.FindIndex(c => c.Id == chart.Id);
-        if (i >= 0) _charts[i] = chart; else _charts.Add(chart);
-        await SaveAsync();
-    }
+        int i = list.FindIndex(c => c.Id == chart.Id);
+        if (i >= 0) list[i] = chart; else list.Add(chart);
+    });
 
-    public async Task RemoveAsync(Celebrity chart)
+    public Task RemoveAsync(Celebrity chart) => CommitAsync(list => list.RemoveAll(c => c.Id == chart.Id));
+
+    private async Task CommitAsync(Action<List<Celebrity>> change)
     {
-        _charts.RemoveAll(c => c.Id == chart.Id);
-        await SaveAsync();
+        await _saving.WaitAsync();
+        try
+        {
+            var candidate = new List<Celebrity>(_charts);
+            change(candidate);
+            await SaveAsync(candidate);
+            _charts = candidate;
+        }
+        finally
+        {
+            _saving.Release();
+        }
     }
 
     private static async Task<List<Celebrity>?> TryReadAsync(string path)
@@ -127,7 +140,17 @@ public sealed class UserChartService
         try
         {
             await using var stream = File.OpenRead(path);
-            return await JsonSerializer.DeserializeAsync<List<Celebrity>>(stream, JsonOpts) ?? [];
+            var charts = await JsonSerializer.DeserializeAsync<List<Celebrity>>(stream, JsonOpts);
+
+            // Well-formed JSON is not enough: "null", "[null]" or "[{}]" parse happily and
+            // would break the app later. Treat those as unreadable too, so the caller sets
+            // the file aside and falls back to the backup.
+            if (charts is null || charts.FirstOrDefault(c => !IsUsable(c)) is { } bad || charts.Contains(null!))
+            {
+                Diagnostics.Log($"{path} is valid JSON but not a usable chart list.");
+                return null;
+            }
+            return charts;
         }
         catch (Exception ex) when (ex is JsonException or IOException or UnauthorizedAccessException)
         {
@@ -136,7 +159,27 @@ public sealed class UserChartService
         }
     }
 
-    private async Task SaveAsync()
+    // A chart Lore can show and calculate: it has an id, a name, a readable date and
+    // (if given) time, and coordinates on the globe.
+    private static bool IsUsable(Celebrity? c)
+    {
+        if (c is null || string.IsNullOrWhiteSpace(c.Id) || string.IsNullOrWhiteSpace(c.Name)) return false;
+        if (!double.IsFinite(c.Latitude) || Math.Abs(c.Latitude) > 90) return false;
+        if (!double.IsFinite(c.Longitude) || Math.Abs(c.Longitude) > 180) return false;
+        if (!double.IsFinite(c.UtcOffsetHours)) return false;
+        try
+        {
+            c.GetBirthDate();
+            c.GetBirthTime();
+            return true;
+        }
+        catch (FormatException)
+        {
+            return false;
+        }
+    }
+
+    private async Task SaveAsync(List<Celebrity> charts)
     {
         if (_saveBlocked)
             throw new IOException("Saving is paused because the existing charts file couldn't be read; restart Lore.");
@@ -145,7 +188,7 @@ public sealed class UserChartService
         await using (var stream = new FileStream(TempPath, FileMode.Create, FileAccess.Write,
                          FileShare.None, 4096, FileOptions.WriteThrough))
         {
-            await JsonSerializer.SerializeAsync(stream, _charts, JsonOpts);
+            await JsonSerializer.SerializeAsync(stream, charts, JsonOpts);
         }
 
         if (!File.Exists(_path))

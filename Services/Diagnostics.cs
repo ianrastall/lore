@@ -7,6 +7,8 @@ public static class Diagnostics
     private static readonly string LogPath =
         Path.Combine(Path.GetTempPath(), "lore-crash.txt");
 
+    public static string LogFile => LogPath;
+
     public static void Log(string message)
     {
         try

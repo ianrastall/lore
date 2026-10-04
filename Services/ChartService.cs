@@ -58,9 +58,11 @@ public sealed class ChartService
         List<HouseCusp> houses;
         double asc, mc;
         bool substituted;
+        string problem;
         lock (SweLock)
         {
             planets = CalculatePlanets(jd, settings.Node);
+            problem = _lastProblem ?? "";
             (houses, asc, mc, substituted) = CalculateHouses(jd, celebrity.Latitude, celebrity.Longitude, settings.Houses);
         }
 
@@ -81,6 +83,8 @@ public sealed class ChartService
             Ascendant = asc,
             Midheaven = mc,
             Settings = settings,
+            CalculatedForUtc = utc,
+            EphemerisNote = problem.Trim(),
             HouseSystemLabel = substituted
                 ? $"Porphyry houses ({settings.Houses.Name()} cannot be calculated at this latitude)"
                 : $"{settings.Houses.Name()} houses",
@@ -122,8 +126,16 @@ public sealed class ChartService
         };
     }
 
+    // Set when a calculation could not use the Swiss Ephemeris data files and fell back
+    // on the library's built-in (less precise) model, or could not supply a body at all.
+    // Empty when all is well. Read by NatalChart.EphemerisNote.
+    [ThreadStatic] private static string? _lastProblem;
+
     private static List<PlanetPosition> CalculatePlanets(double jd, NodeType node)
     {
+        _lastProblem = null;
+        bool fallback = false;
+        var missing = new List<string>();
         var result = new List<PlanetPosition>(PlanetMap.Length);
         var xx = new double[6];
         var eq = new double[6];
@@ -133,7 +145,14 @@ public sealed class ChartService
         {
             int ret = SwissEphemeris.CalcUt(jd, SweBody(planet, node), flags, xx, nint.Zero);
             if (ret < 0)
-                continue; // skip bodies that fail (e.g., Chiron outside data range)
+            {
+                missing.Add(planet.Name()); // e.g. Chiron when its data file is absent
+                continue;
+            }
+            // The flags that come back say which ephemeris was really used. (The mean
+            // node and mean Lilith are computed without any file, so they don't count.)
+            if ((ret & SwissEphemeris.SEFLG_SWIEPH) == 0 && planet is not (Planet.NorthNode or Planet.Lilith))
+                fallback = true;
 
             // A second pass in equatorial coordinates, for the declination only.
             double declination = SwissEphemeris.CalcUt(jd, SweBody(planet, node),
@@ -149,6 +168,10 @@ public sealed class ChartService
             });
         }
 
+        if (fallback || missing.Count > 0)
+            _lastProblem =
+                (fallback ? "The Swiss Ephemeris data files could not be read, so a less precise built-in model was used. " : "") +
+                (missing.Count > 0 ? $"Not available: {string.Join(", ", missing)}." : "");
         return result;
     }
 
@@ -224,7 +247,7 @@ public sealed class ChartService
 
                     // The angle is held still; the planet's own motion decides whether
                     // the aspect is closing or opening.
-                    double next = Math.Abs(AngleBetween(p.Longitude + p.SpeedLongitude / 24.0, lon) - type.Angle());
+                    double next = Math.Abs(AngleBetween(p.Longitude + p.SpeedLongitude * StepDays, lon) - type.Angle());
                     aspects.Add(new AngleAspect
                     {
                         Planet = p.Planet, Angle = angle, Type = type,
@@ -242,13 +265,17 @@ public sealed class ChartService
         return diff > 180 ? 360 - diff : diff;
     }
 
+    private const double StepDays = 1.0 / 1440; // one minute
+
     private static bool IsApplying(PlanetPosition a, PlanetPosition b, AspectType type)
     {
         // Applying = the separation to the exact angle is shrinking. Advance both planets
-        // by their own hourly motion (so relative speed is captured) and compare.
+        // by their own motion over one minute (so relative speed is captured) and compare.
+        // A step as long as an hour would carry a fast Moon through an aspect that is a
+        // few minutes from exact and out the other side, and call it separating.
         double currentAngle = AngleBetween(a.Longitude, b.Longitude);
-        double nextA = a.Longitude + a.SpeedLongitude / 24.0; // advance 1 hour
-        double nextB = b.Longitude + b.SpeedLongitude / 24.0;
+        double nextA = a.Longitude + a.SpeedLongitude * StepDays;
+        double nextB = b.Longitude + b.SpeedLongitude * StepDays;
         double nextAngle = AngleBetween(nextA, nextB);
         double exact = type.Angle();
         return Math.Abs(nextAngle - exact) < Math.Abs(currentAngle - exact);

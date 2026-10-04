@@ -124,4 +124,59 @@ public class BirthTimeResolverTests
         Assert.Equal(ZodiacSign.Capricorn, sun.Sign);
         Assert.InRange(sun.DegreeInSign, 13, 14.5);
     }
+
+    [Theory]
+    [InlineData("th-TH")] // Thai Buddhist calendar: year 2533 for 1990
+    [InlineData("fa-IR")] // Persian calendar
+    [InlineData("ar-SA")] // Umm al-Qura calendar
+    [InlineData("en-US")]
+    public void A_stored_date_means_the_same_whatever_calendar_Windows_uses(string cultureName)
+    {
+        var before = System.Globalization.CultureInfo.CurrentCulture;
+        try
+        {
+            System.Globalization.CultureInfo.CurrentCulture = new System.Globalization.CultureInfo(cultureName);
+            var c = new Celebrity
+            {
+                Id = "t", Name = "T", BirthDate = "1990-01-01", BirthTime = "12:00", BirthTimeKnown = true,
+                Latitude = 51.5, Longitude = -0.13, TimeZoneId = "Europe/London",
+            };
+            Assert.Equal(new DateOnly(1990, 1, 1), c.GetBirthDate());
+            Assert.Equal(new DateTime(1990, 1, 1, 12, 0, 0), BirthTimeResolver.ToUtc(c));
+            Assert.Equal("1990-01-01 12:00:00 UT",
+                WorksheetService.Build(Repo.Charts.Calculate(c)).Facts.Single(f => f.Label == "Universal Time").Value);
+        }
+        finally
+        {
+            System.Globalization.CultureInfo.CurrentCulture = before;
+        }
+    }
+
+    [Fact]
+    public void The_birth_day_is_the_real_local_day_even_when_the_clocks_change()
+    {
+        Celebrity London(string date) => new()
+        {
+            Id = "t", Name = "T", BirthDate = date, BirthTimeKnown = false,
+            Latitude = 51.5, Longitude = -0.13, TimeZoneId = "Europe/London",
+        };
+
+        // An ordinary summer day: BST midnight to midnight is 23:00 to 23:00 UT.
+        var (start, end, clock) = BirthTimeResolver.LocalDay(London("1990-07-01"));
+        Assert.Equal(new DateTime(1990, 6, 30, 23, 0, 0), start);
+        Assert.Equal(24, (end - start).TotalHours);
+        Assert.Equal("00:00", clock(start));
+        Assert.Equal("12:30", clock(start.AddHours(12.5)));
+
+        // 25 March 1990, clocks forward: 23 hours. 28 October 1990, clocks back: 25.
+        var spring = BirthTimeResolver.LocalDay(London("1990-03-25"));
+        Assert.Equal(23, (spring.endUtc - spring.startUtc).TotalHours);
+        Assert.Equal("00:00", spring.clock(spring.startUtc));
+        Assert.Equal("23:59", spring.clock(spring.endUtc.AddMinutes(-1)));
+        var autumn = BirthTimeResolver.LocalDay(London("1990-10-28"));
+        Assert.Equal(25, (autumn.endUtc - autumn.startUtc).TotalHours);
+
+        Assert.Equal(690, TimeSensitivityService.AnalyseDay(Repo.Charts, London("1990-03-25"))!.Minutes);
+        Assert.Equal(750, TimeSensitivityService.AnalyseDay(Repo.Charts, London("1990-10-28"))!.Minutes);
+    }
 }
