@@ -11,6 +11,11 @@ public sealed class NatalChart
     public IReadOnlyList<AngleAspect> AngleAspects { get; init; } = [];
     public double Ascendant { get; init; }   // ecliptic longitude
     public double Midheaven { get; init; }   // ecliptic longitude
+    public double Vertex { get; init; }      // where the prime vertical meets the ecliptic in the west
+    public double Armc { get; init; }        // sidereal time at the birthplace, in degrees
+
+    // The true obliquity of the ecliptic at that instant; null if it could not be had.
+    public double? Obliquity { get; init; }
 
     // The house system the cusps were actually calculated in, as shown to the user,
     // e.g. "Placidus houses" — or a note that another system had to stand in for it.

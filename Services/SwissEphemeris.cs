@@ -34,6 +34,7 @@ internal static partial class SwissEphemeris
     // ascmc array indices
     public const int SE_ASC    = 0;
     public const int SE_MC     = 1;
+    public const int SE_ARMC   = 2;
     public const int SE_VERTEX = 3;
 
     public const int SE_GREG_CAL = 1;

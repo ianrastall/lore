@@ -13,6 +13,10 @@ public sealed class Worksheet
     public required IReadOnlyList<NatalPoint> Points { get; init; }
     public required IReadOnlyList<WorksheetAspect> Aspects { get; init; }
 
+    // The further measurements, each a small table: the Moon's phase, declination,
+    // closeness to the angles, the balance of the chart, its aspects in sum, its rulers.
+    public IReadOnlyList<WorksheetSection> Sections { get; init; } = [];
+
     public bool HasCusps => Cusps.Count > 0;
 
     public WorksheetAspect? AspectBetween(NatalPoint a, NatalPoint b) =>
@@ -28,6 +32,11 @@ public sealed record WorksheetRow(
     string Speed, string House, string Motion);
 
 public sealed record WorksheetCusp(string House, string Position);
+
+// A titled table of already-formatted cells. Headers is empty for a plain list of
+// label-and-value lines; Note, if any, explains the table underneath it.
+public sealed record WorksheetSection(
+    string Title, IReadOnlyList<string> Headers, IReadOnlyList<IReadOnlyList<string>> Rows, string Note = "");
 
 public sealed record WorksheetAspect(
     NatalPoint A, NatalPoint B, AspectType Type, double Orb, bool Applying, bool OutOfSign = false)

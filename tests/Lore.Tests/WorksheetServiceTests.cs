@@ -45,7 +45,8 @@ public class WorksheetServiceTests
     public void A_timed_chart_lists_the_angles_the_Part_of_Fortune_and_twelve_cusps()
     {
         var w = For("elvis-presley");
-        Assert.Equal(16, w.Positions.Count); // 13 bodies + Ascendant + Midheaven + Fortune
+        // 13 bodies + Ascendant + Midheaven + South Node, Descendant, IC, Vertex, Fortune, Spirit
+        Assert.Equal(21, w.Positions.Count);
         Assert.Equal(12, w.Cusps.Count);
         Assert.Equal(15, w.Points.Count);
         Assert.Contains(w.Aspects, a => a.B.IsAngle);
@@ -89,8 +90,9 @@ public class WorksheetServiceTests
         };
         var w = WorksheetService.Build(Repo.Charts.Calculate(untimed));
 
-        Assert.Equal(13, w.Positions.Count);
+        Assert.Equal(14, w.Positions.Count); // 13 bodies + the South Node, which needs no time
         Assert.All(w.Positions, r => Assert.Equal("", r.House));
+        Assert.DoesNotContain(w.Sections, x => x.Title is "Angles and houses" or "House rulers");
         Assert.Empty(w.Cusps);
         Assert.DoesNotContain(w.Aspects, a => a.A.IsAngle || a.B.IsAngle);
         Assert.Contains("time unknown", Fact(w, "Born"));
@@ -104,6 +106,9 @@ public class WorksheetServiceTests
         Assert.Contains("POSITIONS", text);
         Assert.Contains("HOUSE CUSPS", text);
         Assert.Contains("ASPECTS", text);
+        foreach (string heading in new[] { "THE MOON'S PHASE", "DISTANCE FROM THE SUN", "DECLINATION", "ANGLES AND HOUSES",
+                     "BALANCE", "ASPECTS IN SUM", "RULERS", "HOUSE RULERS", "DISPOSITORS" })
+            Assert.Contains(heading, text);
     }
 
     [Fact]

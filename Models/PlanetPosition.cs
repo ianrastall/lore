@@ -31,6 +31,14 @@ public sealed class PlanetPosition
     public double Latitude { get; init; }     // ecliptic latitude
     public double Declination { get; init; }  // degrees north (+) or south (−) of the celestial equator
     public double SpeedLongitude { get; init; } // degrees/day; negative = retrograde
+
+    // The rest of what the ephemeris returns. HasEquatorial is false when the equatorial
+    // pass failed (or was never made): the declination is then unknown, not zero.
+    public bool HasEquatorial { get; init; }
+    public double RightAscension { get; init; }   // degrees, 0–360
+    public double SpeedDeclination { get; init; } // degrees/day
+    public double SpeedLatitude { get; init; }    // degrees/day
+    public double Distance { get; init; }         // from the Earth, in astronomical units
     // The mean node always runs backwards and mean Lilith always forwards; neither has
     // retrograde periods, so neither is ever marked.
     public bool IsRetrograde => SpeedLongitude < 0 && Planet is not (Planet.NorthNode or Planet.Lilith);

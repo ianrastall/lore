@@ -25,6 +25,7 @@ public sealed partial class WorksheetView : UserControl
                 {
                     Bindings.Update();
                     BuildAspectGrid();
+                    BuildSections();
                 }
                 else if (e.PropertyName is nameof(ChartViewModel.Sensitivity) or nameof(ChartViewModel.CanTestTime)
                          or nameof(ChartViewModel.SensitivityHeading))
@@ -34,6 +35,7 @@ public sealed partial class WorksheetView : UserControl
             };
             Bindings.Update();
             BuildAspectGrid();
+            BuildSections();
         }
     }
 
@@ -118,6 +120,81 @@ public sealed partial class WorksheetView : UserControl
                 }
                 Place(cell, row, col);
             }
+        }
+    }
+
+    // The further measurements: under each heading a small table, or a list of
+    // label-and-value lines where the section has no column headings.
+    private void BuildSections()
+    {
+        SectionsPanel.Children.Clear();
+        if (ViewModel.Worksheet is not { } sheet) return;
+
+        static T? Resource<T>(string key) where T : class =>
+            Application.Current.Resources.TryGetValue(key, out var v) ? v as T : null;
+        var secondary = Resource<Brush>("TextFillColorSecondaryBrush");
+        var accent = Resource<Brush>("AccentTextFillColorPrimaryBrush");
+        var divider = Resource<Brush>("DividerStrokeColorDefaultBrush");
+
+        foreach (var section in sheet.Sections)
+        {
+            if (section.Rows.Count == 0) continue;
+            var panel = new StackPanel { Spacing = 6 };
+            var title = new TextBlock { Text = section.Title, FontSize = 20, FontWeight = Microsoft.UI.Text.FontWeights.SemiBold };
+            if (Resource<Style>("SubtitleTextBlockStyle") is { } style) title.Style = style;
+            if (accent is not null) title.Foreground = accent;
+            panel.Children.Add(title);
+
+            bool list = section.Headers.Count == 0;
+            int columns = list ? 2 : section.Headers.Count;
+            var grid = new Grid { HorizontalAlignment = HorizontalAlignment.Left, ColumnSpacing = 24 };
+            for (int i = 0; i < columns; i++)
+                grid.ColumnDefinitions.Add(new ColumnDefinition
+                {
+                    Width = list && i == 0 ? new GridLength(150) : GridLength.Auto,
+                    MinWidth = list ? 0 : 70,
+                });
+
+            int row = 0;
+            void Add(IReadOnlyList<string> cells, bool header)
+            {
+                grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+                for (int i = 0; i < columns; i++)
+                {
+                    var cell = new TextBlock
+                    {
+                        Text = i < cells.Count ? cells[i] : "",
+                        TextWrapping = TextWrapping.Wrap,
+                        MaxWidth = 640,
+                        Padding = new Thickness(0, 2, 0, 2),
+                        IsTextSelectionEnabled = !header,
+                    };
+                    if (header) { cell.FontSize = 12; cell.Opacity = 0.7; }
+                    else if (list && i == 0 && secondary is not null) cell.Foreground = secondary;
+                    Grid.SetRow(cell, row);
+                    Grid.SetColumn(cell, i);
+                    grid.Children.Add(cell);
+                }
+                row++;
+            }
+
+            if (!list)
+            {
+                Add(section.Headers, header: true);
+                var rule = new Border { BorderBrush = divider, BorderThickness = new Thickness(0, 0, 0, 1) };
+                Grid.SetColumnSpan(rule, columns);
+                grid.Children.Add(rule);
+            }
+            foreach (var cells in section.Rows) Add(cells, header: false);
+            panel.Children.Add(grid);
+
+            if (section.Note.Length > 0)
+                panel.Children.Add(new TextBlock
+                {
+                    Text = section.Note, FontSize = 11, Opacity = 0.7, TextWrapping = TextWrapping.Wrap,
+                    MaxWidth = 790, HorizontalAlignment = HorizontalAlignment.Left,
+                });
+            SectionsPanel.Children.Add(panel);
         }
     }
 

@@ -164,8 +164,8 @@ public static class ExportService
         col.Item().Text(
             "A traditional dignity score for the seven classical planets (Sun–Saturn): essential " +
             "dignity by sign and degree, plus accidental dignity by house, motion, and closeness to " +
-            "the Sun. Higher means more traditionally dignified. Most charts fall between 0 and +26; " +
-            "27 or more is flagged Extraordinary and −1 or less Alarming.")
+            "the Sun. Higher means more traditionally dignified. Most charts fall between −1 and +28; " +
+            "29 or more is flagged Extraordinary and −2 or less Alarming.")
             .FontSize(9).FontColor(Colors.Grey.Darken1).LineHeight(1.3f);
 
         col.Item().PaddingTop(2).Text(t =>
@@ -214,6 +214,12 @@ public static class ExportService
     private static ChartExport BuildDto(NatalChart chart)
     {
         var c = chart.Celebrity;
+        var m = NatalMetricsService.Compute(chart);
+        var score = DignityService.ComputeIfTimed(chart);
+        double? Point(string name) => m.LongitudeOf(name) is { } lon ? Round(lon) : null;
+        static List<TallyExport> Tallies(IReadOnlyList<Tally> tallies) =>
+            tallies.Select(t => new TallyExport { Name = t.Name, Count = t.Count }).ToList();
+
         return new ChartExport
         {
             GeneratedBy = "Lore",
@@ -245,6 +251,22 @@ public static class ExportService
             AscendantSign = chart.Timed ? ZodiacSignExtensions.FromLongitude(chart.Ascendant).Name() : "",
             Midheaven = chart.Timed ? Round(chart.Midheaven) : null,
             MidheavenSign = chart.Timed ? ZodiacSignExtensions.FromLongitude(chart.Midheaven).Name() : "",
+            Descendant = Point("Descendant"),
+            ImumCoeli = Point("Imum Coeli"),
+            Vertex = Point("Vertex"),
+            PartOfFortune = Point("Part of Fortune"),
+            PartOfSpirit = Point("Part of Spirit"),
+            SouthNode = Point("South Node"),
+            Sect = chart.Timed ? (chart.IsDayChart ? "Day" : "Night") : "",
+            SiderealTimeDegrees = chart.Timed ? Round(chart.Armc) : null,
+            Obliquity = chart.Obliquity is { } eps ? Math.Round(eps, 6) : null,
+            MoonPhase = m.Moon is { } moon ? new MoonPhaseExport
+            {
+                Phase = moon.Phase.Name(),
+                MoonAheadOfSun = Round(moon.Elongation),
+                Waxing = moon.Waxing,
+                IlluminatedFraction = Round(moon.Illumination),
+            } : null,
             Planets = chart.Planets.Select(p => new PlanetExport
             {
                 Name = p.PlanetName,
@@ -252,8 +274,23 @@ public static class ExportService
                 DegreeInSign = Round(p.DegreeInSign),
                 Longitude = Round(p.Longitude),
                 Latitude = Round(p.Latitude),
-                Declination = Round(p.Declination),
+                Declination = p.HasEquatorial ? Round(p.Declination) : null,
+                RightAscension = p.HasEquatorial ? Round(p.RightAscension) : null,
                 SpeedPerDay = Round(p.SpeedLongitude),
+                LatitudeSpeedPerDay = Round(p.SpeedLatitude),
+                DeclinationSpeedPerDay = p.HasEquatorial ? Round(p.SpeedDeclination) : null,
+                // Only a physical body has a distance worth the name.
+                DistanceAu = p.Planet is Planet.NorthNode or Planet.Lilith ? null : Math.Round(p.Distance, 8),
+                OutOfBoundsBy = m.OutOfBounds.FirstOrDefault(o => o.Planet == p.Planet) is { } oob ? Round(oob.Excess) : null,
+                DegreesFromSun = m.Solar.FirstOrDefault(r => r.Planet == p.Planet) is { } solar ? Round(solar.Elongation) : null,
+                SideOfSun = m.Solar.FirstOrDefault(r => r.Planet == p.Planet) is { } side ? (side.EastOfSun ? "East" : "West") : "",
+                SolarCondition = m.Solar.FirstOrDefault(r => r.Planet == p.Planet) is { Condition: not SolarCondition.None } cond
+                    ? cond.Condition.ToString() : "",
+                NearestAngle = m.Angularity.FirstOrDefault(a => a.Planet == p.Planet)?.NearestAngle ?? "",
+                DegreesFromNearestAngle = m.Angularity.FirstOrDefault(a => a.Planet == p.Planet) is { } ang ? Round(ang.Distance) : null,
+                SignRuler = m.Rulers.Dispositions.First(d => d.Planet == p.Planet).SignRuler.Name(),
+                TermRuler = m.Rulers.Dispositions.First(d => d.Planet == p.Planet).TermRuler.Name(),
+                FaceRuler = m.Rulers.Dispositions.First(d => d.Planet == p.Planet).FaceRuler.Name(),
                 House = chart.Timed ? chart.GetHouseForLongitude(p.Longitude) : null,
                 Retrograde = p.IsRetrograde
             }).ToList(),
@@ -262,7 +299,8 @@ public static class ExportService
                 House = h.House,
                 Longitude = Round(h.Longitude),
                 Sign = h.Sign.Name(),
-                DegreeInSign = Round(h.DegreeInSign)
+                DegreeInSign = Round(h.DegreeInSign),
+                Ruler = DignityService.RulerOf(h.Sign).Name()
             }).ToList(),
             Aspects = chart.Aspects.Select(a => new AspectExport
             {
@@ -293,7 +331,48 @@ public static class ExportService
                 Element = p.Element.HasValue ? p.Element.Value.ToString() : "",
                 Modality = p.Modality.HasValue ? p.Modality.Value.ToString() : "",
                 Apex = p.Apex.HasValue ? p.Apex.Value.Name : ""
-            }).ToList()
+            }).ToList(),
+            DeclinationContacts = m.Parallels.Select(d => new DeclinationContactExport
+            {
+                PlanetA = d.A.Name(),
+                PlanetB = d.B.Name(),
+                Type = d.Contra ? "Contra-parallel" : "Parallel",
+                Orb = Round(d.Orb),
+                AllowedOrb = NatalMetricsService.ParallelOrb,
+                Applying = d.Applying
+            }).ToList(),
+            Balance = new BalanceExport
+            {
+                BodiesCounted = m.Distribution.Total,
+                Elements = Tallies(m.Distribution.Elements),
+                Modalities = Tallies(m.Distribution.Modalities),
+                Polarities = Tallies(m.Distribution.Polarities),
+                HouseTypes = Tallies(m.Distribution.HouseTypes),
+                Hemispheres = Tallies(m.Distribution.Hemispheres),
+            },
+            Rulers = new RulersExport
+            {
+                ChartRuler = m.Rulers.ChartRuler?.Name() ?? "",
+                ModernChartRuler = m.Rulers.ModernChartRuler?.Name() ?? "",
+                FinalDispositor = m.Rulers.FinalDispositor?.Name() ?? "",
+                InOwnSign = m.Rulers.InDomicile.Select(x => x.Name()).ToList(),
+                MutualReceptions = m.Rulers.Loops.Where(l => l.Count == 2)
+                    .Select(l => $"{l[0].Name()} and {l[1].Name()}").ToList(),
+                Unaspected = m.Aspects.Unaspected.Select(x => x.Name()).ToList(),
+            },
+            Dignity = score is null ? null : new DignityExport
+            {
+                Total = score.Total,
+                Verdict = score.Verdict.Label(),
+                Planets = score.Planets.Select(d => new PlanetDignityExport
+                {
+                    Name = d.Planet.Name(),
+                    Essential = d.Essential,
+                    Accidental = d.Accidental,
+                    Total = d.Total,
+                    Notes = d.Notes
+                }).ToList()
+            }
         };
     }
 
@@ -333,10 +412,88 @@ public sealed class ChartExport
     public string AscendantSign { get; set; } = "";
     public double? Midheaven { get; set; }   // null without a birth time
     public string MidheavenSign { get; set; } = "";
+    // Points worked out from the others. All but the South Node need a birth time.
+    public double? Descendant { get; set; }
+    public double? ImumCoeli { get; set; }
+    public double? Vertex { get; set; }
+    public double? PartOfFortune { get; set; }
+    public double? PartOfSpirit { get; set; }
+    public double? SouthNode { get; set; }
+    public string Sect { get; set; } = "";              // Day / Night; empty without a birth time
+    public double? SiderealTimeDegrees { get; set; }    // ARMC at the birthplace
+    public double? Obliquity { get; set; }              // true obliquity of the ecliptic, degrees
+    public MoonPhaseExport? MoonPhase { get; set; }
     public List<PlanetExport> Planets { get; set; } = [];
     public List<HouseExport> Houses { get; set; } = [];
     public List<AspectExport> Aspects { get; set; } = [];
     public List<PatternExport> Patterns { get; set; } = [];
+    public List<DeclinationContactExport> DeclinationContacts { get; set; } = [];
+    public BalanceExport Balance { get; set; } = new();
+    public RulersExport Rulers { get; set; } = new();
+    public DignityExport? Dignity { get; set; }         // null without a birth time
+}
+
+public sealed class MoonPhaseExport
+{
+    public string Phase { get; set; } = "";
+    public double MoonAheadOfSun { get; set; }           // degrees of longitude, 0–360
+    public bool Waxing { get; set; }
+    public double IlluminatedFraction { get; set; }      // 0–1
+}
+
+public sealed class DeclinationContactExport
+{
+    public string PlanetA { get; set; } = "";
+    public string PlanetB { get; set; } = "";
+    public string Type { get; set; } = "";               // Parallel / Contra-parallel
+    public double Orb { get; set; }
+    public double AllowedOrb { get; set; }
+    public bool Applying { get; set; }
+}
+
+public sealed class TallyExport
+{
+    public string Name { get; set; } = "";
+    public int Count { get; set; }
+}
+
+public sealed class BalanceExport
+{
+    public int BodiesCounted { get; set; }
+    public List<TallyExport> Elements { get; set; } = [];
+    public List<TallyExport> Modalities { get; set; } = [];
+    public List<TallyExport> Polarities { get; set; } = [];
+    public List<TallyExport> HouseTypes { get; set; } = [];    // empty without a birth time
+    public List<TallyExport> Hemispheres { get; set; } = [];   // empty without a birth time
+}
+
+public sealed class RulersExport
+{
+    public string ChartRuler { get; set; } = "";         // traditional ruler of the rising sign
+    public string ModernChartRuler { get; set; } = "";
+    public string FinalDispositor { get; set; } = "";
+    [XmlArrayItem("Planet")]
+    public List<string> InOwnSign { get; set; } = [];
+    [XmlArrayItem("Pair")]
+    public List<string> MutualReceptions { get; set; } = [];
+    [XmlArrayItem("Planet")]
+    public List<string> Unaspected { get; set; } = [];
+}
+
+public sealed class DignityExport
+{
+    public int Total { get; set; }
+    public string Verdict { get; set; } = "";
+    public List<PlanetDignityExport> Planets { get; set; } = [];
+}
+
+public sealed class PlanetDignityExport
+{
+    public string Name { get; set; } = "";
+    public int Essential { get; set; }
+    public int Accidental { get; set; }
+    public int Total { get; set; }
+    public string Notes { get; set; } = "";
 }
 
 public sealed class PlanetExport
@@ -346,8 +503,21 @@ public sealed class PlanetExport
     public double DegreeInSign { get; set; }
     public double Longitude { get; set; }
     public double Latitude { get; set; }
-    public double Declination { get; set; }
+    public double? Declination { get; set; }             // null if it could not be calculated
+    public double? RightAscension { get; set; }          // degrees
     public double SpeedPerDay { get; set; }
+    public double LatitudeSpeedPerDay { get; set; }
+    public double? DeclinationSpeedPerDay { get; set; }
+    public double? DistanceAu { get; set; }              // null for the node and Lilith
+    public double? OutOfBoundsBy { get; set; }           // degrees beyond the obliquity; null when within bounds
+    public double? DegreesFromSun { get; set; }          // Moon to Pluto
+    public string SideOfSun { get; set; } = "";          // East (evening) / West (morning)
+    public string SolarCondition { get; set; } = "";     // Cazimi / Combust / UnderBeams
+    public string NearestAngle { get; set; } = "";       // empty without a birth time
+    public double? DegreesFromNearestAngle { get; set; }
+    public string SignRuler { get; set; } = "";
+    public string TermRuler { get; set; } = "";
+    public string FaceRuler { get; set; } = "";
     public int? House { get; set; }          // null without a birth time
     public bool Retrograde { get; set; }
 }
@@ -358,6 +528,7 @@ public sealed class HouseExport
     public double Longitude { get; set; }
     public string Sign { get; set; } = "";
     public double DegreeInSign { get; set; }
+    public string Ruler { get; set; } = "";
 }
 
 public sealed class AspectExport

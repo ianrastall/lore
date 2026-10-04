@@ -56,14 +56,17 @@ public sealed class ChartService
 
         List<PlanetPosition> planets;
         List<HouseCusp> houses;
-        double asc, mc;
+        double asc, mc, vertex, armc;
+        double? obliquity;
         bool substituted;
         string problem;
         lock (SweLock)
         {
             planets = CalculatePlanets(jd, settings.Node);
             problem = _lastProblem ?? "";
-            (houses, asc, mc, substituted) = CalculateHouses(jd, celebrity.Latitude, celebrity.Longitude, settings.Houses);
+            (houses, asc, mc, vertex, armc, substituted) = CalculateHouses(jd, celebrity.Latitude, celebrity.Longitude, settings.Houses);
+            var ecl = new double[6];
+            obliquity = SwissEphemeris.CalcUt(jd, SwissEphemeris.SE_ECL_NUT, 0, ecl, nint.Zero) < 0 ? null : ecl[0];
         }
 
         // Aspect detection is pure managed arithmetic on the results above — no native
@@ -82,6 +85,9 @@ public sealed class ChartService
             AngleAspects = angleAspects,
             Ascendant = asc,
             Midheaven = mc,
+            Vertex = vertex,
+            Armc = armc,
+            Obliquity = obliquity,
             Settings = settings,
             CalculatedForUtc = utc,
             EphemerisNote = problem.Trim(),
@@ -176,17 +182,23 @@ public sealed class ChartService
             if ((ret & SwissEphemeris.SEFLG_SWIEPH) == 0 && planet is not (Planet.NorthNode or Planet.Lilith))
                 fallback = true;
 
-            // A second pass in equatorial coordinates, for the declination only.
-            double declination = SwissEphemeris.CalcUt(jd, SweBody(planet, node),
-                flags | SwissEphemeris.SEFLG_EQUATORIAL, eq, nint.Zero) < 0 ? 0 : eq[1];
+            // A second pass in equatorial coordinates, for the right ascension and
+            // declination. If it fails they are marked unknown rather than left at zero.
+            bool equatorial = SwissEphemeris.CalcUt(jd, SweBody(planet, node),
+                flags | SwissEphemeris.SEFLG_EQUATORIAL, eq, nint.Zero) >= 0;
 
             result.Add(new PlanetPosition
             {
                 Planet = planet,
                 Longitude = xx[0],
                 Latitude = xx[1],
-                Declination = declination,
+                Distance = xx[2],
                 SpeedLongitude = xx[3],
+                SpeedLatitude = xx[4],
+                HasEquatorial = equatorial,
+                RightAscension = equatorial ? eq[0] : 0,
+                Declination = equatorial ? eq[1] : 0,
+                SpeedDeclination = equatorial ? eq[4] : 0,
             });
         }
 
@@ -199,7 +211,7 @@ public sealed class ChartService
 
     // `substituted` is set when the Swiss Ephemeris could not calculate the requested
     // system at this latitude and returned Porphyry cusps in its place.
-    private static (List<HouseCusp> houses, double asc, double mc, bool substituted) CalculateHouses(
+    private static (List<HouseCusp> houses, double asc, double mc, double vertex, double armc, bool substituted) CalculateHouses(
         double jd, double lat, double lon, HouseSystem system)
     {
         var cusps = new double[13];
@@ -211,7 +223,8 @@ public sealed class ChartService
             .Select(i => new HouseCusp { House = i, Longitude = cusps[i] })
             .ToList();
 
-        return (houses, ascmc[SwissEphemeris.SE_ASC], ascmc[SwissEphemeris.SE_MC], substituted);
+        return (houses, ascmc[SwissEphemeris.SE_ASC], ascmc[SwissEphemeris.SE_MC],
+            ascmc[SwissEphemeris.SE_VERTEX], ascmc[SwissEphemeris.SE_ARMC], substituted);
     }
 
     private static List<Aspect> CalculateAspects(List<PlanetPosition> planets, OrbSettings orbs)

@@ -141,6 +141,9 @@
                 <TextBlock FontSize="11" Opacity="0.7" TextWrapping="Wrap" MaxWidth="790" HorizontalAlignment="Left"
                            Text="Each cell shows the aspect between the two points, how far it is from exact, and whether it is applying (a, closing) or separating (s, opening). A star marks an aspect that is out of sign: within orb by degree, but the two signs are not in that relationship (a conjunction from late Aries to early Taurus), which tradition reads as weaker. ☌ conjunction · ⚹ sextile · □ square · △ trine · ☍ opposition; and, when the minor aspects are switched on in Settings, ⚺ semi-sextile · ∠ semi-square · ⚼ sesquiquadrate · ⚻ quincunx."/>
             </StackPanel>
+
+            <!-- Further measurements (built in code: one small table per section) -->
+            <StackPanel x:Name="SectionsPanel" Spacing="18"/>
         </StackPanel>
     </ScrollViewer>
 </UserControl>

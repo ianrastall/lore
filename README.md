@@ -4,14 +4,14 @@
 
 > A Windows desktop application for computing and exploring astrological natal charts — and reading a daily horoscope from them — powered by the Swiss Ephemeris. Browse a curated library of historical figures — every one with a documented birth time — or add your own.
 
-**Latest release: v2.1.0** · [Download](../../releases/latest)
+**Latest release: v2.2.0** · [Download](../../releases/latest)
 
 ### Installing
 
-1. From the [latest release](../../releases/latest), download **`LoreSetup-2.1.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`LoreSetup-2.2.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user only (no administrator prompt), adds a Start-menu shortcut, and can be removed from *Settings → Apps* like any other program.
 
-**Prefer not to install?** Download **`Lore-2.1.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
+**Prefer not to install?** Download **`Lore-2.2.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
 
 > **The installer is not code-signed.** Lore is a free hobby project and does not carry a paid signing certificate, so Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"* — choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -33,8 +33,10 @@
 - Detects **five major aspects** (conjunction ☌, sextile ⚹, square □, trine △, opposition ☍) with per-aspect orbs, and flags each as applying or separating.
 - Detects **major configurations** — stellium, grand trine, T-square, and grand cross — from the positions and aspects (a T-square that is one arm of a grand cross is not reported twice).
 - Retrograde detection for every planet from Mercury to Pluto, and Chiron.
+- **Further points and measurements** — the South Node, Descendant, IC, Vertex and the Parts of Fortune and Spirit; the lunar phase at birth; each planet's distance from the Sun; parallels, contra-parallels and out-of-bounds planets by declination; the balance of the chart; chart ruler, house rulers and dispositors.
 
-- **162 figures** across **14 categories** — Actors, Musicians, Writers, Artists, Scientists, Philosophers, Directors, Athletes, Political, Historical, and more.
+### Figure Library
+- **212 figures** across **14 categories** — Actors, Musicians, Writers, Artists, Scientists, Philosophers, Directors, Athletes, Political, Historical, and more.
 - **Every figure has a documented, recorded birth time** (Astro-Databank / Rodden-rated). Entries without a reliable birth time were removed, so no chart relies on a noon guess.
 - Each entry stores birth date, time, birth place, geographic coordinates, IANA time zone, and a one-sentence bio.
 - Birth instants are resolved with **historical, DST-aware UTC offsets** via the IANA timezone database (NodaTime), not just fixed offsets — correctly handling anomalies like the UK's 1968–71 year-round BST experiment and 1940s US wartime time. For births before standard time existed, the birthplace's own local mean time (from its longitude) is used, as astrological sources record them.
@@ -52,7 +54,7 @@
 |---|---|
 | **Chart Wheel** | Rendered chart wheel (Win2D / Direct2D), drawn on-screen and exportable as a high-resolution PNG. |
 | **Report** | Natural-language reading: Overview (Sun/Moon/Rising), planet-by-sign-degree-and-house paragraphs, major aspects, chart patterns (stellium, grand trine, T-square, grand cross), and elemental and modal balance. The Ascendant/Midheaven line shows their degrees and names the house system. |
-| **Worksheet** | The numbers behind the chart, uninterpreted: how the birth time became Universal Time, every position to the arc-second with latitude, declination, daily speed and house, the twelve house cusps, the Part of Fortune, and a grid of every aspect — including those to the Ascendant and Midheaven — with orb and applying/separating. A section headed *If the birth time is off* shows what would change, and when, if the recorded time were out by a margin you set. |
+| **Worksheet** | The numbers behind the chart, uninterpreted: how the birth time became Universal Time, every position to the arc-second with latitude, declination, daily speed and house, the twelve house cusps, the derived points (South Node, Descendant, IC, Vertex, Parts of Fortune and Spirit), and a grid of every aspect — including those to the Ascendant and Midheaven — with orb and applying/separating. Below that come the further measurements: the Moon's phase, each planet's distance from the Sun, declination contacts and out-of-bounds planets, closeness to the angles, the balance of the chart by element, mode, polarity and house, the aspects in sum, and the chart's rulers and dispositors. A section headed *If the birth time is off* shows what would change, and when, if the recorded time were out by a margin you set. |
 | **Daily** | Daily horoscope for the selected chart on any date — generated from that day's transits. See below. |
 | **Forecast** | The transits coming up for the selected chart over the next month to a year: when each comes into orb, is exact, and leaves, with the Daily view's written line for it. |
 | **Timing** | The solar return in force on a date, with its wheel, and the chart progressed to that date a day for a year. |
@@ -98,9 +100,9 @@ Every chart is scored against the **Lilly/Dorothean rubric**:
 | **Accidental** | House placement (Lilly's table), direct motion (+4) / retrograde (−5), solar phase: cazimi (+5) / combust (−5) / under beams (−4) |
 
 Applied to the seven classical planets (Sun–Saturn). The aggregate score yields a verdict:
-- 🟢 **Extraordinary** (27 or more)
+- 🟢 **Extraordinary** (29 or more)
 - ⚪ **Ordinary**
-- 🔴 **Alarming** (−1 or less)
+- 🔴 **Alarming** (−2 or less)
 
 The verdict is surfaced everywhere: a coloured pill in the chart header, a **whole-row green / red wash** on notable figures in the browse list, a coloured rim on the chart wheel, and a full per-planet breakdown table in the exported PDF. Bands are calibrated against the bundled corpus so roughly a quarter read Extraordinary, a sixth Alarming, and the rest Ordinary — a fair chance of finding something notable when you look someone up.
 
@@ -111,7 +113,7 @@ Charts can be exported in four formats:
 |---|---|
 | **PNG** | High-resolution chart wheel (1600 × 1600 px, offscreen Win2D render) |
 | **PDF** | Full reading — birth data, chart wheel image, Big Three, written report, per-planet dignity table, and the worksheet |
-| **JSON** | Structured chart data (planets, houses, aspects, angles, and detected patterns) |
+| **JSON** | Structured chart data (planets, houses, aspects, angles, detected patterns, and every Worksheet measurement, including the dignity score's breakdown) |
 | **XML** | Same structured data in XML |
 | **Text — worksheet** | The Worksheet view as plain text, for pasting into notes or checking against another program |
 | **PDF / Text — daily horoscope** | The daily reading for the date shown in the Daily view, with the full list of that day's transits |
@@ -132,6 +134,7 @@ Lore/
 │   ├── SwissEphemeris.cs      # P/Invoke wrapper around Native\sweph.dll
 │   ├── SettingsService.cs     # House system / node type, saved to settings.json
 │   ├── WorksheetService.cs    # The Worksheet view's tables and its text export
+│   ├── NatalMetricsService.cs # Further measurements: derived points, lunar phase, declination, balance, rulers
 │   ├── TimeSensitivityService.cs # "If the birth time is off": what holds and what changes across a margin
 │   ├── ChartService.cs        # Orchestrates planet + house + aspect calculation
 │   ├── BirthTimeResolver.cs   # UTC conversion using NodaTime + GeoTimeZone
@@ -163,7 +166,7 @@ Lore/
 │   ├── LegendView.xaml/.cs    # Glyph + colour legend
 │   └── AddChartDialog.xaml/.cs# Custom chart entry dialog
 ├── Data/
-│   ├── celebrities.json       # 162 bundled figures (all with recorded birth times)
+│   ├── celebrities.json       # 212 bundled figures (all with recorded birth times)
 │   ├── cities.json            # ~50,250 cities (lat/lon + IANA tz)
 │   ├── hospitals.json         # ~235,000 hospitals (lat/lon), Add-Chart birthplace search
 │   ├── interpretations.json   # Corpus for the natural-language report
@@ -250,7 +253,7 @@ Produces a self-contained folder that runs with no installed .NET or VC++ runtim
 .\scripts\build-portable.ps1
 ```
 
-Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-2.1.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
+Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-2.2.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
 
 ### Step 4 — Installer
 
@@ -278,7 +281,7 @@ Output: `artifacts\LoreSetup-<version>.exe`.
 
 ### `Data\celebrities.json`
 
-162 figures in 14 categories, each with a documented birth time (Astro-Databank Rodden rating AA or A). Each entry:
+212 figures in 14 categories, each with a documented birth time (Astro-Databank Rodden rating AA or A). Each entry:
 
 ```jsonc
 {
@@ -458,7 +461,21 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 2.1.0 (current)
+### 2.2.0 (current)
+- **Fifty more figures** — the library grows from 162 to **212**, with contemporary names from music, sport and film: Billie Eilish, Kendrick Lamar, Dua Lipa, Zendaya, Timothée Chalamet, Margot Robbie, LeBron James, Simone Biles, Kylian Mbappé, Novak Djokovic and others. Every one is rated AA or A by Astro-Databank and is checked against its record by the tests; figures whose times are conflicting, inferred from a rising sign or undocumented were left out.
+- **More points on the Worksheet** — the South Node, Descendant, IC, Vertex and Part of Spirit join the Part of Fortune in the Positions table.
+- **The Moon's phase at birth** — how far the Moon was ahead of the Sun, the phase that falls in, and how much of the disc was lit.
+- **Distance from the Sun** — for each planet, how far it is from the Sun, whether it is a morning or evening body, and whether it is cazimi, combust or under the beams.
+- **Declination** — parallels and contra-parallels within 1°, applying or separating, and any planet that is out of bounds, with by how much. The obliquity for the birth date is given, not a fixed 23°26'.
+- **Angles and houses** — how far each body is past its house cusp and from the nearest angle.
+- **Balance in numbers** — counts and percentages by element, mode, polarity, kind of house and half of the chart; the same counts the Report's balance paragraphs are written from.
+- **Aspects in sum** — how many of each kind, applying against separating, the closest, the most-aspected bodies, and any unaspected planet.
+- **Rulers** — the chart ruler, the ruler of every house and where it is, each body's dispositor, term and face ruler, the chain of dispositors, the final dispositor if there is one, and mutual receptions.
+- **All of it in the exports** — the worksheet's text and PDF carry the new sections, and the JSON and XML carry the same numbers, along with right ascension, distance, the dignity score's per-planet breakdown and the Part of Fortune, which were missing before. A declination that could not be calculated is now left empty rather than written as 0.
+- **Legend** — a new *Worksheet measurements* section explains each of the above.
+- **Dignity score: the third house** — a planet in the third house now earns the +1 that Lilly's table gives it; Lore had been giving it nothing. Scores rise by a point for each classical planet there, and the bands were redrawn against the larger library to keep their proportions: **Extraordinary** is now 29 or more (it was 27) and **Alarming** −2 or less (it was −1), so that a quarter of the 212 figures read Extraordinary and a sixth Alarming, as before. A few charts change band.
+
+### 2.1.0
 - **A fuller Report** — the written report on a birth chart no longer reads as one sentence pattern repeated. The Overview gives a full paragraph each to the Sun, Moon and Rising signs, and a new one on how the Sun and Moon fit together. Each planet's line now says what it means in its house, rather than ending with the same phrase every time. Every major aspect has text written for that particular pair of planets — 307 lines in all — in place of one stock sentence per kind of aspect. Chart patterns say what the pattern means in that sign, element or mode, and with that planet at its apex. The element and mode sections say more, name both when two tie, and mention every element that is missing rather than only the first.
 
 ### 2.0.0

@@ -100,23 +100,25 @@ public static class DignityService
     ];
 
     // House (1..12) → accidental score (Lilly). Index 0 unused.
+    // The third is the one cadent house Lilly rewards: +1, as the Moon's joy.
     private static readonly int[] HouseScore =
-        [0, +5, +3, 0, +4, +3, -2, +4, -2, +2, +5, +4, -5];
+        [0, +5, +3, +1, +4, +3, -2, +4, -2, +2, +5, +4, -5];
 
     private const double CazimiOrb  = 17.0 / 60.0; // 0°17'
     private const double CombustOrb = 8.5;          // 8°30'
     private const double BeamsOrb   = 17.0;
 
     // Verdict thresholds on the aggregate score — the single tuning point (the scoring
-    // rubric itself is untouched; only where we draw the band lines). Recalibrated for the
-    // full five-tier essential system (v1.1) against the timed reference corpus (150 timed
-    // charts), whose totals run ≈ -24..+47 with a median near +14. The bands give roughly
-    // Extraordinary 23% / Ordinary 61% / Alarming 16% on that corpus — a broad, believable
-    // middle, a meaningful top quarter, and a real (not vanishing) afflicted tail, so
-    // someone looking themselves up has a fair chance of a notable result. Lower
-    // ExtraordinaryAt to widen the top; raise AlarmingAt to widen the bottom.
-    private const int ExtraordinaryAt = 27;
-    private const int AlarmingAt       = -1;
+    // rubric itself is untouched; only where we draw the band lines). Recalibrated for
+    // 2.2.0, when the third house was given the +1 Lilly's table gives it, against the
+    // timed reference corpus (212 timed charts), whose totals run -22..+60 with a median
+    // of +17. The bands give Extraordinary 25% / Ordinary 58% / Alarming 17% on that
+    // corpus — a broad, believable middle, a meaningful top quarter, and a real (not
+    // vanishing) afflicted tail, so someone looking themselves up has a fair chance of a
+    // notable result. Lower ExtraordinaryAt to widen the top; raise AlarmingAt to widen
+    // the bottom.
+    private const int ExtraordinaryAt = 29;
+    private const int AlarmingAt       = -2;
 
     // Null for a chart with no birth time: house placement and day/night sect both
     // depend on the Ascendant, so a score from a noon guess would mean nothing.
@@ -180,8 +182,21 @@ public static class DignityService
         return score;
     }
 
+    // The tables above, for the Worksheet's rulers section.
+    public static Planet RulerOf(ZodiacSign sign) => DomicileRuler[(int)sign];
+
+    public static Planet FaceRuler(ZodiacSign sign, double degInSign) =>
+        Faces[(int)sign][Math.Clamp((int)(degInSign / 10), 0, 2)];
+
+    // How a given distance from the Sun is read, on the same limits the score uses.
+    public static SolarCondition SolarConditionAt(double separation) =>
+        separation <= CazimiOrb ? SolarCondition.Cazimi
+        : separation <= CombustOrb ? SolarCondition.Combust
+        : separation <= BeamsOrb ? SolarCondition.UnderBeams
+        : SolarCondition.None;
+
     // The ruling planet of the Egyptian term (bound) that contains this degree of the sign.
-    private static Planet TermRuler(ZodiacSign sign, double degInSign)
+    public static Planet TermRuler(ZodiacSign sign, double degInSign)
     {
         foreach (var (ruler, upper) in Terms[(int)sign])
             if (degInSign < upper) return ruler;

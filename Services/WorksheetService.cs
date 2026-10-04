@@ -13,14 +13,19 @@ public static class WorksheetService
     {
         bool timed = chart.Timed;
 
+        var metrics = NatalMetricsService.Compute(chart);
+
+        // The bodies, then the angles, then the points worked out from them. (The South
+        // Node needs no birth time; the rest of the derived points do.)
         var positions = chart.Planets.Select(p => BodyRow(chart, p)).ToList();
         if (timed)
         {
             positions.Add(PointRow(chart, "↑", "Ascendant", chart.Ascendant, house: false));
             positions.Add(PointRow(chart, "MC", "Midheaven", chart.Midheaven, house: false));
-            if (PartOfFortune(chart) is { } fortune)
-                positions.Add(PointRow(chart, "⊗", "Part of Fortune", fortune, house: true));
         }
+        foreach (var point in metrics.Points)
+            positions.Add(PointRow(chart, point.Symbol, point.Name, point.Longitude,
+                house: timed && point.Name is not ("Descendant" or "Imum Coeli")));
 
         var points = chart.Planets.Select(p => NatalPoint.Of(p.Planet)).ToList();
         if (timed)
@@ -39,6 +44,7 @@ public static class WorksheetService
                 : [],
             Points = points,
             Aspects = Aspects(chart),
+            Sections = Sections(chart, metrics),
         };
     }
 
@@ -77,6 +83,15 @@ public static class WorksheetService
             facts.Add(new("Part of Fortune", chart.IsDayChart
                 ? "Ascendant + Moon − Sun (day formula)"
                 : "Ascendant + Sun − Moon (night formula)"));
+            facts.Add(new("Part of Spirit", chart.IsDayChart
+                ? "Ascendant + Sun − Moon (day formula)"
+                : "Ascendant + Moon − Sun (night formula)"));
+            facts.Add(new("Sidereal time", SiderealTime(chart.Armc) + " at the birthplace"));
+        }
+        if (chart.Obliquity is { } obliquity)
+        {
+            int seconds = (int)(obliquity * 3600);
+            facts.Add(new("Obliquity", $"{seconds / 3600}°{seconds / 60 % 60:D2}'{seconds % 60:D2}\" (the tilt of the Earth's axis, true of date)"));
         }
         facts.Add(new("Aspect orbs", chart.Settings.Orbs.Describe()));
         facts.Add(new("Engine", chart.EphemerisNote.Length == 0
@@ -100,14 +115,165 @@ public static class WorksheetService
 
     // The Lot of Fortune, reversed by sect as the traditional sources give it: by day
     // Ascendant + Moon − Sun, by night Ascendant + Sun − Moon.
-    public static double? PartOfFortune(NatalChart chart)
-    {
-        if (!chart.Timed ||
-            chart.GetPlanet(Planet.Sun) is not { } sun || chart.GetPlanet(Planet.Moon) is not { } moon)
-            return null;
+    public static double? PartOfFortune(NatalChart chart) => NatalMetricsService.Lot(chart, spirit: false);
 
-        double arc = chart.IsDayChart ? moon.Longitude - sun.Longitude : sun.Longitude - moon.Longitude;
-        return Normalize(chart.Ascendant + arc);
+    // ── Further measurements ──────────────────────────────────────────────────
+
+    private static List<WorksheetSection> Sections(NatalChart chart, NatalMetrics m)
+    {
+        var sections = new List<WorksheetSection>();
+        static IReadOnlyList<string> Line(string label, string value) => [label, value];
+        static string Body(Planet p) => $"{p.Symbol()} {p.Name()}";
+
+        // The Moon's phase, and each body's distance from the Sun.
+        if (m.Moon is { } moon)
+        {
+            var rows = new List<IReadOnlyList<string>>
+            {
+                Line("Lunar phase", $"{moon.Phase.Name()} — the Moon is {Arc(moon.Elongation)} ahead of the Sun"),
+                Line("Lit", $"about {moon.Illumination * 100:0}% of the disc, {(moon.Waxing ? "waxing" : "waning")}"),
+            };
+            sections.Add(new("The Moon's phase", [], rows, chart.Timed
+                ? "The phase is named for the eighth of the cycle the Moon is in, each centred on its exact phase: Full Moon runs from 157°30' to 202°30' ahead of the Sun."
+                : "With no birth time these are the figures for noon. The Moon moves about 13° in a day, so the angle may be 6° or 7° out either way and the phase may be the one before or after."));
+        }
+
+        if (m.Solar.Count > 0)
+            sections.Add(new("Distance from the Sun", ["", "From the Sun", "Side", "Seen", "Condition"],
+                m.Solar.Select(r => (IReadOnlyList<string>)
+                [
+                    Body(r.Planet), Arc(r.Elongation), r.EastOfSun ? "east" : "west", r.EastOfSun ? "evening" : "morning",
+                    r.Condition switch
+                    {
+                        SolarCondition.Cazimi => "cazimi",
+                        SolarCondition.Combust => "combust",
+                        SolarCondition.UnderBeams => "under the beams",
+                        _ => ""
+                    },
+                ]).ToList(),
+                "Measured along the zodiac. A body east of the Sun follows it and sets after it; one to the west rises before it. For the Moon to Saturn: cazimi is within 0°17' of the Sun, combust within 8°30', under the beams within 17°."));
+
+        // Declination: out of bounds, parallels and contra-parallels.
+        if (chart.Planets.Any(p => p.HasEquatorial))
+        {
+            var rows = new List<IReadOnlyList<string>>
+            {
+                Line("Out of bounds", m.Obliquity is null ? "Not known"
+                    : m.OutOfBounds.Count == 0 ? "None"
+                    : string.Join("; ", m.OutOfBounds.Select(o =>
+                        $"{o.Planet.Name()} at {Signed(o.Declination)}, {Arc(o.Excess)} beyond the Sun's limit"))),
+            };
+            rows.AddRange(m.Parallels.Select(c => Line(c.Contra ? "Contra-parallel" : "Parallel",
+                $"{c.A.Name()} and {c.B.Name()}, {Arc(c.Orb)} {(c.Applying ? "a" : "s")}")));
+            if (m.Parallels.Count == 0) rows.Add(Line("Parallels", "None within 1°"));
+            sections.Add(new("Declination", [], rows,
+                "A body is out of bounds when it is further from the celestial equator than the Sun ever gets (the obliquity, above). " +
+                "Two bodies are parallel when they are within 1° of the same declination on the same side of the equator, and " +
+                "contra-parallel when within 1° of equal declinations on opposite sides. a = applying, s = separating."));
+        }
+
+        if (m.Angularity.Count > 0)
+            sections.Add(new("Angles and houses", ["", "House", "Past its cusp", "Nearest angle", "Away"],
+                m.Angularity.Select(a => (IReadOnlyList<string>)
+                    [Body(a.Planet), a.House.ToString(), Arc(a.IntoHouse), a.NearestAngle, Arc(a.Distance)]).ToList(),
+                "Distances along the zodiac: how far each body is past the cusp of its house, and how far from the nearest of the Ascendant, Midheaven, Descendant and IC."));
+
+        // The balance of the chart.
+        {
+            var d = m.Distribution;
+            string Spread(IReadOnlyList<Tally> tallies) => string.Join("  ·  ",
+                tallies.Select(t => $"{t.Name} {t.Count} ({(d.Total == 0 ? 0 : 100.0 * t.Count / d.Total):0}%)"));
+            var rows = new List<IReadOnlyList<string>>
+            {
+                Line("Elements", Spread(d.Elements)),
+                Line("Modes", Spread(d.Modalities)),
+                Line("Polarity", Spread(d.Polarities)),
+            };
+            if (d.HouseTypes.Count > 0)
+            {
+                rows.Add(Line("Houses", Spread(d.HouseTypes)));
+                rows.Add(Line("Above and below", Spread(d.Hemispheres.Take(2).ToList())));
+                rows.Add(Line("East and west", Spread(d.Hemispheres.Skip(2).ToList())));
+            }
+            sections.Add(new("Balance", [], rows,
+                $"Counted over the {d.Total} bodies in the chart, each counting once: the ten planets, the North Node, Chiron and Lilith — the same tally the Report reads." +
+                (d.HouseTypes.Count > 0 ? " The halves of the chart are taken by house, so they follow the house system chosen." : "")));
+        }
+
+        // The aspects in sum.
+        {
+            var a = m.Aspects;
+            var rows = new List<IReadOnlyList<string>>
+            {
+                Line("Between the bodies", a.ByType.Count == 0 ? "None"
+                    : $"{a.Applying + a.Separating} in all  ·  " + string.Join("  ·  ", a.ByType.Select(t => $"{t.Name} {t.Count}"))),
+                Line("Applying, separating", $"{a.Applying} applying  ·  {a.Separating} separating"),
+            };
+            if (a.Closest is { } closest)
+                rows.Add(Line("Closest", $"{closest.PlanetA.Name()} {closest.Type.Name().ToLowerInvariant()} {closest.PlanetB.Name()}, {Arc(closest.Orb)} from exact"));
+            rows.Add(Line("Most aspected", string.Join("  ·  ", a.PerBody.Take(3).Select(t => $"{t.Name} {t.Count}"))));
+            rows.Add(Line("Unaspected", a.Unaspected.Count == 0 ? "None" : string.Join(", ", a.Unaspected.Select(p => p.Name()))));
+            sections.Add(new("Aspects in sum", [], rows,
+                "Aspects between two bodies, not those to the Ascendant and Midheaven. A planet (Sun to Pluto) is unaspected when it makes no major aspect to any other body on the orbs in force; wider orbs would leave fewer."));
+        }
+
+        // Rulers.
+        {
+            var r = m.Rulers;
+            var rows = new List<IReadOnlyList<string>>();
+            if (r.ChartRuler is { } ruler)
+            {
+                var at = chart.GetPlanet(ruler);
+                rows.Add(Line("Chart ruler",
+                    $"{ruler.Name()}, ruler of {ZodiacSignExtensions.FromLongitude(chart.Ascendant).Name()} rising" +
+                    (at is null ? "" : $", in {at.Sign.Name()} in house {chart.GetHouseForLongitude(at.Longitude)}") +
+                    (r.ModernChartRuler is { } modern ? $" (modern ruler: {modern.Name()})" : "")));
+            }
+            rows.Add(Line("In its own sign", r.InDomicile.Count == 0 ? "None" : string.Join(", ", r.InDomicile.Select(p => p.Name()))));
+            rows.Add(Line("Final dispositor", r.FinalDispositor is { } final
+                ? final.Name()
+                : "None — the chains below do not all end at one planet"));
+            foreach (var loop in r.Loops)
+                rows.Add(Line(loop.Count == 2 ? "Mutual reception" : "Ring of rulers",
+                    string.Join(loop.Count == 2 ? " and " : " → ", loop.Select(p => p.Name())) +
+                    (loop.Count == 2 ? " are each in the other's sign" : $" → {loop[0].Name()}")));
+            sections.Add(new("Rulers", [], rows,
+                "By the traditional rulerships: Mars rules Scorpio, Saturn Aquarius, Jupiter Pisces."));
+
+            if (r.Houses.Count > 0)
+                sections.Add(new("House rulers", ["House", "Sign on the cusp", "Ruler", "Ruler is in"],
+                    r.Houses.Select(h => (IReadOnlyList<string>)
+                    [
+                        h.House.ToString(), h.CuspSign.Name(), Body(h.Ruler),
+                        h.RulerSign is { } sign ? $"{sign.Name()}, house {h.RulerHouse}" : "",
+                    ]).ToList()));
+
+            sections.Add(new("Dispositors", ["", "Sign ruler", "Term", "Face", "Chain"],
+                r.Dispositions.Select(d => (IReadOnlyList<string>)
+                [
+                    Body(d.Planet), d.SignRuler.Name(), d.TermRuler.Name(), d.FaceRuler.Name(),
+                    // A chain that ends on a planet in its own sign names it once, not twice.
+                    string.Join(" → ", (d.Chain.Count > 1 && d.Chain[^1] == d.Chain[^2] ? d.Chain.SkipLast(1) : d.Chain)
+                        .Select(p => p.Name())),
+                ]).ToList(),
+                "The ruler of the sign a body is in is its dispositor; the chain follows dispositor to dispositor until it reaches a planet in its own sign or comes back on itself. Terms are the Egyptian bounds and faces the Chaldean decans, as in the dignity score."));
+        }
+
+        return sections;
+    }
+
+    // An arc as degrees and minutes, cut off at the minute: 2°18'.
+    private static string Arc(double degrees)
+    {
+        int total = (int)(Math.Abs(degrees) * 60);
+        return $"{total / 60}°{total % 60:D2}'";
+    }
+
+    // The sidereal time, given in degrees, as hours, minutes and seconds.
+    private static string SiderealTime(double armc)
+    {
+        int total = (int)(Normalize(armc) / 15 * 3600);
+        return $"{total / 3600}h {total / 60 % 60:D2}m {total % 60:D2}s";
     }
 
     // ── Aspects ───────────────────────────────────────────────────────────────
@@ -157,6 +323,20 @@ public static class WorksheetService
         sb.AppendLine("ASPECTS (closest first; a = applying, s = separating; out of sign = within orb, but the signs are not in that aspect)");
         foreach (var a in w.Aspects)
             sb.AppendLine($"{a.A.Name,-12}{a.Type.Name(),-16}{a.B.Name,-12}{a.OrbText}{(a.OutOfSign ? "  out of sign" : "")}");
+
+        foreach (var section in w.Sections)
+        {
+            sb.AppendLine();
+            sb.AppendLine(section.Title.ToUpperInvariant());
+            // Each column as wide as its widest cell; the last runs free.
+            var lines = section.Headers.Count > 0 ? section.Rows.Prepend(section.Headers).ToList() : section.Rows.ToList();
+            int columns = lines.Max(l => l.Count);
+            var widths = Enumerable.Range(0, columns)
+                .Select(i => lines.Max(l => i < l.Count ? l[i].Length : 0) + 2).ToArray();
+            foreach (var line in lines)
+                sb.AppendLine(string.Concat(line.Select((cell, i) => i == line.Count - 1 ? cell : cell.PadRight(widths[i]))).TrimEnd());
+            if (section.Note.Length > 0) sb.AppendLine($"({section.Note})");
+        }
 
         if (sensitivity is not null)
         {

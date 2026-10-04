@@ -281,13 +281,8 @@ public sealed class ChartInterpreter
 
     private ReportSection Balance(NatalChart chart)
     {
-        var counts = new Dictionary<Element, int>
-        {
-            [Element.Fire] = 0, [Element.Earth] = 0, [Element.Air] = 0, [Element.Water] = 0
-        };
-        // Weight the ten traditional bodies plus the two points already in Planets.
-        foreach (var p in chart.Planets)
-            counts[p.Sign.GetElement()]++;
+        // Every body in the chart counts once: the same tally the Worksheet shows.
+        var counts = NatalMetricsService.ElementCounts(chart);
 
         var paras = Spread(counts, "elementsEven", _c.Elements, _c.ElementStrong, _c.ElementWeak,
             e => e.ToString(),
@@ -331,12 +326,7 @@ public sealed class ChartInterpreter
 
     private ReportSection ModalBalance(NatalChart chart)
     {
-        var counts = new Dictionary<Modality, int>
-        {
-            [Modality.Cardinal] = 0, [Modality.Fixed] = 0, [Modality.Mutable] = 0
-        };
-        foreach (var p in chart.Planets)
-            counts[p.Sign.GetModality()]++;
+        var counts = NatalMetricsService.ModalityCounts(chart);
 
         var paras = Spread(counts, "modalitiesEven", _c.Modalities, _c.ModalityStrong, _c.ModalityWeak,
             ModalityFallback,

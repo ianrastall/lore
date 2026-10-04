@@ -133,5 +133,38 @@ public static class WorksheetPdf
             }
             if (w.Aspects.Count % 2 == 1) { table.Cell(); table.Cell(); }
         });
+
+        foreach (var section in w.Sections)
+        {
+            if (section.Rows.Count == 0) continue;
+            col.Item().EnsureSpace(90).PaddingTop(6).Text(section.Title).FontSize(13).SemiBold();
+            if (section.Note.Length > 0)
+                col.Item().Text(section.Note).FontSize(8).FontColor(Colors.Grey.Darken1);
+
+            bool list = section.Headers.Count == 0;   // label-and-value lines
+            int columns = list ? 2 : section.Headers.Count;
+            col.Item().Table(table =>
+            {
+                table.ColumnsDefinition(c =>
+                {
+                    if (list) { c.ConstantColumn(105); c.RelativeColumn(); return; }
+                    // Each column in proportion to its widest cell.
+                    for (int i = 0; i < columns; i++)
+                        c.RelativeColumn(Math.Max(4, section.Rows.Append(section.Headers).Max(r => i < r.Count ? r[i].Length : 0)));
+                });
+                if (!list)
+                    table.Header(h =>
+                    {
+                        foreach (var head in section.Headers)
+                            h.Cell().Element(Head).Text(head).SemiBold().FontSize(9);
+                    });
+                foreach (var row in section.Rows)
+                    for (int i = 0; i < columns; i++)
+                    {
+                        var text = table.Cell().PaddingVertical(1).Text(i < row.Count ? row[i] : "").FontSize(9);
+                        if (list && i == 0) text.FontColor(Colors.Grey.Darken1);
+                    }
+            });
+        }
     }
 }
