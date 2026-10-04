@@ -245,7 +245,8 @@ public sealed partial class MainViewModel : ObservableObject
             SelectedCelebrity = again;
             await LoadChartAsync(again);
         }
-        StatusMessage = $"Now using {settings.Houses.Name()} houses and the {settings.Node.Name().ToLowerInvariant()}.";
+        StatusMessage = $"Now using {settings.Houses.Name()} houses, the {settings.Node.Name().ToLowerInvariant()}, " +
+                        $"and {settings.Orbs.PresetName.ToLowerInvariant()} orbs.";
     }
 
     public async Task AddCustomChartAsync(Celebrity chart)

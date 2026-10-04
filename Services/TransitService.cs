@@ -77,7 +77,7 @@ public sealed class TransitService
         var events = new List<TransitEvent>();
         foreach (var (mover, track) in tracks)
             foreach (var (point, lon) in targets)
-                foreach (var aspect in Enum.GetValues<AspectType>())
+                foreach (var aspect in AspectTypeExtensions.Majors)
                     if (FindEvent(natal, timed, mover, track, jds, point, lon, aspect) is { } e)
                         events.Add(e);
 

@@ -11,6 +11,10 @@ public enum NodeType { Mean, True }
 public sealed record ChartSettings(HouseSystem Houses = HouseSystem.Placidus, NodeType Node = NodeType.Mean)
 {
     public static readonly ChartSettings Default = new();
+
+    // Aspect orbs for the birth chart. A settings file saved before these existed has
+    // none, and gets Lore's standard set.
+    public OrbSettings Orbs { get; init; } = OrbSettings.Lore;
 }
 
 public static class ChartSettingsExtensions

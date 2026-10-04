@@ -78,7 +78,7 @@ public static class WorksheetService
                 ? "Ascendant + Moon − Sun (day formula)"
                 : "Ascendant + Sun − Moon (night formula)"));
         }
-        facts.Add(new("Aspect orbs", "8° conjunction, square, trine and opposition; 6° sextile"));
+        facts.Add(new("Aspect orbs", chart.Settings.Orbs.Describe()));
         facts.Add(new("Engine", "Swiss Ephemeris 2.10.03"));
         return facts;
     }
@@ -110,31 +110,16 @@ public static class WorksheetService
 
     // ── Aspects ───────────────────────────────────────────────────────────────
 
-    // The chart's own planet-to-planet aspects, plus each planet's aspects to the
-    // Ascendant and Midheaven on the same orbs. (The two angles are not aspected to
-    // each other.) Closest first.
+    // The chart's planet-to-planet aspects and its aspects to the Ascendant and
+    // Midheaven, closest first.
     private static List<WorksheetAspect> Aspects(NatalChart chart)
     {
         var aspects = chart.Aspects
-            .Select(a => new WorksheetAspect(NatalPoint.Of(a.PlanetA), NatalPoint.Of(a.PlanetB), a.Type, a.Orb, a.IsApplying))
+            .Select(a => new WorksheetAspect(NatalPoint.Of(a.PlanetA), NatalPoint.Of(a.PlanetB), a.Type, a.Orb, a.IsApplying, a.OutOfSign))
             .ToList();
 
-        if (chart.Timed)
-        {
-            foreach (var p in chart.Planets)
-                foreach (var (angle, lon) in new[] { (NatalPoint.Ascendant, chart.Ascendant), (NatalPoint.Midheaven, chart.Midheaven) })
-                    foreach (var type in Enum.GetValues<AspectType>())
-                    {
-                        double orb = Math.Abs(AngleBetween(p.Longitude, lon) - type.Angle());
-                        if (orb > type.Orb()) continue;
-
-                        // The angle is held still; the planet's own motion decides whether
-                        // the aspect is closing or opening.
-                        double next = Math.Abs(AngleBetween(p.Longitude + p.SpeedLongitude / 24.0, lon) - type.Angle());
-                        aspects.Add(new WorksheetAspect(NatalPoint.Of(p.Planet), angle, type, orb, next < orb));
-                        break; // one aspect per pair
-                    }
-        }
+        aspects.AddRange(chart.AngleAspects.Select(a =>
+            new WorksheetAspect(NatalPoint.Of(a.Planet), a.Angle, a.Type, a.Orb, a.IsApplying, a.OutOfSign)));
 
         aspects.Sort((a, b) => a.Orb.CompareTo(b.Orb));
         return aspects;
@@ -167,9 +152,9 @@ public static class WorksheetService
         }
 
         sb.AppendLine();
-        sb.AppendLine("ASPECTS (closest first; a = applying, s = separating)");
+        sb.AppendLine("ASPECTS (closest first; a = applying, s = separating; out of sign = within orb, but the signs are not in that aspect)");
         foreach (var a in w.Aspects)
-            sb.AppendLine($"{a.A.Name,-12}{a.Type,-13}{a.B.Name,-12}{a.OrbText}");
+            sb.AppendLine($"{a.A.Name,-12}{a.Type.Name(),-16}{a.B.Name,-12}{a.OrbText}{(a.OutOfSign ? "  out of sign" : "")}");
 
         if (sensitivity is not null)
         {

@@ -25,6 +25,7 @@ public sealed partial class MainWindow : Window
         // Show the saved calculation settings (index order matches the enums).
         HouseSystemCombo.SelectedIndex = (int)vm.Settings.Houses;
         NodeTypeCombo.SelectedIndex = (int)vm.Settings.Node;
+        ShowOrbs(vm.Settings.Orbs);
         _settingsReady = true;
 
         AppWindow.Title = "Lore — Natal Charts";
@@ -113,15 +114,76 @@ public sealed partial class MainWindow : Window
         SynastryToggle.IsChecked = synastry;
     }
 
-    // False while the constructor is filling the two settings boxes in.
+    // False while the constructor is filling the settings boxes in.
     private readonly bool _settingsReady;
 
-    private async void Settings_Changed(object sender, Microsoft.UI.Xaml.Controls.SelectionChangedEventArgs e)
+    // True while code (not the user) is writing to the orb boxes, so that doing so is
+    // not taken for six separate edits.
+    private bool _showingOrbs;
+
+    private async void Settings_Changed(object sender, Microsoft.UI.Xaml.Controls.SelectionChangedEventArgs e) =>
+        await ApplySettingsFromMenuAsync();
+
+    // A named set was picked: put its numbers in the boxes, then apply once.
+    private async void OrbPreset_Changed(object sender, Microsoft.UI.Xaml.Controls.SelectionChangedEventArgs e)
+    {
+        if (!_settingsReady || _showingOrbs) return;
+        int i = OrbPresetCombo.SelectedIndex;
+        if (i < 0 || i >= Models.OrbSettings.Presets.Count) return; // "Custom": the boxes stand as they are
+        // A named set changes the major orbs; the minor-aspect switch stays as it is.
+        var current = ReadOrbs();
+        ShowOrbs(Models.OrbSettings.Presets[i].Orbs with { MinorAspects = current.MinorAspects, Minor = current.Minor });
+        await ApplySettingsFromMenuAsync();
+    }
+
+    private async void Minor_Changed(object sender, RoutedEventArgs e)
+    {
+        if (!_settingsReady || _showingOrbs) return;
+        OrbMinorBox.IsEnabled = MinorAspectsCheck.IsChecked == true;
+        await ApplySettingsFromMenuAsync();
+    }
+
+    // A number was edited by hand.
+    private async void Orb_Changed(Microsoft.UI.Xaml.Controls.NumberBox sender, Microsoft.UI.Xaml.Controls.NumberBoxValueChangedEventArgs e)
+    {
+        if (!_settingsReady || _showingOrbs) return;
+        if (double.IsNaN(sender.Value)) return; // box cleared mid-edit: wait for a number
+        var orbs = ReadOrbs();
+        ShowOrbs(orbs); // moves the drop-down to the matching set, or to "Custom"
+        await ApplySettingsFromMenuAsync();
+    }
+
+    private void ShowOrbs(Models.OrbSettings orbs)
+    {
+        _showingOrbs = true;
+        OrbConjunctionBox.Value = orbs.Conjunction;
+        OrbSextileBox.Value = orbs.Sextile;
+        OrbSquareBox.Value = orbs.Square;
+        OrbTrineBox.Value = orbs.Trine;
+        OrbOppositionBox.Value = orbs.Opposition;
+        OrbLuminaryBox.Value = orbs.LuminaryBonus;
+        MinorAspectsCheck.IsChecked = orbs.MinorAspects;
+        OrbMinorBox.Value = orbs.Minor;
+        OrbMinorBox.IsEnabled = orbs.MinorAspects;
+        int preset = Models.OrbSettings.Presets.ToList().FindIndex(p => p.Orbs.PresetName == orbs.PresetName);
+        OrbPresetCombo.SelectedIndex = preset >= 0 ? preset : Models.OrbSettings.Presets.Count; // last = "Custom"
+        _showingOrbs = false;
+    }
+
+    private Models.OrbSettings ReadOrbs() => new Models.OrbSettings(
+        OrbConjunctionBox.Value, OrbSextileBox.Value, OrbSquareBox.Value, OrbTrineBox.Value,
+        OrbOppositionBox.Value, OrbLuminaryBox.Value)
+    {
+        MinorAspects = MinorAspectsCheck.IsChecked == true,
+        Minor = OrbMinorBox.Value,
+    }.Clamped();
+
+    private async Task ApplySettingsFromMenuAsync()
     {
         if (!_settingsReady || HouseSystemCombo.SelectedIndex < 0 || NodeTypeCombo.SelectedIndex < 0) return;
         await ViewModel.ApplySettingsAsync(new Models.ChartSettings(
             (Models.HouseSystem)HouseSystemCombo.SelectedIndex,
-            (Models.NodeType)NodeTypeCombo.SelectedIndex));
+            (Models.NodeType)NodeTypeCombo.SelectedIndex) { Orbs = ReadOrbs() });
     }
 
     private void ShowLegend_Click(object sender, RoutedEventArgs e) => ViewModel.ShowLegend = true;

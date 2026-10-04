@@ -121,18 +121,26 @@ public sealed class ChartInterpreter
     private ReportSection Aspects(NatalChart chart)
     {
         var paras = new List<string>();
-        if (chart.Aspects.Count == 0)
+        if (chart.Aspects.Count == 0 && chart.AngleAspects.Count == 0)
         {
             paras.Add("No major aspects fall within orb — the planetary energies operate fairly independently.");
             return new ReportSection { Heading = "Major Aspects", Paragraphs = paras };
         }
 
-        foreach (var a in chart.Aspects.OrderBy(a => a.Orb))
+        // Planet to planet, and planet to the Ascendant or Midheaven, closest first.
+        string SignOf(NatalPoint p) => ZodiacSignExtensions.FromLongitude(chart.LongitudeOf(p) ?? 0).Name();
+        var all = chart.Aspects.Select(a => (First: a.PlanetA.Name(), Second: a.PlanetB.Name(), a.Type, a.Orb, a.OutOfSign,
+                Signs: $"{SignOf(NatalPoint.Of(a.PlanetA))} and {SignOf(NatalPoint.Of(a.PlanetB))}"))
+            .Concat(chart.AngleAspects.Select(a => (First: a.Planet.Name(), Second: "the " + a.Angle.Name, a.Type, a.Orb, a.OutOfSign,
+                Signs: $"{SignOf(NatalPoint.Of(a.Planet))} and {SignOf(a.Angle)}")));
+        foreach (var a in all.OrderBy(a => a.Orb))
         {
             string dynamic = Lookup(_c.AspectDynamics, a.Type.ToString(), "connects with");
             string note = Lookup(_c.AspectNotes, a.Type.ToString(), "");
-            string line = $"{a.PlanetA.Name()} {dynamic} {a.PlanetB.Name()} ({a.Type} {a.Type.Symbol()}, orb {a.Orb:F1}°).";
+            string line = $"{a.First} {dynamic} {a.Second} ({a.Type.Name()} {a.Type.Symbol()}, orb {a.Orb:F1}°).";
             if (!string.IsNullOrEmpty(note)) line += " " + note;
+            if (a.OutOfSign)
+                line += $" Out of sign: the two are in {a.Signs}, which are not in this aspect to each other, so tradition reads it as weaker.";
             paras.Add(line);
         }
         return new ReportSection { Heading = "Major Aspects", Paragraphs = paras };
@@ -145,18 +153,18 @@ public sealed class ChartInterpreter
 
         if (patterns.Count == 0)
         {
-            paras.Add("No major configuration (stellium, grand trine, T-square, or grand cross) " +
+            paras.Add("No major configuration (stellium, grand trine, T-square, grand cross, or yod) " +
                       "stands out — the aspects act more as individual links than a single locked figure.");
             return new ReportSection { Heading = "Chart Patterns", Paragraphs = paras };
         }
 
         foreach (var p in patterns)
         {
-            string names = JoinNames(p.Planets);
+            string names = JoinNames(p.Points);
             switch (p.Type)
             {
                 case PatternType.Stellium:
-                    paras.Add($"Stellium in {p.Sign!.Value.Name()} — {p.Planets.Count} bodies " +
+                    paras.Add($"Stellium in {p.Sign!.Value.Name()} — {p.Points.Count} bodies " +
                               $"({names}) gather in one sign, concentrating its themes into a dominant focus of the chart.");
                     break;
                 case PatternType.GrandTrine:
@@ -164,10 +172,16 @@ public sealed class ChartInterpreter
                               "an easy, self-reinforcing circuit of talent that flows so naturally it can be taken for granted.");
                     break;
                 case PatternType.TSquare:
-                    var ends = p.Planets.Where(x => x != p.Apex).Select(x => x.Name());
-                    paras.Add($"T-Square in {p.Modality} signs — {p.Apex!.Value.Name()} stands at the apex, " +
+                    var ends = p.Points.Where(x => x != p.Apex).Select(Named);
+                    paras.Add($"T-Square in {p.Modality} signs — {Named(p.Apex!.Value)} stands at the apex, " +
                               $"squaring the opposition between {string.Join(" and ", ends)}. " +
                               "A focal point of dynamic tension that pushes hard toward action and achievement.");
+                    break;
+                case PatternType.Yod:
+                    var feet = p.Points.Where(x => x != p.Apex).Select(Named);
+                    paras.Add($"Yod — {string.Join(" and ", feet)}, in sextile, both stand quincunx to {Named(p.Apex!.Value)}. " +
+                              "Sometimes called the Finger of God: a point of persistent adjustment, where two compatible " +
+                              "drives keep pressing on a third that fits neither.");
                     break;
                 case PatternType.GrandCross:
                     paras.Add($"Grand Cross in {p.Modality} signs — {names} form two oppositions locked by four squares, " +
@@ -178,9 +192,12 @@ public sealed class ChartInterpreter
         return new ReportSection { Heading = "Chart Patterns", Paragraphs = paras };
     }
 
-    private static string JoinNames(IReadOnlyList<Planet> ps)
+    // "Mars", but "the Ascendant".
+    private static string Named(NatalPoint p) => p.IsAngle ? "the " + p.Name : p.Name;
+
+    private static string JoinNames(IReadOnlyList<NatalPoint> ps)
     {
-        var names = ps.Select(p => p.Name()).ToList();
+        var names = ps.Select(Named).ToList();
         return names.Count switch
         {
             0 => "",

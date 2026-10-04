@@ -117,7 +117,7 @@ public static class WorksheetPdf
         }
 
         col.Item().EnsureSpace(120).PaddingTop(6).Text("Aspects").FontSize(13).SemiBold();
-        col.Item().Text("Closest first, including those to the Ascendant and Midheaven. a = applying, s = separating.")
+        col.Item().Text("Closest first, including those to the Ascendant and Midheaven. a = applying, s = separating. * = out of sign: within orb, but the two signs are not in that aspect.")
             .FontSize(9).FontColor(Colors.Grey.Darken1);
         col.Item().Table(table =>
         {
@@ -129,7 +129,7 @@ public static class WorksheetPdf
             foreach (var a in w.Aspects)
             {
                 table.Cell().PaddingVertical(1).Text($"{a.A.Name} {a.Type.Symbol()} {a.B.Name}").FontSize(9);
-                table.Cell().PaddingVertical(1).Text(a.OrbText).FontSize(9).FontColor(Colors.Grey.Darken1);
+                table.Cell().PaddingVertical(1).Text(a.OutOfSign ? $"{a.OrbText} *" : a.OrbText).FontSize(9).FontColor(Colors.Grey.Darken1);
             }
             if (w.Aspects.Count % 2 == 1) { table.Cell(); table.Cell(); }
         });

@@ -66,7 +66,10 @@ public sealed class ChartService
 
         // Aspect detection is pure managed arithmetic on the results above — no native
         // state — so it stays outside the lock.
-        var aspects = CalculateAspects(planets);
+        var aspects = CalculateAspects(planets, settings.Orbs);
+        var angleAspects = celebrity.BirthTimeKnown
+            ? CalculateAngleAspects(planets, asc, mc, settings.Orbs)
+            : [];
 
         return new NatalChart
         {
@@ -74,6 +77,7 @@ public sealed class ChartService
             Planets = planets,
             Houses = houses,
             Aspects = aspects,
+            AngleAspects = angleAspects,
             Ascendant = asc,
             Midheaven = mc,
             Settings = settings,
@@ -165,21 +169,24 @@ public sealed class ChartService
         return (houses, ascmc[SwissEphemeris.SE_ASC], ascmc[SwissEphemeris.SE_MC], substituted);
     }
 
-    private static List<Aspect> CalculateAspects(List<PlanetPosition> planets)
+    private static List<Aspect> CalculateAspects(List<PlanetPosition> planets, OrbSettings orbs)
     {
         var aspects = new List<Aspect>();
-        var types = Enum.GetValues<AspectType>();
+        var types = orbs.Types().ToList();
 
         for (int i = 0; i < planets.Count; i++)
         for (int j = i + 1; j < planets.Count; j++)
         {
             double angle = AngleBetween(planets[i].Longitude, planets[j].Longitude);
 
-            foreach (var type in types)
+            // Nearest exact angle first, so that where a wide major orb and a minor
+            // aspect both cover the separation, the closer one is the one recorded.
+            foreach (var type in types.OrderBy(t => Math.Abs(angle - t.Angle())))
             {
                 double exactAngle = type.Angle();
                 double orb = Math.Abs(angle - exactAngle);
-                if (orb <= type.Orb())
+                double allowed = orbs.For(type, planets[i].Planet, planets[j].Planet);
+                if (orb <= allowed)
                 {
                     // applying = faster planet is moving toward the exact angle
                     bool applying = IsApplying(planets[i], planets[j], type);
@@ -189,13 +196,43 @@ public sealed class ChartService
                         PlanetB = planets[j].Planet,
                         Type = type,
                         Orb = orb,
+                        Allowed = allowed,
                         IsApplying = applying,
+                        OutOfSign = type.IsOutOfSign(planets[i].Longitude, planets[j].Longitude),
                     });
                     break; // one aspect per pair
                 }
             }
         }
 
+        return aspects;
+    }
+
+    // Each body against the Ascendant and the Midheaven, on the same orbs. (The two
+    // angles are not aspected to each other.)
+    private static List<AngleAspect> CalculateAngleAspects(
+        List<PlanetPosition> planets, double asc, double mc, OrbSettings orbs)
+    {
+        var aspects = new List<AngleAspect>();
+        foreach (var p in planets)
+            foreach (var (angle, lon) in new[] { (NatalPoint.Ascendant, asc), (NatalPoint.Midheaven, mc) })
+                foreach (var type in orbs.Types().OrderBy(t => Math.Abs(AngleBetween(p.Longitude, lon) - t.Angle())))
+                {
+                    double orb = Math.Abs(AngleBetween(p.Longitude, lon) - type.Angle());
+                    double allowed = orbs.For(type, p.Planet);
+                    if (orb > allowed) continue;
+
+                    // The angle is held still; the planet's own motion decides whether
+                    // the aspect is closing or opening.
+                    double next = Math.Abs(AngleBetween(p.Longitude + p.SpeedLongitude / 24.0, lon) - type.Angle());
+                    aspects.Add(new AngleAspect
+                    {
+                        Planet = p.Planet, Angle = angle, Type = type,
+                        Orb = orb, Allowed = allowed, IsApplying = next < orb,
+                        OutOfSign = type.IsOutOfSign(p.Longitude, lon),
+                    });
+                    break; // one aspect per pair
+                }
         return aspects;
     }
 

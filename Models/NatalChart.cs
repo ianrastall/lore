@@ -6,6 +6,9 @@ public sealed class NatalChart
     public required IReadOnlyList<PlanetPosition> Planets { get; init; }
     public required IReadOnlyList<HouseCusp> Houses { get; init; }    // 12 entries, index 0 = house 1
     public required IReadOnlyList<Aspect> Aspects { get; init; }
+
+    // The bodies' aspects to the Ascendant and Midheaven; empty without a birth time.
+    public IReadOnlyList<AngleAspect> AngleAspects { get; init; } = [];
     public double Ascendant { get; init; }   // ecliptic longitude
     public double Midheaven { get; init; }   // ecliptic longitude
 

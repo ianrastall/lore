@@ -32,7 +32,15 @@ internal static class ChartRenderer
         Color.FromArgb(160, 220, 60, 60),   // Square       – red
         Color.FromArgb(160, 80, 200, 100),  // Trine        – green
         Color.FromArgb(160, 220, 140, 40),  // Opposition   – orange
+        Color.FromArgb(160, 150, 150, 170), // Semi-sextile   – grey
+        Color.FromArgb(160, 200, 110, 110), // Semi-square    – dull red
+        Color.FromArgb(160, 200, 110, 110), // Sesquiquadrate – dull red
+        Color.FromArgb(160, 170, 130, 200), // Quincunx       – violet
     ];
+
+    // Minor aspects are drawn dashed, so they never read as one of the five majors.
+    private static readonly Microsoft.Graphics.Canvas.Geometry.CanvasStrokeStyle MinorStroke =
+        new() { DashStyle = Microsoft.Graphics.Canvas.Geometry.CanvasDashStyle.Dash };
 
     // ── Layout fractions (of chart radius) ───────────────────────────────────
     private const float OuterRing   = 1.00f;
@@ -276,10 +284,27 @@ internal static class ChartRenderer
             var color = AspectColors[(int)aspect.Type];
 
             // Fade strong-orb aspects
-            byte alpha = (byte)(160 - (int)(aspect.Orb / aspect.Type.Orb() * 100));
+            double allowed = aspect.Allowed > 0 ? aspect.Allowed : aspect.Type.Orb();
+            byte alpha = (byte)(160 - (int)(Math.Min(1, aspect.Orb / allowed) * 100));
             color = Color.FromArgb(alpha, color.R, color.G, color.B);
 
-            ds.DrawLine(ptA, ptB, color, 1.25f);
+            if (aspect.Type.IsMajor()) ds.DrawLine(ptA, ptB, color, 1.25f);
+            else ds.DrawLine(ptA, ptB, color, 1f, MinorStroke);
+        }
+
+        // Aspects to the Ascendant and Midheaven: from the planet to the angle's own
+        // place on the circle, a little lighter so the planets' aspects still lead.
+        foreach (var aspect in chart.AngleAspects)
+        {
+            if (chart.GetPlanet(aspect.Planet) is not { } p || chart.LongitudeOf(aspect.Angle) is not { } angleLon) continue;
+
+            var color = AspectColors[(int)aspect.Type];
+            byte alpha = (byte)(120 - (int)(Math.Min(1, aspect.Orb / aspect.Allowed) * 75));
+            var from = ToPoint(cx, cy, innerR, p.Longitude, WheelAsc(chart));
+            var to = ToPoint(cx, cy, innerR, angleLon, WheelAsc(chart));
+            var faded = Color.FromArgb(alpha, color.R, color.G, color.B);
+            if (aspect.Type.IsMajor()) ds.DrawLine(from, to, faded, 1f);
+            else ds.DrawLine(from, to, faded, 1f, MinorStroke);
         }
     }
 

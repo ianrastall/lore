@@ -36,7 +36,7 @@ public sealed class SettingsService
             if (File.Exists(_path) &&
                 JsonSerializer.Deserialize<ChartSettings>(File.ReadAllText(_path), JsonOpts) is { } s &&
                 Enum.IsDefined(s.Houses) && Enum.IsDefined(s.Node))
-                return s;
+                return s with { Orbs = (s.Orbs ?? OrbSettings.Lore).Clamped() };
         }
         catch (Exception ex) when (ex is JsonException or IOException or UnauthorizedAccessException)
         {

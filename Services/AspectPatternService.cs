@@ -3,26 +3,38 @@ using Lore.Models;
 namespace Lore.Services;
 
 // Detects the classic multi-body configurations from the chart's positions and
-// its already-computed major aspects. Only patterns expressible with Lore's five
-// major aspects are found: a Yod, for instance, needs the quincunx, which Lore
-// does not track. Kept separate from the interpreter so the detection is
-// testable and the report layer only has to render the result.
+// its already-computed aspects. A Yod needs the quincunx, so it is only found when
+// the minor aspects are switched on. Kept separate from the interpreter so the
+// detection is testable and the report layer only has to render the result.
+//
+// The Ascendant and Midheaven take part alongside the bodies (in a chart with a
+// birth time), so a T-square can have the Ascendant at its apex. A stellium is
+// bodies only, and the two angles are never aspected to each other.
 public static class AspectPatternService
 {
     private const int StelliumMin = 3;
 
     public static IReadOnlyList<AspectPattern> Detect(NatalChart chart)
     {
-        var signs = chart.Planets.ToDictionary(p => p.Planet, p => p.Sign);
-        var aspect = BuildAspectLookup(chart);
-        var bodies = chart.Planets.Select(p => p.Planet).ToList();
+        var signs = chart.Planets.ToDictionary(p => NatalPoint.Of(p.Planet), p => p.Sign);
+        var points = chart.Planets.Select(p => NatalPoint.Of(p.Planet)).ToList();
+        if (chart.Timed)
+        {
+            foreach (var angle in new[] { NatalPoint.Ascendant, NatalPoint.Midheaven })
+            {
+                points.Add(angle);
+                signs[angle] = ZodiacSignExtensions.FromLongitude(chart.LongitudeOf(angle) ?? 0);
+            }
+        }
+        var aspect = BuildAspectLookup(chart, points);
 
         var patterns = new List<AspectPattern>();
         patterns.AddRange(Stelliums(chart));
-        patterns.AddRange(GrandTrines(bodies, aspect, signs));
-        var crosses = GrandCrosses(bodies, aspect, signs);
+        patterns.AddRange(GrandTrines(points, aspect, signs));
+        var crosses = GrandCrosses(points, aspect, signs);
         patterns.AddRange(crosses);
-        patterns.AddRange(TSquares(bodies, aspect, signs, crosses));
+        patterns.AddRange(TSquares(points, aspect, signs, crosses));
+        patterns.AddRange(Yods(points, aspect));
         return patterns;
     }
 
@@ -38,28 +50,28 @@ public static class AspectPatternService
                 Sign = g.Key,
                 Element = g.Key.GetElement(),
                 Modality = g.Key.GetModality(),
-                Planets = g.OrderBy(p => p.DegreeInSign).Select(p => p.Planet).ToList()
+                Points = g.OrderBy(p => p.DegreeInSign).Select(p => NatalPoint.Of(p.Planet)).ToList()
             });
     }
 
-    // ── Grand Trine: three bodies in mutual trine ─────────────────────────────
+    // ── Grand Trine: three points in mutual trine ─────────────────────────────
     private static IEnumerable<AspectPattern> GrandTrines(
-        List<Planet> bodies, Dictionary<(Planet, Planet), AspectType> aspect,
-        Dictionary<Planet, ZodiacSign> signs)
+        List<NatalPoint> points, Dictionary<(int, int), AspectType> aspect,
+        Dictionary<NatalPoint, ZodiacSign> signs)
     {
-        for (int i = 0; i < bodies.Count; i++)
-            for (int j = i + 1; j < bodies.Count; j++)
-                for (int k = j + 1; k < bodies.Count; k++)
+        for (int i = 0; i < points.Count; i++)
+            for (int j = i + 1; j < points.Count; j++)
+                for (int k = j + 1; k < points.Count; k++)
                 {
-                    if (Is(aspect, bodies[i], bodies[j], AspectType.Trine)
-                        && Is(aspect, bodies[i], bodies[k], AspectType.Trine)
-                        && Is(aspect, bodies[j], bodies[k], AspectType.Trine))
+                    if (Is(aspect, i, j, AspectType.Trine)
+                        && Is(aspect, i, k, AspectType.Trine)
+                        && Is(aspect, j, k, AspectType.Trine))
                     {
                         yield return new AspectPattern
                         {
                             Type = PatternType.GrandTrine,
-                            Planets = new[] { bodies[i], bodies[j], bodies[k] },
-                            Element = signs[bodies[i]].GetElement()
+                            Points = new[] { points[i], points[j], points[k] },
+                            Element = signs[points[i]].GetElement()
                         };
                     }
                 }
@@ -67,17 +79,17 @@ public static class AspectPatternService
 
     // ── Grand Cross: two oppositions joined by four squares ───────────────────
     private static List<AspectPattern> GrandCrosses(
-        List<Planet> bodies, Dictionary<(Planet, Planet), AspectType> aspect,
-        Dictionary<Planet, ZodiacSign> signs)
+        List<NatalPoint> points, Dictionary<(int, int), AspectType> aspect,
+        Dictionary<NatalPoint, ZodiacSign> signs)
     {
         var found = new List<AspectPattern>();
-        for (int a = 0; a < bodies.Count; a++)
-            for (int b = a + 1; b < bodies.Count; b++)
-                for (int c = b + 1; c < bodies.Count; c++)
-                    for (int d = c + 1; d < bodies.Count; d++)
+        for (int a = 0; a < points.Count; a++)
+            for (int b = a + 1; b < points.Count; b++)
+                for (int c = b + 1; c < points.Count; c++)
+                    for (int d = c + 1; d < points.Count; d++)
                     {
-                        Planet[] q = { bodies[a], bodies[b], bodies[c], bodies[d] };
-                        // Three ways to split four bodies into two opposition pairs.
+                        int[] q = { a, b, c, d };
+                        // Three ways to split four points into two opposition pairs.
                         (int o1, int o2, int o3, int o4)[] pairings =
                         {
                             (0, 1, 2, 3), (0, 2, 1, 3), (0, 3, 1, 2)
@@ -94,8 +106,8 @@ public static class AspectPatternService
                                 found.Add(new AspectPattern
                                 {
                                     Type = PatternType.GrandCross,
-                                    Planets = q,
-                                    Modality = signs[q[0]].GetModality()
+                                    Points = q.Select(i => points[i]).ToList(),
+                                    Modality = signs[points[q[0]]].GetModality()
                                 });
                                 break; // one grand cross per set of four
                             }
@@ -104,49 +116,79 @@ public static class AspectPatternService
         return found;
     }
 
-    // ── T-Square: an opposition with a third body square to both ends ─────────
+    // ── T-Square: an opposition with a third point square to both ends ────────
     private static IEnumerable<AspectPattern> TSquares(
-        List<Planet> bodies, Dictionary<(Planet, Planet), AspectType> aspect,
-        Dictionary<Planet, ZodiacSign> signs, List<AspectPattern> crosses)
+        List<NatalPoint> points, Dictionary<(int, int), AspectType> aspect,
+        Dictionary<NatalPoint, ZodiacSign> signs, List<AspectPattern> crosses)
     {
-        for (int i = 0; i < bodies.Count; i++)
-            for (int j = i + 1; j < bodies.Count; j++)
+        for (int i = 0; i < points.Count; i++)
+            for (int j = i + 1; j < points.Count; j++)
             {
-                if (!Is(aspect, bodies[i], bodies[j], AspectType.Opposition)) continue;
-                for (int a = 0; a < bodies.Count; a++)
+                if (!Is(aspect, i, j, AspectType.Opposition)) continue;
+                for (int a = 0; a < points.Count; a++)
                 {
-                    Planet apex = bodies[a];
-                    if (apex == bodies[i] || apex == bodies[j]) continue;
-                    if (Is(aspect, apex, bodies[i], AspectType.Square)
-                        && Is(aspect, apex, bodies[j], AspectType.Square))
+                    if (a == i || a == j) continue;
+                    if (Is(aspect, a, i, AspectType.Square)
+                        && Is(aspect, a, j, AspectType.Square))
                     {
-                        var trio = new[] { bodies[i], bodies[j], apex };
+                        var trio = new[] { points[i], points[j], points[a] };
                         // Skip a T-square that is merely one arm of a detected grand cross.
-                        if (crosses.Any(x => trio.All(x.Planets.Contains))) continue;
+                        if (crosses.Any(x => trio.All(x.Points.Contains))) continue;
                         yield return new AspectPattern
                         {
                             Type = PatternType.TSquare,
-                            Planets = trio,
-                            Apex = apex,
-                            Modality = signs[apex].GetModality()
+                            Points = trio,
+                            Apex = points[a],
+                            Modality = signs[points[a]].GetModality()
                         };
                     }
                 }
             }
     }
 
-    // ── helpers ───────────────────────────────────────────────────────────────
-    private static Dictionary<(Planet, Planet), AspectType> BuildAspectLookup(NatalChart chart)
+    // ── Yod: two points in sextile, each quincunx the same third point ────────
+    private static IEnumerable<AspectPattern> Yods(
+        List<NatalPoint> points, Dictionary<(int, int), AspectType> aspect)
     {
-        var map = new Dictionary<(Planet, Planet), AspectType>();
+        for (int i = 0; i < points.Count; i++)
+            for (int j = i + 1; j < points.Count; j++)
+            {
+                if (!Is(aspect, i, j, AspectType.Sextile)) continue;
+                for (int a = 0; a < points.Count; a++)
+                {
+                    if (a == i || a == j) continue;
+                    if (Is(aspect, a, i, AspectType.Quincunx) && Is(aspect, a, j, AspectType.Quincunx))
+                        yield return new AspectPattern
+                        {
+                            Type = PatternType.Yod,
+                            Points = new[] { points[i], points[j], points[a] },
+                            Apex = points[a],
+                        };
+                }
+            }
+    }
+
+    // ── helpers ───────────────────────────────────────────────────────────────
+
+    // Every aspect in the chart, keyed by the positions of its two points in `points`.
+    private static Dictionary<(int, int), AspectType> BuildAspectLookup(NatalChart chart, List<NatalPoint> points)
+    {
+        var map = new Dictionary<(int, int), AspectType>();
+        void Add(NatalPoint a, NatalPoint b, AspectType type)
+        {
+            int i = points.IndexOf(a), j = points.IndexOf(b);
+            if (i >= 0 && j >= 0) map[Key(i, j)] = type; // one aspect per pair
+        }
+
         foreach (var asp in chart.Aspects)
-            map[Key(asp.PlanetA, asp.PlanetB)] = asp.Type; // one aspect per pair
+            Add(NatalPoint.Of(asp.PlanetA), NatalPoint.Of(asp.PlanetB), asp.Type);
+        foreach (var asp in chart.AngleAspects)
+            Add(NatalPoint.Of(asp.Planet), asp.Angle, asp.Type);
         return map;
     }
 
-    private static (Planet, Planet) Key(Planet a, Planet b) =>
-        (int)a <= (int)b ? (a, b) : (b, a);
+    private static (int, int) Key(int a, int b) => a <= b ? (a, b) : (b, a);
 
-    private static bool Is(Dictionary<(Planet, Planet), AspectType> map, Planet a, Planet b, AspectType type) =>
+    private static bool Is(Dictionary<(int, int), AspectType> map, int a, int b, AspectType type) =>
         map.TryGetValue(Key(a, b), out var t) && t == type;
 }

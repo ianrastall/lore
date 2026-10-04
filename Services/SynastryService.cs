@@ -25,7 +25,7 @@ public static class SynastryService
             foreach (var (pointB, lonB) in Points(second))
             {
                 double angle = AngleBetween(lonA, lonB);
-                foreach (var type in Enum.GetValues<AspectType>())
+                foreach (var type in AspectTypeExtensions.Majors)
                 {
                     double orb = Math.Abs(angle - type.Angle());
                     if (orb <= Orb(type))

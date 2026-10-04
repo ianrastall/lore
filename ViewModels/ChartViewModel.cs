@@ -28,6 +28,10 @@ public sealed partial class ChartViewModel : ObservableObject
 
     public string Title => Chart is null ? "" : Chart.Celebrity.Name;
 
+    // The Chart view's aspect list: planet to planet, then planet to angle.
+    public IReadOnlyList<string> AspectLines => Chart is null ? [] :
+        [.. Chart.Aspects.Select(a => a.Description), .. Chart.AngleAspects.Select(a => a.Description)];
+
     // The numbers behind the chart, for the Worksheet view.
     [ObservableProperty]
     public partial Worksheet? Worksheet { get; set; }
@@ -122,6 +126,7 @@ public sealed partial class ChartViewModel : ObservableObject
         SelectedPlanet = null;
         _score = value is null ? null : DignityService.ComputeIfTimed(value);
         OnPropertyChanged(nameof(Title));
+        OnPropertyChanged(nameof(AspectLines));
         OnPropertyChanged(nameof(WorksheetTitle));
         Worksheet = value is null ? null : WorksheetService.Build(value);
         OnPropertyChanged(nameof(CanTestTime));

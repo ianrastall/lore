@@ -234,6 +234,7 @@ public static class ExportService
             UtcOffsetHours = c.UtcOffsetHours,
             HouseSystem = chart.HouseSystemLabel,
             NodeType = chart.Settings.Node.Name(),
+            AspectOrbs = chart.Settings.Orbs.Describe(),
             // The angles and houses are left out, not guessed, when there is no birth time.
             Ascendant = chart.Timed ? Round(chart.Ascendant) : null,
             AscendantSign = chart.Timed ? ZodiacSignExtensions.FromLongitude(chart.Ascendant).Name() : "",
@@ -262,19 +263,31 @@ public static class ExportService
             {
                 PlanetA = a.PlanetA.Name(),
                 PlanetB = a.PlanetB.Name(),
-                Type = a.Type.ToString(),
+                Type = a.Type.Name(),
                 ExactAngle = a.Type.Angle(),
                 Orb = Round(a.Orb),
-                Applying = a.IsApplying
-            }).ToList(),
+                AllowedOrb = a.Allowed,
+                Applying = a.IsApplying,
+                OutOfSign = a.OutOfSign
+            }).Concat(chart.AngleAspects.Select(a => new AspectExport
+            {
+                PlanetA = a.Planet.Name(),
+                PlanetB = a.Angle.Name,
+                Type = a.Type.Name(),
+                ExactAngle = a.Type.Angle(),
+                Orb = Round(a.Orb),
+                AllowedOrb = a.Allowed,
+                Applying = a.IsApplying,
+                OutOfSign = a.OutOfSign
+            })).ToList(),
             Patterns = AspectPatternService.Detect(chart).Select(p => new PatternExport
             {
                 Type = p.Type.ToString(),
-                Planets = p.Planets.Select(x => x.Name()).ToList(),
+                Planets = p.Points.Select(x => x.Name).ToList(),
                 Sign = p.Sign.HasValue ? p.Sign.Value.Name() : "",
                 Element = p.Element.HasValue ? p.Element.Value.ToString() : "",
                 Modality = p.Modality.HasValue ? p.Modality.Value.ToString() : "",
-                Apex = p.Apex.HasValue ? p.Apex.Value.Name() : ""
+                Apex = p.Apex.HasValue ? p.Apex.Value.Name : ""
             }).ToList()
         };
     }
@@ -303,6 +316,7 @@ public sealed class ChartExport
     public double UtcOffsetHours { get; set; }
     public string HouseSystem { get; set; } = "";
     public string NodeType { get; set; } = "";
+    public string AspectOrbs { get; set; } = "";
     public double? Ascendant { get; set; }   // null without a birth time
     public string AscendantSign { get; set; } = "";
     public double? Midheaven { get; set; }   // null without a birth time
@@ -341,7 +355,9 @@ public sealed class AspectExport
     public string Type { get; set; } = "";
     public double ExactAngle { get; set; }
     public double Orb { get; set; }
+    public double AllowedOrb { get; set; }
     public bool Applying { get; set; }
+    public bool OutOfSign { get; set; }
 }
 
 public sealed class PatternExport

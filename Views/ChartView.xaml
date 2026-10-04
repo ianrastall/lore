@@ -73,10 +73,10 @@
                            Margin="0,8,0,4"/>
 
                 <ListView Grid.Row="3"
-                          ItemsSource="{x:Bind ViewModel.Chart.Aspects, Mode=OneWay, FallbackValue={x:Null}}">
+                          ItemsSource="{x:Bind ViewModel.AspectLines, Mode=OneWay}">
                     <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="models:Aspect">
-                            <TextBlock Text="{x:Bind Description}"
+                        <DataTemplate x:DataType="x:String">
+                            <TextBlock Text="{x:Bind}"
                                        FontSize="11"
                                        FontFamily="Segoe UI"
                                        Padding="0,2"/>

@@ -190,14 +190,22 @@
     "Sextile": "works harmoniously with",
     "Square": "sits in dynamic tension with",
     "Trine": "flows easily with",
-    "Opposition": "pulls in balance against"
+    "Opposition": "pulls in balance against",
+    "SemiSextile": "sits a little awkwardly beside",
+    "SemiSquare": "chafes against",
+    "Sesquiquadrate": "grates on",
+    "Quincunx": "has to keep adjusting to"
   },
   "aspectNotes": {
     "Conjunction": "These energies blend and amplify each other.",
     "Sextile": "An easy, supportive link that offers opportunity when used.",
     "Square": "Friction here pushes growth through effort and challenge.",
     "Trine": "A natural, effortless flow of talent between the two.",
-    "Opposition": "A push-pull that seeks balance between opposite needs."
+    "Opposition": "A push-pull that seeks balance between opposite needs.",
+    "SemiSextile": "A minor aspect: neighbouring signs with little in common, a mild and easily missed friction.",
+    "SemiSquare": "A minor aspect: a low-level irritation, half a square, that nags rather than confronts.",
+    "Sesquiquadrate": "A minor aspect: a square and a half, an agitation that tends to surface under pressure.",
+    "Quincunx": "A minor aspect: the two have nothing in common by sign, so neither can simply have its way."
   },
   "elements": {
     "Fire": "a fiery temperament — driven, enthusiastic, and quick to act",

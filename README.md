@@ -4,14 +4,14 @@
 
 > A Windows desktop application for computing and exploring astrological natal charts — and reading a daily horoscope from them — powered by the Swiss Ephemeris. Browse a curated library of historical figures — every one with a documented birth time — or add your own.
 
-**Latest release: v1.6.0** · [Download](../../releases/latest)
+**Latest release: v1.7.0** · [Download](../../releases/latest)
 
 ### Installing
 
-1. From the [latest release](../../releases/latest), download **`LoreSetup-1.6.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`LoreSetup-1.7.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user only (no administrator prompt), adds a Start-menu shortcut, and can be removed from *Settings → Apps* like any other program.
 
-**Prefer not to install?** Download **`Lore-1.6.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
+**Prefer not to install?** Download **`Lore-1.7.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
 
 > **The installer is not code-signed.** Lore is a free hobby project and does not carry a paid signing certificate, so Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"* — choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -248,7 +248,7 @@ Produces a self-contained folder that runs with no installed .NET or VC++ runtim
 .\scripts\build-portable.ps1
 ```
 
-Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-1.6.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
+Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-1.7.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
 
 ### Step 4 — Installer
 
@@ -396,6 +396,7 @@ The **Settings** button in the toolbar holds the choices astrologers disagree on
 |---|---|
 | **House system** | Placidus *(default)*, Whole Sign, Equal, Koch |
 | **North Node** | Mean node *(default)*, True node |
+| **Aspect orbs** | Standard *(default: 8°, sextile 6°)*, Tight, Wide, or your own figure for each aspect, with an optional extra for the Sun and Moon |
 
 Changing the house system moves no planet and neither angle — only which house each planet falls in, and so the house part of the dignity score. Whether a chart is a day or night chart is taken from the Sun's position above or below the horizon, so it is the same under every system.
 
@@ -446,7 +447,14 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 1.6.0 (current)
+### 1.7.0 (current)
+- **Aspect orbs are yours to set** — the Settings menu now has an orb for each of the five aspects and an extra allowance for the Sun and Moon, with three named sets: *Standard* (8°, sextile 6° — what Lore has always used), *Tight* (6°, sextile 4°, two degrees more with the Sun or Moon) and *Wide* (10°, sextile 6°). The choice changes the aspects on the wheel, in the report, in the patterns found and on the Worksheet, is remembered, and is named on the Worksheet and in the exports. Synastry and the daily horoscope keep their own orbs.
+- **Aspects to the Ascendant and Midheaven, everywhere** — they were on the Worksheet only; now they are drawn on the wheel (lighter than the planets' own aspects), listed beside it, written into the report's Major Aspects, included in the JSON and XML, and take part in pattern detection, so a T-square can have the Ascendant at its apex. A chart with no birth time has none.
+- **Minor aspects, if you want them** — a switch in Settings (off by default) adds the semi-sextile, semi-square, sesquiquadrate and quincunx, on one small orb of their own (2° unless changed). They are drawn dashed on the wheel, marked as minor in the report, and listed on the Worksheet. With the quincunx available Lore can also find a **Yod**. Transits and synastry stay with the five major aspects.
+- **Out-of-sign aspects are marked** — an aspect that is within orb by degree but whose two signs are not in that relationship (a conjunction from late Aries to early Taurus) carries a star on the Worksheet and in its PDF, and a sentence in the report saying which signs the two are in. The exports flag it too.
+- **Legend** — new entries explain the Rodden ratings, the *If the birth time is off* check, Old Style dates, aspect orbs, the minor aspects, and out-of-sign aspects.
+
+### 1.6.0
 - **If the birth time is off** — the Worksheet has a new section that asks what would change if the recorded time were out by a margin you choose (up to three hours either way). The chart is recalculated at every minute of that window and each thing a reading leans on is followed across it: the Rising sign, the Midheaven's sign, day or night, and every body's sign and house. What holds is listed, and what changes is listed with the clock time it changes at. A chart of your own can carry its margin (set in the Add / Edit Chart dialog, shown as "± 15 min" beside the birth time), and the analysis is included in the worksheet's text export.
 - **Charts with no birth time, checked across the whole day** — the same analysis runs from midnight to midnight at the birthplace. The Worksheet says where the Moon could be and whether it, or any other body, changed sign that day, with the clock time. When the Moon did change sign, the header shows both ("Moon Taurus or Gemini") and the report declines to name a Moon sign, where before it read the noon position as fact.
 - **Reliability and source** — every chart can carry a Rodden rating (AA, A, B, C, DD, X, XX — where the birth time came from) and a note of its source, set in the Add / Edit Chart dialog. Both are shown beside the birth data, on the Worksheet, and in the PDF, JSON and XML exports. All 162 bundled figures now show the rating and source Astro-Databank gives them.

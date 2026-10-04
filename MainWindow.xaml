@@ -149,7 +149,7 @@
                                     ToolTipService.ToolTip="How charts are calculated">
                         <DropDownButton.Flyout>
                             <Flyout>
-                                <StackPanel Spacing="12" Width="250">
+                                <StackPanel Spacing="12" Width="280">
                                     <ComboBox x:Name="HouseSystemCombo" Header="House system"
                                               HorizontalAlignment="Stretch"
                                               SelectionChanged="Settings_Changed">
@@ -164,9 +164,47 @@
                                         <ComboBoxItem Content="Mean node"/>
                                         <ComboBoxItem Content="True node"/>
                                     </ComboBox>
+                                    <ComboBox x:Name="OrbPresetCombo" Header="Aspect orbs (birth chart)"
+                                              HorizontalAlignment="Stretch"
+                                              SelectionChanged="OrbPreset_Changed">
+                                        <ComboBoxItem Content="Standard — 8°, sextile 6°"/>
+                                        <ComboBoxItem Content="Tight — 6°, sextile 4°, Sun and Moon +2°"/>
+                                        <ComboBoxItem Content="Wide — 10°, sextile 6°"/>
+                                        <ComboBoxItem Content="Custom"/>
+                                    </ComboBox>
+                                    <Grid ColumnDefinitions="*,*" ColumnSpacing="8" RowSpacing="6"
+                                          RowDefinitions="Auto,Auto,Auto">
+                                        <NumberBox x:Name="OrbConjunctionBox" Grid.Row="0" Grid.Column="0" Header="☌ Conjunction"
+                                                   Minimum="0" Maximum="15" SmallChange="1" SpinButtonPlacementMode="Compact"
+                                                   ValueChanged="Orb_Changed"/>
+                                        <NumberBox x:Name="OrbOppositionBox" Grid.Row="0" Grid.Column="1" Header="☍ Opposition"
+                                                   Minimum="0" Maximum="15" SmallChange="1" SpinButtonPlacementMode="Compact"
+                                                   ValueChanged="Orb_Changed"/>
+                                        <NumberBox x:Name="OrbSquareBox" Grid.Row="1" Grid.Column="0" Header="□ Square"
+                                                   Minimum="0" Maximum="15" SmallChange="1" SpinButtonPlacementMode="Compact"
+                                                   ValueChanged="Orb_Changed"/>
+                                        <NumberBox x:Name="OrbTrineBox" Grid.Row="1" Grid.Column="1" Header="△ Trine"
+                                                   Minimum="0" Maximum="15" SmallChange="1" SpinButtonPlacementMode="Compact"
+                                                   ValueChanged="Orb_Changed"/>
+                                        <NumberBox x:Name="OrbSextileBox" Grid.Row="2" Grid.Column="0" Header="⚹ Sextile"
+                                                   Minimum="0" Maximum="15" SmallChange="1" SpinButtonPlacementMode="Compact"
+                                                   ValueChanged="Orb_Changed"/>
+                                        <NumberBox x:Name="OrbLuminaryBox" Grid.Row="2" Grid.Column="1" Header="Sun / Moon extra"
+                                                   Minimum="0" Maximum="15" SmallChange="1" SpinButtonPlacementMode="Compact"
+                                                   ValueChanged="Orb_Changed"/>
+                                    </Grid>
+                                    <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                                        <CheckBox x:Name="MinorAspectsCheck" Grid.Column="0" VerticalAlignment="Bottom"
+                                                  Content="Minor aspects"
+                                                  ToolTipService.ToolTip="Also find the semi-sextile (30°), semi-square (45°), sesquiquadrate (135°) and quincunx (150°), and the Yod pattern"
+                                                  Checked="Minor_Changed" Unchecked="Minor_Changed"/>
+                                        <NumberBox x:Name="OrbMinorBox" Grid.Column="1" Header="Minor orb"
+                                                   Minimum="0" Maximum="15" SmallChange="0.5" SpinButtonPlacementMode="Compact"
+                                                   ValueChanged="Orb_Changed"/>
+                                    </Grid>
                                     <TextBlock TextWrapping="Wrap" FontSize="11"
                                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                               Text="These apply to every chart, the daily horoscope and synastry. Each chart shows which were used."/>
+                                               Text="House system and node apply to every chart, the daily horoscope and synastry. The orbs apply to aspects within a birth chart; synastry (6°) and the daily horoscope (1°) keep their own. Each chart shows which settings were used."/>
                                 </StackPanel>
                             </Flyout>
                         </DropDownButton.Flyout>

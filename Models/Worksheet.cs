@@ -29,7 +29,8 @@ public sealed record WorksheetRow(
 
 public sealed record WorksheetCusp(string House, string Position);
 
-public sealed record WorksheetAspect(NatalPoint A, NatalPoint B, AspectType Type, double Orb, bool Applying)
+public sealed record WorksheetAspect(
+    NatalPoint A, NatalPoint B, AspectType Type, double Orb, bool Applying, bool OutOfSign = false)
 {
     // "2°14' a" — the orb, then a for applying or s for separating.
     public string OrbText

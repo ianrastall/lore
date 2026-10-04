@@ -50,6 +50,10 @@ public sealed partial class WorksheetView : UserControl
         Color.FromArgb(255, 220, 60, 60),   // Square
         Color.FromArgb(255, 80, 200, 100),  // Trine
         Color.FromArgb(255, 220, 140, 40),  // Opposition
+        Color.FromArgb(255, 150, 150, 170), // Semi-sextile
+        Color.FromArgb(255, 200, 110, 110), // Semi-square
+        Color.FromArgb(255, 200, 110, 110), // Sesquiquadrate
+        Color.FromArgb(255, 170, 130, 200), // Quincunx
     ];
 
     private const double CellWidth = 62, CellHeight = 40;
@@ -93,7 +97,8 @@ public sealed partial class WorksheetView : UserControl
                     var stack = new StackPanel { VerticalAlignment = VerticalAlignment.Center };
                     stack.Children.Add(new TextBlock
                     {
-                        Text = aspect.Type.Symbol(),
+                        // An out-of-sign aspect carries a star (explained under the grid).
+                        Text = aspect.OutOfSign ? aspect.Type.Symbol() + "*" : aspect.Type.Symbol(),
                         FontSize = 15,
                         Foreground = new SolidColorBrush(AspectColors[(int)aspect.Type]),
                         HorizontalAlignment = HorizontalAlignment.Center,
@@ -107,8 +112,9 @@ public sealed partial class WorksheetView : UserControl
                     });
                     cell.Child = stack;
                     ToolTipService.SetToolTip(cell,
-                        $"{points[col].Name} {aspect.Type.ToString().ToLowerInvariant()} {points[row].Name}, " +
-                        $"{aspect.OrbText[..^2]} from exact, {(aspect.Applying ? "applying" : "separating")}");
+                        $"{points[col].Name} {aspect.Type.Name().ToLowerInvariant()} {points[row].Name}, " +
+                        $"{aspect.OrbText[..^2]} from exact, {(aspect.Applying ? "applying" : "separating")}" +
+                        (aspect.OutOfSign ? " — out of sign" : ""));
                 }
                 Place(cell, row, col);
             }
