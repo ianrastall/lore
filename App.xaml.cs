@@ -24,6 +24,7 @@ public partial class App : Application
         string ephemerisPath = Path.Combine(baseDir, "Assets", "Ephemeris");
         string interpPath    = Path.Combine(baseDir, "Data", "interpretations.json");
         string dailyPath     = Path.Combine(baseDir, "Data", "daily.json");
+        string synastryPath  = Path.Combine(baseDir, "Data", "synastry.json");
 
         var celebSvc    = new CelebrityService();
         var chartSvc    = new ChartService(ephemerisPath);
@@ -33,8 +34,9 @@ public partial class App : Application
         var hospitals   = new HospitalService();
         var transits    = new TransitService(chartSvc);
         var daily       = new DailyInterpreter(dailyPath);
+        var synastry    = new SynastryInterpreter(synastryPath);
         var mainVm      = new MainViewModel(celebSvc, chartSvc, interpreter, userCharts, cities, hospitals,
-                                            transits, daily);
+                                            transits, daily, synastry);
 
         _mainWindow = new MainWindow(mainVm);
         _mainWindow.Activate();

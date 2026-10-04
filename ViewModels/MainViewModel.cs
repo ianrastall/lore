@@ -19,6 +19,9 @@ public sealed partial class MainViewModel : ObservableObject
     // The Daily view's state; follows whichever chart ChartVM is showing.
     public DailyViewModel DailyVM { get; }
 
+    // The Synastry view's state: ChartVM's chart compared with a second person.
+    public SynastryViewModel SynastryVM { get; }
+
     // Bumped per chart load; a calculation that finishes after a newer selection has
     // started is dropped instead of overwriting the newer chart.
     private int _loadGeneration;
@@ -58,6 +61,10 @@ public sealed partial class MainViewModel : ObservableObject
     [ObservableProperty]
     public partial bool ShowDaily { get; set; }
 
+    // The Synastry view (likewise mutually exclusive with the other two).
+    [ObservableProperty]
+    public partial bool ShowSynastry { get; set; }
+
     // Full-page Legend / reference view over the chart+report body.
     [ObservableProperty]
     public partial bool ShowLegend { get; set; }
@@ -73,7 +80,8 @@ public sealed partial class MainViewModel : ObservableObject
         CityService cities,
         HospitalService hospitals,
         TransitService transits,
-        DailyInterpreter dailyInterpreter)
+        DailyInterpreter dailyInterpreter,
+        SynastryInterpreter synastryInterpreter)
     {
         _celebrities = celebrities;
         _charts = charts;
@@ -82,6 +90,7 @@ public sealed partial class MainViewModel : ObservableObject
         Hospitals = hospitals;
         ChartVM = new ChartViewModel(interpreter);
         DailyVM = new DailyViewModel(transits, dailyInterpreter);
+        SynastryVM = new SynastryViewModel(charts, synastryInterpreter);
     }
 
     public async Task InitializeAsync(string dataPath, string citiesPath, string hospitalsPath)
@@ -117,6 +126,7 @@ public sealed partial class MainViewModel : ObservableObject
     private async Task RebuildPoolAsync()
     {
         _all = [.. _celebrities.All, .. _userCharts.Charts];
+        SynastryVM.SetPeople(_all);
         // Scoring runs the native Swiss Ephemeris calculation for every chart (150+),
         // so keep it off the UI thread. It only writes plain string fields on each
         // Celebrity, which the list bindings read afterwards at item realisation.
@@ -230,6 +240,7 @@ public sealed partial class MainViewModel : ObservableObject
         SelectedCelebrity = null;
         ChartVM.Chart = null;
         DailyVM.Chart = null;
+        SynastryVM.Chart = null;
         await RebuildPoolAsync();
         StatusMessage = $"Deleted {c.Name}.";
     }
@@ -262,6 +273,7 @@ public sealed partial class MainViewModel : ObservableObject
             if (generation != _loadGeneration) return; // superseded by a newer selection
             ChartVM.Chart = chart;
             DailyVM.Chart = chart;
+            SynastryVM.Chart = chart;
             StatusMessage = "";
         }
         catch (Exception ex)

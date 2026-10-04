@@ -119,6 +119,9 @@
                     <ToggleButton x:Name="DailyToggle" Content="Daily"
                                   Click="ShowDaily_Click"
                                   ToolTipService.ToolTip="Daily horoscope from today's transits"/>
+                    <ToggleButton x:Name="SynastryToggle" Content="Synastry"
+                                  Click="ShowSynastry_Click"
+                                  ToolTipService.ToolTip="Compare this chart with another person's"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6">
@@ -132,6 +135,9 @@
                                 <MenuFlyoutSeparator/>
                                 <MenuFlyoutItem Text="PDF — daily horoscope…" Click="ExportDailyPdf_Click"/>
                                 <MenuFlyoutItem Text="Text — daily horoscope…" Click="ExportDailyText_Click"/>
+                                <MenuFlyoutSeparator/>
+                                <MenuFlyoutItem Text="PDF — synastry reading…" Click="ExportSynastryPdf_Click"/>
+                                <MenuFlyoutItem Text="PNG — synastry bi-wheel…" Click="ExportSynastryPng_Click"/>
                             </MenuFlyout>
                         </DropDownButton.Flyout>
                     </DropDownButton>
@@ -139,13 +145,13 @@
                 </StackPanel>
             </Grid>
 
-            <!-- Body: chart, report, or the full-page legend -->
+            <!-- Body: chart, report, daily, synastry, or the full-page legend -->
             <Grid Grid.Row="1">
                 <views:ChartView Grid.Row="0"
                                  x:Name="ChartViewControl"
                                  ViewModel="{x:Bind ViewModel.ChartVM}"
                                  RequestedTheme="Dark"
-                                 Visibility="{x:Bind VisChartBody(ViewModel.ShowReport, ViewModel.ShowDaily, ViewModel.ShowLegend), Mode=OneWay}"/>
+                                 Visibility="{x:Bind VisChartBody(ViewModel.ShowReport, ViewModel.ShowDaily, ViewModel.ShowSynastry, ViewModel.ShowLegend), Mode=OneWay}"/>
                 <views:ReportView x:Name="ReportViewControl"
                                   ViewModel="{x:Bind ViewModel.ChartVM}"
                                   RequestedTheme="Dark"
@@ -154,6 +160,10 @@
                                  ViewModel="{x:Bind ViewModel.DailyVM}"
                                  RequestedTheme="Dark"
                                  Visibility="{x:Bind VisReportBody(ViewModel.ShowDaily, ViewModel.ShowLegend), Mode=OneWay}"/>
+                <views:SynastryView x:Name="SynastryViewControl"
+                                    ViewModel="{x:Bind ViewModel.SynastryVM}"
+                                    RequestedTheme="Dark"
+                                    Visibility="{x:Bind VisReportBody(ViewModel.ShowSynastry, ViewModel.ShowLegend), Mode=OneWay}"/>
                 <views:LegendView x:Name="LegendViewControl"
                                   RequestedTheme="Dark"
                                   CloseRequested="Legend_CloseRequested"

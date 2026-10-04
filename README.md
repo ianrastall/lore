@@ -4,14 +4,14 @@
 
 > A Windows desktop application for computing and exploring astrological natal charts — and reading a daily horoscope from them — powered by the Swiss Ephemeris. Browse a curated library of historical figures — every one with a documented birth time — or add your own.
 
-**Latest release: v1.3.0** · [Download](../../releases/latest)
+**Latest release: v1.4.0** · [Download](../../releases/latest)
 
 ### Installing
 
-1. From the [latest release](../../releases/latest), download **`LoreSetup-1.3.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`LoreSetup-1.4.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user only (no administrator prompt), adds a Start-menu shortcut, and can be removed from *Settings → Apps* like any other program.
 
-**Prefer not to install?** Download **`Lore-1.3.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
+**Prefer not to install?** Download **`Lore-1.4.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
 
 > **The installer is not code-signed.** Lore is a free hobby project and does not carry a paid signing certificate, so Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"* — choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -53,6 +53,7 @@
 | **Chart Wheel** | Rendered chart wheel (Win2D / Direct2D), drawn on-screen and exportable as a high-resolution PNG. |
 | **Report** | Natural-language reading: Overview (Sun/Moon/Rising), planet-by-sign-degree-and-house paragraphs, major aspects, chart patterns (stellium, grand trine, T-square, grand cross), and elemental and modal balance. The Ascendant/Midheaven line shows their degrees and names the Placidus house system. |
 | **Daily** | Daily horoscope for the selected chart on any date — generated from that day's transits. See below. |
+| **Synastry** | The selected chart compared with a second person's: a written reading and a bi-wheel of the two charts. See below. |
 | **Legend** | Full-page reference — a grouped list of every glyph, colour, angle, house, and term; click any item for a fuller explanation. |
 
 ### Daily Horoscope
@@ -68,6 +69,20 @@ The **Daily** view writes a horoscope for the selected chart, for today or any d
 - **Honest about unknowns.** For a chart with no birth time, the houses, angles, and contacts to the natal Moon are left out rather than read from a noon guess.
 
 It is a prompt for reflection, not a prediction: the ranking of transits is an editorial priority, not a probability.
+
+### Synastry
+The **Synastry** view compares the selected chart with a second person's — any bundled figure or any of your own charts, chosen in the **Compare with…** box.
+
+- **Every contact between the two charts.** Each person's thirteen bodies, Ascendant, and Midheaven are tried against the other's, within a **6° orb** (4° for a sextile) — a little tighter than the 8°/6° used inside one chart.
+- **A short, ranked reading.** *Closest bonds* (up to three conjunctions), *What comes easily* (up to four trines and sextiles), and *What takes work* (up to four squares and oppositions), chosen by closeness and by how personal the points are. Contacts between two slow planets, shared by everyone born in the same years, are listed but not written up.
+- **At a glance.** The two Sun signs and Moon signs compared by element, and an overall tone — Harmonious, Mixed, or Challenging.
+- **House overlays.** Where each person's Sun, Moon, Venus, and Mars fall in the other's houses.
+- **Bi-wheel.** The selected chart drawn inside, the second person's planets in a band around it on the same zodiac, with the contacts between them as aspect lines (the ones the reading uses drawn heavier).
+- **Deterministic and offline.** Every sentence comes from an editable corpus (`Data\synastry.json`): 144 bespoke lines for the pairs that matter most, and assembled sentences for the rest.
+- **Explainable.** *Why this reading?* lists every contact found and which ones the reading used.
+- **Honest about unknowns.** A chart with no birth time contributes no Ascendant, Midheaven, houses, or Moon.
+
+It describes the symbolism between two charts; it is not a compatibility score.
 
 ### Traditional Dignity Scoring
 Every chart is scored against the **Lilly/Dorothean rubric**:
@@ -94,6 +109,8 @@ Charts can be exported in four formats:
 | **JSON** | Structured chart data (planets, houses, aspects, angles, and detected patterns) |
 | **XML** | Same structured data in XML |
 | **PDF / Text — daily horoscope** | The daily reading for the date shown in the Daily view, with the full list of that day's transits |
+| **PDF — synastry reading** | The synastry reading on screen, with the bi-wheel and the full list of contacts between the two charts |
+| **PNG — synastry bi-wheel** | The bi-wheel alone (1600 × 1600 px) |
 
 ---
 
@@ -114,6 +131,9 @@ Lore/
 │   ├── TransitService.cs      # Daily horoscope, astronomy: a day's transits to a natal chart
 │   ├── DailyInterpreter.cs    # Daily horoscope, wording: rank, select, compose from daily.json
 │   ├── DailyExportService.cs  # Daily horoscope PDF / text export
+│   ├── SynastryService.cs     # Synastry, astronomy: aspects and house overlays between two charts
+│   ├── SynastryInterpreter.cs # Synastry, wording: rank, select, compose from synastry.json
+│   ├── SynastryExportService.cs # Synastry PDF export
 │   ├── ExportService.cs       # PNG / PDF / JSON / XML export
 │   ├── CelebrityService.cs    # Loads celebrities.json
 │   ├── UserChartService.cs    # Loads/saves mycharts.json
@@ -122,13 +142,15 @@ Lore/
 ├── ViewModels/
 │   ├── MainViewModel.cs       # Browse list, search/filter, category, add/delete
 │   ├── ChartViewModel.cs      # Chart + report state for the detail pane
-│   └── DailyViewModel.cs      # Daily horoscope state: chart, date, generated reading
+│   ├── DailyViewModel.cs      # Daily horoscope state: chart, date, generated reading
+│   └── SynastryViewModel.cs   # Synastry state: chart, partner, generated reading
 ├── SplashWindow.xaml/.cs      # Launch splash: artwork + "Lore <version>", up while data loads
 ├── Views/
 │   ├── ChartRenderer.cs       # Win2D Direct2D chart wheel drawing
 │   ├── ChartView.xaml/.cs     # Chart wheel + export controls
 │   ├── ReportView.xaml/.cs    # Natural-language report display
 │   ├── DailyView.xaml/.cs     # Daily horoscope with date navigation
+│   ├── SynastryView.xaml/.cs  # Synastry reading, partner picker, and bi-wheel
 │   ├── LegendView.xaml/.cs    # Glyph + colour legend
 │   └── AddChartDialog.xaml/.cs# Custom chart entry dialog
 ├── Data/
@@ -137,6 +159,7 @@ Lore/
 │   ├── hospitals.json         # ~235,000 hospitals (lat/lon), Add-Chart birthplace search
 │   ├── interpretations.json   # Corpus for the natural-language report
 │   ├── daily.json             # Corpus for the daily horoscope (transit lines, Moon/Sun/house text)
+│   ├── synastry.json          # Corpus for the synastry reading (aspect lines, element and house text)
 │   └── swisseph-2.10.3bfinal/ # Swiss Ephemeris C source + .se1 ephemeris files
 ├── Native/
 │   └── sweph.dll              # Built by Build-SwephDll.ps1 (not in repo)
@@ -170,7 +193,7 @@ Lore/
 
 ## Prerequisites
 
-- **Windows 10 version 1803** (build 17763) or later, **64-bit**
+- **Windows 10 version 1809** (build 17763) or later, **64-bit**
 - **.NET 10 SDK** (for building from source)
 - **Visual Studio 2019/2022 Build Tools** with the *Desktop development with C++* workload — required once to compile `sweph.dll`
 
@@ -205,7 +228,7 @@ The `.csproj` automatically copies `sweph.dll` and the required `.se1` ephemeris
 dotnet test tests\Lore.Tests
 ```
 
-The tests cover the parts that must stay right: birth-time resolution (daylight saving, local mean time, historical city times), planet and Ascendant positions checked against Astro-Databank's published values, the daily transit scan checked against an independent calculation, the daily-horoscope corpus and wording, crash-safe saving of My Charts (including recovery from a damaged file), and hospital search. `FigureLibraryTests` checks every bundled figure against its Astro-Databank record in `tests\Lore.Tests\Reference\adb-reference.json`: each well-documented (AA/A) birth time must match, and Lore must turn it into the same instant Astro-Databank does. Run them after editing `Data\celebrities.json`.
+The tests cover the parts that must stay right: birth-time resolution (daylight saving, local mean time, historical city times), planet and Ascendant positions checked against Astro-Databank's published values, the daily transit scan checked against an independent calculation, the daily-horoscope corpus and wording, synastry (the contacts found between two charts, and the corpus and wording of the reading), crash-safe saving of My Charts (including recovery from a damaged file), and hospital search. `FigureLibraryTests` checks every bundled figure against its Astro-Databank record in `tests\Lore.Tests\Reference\adb-reference.json`: each well-documented (AA/A) birth time must match, and Lore must turn it into the same instant Astro-Databank does. Run them after editing `Data\celebrities.json`.
 
 ### Step 3 — Portable Build
 
@@ -215,7 +238,7 @@ Produces a self-contained folder that runs with no installed .NET or VC++ runtim
 .\scripts\build-portable.ps1
 ```
 
-Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-1.3.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
+Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-1.4.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
 
 ### Step 4 — Installer
 
@@ -333,6 +356,18 @@ Editable corpus for the daily horoscope. Edit it to change what the Daily view s
 
 Names must match the app's display names (`North Node`, not `NorthNode`). The orb, the number of transits shown, and the ranking weights are constants in `Services\TransitService.cs` and `Services\DailyInterpreter.cs`.
 
+### `Data\synastry.json`
+
+Editable corpus for the synastry reading. Edit it to change what the Synastry view says without touching C# code.
+
+- `aspects` — 144 bespoke lines keyed `Point|Tone|Point`, e.g. `"Venus|Tension|Mars"`. *Tone* is `Conjunction`, `Flow`, or `Tension`, as in `daily.json`. The two points are always written in the app's standard order (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North Node, Chiron, Lilith, Ascendant, Midheaven), so each pair has one line: `Sun|Flow|Moon`, never `Moon|Flow|Sun`. In the text, `{a}` is the person who owns the first-named point and `{b}` the person who owns the second; Lore fills in their first names. Covered: every pair among the Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, and Ascendant, plus the Sun, Moon, Venus, and Mars with Uranus, Neptune, and Pluto.
+- `pointThemes`, `toneLinks` — building blocks used to assemble a plainer sentence for any other pair, or one whose bespoke line is empty.
+- `sunElements`, `moonElements` — the two Sun (or Moon) signs compared by element, keyed `Element|Element` in the order Fire, Earth, Air, Water.
+- `overlayHouses`, `overlayPlanets`, `houses` — one person's planets in the other's houses; `{guest}` owns the planets, `{host}` the house.
+- `tones`, `notes` — the overall tone sentence and the unknown-birth-time messages.
+
+The orbs, the number of contacts shown, and the ranking weights are constants in `Services\SynastryService.cs` and `Services\SynastryInterpreter.cs`.
+
 ### `Data\interpretations.json`
 
 Editable corpus for the natural-language report. Keyed dictionaries for sign traits, role framing, planet themes, sign styles, bespoke planet-in-sign lines (`"Planet|Sign"` keys), house area descriptions, aspect dynamics, and elemental descriptions. Edit this file to customise the generated text without touching C# code.
@@ -395,15 +430,16 @@ The `_12` files are required for historical figures such as Leonardo da Vinci, S
 
 ## Version History
 
-### Unreleased
+### 1.4.0 (current)
+- **Synastry** — a new **Synastry** view compares the selected chart with a second person's. Every contact between the two charts' thirteen bodies, Ascendants, and Midheavens is found (6° orb, 4° for a sextile); the closest and most personal are written up as *Closest bonds*, *What comes easily*, and *What takes work* from a new editable corpus (`Data\synastry.json`, 144 bespoke lines), alongside the Sun and Moon signs compared by element, an overall tone, and each person's Sun, Moon, Venus, and Mars in the other's houses. A **bi-wheel** draws one chart inside the other with the contacts between them. Exports as a PDF reading or a PNG of the bi-wheel, and the Legend has a new *Synastry* section.
 - **Edit saved charts** — My Charts entries can now be edited as well as deleted, and deleting asks for confirmation first.
 - **Crash-safe saving** — My Charts is written via a temporary file with a `.bak` of the previous version; a damaged file is kept aside and the backup restored instead of being silently replaced by an empty list.
 - **Figure library audited** — all 150 original figures checked against Astro-Databank. 20 recorded birth times corrected (some by hours, e.g. Beyoncé, James Dean, Ellen DeGeneres); every figure given an explicit time zone, with fixed standard time where the birth record says so; and 21 figures removed whose birth times aren't documented to the library's standard (rated B, C or DD, or with no recorded time at all — among them Lincoln, John Lennon, Gandhi, Jung, Taylor Swift and Tom Cruise). The library is now **162** figures, every one rated AA or A, and each matches Astro-Databank's birth moment to the minute.
-- **Automated tests** — a new `tests\Lore.Tests` project (41 tests) guards the calculations, transits, saved charts, and the figure library.
+- **Automated tests** — a new `tests\Lore.Tests` project (58 tests) guards the calculations, transits, synastry, saved charts, and the figure library.
 - **Fix** — the Add Chart dialog's default date displayed as the previous day west of Greenwich.
 - **33 more figures** — philosophers, writers, scientists, artists, athletes and historical figures such as Kant, Goethe, Jules Verne, Alan Turing, Neil Armstrong, Marie Antoinette, Pelé, and Steffi Graf, each checked against Astro-Databank (Rodden rating AA or A); every computed birth moment matches Astro-Databank's to the minute.
 
-### 1.3.0 (current)
+### 1.3.0
 - **Daily horoscope** — a new **Daily** view generates a horoscope for any chart on any date from that day's transits: the whole local day is scanned, every contact between the thirteen moving bodies and the chart's thirteen natal positions plus Ascendant and Midheaven is found to within a 1° orb and timed, and the closest and weightiest few are written up from a new editable corpus (`Data\daily.json`, 585 bespoke transit lines). Includes Moon sign, phase and house, the Sun's house, retrogrades and stations, an overall day tone, date navigation, and a full "Why this reading?" list of the day's transits. Chiron, Lilith, and the North Node take part both as moving bodies and as natal points.
 - **Daily export** — the reading on screen can be saved as a PDF or plain text.
 - **Legend** — new *Daily horoscope* section explaining transits, the fast/slow split, building/exact/easing, and the day tone.

@@ -19,9 +19,9 @@
     <LangVersion>preview</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Configurations>Debug;Release</Configurations>
-    <Version>1.3.0</Version>
-    <AssemblyVersion>1.3.0.0</AssemblyVersion>
-    <FileVersion>1.3.0.0</FileVersion>
+    <Version>1.4.0</Version>
+    <AssemblyVersion>1.4.0.0</AssemblyVersion>
+    <FileVersion>1.4.0.0</FileVersion>
   </PropertyGroup>
 
   <!-- The test project lives under tests\ and builds separately; keep its files
@@ -79,6 +79,10 @@
     </Content>
     <!-- Corpus for the daily horoscope (transit lines, Moon/Sun/house text) -->
     <Content Include="Data\daily.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <!-- Corpus for the synastry reading (aspect lines between two charts, house overlays) -->
+    <Content Include="Data\synastry.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
 

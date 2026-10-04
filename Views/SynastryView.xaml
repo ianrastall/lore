@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="Lore.Views.SynastryView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:canvas="using:Microsoft.Graphics.Canvas.UI.Xaml"
+    xmlns:models="using:Lore.Models">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Header: who is compared with whom -->
+        <StackPanel Grid.Row="0" Spacing="10" Padding="24,16,24,8">
+            <StackPanel>
+                <TextBlock Text="{x:Bind ViewModel.Title, Mode=OneWay}"
+                           Style="{StaticResource TitleTextBlockStyle}"/>
+                <TextBlock Text="Generated from the contacts between the two birth charts — a prompt for reflection, not a verdict."
+                           Opacity="0.7" FontSize="12" Margin="0,2,0,0" TextWrapping="Wrap"/>
+            </StackPanel>
+
+            <!-- Partner picker -->
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <AutoSuggestBox x:Name="PartnerBox"
+                                Width="300"
+                                PlaceholderText="Compare with…"
+                                QueryIcon="Find"
+                                DisplayMemberPath="Name"
+                                TextMemberPath="Name"
+                                TextChanged="PartnerBox_TextChanged"
+                                QuerySubmitted="PartnerBox_QuerySubmitted"
+                                AutomationProperties.Name="Person to compare with"/>
+                <TextBlock Text="{x:Bind ViewModel.PartnerText, Mode=OneWay}"
+                           VerticalAlignment="Center"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                <Button Command="{x:Bind ViewModel.ClearPartnerCommand}"
+                        Visibility="{x:Bind VisIf(ViewModel.HasPartner), Mode=OneWay}"
+                        AutomationProperties.Name="Clear the comparison"
+                        ToolTipService.ToolTip="Clear the comparison">
+                    <FontIcon Glyph="&#xE711;" FontSize="12"/>
+                </Button>
+                <ProgressRing IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}"
+                              Width="16" Height="16" Margin="6,0,0,0"/>
+            </StackPanel>
+
+            <TextBlock Text="{x:Bind ViewModel.PromptText, Mode=OneWay}"
+                       TextWrapping="Wrap"
+                       Visibility="{x:Bind HasText(ViewModel.PromptText), Mode=OneWay}"/>
+
+            <TextBlock Text="{x:Bind ViewModel.ErrorText, Mode=OneWay}"
+                       Foreground="#E5534B" TextWrapping="Wrap"
+                       Visibility="{x:Bind HasText(ViewModel.ErrorText), Mode=OneWay}"/>
+
+            <!-- Overall tone pill -->
+            <Border Padding="9,3" CornerRadius="10" HorizontalAlignment="Left"
+                    Background="{x:Bind ViewModel.ToneBrush, Mode=OneWay}"
+                    Visibility="{x:Bind HasText(ViewModel.ToneText), Mode=OneWay}">
+                <TextBlock Text="{x:Bind ViewModel.ToneText, Mode=OneWay}"
+                           FontSize="12" FontWeight="SemiBold" Foreground="#111318"/>
+            </Border>
+        </StackPanel>
+
+        <!-- Reading on the left, bi-wheel on the right -->
+        <Grid Grid.Row="1"
+              Visibility="{x:Bind HasText(ViewModel.ToneText), Mode=OneWay}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MaxWidth="720"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" Padding="24,8,24,24">
+                <StackPanel Spacing="16">
+                    <ItemsControl ItemsSource="{x:Bind ViewModel.Sections, Mode=OneWay}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="models:DailySection">
+                                <StackPanel Spacing="10" Margin="0,0,0,14">
+                                    <TextBlock Text="{x:Bind Heading}"
+                                               Style="{StaticResource SubtitleTextBlockStyle}"
+                                               Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
+                                    <ItemsControl ItemsSource="{x:Bind Items}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate x:DataType="models:DailyItem">
+                                                <StackPanel Margin="0,0,0,10">
+                                                    <TextBlock Text="{x:Bind Title}" FontWeight="SemiBold"
+                                                               FontSize="15" TextWrapping="Wrap"
+                                                               Visibility="{x:Bind HasTitle}"/>
+                                                    <TextBlock Text="{x:Bind Meta}" FontSize="12" TextWrapping="Wrap"
+                                                               Margin="0,1,0,0"
+                                                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                               Visibility="{x:Bind HasMeta}"/>
+                                                    <TextBlock Text="{x:Bind Text}" TextWrapping="Wrap"
+                                                               LineHeight="20" Margin="0,4,0,0"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <!-- The calculation trail behind the reading -->
+                    <Expander HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                        <Expander.Header>
+                            <TextBlock Text="{x:Bind ViewModel.TraceHeader, Mode=OneWay}" TextWrapping="Wrap"/>
+                        </Expander.Header>
+                        <StackPanel Spacing="4">
+                            <TextBlock FontSize="12" TextWrapping="Wrap" Opacity="0.75" Margin="0,0,0,6"
+                                       Text="Each line is a point in one chart in aspect to a point in the other, within 6° of exact (4° for a sextile). The reading uses the closest and most personal few: up to three conjunctions, four easy aspects and four hard ones."/>
+                            <ItemsControl ItemsSource="{x:Bind ViewModel.Trace, Mode=OneWay}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="x:String">
+                                        <TextBlock Text="{x:Bind}" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,3"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Expander>
+                </StackPanel>
+            </ScrollViewer>
+
+            <Grid Grid.Column="1" RowDefinitions="*,Auto">
+                <canvas:CanvasControl x:Name="WheelCanvas"
+                                      Grid.Row="0"
+                                      Draw="WheelCanvas_Draw"
+                                      SizeChanged="WheelCanvas_SizeChanged"
+                                      Margin="8"/>
+                <TextBlock Grid.Row="1"
+                           Text="{x:Bind ViewModel.WheelCaption, Mode=OneWay}"
+                           FontSize="12" HorizontalAlignment="Center" Margin="8,0,8,12"
+                           TextWrapping="Wrap"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

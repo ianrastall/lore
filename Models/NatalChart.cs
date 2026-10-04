@@ -12,6 +12,14 @@ public sealed class NatalChart
     public PlanetPosition? GetPlanet(Planet p) =>
         Planets.FirstOrDefault(x => x.Planet == p);
 
+    // Ecliptic longitude of a body or angle; null for a body the chart does not have.
+    public double? LongitudeOf(NatalPoint point) => point.Kind switch
+    {
+        NatalPointKind.Ascendant => Ascendant,
+        NatalPointKind.Midheaven => Midheaven,
+        _ => GetPlanet(point.Body)?.Longitude
+    };
+
     public HouseCusp GetHouse(int house) =>
         Houses[house - 1];
 

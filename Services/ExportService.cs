@@ -23,13 +23,20 @@ public static class ExportService
     }
 
     // ── PNG (Win2D offscreen render, no on-screen control needed) ─────────────
-    public static async Task<byte[]> RenderChartPngAsync(NatalChart chart, int size = 1600)
+    public static Task<byte[]> RenderChartPngAsync(NatalChart chart, int size = 1600) =>
+        RenderPngAsync(size, ds => ChartRenderer.Draw(ds, chart, size, size));
+
+    // The synastry bi-wheel: the first chart inside, the second around it.
+    public static Task<byte[]> RenderBiWheelPngAsync(Synastry synastry, int size = 1600) =>
+        RenderPngAsync(size, ds => ChartRenderer.DrawBiWheel(ds, synastry, size, size));
+
+    private static async Task<byte[]> RenderPngAsync(int size, Action<CanvasDrawingSession> draw)
     {
         var device = CanvasDevice.GetSharedDevice();
         using var target = new CanvasRenderTarget(device, size, size, 96);
         using (var ds = target.CreateDrawingSession())
         {
-            ChartRenderer.Draw(ds, chart, size, size);
+            draw(ds);
         }
 
         using var stream = new InMemoryRandomAccessStream();

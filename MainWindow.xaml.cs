@@ -88,18 +88,21 @@ public sealed partial class MainWindow : Window
             await ViewModel.DeleteSelectedCommand.ExecuteAsync(null);
     }
 
-    private void ShowChart_Click(object sender, RoutedEventArgs e) => ShowBody(report: false, daily: false);
-    private void ShowReport_Click(object sender, RoutedEventArgs e) => ShowBody(report: true, daily: false);
-    private void ShowDaily_Click(object sender, RoutedEventArgs e) => ShowBody(report: false, daily: true);
+    private void ShowChart_Click(object sender, RoutedEventArgs e) => ShowBody();
+    private void ShowReport_Click(object sender, RoutedEventArgs e) => ShowBody(report: true);
+    private void ShowDaily_Click(object sender, RoutedEventArgs e) => ShowBody(daily: true);
+    private void ShowSynastry_Click(object sender, RoutedEventArgs e) => ShowBody(synastry: true);
 
-    private void ShowBody(bool report, bool daily)
+    private void ShowBody(bool report = false, bool daily = false, bool synastry = false)
     {
         ViewModel.ShowLegend = false;
         ViewModel.ShowReport = report;
         ViewModel.ShowDaily = daily;
-        ChartToggle.IsChecked = !report && !daily;
+        ViewModel.ShowSynastry = synastry;
+        ChartToggle.IsChecked = !report && !daily && !synastry;
         ReportToggle.IsChecked = report;
         DailyToggle.IsChecked = daily;
+        SynastryToggle.IsChecked = synastry;
     }
 
     private void ShowLegend_Click(object sender, RoutedEventArgs e) => ViewModel.ShowLegend = true;
@@ -112,6 +115,8 @@ public sealed partial class MainWindow : Window
     private async void ExportXml_Click(object sender, RoutedEventArgs e) => await ExportAsync("xml");
     private async void ExportDailyPdf_Click(object sender, RoutedEventArgs e) => await ExportAsync("dailypdf");
     private async void ExportDailyText_Click(object sender, RoutedEventArgs e) => await ExportAsync("dailytxt");
+    private async void ExportSynastryPdf_Click(object sender, RoutedEventArgs e) => await ExportAsync("synastrypdf");
+    private async void ExportSynastryPng_Click(object sender, RoutedEventArgs e) => await ExportAsync("synastrypng");
 
     private async Task ExportAsync(string kind)
     {
@@ -132,6 +137,16 @@ public sealed partial class MainWindow : Window
             return;
         }
 
+        // Likewise the synastry exports write the comparison already on screen.
+        var comparison = ViewModel.SynastryVM.Comparison;
+        var synastryReading = ViewModel.SynastryVM.Reading;
+        bool synastry = kind.StartsWith("synastry", StringComparison.Ordinal);
+        if (synastry && (comparison is null || synastryReading is null))
+        {
+            ViewModel.StatusMessage = "Open the Synastry view and choose someone to compare with first, then export.";
+            return;
+        }
+
         try
         {
             var (label, ext) = kind switch
@@ -142,15 +157,18 @@ public sealed partial class MainWindow : Window
                 "xml"  => ("XML data", ".xml"),
                 "dailypdf" => ("PDF document", ".pdf"),
                 "dailytxt" => ("Text file", ".txt"),
+                "synastrypdf" => ("PDF document", ".pdf"),
+                "synastrypng" => ("PNG image", ".png"),
                 _      => throw new ArgumentOutOfRangeException(nameof(kind)),
             };
 
             var picker = new FileSavePicker { SuggestedStartLocation = PickerLocationId.DocumentsLibrary };
             InitializeWithWindow.Initialize(picker, WindowNative.GetWindowHandle(this));
             picker.FileTypeChoices.Add(label, [ext]);
-            picker.SuggestedFileName = daily
-                ? SafeFileName($"{chart.Celebrity.Name} - daily {reading!.Date:yyyy-MM-dd}")
-                : SafeFileName(chart.Celebrity.Name);
+            picker.SuggestedFileName =
+                daily ? SafeFileName($"{chart.Celebrity.Name} - daily {reading!.Date:yyyy-MM-dd}") :
+                synastry ? SafeFileName($"{synastryReading!.FirstName} and {synastryReading.SecondName} - synastry") :
+                SafeFileName(chart.Celebrity.Name);
 
             var file = await picker.PickSaveFileAsync();
             if (file is null) return; // user cancelled
@@ -165,6 +183,9 @@ public sealed partial class MainWindow : Window
                 "xml"  => ExportService.ToXml(chart),
                 "dailypdf" => DailyExportService.ToPdf(reading!),
                 "dailytxt" => DailyExportService.ToText(reading!),
+                "synastrypdf" => SynastryExportService.ToPdf(comparison!, synastryReading!,
+                                              await ExportService.RenderBiWheelPngAsync(comparison!)),
+                "synastrypng" => await ExportService.RenderBiWheelPngAsync(comparison!),
                 _      => throw new ArgumentOutOfRangeException(nameof(kind)),
             };
 
@@ -190,9 +211,9 @@ public sealed partial class MainWindow : Window
     public Visibility VisIfNot(bool b) => b ? Visibility.Collapsed : Visibility.Visible;
     public bool Not(bool b) => !b;
 
-    // Body panes: the legend, when shown, hides the chart, report and daily views.
-    public Visibility VisChartBody(bool showReport, bool showDaily, bool showLegend) =>
-        !showReport && !showDaily && !showLegend ? Visibility.Visible : Visibility.Collapsed;
+    // Body panes: the legend, when shown, hides the chart, report, daily and synastry views.
+    public Visibility VisChartBody(bool showReport, bool showDaily, bool showSynastry, bool showLegend) =>
+        !showReport && !showDaily && !showSynastry && !showLegend ? Visibility.Visible : Visibility.Collapsed;
     public Visibility VisReportBody(bool show, bool showLegend) =>
         show && !showLegend ? Visibility.Visible : Visibility.Collapsed;
 }
