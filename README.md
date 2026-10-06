@@ -4,14 +4,14 @@
 
 > A Windows desktop application for computing and exploring astrological natal charts — and reading a daily horoscope from them — powered by the Swiss Ephemeris. Browse a curated library of historical figures — every one with a documented birth time — or add your own.
 
-**Latest release: v2.3.0** · [Download](../../releases/latest)
+**Latest release: v2.3.1** · [Download](../../releases/latest)
 
 ### Installing
 
-1. From the [latest release](../../releases/latest), download **`LoreSetup-2.3.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`LoreSetup-2.3.1.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user only (no administrator prompt), adds a Start-menu shortcut, and can be removed from *Settings → Apps* like any other program.
 
-**Prefer not to install?** Download **`Lore-2.3.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
+**Prefer not to install?** Download **`Lore-2.3.1-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
 
 > **The installer is not code-signed.** Lore is a free hobby project and does not carry a paid signing certificate, so Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"* — choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -261,7 +261,7 @@ Produces a self-contained folder that runs with no installed .NET or VC++ runtim
 .\scripts\build-portable.ps1
 ```
 
-Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-2.3.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
+Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-2.3.1-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
 
 ### Step 4 — Installer
 
@@ -469,7 +469,15 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 2.3.0 (current)
+### 2.3.1 (current)
+A fixes release; nothing new to learn.
+- **Forecast: both dates when a planet turns round** — when a planet stations on a natal point and makes the same aspect twice close together, the forecast now lists both exact dates, where it could miss one.
+- **Two Lore windows** — with Lore open twice, a chart saved in one window is no longer overwritten by a save from the other.
+- **Solar return: the right day** — the Timing view changes over to the new solar return on your own calendar day.
+- **Hospital search** — the words you type are matched across the hospital's name, town and country; before, the whole phrase had to appear in one of them.
+- **Searches stop when overtaken** — choosing another chart while a forecast or a match search is still running now stops the old one instead of letting it run on.
+
+### 2.3.0
 - **Best and worst matches** — the Synastry view now opens on a search: the selected chart compared with every figure in the library and every chart of your own, with the twelve best and twelve worst matches listed and a count of how many charts fall on each step of the scale. Click a name to read the comparison.
 - **A five-step compatibility scale** — the overall tone of a pair is now one of **Soulmates** (+2), **Harmonious** (+1), **Mixed** (0), **Challenging** (−1) or **Adversaries** (−2), where before there were three. It comes from the share of the contacts between two charts that are easy ones, each counted by how close and how personal it is. The scale is Lore's own — astrology has no agreed one — and its steps are set against all 22,366 pairs of figures in the library: about half read as Mixed, about a fifth each as Harmonious and Challenging, and about one in fourteen at each end.
 - **Some pairs change tone** — the old lines were drawn either side of an even split, which left four pairs in five Mixed and almost none Challenging, because easy aspects are simply more common than hard ones. The new lines are measured from the typical pair, so more pairs now read as Harmonious or Challenging than did before.
