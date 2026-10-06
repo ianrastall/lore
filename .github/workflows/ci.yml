@@ -1,7 +1,8 @@
 name: CI
 
-# Builds sweph.dll from the bundled Swiss Ephemeris source and runs the tests
-# (the calculation and data layer; they need no WinUI).
+# Builds sweph.dll from the bundled Swiss Ephemeris source, runs the tests (the
+# calculation and data layer; they need no WinUI), then builds the app itself so
+# that a broken view or binding is caught too.
 on:
   push:
     branches: [main]
@@ -27,3 +28,6 @@ jobs:
 
       - name: Test
         run: dotnet test tests\Lore.Tests
+
+      - name: Build the app
+        run: dotnet build Lore.csproj -c Release

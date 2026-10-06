@@ -129,6 +129,28 @@ public class ForecastTests
     }
 
     [Fact]
+    public void A_planet_that_crosses_stations_and_crosses_back_between_samples_is_exact_twice()
+    {
+        // Mercury stations direct on 26 February 2026 a hair beyond this point: it backs
+        // over it at about 03:08 UT and comes forward over it again at about 10:29, both
+        // between the midnight and midday samples, which see it on the same side each time.
+        var natal = new NatalChart
+        {
+            Celebrity = new Celebrity { Id = "t", Name = "T", BirthDate = "2000-01-01", BirthTimeKnown = false },
+            Planets = [new PlanetPosition { Planet = Planet.Sun, Longitude = 352.563402977 }],
+            Houses = [],
+            Aspects = [],
+        };
+
+        var pass = Assert.Single(Transits.Forecast(natal, new DateOnly(2026, 2, 19), 14, Zone),
+            p => p.Mover == Planet.Mercury && p.Aspect == AspectType.Conjunction);
+        Assert.Equal(2, pass.ExactUtc.Count);
+        Assert.InRange((pass.ExactUtc[0] - new DateTime(2026, 2, 26, 3, 8, 0)).TotalMinutes, -5, 5);
+        Assert.InRange((pass.ExactUtc[1] - new DateTime(2026, 2, 26, 10, 29, 0)).TotalMinutes, -5, 5);
+        Assert.Equal(0, pass.MinOrb);
+    }
+
+    [Fact]
     public void A_planet_that_dips_into_orb_and_turns_back_between_samples_is_still_found()
     {
         // Find a moment Mercury stations retrograde: its speed goes from forward to

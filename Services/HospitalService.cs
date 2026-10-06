@@ -30,13 +30,17 @@ public sealed class HospitalService
         // list and its suggestions are arbitrary anyway; wait for a second letter so
         // each keystroke stays quick.
         if (q.Length < 2) return [];
+        // Every word typed must be found, but each may be in the name, the town or the
+        // country: "St Mary London" finds St Mary's Hospital in London.
+        string[] words = q.Split(' ', StringSplitOptions.RemoveEmptyEntries);
         return _hospitals
-            .Where(h => h.Name.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                        h.City.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                        h.Country.Contains(q, StringComparison.OrdinalIgnoreCase))
+            .Where(h => words.All(w => h.Name.Contains(w, StringComparison.OrdinalIgnoreCase) ||
+                                       h.City.Contains(w, StringComparison.OrdinalIgnoreCase) ||
+                                       h.Country.Contains(w, StringComparison.OrdinalIgnoreCase)))
             // Rank: names that start with the query first (no population to fall back
             // on as cities do), then alphabetically for a stable list.
-            .OrderBy(h => h.Name.StartsWith(q, StringComparison.OrdinalIgnoreCase) ? 0 : 1)
+            .OrderBy(h => h.Name.StartsWith(q, StringComparison.OrdinalIgnoreCase) ? 0
+                        : h.Name.StartsWith(words[0], StringComparison.OrdinalIgnoreCase) ? 1 : 2)
             .ThenBy(h => h.Name)
             .Take(max)
             .ToList();

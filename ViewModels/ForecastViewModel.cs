@@ -21,6 +21,11 @@ public sealed partial class ForecastViewModel : ObservableObject
     // is discarded, so changing the settings quickly never shows a stale list.
     private int _generation;
 
+    // Stops the calculation a newer one has overtaken, rather than letting it run on
+    // to a result nobody will see: holding an arrow key down in the list would
+    // otherwise queue up a year's forecast for every person passed.
+    private CancellationTokenSource? _cancel;
+
     public ForecastViewModel(TransitService? transits = null, DailyInterpreter? interpreter = null)
     {
         _transits = transits;
@@ -93,6 +98,8 @@ public sealed partial class ForecastViewModel : ObservableObject
     private async void Rebuild()
     {
         int generation = ++_generation;
+        _cancel?.Cancel();
+        var cancel = _cancel = new CancellationTokenSource();
         var chart = Chart;
         var start = Start;
         int days = Spans[Math.Clamp(SpanIndex, 0, Spans.Length - 1)];
@@ -110,9 +117,13 @@ public sealed partial class ForecastViewModel : ObservableObject
         try
         {
             var reading = await Task.Run(() =>
-                _interpreter.ComposeForecast(chart, _transits.Forecast(chart, start, days, _zone, fast), start, days, _zone));
+                _interpreter.ComposeForecast(chart, _transits.Forecast(chart, start, days, _zone, fast, cancel.Token), start, days, _zone));
             if (generation == _generation)
                 Reading = reading;
+        }
+        catch (OperationCanceledException)
+        {
+            // overtaken by a newer forecast
         }
         catch (Exception ex)
         {

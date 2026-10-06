@@ -43,8 +43,23 @@ public class TimingServiceTests
     public void The_return_in_force_is_the_latest_one_on_or_before_the_date()
     {
         var natal = Chart(); // born 14 March
-        Assert.Equal(2025, Timing.SolarReturnInForce(natal, new DateOnly(2026, 2, 1))!.Utc.Year);
-        Assert.Equal(2026, Timing.SolarReturnInForce(natal, new DateOnly(2026, 6, 1))!.Utc.Year);
+        Assert.Equal(2025, Timing.SolarReturnInForce(natal, new DateOnly(2026, 2, 1), DateTimeZone.Utc)!.Utc.Year);
+        Assert.Equal(2026, Timing.SolarReturnInForce(natal, new DateOnly(2026, 6, 1), DateTimeZone.Utc)!.Utc.Year);
+    }
+
+    [Theory]
+    [InlineData(14)]   // far east of Greenwich: already tomorrow
+    [InlineData(0)]
+    [InlineData(-12)]  // far west: still yesterday
+    public void The_return_takes_over_on_the_readers_own_calendar_day(int offsetHours)
+    {
+        var natal = Chart();
+        var zone = DateTimeZone.ForOffset(Offset.FromHours(offsetHours));
+        var returns = Timing.SolarReturn(natal, 2026)!.Utc;
+        var local = DateOnly.FromDateTime(returns.AddHours(offsetHours));
+
+        Assert.Equal(2026, Timing.SolarReturnInForce(natal, local, zone)!.Utc.Year);
+        Assert.Equal(2025, Timing.SolarReturnInForce(natal, local.AddDays(-1), zone)!.Utc.Year);
     }
 
     [Fact]

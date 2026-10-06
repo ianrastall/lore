@@ -60,12 +60,13 @@ public sealed class TimingService
         return new SolarReturn { Year = year, Utc = utc, Chart = _charts.CalculateAt(natal.Celebrity, utc) };
     }
 
-    // The return in force on a date: the latest one on or before it.
-    public SolarReturn? SolarReturnInForce(NatalChart natal, DateOnly asOf)
+    // The return in force on a date: the latest one on or before it. The date is a day
+    // on the reader's own calendar, the one the return's time is shown in.
+    public SolarReturn? SolarReturnInForce(NatalChart natal, DateOnly asOf, DateTimeZone zone)
     {
-        var day = asOf.ToDateTime(new TimeOnly(23, 59), DateTimeKind.Utc);
+        var dayEnds = zone.AtStartOfDay(new LocalDate(asOf.Year, asOf.Month, asOf.Day).PlusDays(1)).ToDateTimeUtc();
         var thisYear = SolarReturn(natal, asOf.Year);
-        return thisYear is not null && thisYear.Utc <= day ? thisYear : SolarReturn(natal, asOf.Year - 1);
+        return thisYear is not null && thisYear.Utc < dayEnds ? thisYear : SolarReturn(natal, asOf.Year - 1);
     }
 
     // ── Secondary progressions ────────────────────────────────────────────────
@@ -143,7 +144,7 @@ public sealed class TimingService
 
     public TimingReading Compose(NatalChart natal, DateOnly asOf, DateTimeZone zone)
     {
-        var solar = SolarReturnInForce(natal, asOf);
+        var solar = SolarReturnInForce(natal, asOf, zone);
         var progression = Progress(natal, asOf);
         return new TimingReading
         {

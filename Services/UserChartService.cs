@@ -105,8 +105,8 @@ public sealed class UserChartService
         }
     }
 
-    // Each change is made to a copy, the copy is saved, and only then does it become the
-    // list in memory. If the save fails, memory and disk both stay as they were — so a
+    // Each change is made to a copy of the saved list, the copy is saved, and only then
+    // does it become the list in memory. If the save fails, memory and disk both stay as they were — so a
     // failed delete can't quietly take effect the next time something else is saved.
     public Task AddAsync(Celebrity chart) => CommitAsync(list => list.Add(chart));
 
@@ -124,7 +124,10 @@ public sealed class UserChartService
         await _saving.WaitAsync();
         try
         {
-            var candidate = new List<Celebrity>(_charts);
+            // Start from what is on disk rather than from memory: a second Lore window may
+            // have saved since this one loaded, and its charts must not be written over.
+            var candidate = new List<Celebrity>(
+                File.Exists(_path) && await TryReadAsync(_path) is { } onDisk ? onDisk : _charts);
             change(candidate);
             await SaveAsync(candidate);
             _charts = candidate;

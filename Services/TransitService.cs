@@ -107,7 +107,8 @@ public sealed class TransitService
     // touches every point in the chart several times a month, which is what the Daily
     // view is for. `includeFast` adds the Sun, Mercury, Venus and Mars to the slow movers.
     public IReadOnlyList<TransitPass> Forecast(
-        NatalChart natal, DateOnly start, int days, DateTimeZone zone, bool includeFast = true)
+        NatalChart natal, DateOnly start, int days, DateTimeZone zone, bool includeFast = true,
+        CancellationToken cancel = default)
     {
         var first = new LocalDate(start.Year, start.Month, start.Day);
         double jd0 = SwissEphemeris.DateTimeToJulianDay(zone.AtStartOfDay(first).ToDateTimeUtc());
@@ -120,6 +121,7 @@ public sealed class TransitService
         foreach (var mover in Enum.GetValues<Planet>())
         {
             if (mover == Planet.Moon || (!includeFast && mover.IsPersonal())) continue;
+            cancel.ThrowIfCancellationRequested();
 
             // Half-day samples for the quick planets, daily for the slow: in either case
             // the body moves less between samples than the 2° an orb spans, so no pass
@@ -139,6 +141,8 @@ public sealed class TransitService
             if (!available) continue;
 
             foreach (var (point, natalLon) in targets)
+            {
+                cancel.ThrowIfCancellationRequested();
                 foreach (var aspect in AspectTypeExtensions.Majors)
                     foreach (double branch in Branches(natalLon, aspect.Angle()))
                     {
@@ -148,7 +152,7 @@ public sealed class TransitService
                             if (Math.Abs(D(i)) > Orb) continue;
                             int a = i;
                             while (i < n && Math.Abs(D(i + 1)) <= Orb) i++;
-                            passes.Add(Pass(natal, timed, mover, point, natalLon, aspect, branch, jds, D, a, i));
+                            passes.Add(Pass(natal, timed, mover, point, natalLon, aspect, branch, jds, speed, D, a, i));
                         }
 
                         // The one case sampling can miss: the body stations between two
@@ -179,6 +183,7 @@ public sealed class TransitService
                             });
                         }
                     }
+            }
         }
 
         passes.Sort((x, y) => x.PeakUtc.CompareTo(y.PeakUtc));
@@ -188,7 +193,7 @@ public sealed class TransitService
     // One run of samples [a..b] inside the orb, refined at both ends and at each crossing.
     private TransitPass Pass(
         NatalChart natal, bool timed, Planet mover, NatalPoint point, double natalLon, AspectType aspect,
-        double branch, double[] jds, Func<int, double> d, int a, int b)
+        double branch, double[] jds, double[] speed, Func<int, double> d, int a, int b)
     {
         int n = jds.Length - 1;
         double OutBy(double t) => OrbAt(mover, branch, t) - Orb; // negative inside the orb
@@ -205,6 +210,19 @@ public sealed class TransitService
             else if ((x < 0) != (y < 0) && y != 0)
                 exact.Add(Bisect(t => SignedAt(mover, branch, t), jds[k], jds[k + 1]));
             else if (y == 0 && k + 1 == n) exact.Add(jds[n]);
+            else if (y != 0 && (speed[k] < 0) != (speed[k + 1] < 0))
+            {
+                // On the same side at both samples, but the body turned round in between:
+                // it may have crossed the exact point, stationed just beyond it, and
+                // crossed back. It is furthest over where it stations, so look there.
+                double station = Bisect(t => SpeedAt(mover, t), jds[k], jds[k + 1]);
+                double beyond = SignedAt(mover, branch, station);
+                if (!double.IsNaN(beyond) && beyond != 0 && (beyond < 0) != (x < 0))
+                {
+                    exact.Add(Bisect(t => SignedAt(mover, branch, t), jds[k], station));
+                    exact.Add(Bisect(t => SignedAt(mover, branch, t), station, jds[k + 1]));
+                }
+            }
         }
         // A crossing found just outside the run's own ends belongs to it only if it
         // falls between entering and leaving.
@@ -339,6 +357,9 @@ public sealed class TransitService
 
     private double SignedAt(Planet mover, double branch, double jd) =>
         _charts.CalculateBody(jd, mover) is { } p ? Signed(p.Longitude - branch) : double.NaN;
+
+    private double SpeedAt(Planet mover, double jd) =>
+        _charts.CalculateBody(jd, mover) is { } p ? p.SpeedLongitude : double.NaN;
 
     // Ternary search for the instant of closest approach inside a short bracket. Unlike
     // looking for a sign change, this also finds a closest approach that never becomes

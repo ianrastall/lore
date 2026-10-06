@@ -27,6 +27,9 @@ public sealed partial class SynastryViewModel : ObservableObject
     // As _generation, for the search of everyone against the selected chart.
     private int _matchGeneration;
 
+    // Stops a search a newer one has overtaken, rather than letting it run on.
+    private CancellationTokenSource? _matchCancel;
+
     public SynastryViewModel(ChartService? charts = null, SynastryInterpreter? interpreter = null)
     {
         _charts = charts;
@@ -174,6 +177,8 @@ public sealed partial class SynastryViewModel : ObservableObject
     private async void RebuildMatches()
     {
         int generation = ++_matchGeneration;
+        _matchCancel?.Cancel();
+        var cancel = _matchCancel = new CancellationTokenSource();
         var chart = Chart;
         var people = _people;
         Matches = [];
@@ -187,9 +192,13 @@ public sealed partial class SynastryViewModel : ObservableObject
         IsSearching = true;
         try
         {
-            var matches = await Task.Run(() => SynastryScoring.Rank(_charts, chart, people));
+            var matches = await Task.Run(() => SynastryScoring.Rank(_charts, chart, people, cancel.Token));
             if (generation == _matchGeneration)
                 Matches = matches;
+        }
+        catch (OperationCanceledException)
+        {
+            // overtaken by a newer search
         }
         catch (Exception ex)
         {

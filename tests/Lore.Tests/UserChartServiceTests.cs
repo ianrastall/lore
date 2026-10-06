@@ -46,6 +46,20 @@ public sealed class UserChartServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task Two_windows_open_at_once_do_not_lose_each_others_charts()
+    {
+        // Both load the same (empty) list, then each saves a chart of its own.
+        var first = await Fresh();
+        var second = await Fresh();
+        await first.AddAsync(Chart("user-1", "Ann"));
+        await second.AddAsync(Chart("user-2", "Ben"));
+        await first.RemoveAsync(Chart("user-1", "Ann"));
+
+        Assert.Equal(new[] { "Ben" }, first.Charts.Select(c => c.Name));
+        Assert.Equal(new[] { "Ben" }, (await Fresh()).Charts.Select(c => c.Name));
+    }
+
+    [Fact]
     public async Task Each_save_keeps_the_previous_version_as_a_backup()
     {
         var store = await Fresh();

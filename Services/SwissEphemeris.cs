@@ -93,7 +93,7 @@ internal static partial class SwissEphemeris
 
     public static double DateTimeToJulianDay(DateTime utc)
     {
-        double hour = utc.Hour + utc.Minute / 60.0 + utc.Second / 3600.0;
+        double hour = utc.TimeOfDay.TotalHours; // fractions of a second included
         return JulDay(utc.Year, utc.Month, utc.Day, hour, SE_GREG_CAL);
     }
 

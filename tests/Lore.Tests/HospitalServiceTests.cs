@@ -26,6 +26,17 @@ public class HospitalServiceTests
     }
 
     [Fact]
+    public void Words_can_match_the_name_and_the_town_between_them()
+    {
+        var hits = Service.Value.Search("St Mary London", max: 20);
+        Assert.NotEmpty(hits);
+        Assert.Contains(hits, h => h.Name.StartsWith("St Mary", StringComparison.OrdinalIgnoreCase) &&
+                                   h.City.Contains("London", StringComparison.OrdinalIgnoreCase));
+        Assert.All(hits, h => Assert.All(new[] { "St", "Mary", "London" }, word =>
+            Assert.Contains(word, $"{h.Name} {h.City} {h.Country}", StringComparison.OrdinalIgnoreCase)));
+    }
+
+    [Fact]
     public void Results_are_capped_and_prefix_matches_come_first()
     {
         var results = Service.Value.Search("Royal", max: 8);
