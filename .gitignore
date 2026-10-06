@@ -7,6 +7,9 @@ artifacts/
 
 # ---- Generated native library (built by Build-SwephDll.ps1) -------------
 Native/sweph.dll
+# The linker's import library and export file -- by-products nothing uses.
+Native/sweph.exp
+Native/sweph.lib
 
 # ---- Large re-downloadable raw data (NOT redistributed in the repo) ------
 # Full Swiss Ephemeris data set (452 MB) -- download from astro.com if needed.

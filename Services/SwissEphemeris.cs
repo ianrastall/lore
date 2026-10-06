@@ -3,8 +3,8 @@ using System.Runtime.InteropServices;
 namespace Lore.Services;
 
 // P/Invoke wrapper for the Swiss Ephemeris C library (sweph.dll, x64).
-// Download the DLL and ephemeris data files from https://www.astro.com/swisseph/
-// Place sweph.dll in the Native\ folder and *.se1 data files in Assets\Ephemeris\.
+// Build-SwephDll.ps1 compiles the DLL into Native\ from the source bundled under Data\;
+// the .csproj copies it beside the exe and the *.se1 data files to Assets\Ephemeris\.
 internal static partial class SwissEphemeris
 {
     private const string Dll = "sweph.dll";

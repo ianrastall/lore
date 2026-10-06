@@ -92,6 +92,8 @@ try {
 
     # Clean up .obj and .exp/.lib noise in the source dir
     Remove-Item -Force *.obj, *.exp, *.lib -ErrorAction SilentlyContinue
+    # The linker writes its import library and export file beside the DLL; nothing uses them.
+    Remove-Item -Force "$outDir\sweph.exp", "$outDir\sweph.lib" -ErrorAction SilentlyContinue
 }
 finally {
     Pop-Location
