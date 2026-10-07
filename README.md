@@ -36,7 +36,7 @@
 - **Further points and measurements** — the South Node, Descendant, IC, Vertex and the Parts of Fortune and Spirit; the lunar phase at birth; each planet's distance from the Sun; parallels, contra-parallels and out-of-bounds planets by declination; the balance of the chart; chart ruler, house rulers and dispositors.
 
 ### Figure Library
-- **212 figures** across **14 categories** — Actors, Musicians, Writers, Artists, Scientists, Philosophers, Directors, Athletes, Political, Historical, and more.
+- **1,314 figures** across **14 categories** — Actors, Musicians, Writers, Artists, Scientists, Philosophers, Directors, Athletes, Political, Historical, and more.
 - **Every figure has a documented, recorded birth time** (Astro-Databank / Rodden-rated). Entries without a reliable birth time were removed, so no chart relies on a noon guess.
 - Each entry stores birth date, time, birth place, geographic coordinates, IANA time zone, and a one-sentence bio.
 - Birth instants are resolved with **historical, DST-aware UTC offsets** via the IANA timezone database (NodaTime), not just fixed offsets — correctly handling anomalies like the UK's 1968–71 year-round BST experiment and 1940s US wartime time. For births before standard time existed, the birthplace's own local mean time (from its longitude) is used, as astrological sources record them.
@@ -183,7 +183,7 @@ Lore/
 │   ├── LegendView.xaml/.cs    # Glyph + colour legend
 │   └── AddChartDialog.xaml/.cs# Custom chart entry dialog
 ├── Data/
-│   ├── celebrities.json       # 212 bundled figures (all with recorded birth times)
+│   ├── celebrities.json       # 1,314 bundled figures (all with recorded birth times)
 │   ├── cities.json            # ~50,250 cities (lat/lon + IANA tz)
 │   ├── hospitals.json         # ~235,000 hospitals (lat/lon), Add-Chart birthplace search
 │   ├── interpretations.json   # Corpus for the natural-language report
@@ -298,7 +298,7 @@ Output: `artifacts\LoreSetup-<version>.exe`.
 
 ### `Data\celebrities.json`
 
-212 figures in 14 categories, each with a documented birth time (Astro-Databank Rodden rating AA or A). Each entry:
+1,314 figures in 14 categories, each with a documented birth time (Astro-Databank Rodden rating AA or A). Each entry:
 
 ```jsonc
 {
@@ -320,6 +320,8 @@ Output: `artifacts\LoreSetup-<version>.exe`.
 ```
 
 `timeZoneId` (IANA zone) is preferred for historical offset resolution. `utcOffsetHours` is a fallback only. Entries without `timeZoneId` are backfilled from their coordinates at load time.
+
+38 figures also carry `"utcOffsetFixed": true`. For them `utcOffsetHours` is used as it stands, because Astro-Databank records a clock standard for that town on that day which the time-zone database does not have (mostly American towns before 1967, when daylight saving was a local matter, and wartime Europe). They are listed in `scripts\celebrity-expansion-2026-10-07.md`.
 
 `birthTimeKnown: false` → the planets are placed for noon, and the Ascendant, Midheaven, houses and dignity score are left out.
 

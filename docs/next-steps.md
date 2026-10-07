@@ -17,8 +17,10 @@ note stays true.
   GitHub on every push, followed by a build of the app itself (about 3 minutes).
 - The view models, the views and the three export services are **not** tested: they
   depend on WinUI or Win2D and the test project leaves them out.
-- 212 bundled figures, all rated AA or A. Three corpora: 307 natal aspect lines,
-  585 daily transit lines (none empty), 144 synastry lines.
+- 1,314 bundled figures (212 until 7 October 2026), all rated AA or A. How the
+  1,102 were found and checked, and the long list of who was looked up and left
+  out, is in `scripts/celebrity-expansion-2026-10-07.md`. Three corpora: 307 natal
+  aspect lines, 585 daily transit lines (none empty), 144 synastry lines.
 - Most of stages 1 and 2 of `natal-chart-metrics-research.md` shipped in 2.2.0.
   That document describes the code as it was before 2.2.0; its "correctness issues"
   section (third house, thresholds of 27 and −1, declination defaulting to zero) is
@@ -67,9 +69,25 @@ in 2.4.0; item 7 is still open.
    someone with family charts entered.
 6. ~~**Forecast and Timing as PDF.**~~ Done, in `DailyExportService`, which is now in the test project. **Was:** Both export as text only, while Daily and
    Synastry have PDFs. `DailyExportService` is a close model for both.
-7. **Uneven categories.** Spiritual has 1 figure, Media 2, Director and
+7. ~~**Uneven categories.**~~ Done on 7 October 2026 by the large batch of figures:
+   the smallest categories are now Entrepreneur and Spiritual with 37 each and
+   Historical with 40. **Was:** Spiritual has 1 figure, Media 2, Director and
    Entrepreneur 4 each, Historical and Royalty 5. Either fold the tiny ones into
    neighbours or fill them in the next batch of figures.
+8. **What the larger library leaves to do.** Not yet released: no version number
+   was changed and the README's Version History has no entry for it. Three things
+   follow from having six times as many figures:
+   - 38 figures use `utcOffsetFixed` because Astro-Databank's clock standard for
+     that town and day differs from the time-zone database (listed in the
+     expansion note). The Worksheet calls such an offset "set by hand"
+     (`BirthTimeResolver.Explain`), wording meant for a reader's own charts; a
+     bundled figure would read better as "as Astro-Databank records it".
+   - A third of the additions were born in France, because French records state
+     the hour. If a more even spread is wanted, the next batch should look
+     outside France and the United States.
+   - `SynastryScoringTests.The_bands_keep_their_proportions_across_the_library`
+     compares every pair (862,641) and now takes about 50 seconds. A fixed sample
+     would bring the test run back to a few seconds.
 
 ## 4. Features, in the order I would build them
 
@@ -257,7 +275,7 @@ be a setting if anyone asks.
    release, so a release no longer depends on one PC's setup. It needs Inno Setup
    on the runner and `assert-clean-release.ps1` to work without local history.
    Medium. Only worth it if releasing by hand becomes a chore.
-5. **README counts.** "212 figures", "585 lines", "144 lines" and "307 lines" are
+5. **README counts.** "1,314 figures", "585 lines", "144 lines" and "307 lines" are
    typed by hand in several places and drift each release. A test that reads the
    README and compares would catch it; or say "over 200".
 
@@ -277,7 +295,9 @@ investigated again from scratch.
 - **Every view is calculated on every selection**, not only the one on screen.
   Measured: daily scan 17 ms, 91-day forecast 117 ms, year forecast 489 ms, match
   search against 212 charts 82 ms, all off the UI thread, and now cancelled when
-  overtaken. Calculating only on demand would also break exporting the daily
+  overtaken. (With 1,314 figures the match search has not been timed again; by
+  proportion it would be about half a second. Scoring every chart at start-up was
+  measured at 0.4 seconds.) Calculating only on demand would also break exporting the daily
   horoscope from another view.
 - **The birth-time check runs on the UI thread.** Measured at 65 ms for the
   widest margin (±180 minutes), 4 ms for ±15, 37 ms for a whole-day scan.
