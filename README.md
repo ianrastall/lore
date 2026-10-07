@@ -4,14 +4,14 @@
 
 > A Windows desktop application for computing and exploring astrological natal charts — and reading a daily horoscope from them — powered by the Swiss Ephemeris. Browse a curated library of historical figures — every one with a documented birth time — or add your own.
 
-**Latest release: v2.6.0** · [Download](../../releases/latest)
+**Latest release: v2.6.5** · [Download](../../releases/latest)
 
 ### Installing
 
-1. From the [latest release](../../releases/latest), download **`LoreSetup-2.6.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`LoreSetup-2.6.5.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user only (no administrator prompt), adds a Start-menu shortcut, and can be removed from *Settings → Apps* like any other program.
 
-**Prefer not to install?** Download **`Lore-2.6.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
+**Prefer not to install?** Download **`Lore-2.6.5-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
 
 > **The installer is not code-signed.** Lore is a free hobby project and does not carry a paid signing certificate, so Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"* — choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -270,7 +270,7 @@ Produces a self-contained folder that runs with no installed .NET or VC++ runtim
 .\scripts\build-portable.ps1
 ```
 
-Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-2.6.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
+Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-2.6.5-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
 
 ### Step 4 — Installer
 
@@ -482,7 +482,14 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 2.6.0 (current)
+### 2.6.5 (current)
+A much larger library. Nothing else in Lore changes.
+- **1,102 more figures** — the library grows from 212 to **1,314**, with the same rule as before: every figure has a recorded birth time rated AA or A by Astro-Databank, a named birthplace and a stated time standard, and is checked against its Astro-Databank record by the tests. About 2,500 well-known names were looked up; those with lower-rated, conflicting, approximate or missing times were left out, which is why some very famous names are still absent.
+- **Every category filled out** — the small ones most of all: Spiritual grows from 1 figure to 37, Media from 2 to 68, Entrepreneur from 4 to 37, Royalty from 5 to 59, Historical from 5 to 40, Director from 4 to 52. There are now 234 actors, 215 musicians, 134 athletes, 131 writers, 98 political figures, 92 artists, 62 scientists and 55 philosophers.
+- **Clock standards taken from the record** — for 38 of the new figures, mostly born in American towns before 1967 or in wartime Europe, Astro-Databank records a clock standard for that town and day which the time-zone database does not have. Lore uses the recorded one, so the chart is cast for the same moment Astro-Databank gives. The Worksheet shows the offset used.
+- **Best and worst matches** — the Synastry view now compares a chart with every one of the 1,314 figures, so its lists draw on a far wider field.
+
+### 2.6.0
 A release of techniques Lore did not have, most of them suggested by a comparison with the Kerykeion library. Each is explained in the Legend.
 - **Annual profection** — the Timing view now gives the year's profection: the house of the birth chart brought to the fore at this age, counted in whole signs from the rising sign, the sign of the year, and its ruler as **Lord of the Year** with where it stands in the birth chart. It needs a birth time.
 - **Solar arc directions** — also in Timing: every point of the birth chart moved on by as far as the progressed Sun has gone, with the directed positions and any contact within a degree of the birth chart.

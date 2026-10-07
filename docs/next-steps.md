@@ -74,8 +74,8 @@ in 2.4.0; item 7 is still open.
    Historical with 40. **Was:** Spiritual has 1 figure, Media 2, Director and
    Entrepreneur 4 each, Historical and Royalty 5. Either fold the tiny ones into
    neighbours or fill them in the next batch of figures.
-8. **What the larger library leaves to do.** Not yet released: no version number
-   was changed and the README's Version History has no entry for it. Three things
+8. **What the larger library leaves to do.** Built as 2.6.5 on 7 October 2026; the
+   GitHub release is still to be published by hand. Three things
    follow from having six times as many figures:
    - 38 figures use `utcOffsetFixed` because Astro-Databank's clock standard for
      that town and day differs from the time-zone database (listed in the
