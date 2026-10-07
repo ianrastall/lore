@@ -249,6 +249,9 @@ public static class ExportService
         static List<TallyExport> Tallies(IReadOnlyList<Tally> tallies) =>
             tallies.Select(t => new TallyExport { Name = t.Name, Count = t.Count }).ToList();
 
+        static List<WeightExport> Weights(IReadOnlyList<Weight> weights) =>
+            weights.Select(w => new WeightExport { Name = w.Name, Points = w.Points }).ToList();
+
         return new ChartExport
         {
             GeneratedBy = "Lore",
@@ -390,6 +393,17 @@ public static class ExportService
                     .Select(l => $"{l[0].Name()} and {l[1].Name()}").ToList(),
                 Unaspected = m.Aspects.Unaspected.Select(x => x.Name()).ToList(),
             },
+            Dominants = new DominantsExport
+            {
+                Planet = m.Dominants.Planet?.Name() ?? "",
+                Planets = m.Dominants.Planets.Select(p => new PlanetStrengthExport
+                {
+                    Name = p.Planet.Name(), Points = Round(p.Score), MadeUpOf = string.Join("; ", p.Parts),
+                }).ToList(),
+                Signs = Weights(m.Dominants.Signs),
+                Elements = Weights(m.Dominants.Elements),
+                Modalities = Weights(m.Dominants.Modalities),
+            },
             Dignity = score is null ? null : new DignityExport
             {
                 Total = score.Total,
@@ -461,6 +475,7 @@ public sealed class ChartExport
     public List<DeclinationContactExport> DeclinationContacts { get; set; } = [];
     public BalanceExport Balance { get; set; } = new();
     public RulersExport Rulers { get; set; } = new();
+    public DominantsExport Dominants { get; set; } = new();
     public DignityExport? Dignity { get; set; }         // null without a birth time
 }
 
@@ -496,6 +511,34 @@ public sealed class BalanceExport
     public List<TallyExport> Polarities { get; set; } = [];
     public List<TallyExport> HouseTypes { get; set; } = [];    // empty without a birth time
     public List<TallyExport> Hemispheres { get; set; } = [];   // empty without a birth time
+}
+
+// Which planet stands out, by Lore's own weighting, and the chart's balance with the
+// Sun, Moon and Ascendant counting for more than the slow planets.
+public sealed class DominantsExport
+{
+    public string Planet { get; set; } = "";
+    [XmlArrayItem("Planet")]
+    public List<PlanetStrengthExport> Planets { get; set; } = [];   // strongest first
+    [XmlArrayItem("Sign")]
+    public List<WeightExport> Signs { get; set; } = [];
+    [XmlArrayItem("Element")]
+    public List<WeightExport> Elements { get; set; } = [];
+    [XmlArrayItem("Modality")]
+    public List<WeightExport> Modalities { get; set; } = [];
+}
+
+public sealed class PlanetStrengthExport
+{
+    public string Name { get; set; } = "";
+    public double Points { get; set; }
+    public string MadeUpOf { get; set; } = "";
+}
+
+public sealed class WeightExport
+{
+    public string Name { get; set; } = "";
+    public double Points { get; set; }
 }
 
 public sealed class RulersExport

@@ -78,6 +78,39 @@ public sealed class SettingsService
         }
     }
 
+    // Where the reader is, for sunrise, sunset and the planetary hours (home.json beside
+    // settings.json). It is not a calculation setting: no chart depends on it. Null
+    // until a city has been chosen, and null again once it is cleared.
+    private string HomePath => Path.Combine(Path.GetDirectoryName(_path)!, "home.json");
+
+    public HomePlace? LoadHome()
+    {
+        try
+        {
+            if (File.Exists(HomePath) && JsonSerializer.Deserialize<HomePlace>(File.ReadAllText(HomePath), JsonOpts) is { } home &&
+                !string.IsNullOrWhiteSpace(home.Name) && home.Latitude is >= -90 and <= 90 && home.Longitude is >= -180 and <= 180)
+                return home;
+        }
+        catch (Exception ex) when (ex is JsonException or IOException or UnauthorizedAccessException)
+        {
+            Diagnostics.Log($"Could not read {HomePath}: {ex.Message}");
+        }
+        return null;
+    }
+
+    public void SaveHome(HomePlace? home)
+    {
+        try
+        {
+            if (home is null) File.Delete(HomePath);
+            else File.WriteAllText(HomePath, JsonSerializer.Serialize(home, JsonOpts));
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            Diagnostics.Log($"Could not save {HomePath}: {ex.Message}");
+        }
+    }
+
     public void Save(ChartSettings settings)
     {
         try

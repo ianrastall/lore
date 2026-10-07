@@ -40,6 +40,13 @@ internal static partial class SwissEphemeris
 
     public const int SE_GREG_CAL = 1;
 
+    // Kinds of eclipse, as bits in what the eclipse searches return.
+    public const int SE_ECL_TOTAL         = 4;
+    public const int SE_ECL_ANNULAR       = 8;
+    public const int SE_ECL_PARTIAL       = 16;
+    public const int SE_ECL_ANNULAR_TOTAL = 32; // annular along part of the track, total along the rest
+    public const int SE_ECL_PENUMBRAL     = 64;
+
     // ── Native imports ────────────────────────────────────────────────────────
 
     // CALL_CONV is empty in the MAKE_DLL build without PASCAL defined → default cdecl.
@@ -85,6 +92,51 @@ internal static partial class SwissEphemeris
         int hsys,
         [MarshalAs(UnmanagedType.LPArray, SizeConst = 13)] double[] cusps,
         [MarshalAs(UnmanagedType.LPArray, SizeConst = 10)] double[] ascmc);
+
+    // The next eclipse of the Sun seen from anywhere on Earth after tjdStart (ifltype 0:
+    // of any kind). Returns the kind as SE_ECL_* bits, negative on error; tret[0] is the
+    // moment of greatest eclipse.
+    [LibraryImport(Dll, EntryPoint = "swe_sol_eclipse_when_glob")]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
+    public static partial int SolEclipseWhenGlob(
+        double tjdStart,
+        int ifl,
+        int ifltype,
+        [MarshalAs(UnmanagedType.LPArray, SizeConst = 10)] double[] tret,
+        int backward,
+        nint serr);
+
+    // The same for eclipses of the Moon.
+    [LibraryImport(Dll, EntryPoint = "swe_lun_eclipse_when")]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
+    public static partial int LunEclipseWhen(
+        double tjdStart,
+        int ifl,
+        int ifltype,
+        [MarshalAs(UnmanagedType.LPArray, SizeConst = 10)] double[] tret,
+        int backward,
+        nint serr);
+
+    public const int SE_CALC_RISE = 1;
+    public const int SE_CALC_SET  = 2;
+
+    // The next rising or setting (rsmi) of a body after tjdUt at a place; geopos is
+    // longitude, latitude and height in metres. By default the moment the upper edge of
+    // the disc touches the horizon, with refraction. Returns −2 if the body does not rise
+    // or set there (the midnight Sun), negative on error; tret[0] is the moment.
+    [LibraryImport(Dll, EntryPoint = "swe_rise_trans")]
+    [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]
+    public static partial int RiseTrans(
+        double tjdUt,
+        int ipl,
+        nint starname,   // null: a planet, not a star
+        int epheflag,
+        int rsmi,
+        [MarshalAs(UnmanagedType.LPArray, SizeConst = 3)] double[] geopos,
+        double atpress,
+        double attemp,
+        [MarshalAs(UnmanagedType.LPArray, SizeConst = 1)] double[] tret,
+        nint serr);
 
     [LibraryImport(Dll, EntryPoint = "swe_close")]
     [UnmanagedCallConv(CallConvs = [typeof(System.Runtime.CompilerServices.CallConvCdecl)])]

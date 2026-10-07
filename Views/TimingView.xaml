@@ -13,7 +13,7 @@
             <StackPanel>
                 <TextBlock Text="{x:Bind ViewModel.Title, Mode=OneWay}"
                            Style="{StaticResource TitleTextBlockStyle}"/>
-                <TextBlock Text="Two ways of carrying the birth chart forward to a date: the solar return for that year, and the chart progressed a day for each year of life. The positions are given as they are; nothing here is interpreted."
+                <TextBlock Text="Ways of carrying the birth chart forward to a date: the solar return and the profection for that year, the chart progressed a day for each year of life, and the chart directed by solar arc. Choose another place and the birth chart is relocated there too. The positions are given as they are; nothing here is interpreted."
                            Opacity="0.7" FontSize="12" Margin="0,2,0,0" TextWrapping="Wrap" MaxWidth="900" HorizontalAlignment="Left"/>
             </StackPanel>
 
@@ -39,14 +39,14 @@
                         Visibility="{x:Bind VisIf(ViewModel.CanChoosePlace), Mode=OneWay}">
                 <AutoSuggestBox x:Name="PlaceBox"
                                 Width="300"
-                                PlaceholderText="Cast the return for another place…"
+                                PlaceholderText="Cast for another place…"
                                 QueryIcon="Find"
                                 DisplayMemberPath="Display"
                                 TextMemberPath="Display"
                                 TextChanged="PlaceBox_TextChanged"
                                 QuerySubmitted="PlaceBox_QuerySubmitted"
-                                AutomationProperties.Name="Place to cast the solar return for"
-                                ToolTipService.ToolTip="Many astrologers cast the return for where the person was living that year. The moment is the same; the Ascendant and houses change with the place."/>
+                                AutomationProperties.Name="Place to cast the solar return and relocated chart for"
+                                ToolTipService.ToolTip="Many astrologers cast the return for where the person was living that year. The moment is the same; the Ascendant and houses change with the place. The birth chart is relocated to the same place, further down."/>
                 <TextBlock Text="{x:Bind ViewModel.PlaceText, Mode=OneWay}"
                            VerticalAlignment="Center"
                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>

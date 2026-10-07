@@ -13,7 +13,7 @@ note stays true.
 
 - Seven views: Chart, Report, Worksheet, Daily, Forecast, Timing, Synastry, plus the
   Legend. About 10,600 lines of C# and XAML; no file over 560 lines.
-- 240 tests, all passing, covering the calculation and data layer. They run on
+- 283 tests (as of 2.6.0), all passing, covering the calculation and data layer. They run on
   GitHub on every push, followed by a build of the app itself (about 3 minutes).
 - The view models, the views and the three export services are **not** tested: they
   depend on WinUI or Win2D and the test project leaves them out.
@@ -149,6 +149,7 @@ the note at the end):
 
 - **Composite chart** (midpoints of the two charts), the other standard
   relationship technique. Needs circular midpoints, which section 4.8 also wants.
+  (The Davison chart, its cousin, is in 2.6.0.)
 - **Text export** of the reading (PDF and PNG only today).
 - **House overlays for more than four planets** (`overlayPlanets` has Sun, Moon,
   Venus, Mars).
@@ -182,6 +183,59 @@ Still open from `natal-chart-metrics-research.md`:
 - sidereal zodiac, fixed stars, harmonic and draconic charts: each a mode of its
   own, large, and only worth it if asked for.
 
+### 4.9 A personality inventory beside the chart. Large. Undecided.
+
+An idea from 6 October 2026, written up for an outside opinion in
+`personality-inventory-proposal.md`: the reader sits a public-domain questionnaire
+(IPIP-NEO-120) and a new view compares what the chart describes with what they
+report. Not to be started until that opinion is in and Ian has said yes.
+
+### 4.10 ~~Ideas from Kerykeion.~~ Done in 2.6.0.
+
+On 6 October 2026 Lore was compared with Kerykeion (a Python astrology library,
+AGPL-3.0 like Lore; local copy at `D:\dev\proj\kerykeion`). Ideas only, no code taken.
+Ian made the gaps the list for 2.6.0. What was built, and where:
+
+- **Annual profections.** `TimingService.Profect`; a section of the Timing reading.
+  Whole signs from the rising sign, traditional rulers, birthday to birthday (29
+  February falls on 1 March in other years). The house topics come from `daily.json`
+  through `DailyInterpreter.HouseTopic`, handed to `TimingService` as a function.
+- **Solar arc directions.** `TimingService.Direct`; shares `Targets` and `Contacts`
+  with the progressions.
+- **Relocated chart.** `TimingService.Relocate`; a last section of the Timing reading
+  when a place is chosen. It uses the same place as the solar return, so there is one
+  box for both. A separate place for each, or a wheel for the relocated chart, would be
+  the next step if wanted.
+- **Void-of-course Moon.** `TransitService.VoidOfCourse`, in `DaySky.Voids`; written
+  under *Also in the sky*. Major aspects to the Sun and Mercury to Pluto, exact, no orb.
+- **Sky calendar.** `TransitService.SkyCalendar` and `ChartService.NextEclipse` (two
+  new Swiss Ephemeris imports); `ComposeForecast` takes the events and sets them among
+  the passes. Wording in the new `calendar` section of `daily.json`. Checked against
+  the almanac for 2026 in `SkyCalendarTests`.
+- **Dominant planets and weighted balance.** `NatalMetricsService.Dominants`; two
+  Worksheet tables and a `Dominants` block in the JSON and XML. The weights are in the
+  comment above the method and in the Legend. Across the timed figures the dominant
+  comes out as Mercury 41, Jupiter 37, Saturn 28, Mars 27, Moon 25, Sun 22, Venus 22,
+  Pluto 6, Uranus 3, Neptune 1: nothing runs away with it. Not yet shown in the Report,
+  the Chart view or the chart-with-tables PNG.
+- **Davison chart.** `ChartService.Davison`; a last section of the synastry reading.
+  Stated, not interpreted, and not drawn as a wheel.
+
+- **Planetary hours, and where the reader is.** Ian said yes to a saved place on
+  6 October 2026. `HomePlace`, kept in `home.json` beside `settings.json`
+  (`SettingsService.LoadHome` / `SaveHome`) and set in the Settings flyout;
+  `MainViewModel.Home` hands it to the Daily view model. `ChartService.NextSunriseOrSet`
+  (a `swe_rise_trans` import) and `TransitService.PlanetaryHours`; a last section of
+  the daily reading. Wording in `planetaryDays` and `notes.planetaryHours` in
+  `daily.json`. Sunrise and sunset checked against London's almanac times. The place
+  is used for nothing else yet; it would also serve a chosen time zone for the day
+  (4.5), rise and set times of the Moon, or a default place for relocation.
+Looked at and not recommended for Lore: sidereal modes, Vedic nakshatras, heliocentric
+and other viewpoints, Uranian points, trans-Neptunian bodies, Gauquelin sectors,
+astrocartography, primary directions, zodiacal releasing, firdaria, horary, heliacal
+events and occultations. Each is a specialist mode with its own audience and, for a
+reading, its own corpus. Topocentric positions (the Moon moves by up to a degree) could
+be a setting if anyone asks.
 ## 5. Keeping it sound
 
 1. **Test what the exports write.** `ExportService` builds the JSON and XML
@@ -244,8 +298,10 @@ investigated again from scratch.
    committed, built with `release.bat` and published.
 3. ~~The Daily wheel (4.1) and the solar return's place (4.2).~~ Written as
    2.5.0 on 6 October 2026; to be committed, built with `release.bat` and published.
-4. House systems (4.3) and the lunar return (4.4).
-5. Then whichever of 4.5 to 4.8 is wanted, with section 5's test work done
+4. ~~The Kerykeion list (4.10).~~ Written as 2.6.0 on 6 October 2026; to be committed,
+   built with `release.bat` and published.
+5. House systems (4.3) and the lunar return (4.4).
+6. Then whichever of 4.5 to 4.8 is wanted, with section 5's test work done
    alongside the feature that touches the same code.
 
 ---

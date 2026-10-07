@@ -32,6 +32,11 @@ public sealed partial class DailyViewModel : ObservableObject
     [ObservableProperty]
     public partial DateOnly Date { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 
+    // Where the reader is, from Settings; null until a city is chosen. With it the
+    // reading gains sunrise, sunset and the planetary hours.
+    [ObservableProperty]
+    public partial HomePlace? Home { get; set; }
+
     [ObservableProperty]
     public partial DailyReading? Reading { get; set; }
 
@@ -81,6 +86,8 @@ public sealed partial class DailyViewModel : ObservableObject
         Rebuild();
     }
 
+    partial void OnHomeChanged(HomePlace? value) => Rebuild();
+
     partial void OnDateChanged(DateOnly value)
     {
         OnPropertyChanged(nameof(PickerDate));
@@ -105,6 +112,7 @@ public sealed partial class DailyViewModel : ObservableObject
         int generation = ++_generation;
         var chart = Chart;
         var date = Date;
+        var home = Home;
         ErrorText = "";
 
         if (chart is null || _transits is null || _interpreter is null)
@@ -118,7 +126,7 @@ public sealed partial class DailyViewModel : ObservableObject
         try
         {
             var reading = await Task.Run(() =>
-                _interpreter.Compose(chart, _transits.Scan(chart, date, _zone), _zone));
+                _interpreter.Compose(chart, _transits.Scan(chart, date, _zone, home), _zone));
             if (generation == _generation)
                 Reading = reading;
         }

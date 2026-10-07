@@ -30,6 +30,13 @@ public sealed class DailyInterpreter
         public Dictionary<string, string> MoonPhases { get; init; } = new();
         public Dictionary<string, string> Retrogrades { get; init; } = new();
         public Dictionary<string, string> Stations { get; init; } = new();
+
+        // The forecast's sky calendar: eclipses, stations and changes of sign, with
+        // {planet} and {sign} filled in. (New and Full Moons use MoonPhases.)
+        public Dictionary<string, string> Calendar { get; init; } = new();
+
+        // What each of the seven planetary days is traditionally good for, by planet.
+        public Dictionary<string, string> PlanetaryDays { get; init; } = new();
         public Dictionary<string, string> DayTones { get; init; } = new();
         public Dictionary<string, string> Houses { get; init; } = new();
         public Dictionary<string, string> Notes { get; init; } = new();
@@ -56,6 +63,10 @@ public sealed class DailyInterpreter
             _c = new Corpus();
         }
     }
+
+    // What a house is about, in the corpus's few words ("home, family and private
+    // life"); empty if the corpus has no line for it.
+    public string HouseTopic(int house) => Lookup(_c.Houses, house.ToString(), "");
 
     public DailyReading Compose(NatalChart natal, DaySky sky, DateTimeZone zone)
     {
@@ -95,9 +106,12 @@ public sealed class DailyInterpreter
                 Items = background.Select(e => Item(e, sky, zone)).ToList()
             });
 
-        var skyNotes = SkyNotes(natal, sky, timed);
+        var skyNotes = SkyNotes(natal, sky, zone, timed);
         if (skyNotes.Count > 0)
             sections.Add(new DailySection { Heading = "Also in the sky", Items = skyNotes });
+
+        if (sky.Hours is { } hours)
+            sections.Add(HoursSection(hours, zone));
 
         return new DailyReading
         {
@@ -306,10 +320,13 @@ public sealed class DailyInterpreter
 
     // ── Forecast ──────────────────────────────────────────────────────────────
     // The passes found by TransitService.Forecast, written out month by month in the
-    // order they peak, each with the same line the Daily view would give it.
+    // order they peak, each with the same line the Daily view would give it. `sky`, if
+    // given, is the sky calendar for the same stretch, set among them in date order.
     public ForecastReading ComposeForecast(
-        NatalChart natal, IReadOnlyList<TransitPass> passes, DateOnly start, int days, DateTimeZone zone)
+        NatalChart natal, IReadOnlyList<TransitPass> passes, DateOnly start, int days, DateTimeZone zone,
+        IReadOnlyList<SkyEvent>? sky = null)
     {
+        sky ??= [];
         LocalDateTime Local(DateTime utc) => Instant.FromDateTimeUtc(DateTime.SpecifyKind(utc, DateTimeKind.Utc)).InZone(zone).LocalDateTime;
         string Day(DateTime utc) => Local(utc).ToString("d MMM", null);
         string Moment(DateTime utc) => Local(utc).ToString("d MMM, HH:mm", null);
@@ -356,13 +373,65 @@ public sealed class DailyInterpreter
             };
         }
 
-        var sections = passes
-            .GroupBy(p => { var d = Local(p.PeakUtc); return (d.Year, d.Month); })
+        string InHouse(SkyEvent e, string lead) => e.NatalHouse is { } house
+            ? $"  ·  {lead} your {ChartInterpreter.Ordinal(house)} house ({Lookup(_c.Houses, house.ToString(), "this area of life")})"
+            : "";
+        string At(SkyEvent e) => $"{ZodiacSignExtensions.FormatDegreeInSign(e.Longitude)} {e.Sign.Name()}";
+        string Line(string key, SkyEvent e) =>
+            Lookup(_c.Calendar, key, "").Replace("{planet}", e.Body.Name()).Replace("{sign}", e.Sign.Name());
+
+        DailyItem SkyItem(SkyEvent e)
+        {
+            switch (e.Kind)
+            {
+                case SkyEventKind.Station:
+                {
+                    string text = Line(e.Retrograde ? "Retrograde" : "Direct", e);
+                    // The three personal planets have a line of their own about their retrogrades.
+                    if (e.Retrograde && Lookup(_c.Retrogrades, e.Body.Name(), "") is { Length: > 0 } more)
+                        text = $"{text} {more}".Trim();
+                    return new DailyItem
+                    {
+                        Title = $"{e.Body.Symbol()} {e.Body.Name()} turns {(e.Retrograde ? "retrograde" : "direct")} at {At(e)}",
+                        Meta = Moment(e.Utc) +
+                               (e.DirectUtc is { } direct ? $"  ·  retrograde until {Local(direct).ToString("d MMM yyyy", null)}" : "") +
+                               InHouse(e, "in"),
+                        Text = text,
+                    };
+                }
+                case SkyEventKind.Ingress:
+                    return new DailyItem
+                    {
+                        Title = $"{e.Body.Symbol()} {e.Body.Name()} {(e.Retrograde ? "goes back into" : "enters")} {e.Sign.Name()}",
+                        Meta = Moment(e.Utc) + (e.Retrograde ? "  ·  retrograde" : "") + InHouse(e, "arriving in"),
+                        Text = Line(e.Retrograde ? "IngressRetrograde" : "Ingress", e),
+                    };
+                default:
+                {
+                    bool isNew = e.Kind is SkyEventKind.NewMoon or SkyEventKind.SolarEclipse;
+                    string phase = Lookup(_c.MoonPhases, (isNew ? MoonPhase.NewMoon : MoonPhase.FullMoon).ToString(), "");
+                    return new DailyItem
+                    {
+                        Title = e.IsEclipse
+                            ? $"{(isNew ? "☉ Solar" : "☽ Lunar")} eclipse ({e.EclipseType}) at {At(e)}"
+                            : $"☽ {(isNew ? "New" : "Full")} Moon at {At(e)}",
+                        Meta = Moment(e.Utc) + (e.IsEclipse ? $"  ·  {(isNew ? "a New Moon" : "a Full Moon")}" : "") + InHouse(e, "in"),
+                        Text = e.IsEclipse ? $"{Line(e.Kind.ToString(), e)} {phase}".Trim() : phase,
+                    };
+                }
+            }
+        }
+
+        var sections = passes.Select(p => (Utc: p.PeakUtc, Item: Item(p)))
+            .Concat(sky.Select(e => (e.Utc, Item: SkyItem(e))))
+            .Where(x => !string.IsNullOrWhiteSpace(x.Item.Text))
+            .OrderBy(x => x.Utc)
+            .GroupBy(x => { var d = Local(x.Utc); return (d.Year, d.Month); })
             .OrderBy(g => g.Key)
             .Select(g => new DailySection
             {
                 Heading = new DateOnly(g.Key.Year, g.Key.Month, 1).ToString("MMMM yyyy"),
-                Items = g.Select(Item).ToList(),
+                Items = g.Select(x => x.Item).ToList(),
             })
             .ToList();
 
@@ -381,6 +450,7 @@ public sealed class DailyInterpreter
             ZoneId = zone.Id,
             Sections = sections,
             Passes = passes,
+            Sky = sky,
         };
     }
 
@@ -414,9 +484,63 @@ public sealed class DailyInterpreter
         return [.. System.Text.Encoding.UTF8.GetPreamble(), .. System.Text.Encoding.UTF8.GetBytes(sb.ToString())];
     }
 
-    private List<DailyItem> SkyNotes(NatalChart natal, DaySky sky, bool timed)
+    // Sunrise, sunset and the twenty-four planetary hours where the reader is.
+    private DailySection HoursSection(PlanetaryHours h, DateTimeZone zone)
+    {
+        string Lines(IReadOnlyList<PlanetaryHour> hours) => string.Join("\n", hours.Select(x =>
+            $"{Time(x.StartUtc, zone)} – {Time(x.EndUtc, zone)}   {x.Ruler.Symbol()} {x.Ruler.Name()}"));
+        string Length(IReadOnlyList<PlanetaryHour> hours) =>
+            $"each a twelfth of the {(ReferenceEquals(hours, h.Day) ? "daylight" : "night")}: " +
+            $"{Math.Round((hours[0].EndUtc - hours[0].StartUtc).TotalMinutes):0} minutes";
+
+        return new DailySection
+        {
+            Heading = "Planetary hours",
+            Items =
+            [
+                new DailyItem
+                {
+                    Title = $"{h.DayRuler.Symbol()} {h.DayRuler.Name()}'s day  ·  sunrise {Time(h.SunriseUtc, zone)}  ·  sunset {Time(h.SunsetUtc, zone)}",
+                    Meta = $"at {h.Place.Name}  ·  the planetary day runs from sunrise to the next, at {Time(h.NextSunriseUtc, zone)}",
+                    Text = $"{Lookup(_c.PlanetaryDays, h.DayRuler.Name(), "")} " + Note("planetaryHours",
+                        "Each day of the week belongs to the planet it is named for, and so does its first hour after " +
+                        "sunrise. The hours that follow are ruled in turn by Saturn, Jupiter, Mars, the Sun, Venus, " +
+                        "Mercury and the Moon, round and round, and tradition picks the hour of a planet for the things " +
+                        "that planet governs."),
+                },
+                new DailyItem { Title = "Hours of the day", Meta = Length(h.Day), Text = Lines(h.Day) },
+                new DailyItem { Title = "Hours of the night", Meta = Length(h.Night), Text = Lines(h.Night) },
+            ],
+        };
+    }
+
+    private List<DailyItem> SkyNotes(NatalChart natal, DaySky sky, DateTimeZone zone, bool timed)
     {
         var items = new List<DailyItem>();
+
+        foreach (var v in sky.Voids)
+        {
+            bool before = v.StartUtc <= sky.StartUtc, after = v.EndUtc >= sky.EndUtc;
+            string span = (before, after) switch
+            {
+                (true, true)   => "all day",
+                (true, false)  => $"until {Time(v.EndUtc, zone)}",
+                (false, true)  => $"from {Time(v.StartUtc, zone)}, into tomorrow",
+                _              => $"from {Time(v.StartUtc, zone)} to {Time(v.EndUtc, zone)}",
+            };
+            items.Add(new DailyItem
+            {
+                Title = $"☽ Moon void of course {span}",
+                Meta = (v is { LastPlanet: { } planet, LastAspect: { } aspect }
+                           ? $"its last aspect in {v.Sign.Name()} is {(aspect == AspectType.Opposition ? "an" : "a")} {aspect.Name().ToLowerInvariant()} to {planet.Name()}"
+                           : $"it makes no aspect at all in {v.Sign.Name()}") +
+                       $"  ·  it then enters {v.Enters.Name()}",
+                Text = Note("voidOfCourse",
+                    "Between its last aspect in one sign and its entry into the next, the Moon is said to be void of " +
+                    "course. Tradition treats these hours as a pause: suited to routine, rest and finishing what is " +
+                    "already begun, and less to starting anything you want to come to something.")
+            });
+        }
 
         foreach (var station in sky.Stations)
         {

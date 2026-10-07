@@ -27,6 +27,7 @@ public sealed partial class MainWindow : Window
         NodeTypeCombo.SelectedIndex = (int)vm.Settings.Node;
         LilithTypeCombo.SelectedIndex = (int)vm.Settings.Lilith;
         ShowOrbs(vm.Settings.Orbs);
+        ShowHome();
         _settingsReady = true;
 
         AppWindow.Title = "Lore — Natal Charts";
@@ -278,6 +279,40 @@ public sealed partial class MainWindow : Window
             (Models.HouseSystem)HouseSystemCombo.SelectedIndex,
             (Models.NodeType)NodeTypeCombo.SelectedIndex,
             (Models.LilithType)LilithTypeCombo.SelectedIndex) { Orbs = ReadOrbs() });
+    }
+
+    // ── Where the reader is ───────────────────────────────────────────────────
+
+    private void ShowHome()
+    {
+        HomeText.Text = ViewModel.Home is { } home
+            ? $"{home.Name}: the Daily view gives sunrise, sunset and the planetary hours there."
+            : "Not set. Choose a city and the Daily view gives sunrise, sunset and the planetary hours there.";
+        HomeClearButton.Visibility = ViewModel.Home is null ? Visibility.Collapsed : Visibility.Visible;
+    }
+
+    private void HomeBox_TextChanged(Microsoft.UI.Xaml.Controls.AutoSuggestBox sender, Microsoft.UI.Xaml.Controls.AutoSuggestBoxTextChangedEventArgs args)
+    {
+        if (args.Reason == Microsoft.UI.Xaml.Controls.AutoSuggestionBoxTextChangeReason.UserInput)
+            sender.ItemsSource = ViewModel.Cities.Search(sender.Text);
+    }
+
+    // A suggestion was picked, or Enter pressed: take the pick, else the best match.
+    private void HomeBox_QuerySubmitted(Microsoft.UI.Xaml.Controls.AutoSuggestBox sender, Microsoft.UI.Xaml.Controls.AutoSuggestBoxQuerySubmittedEventArgs args)
+    {
+        var city = args.ChosenSuggestion as Models.City ?? ViewModel.Cities.Search(args.QueryText).FirstOrDefault();
+        if (city is null) return;
+
+        ViewModel.Home = new Models.HomePlace(city.Display, city.Latitude, city.Longitude);
+        sender.Text = "";
+        sender.ItemsSource = null;
+        ShowHome();
+    }
+
+    private void HomeClear_Click(object sender, RoutedEventArgs e)
+    {
+        ViewModel.Home = null;
+        ShowHome();
     }
 
     private void ShowLegend_Click(object sender, RoutedEventArgs e) => ViewModel.ShowLegend = true;

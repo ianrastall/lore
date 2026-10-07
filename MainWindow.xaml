@@ -254,6 +254,22 @@
                                                    Minimum="0" Maximum="15" SmallChange="0.5" SpinButtonPlacementMode="Compact"
                                                    ValueChanged="Orb_Changed"/>
                                     </Grid>
+                                    <AutoSuggestBox x:Name="HomeBox" Header="Where you are"
+                                                    PlaceholderText="Search for your city…"
+                                                    QueryIcon="Find"
+                                                    DisplayMemberPath="Display"
+                                                    TextMemberPath="Display"
+                                                    TextChanged="HomeBox_TextChanged"
+                                                    QuerySubmitted="HomeBox_QuerySubmitted"
+                                                    AutomationProperties.Name="Where you are"
+                                                    ToolTipService.ToolTip="Used only for sunrise, sunset and the planetary hours in the Daily view. It is kept on this PC and changes nothing about any chart."/>
+                                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                                        <TextBlock x:Name="HomeText" Grid.Column="0" TextWrapping="Wrap" FontSize="12"
+                                                   VerticalAlignment="Center"
+                                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                                        <Button x:Name="HomeClearButton" Grid.Column="1" Content="Clear" Click="HomeClear_Click"
+                                                AutomationProperties.Name="Clear where you are"/>
+                                    </Grid>
                                     <TextBlock TextWrapping="Wrap" FontSize="11"
                                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                                Text="House system, node and Lilith apply to every chart, the daily horoscope and synastry. The orbs apply to aspects within a birth chart; synastry (6°) and the daily horoscope (1°) keep their own. Each chart shows which settings were used."/>

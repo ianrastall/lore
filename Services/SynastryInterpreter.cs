@@ -89,6 +89,9 @@ public sealed class SynastryInterpreter
         if (overlays.Count > 0)
             sections.Add(new DailySection { Heading = "In each other's houses", Items = overlays });
 
+        if (s.Davison is { } davison)
+            sections.Add(DavisonSection(davison));
+
         return new SynastryReading
         {
             FirstName = s.First.Celebrity.Name,
@@ -220,6 +223,56 @@ public sealed class SynastryInterpreter
                            .Replace("{brings}", JoinList(bodies.Select(p => Lookup(_c.OverlayPlanets, p.Name(), p.Name()))))
             };
         }
+    }
+
+    // The Davison chart, stated and not interpreted: when and where it is cast for, and
+    // where everything in it stands.
+    private DailySection DavisonSection(NatalChart d)
+    {
+        static string Position(double longitude) =>
+            $"{ZodiacSignExtensions.FormatDegreeInSign(longitude)} {ZodiacSignExtensions.FromLongitude(longitude).Name()}";
+        static string Coordinate(double value, char positive, char negative)
+        {
+            int total = (int)Math.Round(Math.Abs(value) * 60);
+            return $"{total / 60}°{total % 60:D2}'{(value < 0 ? negative : positive)}";
+        }
+
+        var lines = new List<string>();
+        if (d.Timed)
+        {
+            lines.Add($"Ascendant {Position(d.Ascendant)}");
+            lines.Add($"Midheaven {Position(d.Midheaven)}");
+        }
+        lines.AddRange(d.Planets
+            .Where(p => d.Timed || p.Planet != Planet.Moon)
+            .Select(p => $"{p.PlanetSymbol} {p.PlanetName} {Position(p.Longitude)}{(p.IsRetrograde ? " ℞" : "")}" +
+                         (d.Timed ? $" — {ChartInterpreter.Ordinal(d.GetHouseForLongitude(p.Longitude))} house" : "")));
+
+        return new DailySection
+        {
+            Heading = "The Davison chart",
+            Items =
+            [
+                new DailyItem
+                {
+                    Title = "A chart for the midpoint in time and place",
+                    Meta = $"{d.CalculatedForUtc.ToString("d MMMM yyyy, HH:mm", System.Globalization.CultureInfo.InvariantCulture)} UT  ·  " +
+                           $"{Coordinate(d.Celebrity.Latitude, 'N', 'S')}, {Coordinate(d.Celebrity.Longitude, 'E', 'W')}",
+                    Text = Lookup(_c.Notes, "davison",
+                        "The Davison chart is cast for the moment halfway between the two births, at the place halfway " +
+                        "between the two birthplaces. Unlike the comparison above, which sets one chart against the " +
+                        "other, it is a single real chart, and astrologers read it as the chart of the relationship itself."),
+                },
+                new DailyItem
+                {
+                    Title = "Where everything stands in it",
+                    Meta = d.Timed ? d.HouseSystemLabel
+                        : Lookup(_c.Notes, "davisonUntimed",
+                            "a birth time is missing, so the midpoint may be hours out: the Ascendant, Midheaven, houses and Moon are left out"),
+                    Text = string.Join("\n", lines),
+                },
+            ],
+        };
     }
 
     // "warmth", "warmth and drive", "warmth, affection and drive".

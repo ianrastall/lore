@@ -112,6 +112,35 @@ public sealed class ChartService
         };
     }
 
+    // The Davison chart of two people: an ordinary chart, cast for the moment halfway
+    // between their births at the place halfway between their birthplaces (the mean of
+    // the latitudes, and the longitude midway round the shorter side of the globe). With
+    // a birth time missing the midpoint could be hours out, so the chart is then marked
+    // untimed and its angles, houses and Moon are not to be read.
+    public NatalChart Davison(NatalChart first, NatalChart second)
+    {
+        var utc = first.CalculatedForUtc + (second.CalculatedForUtc - first.CalculatedForUtc) / 2;
+        Celebrity a = first.Celebrity, b = second.Celebrity;
+        double apart = ((b.Longitude - a.Longitude) % 360 + 540) % 360 - 180;   // −180…+180
+        double longitude = ((a.Longitude + apart / 2) % 360 + 540) % 360 - 180;
+        double latitude = (a.Latitude + b.Latitude) / 2;
+
+        return CalculateAt(new Celebrity
+        {
+            Id = $"davison:{a.Id}:{b.Id}",
+            Name = $"{a.Name} & {b.Name}",
+            Category = "Davison",
+            BirthDate = utc.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture),
+            BirthTime = utc.ToString("HH:mm", System.Globalization.CultureInfo.InvariantCulture),
+            BirthTimeKnown = a.BirthTimeKnown && b.BirthTimeKnown,
+            BirthPlace = $"midway between {a.BirthPlace} and {b.BirthPlace}",
+            Latitude = latitude,
+            Longitude = longitude,
+            UtcOffsetHours = 0,
+            UtcOffsetFixed = true,
+        }, utc);
+    }
+
     // Every body's position at an arbitrary instant (the "transit sky"), with the same
     // bodies, flags and lock as a natal calculation.
     public IReadOnlyList<PlanetPosition> CalculateSky(double jd)
@@ -146,6 +175,47 @@ public sealed class ChartService
             Latitude = xx[1],
             SpeedLongitude = xx[3],
         };
+    }
+
+    // The next eclipse after an instant, of the Sun (seen from anywhere on Earth) or of
+    // the Moon: the moment it is greatest, and its kind in a word. Null if the
+    // ephemeris cannot say.
+    public (double Jd, string Kind)? NextEclipse(double afterJd, bool lunar)
+    {
+        var tret = new double[10];
+        int type;
+        lock (SweLock)
+        {
+            type = lunar
+                ? SwissEphemeris.LunEclipseWhen(afterJd, SwissEphemeris.SEFLG_SWIEPH, 0, tret, 0, nint.Zero)
+                : SwissEphemeris.SolEclipseWhenGlob(afterJd, SwissEphemeris.SEFLG_SWIEPH, 0, tret, 0, nint.Zero);
+        }
+        if (type < 0) return null;
+
+        string kind =
+            (type & SwissEphemeris.SE_ECL_ANNULAR_TOTAL) != 0 ? "hybrid"
+            : (type & SwissEphemeris.SE_ECL_TOTAL) != 0 ? "total"
+            : (type & SwissEphemeris.SE_ECL_ANNULAR) != 0 ? "annular"
+            : (type & SwissEphemeris.SE_ECL_PENUMBRAL) != 0 ? "penumbral"
+            : "partial";
+        return (tret[0], kind);
+    }
+
+    // The next sunrise (or sunset) after an instant at a place: when the Sun's upper edge
+    // touches a sea-level horizon, with standard refraction, as almanacs give it. Null
+    // if the Sun does not rise (or set) there within the next days, as inside the polar
+    // circles in midsummer and midwinter.
+    public double? NextSunriseOrSet(double afterJd, double latitude, double longitude, bool sunset)
+    {
+        var when = new double[1];
+        int result;
+        lock (SweLock)
+        {
+            result = SwissEphemeris.RiseTrans(afterJd, SwissEphemeris.SE_SUN, nint.Zero, SwissEphemeris.SEFLG_SWIEPH,
+                sunset ? SwissEphemeris.SE_CALC_SET : SwissEphemeris.SE_CALC_RISE,
+                [longitude, latitude, 0], 1013.25, 15, when, nint.Zero);
+        }
+        return result < 0 ? null : when[0];
     }
 
     // Set when a calculation could not use the Swiss Ephemeris data files and fell back

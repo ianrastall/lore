@@ -5,12 +5,19 @@ using System.Text;
 
 namespace Lore.Services;
 
-// Two ways of carrying a birth chart forward in time, both standard practice:
+// Ways of carrying a birth chart forward in time, all standard practice:
 //
 //   • the solar return — the chart for the moment each year when the Sun comes back to
 //     its exact place at birth, read as a picture of the year to the next birthday;
+//   • the annual profection — one house, counted round from the rising sign, for each
+//     year of life, and the ruler of its sign as Lord of the Year;
 //   • secondary progressions — "a day for a year": the sky as it stood as many days
-//     after birth as the person is years old, read against the birth chart.
+//     after birth as the person is years old, read against the birth chart;
+//   • solar arc directions — every point of the birth chart moved on by as far as the
+//     progressed Sun has gone.
+//
+// And one way of carrying it somewhere else: the relocated chart, the same birth moment
+// under another place's horizon.
 //
 // This is the astronomy and the plain statement of it. Nothing here is interpreted.
 public sealed class TimingService
@@ -28,7 +35,15 @@ public sealed class TimingService
 
     private readonly ChartService _charts;
 
-    public TimingService(ChartService charts) => _charts = charts;
+    // What a house is about, in a few words ("home, family and private life"), for the
+    // lines that name one. Without it they name the house and leave it at that.
+    private readonly Func<int, string>? _houseTopic;
+
+    public TimingService(ChartService charts, Func<int, string>? houseTopic = null)
+    {
+        _charts = charts;
+        _houseTopic = houseTopic;
+    }
 
     // ── Solar return ──────────────────────────────────────────────────────────
 
@@ -103,28 +118,8 @@ public sealed class TimingService
                 points.Add(new ProgressedPoint(NatalPoint.Ascendant, asc, natal.Ascendant, false));
         }
 
-        var targets = natal.Planets
-            .Where(p => natal.Timed || p.Planet != Planet.Moon)
-            .Select(p => (Point: NatalPoint.Of(p.Planet), p.Longitude)).ToList();
-        if (natal.Timed)
-        {
-            targets.Add((NatalPoint.Ascendant, natal.Ascendant));
-            targets.Add((NatalPoint.Midheaven, natal.Midheaven));
-        }
-
-        var aspects = new List<ProgressedAspect>();
-        foreach (var p in points)
-            foreach (var (target, lon) in targets)
-            {
-                if (p.Point.IsAngle && target.IsAngle) continue; // the angles move together
-                double separation = Math.Abs(Signed(p.Longitude - lon));
-                foreach (var type in AspectTypeExtensions.Majors)
-                {
-                    double orb = Math.Abs(separation - type.Angle());
-                    if (orb <= Orb) { aspects.Add(new ProgressedAspect(p.Point, target, type, orb)); break; }
-                }
-            }
-        aspects.Sort((a, b) => a.Orb.CompareTo(b.Orb));
+        // The angles move together, so one is never read against the other.
+        var aspects = Contacts(points, Targets(natal), (moved, target) => moved.IsAngle && target.IsAngle);
 
         double sunLon = sky.FirstOrDefault(p => p.Planet == Planet.Sun)?.Longitude ?? 0;
         double moonLon = sky.FirstOrDefault(p => p.Planet == Planet.Moon)?.Longitude ?? 0;
@@ -143,22 +138,172 @@ public sealed class TimingService
         };
     }
 
+    // The natal points a moved point can make contact with. Without a birth time the
+    // Moon may be several degrees out and the angles are unknown.
+    private static List<(NatalPoint Point, double Longitude)> Targets(NatalChart natal)
+    {
+        var targets = natal.Planets
+            .Where(p => natal.Timed || p.Planet != Planet.Moon)
+            .Select(p => (Point: NatalPoint.Of(p.Planet), p.Longitude)).ToList();
+        if (natal.Timed)
+        {
+            targets.Add((NatalPoint.Ascendant, natal.Ascendant));
+            targets.Add((NatalPoint.Midheaven, natal.Midheaven));
+        }
+        return targets;
+    }
+
+    // Each moved point against each natal one: the major aspects within Orb, closest first.
+    private static List<ProgressedAspect> Contacts(
+        IEnumerable<ProgressedPoint> points, List<(NatalPoint Point, double Longitude)> targets,
+        Func<NatalPoint, NatalPoint, bool> skip)
+    {
+        var aspects = new List<ProgressedAspect>();
+        foreach (var p in points)
+            foreach (var (target, lon) in targets)
+            {
+                if (skip(p.Point, target)) continue;
+                double separation = Math.Abs(Signed(p.Longitude - lon));
+                foreach (var type in AspectTypeExtensions.Majors)
+                {
+                    double orb = Math.Abs(separation - type.Angle());
+                    if (orb <= Orb) { aspects.Add(new ProgressedAspect(p.Point, target, type, orb)); break; }
+                }
+            }
+        aspects.Sort((a, b) => a.Orb.CompareTo(b.Orb));
+        return aspects;
+    }
+
+    // ── Annual profection ─────────────────────────────────────────────────────
+
+    // The year of life the date falls in, and the house and sign it switches on. Null
+    // without a birth time (there is no rising sign to count from) or before the birth.
+    public Profection? Profect(NatalChart natal, DateOnly asOf)
+    {
+        if (!natal.Timed) return null;
+
+        // Years run from birthday to birthday; someone born on 29 February has theirs
+        // on 1 March in the years without one.
+        var born = BirthTimeResolver.GregorianDate(natal.Celebrity);
+        DateOnly Birthday(int year) => born is { Month: 2, Day: 29 } && !DateTime.IsLeapYear(year)
+            ? new DateOnly(year, 3, 1)
+            : new DateOnly(year, born.Month, born.Day);
+
+        int age = asOf.Year - born.Year - (asOf < Birthday(asOf.Year) ? 1 : 0);
+        if (age < 0) return null;
+
+        int step = age % 12;
+        var sign = (ZodiacSign)(((int)ZodiacSignExtensions.FromLongitude(natal.Ascendant) + step) % 12);
+        var lord = DignityService.RulerOf(sign);
+        var lordAt = natal.GetPlanet(lord);
+        return new Profection(age, step + 1, sign, lord, lordAt?.Sign,
+            lordAt is null ? null : natal.GetHouseForLongitude(lordAt.Longitude),
+            Birthday(born.Year + age), Birthday(born.Year + age + 1));
+    }
+
+    // ── Solar arc ─────────────────────────────────────────────────────────────
+
+    // Null when the Sun could not be progressed, or for a date before the birth.
+    public static SolarArc? Direct(NatalChart natal, Progression progression)
+    {
+        if (progression.AgeYears < 0 || progression.Get(NatalPoint.Of(Planet.Sun)) is not { } sun) return null;
+
+        double arc = Normalize(sun.Longitude - sun.NatalLongitude);
+        var targets = Targets(natal);
+        var points = targets
+            .Select(t => new ProgressedPoint(t.Point, Normalize(t.Longitude + arc), t.Longitude, false))
+            .ToList();
+        // Every point is the same arc from its own natal place; that is not a contact.
+        return new SolarArc { Arc = arc, Points = points, Aspects = Contacts(points, targets, (moved, target) => moved == target) };
+    }
+
+    // ── Relocation ────────────────────────────────────────────────────────────
+
+    // The birth moment cast for another place. Null without a birth time: only the
+    // angles and houses change, and without a time there are none.
+    public Relocation? Relocate(NatalChart natal, ReturnPlace? place) =>
+        place is null || !natal.Timed ? null
+        : new Relocation(place, _charts.CalculateAt(natal.Celebrity, natal.CalculatedForUtc, place.Latitude, place.Longitude));
+
     // ── Written out ───────────────────────────────────────────────────────────
 
-    // `place`: where the solar return is cast for, if not the birthplace. The
-    // progressions do not depend on it.
+    // `place`: where the solar return is cast for, if not the birthplace, and where the
+    // birth chart is relocated to. The profection, progressions and solar arc do not
+    // depend on it.
     public TimingReading Compose(NatalChart natal, DateOnly asOf, DateTimeZone zone, ReturnPlace? place = null)
     {
         var solar = SolarReturnInForce(natal, asOf, zone, place);
+        var profection = Profect(natal, asOf);
         var progression = Progress(natal, asOf);
+        var solarArc = Direct(natal, progression);
+        var relocation = Relocate(natal, place);
+
+        var sections = new List<DailySection> { ReturnSection(natal, solar, zone) };
+        if (ProfectionSection(natal, profection) is { } profected) sections.Add(profected);
+        sections.Add(ProgressionSection(natal, progression));
+        if (solarArc is not null) sections.Add(SolarArcSection(natal, solarArc));
+        if (relocation is not null) sections.Add(RelocationSection(natal, relocation));
+
         return new TimingReading
         {
             Name = natal.Celebrity.Name,
             AsOf = asOf,
             Return = solar,
             Progression = progression,
-            Sections = [ReturnSection(natal, solar, zone), ProgressionSection(natal, progression)],
+            Profection = profection,
+            SolarArc = solarArc,
+            Relocation = relocation,
+            Sections = sections,
         };
+    }
+
+    // " (home, family and private life)", or nothing if no topics were supplied.
+    private string Topic(int house) =>
+        _houseTopic?.Invoke(house) is { Length: > 0 } topic ? $" ({topic})" : "";
+
+    // Null for a date before the birth, when there is nothing to say.
+    private DailySection? ProfectionSection(NatalChart natal, Profection? p)
+    {
+        if (!natal.Timed)
+            return new DailySection
+            {
+                Heading = "Annual profection",
+                Items =
+                [
+                    new DailyItem
+                    {
+                        Text = "A profection is counted round the chart from the rising sign, one sign for each year of " +
+                               "life. Without a birth time the rising sign is unknown, so there is nothing to count from."
+                    }
+                ]
+            };
+        if (p is null) return null;
+
+        string house = Ordinal(p.House);
+        var items = new List<DailyItem>
+        {
+            new()
+            {
+                Title = $"Age {p.Age}: a {house}-house year",
+                Meta = $"from {p.From:d MMMM yyyy} until {p.Until:d MMMM yyyy}  ·  counted from the Ascendant in " +
+                       ZodiacSignExtensions.FromLongitude(natal.Ascendant).Name(),
+                Text = "An annual profection moves the Ascendant on by one whole sign for each year of life, so every " +
+                       "birthday brings the next house of the birth chart to the fore, and every twelve years the count " +
+                       $"comes back to the first. This year it has reached the {house} house{Topic(p.House)}. The count " +
+                       "is by whole signs, whatever house system the chart is drawn in."
+            },
+            new()
+            {
+                Title = $"{p.Sign.Symbol()} {p.Sign.Name()} is the sign of the year  ·  {p.Lord.Symbol()} {p.Lord.Name()} is Lord of the Year",
+                Text = $"{p.Lord.Name()} is the traditional ruler of {p.Sign.Name()}." +
+                       (p is { LordSign: { } sign, LordHouse: { } lordHouse }
+                           ? $" In the birth chart it stands in {sign.Name()}, in the {Ordinal(lordHouse)} house{Topic(lordHouse)}."
+                           : "") +
+                       $" Astrologers who use profections watch {p.Lord.Name()} through the year: its place in the birth " +
+                       "chart, its place in the solar return, and the transits to and from it."
+            },
+        };
+        return new DailySection { Heading = $"Annual profection for age {p.Age}", Items = items };
     }
 
     private static DailySection ReturnSection(NatalChart natal, SolarReturn? solar, DateTimeZone zone)
@@ -264,11 +409,79 @@ public sealed class TimingService
         return new DailySection { Heading = $"Secondary progressions for {p.AsOf:d MMMM yyyy}", Items = items };
     }
 
+    private static DailySection SolarArcSection(NatalChart natal, SolarArc s)
+    {
+        string Name(NatalPoint point) => point.IsAngle ? point.Name : $"{point.Symbol} {point.Name}";
+
+        var items = new List<DailyItem>
+        {
+            new()
+            {
+                Title = $"The solar arc is {FormatOrb(s.Arc)}",
+                Meta = "how far the progressed Sun has moved from the Sun's place at birth",
+                Text = "Solar arc directions move every point of the birth chart forward by the same distance: as far " +
+                       "as the progressed Sun has travelled, about a degree for each year of life. The chart keeps its " +
+                       "shape and turns as a whole, so the slow planets, which hardly move by progression, take part too."
+            },
+            new()
+            {
+                Title = "Directed positions",
+                Meta = natal.Timed ? null : "no birth time: the Moon and the angles are left out",
+                Text = string.Join("\n", s.Points.Select(x =>
+                    $"{Name(x.Point)} {Position(x.Longitude)}   (at birth {Position(x.NatalLongitude)})" +
+                    (natal.Timed && !x.Point.IsAngle ? $" — {Ordinal(natal.GetHouseForLongitude(x.Longitude))} house of the birth chart" : "")))
+            },
+            new()
+            {
+                Title = $"Contacts to the birth chart (within {Orb:0}°)",
+                Meta = "a degree is about a year, so each of these is within a year or so of exact",
+                Text = s.Aspects.Count == 0
+                    ? "No directed point is within a degree of an aspect to the birth chart at this date."
+                    : string.Join("\n", s.Aspects.Select(a =>
+                        $"Directed {Name(a.Progressed)} {a.Type.Verb()} natal {Name(a.Natal)} — {FormatOrb(a.Orb)} from exact"))
+            },
+        };
+        return new DailySection { Heading = "Solar arc directions", Items = items };
+    }
+
+    private DailySection RelocationSection(NatalChart natal, Relocation r)
+    {
+        var chart = r.Chart;
+        var items = new List<DailyItem>
+        {
+            new()
+            {
+                Title = "The same birth moment, somewhere else",
+                Meta = $"{chart.HouseSystemLabel}  ·  the birthplace is {natal.Celebrity.BirthPlace}",
+                Text = "A relocated chart keeps the moment of birth and changes the place. The planets stay in the same " +
+                       "signs and degrees and keep their aspects to one another; the Ascendant, the Midheaven and the " +
+                       "houses are those of the new place, so the planets fall in different houses there."
+            },
+            new()
+            {
+                Title = "The relocated angles",
+                Text = $"Ascendant {Position(chart.Ascendant)}   (at the birthplace {Position(natal.Ascendant)})\n" +
+                       $"Midheaven {Position(chart.Midheaven)}   (at the birthplace {Position(natal.Midheaven)})"
+            },
+            new()
+            {
+                Title = "Where the planets fall",
+                Text = string.Join("\n", natal.Planets.Select(p =>
+                {
+                    int there = chart.GetHouseForLongitude(p.Longitude), here = natal.GetHouseForLongitude(p.Longitude);
+                    return $"{p.PlanetSymbol} {p.PlanetName} — {Ordinal(there)} house{Topic(there)}" +
+                           (there == here ? ", as at the birthplace" : $"; at the birthplace, the {Ordinal(here)}");
+                }))
+            },
+        };
+        return new DailySection { Heading = $"Birth chart relocated to {r.Place.Name}", Items = items };
+    }
+
     // The reading as plain text, for saving or pasting into notes.
     public static byte[] ToText(TimingReading t)
     {
         var sb = new StringBuilder();
-        sb.AppendLine($"{t.Name} — Solar return and progressions");
+        sb.AppendLine($"{t.Name} — Solar return, profection and progressions");
         sb.AppendLine($"As of {t.AsOf:d MMMM yyyy}");
         foreach (var section in t.Sections)
         {

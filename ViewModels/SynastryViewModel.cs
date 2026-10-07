@@ -246,7 +246,8 @@ public sealed partial class SynastryViewModel : ObservableObject
         {
             var (comparison, reading) = await Task.Run(() =>
             {
-                var synastry = SynastryService.Compare(chart, _charts.Calculate(partner));
+                var other = _charts.Calculate(partner);
+                var synastry = SynastryService.Compare(chart, other, _charts.Davison(chart, other));
                 return (synastry, _interpreter.Compose(synastry));
             });
             if (generation == _generation)

@@ -185,6 +185,9 @@ public static class DignityService
     // The tables above, for the Worksheet's rulers section.
     public static Planet RulerOf(ZodiacSign sign) => DomicileRuler[(int)sign];
 
+    public static bool IsExalted(Planet planet, ZodiacSign sign) =>
+        ExaltationSign.TryGetValue(planet, out var exalted) && exalted == sign;
+
     public static Planet FaceRuler(ZodiacSign sign, double degInSign) =>
         Faces[(int)sign][Math.Clamp((int)(degInSign / 10), 0, 2)];
 

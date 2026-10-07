@@ -11,7 +11,7 @@
             <StackPanel>
                 <TextBlock Text="{x:Bind ViewModel.Title, Mode=OneWay}"
                            Style="{StaticResource TitleTextBlockStyle}"/>
-                <TextBlock Text="The transits coming up for this chart, in the order they peak — a prompt for reflection, not a prediction. The Moon's quick contacts are left to the Daily view."
+                <TextBlock Text="The transits coming up for this chart, in the order they peak, with what the sky itself is doing set among them — a prompt for reflection, not a prediction. The Moon's quick contacts are left to the Daily view."
                            Opacity="0.7" FontSize="12" Margin="0,2,0,0" TextWrapping="Wrap"/>
             </StackPanel>
 
@@ -34,6 +34,9 @@
             <CheckBox Content="Include the Sun, Mercury, Venus and Mars"
                       IsChecked="{x:Bind ViewModel.IncludeFast, Mode=TwoWay}" Margin="0,-8,0,0"
                       ToolTipService.ToolTip="Untick to list only Jupiter and beyond: fewer transits, each lasting weeks"/>
+            <CheckBox Content="Include the sky calendar"
+                      IsChecked="{x:Bind ViewModel.IncludeSky, Mode=TwoWay}" Margin="0,-12,0,0"
+                      ToolTipService.ToolTip="New and Full Moons, eclipses, planets turning retrograde or direct, and the slow planets changing sign: the same for everyone, each with the house of this chart it falls in"/>
 
             <TextBlock Text="{x:Bind ViewModel.ErrorText, Mode=OneWay}"
                        Foreground="#E5534B" TextWrapping="Wrap"

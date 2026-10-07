@@ -240,4 +240,104 @@ public class NatalMetricsServiceTests
         Assert.Null(m.Rulers.ChartRuler);
         Assert.Equal(13, m.Rulers.Dispositions.Count);
     }
+
+    // ── Dominants ─────────────────────────────────────────────────────────────
+
+    [Fact]
+    public void A_planet_on_the_Ascendant_that_rules_it_dominates_the_chart()
+    {
+        // Aries rising with Mars two degrees from the Ascendant; the Sun in Leo, the
+        // Moon in Taurus, and nothing in aspect (the made-up chart carries none).
+        var chart = Chart(10, At(Planet.Sun, 130), At(Planet.Moon, 40), At(Planet.Mars, 12), At(Planet.Saturn, 200));
+        var d = NatalMetricsService.Compute(chart).Dominants;
+
+        Assert.Equal(Planet.Mars, d.Planet);
+        Assert.Equal(d.Planets.OrderByDescending(p => p.Score).Select(p => p.Planet), d.Planets.Select(p => p.Planet));
+
+        // Mars: 2° from the Ascendant is 10 × 0.8; in its own sign 5; rules the Ascendant 8.
+        var mars = d.Planets[0];
+        Assert.Equal(8 + 5 + 8, mars.Score, 6);
+        Assert.Equal(["2°00' from the Ascendant 8.0", "in its own sign, Aries 5.0", "rules the Ascendant 8.0"], mars.Parts);
+
+        // The Sun in Leo is in its own sign, and is not counted again for ruling itself;
+        // as a light it starts with 3.
+        Assert.Equal(3 + 5, d.Planets.Single(p => p.Planet == Planet.Sun).Score, 6);
+        // The Moon is exalted in Taurus; Saturn in Libra is exalted and rules the Midheaven (Capricorn).
+        Assert.Equal(3 + 4, d.Planets.Single(p => p.Planet == Planet.Moon).Score, 6);
+        Assert.Equal(4 + 3, d.Planets.Single(p => p.Planet == Planet.Saturn).Score, 6);
+    }
+
+    [Fact]
+    public void A_close_aspect_counts_for_more_than_a_wide_one_and_a_generational_one_for_half()
+    {
+        static Aspect Of(Planet a, Planet b, AspectType type, double orb) =>
+            new() { PlanetA = a, PlanetB = b, Type = type, Orb = orb, Allowed = 8 };
+        NatalChart With(params Aspect[] aspects) => new()
+        {
+            Celebrity = new Celebrity { Id = "t", Name = "T", BirthDate = "2000-01-01", BirthTimeKnown = false },
+            Planets = [At(Planet.Venus, 95), At(Planet.Jupiter, 185), At(Planet.Uranus, 275), At(Planet.Neptune, 5)],
+            Houses = [], Aspects = aspects,
+        };
+        double Score(NatalChart c, Planet p) => NatalMetricsService.Compute(c).Dominants.Planets.Single(x => x.Planet == p).Score;
+
+        // A square is worth 3 at exact and half of that halfway out; both ends get it.
+        // (Jupiter is exalted in Cancer, Venus in Pisces: neither is there.)
+        Assert.Equal(3, Score(With(Of(Planet.Venus, Planet.Jupiter, AspectType.Square, 0)), Planet.Venus), 6);
+        Assert.Equal(1.5, Score(With(Of(Planet.Venus, Planet.Jupiter, AspectType.Square, 4)), Planet.Jupiter), 6);
+        Assert.Equal(0, Score(With(Of(Planet.Venus, Planet.Jupiter, AspectType.Square, 8)), Planet.Venus), 6);
+
+        // Between two of the outermost three it counts half; a minor aspect not at all.
+        Assert.Equal(1.5, Score(With(Of(Planet.Uranus, Planet.Neptune, AspectType.Square, 0)), Planet.Uranus), 6);
+        Assert.Equal(0, Score(With(Of(Planet.Venus, Planet.Jupiter, AspectType.Quintile, 0)), Planet.Venus), 6);
+    }
+
+    [Fact]
+    public void The_weighted_balance_counts_the_lights_and_the_Ascendant_three_times_over()
+    {
+        // Aries rising (fire, cardinal) with a Capricorn Midheaven; Sun in Leo, Moon in
+        // Taurus, Mars in Aries, Saturn in Libra.
+        var chart = Chart(10, At(Planet.Sun, 130), At(Planet.Moon, 40), At(Planet.Mars, 12), At(Planet.Saturn, 200), At(Planet.Chiron, 100));
+        var d = NatalMetricsService.Compute(chart).Dominants;
+
+        // Sun 3 + Moon 3 + Mars 2 + Saturn 1 + Ascendant 3 + Midheaven 1; Chiron is not counted.
+        Assert.Equal(13, d.TotalWeight);
+        Assert.Equal([("Fire", 8.0), ("Earth", 4.0), ("Air", 1.0), ("Water", 0.0)], d.Elements.Select(w => (w.Name, w.Points)));
+        Assert.Equal([("Cardinal", 7.0), ("Fixed", 6.0), ("Mutable", 0.0)], d.Modalities.Select(w => (w.Name, w.Points)));
+        Assert.Equal(("Aries", 5.0), (d.Signs[0].Name, d.Signs[0].Points));
+        Assert.Equal(13, d.Signs.Sum(w => w.Points));
+        Assert.DoesNotContain(d.Signs, w => w.Points == 0);
+    }
+
+    [Fact]
+    public void Without_a_birth_time_the_angles_take_no_part_in_the_dominants()
+    {
+        var chart = Repo.Charts.Calculate(Demo.Person(timed: false));
+        var d = NatalMetricsService.Compute(chart).Dominants;
+
+        Assert.Equal(10, d.Planets.Count);
+        Assert.DoesNotContain(d.Planets.SelectMany(p => p.Parts),
+            part => part.Contains("Ascendant") || part.Contains("Midheaven") || part.Contains(" from the "));
+        Assert.Equal(3 + 3 + 2 + 2 + 2 + 5, d.TotalWeight);
+
+        // The worksheet shows both tables, and says the angles are missing.
+        var sheet = WorksheetService.Build(chart);
+        Assert.Equal(10, sheet.Sections.Single(s => s.Title == "Dominant planets").Rows.Count);
+        Assert.Contains("With no birth time", sheet.Sections.Single(s => s.Title == "Dominant planets").Note);
+        Assert.Equal(3, sheet.Sections.Single(s => s.Title == "Weighted balance").Rows.Count);
+    }
+
+    [Fact]
+    public void Every_bundled_figure_has_a_dominant_planet_and_a_balance_that_adds_up()
+    {
+        foreach (var f in Repo.Figures)
+        {
+            var d = NatalMetricsService.Compute(Repo.Charts.Calculate(f)).Dominants;
+            Assert.NotNull(d.Planet);
+            Assert.Equal(10, d.Planets.Count);
+            Assert.All(d.Planets, p => Assert.True(p.Score >= 0));
+            Assert.Equal(d.TotalWeight, d.Elements.Sum(w => w.Points), 9);
+            Assert.Equal(d.TotalWeight, d.Modalities.Sum(w => w.Points), 9);
+            Assert.Equal(f.BirthTimeKnown ? 21 : 17, d.TotalWeight);
+        }
+    }
 }

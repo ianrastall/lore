@@ -4,14 +4,14 @@
 
 > A Windows desktop application for computing and exploring astrological natal charts — and reading a daily horoscope from them — powered by the Swiss Ephemeris. Browse a curated library of historical figures — every one with a documented birth time — or add your own.
 
-**Latest release: v2.5.0** · [Download](../../releases/latest)
+**Latest release: v2.6.0** · [Download](../../releases/latest)
 
 ### Installing
 
-1. From the [latest release](../../releases/latest), download **`LoreSetup-2.5.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`LoreSetup-2.6.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user only (no administrator prompt), adds a Start-menu shortcut, and can be removed from *Settings → Apps* like any other program.
 
-**Prefer not to install?** Download **`Lore-2.5.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
+**Prefer not to install?** Download **`Lore-2.6.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
 
 > **The installer is not code-signed.** Lore is a free hobby project and does not carry a paid signing certificate, so Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"* — choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -55,10 +55,10 @@
 |---|---|
 | **Chart Wheel** | Rendered chart wheel (Win2D / Direct2D), drawn on-screen and exportable as a high-resolution PNG. |
 | **Report** | Natural-language reading: Overview (Sun/Moon/Rising), planet-by-sign-degree-and-house paragraphs, major aspects, chart patterns (stellium, grand trine, T-square, grand cross), and elemental and modal balance. The Ascendant/Midheaven line shows their degrees and names the house system. |
-| **Worksheet** | The numbers behind the chart, uninterpreted: how the birth time became Universal Time, every position to the arc-second with latitude, declination, daily speed and house, the twelve house cusps, the derived points (South Node, Descendant, IC, Vertex, Parts of Fortune and Spirit), and a grid of every aspect — including those to the Ascendant and Midheaven — with orb and applying/separating. Below that come the further measurements: the Moon's phase, each planet's distance from the Sun, declination contacts and out-of-bounds planets, closeness to the angles, the balance of the chart by element, mode, polarity and house, the aspects in sum, and the chart's rulers and dispositors. A section headed *If the birth time is off* shows what would change, and when, if the recorded time were out by a margin you set. |
+| **Worksheet** | The numbers behind the chart, uninterpreted: how the birth time became Universal Time, every position to the arc-second with latitude, declination, daily speed and house, the twelve house cusps, the derived points (South Node, Descendant, IC, Vertex, Parts of Fortune and Spirit), and a grid of every aspect — including those to the Ascendant and Midheaven — with orb and applying/separating. Below that come the further measurements: the Moon's phase, each planet's distance from the Sun, declination contacts and out-of-bounds planets, closeness to the angles, the balance of the chart by element, mode, polarity and house, a weighted reckoning of which planet and which signs dominate, the aspects in sum, and the chart's rulers and dispositors. A section headed *If the birth time is off* shows what would change, and when, if the recorded time were out by a margin you set. |
 | **Daily** | Daily horoscope for the selected chart on any date — generated from that day's transits, with a wheel of the day's sky around the birth chart. See below. |
-| **Forecast** | The transits coming up for the selected chart over the next month to a year: when each comes into orb, is exact, and leaves, with the Daily view's written line for it. |
-| **Timing** | The solar return in force on a date, with its wheel, cast for the birthplace or for any city you choose, and the chart progressed to that date a day for a year. |
+| **Forecast** | The transits coming up for the selected chart over the next month to a year: when each comes into orb, is exact, and leaves, with the Daily view's written line for it. Set among them, if you wish, is the sky's own calendar: New and Full Moons, eclipses, planets turning retrograde or direct, and the slow planets changing sign, each with the house of the chart it falls in. |
+| **Timing** | The solar return in force on a date, with its wheel, cast for the birthplace or for any city you choose; the annual profection (the house, sign and Lord of the Year); the chart progressed to that date a day for a year; the chart directed by solar arc; and, when another city is chosen, the birth chart relocated there. |
 | **Synastry** | The selected chart compared with a second person's: a written reading and a bi-wheel of the two charts. See below. |
 | **Legend** | Full-page reference — a grouped list of every glyph, colour, angle, house, and term; click any item for a fuller explanation. |
 
@@ -75,6 +75,8 @@ The **Daily** view writes a horoscope for the selected chart, for today or any d
 - **Deterministic and offline.** The same chart and date always give the same reading. Every sentence comes from an editable corpus (`Data\daily.json`, 585 bespoke transit lines); nothing is generated at run time.
 - **Explainable.** *Why this reading?* lists every transit in effect that day, how close it gets, and which ones the reading used.
 - **Honest about unknowns.** For a chart with no birth time, the houses, angles, and contacts to the natal Moon are left out rather than read from a noon guess.
+- **Void-of-course Moon.** When the Moon has made its last aspect in a sign and not yet entered the next, the reading gives the hours on your clock, the aspect that began the stretch and the sign that ends it.
+- **Planetary hours.** Choose your city under **Settings → Where you are** and the reading ends with the day's ruling planet, sunrise and sunset there, and the twelve planetary hours of the day and of the night on your clock. The place is kept on your PC and used for nothing else.
 - **Transit wheel.** Beside the reading, the birth chart drawn inside and the moving planets (as they stand at the middle of the day) in a band around it, with each transit as an aspect line; the ones the reading uses are drawn heavier.
 
 It is a prompt for reflection, not a prediction: the ranking of transits is an editorial priority, not a probability.
@@ -88,6 +90,7 @@ The **Synastry** view compares the selected chart with a second person's — any
 - **A short, ranked reading.** *Closest bonds* (up to three conjunctions), *What comes easily* (up to four trines and sextiles), and *What takes work* (up to four squares and oppositions), chosen by closeness and by how personal the points are. Contacts between two slow planets, shared by everyone born in the same years, are listed but not written up.
 - **At a glance.** The two Sun signs and Moon signs compared by element, and an overall tone on a five-step scale (see below).
 - **House overlays.** Where each person's Sun, Moon, Venus, and Mars fall in the other's houses.
+- **Davison chart.** The reading ends with the chart for the moment and place halfway between the two births: when and where it is cast for, and where everything stands in it. Stated, not interpreted.
 - **Bi-wheel.** The selected chart drawn inside, the second person's planets in a band around it on the same zodiac, with the contacts between them as aspect lines (the ones the reading uses drawn heavier).
 - **Deterministic and offline.** Every sentence comes from an editable corpus (`Data\synastry.json`): 144 bespoke lines for the pairs that matter most, and assembled sentences for the rest.
 - **Explainable.** *Why this reading?* lists every contact found and which ones the reading used.
@@ -128,8 +131,8 @@ Charts and readings can be exported in these formats:
 | **Text — worksheet** | The Worksheet view as plain text, for pasting into notes or checking against another program |
 | **PDF / Text — daily horoscope** | The daily reading for the date shown in the Daily view, with the full list of that day's transits; the PDF includes the transit wheel |
 | **PNG — daily transit wheel** | The Daily view's wheel alone (1600 × 1600 px) |
-| **PDF / Text — forecast** | The transits ahead for the period shown in the Forecast view, month by month |
-| **PDF / Text — solar return and progressions** | The Timing view's reading for its date; the PDF includes the return chart's wheel |
+| **PDF / Text — forecast** | The transits ahead for the period shown in the Forecast view, month by month, with the sky calendar among them if it is switched on |
+| **PDF / Text — solar return and progressions** | The Timing view's whole reading for its date (solar return, profection, progressions, solar arc and any relocation); the PDF includes the return chart's wheel |
 | **PDF — synastry reading** | The synastry reading on screen, with the bi-wheel and the full list of contacts between the two charts |
 | **PNG — synastry bi-wheel** | The bi-wheel alone (1600 × 1600 px) |
 
@@ -267,7 +270,7 @@ Produces a self-contained folder that runs with no installed .NET or VC++ runtim
 .\scripts\build-portable.ps1
 ```
 
-Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-2.5.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
+Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-2.6.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
 
 ### Step 4 — Installer
 
@@ -385,7 +388,9 @@ Editable corpus for the daily horoscope. Edit it to change what the Daily view s
 - `transits` — 585 bespoke lines keyed `Mover|Tone|Target`, e.g. `"Mars|Tension|Midheaven"`. *Mover* is the planet moving today, *Target* the natal point it touches (any of the thirteen bodies, `Ascendant`, or `Midheaven`), and *Tone* is `Conjunction`, `Flow` (sextile or trine), or `Tension` (square or opposition). The key is directional: `Saturn|Tension|Mercury` (weeks of pressure on your thinking) and `Mercury|Tension|Saturn` (one serious-minded day) are different lines.
 - `moverThemes`, `toneLinks`, `targetThemes` — building blocks used to assemble a plainer sentence for any pair whose bespoke line is missing or empty.
 - `moonInSign`, `moonInHouse`, `sunInHouse`, `moonPhases`, `houses` — the "day at a glance" text.
-- `dayTones`, `retrogrades`, `stations`, `notes` — the overall tone sentence, retrograde and station notes, and the quiet-day / unknown-birth-time messages.
+- `dayTones`, `retrogrades`, `stations`, `notes` — the overall tone sentence, retrograde and station notes, and the quiet-day, void-of-course and unknown-birth-time messages.
+- `planetaryDays` — one line for each of the seven planets, on what its day of the week is traditionally for; `notes.planetaryHours` explains the hours themselves.
+- `calendar` — the Forecast's sky calendar: one line each for a solar eclipse, a lunar eclipse, a planet turning `Retrograde` or `Direct`, and a slow planet's `Ingress` into a sign (or `IngressRetrograde`, back into the one before). `{planet}` and `{sign}` are filled in. New and Full Moons use the `moonPhases` lines.
 
 Names must match the app's display names (`North Node`, not `NorthNode`). The orb, the number of transits shown, and the ranking weights are constants in `Services\TransitService.cs` and `Services\DailyInterpreter.cs`.
 
@@ -397,7 +402,7 @@ Editable corpus for the synastry reading. Edit it to change what the Synastry vi
 - `pointThemes`, `toneLinks` — building blocks used to assemble a plainer sentence for any other pair, or one whose bespoke line is empty.
 - `sunElements`, `moonElements` — the two Sun (or Moon) signs compared by element, keyed `Element|Element` in the order Fire, Earth, Air, Water.
 - `overlayHouses`, `overlayPlanets`, `houses` — one person's planets in the other's houses; `{guest}` owns the planets, `{host}` the house.
-- `tones`, `notes` — the overall tone sentence for each step of the scale (`Soulmates`, `Harmonious`, `Mixed`, `Challenging`, `Adversaries`, and `Light` for two charts with no contacts), and the unknown-birth-time messages.
+- `tones`, `notes` — the overall tone sentence for each step of the scale (`Soulmates`, `Harmonious`, `Mixed`, `Challenging`, `Adversaries`, and `Light` for two charts with no contacts), the unknown-birth-time messages, and the two lines that introduce the Davison chart.
 
 The orbs, the number of contacts shown, and the ranking weights are constants in `Services\SynastryService.cs`, `Services\SynastryScoring.cs` and `Services\SynastryInterpreter.cs`.
 
@@ -475,7 +480,18 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 2.5.0 (current)
+### 2.6.0 (current)
+A release of techniques Lore did not have, most of them suggested by a comparison with the Kerykeion library. Each is explained in the Legend.
+- **Annual profection** — the Timing view now gives the year's profection: the house of the birth chart brought to the fore at this age, counted in whole signs from the rising sign, the sign of the year, and its ruler as **Lord of the Year** with where it stands in the birth chart. It needs a birth time.
+- **Solar arc directions** — also in Timing: every point of the birth chart moved on by as far as the progressed Sun has gone, with the directed positions and any contact within a degree of the birth chart.
+- **Relocated chart** — choosing another place in the Timing view now also relocates the birth chart there: the same planets under that place's Ascendant, Midheaven and houses, each planet's new house beside its house at the birthplace. The box is now labelled *Cast for another place*.
+- **Void-of-course Moon** — the Daily view notes when the Moon is void of course during the day, with the hours on your clock, the aspect that began it and the sign that ends it.
+- **A sky calendar in the Forecast** — a new tick box, *Include the sky calendar* (on to begin with), sets among the transits every New and Full Moon, every eclipse and its kind, every planet turning retrograde or direct (a retrograde says when it ends) and every change of sign by Jupiter to Pluto, each with the house of your chart it falls in.
+- **Dominant planets and weighted balance** — two new Worksheet tables. *Dominant planets* scores all ten planets on how much they stand out (the lights, closeness to an angle, aspects, dignity, and what they rule) and shows what each total is made of; the weights are Lore's own. *Weighted balance* counts the elements, modes and signs with the Sun, Moon and Ascendant counting for more than the slow planets. Both are in the worksheet text and PDF and in the JSON and XML exports.
+- **Davison chart** — the synastry reading ends with the Davison chart of the two people: the chart for the moment and place halfway between their births.
+- **Planetary hours, and where you are** — Settings has a new box, *Where you are*, with the same city search as Add Chart. Once a city is chosen the Daily view ends with whose day it is, sunrise and sunset there, and the planetary hours of the day and night. The place is saved on your PC (`home.json`, beside the settings), changes nothing about any chart, and *Clear* removes it.
+
+### 2.5.0
 - **Chart with tables, as one image** — a new export, **PNG — chart with tables**, draws the wheel with the Worksheet around and under it: birth data and the settings used, every position, the house cusps, the aspect grid, the bodies by element and mode, the Moon's phase, the balance of the chart, its rulers, declination, distance from the Sun, dispositors, the dignity score planet by planet, and a strip that orders everything by its degree within its sign. The plain wheel export is unchanged.
 - **True Lilith** — Settings has a new choice, *Black Moon Lilith*: the mean apogee (as before) or the true, osculating one that some chart services use, which can stand in a different sign. Whichever node and Lilith you choose, the Worksheet now lists the other kind of each beneath the positions for comparison.
 - **Quintile and biquintile** — the minor aspects (still off unless switched on) now include the quintile (72°) and biquintile (144°), on the same small orb, with words for them in the report.

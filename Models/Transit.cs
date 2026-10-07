@@ -121,6 +121,34 @@ public static class MoonPhaseExtensions
 // A planet turning retrograde or direct during the day.
 public sealed record Station(Planet Planet, bool TurnsRetrograde);
 
+// A stretch when the Moon is "void of course": from the last major aspect it makes to
+// the Sun or a planet while in one sign, until it enters the next. LastPlanet and
+// LastAspect are null in the rare case that it makes none at all in that sign, and is
+// void from the moment it enters.
+public sealed record VoidOfCourse(
+    DateTime StartUtc, DateTime EndUtc, ZodiacSign Sign, ZodiacSign Enters, Planet? LastPlanet, AspectType? LastAspect);
+
+// Where the reader is: the place sunrise and sunset are taken for. Chosen in Settings.
+public sealed record HomePlace(string Name, double Latitude, double Longitude);
+
+public sealed record PlanetaryHour(DateTime StartUtc, DateTime EndUtc, Planet Ruler);
+
+// The planetary hours of one day at one place. The planetary day runs from sunrise to
+// the next sunrise and belongs to the planet the weekday is named for; the daylight and
+// the night are each cut into twelve equal hours (so they are longer than clock hours
+// in summer by day, and shorter by night), ruled in turn in the Chaldean order: Saturn,
+// Jupiter, Mars, Sun, Venus, Mercury, Moon. The first hour of the day is the day's own.
+public sealed class PlanetaryHours
+{
+    public required HomePlace Place { get; init; }
+    public required DateTime SunriseUtc { get; init; }
+    public required DateTime SunsetUtc { get; init; }
+    public required DateTime NextSunriseUtc { get; init; }
+    public required Planet DayRuler { get; init; }
+    public required IReadOnlyList<PlanetaryHour> Day { get; init; }     // twelve, sunrise to sunset
+    public required IReadOnlyList<PlanetaryHour> Night { get; init; }   // twelve, sunset to the next sunrise
+}
+
 // Everything the transit scan found for one chart on one local calendar day: the facts
 // the daily reading is then written from.
 public sealed class DaySky
@@ -139,6 +167,14 @@ public sealed class DaySky
     public ZodiacSign? MoonEnters { get; init; }       // sign the Moon moves into during the day, if any
     public DateTime? MoonIngressUtc { get; init; }
     public required IReadOnlyList<Station> Stations { get; init; }
+
+    // The void-of-course stretches that overlap the day, in order; each may begin
+    // before it or end after it.
+    public IReadOnlyList<VoidOfCourse> Voids { get; init; } = [];
+
+    // Sunrise, sunset and the planetary hours where the reader is. Null if no place has
+    // been chosen, or the Sun does not both rise and set there that day.
+    public PlanetaryHours? Hours { get; init; }
 
     public PlanetPosition? Body(Planet p) => Midday.FirstOrDefault(x => x.Planet == p);
 }

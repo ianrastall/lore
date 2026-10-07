@@ -38,7 +38,9 @@ public sealed class TransitService
         catch (DateTimeZoneNotFoundException) { return BclDateTimeZone.ForSystemDefault(); }
     }
 
-    public DaySky Scan(NatalChart natal, DateOnly date, DateTimeZone zone)
+    // `home`: where the reader is, for sunrise, sunset and the planetary hours; without
+    // it they are left out.
+    public DaySky Scan(NatalChart natal, DateOnly date, DateTimeZone zone, HomePlace? home = null)
     {
         // The day runs from one local midnight to the next. Both ends are resolved
         // separately, so a 23- or 25-hour daylight-saving day comes out right.
@@ -98,6 +100,8 @@ public sealed class TransitService
             MoonEnters = moonEnters,
             MoonIngressUtc = moonIngress,
             Stations = StationsFor(tracks),
+            Voids = VoidOfCourse(jd0, jd1),
+            Hours = home is null ? null : PlanetaryHours(date, jd0, jd1, home),
         };
     }
 
@@ -188,6 +192,149 @@ public sealed class TransitService
 
         passes.Sort((x, y) => x.PeakUtc.CompareTo(y.PeakUtc));
         return passes;
+    }
+
+    // ── Sky calendar ──────────────────────────────────────────────────────────
+    // What the sky itself does over the same stretch: New and Full Moons (and which of
+    // them are eclipses), the planets' stations, and the slow planets' changes of sign.
+    // The events are the same for everyone; the chart only says which house each falls in.
+
+    private static readonly Planet[] Stationing =
+    [
+        Planet.Mercury, Planet.Venus, Planet.Mars, Planet.Jupiter,
+        Planet.Saturn, Planet.Uranus, Planet.Neptune, Planet.Pluto,
+    ];
+
+    // The planets slow enough for a change of sign to be worth marking: Jupiter takes a
+    // year over one, Pluto up to thirty.
+    private static readonly Planet[] SlowIngress =
+        [Planet.Jupiter, Planet.Saturn, Planet.Uranus, Planet.Neptune, Planet.Pluto];
+
+    // How far past the end to look for the station that ends a retrograde begun inside
+    // the forecast. Pluto, the slowest, is retrograde for about 160 days.
+    private const int StationLookahead = 200;
+
+    public IReadOnlyList<SkyEvent> SkyCalendar(
+        NatalChart natal, DateOnly start, int days, DateTimeZone zone, CancellationToken cancel = default)
+    {
+        var first = new LocalDate(start.Year, start.Month, start.Day);
+        double jd0 = SwissEphemeris.DateTimeToJulianDay(zone.AtStartOfDay(first).ToDateTimeUtc());
+        double jd1 = SwissEphemeris.DateTimeToJulianDay(zone.AtStartOfDay(first.PlusDays(days)).ToDateTimeUtc());
+        int n = Math.Max(1, (int)Math.Ceiling(jd1 - jd0));
+        double At(int i) => Math.Min(jd0 + i, jd1);
+
+        bool timed = natal.Celebrity.BirthTimeKnown;
+        int? House(double lon) => timed ? natal.GetHouseForLongitude(lon) : null;
+        var events = new List<SkyEvent>();
+
+        // New and Full Moons: the Moon's lead over the Sun passing 0° and 180°. It gains
+        // about 12° a day, so daily samples cannot step over one.
+        double Lead(double jd) =>
+            _charts.CalculateBody(jd, Planet.Sun) is { } s && _charts.CalculateBody(jd, Planet.Moon) is { } m
+                ? Normalize(m.Longitude - s.Longitude) : double.NaN;
+        var eclipses = new[] { Eclipses(jd0, jd1, lunar: false), Eclipses(jd0, jd1, lunar: true) };
+        for (int i = 0; i < n; i++)
+        {
+            cancel.ThrowIfCancellationRequested();
+            double from = Lead(At(i)), to = Lead(At(i + 1));
+            if (double.IsNaN(from) || double.IsNaN(to)) break;
+            for (int full = 0; full <= 1; full++)
+            {
+                double ahead = Normalize(full * 180 - from);
+                if (ahead <= 0 || ahead > Normalize(to - from)) continue;
+
+                double target = full * 180;
+                double jd = Bisect(t => Signed(Lead(t) - target), At(i), At(i + 1));
+                if (_charts.CalculateBody(jd, Planet.Moon) is not { } moon) continue;
+                // An eclipse is greatest within an hour or so of the exact New or Full Moon.
+                var eclipse = eclipses[full].FirstOrDefault(e => Math.Abs(e.Jd - jd) < 0.5);
+                events.Add(new SkyEvent(
+                    (full, eclipse.Kind) switch
+                    {
+                        (0, null) => SkyEventKind.NewMoon,
+                        (0, _)    => SkyEventKind.SolarEclipse,
+                        (_, null) => SkyEventKind.FullMoon,
+                        _         => SkyEventKind.LunarEclipse,
+                    },
+                    SwissEphemeris.JulianDayToDateTime(jd), Planet.Moon, moon.Longitude, moon.Sign)
+                {
+                    EclipseType = eclipse.Kind,
+                    NatalHouse = House(moon.Longitude),
+                });
+            }
+        }
+
+        // Stations: where a planet's speed changes sign. Looked for some way past the
+        // end as well, so a retrograde that begins inside the forecast can say when it ends.
+        foreach (var planet in Stationing)
+        {
+            cancel.ThrowIfCancellationRequested();
+            int m = n + StationLookahead;
+            var speed = new double[m + 1];
+            bool available = true;
+            for (int i = 0; i <= m && available; i++)
+            {
+                speed[i] = SpeedAt(planet, jd0 + i);
+                available = !double.IsNaN(speed[i]);
+            }
+            if (!available) continue;
+
+            var stations = new List<(double Jd, bool Retrograde)>();
+            for (int i = 0; i < m; i++)
+                if ((speed[i] < 0) != (speed[i + 1] < 0))
+                    stations.Add((Bisect(t => SpeedAt(planet, t), jd0 + i, jd0 + i + 1), speed[i + 1] < 0));
+
+            for (int k = 0; k < stations.Count; k++)
+            {
+                var (jd, retrograde) = stations[k];
+                if (jd >= jd1 || _charts.CalculateBody(jd, planet) is not { } p) continue;
+                events.Add(new SkyEvent(SkyEventKind.Station, SwissEphemeris.JulianDayToDateTime(jd), planet, p.Longitude, p.Sign)
+                {
+                    Retrograde = retrograde,
+                    DirectUtc = retrograde && k + 1 < stations.Count ? SwissEphemeris.JulianDayToDateTime(stations[k + 1].Jd) : null,
+                    NatalHouse = House(p.Longitude),
+                });
+            }
+        }
+
+        // Changes of sign. A planet going backwards over a boundary re-enters the sign
+        // before; the boundary it crosses is then the start of the sign it is leaving.
+        foreach (var planet in SlowIngress)
+        {
+            cancel.ThrowIfCancellationRequested();
+            var at = new PlanetPosition?[n + 1];
+            for (int i = 0; i <= n; i++) at[i] = _charts.CalculateBody(At(i), planet);
+            for (int i = 0; i < n; i++)
+            {
+                if (at[i] is not { } a || at[i + 1] is not { } b || a.Sign == b.Sign) continue;
+                bool backwards = (int)b.Sign == ((int)a.Sign + 11) % 12;
+                double boundary = (int)(backwards ? a.Sign : b.Sign) * 30;
+                double jd = Bisect(t => SignedAt(planet, boundary, t), At(i), At(i + 1));
+                events.Add(new SkyEvent(SkyEventKind.Ingress, SwissEphemeris.JulianDayToDateTime(jd), planet, boundary, b.Sign)
+                {
+                    Retrograde = backwards,
+                    // Just inside the sign entered, so the house is the one it arrives in.
+                    NatalHouse = House(boundary + (backwards ? -1e-6 : 1e-6)),
+                });
+            }
+        }
+
+        events.Sort((x, y) => x.Utc.CompareTo(y.Utc));
+        return events;
+    }
+
+    // Every eclipse of one kind between two instants, with a day to spare at each end.
+    private List<(double Jd, string? Kind)> Eclipses(double fromJd, double toJd, bool lunar)
+    {
+        var found = new List<(double, string?)>();
+        double after = fromJd - 1;
+        // There are at most five of either kind in a year; the cap only guards the loop.
+        for (int i = 0; i < 64 && _charts.NextEclipse(after, lunar) is { } e && e.Jd < toJd + 1; i++)
+        {
+            found.Add((e.Jd, e.Kind));
+            after = e.Jd + 1;
+        }
+        return found;
     }
 
     // One run of samples [a..b] inside the orb, refined at both ends and at each crossing.
@@ -469,6 +616,135 @@ public sealed class TransitService
         double boundary = (int)last * 30;
         double jd = Bisect(t => SignedAt(Planet.Moon, boundary, t), jds[0], jds[n]);
         return (first, last, SwissEphemeris.JulianDayToDateTime(jd));
+    }
+
+    // ── Planetary hours ───────────────────────────────────────────────────────
+
+    // The order the hours run in: the seven planets from slowest to fastest.
+    private static readonly Planet[] Chaldean =
+        [Planet.Saturn, Planet.Jupiter, Planet.Mars, Planet.Sun, Planet.Venus, Planet.Mercury, Planet.Moon];
+
+    // The planet each weekday is named for, Sunday first.
+    private static readonly Planet[] DayRulers =
+        [Planet.Sun, Planet.Moon, Planet.Mars, Planet.Mercury, Planet.Jupiter, Planet.Venus, Planet.Saturn];
+
+    // The planetary hours of the day that begins with the sunrise falling on a calendar
+    // day (given as its two midnights). Null if the Sun does not rise in that day at
+    // that place and set before rising again: in the polar summer and winter, or if the
+    // place is so far from the clock's time zone that its sunrise falls on another date.
+    public PlanetaryHours? PlanetaryHours(DateOnly date, double fromJd, double toJd, HomePlace home)
+    {
+        if (_charts.NextSunriseOrSet(fromJd, home.Latitude, home.Longitude, sunset: false) is not { } rise || rise >= toJd ||
+            _charts.NextSunriseOrSet(rise, home.Latitude, home.Longitude, sunset: true) is not { } set || set - rise >= 1 ||
+            _charts.NextSunriseOrSet(set, home.Latitude, home.Longitude, sunset: false) is not { } next || next - set >= 1)
+            return null;
+
+        var ruler = DayRulers[(int)date.DayOfWeek];
+        int first = Array.IndexOf(Chaldean, ruler);
+        List<PlanetaryHour> Twelve(double start, double end, int offset) => Enumerable.Range(0, 12)
+            .Select(i => new PlanetaryHour(
+                SwissEphemeris.JulianDayToDateTime(start + (end - start) * i / 12),
+                SwissEphemeris.JulianDayToDateTime(start + (end - start) * (i + 1) / 12),
+                Chaldean[(first + offset + i) % 7]))
+            .ToList();
+
+        return new PlanetaryHours
+        {
+            Place = home,
+            SunriseUtc = SwissEphemeris.JulianDayToDateTime(rise),
+            SunsetUtc = SwissEphemeris.JulianDayToDateTime(set),
+            NextSunriseUtc = SwissEphemeris.JulianDayToDateTime(next),
+            DayRuler = ruler,
+            Day = Twelve(rise, set, 0),
+            Night = Twelve(set, next, 12),
+        };
+    }
+
+    // ── Void-of-course Moon ───────────────────────────────────────────────────
+
+    // The bodies whose aspects keep the Moon "in course": the Sun and the planets. The
+    // node, Chiron and Lilith are not counted, by the usual modern convention.
+    private static readonly Planet[] CourseBodies =
+    [
+        Planet.Sun, Planet.Mercury, Planet.Venus, Planet.Mars, Planet.Jupiter,
+        Planet.Saturn, Planet.Uranus, Planet.Neptune, Planet.Pluto,
+    ];
+
+    // The void-of-course stretches overlapping the time between two Julian days. This
+    // has nothing to do with any birth chart: it is the same for everyone.
+    public IReadOnlyList<VoidOfCourse> VoidOfCourse(double fromJd, double toJd)
+    {
+        // The Moon is never more than about two and a half days in a sign, so three
+        // days either side takes in the whole of every stay that overlaps the stretch.
+        const double Margin = 3;
+        double lo = fromJd - Margin;
+        int n = (int)Math.Ceiling((toJd + Margin - lo) * 24);
+        double At(int i) => lo + i / 24.0;
+
+        var moon = new double[n + 1];
+        for (int i = 0; i <= n; i++)
+        {
+            if (_charts.CalculateBody(At(i), Planet.Moon) is not { } m) return [];
+            moon[i] = m.Longitude;
+        }
+
+        var ingresses = new List<(double Jd, ZodiacSign Sign)>();
+        for (int i = 0; i < n; i++)
+        {
+            var next = ZodiacSignExtensions.FromLongitude(moon[i + 1]);
+            if (next == ZodiacSignExtensions.FromLongitude(moon[i])) continue;
+            double boundary = (int)next * 30;
+            ingresses.Add((Bisect(t => SignedAt(Planet.Moon, boundary, t), At(i), At(i + 1)), next));
+        }
+
+        // Every exact major aspect from the Moon to one of the bodies. The Moon gains on
+        // all of them all the time, so its lead over each only ever grows, and an aspect
+        // is exact where that lead passes 0°, 60°, 90°, 120° or 180° either side.
+        var aspects = new List<(double Jd, Planet Body, AspectType Type)>();
+        foreach (var body in CourseBodies)
+        {
+            var lead = new double[n + 1];
+            bool available = true;
+            for (int i = 0; i <= n && available; i++)
+            {
+                if (_charts.CalculateBody(At(i), body) is { } p) lead[i] = Normalize(moon[i] - p.Longitude);
+                else available = false;
+            }
+            if (!available) continue;
+
+            for (int i = 0; i < n; i++)
+            {
+                double gained = Signed(lead[i + 1] - lead[i]);
+                foreach (var type in AspectTypeExtensions.Majors)
+                    foreach (double angle in Branches(0, type.Angle()))
+                    {
+                        double ahead = Normalize(angle - lead[i]);
+                        if (ahead <= 0 || ahead > gained) continue;
+                        double jd = Bisect(t =>
+                            _charts.CalculateBody(t, Planet.Moon) is { } m && _charts.CalculateBody(t, body) is { } p
+                                ? Signed(m.Longitude - p.Longitude - angle) : double.NaN,
+                            At(i), At(i + 1));
+                        aspects.Add((jd, body, type));
+                    }
+            }
+        }
+
+        var voids = new List<VoidOfCourse>();
+        for (int k = 0; k + 1 < ingresses.Count; k++)
+        {
+            var (entered, sign) = ingresses[k];
+            var (left, enters) = ingresses[k + 1];
+            if (left <= fromJd || entered >= toJd) continue;
+
+            var inSign = aspects.Where(a => a.Jd >= entered && a.Jd < left).ToList();
+            var last = inSign.Count > 0 ? inSign.MaxBy(a => a.Jd) : ((double Jd, Planet Body, AspectType Type)?)null;
+            double start = last?.Jd ?? entered;
+            if (start >= toJd) continue;
+            voids.Add(new VoidOfCourse(
+                SwissEphemeris.JulianDayToDateTime(start), SwissEphemeris.JulianDayToDateTime(left),
+                sign, enters, last?.Body, last?.Type));
+        }
+        return voids;
     }
 
     // Planets whose motion reverses during the day. The Sun and Moon never do, and the

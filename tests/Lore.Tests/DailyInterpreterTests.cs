@@ -35,6 +35,21 @@ public class DailyInterpreterTests
     }
 
     [Fact]
+    public void A_void_Moon_is_noted_with_its_hours_and_what_ends_it()
+    {
+        // On 2 October 2026 the Moon leaves Gemini for Cancer, in Chicago's afternoon.
+        var note = Read(new DateOnly(2026, 10, 2)).Sections.Single(s => s.Heading == "Also in the sky")
+            .Items.Single(i => i.Title!.StartsWith("☽ Moon void of course "));
+        Assert.Matches("^☽ Moon void of course (until|from) ", note.Title);
+        Assert.Matches("^its last aspect in Gemini is an? [a-z]+ to [A-Z][a-z]+  ·  it then enters Cancer$", note.Meta);
+        Assert.Contains("void of course", note.Text);
+
+        // It has nothing to do with the birth time.
+        Assert.Contains(Read(new DateOnly(2026, 10, 2), timed: false).Sections.SelectMany(s => s.Items),
+            i => i.Title == note.Title);
+    }
+
+    [Fact]
     public void The_same_chart_and_date_always_give_the_same_reading()
     {
         var a = Read(new DateOnly(2026, 10, 2));

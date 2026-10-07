@@ -46,6 +46,11 @@ public sealed partial class ForecastViewModel : ObservableObject
     [ObservableProperty]
     public partial bool IncludeFast { get; set; } = true;
 
+    // Whether the sky's own calendar (New and Full Moons, eclipses, stations, the slow
+    // planets' changes of sign) is set among the transits.
+    [ObservableProperty]
+    public partial bool IncludeSky { get; set; } = true;
+
     [ObservableProperty]
     public partial ForecastReading? Reading { get; set; }
 
@@ -66,7 +71,9 @@ public sealed partial class ForecastViewModel : ObservableObject
     public string Title => Chart is null ? "" : $"{Chart.Celebrity.Name} — Transits ahead";
 
     public string Summary => Reading is null ? "" :
-        $"{Reading.Passes.Count} {(Reading.Passes.Count == 1 ? "transit" : "transits")} from {Reading.RangeText}" +
+        $"{Reading.Passes.Count} {(Reading.Passes.Count == 1 ? "transit" : "transits")}" +
+        (Reading.Sky.Count > 0 ? $" and {Reading.Sky.Count} {(Reading.Sky.Count == 1 ? "event" : "events")} in the sky" : "") +
+        $" from {Reading.RangeText}" +
         (Chart?.Timed == false ? ". With no birth time, the Ascendant, Midheaven and natal Moon are left out." : ".");
 
     public IReadOnlyList<DailySection> Sections => Reading?.Sections ?? [];
@@ -88,6 +95,7 @@ public sealed partial class ForecastViewModel : ObservableObject
 
     partial void OnSpanIndexChanged(int value) => Rebuild();
     partial void OnIncludeFastChanged(bool value) => Rebuild();
+    partial void OnIncludeSkyChanged(bool value) => Rebuild();
 
     partial void OnReadingChanged(ForecastReading? value)
     {
@@ -103,7 +111,7 @@ public sealed partial class ForecastViewModel : ObservableObject
         var chart = Chart;
         var start = Start;
         int days = Spans[Math.Clamp(SpanIndex, 0, Spans.Length - 1)];
-        bool fast = IncludeFast;
+        bool fast = IncludeFast, sky = IncludeSky;
         ErrorText = "";
 
         if (chart is null || _transits is null || _interpreter is null)
@@ -117,7 +125,8 @@ public sealed partial class ForecastViewModel : ObservableObject
         try
         {
             var reading = await Task.Run(() =>
-                _interpreter.ComposeForecast(chart, _transits.Forecast(chart, start, days, _zone, fast, cancel.Token), start, days, _zone));
+                _interpreter.ComposeForecast(chart, _transits.Forecast(chart, start, days, _zone, fast, cancel.Token), start, days, _zone,
+                    sky ? _transits.SkyCalendar(chart, start, days, _zone, cancel.Token) : null));
             if (generation == _generation)
                 Reading = reading;
         }

@@ -24,6 +24,7 @@ public sealed class NatalMetrics
     public required Distribution Distribution { get; init; }
     public required AspectSummary Aspects { get; init; }
     public required Rulership Rulers { get; init; }
+    public required Dominants Dominants { get; init; }
 
     public double? LongitudeOf(string point) => Points.FirstOrDefault(p => p.Name == point)?.Longitude;
 }
@@ -101,4 +102,25 @@ public sealed class Rulership
     public Planet? FinalDispositor { get; init; }
     // Planets that dispose of each other in a ring; a ring of two is a mutual reception.
     public required IReadOnlyList<IReadOnlyList<Planet>> Loops { get; init; }
+}
+
+// One planet's weight in the chart and what it is made of: closeness to an angle, the
+// aspects it makes, its dignity by sign, and the points of the chart it rules.
+public sealed record PlanetStrength(Planet Planet, double Score, IReadOnlyList<string> Parts);
+
+public sealed record Weight(string Name, double Points);
+
+// Which planet, and which signs, elements and modes, carry most weight in the chart.
+// Two separate reckonings: the planets are scored on their condition (see
+// NatalMetricsService.Dominants); the signs, elements and modes are a weighted count,
+// in which the Sun, Moon and Ascendant count for more than Pluto does.
+public sealed class Dominants
+{
+    public required IReadOnlyList<PlanetStrength> Planets { get; init; }   // Sun to Pluto, strongest first
+    public required IReadOnlyList<Weight> Signs { get; init; }             // those holding anything, heaviest first
+    public required IReadOnlyList<Weight> Elements { get; init; }          // all four, in the usual order
+    public required IReadOnlyList<Weight> Modalities { get; init; }        // all three
+    public required double TotalWeight { get; init; }                      // what the three counts each add up to
+
+    public Planet? Planet => Planets.Count > 0 ? Planets[0].Planet : null;
 }

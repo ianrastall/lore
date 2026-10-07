@@ -65,6 +65,83 @@ public class TransitServiceTests
         Assert.All(sky.Events, e => Assert.Null(e.TargetHouse));
     }
 
+    // ── Void-of-course Moon ───────────────────────────────────────────────────
+
+    private static readonly Planet[] CourseBodies =
+    [
+        Planet.Sun, Planet.Mercury, Planet.Venus, Planet.Mars, Planet.Jupiter,
+        Planet.Saturn, Planet.Uranus, Planet.Neptune, Planet.Pluto,
+    ];
+
+    private static double Lon(DateTime utc, Planet p) =>
+        Repo.Charts.CalculateBody(SwissEphemeris.DateTimeToJulianDay(utc), p)!.Longitude;
+
+    // How far the Moon is from the nearest exact major aspect to a body, in degrees.
+    private static double OffAspect(DateTime utc, Planet body)
+    {
+        double apart = Repo.ArcMinutesBetween(Lon(utc, Planet.Moon), Lon(utc, body)) / 60;
+        return new[] { 0.0, 60, 90, 120, 180 }.Min(a => Math.Abs(apart - a));
+    }
+
+    [Fact]
+    public void A_void_Moon_runs_from_its_last_aspect_in_a_sign_to_the_next_sign()
+    {
+        double from = SwissEphemeris.DateTimeToJulianDay(new DateTime(2026, 10, 1, 0, 0, 0, DateTimeKind.Utc));
+        var voids = new TransitService(Repo.Charts).VoidOfCourse(from, from + 30);
+
+        // The Moon changes sign thirteen times in thirty days, give or take one.
+        Assert.InRange(voids.Count, 12, 14);
+
+        for (int i = 0; i < voids.Count; i++)
+        {
+            var v = voids[i];
+            Assert.True(v.StartUtc < v.EndUtc);
+            if (i > 0) Assert.True(voids[i - 1].EndUtc < v.StartUtc);
+
+            // It ends as the Moon crosses into the next sign…
+            Assert.Equal((ZodiacSign)(((int)v.Sign + 1) % 12), v.Enters);
+            Assert.True(Repo.ArcMinutesBetween(Lon(v.EndUtc, Planet.Moon), (int)v.Enters * 30) < 0.01);
+            Assert.Equal(v.Sign, ZodiacSignExtensions.FromLongitude(Lon(v.StartUtc, Planet.Moon)));
+
+            // …begins at an exact aspect to the body named…
+            Assert.NotNull(v.LastPlanet);
+            Assert.True(OffAspect(v.StartUtc, v.LastPlanet!.Value) < 0.0005, $"{v.StartUtc:u} {v.LastPlanet}");
+            double apart = Repo.ArcMinutesBetween(Lon(v.StartUtc, Planet.Moon), Lon(v.StartUtc, v.LastPlanet.Value)) / 60;
+            Assert.Equal(v.LastAspect!.Value.Angle(), apart, 3);
+
+            // …and in between the Moon reaches no other: sampled every five minutes, its
+            // distance from the nearest exact aspect to each body never touches zero
+            // (it would show as a dip to within the 0.05° the Moon covers in that time).
+            for (var t = v.StartUtc.AddMinutes(10); t < v.EndUtc.AddMinutes(-5); t = t.AddMinutes(5))
+                foreach (var body in CourseBodies)
+                    Assert.True(OffAspect(t, body) > 0.03, $"{t:u} Moon reaches an aspect to {body} inside a void");
+        }
+    }
+
+    [Fact]
+    public void The_days_void_ends_at_the_Moons_sign_change()
+    {
+        var sky = Scan(new DateOnly(2026, 10, 2));
+        var v = Assert.Single(sky.Voids);
+        Assert.Equal(ZodiacSign.Gemini, v.Sign);
+        Assert.Equal(ZodiacSign.Cancer, v.Enters);
+        Assert.True(Math.Abs((v.EndUtc - sky.MoonIngressUtc!.Value).TotalSeconds) < 2);
+
+        // The same for everyone: a chart with no birth time sees the same void.
+        Assert.Equal(sky.Voids, Scan(new DateOnly(2026, 10, 2), timed: false).Voids);
+    }
+
+    [Fact]
+    public void A_day_the_Moon_stays_in_course_has_no_void()
+    {
+        // Every day in a month either overlaps a void or does not, and the ones that
+        // do not are days with no sign change.
+        var quiet = Enumerable.Range(0, 30).Select(i => Scan(new DateOnly(2026, 10, 1).AddDays(i)))
+            .Where(s => s.Voids.Count == 0).ToList();
+        Assert.NotEmpty(quiet);
+        Assert.All(quiet, s => Assert.Null(s.MoonEnters));
+    }
+
     [Fact]
     public void Moon_sign_change_is_found_and_timed()
     {

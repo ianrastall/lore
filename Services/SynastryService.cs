@@ -18,7 +18,9 @@ public static class SynastryService
 
     public static double Orb(AspectType type) => type.Orb() - OrbTightening;
 
-    public static Synastry Compare(NatalChart first, NatalChart second)
+    // `davison`: the two people's Davison chart (ChartService.Davison), carried along for
+    // the reading; nothing here is worked out from it.
+    public static Synastry Compare(NatalChart first, NatalChart second, NatalChart? davison = null)
     {
         var aspects = new List<SynastryAspect>();
         foreach (var (pointA, lonA) in Points(first))
@@ -44,6 +46,7 @@ public static class SynastryService
             Aspects = aspects,
             FirstInSecondHouses = Overlay(first, second),
             SecondInFirstHouses = Overlay(second, first),
+            Davison = davison,
         };
     }
 

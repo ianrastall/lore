@@ -139,9 +139,9 @@ public sealed partial class MainViewModel : ObservableObject
         Cities = cities;
         Hospitals = hospitals;
         ChartVM = new ChartViewModel(interpreter, charts);
-        DailyVM = new DailyViewModel(transits, dailyInterpreter);
+        DailyVM = new DailyViewModel(transits, dailyInterpreter) { Home = settings?.LoadHome() };
         ForecastVM = new ForecastViewModel(transits, dailyInterpreter);
-        TimingVM = new TimingViewModel(new TimingService(charts), cities);
+        TimingVM = new TimingViewModel(new TimingService(charts, dailyInterpreter.HouseTopic), cities);
         SynastryVM = new SynastryViewModel(charts, synastryInterpreter);
     }
 
@@ -286,6 +286,22 @@ public sealed partial class MainViewModel : ObservableObject
 
     [RelayCommand]
     private void ClearCategory() => SelectedCategory = AllCategories;
+
+    // Where the reader is, for the Daily view's sunrise, sunset and planetary hours; null
+    // if no city has been chosen. Saved as soon as it is set or cleared.
+    public HomePlace? Home
+    {
+        get => DailyVM.Home;
+        set
+        {
+            if (value == DailyVM.Home) return;
+            DailyVM.Home = value;
+            _settings?.SaveHome(value);
+            StatusMessage = value is null
+                ? "Your place is cleared; the Daily view no longer shows the planetary hours."
+                : $"Sunrise, sunset and the planetary hours in the Daily view are now for {value.Name}.";
+        }
+    }
 
     // The house system and node type in force (see ChartSettings).
     public ChartSettings Settings => _charts.Settings;

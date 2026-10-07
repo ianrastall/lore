@@ -693,6 +693,23 @@
     "Retrograde": "{planet} appears to stand still today before turning back. Its themes are unusually prominent, and what it governs shifts into a period of review.",
     "Direct": "{planet} appears to stand still today before moving forward again. Matters it governs that were stalled or under review begin, slowly, to move."
   },
+  "calendar": {
+    "SolarEclipse": "A solar eclipse is a New Moon with the Sun, Moon and Earth exactly in line. Astrologers read it as a fresh start with more weight than usual, one that works itself out over the following months rather than the following weeks.",
+    "LunarEclipse": "A lunar eclipse is a Full Moon passing through the Earth's shadow. Astrologers read it as a culmination with more weight than usual: something comes to a head or comes to light, and the effects play out over months.",
+    "Retrograde": "{planet} slows to a stop and turns back. What it governs shifts from advance to review until it turns direct again.",
+    "Direct": "{planet} slows to a stop and moves forward again. Matters it governs that were stalled or under review begin, slowly, to move.",
+    "Ingress": "{planet} changes sign rarely, so each change shifts the background of the times: from here its themes work in the manner of {sign}.",
+    "IngressRetrograde": "{planet} steps back into {sign} for a while, returning to ground it had already left. The earlier chapter gets a second look before it finally closes."
+  },
+  "planetaryDays": {
+    "Sun": "Sunday is the Sun's day: for being seen, taking the lead, and matters of health, confidence and purpose.",
+    "Moon": "Monday is the Moon's day: for home and family, rest, the public mood, and anything that needs care rather than force.",
+    "Mars": "Tuesday is the day of Mars: for effort, competition, physical work, and whatever needs courage or a clean cut.",
+    "Mercury": "Wednesday is Mercury's day: for messages, study, writing, trade, short journeys and paperwork.",
+    "Jupiter": "Thursday is Jupiter's day: for growth and good fortune, teaching and law, generosity, and plans on a large scale.",
+    "Venus": "Friday is the day of Venus: for love and friendship, art and adornment, pleasure, and making peace.",
+    "Saturn": "Saturday is Saturn's day: for duty, patience and long-term work, for boundaries, and for clearing away and finishing."
+  },
   "houses": {
     "1": "self-image and how you meet the world",
     "2": "money, possessions and self-worth",
@@ -709,6 +726,8 @@
   },
   "notes": {
     "quietDay": "None of the faster planets makes a close contact to this chart today. Nothing in particular is being stirred, which leaves the day free for whatever is already under way.",
+    "planetaryHours": "Each day of the week belongs to the planet it is named for, and so does its first hour after sunrise. The hours that follow are ruled in turn by Saturn, Jupiter, Mars, the Sun, Venus, Mercury and the Moon, round and round, and tradition picks the hour of a planet for the things that planet governs.",
+    "voidOfCourse": "Between its last aspect in one sign and its entry into the next, the Moon is said to be void of course. Tradition treats these hours as a pause: suited to routine, rest and finishing what is already begun, and less to starting anything you want to come to something.",
     "unknownBirthTime": "The birth time is unknown, so this reading leaves out the houses, the Ascendant and Midheaven, and contacts to the natal Moon — all of which depend on the hour of birth."
   }
 }

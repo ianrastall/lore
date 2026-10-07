@@ -73,7 +73,7 @@ public static class DailyExportService
     // The solar return and progressions, as on the Timing view. The wheel is the return
     // chart's (none for a chart with no birth time, which has no return).
     public static byte[] TimingToPdf(TimingReading timing, byte[]? returnWheelPng) => SectionsPdf(
-        $"{timing.Name} — Solar return and progressions", $"As of {timing.AsOf:d MMMM yyyy}",
+        $"{timing.Name} — Solar return, profection and progressions", $"As of {timing.AsOf:d MMMM yyyy}",
         timing.Sections, returnWheelPng, closing: null);
 
     private static byte[] SectionsPdf(string title, string subtitle, IReadOnlyList<DailySection> sections,

@@ -210,6 +210,34 @@ public static class WorksheetService
                 (d.HouseTypes.Count > 0 ? " The halves of the chart are taken by house, so they follow the house system chosen." : "")));
         }
 
+        // Which planet and which signs carry most weight.
+        {
+            var d = m.Dominants;
+            string Points(double x) => x.ToString("0.0", CultureInfo.InvariantCulture);
+            sections.Add(new("Dominant planets", ["", "Points", "Made up of"],
+                d.Planets.Select(p => (IReadOnlyList<string>)
+                    [Body(p.Planet), Points(p.Score), p.Parts.Count == 0 ? "—" : string.Join("  ·  ", p.Parts)]).ToList(),
+                "A weighted reckoning of which planet stands out, strongest first. The Sun and Moon start with 3 each. Points then come from four things: standing within 10° of an angle " +
+                "(up to 10 at the Ascendant, 8 at the Midheaven, 6 at the Descendant or IC); each major aspect to another planet, more for a closer one " +
+                "(conjunction up to 4, opposition, square and trine 3, sextile 2; half between two of Uranus, Neptune and Pluto); being in its own sign (5) " +
+                "or exalted (4); and ruling the rising sign (8), the Sun's sign (5), the Moon's (4) or the Midheaven's (3), with half as much for a modern ruler. " +
+                "The weights are Lore's own; other programs weigh these things differently and may name another planet." +
+                (chart.Timed ? "" : " With no birth time the angles are unknown and take no part.")));
+
+            string Spread(IReadOnlyList<Weight> weights) => string.Join("  ·  ",
+                weights.Select(w => $"{w.Name} {w.Points:0} ({(d.TotalWeight == 0 ? 0 : 100 * w.Points / d.TotalWeight):0}%)"));
+            sections.Add(new("Weighted balance", [],
+                [
+                    Line("Elements", Spread(d.Elements)),
+                    Line("Modes", Spread(d.Modalities)),
+                    Line("Signs", Spread(d.Signs.Take(4).ToList())),
+                ],
+                "The same count as under Balance, but with the points that matter most counting for more: the Sun, Moon" +
+                (chart.Timed ? " and Ascendant" : "") + " 3 each, Mercury, Venus and Mars 2, Jupiter to Pluto" +
+                (chart.Timed ? " and the Midheaven" : "") + " 1. The North Node, Chiron and Lilith are left out. The four heaviest signs are shown." +
+                (chart.Timed ? "" : " With no birth time the Ascendant and Midheaven are left out too.")));
+        }
+
         // The aspects in sum.
         {
             var a = m.Aspects;

@@ -27,6 +27,7 @@ public static class NatalMetricsService
         Distribution = Distribution(chart),
         Aspects = Aspects(chart),
         Rulers = Rulers(chart),
+        Dominants = Dominants(chart),
     };
 
     // ── Further points ────────────────────────────────────────────────────────
@@ -296,6 +297,132 @@ public static class NatalMetricsService
             if (seen) break;
         }
         return chain;
+    }
+
+    // ── Dominants ─────────────────────────────────────────────────────────────
+    // A weighted answer to "which planet runs this chart", in the modern manner. Each of
+    // the ten planets collects points from five things, and the one with most is the
+    // dominant. The weights are Lore's own and are meant to be read, not believed: the
+    // Worksheet shows what every planet's total is made of.
+    //
+    //   • On an angle: within AngleOrb of the Ascendant (up to 10 points), Midheaven (8),
+    //     Descendant or IC (6), fading evenly to nothing at the edge.
+    //   • Aspects: each major aspect to another planet, by kind (conjunction 4,
+    //     opposition, square and trine 3, sextile 2) and by closeness (full at exact,
+    //     nothing at the edge of its orb). An aspect between two of Uranus, Neptune and
+    //     Pluto counts half: a whole generation shares it.
+    //   • Dignity: in its own sign 5, exalted 4.
+    //   • Rulership: ruling the rising sign 8, the Sun's sign 5, the Moon's 4, the
+    //     Midheaven's 3. The modern ruler of Scorpio, Aquarius or Pisces gets half of
+    //     that beside the traditional one. A body in its own sign is not counted again
+    //     for ruling itself.
+    //   • The Sun and Moon start with 3 each. Every tradition puts the two lights first,
+    //     and each rules one sign where the other planets rule two, so without this the
+    //     rulership points alone would put them last.
+    //
+    // Without a birth time the angles are unknown, so only the aspects, the dignities
+    // and the rulers of the Sun's and Moon's signs count.
+
+    public const double AngleOrb = 10;
+
+    // What each point counts for in the weighted tally of signs, elements and modes.
+    private static double TallyWeight(Planet p) => p switch
+    {
+        Planet.Sun or Planet.Moon => 3,
+        Planet.Mercury or Planet.Venus or Planet.Mars => 2,
+        _ => 1,
+    };
+    private const double AscendantWeight = 3, MidheavenWeight = 1;
+
+    private static Dominants Dominants(NatalChart chart)
+    {
+        var planets = TenPlanets.Select(chart.GetPlanet).OfType<PlanetPosition>().ToList();
+        var parts = planets.ToDictionary(p => p.Planet, _ => new List<(string Text, double Points)>());
+        void Add(Planet p, string what, double points)
+        {
+            if (points > 0 && parts.TryGetValue(p, out var list)) list.Add((what, points));
+        }
+
+        Add(Planet.Sun, "one of the two lights", 3);
+        Add(Planet.Moon, "one of the two lights", 3);
+
+        if (chart.Timed)
+        {
+            (string Name, double Lon, double Max)[] angles =
+            [
+                ("Ascendant", chart.Ascendant, 10), ("Midheaven", chart.Midheaven, 8),
+                ("Descendant", Normalize(chart.Ascendant + 180), 6), ("IC", Normalize(chart.Midheaven + 180), 6),
+            ];
+            foreach (var p in planets)
+            {
+                var (name, lon, max) = angles.MinBy(a => Separation(p.Longitude, a.Lon));
+                double away = Separation(p.Longitude, lon);
+                if (away < AngleOrb) Add(p.Planet, $"{Arc(away)} from the {name}", max * (1 - away / AngleOrb));
+            }
+        }
+
+        foreach (var group in chart.Aspects
+                     .Where(a => a.Type.IsMajor() && parts.ContainsKey(a.PlanetA) && parts.ContainsKey(a.PlanetB))
+                     .SelectMany(a => new[] { (Planet: a.PlanetA, Aspect: a), (Planet: a.PlanetB, Aspect: a) })
+                     .GroupBy(x => x.Planet))
+        {
+            double points = group.Sum(x =>
+            {
+                var a = x.Aspect;
+                double kind = a.Type switch { AspectType.Conjunction => 4, AspectType.Sextile => 2, _ => 3 };
+                double closeness = a.Allowed > 0 ? Math.Max(0, 1 - a.Orb / a.Allowed) : 0;
+                bool generational = a.PlanetA >= Planet.Uranus && a.PlanetB >= Planet.Uranus;
+                return kind * closeness * (generational ? 0.5 : 1);
+            });
+            Add(group.Key, group.Count() == 1 ? "one aspect" : $"{group.Count()} aspects", points);
+        }
+
+        foreach (var p in planets)
+        {
+            if (DignityService.RulerOf(p.Sign) == p.Planet || ModernRuler(p.Sign) == p.Planet)
+                Add(p.Planet, $"in its own sign, {p.Sign.Name()}", 5);
+            else if (DignityService.IsExalted(p.Planet, p.Sign))
+                Add(p.Planet, $"exalted in {p.Sign.Name()}", 4);
+        }
+
+        void Rules(string what, ZodiacSign sign, double points, Planet? self = null)
+        {
+            if (DignityService.RulerOf(sign) is var ruler && ruler != self) Add(ruler, $"rules {what}", points);
+            if (ModernRuler(sign) is { } modern && modern != self) Add(modern, $"modern ruler of {what}", points / 2);
+        }
+        if (chart.Timed) Rules("the Ascendant", ZodiacSignExtensions.FromLongitude(chart.Ascendant), 8);
+        if (chart.GetPlanet(Planet.Sun) is { } sun) Rules("the Sun's sign", sun.Sign, 5, Planet.Sun);
+        if (chart.GetPlanet(Planet.Moon) is { } moon) Rules("the Moon's sign", moon.Sign, 4, Planet.Moon);
+        if (chart.Timed) Rules("the Midheaven", ZodiacSignExtensions.FromLongitude(chart.Midheaven), 3);
+
+        // The weighted tally.
+        var weights = planets.Select(p => (p.Sign, Points: TallyWeight(p.Planet))).ToList();
+        if (chart.Timed)
+        {
+            weights.Add((ZodiacSignExtensions.FromLongitude(chart.Ascendant), AscendantWeight));
+            weights.Add((ZodiacSignExtensions.FromLongitude(chart.Midheaven), MidheavenWeight));
+        }
+        double In(Func<ZodiacSign, bool> which) => weights.Where(w => which(w.Sign)).Sum(w => w.Points);
+
+        return new Dominants
+        {
+            Planets = planets
+                .Select(p => new PlanetStrength(p.Planet, parts[p.Planet].Sum(x => x.Points),
+                    parts[p.Planet].Select(x => $"{x.Text} {x.Points.ToString("0.0", System.Globalization.CultureInfo.InvariantCulture)}").ToList()))
+                .OrderByDescending(s => s.Score).ToList(),
+            Signs = Enum.GetValues<ZodiacSign>().Select(s => new Weight(s.Name(), In(x => x == s)))
+                .Where(w => w.Points > 0).OrderByDescending(w => w.Points).ToList(),
+            Elements = Enum.GetValues<Element>().Select(e => new Weight(e.ToString(), In(s => s.GetElement() == e))).ToList(),
+            Modalities = Enum.GetValues<Modality>().Select(m => new Weight(m.ToString(), In(s => s.GetModality() == m))).ToList(),
+            TotalWeight = weights.Sum(w => w.Points),
+        };
+    }
+
+    // An arc as degrees and minutes, cut off at the minute: 2°18'.
+    private static string Arc(double degrees)
+    {
+        int total = (int)(Math.Abs(degrees) * 60);
+        return $"{total / 60}°{total % 60:D2}'";
     }
 
     // ── Arithmetic ────────────────────────────────────────────────────────────

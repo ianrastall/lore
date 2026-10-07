@@ -7,7 +7,7 @@ using NodaTime;
 namespace Lore.ViewModels;
 
 // State for the Timing view: the selected chart, the date being looked at, and the solar
-// return and progressions for it. Rebuilt (off the UI thread) whenever an input changes.
+// return, profection, progressions and solar arc for it. Rebuilt (off the UI thread) whenever an input changes.
 public sealed partial class TimingViewModel : ObservableObject
 {
     private readonly TimingService? _timing;
@@ -30,8 +30,9 @@ public sealed partial class TimingViewModel : ObservableObject
     [ObservableProperty]
     public partial DateOnly AsOf { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 
-    // Where the solar return is cast for; null for the birthplace. It belongs to the
-    // person (where they were living), so it is dropped when another chart is picked.
+    // Where the solar return is cast for, and the birth chart relocated to; null for the
+    // birthplace. It belongs to the person (where they were living), so it is dropped
+    // when another chart is picked.
     [ObservableProperty]
     public partial ReturnPlace? Place { get; set; }
 
@@ -52,7 +53,7 @@ public sealed partial class TimingViewModel : ObservableObject
         set { if (value is { } v) AsOf = DateOnly.FromDateTime(v.Date); }
     }
 
-    public string Title => Chart is null ? "" : $"{Chart.Celebrity.Name} — Solar return and progressions";
+    public string Title => Chart is null ? "" : $"{Chart.Celebrity.Name} — Timing";
     public IReadOnlyList<DailySection> Sections => Reading?.Sections ?? [];
 
     // The return chart, for the wheel beside the text; null when there is none.
@@ -66,7 +67,7 @@ public sealed partial class TimingViewModel : ObservableObject
     public bool CanChoosePlace => Chart?.Timed == true;
     public bool HasPlace => Place is not null;
     public string PlaceText => Chart is null ? "" :
-        Place is { } p ? $"Return cast for {p.Name}" : $"Return cast for the birthplace, {Chart.Celebrity.BirthPlace}";
+        Place is { } p ? $"Return cast for, and birth chart relocated to, {p.Name}" : $"Return cast for the birthplace, {Chart.Celebrity.BirthPlace}";
 
     // Cities matching what has been typed in the "cast for" box.
     public IReadOnlyList<City> Suggest(string? query) => _cities?.Search(query) ?? [];
@@ -143,7 +144,7 @@ public sealed partial class TimingViewModel : ObservableObject
             if (generation == _generation)
             {
                 Reading = null;
-                ErrorText = $"Could not build the solar return and progressions: {ex.Message}";
+                ErrorText = $"Could not build the timing reading: {ex.Message}";
             }
         }
         finally

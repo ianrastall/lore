@@ -34,4 +34,9 @@ public sealed class Synastry
     // owning the houses has no birth time.
     public required IReadOnlyList<HouseOverlay> FirstInSecondHouses { get; init; }
     public required IReadOnlyList<HouseOverlay> SecondInFirstHouses { get; init; }
+
+    // The Davison chart: a chart cast for the moment halfway between the two births, at
+    // the place halfway between the two birthplaces. Null if it was not asked for. It is
+    // Timed only when both births are.
+    public NatalChart? Davison { get; init; }
 }
