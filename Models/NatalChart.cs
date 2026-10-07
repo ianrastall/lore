@@ -49,6 +49,14 @@ public sealed class NatalChart
     // and houses are unknown; nothing should be read from them.
     public bool Timed => Celebrity.BirthTimeKnown;
 
+    // The technical angles in one line, for under the chart's heading and in the PDF.
+    // The Midheaven is not anyone's "sign"; it lives here so it cannot be taken for one.
+    public string AnglesLine => !Timed
+        ? $"Birth time unknown — planets are placed for noon; no Ascendant, Midheaven or houses   ·   {Settings.Node.Name()}"
+        : $"Ascendant {ZodiacSignExtensions.FromLongitude(Ascendant).Name()} {ZodiacSignExtensions.FormatDegreeInSign(Ascendant)}" +
+          $"   ·   Midheaven {ZodiacSignExtensions.FromLongitude(Midheaven).Name()} {ZodiacSignExtensions.FormatDegreeInSign(Midheaven)}" +
+          $"   ·   {HouseSystemLabel}   ·   {Settings.Node.Name()}";
+
     public PlanetPosition? GetPlanet(Planet p) =>
         Planets.FirstOrDefault(x => x.Planet == p);
 

@@ -8,9 +8,13 @@ namespace Lore.Views;
 // Empty/blank → transparent, so an un-scored or Ordinary entry shows no highlight.
 public sealed class HexBrushConverter : IValueConverter
 {
-    public object Convert(object value, System.Type targetType, object parameter, string language)
+    public object Convert(object value, System.Type targetType, object parameter, string language) =>
+        ToBrush(value as string);
+
+    // The same for code and for x:Bind functions, which have the string already.
+    public static SolidColorBrush ToBrush(string? value)
     {
-        var hex = (value as string)?.TrimStart('#');
+        var hex = value?.TrimStart('#');
         if (string.IsNullOrEmpty(hex))
             return new SolidColorBrush(Microsoft.UI.Colors.Transparent);
 

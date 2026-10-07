@@ -52,7 +52,7 @@
 
             <!-- Overall tone pill -->
             <Border Padding="9,3" CornerRadius="10" HorizontalAlignment="Left"
-                    Background="{x:Bind ViewModel.ToneBrush, Mode=OneWay}"
+                    Background="{x:Bind ToneBrush(ViewModel.ToneColorHex), Mode=OneWay}"
                     Visibility="{x:Bind HasText(ViewModel.ToneText), Mode=OneWay}">
                 <TextBlock Text="{x:Bind ViewModel.ToneText, Mode=OneWay}"
                            FontSize="12" FontWeight="SemiBold" Foreground="#111318"/>

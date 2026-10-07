@@ -118,7 +118,9 @@ public class PlanetaryHoursTests
         {
             Assert.Null(new SettingsService(dir).LoadHome());
 
-            new SettingsService(dir).SaveHome(Greenwich);
+            var saving = new SettingsService(dir);
+            saving.SaveHome(Greenwich);
+            saving.Flush();
             Assert.Equal(Greenwich, new SettingsService(dir).LoadHome());
             // It is kept apart from the calculation settings, which are untouched.
             Assert.Equal(ChartSettings.Default, new SettingsService(dir).Load());
@@ -128,8 +130,9 @@ public class PlanetaryHoursTests
             File.WriteAllText(Path.Combine(dir, "home.json"), "{ not json");
             Assert.Null(new SettingsService(dir).LoadHome());
 
-            new SettingsService(dir).SaveHome(Greenwich);
-            new SettingsService(dir).SaveHome(null);
+            saving.SaveHome(Greenwich);
+            saving.SaveHome(null);
+            saving.Flush();
             Assert.Null(new SettingsService(dir).LoadHome());
             Assert.False(File.Exists(Path.Combine(dir, "home.json")));
         }

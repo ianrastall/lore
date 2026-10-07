@@ -67,6 +67,13 @@ public sealed partial class SplashWindow : Window
         if (!_closed) Close();
     }
 
+    // For a start-up that failed: there is nothing to wait for.
+    public void CloseNow()
+    {
+        try { if (!_closed) Close(); }
+        catch (Exception ex) { Diagnostics.Log($"Splash could not be closed: {ex}"); }
+    }
+
     // Bare artwork: no caption or border, no taskbar/Alt+Tab entry of its own, and kept
     // above the main window, which opens (maximised) underneath while its data loads.
     private void ApplyChrome()

@@ -291,10 +291,12 @@ public sealed partial class MainWindow : Window
         HomeClearButton.Visibility = ViewModel.Home is null ? Visibility.Collapsed : Visibility.Visible;
     }
 
-    private void HomeBox_TextChanged(Microsoft.UI.Xaml.Controls.AutoSuggestBox sender, Microsoft.UI.Xaml.Controls.AutoSuggestBoxTextChangedEventArgs args)
+    private readonly SuggestionSearch _homeSearch = new();
+
+    private async void HomeBox_TextChanged(Microsoft.UI.Xaml.Controls.AutoSuggestBox sender, Microsoft.UI.Xaml.Controls.AutoSuggestBoxTextChangedEventArgs args)
     {
         if (args.Reason == Microsoft.UI.Xaml.Controls.AutoSuggestionBoxTextChangeReason.UserInput)
-            sender.ItemsSource = ViewModel.Cities.Search(sender.Text);
+            await _homeSearch.RunAsync(sender, q => ViewModel.Cities.Search(q));
     }
 
     // A suggestion was picked, or Enter pressed: take the pick, else the best match.
@@ -303,6 +305,7 @@ public sealed partial class MainWindow : Window
         var city = args.ChosenSuggestion as Models.City ?? ViewModel.Cities.Search(args.QueryText).FirstOrDefault();
         if (city is null) return;
 
+        _homeSearch.Cancel();
         ViewModel.Home = new Models.HomePlace(city.Display, city.Latitude, city.Longitude);
         sender.Text = "";
         sender.ItemsSource = null;
@@ -335,7 +338,29 @@ public sealed partial class MainWindow : Window
     private async void ExportSynastryPdf_Click(object sender, RoutedEventArgs e) => await ExportAsync("synastrypdf");
     private async void ExportSynastryPng_Click(object sender, RoutedEventArgs e) => await ExportAsync("synastrypng");
 
+    // One export at a time: a second, started while the first is still being written,
+    // would be competing with it for the same drawing surface and status line.
+    private bool _exporting;
+
     private async Task ExportAsync(string kind)
+    {
+        if (_exporting)
+        {
+            ViewModel.StatusMessage = "An export is still being written — try again when it has finished.";
+            return;
+        }
+        _exporting = true;
+        try
+        {
+            await ExportCoreAsync(kind);
+        }
+        finally
+        {
+            _exporting = false;
+        }
+    }
+
+    private async Task ExportCoreAsync(string kind)
     {
         var chart = ViewModel.ChartVM.Chart;
         if (chart is null)
@@ -428,30 +453,36 @@ public sealed partial class MainWindow : Window
             if (file is null) return; // user cancelled
 
             ViewModel.StatusMessage = $"Exporting {file.Name}…";
-            byte[] bytes = kind switch
+            // The wheel first, for the kinds that have one. (Drawn here: the drawing
+            // code shares its fonts and device with the wheels on screen.)
+            byte[]? wheel = kind switch
             {
-                "pdf"  => ExportService.ToPdf(chart, report,
-                                              await ExportService.RenderChartPngAsync(chart),
-                                              worksheet, sensitivity),
-                "png"  => await ExportService.RenderChartPngAsync(chart),
+                "pdf" or "png" => await ExportService.RenderChartPngAsync(chart),
                 "sheetpng" => await ExportService.RenderChartSheetPngAsync(chart),
+                "dailypdf" or "dailypng" => await ExportService.RenderTransitWheelPngAsync(chart, reading!),
+                "timingpdf" when timing!.Return is { } solar => await ExportService.RenderChartPngAsync(solar.Chart),
+                "synastrypdf" or "synastrypng" => await ExportService.RenderBiWheelPngAsync(comparison!),
+                _ => null,
+            };
+
+            // Then the document itself, off the UI thread: laying out a PDF of a dozen
+            // pages takes long enough to freeze the window if it is done on it.
+            byte[] bytes = await Task.Run(() => kind switch
+            {
+                "pdf"  => ExportService.ToPdf(chart, report, wheel!, worksheet, sensitivity),
+                "png" or "sheetpng" or "dailypng" or "synastrypng" => wheel!,
                 "json" => ExportService.ToJson(chart),
                 "xml"  => ExportService.ToXml(chart),
                 "worksheettxt" => WorksheetService.ToText(WorksheetService.Build(chart), sensitivity),
-                "dailypdf" => DailyExportService.ToPdf(reading!,
-                                              await ExportService.RenderTransitWheelPngAsync(chart, reading!)),
-                "dailypng" => await ExportService.RenderTransitWheelPngAsync(chart, reading!),
+                "dailypdf" => DailyExportService.ToPdf(reading!, wheel!),
                 "dailytxt" => DailyExportService.ToText(reading!),
                 "forecastpdf" => DailyExportService.ForecastToPdf(forecast!),
                 "forecasttxt" => DailyInterpreter.ForecastToText(forecast!),
-                "timingpdf" => DailyExportService.TimingToPdf(timing!,
-                                              timing!.Return is { } solar ? await ExportService.RenderChartPngAsync(solar.Chart) : null),
+                "timingpdf" => DailyExportService.TimingToPdf(timing!, wheel),
                 "timingtxt" => TimingService.ToText(timing!),
-                "synastrypdf" => SynastryExportService.ToPdf(comparison!, synastryReading!,
-                                              await ExportService.RenderBiWheelPngAsync(comparison!)),
-                "synastrypng" => await ExportService.RenderBiWheelPngAsync(comparison!),
+                "synastrypdf" => SynastryExportService.ToPdf(comparison!, synastryReading!, wheel!),
                 _      => throw new ArgumentOutOfRangeException(nameof(kind)),
-            };
+            });
 
             await FileIO.WriteBytesAsync(file, bytes);
             ViewModel.StatusMessage = $"Exported {file.Name}";

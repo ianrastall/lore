@@ -10,14 +10,18 @@
     the installer. Any finding throws, which aborts the build.
 
 .DESCRIPTION
-    Three checks, all hard failures:
-      1. No mycharts.json anywhere in the staged folder (the personal-chart store must
-         never be bundled).
+    Four checks, all hard failures:
+      1. Nothing from the personal-chart store anywhere in the staged folder: not
+         mycharts.json itself, nor its backup (.bak), a half-written copy (.tmp), its
+         lock, or a file set aside as unreadable (mycharts.unreadable-*.json).
       2. No entry in the shipped Data\celebrities.json uses the "My Charts" category
          (that category is only ever assigned to user-entered charts).
       3. Data\celebrities.json has no uncommitted changes vs git HEAD -- so a release
          ships exactly the figure library that is committed and reviewed, catching
          personal rows added by any means (skipped only if git is unavailable).
+      4. The staged Data\celebrities.json is that same file, byte for byte. Without
+         this, checks 2 and 3 could pass on the repository's copy while a stage left
+         over from an earlier build carried a different one.
 
 .PARAMETER StageDir
     The staged build output to inspect (e.g. artifacts\Lore-2.3.1-portable).
@@ -37,7 +41,8 @@ if (-not (Test-Path -LiteralPath $StageDir)) {
 $problems = [System.Collections.Generic.List[string]]::new()
 
 # 1. The personal-chart store must never ride along in a release.
-$stray = Get-ChildItem -LiteralPath $StageDir -Recurse -File -Filter 'mycharts.json' -ErrorAction SilentlyContinue
+#    "mycharts*" takes in the store and everything Lore writes beside it.
+$stray = Get-ChildItem -LiteralPath $StageDir -Recurse -File -Filter 'mycharts*' -ErrorAction SilentlyContinue
 foreach ($f in $stray) { $problems.Add("personal chart store bundled: $($f.FullName)") }
 
 # 2. The shipped figure library must contain no user-entered ("My Charts") charts.
@@ -62,6 +67,15 @@ if ($git) {
     }
 } else {
     Write-Host "assert-clean-release: git not found -- skipping the committed-state check." -ForegroundColor DarkYellow
+}
+
+# 4. What is staged must be the repository's own library, not merely look like one.
+$sourcePath = Join-Path $root 'Data\celebrities.json'
+if (-not (Test-Path -LiteralPath $sourcePath)) {
+    $problems.Add("Data\celebrities.json is missing from the repository, so the staged copy cannot be checked against it.")
+} elseif ((Get-FileHash -LiteralPath $celebPath -Algorithm SHA256).Hash -ne
+          (Get-FileHash -LiteralPath $sourcePath -Algorithm SHA256).Hash) {
+    $problems.Add("the staged Data\celebrities.json is not the repository's Data\celebrities.json -- delete the staged folder and build again.")
 }
 
 if ($problems.Count -gt 0) {

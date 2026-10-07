@@ -162,25 +162,10 @@ public sealed partial class AddChartDialog : ContentDialog
     // Searching a quarter of a million hospitals takes long enough to feel in the typing,
     // so both searches wait for a short pause and then run off the UI thread. A newer
     // keystroke cancels the search before it.
-    private CancellationTokenSource? _searching;
+    private readonly SuggestionSearch _search = new();
 
-    private async Task SuggestAsync<T>(AutoSuggestBox box, Func<string, IReadOnlyList<T>> search)
-    {
-        _searching?.Cancel();
-        var mine = _searching = new CancellationTokenSource();
-        string query = box.Text;
-        try
-        {
-            await Task.Delay(200, mine.Token);
-            var results = await Task.Run(() => search(query), mine.Token);
-            if (!mine.IsCancellationRequested)
-                box.ItemsSource = results;
-        }
-        catch (OperationCanceledException)
-        {
-            // superseded by a later keystroke
-        }
-    }
+    private Task SuggestAsync<T>(AutoSuggestBox box, Func<string, IReadOnlyList<T>> search) =>
+        _search.RunAsync(box, search);
 
     private async void CityBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
     {

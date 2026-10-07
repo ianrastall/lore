@@ -13,12 +13,16 @@ public sealed partial class ReportView : UserControl
         set
         {
             if (ReferenceEquals(_viewModel, value)) return;
+            _viewModel.PropertyChanged -= OnViewModelChanged;
             _viewModel = value;
             if (value is not null)
-                value.PropertyChanged += (_, _) => Bindings.Update();
+                value.PropertyChanged += OnViewModelChanged;
             Bindings.Update();
         }
     }
+
+    private void OnViewModelChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) =>
+        Bindings.Update();
 
     public ReportView()
     {

@@ -24,7 +24,7 @@
             <Border Margin="0,6,0,0" Padding="9,3" CornerRadius="10"
                     HorizontalAlignment="Left"
                     Visibility="{x:Bind VisIf(ViewModel.HasChart), Mode=OneWay}"
-                    Background="{x:Bind ViewModel.ScoreBrush, Mode=OneWay}">
+                    Background="{x:Bind BrushOf(ViewModel.ScoreColorHex), Mode=OneWay}">
                 <TextBlock Text="{x:Bind ViewModel.ScoreText, Mode=OneWay}"
                            FontSize="12" FontWeight="SemiBold" Foreground="#111318"/>
             </Border>

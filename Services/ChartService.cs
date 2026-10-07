@@ -22,7 +22,8 @@ public sealed class ChartService
     ];
 
     // The house system and node type every calculation uses. Replaced as a whole when
-    // the user changes a setting; each calculation reads it once.
+    // the user changes a setting; each calculation reads it once. (See With, for work
+    // that is more than one calculation.)
     public ChartSettings Settings { get; set; } = ChartSettings.Default;
 
     private static int SweBody(Planet planet, NodeType node, LilithType lilith) =>
@@ -39,10 +40,24 @@ public sealed class ChartService
     // sub-millisecond, so serialising them costs nothing perceptible.
     private static readonly object SweLock = new();
 
+    // The ephemeris path belongs to the whole process, not to one service: it is set
+    // once, here, under the same lock as the calculations that read it.
     public ChartService(string ephemerisPath)
     {
-        SwissEphemeris.SetEphePath(ephemerisPath);
+        lock (SweLock)
+        {
+            SwissEphemeris.SetEphePath(ephemerisPath);
+        }
     }
+
+    private ChartService(ChartSettings settings) => Settings = settings;
+
+    // This service with its settings fixed at the given ones, whatever is chosen in the
+    // menu afterwards. Anything that makes many calculations for one result (a forecast,
+    // a search of the library, the birth-time check) works through one of these, so a
+    // setting changed half-way cannot give it a mixture — the first half of a forecast
+    // with the mean Lilith and the rest with the true one, tens of degrees away.
+    public ChartService With(ChartSettings settings) => new(settings);
 
     public NatalChart Calculate(Celebrity celebrity) =>
         CalculateAt(celebrity, BirthTimeResolver.ToUtc(celebrity));
@@ -125,7 +140,8 @@ public sealed class ChartService
         double longitude = ((a.Longitude + apart / 2) % 360 + 540) % 360 - 180;
         double latitude = (a.Latitude + b.Latitude) / 2;
 
-        return CalculateAt(new Celebrity
+        // Cast with the first chart's settings, like the comparison it sits beside.
+        return With(first.Settings).CalculateAt(new Celebrity
         {
             Id = $"davison:{a.Id}:{b.Id}",
             Name = $"{a.Name} & {b.Name}",

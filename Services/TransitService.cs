@@ -28,7 +28,30 @@ public sealed class TransitService
 
     private readonly ChartService _charts;
 
+    // True once _charts has its settings fixed (see For).
+    private readonly bool _pinned;
+
     public TransitService(ChartService charts) => _charts = charts;
+
+    private TransitService(ChartService charts, bool pinned)
+    {
+        _charts = charts;
+        _pinned = pinned;
+    }
+
+    // This service, calculating with the settings the birth chart was cast with for as
+    // long as the work takes: every sample and every refinement of one scan or forecast
+    // then uses the same node and Lilith, whatever is changed in the menu meanwhile.
+    private TransitService For(NatalChart natal) => new(_charts.With(natal.Settings), pinned: true);
+
+    // How far apart, in days, a body's positions are sampled when looking for the days
+    // it spends within orb of a point: close enough together that it moves less between
+    // two samples than the 2° an orb spans, so no pass can slip between them. The true
+    // (osculating) Lilith is the quick one: it swings back and forth by 6° a day and more.
+    private double SampleStep(Planet mover) =>
+        mover == Planet.Lilith && _charts.Settings.Lilith == LilithType.True ? 0.125
+        : mover.IsPersonal() ? 0.5
+        : 1.0;
 
     // The zone whose calendar day a reading covers: the reader's own, wherever the
     // chart's owner was born.
@@ -42,6 +65,8 @@ public sealed class TransitService
     // it they are left out.
     public DaySky Scan(NatalChart natal, DateOnly date, DateTimeZone zone, HomePlace? home = null)
     {
+        if (!_pinned) return For(natal).Scan(natal, date, zone, home);
+
         // The day runs from one local midnight to the next. Both ends are resolved
         // separately, so a 23- or 25-hour daylight-saving day comes out right.
         var local = new LocalDate(date.Year, date.Month, date.Day);
@@ -114,6 +139,8 @@ public sealed class TransitService
         NatalChart natal, DateOnly start, int days, DateTimeZone zone, bool includeFast = true,
         CancellationToken cancel = default)
     {
+        if (!_pinned) return For(natal).Forecast(natal, start, days, zone, includeFast, cancel);
+
         var first = new LocalDate(start.Year, start.Month, start.Day);
         double jd0 = SwissEphemeris.DateTimeToJulianDay(zone.AtStartOfDay(first).ToDateTimeUtc());
         double jd1 = SwissEphemeris.DateTimeToJulianDay(zone.AtStartOfDay(first.PlusDays(days)).ToDateTimeUtc());
@@ -127,10 +154,7 @@ public sealed class TransitService
             if (mover == Planet.Moon || (!includeFast && mover.IsPersonal())) continue;
             cancel.ThrowIfCancellationRequested();
 
-            // Half-day samples for the quick planets, daily for the slow: in either case
-            // the body moves less between samples than the 2° an orb spans, so no pass
-            // can slip between two of them.
-            double step = mover.IsPersonal() ? 0.5 : 1.0;
+            double step = SampleStep(mover);
             int n = Math.Max(1, (int)Math.Ceiling((jd1 - jd0) / step));
             var jds = new double[n + 1];
             var lon = new double[n + 1];
@@ -217,6 +241,8 @@ public sealed class TransitService
     public IReadOnlyList<SkyEvent> SkyCalendar(
         NatalChart natal, DateOnly start, int days, DateTimeZone zone, CancellationToken cancel = default)
     {
+        if (!_pinned) return For(natal).SkyCalendar(natal, start, days, zone, cancel);
+
         var first = new LocalDate(start.Year, start.Month, start.Day);
         double jd0 = SwissEphemeris.DateTimeToJulianDay(zone.AtStartOfDay(first).ToDateTimeUtc());
         double jd1 = SwissEphemeris.DateTimeToJulianDay(zone.AtStartOfDay(first.PlusDays(days)).ToDateTimeUtc());
@@ -531,6 +557,8 @@ public sealed class TransitService
         var (step, steps) = mover switch
         {
             Planet.Moon => (1.0 / 24, 12),   // an hour at a time, half a day out
+            // The true Lilith doubles back within days; three hours at a time, five days out.
+            Planet.Lilith when SampleStep(mover) < 0.5 => (0.125, 40),
             _ when mover.IsPersonal() => (0.25, 40),       // ten days out
             _ => (1.0, 240),                               // eight months out
         };

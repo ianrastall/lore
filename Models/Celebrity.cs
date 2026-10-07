@@ -11,8 +11,10 @@ public sealed class Celebrity
     [JsonPropertyName("name")]
     public string Name { get; init; } = "";
 
+    // (The optional text below reads an explicit null in a file as empty, so nothing
+    // that searches or prints it has to allow for one.)
     [JsonPropertyName("category")]
-    public string Category { get; init; } = "";
+    public string Category { get; init => field = value ?? ""; } = "";
 
     [JsonPropertyName("birthDate")]
     public string BirthDate { get; init; } = "";
@@ -34,7 +36,7 @@ public sealed class Celebrity
     public int BirthTimeUncertaintyMinutes { get; init; }
 
     [JsonPropertyName("birthPlace")]
-    public string BirthPlace { get; init; } = "";
+    public string BirthPlace { get; init => field = value ?? ""; } = "";
 
     [JsonPropertyName("latitude")]
     public double Latitude { get; init; }
@@ -66,7 +68,7 @@ public sealed class Celebrity
     public string? Source { get; init; }
 
     [JsonPropertyName("bio")]
-    public string Bio { get; init; } = "";
+    public string Bio { get; init => field = value ?? ""; } = "";
 
     // Transient dignity-verdict tint for the browse list, filled in after the chart is
     // scored (not persisted). Empty/transparent hex = Ordinary (no highlight).

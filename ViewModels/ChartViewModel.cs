@@ -1,8 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using Lore.Models;
 using Lore.Services;
-using Microsoft.UI.Xaml.Media;
-using Windows.UI;
 
 namespace Lore.ViewModels;
 
@@ -53,23 +51,78 @@ public sealed partial class ChartViewModel : ObservableObject
     public bool SensitivityHasChanges => Sensitivity?.HasChanges == true;
 
     // Set while a new chart is being taken in, when the margin is reset as part of that
-    // and the analysis is rebuilt once at the end rather than once per change.
+    // and the analysis arrives with the chart rather than being rebuilt for the change.
     private bool _loadingChart;
+
+    // The analysis that belongs to a chart being shown (see Show).
+    private TimeSensitivity? _incoming;
+    private bool _hasIncoming;
+
+    // Bumped whenever the analysis is asked for again; one that finishes after a newer
+    // request (or after another chart has been shown) is dropped.
+    private int _sensitivityGeneration;
+    private CancellationTokenSource? _sensitivityCancel;
+
+    // The analysis recalculates the chart for every minute of the margin (361 charts at
+    // its widest), so it is never run on the UI thread: MainViewModel works it out
+    // beside the chart itself and hands both over together.
+    public static TimeSensitivity? Analyse(ChartService charts, NatalChart chart, CancellationToken cancel = default) =>
+        TimeSensitivityService.For(charts, chart, chart.Celebrity.BirthTimeUncertaintyMinutes, cancel);
+
+    public void Show(NatalChart? chart, TimeSensitivity? sensitivity)
+    {
+        _incoming = sensitivity;
+        _hasIncoming = true;
+        try { Chart = chart; }
+        finally { _hasIncoming = false; _incoming = null; }
+    }
 
     partial void OnUncertaintyMinutesChanged(double value)
     {
         if (!_loadingChart) RebuildSensitivity();
     }
 
-    private void RebuildSensitivity()
+    partial void OnSensitivityChanged(TimeSensitivity? value)
     {
-        int minutes = double.IsNaN(UncertaintyMinutes) ? 0 : (int)UncertaintyMinutes;
-        Sensitivity = Chart is null || _charts is null ? null
-            : Chart.Timed ? TimeSensitivityService.Analyse(_charts, Chart.Celebrity, minutes)
-            : TimeSensitivityService.AnalyseDay(_charts, Chart.Celebrity);
         OnPropertyChanged(nameof(HasSensitivity));
         OnPropertyChanged(nameof(SensitivityHasChanges));
         OnPropertyChanged(nameof(BigThreeText));
+    }
+
+    // The margin was changed by hand: work the analysis out again, off the UI thread,
+    // after a short pause so that holding the box's arrow down asks only once.
+    private async void RebuildSensitivity()
+    {
+        int generation = ++_sensitivityGeneration;
+        _sensitivityCancel?.Cancel();
+        var cancel = _sensitivityCancel = new CancellationTokenSource();
+        var chart = Chart;
+        var charts = _charts;
+        int minutes = double.IsNaN(UncertaintyMinutes) ? 0 : (int)UncertaintyMinutes;
+
+        if (chart is null || charts is null)
+        {
+            Sensitivity = null;
+            return;
+        }
+
+        try
+        {
+            await Task.Delay(150, cancel.Token);
+            var result = await Task.Run(() => TimeSensitivityService.For(charts, chart, minutes, cancel.Token), cancel.Token);
+            if (generation == _sensitivityGeneration)
+                Sensitivity = result;
+        }
+        catch (OperationCanceledException)
+        {
+            // overtaken by a newer margin or another chart
+        }
+        catch (Exception ex)
+        {
+            Diagnostics.Log($"Birth-time check for chart {chart.Celebrity.Id} failed: {ex}");
+            if (generation == _sensitivityGeneration)
+                Sensitivity = null;
+        }
     }
 
     public string WorksheetTitle => Chart is null ? "" : $"{Chart.Celebrity.Name} — Worksheet";
@@ -98,16 +151,9 @@ public sealed partial class ChartViewModel : ObservableObject
         return string.Join("     ·     ", parts);
     }
 
-    // Technical chart angles — secondary, shown small. The Midheaven is NOT the "sign";
-    // it lives here so it can't be mistaken for one.
-    public string AnglesText => Chart is null ? "" : FormatAngles(Chart);
-
-    // Shared with the PDF export so both print the same line.
-    public static string FormatAngles(NatalChart chart) => !chart.Timed
-        ? $"Birth time unknown — planets are placed for noon; no Ascendant, Midheaven or houses   ·   {chart.Settings.Node.Name()}"
-        : $"Ascendant {ZodiacSignExtensions.FromLongitude(chart.Ascendant).Name()} {ZodiacSignExtensions.FormatDegreeInSign(chart.Ascendant)}" +
-          $"   ·   Midheaven {ZodiacSignExtensions.FromLongitude(chart.Midheaven).Name()} {ZodiacSignExtensions.FormatDegreeInSign(chart.Midheaven)}" +
-          $"   ·   {chart.HouseSystemLabel}   ·   {chart.Settings.Node.Name()}";
+    // Technical chart angles — secondary, shown small (see NatalChart.AnglesLine, which
+    // the PDF export prints too).
+    public string AnglesText => Chart?.AnglesLine ?? "";
 
     // Traditional dignity score + verdict, shown as a coloured pill.
     private ChartScore? _score;
@@ -117,16 +163,8 @@ public sealed partial class ChartViewModel : ObservableObject
         _score is null ? "Dignity score needs a birth time" :
         $"Dignity score {_score.Total:+#;-#;0}  ·  {_score.Verdict.Label()}";
 
-    public SolidColorBrush ScoreBrush => new(ParseHex(_score?.Verdict.ColorHex() ?? "#9AA0A6"));
-
-    private static Color ParseHex(string hex)
-    {
-        hex = hex.TrimStart('#');
-        return Color.FromArgb(255,
-            Convert.ToByte(hex[..2], 16),
-            Convert.ToByte(hex.Substring(2, 2), 16),
-            Convert.ToByte(hex.Substring(4, 2), 16));
-    }
+    // The pill's colour as "#RRGGBB"; the view makes the brush.
+    public string ScoreColorHex => _score?.Verdict.ColorHex() ?? "#9AA0A6";
 
     partial void OnChartChanged(NatalChart? value)
     {
@@ -139,10 +177,17 @@ public sealed partial class ChartViewModel : ObservableObject
         OnPropertyChanged(nameof(CanTestTime));
         OnPropertyChanged(nameof(HasChart));
         OnPropertyChanged(nameof(SensitivityHeading));
+        // Whatever analysis was on its way belonged to the chart before this one.
+        _sensitivityGeneration++;
+        _sensitivityCancel?.Cancel();
         _loadingChart = true;
         UncertaintyMinutes = value?.Celebrity.BirthTimeUncertaintyMinutes ?? 0;
         _loadingChart = false;
-        RebuildSensitivity();
+        // Normally handed over with the chart (see Show); worked out here only when a
+        // chart is set on its own.
+        Sensitivity = _hasIncoming ? _incoming
+            : value is null || _charts is null ? null
+            : Analyse(_charts, value);
         // After the analysis above: the report draws on it for an untimed Moon.
         ReportSections = (_interpreter is not null && value is not null)
             ? _interpreter.Interpret(value, Sensitivity?.MoonSigns)
@@ -151,6 +196,6 @@ public sealed partial class ChartViewModel : ObservableObject
         OnPropertyChanged(nameof(BigThreeText));
         OnPropertyChanged(nameof(AnglesText));
         OnPropertyChanged(nameof(ScoreText));
-        OnPropertyChanged(nameof(ScoreBrush));
+        OnPropertyChanged(nameof(ScoreColorHex));
     }
 }

@@ -2,8 +2,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Lore.Models;
 using Lore.Services;
-using Microsoft.UI.Xaml.Media;
-using Windows.UI;
 
 namespace Lore.ViewModels;
 
@@ -109,7 +107,7 @@ public sealed partial class SynastryViewModel : ObservableObject
 
     public string ToneText => Reading is null ? "" :
         $"The connection reads as {Reading.Tone.Label()} ({Reading.Tone.LevelText()})";
-    public SolidColorBrush ToneBrush => new(ParseHex(Reading?.Tone.ColorHex() ?? "#9AA0A6"));
+    public string ToneColorHex => Reading?.Tone.ColorHex() ?? "#9AA0A6";
 
     public IReadOnlyList<DailySection> Sections => Reading?.Sections ?? [];
     public IReadOnlyList<string> Trace => Reading?.Trace ?? [];
@@ -192,7 +190,9 @@ public sealed partial class SynastryViewModel : ObservableObject
         IsSearching = true;
         try
         {
-            var matches = await Task.Run(() => SynastryScoring.Rank(_charts, chart, people, cancel.Token));
+            // Everyone is cast with the settings the selected chart was cast with.
+            var charts = _charts.With(chart.Settings);
+            var matches = await Task.Run(() => SynastryScoring.Rank(charts, chart, people, cancel.Token));
             if (generation == _matchGeneration)
                 Matches = matches;
         }
@@ -202,7 +202,7 @@ public sealed partial class SynastryViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            Diagnostics.Log($"Synastry search for {chart.Celebrity.Name} failed: {ex}");
+            Diagnostics.Log($"Synastry search for chart {chart.Celebrity.Id} failed: {ex}");
         }
         finally
         {
@@ -217,7 +217,7 @@ public sealed partial class SynastryViewModel : ObservableObject
     {
         OnPropertyChanged(nameof(Title));
         OnPropertyChanged(nameof(ToneText));
-        OnPropertyChanged(nameof(ToneBrush));
+        OnPropertyChanged(nameof(ToneColorHex));
         OnPropertyChanged(nameof(Sections));
         OnPropertyChanged(nameof(Trace));
         OnPropertyChanged(nameof(TraceHeader));
@@ -229,14 +229,17 @@ public sealed partial class SynastryViewModel : ObservableObject
         var chart = Chart;
         var partner = Partner;
         ErrorText = "";
+
+        // Either person has changed, so the comparison on screen is no longer theirs: it
+        // goes at once, not when its replacement is ready.
+        Comparison = null;
+        Reading = null;
         OnPropertyChanged(nameof(Title));
         OnPropertyChanged(nameof(PromptText));
 
         if (chart is null || partner is null || partner.Id == chart.Celebrity.Id ||
             _charts is null || _interpreter is null)
         {
-            Comparison = null;
-            Reading = null;
             IsBusy = false;
             return;
         }
@@ -246,8 +249,10 @@ public sealed partial class SynastryViewModel : ObservableObject
         {
             var (comparison, reading) = await Task.Run(() =>
             {
-                var other = _charts.Calculate(partner);
-                var synastry = SynastryService.Compare(chart, other, _charts.Davison(chart, other));
+                // The partner is cast with the settings the selected chart was cast with.
+                var charts = _charts.With(chart.Settings);
+                var other = charts.Calculate(partner);
+                var synastry = SynastryService.Compare(chart, other, charts.Davison(chart, other));
                 return (synastry, _interpreter.Compose(synastry));
             });
             if (generation == _generation)
@@ -258,7 +263,7 @@ public sealed partial class SynastryViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            Diagnostics.Log($"Synastry for {chart.Celebrity.Name} and {partner.Name} failed: {ex}");
+            Diagnostics.Log($"Synastry for charts {chart.Celebrity.Id} and {partner.Id} failed: {ex}");
             if (generation == _generation)
             {
                 Comparison = null;
@@ -271,14 +276,5 @@ public sealed partial class SynastryViewModel : ObservableObject
             if (generation == _generation)
                 IsBusy = false;
         }
-    }
-
-    private static Color ParseHex(string hex)
-    {
-        hex = hex.TrimStart('#');
-        return Color.FromArgb(255,
-            Convert.ToByte(hex[..2], 16),
-            Convert.ToByte(hex.Substring(2, 2), 16),
-            Convert.ToByte(hex.Substring(4, 2), 16));
     }
 }

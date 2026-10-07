@@ -44,6 +44,27 @@ public sealed partial class MainViewModel : ObservableObject
     // started is dropped instead of overwriting the newer chart.
     private int _loadGeneration;
 
+    // Stops the calculation a newer selection has overtaken (see LoadChartAsync).
+    private CancellationTokenSource? _loadCancel;
+
+    // Bumped each time the list is rebuilt and each time a setting is changed: of two
+    // that overlap, only the later one's results are used.
+    private int _poolGeneration;
+    private int _settingsGeneration;
+
+    // The two things the progress ring stands for. They are kept apart because they
+    // overlap: the first chart starts calculating before the data load has returned,
+    // and either may finish first.
+    private bool _initializing;
+    private bool _calculating;
+
+    private void SetBusy(bool? initializing = null, bool? calculating = null)
+    {
+        _initializing = initializing ?? _initializing;
+        _calculating = calculating ?? _calculating;
+        IsLoading = _initializing || _calculating;
+    }
+
     // Exposed so the Add-Chart dialog (owned by the window) can offer city autocomplete.
     public CityService Cities { get; }
 
@@ -147,7 +168,7 @@ public sealed partial class MainViewModel : ObservableObject
 
     public async Task InitializeAsync(string dataPath, string citiesPath, string hospitalsPath)
     {
-        IsLoading = true;
+        SetBusy(initializing: true);
         StatusMessage = "Loading data…";
         try
         {
@@ -179,55 +200,71 @@ public sealed partial class MainViewModel : ObservableObject
         }
         finally
         {
-            IsLoading = false;
+            SetBusy(initializing: false);
         }
     }
 
-    private async Task RebuildPoolAsync()
+    // Rebuilds the list of people and their verdicts. Returns the Id of whoever was
+    // selected just before the list was replaced (replacing it clears the selection),
+    // so that a caller can put the selection back: taken at that moment rather than at
+    // the start, in case someone else was picked while the verdicts were worked out.
+    private async Task<string?> RebuildPoolAsync()
     {
-        _all = [.. _celebrities.All, .. _userCharts.Charts];
-        SynastryVM.SetPeople(_all);
-        // Scoring runs the native Swiss Ephemeris calculation for every chart (150+),
-        // so keep it off the UI thread. It only writes plain string fields on each
-        // Celebrity, which the list bindings read afterwards at item realisation.
-        await Task.Run(ComputeVerdicts);
+        int generation = ++_poolGeneration;
+        var all = _all = [.. _celebrities.All, .. _userCharts.Charts];
+        SynastryVM.SetPeople(all);
+        // Scoring runs the native Swiss Ephemeris calculation for every chart in the
+        // library (over 1,300), so it is kept off the UI thread, and it is done with
+        // the settings in force now even if they are changed before it finishes.
+        var charts = _charts.With(_charts.Settings);
+        var verdicts = await Task.Run(() => ComputeVerdicts(charts, all));
+        // Written here, on the UI thread, and only by the latest pass: the list
+        // bindings read these values when the rows are next built, just below.
+        if (generation == _poolGeneration)
+            foreach (var (person, colorHex, label) in verdicts)
+            {
+                person.VerdictColorHex = colorHex;
+                person.VerdictLabel = label;
+            }
+        string? selectedId = SelectedCelebrity?.Id;
         RefreshCategories();
         ApplyFilter();
+        return selectedId;
     }
 
     // Score every chart so the browse list can highlight the notable ones. Only
     // Extraordinary/Alarming get a coloured bar; Ordinary stays clear so the outliers
-    // stand out. Runs on a background thread (see RebuildPoolAsync) before the displayed
-    // list is built, since the list bindings read these values at item realisation.
-    private void ComputeVerdicts()
+    // stand out. Runs on a background thread (see RebuildPoolAsync).
+    private static List<(Celebrity Person, string ColorHex, string Label)> ComputeVerdicts(
+        ChartService charts, List<Celebrity> all)
     {
-        foreach (var c in _all)
+        var verdicts = new List<(Celebrity, string, string)>(all.Count);
+        foreach (var c in all)
         {
             try
             {
                 // No birth time, no score (see DignityService.ComputeIfTimed).
-                if (DignityService.ComputeIfTimed(_charts.Calculate(c)) is not { } score)
+                if (DignityService.ComputeIfTimed(charts.Calculate(c)) is not { } score)
                 {
-                    c.VerdictColorHex = "#00000000";
-                    c.VerdictLabel = "";
+                    verdicts.Add((c, "#00000000", ""));
                     continue;
                 }
                 // Translucent wash for the whole row: green (Extraordinary) / red
                 // (Alarming), transparent for Ordinary so the notable rows stand out.
-                c.VerdictColorHex = score.Verdict switch
+                string colorHex = score.Verdict switch
                 {
                     Models.ChartVerdict.Extraordinary => "#553FB84F",
                     Models.ChartVerdict.Alarming      => "#55E5534B",
                     _                                 => "#00000000",
                 };
-                c.VerdictLabel = $"Dignity {score.Total:+#;-#;0} · {score.Verdict.Label()}";
+                verdicts.Add((c, colorHex, $"Dignity {score.Total:+#;-#;0} · {score.Verdict.Label()}"));
             }
             catch
             {
-                c.VerdictColorHex = "#00000000";
-                c.VerdictLabel = "";
+                verdicts.Add((c, "#00000000", ""));
             }
         }
+        return verdicts;
     }
 
     // First entry in the category dropdown: clears the filter to show everyone.
@@ -260,6 +297,13 @@ public sealed partial class MainViewModel : ObservableObject
         {
             ShowLegend = false; // picking a person returns from the legend to their chart
             _ = LoadChartAsync(value);
+        }
+        else
+        {
+            // Nothing is selected, so nothing is being calculated for the screen: the
+            // calculation just dropped must not leave the progress ring turning.
+            _loadCancel?.Cancel();
+            SetBusy(calculating: false);
         }
     }
 
@@ -311,11 +355,14 @@ public sealed partial class MainViewModel : ObservableObject
     public async Task ApplySettingsAsync(ChartSettings settings)
     {
         if (settings == _charts.Settings) return;
+        int request = ++_settingsGeneration;
         _charts.Settings = settings;
         _settings?.Save(settings);
 
-        string? selectedId = SelectedCelebrity?.Id;
-        await RebuildPoolAsync();
+        string? selectedId = await RebuildPoolAsync();
+        // A newer change overtook this one while the list was rescored; it will redraw
+        // the chart and say what is in use.
+        if (request != _settingsGeneration) return;
         if (selectedId is not null &&
             DisplayedCelebrities.FirstOrDefault(c => c.Id == selectedId) is { } again)
         {
@@ -373,7 +420,8 @@ public sealed partial class MainViewModel : ObservableObject
         UserChartService.ImportResult result;
         try
         {
-            result = await _userCharts.ImportAsync(path);
+            // Off the UI thread: the file is read, checked and merged chart by chart.
+            result = await Task.Run(() => _userCharts.ImportAsync(path));
         }
         catch (Exception ex)
         {
@@ -388,9 +436,8 @@ public sealed partial class MainViewModel : ObservableObject
             return;
         }
 
-        string? selectedId = SelectedCelebrity?.Id;
         bool keepCategory = SelectedCelebrity is not null && !SelectedIsCustom;
-        await RebuildPoolAsync();
+        string? selectedId = await RebuildPoolAsync();
         if (!keepCategory) SelectedCategory = UserChartService.MyChartsCategory;
         if (selectedId is not null &&
             DisplayedCelebrities.FirstOrDefault(c => c.Id == selectedId) is { } again)
@@ -425,18 +472,39 @@ public sealed partial class MainViewModel : ObservableObject
     private async Task LoadChartAsync(Celebrity celebrity)
     {
         int generation = ++_loadGeneration;
-        IsLoading = true;
+        _loadCancel?.Cancel();
+        var cancel = _loadCancel = new CancellationTokenSource();
+        SetBusy(calculating: true);
         StatusMessage = $"Calculating chart for {celebrity.Name}…";
         try
         {
-            var chart = await Task.Run(() => _charts.Calculate(celebrity));
+            // The chart and its birth-time check together, both with the settings in
+            // force now. The check alone recalculates the chart some hundreds of times.
+            var charts = _charts.With(_charts.Settings);
+            var (chart, sensitivity) = await Task.Run(() =>
+            {
+                var calculated = charts.Calculate(celebrity);
+                try
+                {
+                    return (calculated, ChartViewModel.Analyse(charts, calculated, cancel.Token));
+                }
+                catch (Exception ex) when (ex is not OperationCanceledException)
+                {
+                    Diagnostics.Log($"Birth-time check for chart {celebrity.Id} failed: {ex}");
+                    return (calculated, (TimeSensitivity?)null);
+                }
+            });
             if (generation != _loadGeneration) return; // superseded by a newer selection
-            ChartVM.Chart = chart;
+            ChartVM.Show(chart, sensitivity);
             DailyVM.Chart = chart;
             ForecastVM.Chart = chart;
             TimingVM.Chart = chart;
             SynastryVM.Chart = chart;
             StatusMessage = chart.EphemerisNote; // empty unless the ephemeris data is missing
+        }
+        catch (OperationCanceledException)
+        {
+            // superseded by a newer selection
         }
         catch (Exception ex)
         {
@@ -446,7 +514,7 @@ public sealed partial class MainViewModel : ObservableObject
         finally
         {
             if (generation == _loadGeneration)
-                IsLoading = false;
+                SetBusy(calculating: false);
         }
     }
 }

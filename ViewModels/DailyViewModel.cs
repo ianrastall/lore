@@ -2,9 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Lore.Models;
 using Lore.Services;
-using Microsoft.UI.Xaml.Media;
 using NodaTime;
-using Windows.UI;
 
 namespace Lore.ViewModels;
 
@@ -59,7 +57,7 @@ public sealed partial class DailyViewModel : ObservableObject
     public bool IsToday => Date == DateOnly.FromDateTime(DateTime.Now);
 
     public string ToneText => Reading is null ? "" : $"The day reads as {Reading.Tone.Label()}";
-    public SolidColorBrush ToneBrush => new(ParseHex(Reading?.Tone.ColorHex() ?? "#9AA0A6"));
+    public string ToneColorHex => Reading?.Tone.ColorHex() ?? "#9AA0A6";
 
     // Under the wheel beside the reading.
     public string WheelCaption => Reading is null ? "" :
@@ -83,6 +81,9 @@ public sealed partial class DailyViewModel : ObservableObject
     partial void OnChartChanged(NatalChart? value)
     {
         OnPropertyChanged(nameof(Title));
+        // The heading now names someone else: the last reading must not stay under it
+        // while the new one is worked out.
+        Reading = null;
         Rebuild();
     }
 
@@ -100,7 +101,7 @@ public sealed partial class DailyViewModel : ObservableObject
     {
         OnPropertyChanged(nameof(DateText));
         OnPropertyChanged(nameof(ToneText));
-        OnPropertyChanged(nameof(ToneBrush));
+        OnPropertyChanged(nameof(ToneColorHex));
         OnPropertyChanged(nameof(WheelCaption));
         OnPropertyChanged(nameof(Sections));
         OnPropertyChanged(nameof(Trace));
@@ -132,7 +133,7 @@ public sealed partial class DailyViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            Diagnostics.Log($"Daily reading for {chart.Celebrity.Name} on {date} failed: {ex}");
+            Diagnostics.Log($"Daily reading for chart {chart.Celebrity.Id} on {date} failed: {ex}");
             if (generation == _generation)
             {
                 Reading = null;
@@ -144,14 +145,5 @@ public sealed partial class DailyViewModel : ObservableObject
             if (generation == _generation)
                 IsBusy = false;
         }
-    }
-
-    private static Color ParseHex(string hex)
-    {
-        hex = hex.TrimStart('#');
-        return Color.FromArgb(255,
-            Convert.ToByte(hex[..2], 16),
-            Convert.ToByte(hex.Substring(2, 2), 16),
-            Convert.ToByte(hex.Substring(4, 2), 16));
     }
 }

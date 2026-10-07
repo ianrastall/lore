@@ -121,7 +121,7 @@ public static class ExportService
         else if (chart.GetPlanet(Planet.Moon) is { } moonP) bigParts.Add($"☽ Moon {moonP.Sign.Name()}");
         if (chart.Timed) bigParts.Add($"↑ Rising {rising}");
         string bigThree = string.Join("     ·     ", bigParts);
-        string angles = ViewModels.ChartViewModel.FormatAngles(chart);
+        string angles = chart.AnglesLine;
 
         // No dignity score without a birth time (see DignityService.ComputeIfTimed).
         var score = DignityService.ComputeIfTimed(chart);

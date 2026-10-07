@@ -18,24 +18,27 @@ public sealed partial class WorksheetView : UserControl
         set
         {
             if (ReferenceEquals(_viewModel, value)) return;
+            _viewModel.PropertyChanged -= OnViewModelChanged;
             _viewModel = value;
-            value.PropertyChanged += (_, e) =>
-            {
-                if (e.PropertyName == nameof(ChartViewModel.Worksheet))
-                {
-                    Bindings.Update();
-                    BuildAspectGrid();
-                    BuildSections();
-                }
-                else if (e.PropertyName is nameof(ChartViewModel.Sensitivity) or nameof(ChartViewModel.CanTestTime)
-                         or nameof(ChartViewModel.SensitivityHeading))
-                {
-                    Bindings.Update();
-                }
-            };
+            value.PropertyChanged += OnViewModelChanged;
             Bindings.Update();
             BuildAspectGrid();
             BuildSections();
+        }
+    }
+
+    private void OnViewModelChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(ChartViewModel.Worksheet))
+        {
+            Bindings.Update();
+            BuildAspectGrid();
+            BuildSections();
+        }
+        else if (e.PropertyName is nameof(ChartViewModel.Sensitivity) or nameof(ChartViewModel.CanTestTime)
+                 or nameof(ChartViewModel.SensitivityHeading))
+        {
+            Bindings.Update();
         }
     }
 

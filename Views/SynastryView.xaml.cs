@@ -17,14 +17,17 @@ public sealed partial class SynastryView : UserControl
         set
         {
             if (ReferenceEquals(_viewModel, value)) return;
+            _viewModel.PropertyChanged -= OnViewModelChanged;
             _viewModel = value;
-            value.PropertyChanged += (_, e) =>
-            {
-                if (e.PropertyName == nameof(SynastryViewModel.Comparison))
-                    WheelCanvas.Invalidate();
-            };
+            value.PropertyChanged += OnViewModelChanged;
             Bindings.Update();
         }
+    }
+
+    private void OnViewModelChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(SynastryViewModel.Comparison))
+            WheelCanvas.Invalidate();
     }
 
     public SynastryView()
@@ -76,13 +79,9 @@ public sealed partial class SynastryView : UserControl
     // x:Bind helpers.
     public bool Either(bool a, bool b) => a || b;
 
-    // The pill colour of a match, from its "#RRGGBB".
-    public static Microsoft.UI.Xaml.Media.SolidColorBrush BrushOf(string hex)
-    {
-        hex = hex.TrimStart('#');
-        return new(Color.FromArgb(255,
-            Convert.ToByte(hex[..2], 16), Convert.ToByte(hex.Substring(2, 2), 16), Convert.ToByte(hex.Substring(4, 2), 16)));
-    }
+    // The pill colour of a match or of the reading's tone, from its "#RRGGBB".
+    public static Microsoft.UI.Xaml.Media.SolidColorBrush BrushOf(string hex) => HexBrushConverter.ToBrush(hex);
+    public Microsoft.UI.Xaml.Media.SolidColorBrush ToneBrush(string hex) => HexBrushConverter.ToBrush(hex);
     public Visibility VisIf(bool b) => b ? Visibility.Visible : Visibility.Collapsed;
     public Visibility HasText(string? s) => string.IsNullOrEmpty(s) ? Visibility.Collapsed : Visibility.Visible;
 }

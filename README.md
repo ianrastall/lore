@@ -4,14 +4,14 @@
 
 > A Windows desktop application for computing and exploring astrological natal charts — and reading a daily horoscope from them — powered by the Swiss Ephemeris. Browse a curated library of historical figures — every one with a documented birth time — or add your own.
 
-**Latest release: v2.6.5** · [Download](../../releases/latest)
+**Latest release: v2.7.0** · [Download](../../releases/latest)
 
 ### Installing
 
-1. From the [latest release](../../releases/latest), download **`LoreSetup-2.6.5.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`LoreSetup-2.7.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user only (no administrator prompt), adds a Start-menu shortcut, and can be removed from *Settings → Apps* like any other program.
 
-**Prefer not to install?** Download **`Lore-2.6.5-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
+**Prefer not to install?** Download **`Lore-2.7.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
 
 > **The installer is not code-signed.** Lore is a free hobby project and does not carry a paid signing certificate, so Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"* — choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -270,7 +270,7 @@ Produces a self-contained folder that runs with no installed .NET or VC++ runtim
 .\scripts\build-portable.ps1
 ```
 
-Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-2.6.5-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
+Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-2.7.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
 
 ### Step 4 — Installer
 
@@ -482,7 +482,18 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 2.6.5 (current)
+### 2.7.0 (current)
+A release of repairs, from a review of the whole program. Nothing is added; a good deal is made safer and steadier.
+- **Your saved charts are better protected** — two Lore windows saving at the same moment now take turns, so neither loses the other's chart. If the saved-charts file is damaged while Lore is open, Lore refuses to save over it (and leaves the backup alone) and tells you to restart, which sets the damaged file aside and restores the backup.
+- **Stricter checks on charts brought in from a file** — a chart that says its birth time is known but gives none, has no date, or has an impossible clock offset is refused instead of being let in to cause trouble later. A missing birthplace is read as an empty one. Very large files are refused unread.
+- **A forecast no longer misses transits of the true Lilith** — the true (osculating) Lilith can move six degrees in a day, and a whole transit could fall between two of the forecast's daily samples. It is now sampled every three hours.
+- **Changing a setting can no longer muddle a calculation in progress** — a forecast, a day's reading, the best-and-worst-matches search and the birth-time check are each made from start to finish with the settings their chart was cast with. Changing two settings quickly, or picking someone else while the list is rescored, no longer brings back the earlier choice.
+- **No more of one person's reading under another's name** — when another chart is picked, the Daily, Forecast, Timing and Synastry views clear at once instead of showing the last person's reading until the new one is ready.
+- **A start-up that fails says so** — if a file Lore is installed with is missing or damaged, a window says what went wrong; before, the splash picture could be left on screen with nothing behind it.
+- **Smoother in use** — the birth-time check and the making of PDFs are done in the background, so the window no longer stalls on them; the place boxes in Settings and Timing search after a short pause rather than on every keystroke; the progress ring can no longer be left turning after a selection is cleared.
+- **Under the bonnet** — the Swiss Ephemeris library is only ever loaded from Lore's own folder; the log file (`%TEMP%\lore-crash.txt`) is kept to a fixed size and names charts by their Id rather than by the person's name; the packages Lore is built from are fixed at tested versions; and the check that stops personal charts reaching a release now compares the very files being packaged.
+
+### 2.6.5
 A much larger library. Nothing else in Lore changes.
 - **1,102 more figures** — the library grows from 212 to **1,314**, with the same rule as before: every figure has a recorded birth time rated AA or A by Astro-Databank, a named birthplace and a stated time standard, and is checked against its Astro-Databank record by the tests. About 2,500 well-known names were looked up; those with lower-rated, conflicting, approximate or missing times were left out, which is why some very famous names are still absent.
 - **Every category filled out** — the small ones most of all: Spiritual grows from 1 figure to 37, Media from 2 to 68, Entrepreneur from 4 to 37, Royalty from 5 to 59, Historical from 5 to 40, Director from 4 to 52. There are now 234 actors, 215 musicians, 134 athletes, 131 writers, 98 political figures, 92 artists, 62 scientists and 55 philosophers.

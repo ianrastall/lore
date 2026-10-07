@@ -134,7 +134,7 @@ public static class SynastryScoring
             }
             catch (Exception ex) when (ex is not OperationCanceledException)
             {
-                Diagnostics.Log($"Synastry match for {person.Name} skipped: {ex.Message}");
+                Diagnostics.Log($"Synastry match for chart {person.Id} skipped: {ex.Message}");
             }
         }
 

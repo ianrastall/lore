@@ -91,6 +91,7 @@ public sealed partial class TimingViewModel : ObservableObject
         OnPropertyChanged(nameof(Title));
         OnPropertyChanged(nameof(CanChoosePlace));
         OnPropertyChanged(nameof(PlaceText));
+        Reading = null; // the last person's reading must not stay under the new heading
         if (Place is not null) Place = null; // which rebuilds
         else Rebuild();
     }
@@ -140,7 +141,7 @@ public sealed partial class TimingViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            Diagnostics.Log($"Timing for {chart.Celebrity.Name} on {asOf} failed: {ex}");
+            Diagnostics.Log($"Timing for chart {chart.Celebrity.Id} on {asOf} failed: {ex}");
             if (generation == _generation)
             {
                 Reading = null;

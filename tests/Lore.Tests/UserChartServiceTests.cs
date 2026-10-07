@@ -69,7 +69,52 @@ public sealed class UserChartServiceTests : IDisposable
         Assert.True(File.Exists(BackupFile));
         Assert.Contains("Ann", File.ReadAllText(BackupFile));
         Assert.DoesNotContain("Ben", File.ReadAllText(BackupFile));
-        Assert.False(File.Exists(MainFile + ".tmp"));
+        Assert.Empty(Directory.GetFiles(_dir, "*.tmp"));
+        Assert.False(File.Exists(MainFile + ".lock"));
+    }
+
+    [Fact]
+    public async Task Two_windows_saving_at_the_same_moment_both_keep_their_charts()
+    {
+        var seed = await Fresh();
+        await seed.AddAsync(Chart("user-0", "Zero"));
+
+        // Twenty charts from each of two windows, all at once: each save must read what
+        // the other has just written, not what it loaded.
+        var first = await Fresh();
+        var second = await Fresh();
+        var saves = Enumerable.Range(1, 20).SelectMany(i => new[]
+        {
+            Task.Run(() => first.AddAsync(Chart($"a-{i}", $"A{i}"))),
+            Task.Run(() => second.AddAsync(Chart($"b-{i}", $"B{i}"))),
+        });
+        await Task.WhenAll(saves);
+
+        var reloaded = await Fresh();
+        Assert.Equal(41, reloaded.Charts.Count);
+        Assert.Equal(41, reloaded.Charts.Select(c => c.Id).Distinct().Count());
+        Assert.Empty(Directory.GetFiles(_dir, "*.tmp"));
+    }
+
+    [Fact]
+    public async Task A_file_that_goes_bad_after_loading_is_not_saved_over_and_the_backup_is_kept()
+    {
+        var store = await Fresh();
+        await store.AddAsync(Chart("user-1", "Ann"));
+        await store.AddAsync(Chart("user-2", "Ben"));    // backup now holds Ann only
+        string goodBackup = File.ReadAllText(BackupFile);
+        File.WriteAllText(MainFile, "{ damaged after start-up");
+
+        await Assert.ThrowsAsync<InvalidDataException>(() => store.AddAsync(Chart("user-3", "Cy")));
+
+        Assert.Equal("{ damaged after start-up", File.ReadAllText(MainFile));
+        Assert.Equal(goodBackup, File.ReadAllText(BackupFile));
+        Assert.Equal(new[] { "Ann", "Ben" }, store.Charts.Select(c => c.Name));
+
+        // The next start sets the damaged file aside and restores the backup.
+        var restarted = await Fresh();
+        Assert.Equal("Ann", Assert.Single(restarted.Charts).Name);
+        Assert.Single(Directory.GetFiles(_dir, "mycharts.unreadable-*.json"));
     }
 
     [Fact]
@@ -117,12 +162,14 @@ public sealed class UserChartServiceTests : IDisposable
     [Fact]
     public async Task A_failed_save_changes_nothing_in_memory_or_on_disk()
     {
-        var store = await Fresh();
+        var store = new UserChartService(_dir) { LockWait = TimeSpan.FromMilliseconds(100) };
+        await store.LoadAsync();
         await store.AddAsync(Chart("user-1", "Ann"));
         await store.AddAsync(Chart("user-2", "Ben"));
 
-        // Hold the temporary file open so the next save cannot write it.
-        using (new FileStream(MainFile + ".tmp", FileMode.Create, FileAccess.Write, FileShare.None))
+        // Hold the lock, as another window in the middle of a save would, so the next
+        // save cannot go ahead.
+        using (new FileStream(MainFile + ".lock", FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
         {
             await Assert.ThrowsAnyAsync<IOException>(() => store.RemoveAsync(Chart("user-2", "Ben")));
             await Assert.ThrowsAnyAsync<IOException>(() => store.AddAsync(Chart("user-9", "Zed")));
@@ -188,6 +235,56 @@ public sealed class UserChartServiceTests : IDisposable
 
         Assert.Equal("Ann", Assert.Single(store.Charts).Name);
         Assert.Equal(before, File.ReadAllText(MainFile));
+    }
+
+    [Theory]
+    // No place at all is read as an empty one.
+    [InlineData("""[{"id":"user-1","name":"Ann","category":"My Charts","birthDate":"1980-05-17","birthPlace":null,"bio":null,"latitude":53.8,"longitude":-1.55}]""")]
+    public async Task Missing_optional_text_is_read_as_empty(string contents)
+    {
+        var store = await Fresh();
+        string file = Path.Combine(_dir, "sparse.json");
+        File.WriteAllText(file, contents);
+
+        await store.ImportAsync(file);
+
+        var ann = Assert.Single(store.Charts);
+        Assert.Equal("", ann.BirthPlace);
+        Assert.Equal("", ann.Bio);
+    }
+
+    [Theory]
+    // Said to have a known time, but none given: it would be drawn for noon.
+    [InlineData("""[{"id":"user-1","name":"Ann","category":"My Charts","birthDate":"1980-05-17","birthTimeKnown":true,"latitude":53.8,"longitude":-1.55}]""")]
+    // A clock no place has ever kept.
+    [InlineData("""[{"id":"user-1","name":"Ann","category":"My Charts","birthDate":"1980-05-17","utcOffsetHours":1e300,"utcOffsetFixed":true,"latitude":53.8,"longitude":-1.55}]""")]
+    [InlineData("""[{"id":"user-1","name":"Ann","category":"My Charts","birthDate":"1980-05-17","utcOffsetHours":40,"latitude":53.8,"longitude":-1.55}]""")]
+    // No date.
+    [InlineData("""[{"id":"user-1","name":"Ann","category":"My Charts","birthDate":null,"latitude":53.8,"longitude":-1.55}]""")]
+    [InlineData("""[{"id":"user-1","name":"Ann","category":"My Charts","birthDate":"1980-05-17","birthTime":"25:99","latitude":53.8,"longitude":-1.55}]""")]
+    public async Task Importing_a_chart_that_could_not_be_calculated_changes_nothing(string contents)
+    {
+        var store = await Fresh();
+        await store.AddAsync(Chart("user-0", "Zero"));
+        string before = File.ReadAllText(MainFile);
+        string file = Path.Combine(_dir, "bad.json");
+        File.WriteAllText(file, contents);
+
+        await Assert.ThrowsAsync<InvalidDataException>(() => store.ImportAsync(file));
+
+        Assert.Equal(before, File.ReadAllText(MainFile));
+    }
+
+    [Fact]
+    public async Task Importing_a_file_far_too_large_to_be_a_chart_list_is_refused_unread()
+    {
+        var store = await Fresh();
+        string file = Path.Combine(_dir, "huge.json");
+        using (var stream = File.Create(file))
+            stream.SetLength(UserChartService.MaxImportBytes + 1);
+
+        var ex = await Assert.ThrowsAsync<InvalidDataException>(() => store.ImportAsync(file));
+        Assert.Contains("too large", ex.Message);
     }
 
     [Theory]

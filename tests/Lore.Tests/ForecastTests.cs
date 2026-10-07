@@ -36,6 +36,53 @@ public class ForecastTests
         });
     }
 
+    // The true (osculating) Lilith swings by six degrees a day and more, so a whole
+    // pass can fall between two daily samples. This one did: exact at about 10:28 UT on
+    // 3 January 2021, and missing from the forecast until it was sampled more closely.
+    [Fact]
+    public void A_pass_of_the_true_Lilith_is_not_missed_between_samples()
+    {
+        var charts = new ChartService(Repo.Ephemeris) { Settings = new ChartSettings { Lilith = LilithType.True } };
+        var natal = charts.Calculate(new Celebrity
+        {
+            Id = "lilith-case", Name = "Lilith Case", Category = "Test",
+            BirthDate = "1990-05-11", BirthTime = "12:00", BirthTimeKnown = true,
+            BirthPlace = "Greenwich", Latitude = 51.5, Longitude = 0,
+            UtcOffsetHours = 0, UtcOffsetFixed = true,
+        });
+        var transits = new TransitService(charts);
+        var day = new DateOnly(2021, 1, 3);
+
+        bool LilithOnSun(Planet mover, NatalPoint target, AspectType aspect) =>
+            mover == Planet.Lilith && target == NatalPoint.Of(Planet.Sun) && aspect == AspectType.Conjunction;
+
+        // The Daily view's scan of that day is the yardstick.
+        var seen = Assert.Single(transits.Scan(natal, day, Zone).Events, e => LilithOnSun(e.Mover, e.Target, e.Aspect));
+        Assert.Equal(TransitPhase.Exact, seen.Phase);
+
+        var pass = Assert.Single(transits.Forecast(natal, day, 1, Zone), p => LilithOnSun(p.Mover, p.Target, p.Aspect));
+        var exact = Assert.Single(pass.ExactUtc);
+        Assert.InRange(exact, new DateTime(2021, 1, 3, 10, 20, 0), new DateTime(2021, 1, 3, 10, 35, 0));
+    }
+
+    // A forecast is made with the settings its chart was cast with, start to finish,
+    // whatever the menu is changed to meanwhile.
+    [Fact]
+    public void A_forecast_keeps_to_its_charts_own_settings()
+    {
+        var charts = new ChartService(Repo.Ephemeris) { Settings = new ChartSettings { Lilith = LilithType.True } };
+        var natal = charts.Calculate(Repo.Figure("albert-einstein"));
+        var transits = new TransitService(charts);
+        var before = transits.Forecast(natal, Start, 30, Zone, includeFast: false);
+
+        charts.Settings = ChartSettings.Default; // as if changed in the menu
+        var after = transits.Forecast(natal, Start, 30, Zone, includeFast: false);
+
+        Assert.Equal(
+            before.Select(p => (p.Mover, p.Target, p.Aspect, p.PeakUtc)),
+            after.Select(p => (p.Mover, p.Target, p.Aspect, p.PeakUtc)));
+    }
+
     [Fact]
     public void An_exact_moment_really_is_exact_and_the_orb_really_is_one_degree_at_each_end()
     {

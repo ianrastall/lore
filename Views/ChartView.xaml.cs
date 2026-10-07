@@ -16,11 +16,15 @@ public sealed partial class ChartView : UserControl
         set
         {
             if (ReferenceEquals(_viewModel, value)) return;
+            _viewModel.PropertyChanged -= OnViewModelChanged;
             _viewModel = value;
-            value.PropertyChanged += (_, _) => ChartCanvas.Invalidate();
+            value.PropertyChanged += OnViewModelChanged;
             Bindings.Update();
         }
     }
+
+    private void OnViewModelChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) =>
+        ChartCanvas.Invalidate();
 
     public ChartView()
     {
@@ -44,6 +48,7 @@ public sealed partial class ChartView : UserControl
     // x:Bind helpers.
     public Visibility VisIf(bool b) => b ? Visibility.Visible : Visibility.Collapsed;
     public Visibility VisIfNot(bool b) => b ? Visibility.Collapsed : Visibility.Visible;
+    public Microsoft.UI.Xaml.Media.SolidColorBrush BrushOf(string hex) => HexBrushConverter.ToBrush(hex);
 
     private void PlanetsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {

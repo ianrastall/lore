@@ -66,15 +66,45 @@ public sealed class SettingsService
         return new UiState();
     }
 
-    public void SaveUi(UiState ui)
+    // Saved with every chart picked and every change of view, so the writing is done
+    // behind the scenes (see Queue) rather than while the click is being answered.
+    public void SaveUi(UiState ui) => Queue(() => Write(UiPath, JsonSerializer.Serialize(ui, JsonOpts)));
+
+    // The small files that change as Lore is used (ui.json, home.json) are written one
+    // after another on a background thread, in the order asked for. Flush waits for
+    // whatever is still to be written; the window calls it as it closes.
+    private readonly object _queueGate = new();
+    private Task _queue = Task.CompletedTask;
+
+    private void Queue(Action write)
     {
+        lock (_queueGate)
+            _queue = _queue.ContinueWith(_ => write(), TaskScheduler.Default);
+    }
+
+    public void Flush()
+    {
+        Task pending;
+        lock (_queueGate) pending = _queue;
+        pending.Wait(TimeSpan.FromSeconds(2));
+    }
+
+    // Written beside the real file and then swapped in, so a crash mid-write cannot
+    // leave half a file behind. Never throws: a setting that could not be saved is
+    // logged and Lore carries on with it for this session.
+    private static void Write(string path, string json)
+    {
+        string temp = $"{path}.{Guid.NewGuid():N}.tmp";
         try
         {
-            File.WriteAllText(UiPath, JsonSerializer.Serialize(ui, JsonOpts));
+            File.WriteAllText(temp, json);
+            File.Move(temp, path, overwrite: true);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            Diagnostics.Log($"Could not save {UiPath}: {ex.Message}");
+            Diagnostics.Log($"Could not save {path}: {ex.Message}");
+            try { File.Delete(temp); }
+            catch (Exception e) when (e is IOException or UnauthorizedAccessException) { }
         }
     }
 
@@ -98,32 +128,24 @@ public sealed class SettingsService
         return null;
     }
 
-    public void SaveHome(HomePlace? home)
+    public void SaveHome(HomePlace? home) => Queue(() =>
     {
+        if (home is not null)
+        {
+            Write(HomePath, JsonSerializer.Serialize(home, JsonOpts));
+            return;
+        }
         try
         {
-            if (home is null) File.Delete(HomePath);
-            else File.WriteAllText(HomePath, JsonSerializer.Serialize(home, JsonOpts));
+            File.Delete(HomePath);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
-            Diagnostics.Log($"Could not save {HomePath}: {ex.Message}");
+            Diagnostics.Log($"Could not remove {HomePath}: {ex.Message}");
         }
-    }
+    });
 
-    public void Save(ChartSettings settings)
-    {
-        try
-        {
-            // Written beside the real file and then swapped in, so a crash mid-write
-            // cannot leave half a settings file behind.
-            string temp = _path + ".tmp";
-            File.WriteAllText(temp, JsonSerializer.Serialize(settings, JsonOpts));
-            File.Move(temp, _path, overwrite: true);
-        }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-        {
-            Diagnostics.Log($"Could not save {_path}: {ex.Message}");
-        }
-    }
+    // Rare (a setting changed in the menu) and wanted on disk before anything else
+    // happens, so this one is written at once.
+    public void Save(ChartSettings settings) => Write(_path, JsonSerializer.Serialize(settings, JsonOpts));
 }

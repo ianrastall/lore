@@ -54,6 +54,7 @@ public sealed class TimingService
     public SolarReturn? SolarReturn(NatalChart natal, int year, ReturnPlace? place = null)
     {
         if (!natal.Timed || natal.GetPlanet(Planet.Sun) is not { } sun) return null;
+        var charts = _charts.With(natal.Settings); // the settings the birth chart was cast with
 
         // The Sun is back within a day of the birthday; bracket it generously.
         var born = natal.CalculatedForUtc;
@@ -63,7 +64,7 @@ public sealed class TimingService
         double hi = SwissEphemeris.DateTimeToJulianDay(near.AddDays(3));
 
         double Off(double jd) =>
-            _charts.CalculateBody(jd, Planet.Sun) is { } p ? Signed(p.Longitude - sun.Longitude) : double.NaN;
+            charts.CalculateBody(jd, Planet.Sun) is { } p ? Signed(p.Longitude - sun.Longitude) : double.NaN;
         if (double.IsNaN(Off(lo)) || double.IsNaN(Off(hi)) || (Off(lo) < 0) == (Off(hi) < 0)) return null;
 
         for (int i = 0; i < 50; i++)
@@ -73,8 +74,8 @@ public sealed class TimingService
         }
         var utc = DateTime.SpecifyKind(SwissEphemeris.JulianDayToDateTime((lo + hi) / 2), DateTimeKind.Utc);
         var chart = place is null
-            ? _charts.CalculateAt(natal.Celebrity, utc)
-            : _charts.CalculateAt(natal.Celebrity, utc, place.Latitude, place.Longitude);
+            ? charts.CalculateAt(natal.Celebrity, utc)
+            : charts.CalculateAt(natal.Celebrity, utc, place.Latitude, place.Longitude);
         return new SolarReturn { Year = year, Utc = utc, Chart = chart, Place = place };
     }
 
@@ -95,7 +96,7 @@ public sealed class TimingService
         double ageYears = (asOf.ToDateTime(new TimeOnly(12, 0), DateTimeKind.Utc) - born).TotalDays / TropicalYearDays;
         var progressedUtc = born.AddDays(ageYears); // a day for a year
         double jd = SwissEphemeris.DateTimeToJulianDay(progressedUtc);
-        var sky = _charts.CalculateSky(jd);
+        var sky = _charts.With(natal.Settings).CalculateSky(jd);
 
         var points = new List<ProgressedPoint>();
         foreach (var body in Progressed)
@@ -223,7 +224,7 @@ public sealed class TimingService
     // angles and houses change, and without a time there are none.
     public Relocation? Relocate(NatalChart natal, ReturnPlace? place) =>
         place is null || !natal.Timed ? null
-        : new Relocation(place, _charts.CalculateAt(natal.Celebrity, natal.CalculatedForUtc, place.Latitude, place.Longitude));
+        : new Relocation(place, _charts.With(natal.Settings).CalculateAt(natal.Celebrity, natal.CalculatedForUtc, place.Latitude, place.Longitude));
 
     // ── Written out ───────────────────────────────────────────────────────────
 

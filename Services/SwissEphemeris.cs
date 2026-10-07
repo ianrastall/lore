@@ -1,5 +1,10 @@
 using System.Runtime.InteropServices;
 
+// sweph.dll is looked for beside Lore itself (and, for Windows' own libraries, in
+// System32) and nowhere else. Without this a copy of Lore whose DLL had gone missing
+// would load one of the same name from whatever folder it happened to be started in.
+[assembly: DefaultDllImportSearchPaths(DllImportSearchPath.AssemblyDirectory | DllImportSearchPath.System32)]
+
 namespace Lore.Services;
 
 // P/Invoke wrapper for the Swiss Ephemeris C library (sweph.dll, x64).

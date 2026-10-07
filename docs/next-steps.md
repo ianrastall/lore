@@ -13,7 +13,7 @@ note stays true.
 
 - Seven views: Chart, Report, Worksheet, Daily, Forecast, Timing, Synastry, plus the
   Legend. About 10,600 lines of C# and XAML; no file over 560 lines.
-- 283 tests (as of 2.6.0), all passing, covering the calculation and data layer. They run on
+- 294 tests (as of 2.7.0), all passing, covering the calculation and data layer. They run on
   GitHub on every push, followed by a build of the app itself (about 3 minutes).
 - The view models, the views and the three export services are **not** tested: they
   depend on WinUI or Win2D and the test project leaves them out.
@@ -88,6 +88,48 @@ in 2.4.0; item 7 is still open.
    - `SynastryScoringTests.The_bands_keep_their_proportions_across_the_library`
      compares every pair (862,641) and now takes about 50 seconds. A fixed sample
      would bring the test run back to a few seconds.
+
+## 3a. The review behind 2.7.0
+
+On 7 October 2026 a Codex review of the whole program listed 22 findings; 2.7.0
+(written the same day; to be committed, built with `release.bat` and published) acts
+on most of them. The release notes in the README say what changed. The tests went
+from 283 to 294. What was left, and why:
+
+- **Every view is still calculated on every selection** (finding 10). Section 6
+  explains why; that reasoning stands. Work overtaken by a newer selection is now
+  cancelled in more places (the chart load and the birth-time check as well as the
+  forecast and the match search), and adding or editing one chart still rescores the
+  whole library (0.4 seconds, in the background).
+- **The wheels for the exports are still drawn on the UI thread** (part of finding
+  9). Only the PDF layout moved to the background. The drawing code shares Win2D text
+  formats with the wheels on screen; moving it needs a look at what Win2D allows off
+  the UI thread.
+- **`swe_close` is still not called at exit** (part of finding 16). Windows frees
+  everything when the process ends, and calling it while a background calculation
+  might be running is the riskier choice. Setting the ephemeris path is now under the
+  same lock as the calculations.
+- **View models are free of WinUI types but still not tested** (finding 17 and
+  section 5.2). The brushes are gone (`ScoreColorHex`, `ToneColorHex`; the views make
+  the brush) and `FormatAngles` is now `NatalChart.AnglesLine`, so the view models
+  could be added to the test project. They have not been: that is the next step.
+- **No package lock files or `global.json`** (part of finding 20). The versions are
+  now exact in both project files, which gives the same result with less to maintain.
+- **The log file is still in `%TEMP%`** (part of finding 21), now capped at two files
+  of half a megabyte.
+- **No automated test of `assert-clean-release.ps1`** (part of finding 14). It was
+  tried by hand against a clean stage, one with a `mycharts.json.bak` and one with a
+  substituted library; the last two are refused.
+
+New things worth knowing when working in this code:
+
+- `ChartService.With(settings)` gives a service whose settings cannot change. Use it
+  for anything that makes more than one calculation for one result.
+- `UserChartService` holds `mycharts.json.lock` for the length of each save.
+- `SettingsService.SaveUi` and `SaveHome` write in the background; `Flush` waits for
+  them (the main window calls it on closing, and the tests call it).
+- `MainViewModel.LoadChartAsync` works out the birth-time check beside the chart and
+  hands both to `ChartViewModel.Show`.
 
 ## 4. Features, in the order I would build them
 
@@ -299,12 +341,11 @@ investigated again from scratch.
   proportion it would be about half a second. Scoring every chart at start-up was
   measured at 0.4 seconds.) Calculating only on demand would also break exporting the daily
   horoscope from another view.
-- **The birth-time check runs on the UI thread.** Measured at 65 ms for the
-  widest margin (±180 minutes), 4 ms for ±15, 37 ms for a whole-day scan.
+- ~~**The birth-time check runs on the UI thread.**~~ Moved to the background in
+  2.7.0. (It was measured at 65 ms for the widest margin, 37 ms for a whole-day scan.)
 - **UTC is passed to the ephemeris as UT.** The difference is under a second.
-- **Package versions float** (`1.8.*`, `8.*`). A release picks up whatever is
-  newest that day. Pinning them is reasonable if a release ever breaks because of
-  it; so far none has.
+- ~~**Package versions float.**~~ Fixed at exact versions in 2.7.0; update them by
+  hand in `Lore.csproj` and `tests\Lore.Tests\Lore.Tests.csproj`, then run the tests.
 - **`hospitals.json` (25 MB) is in git.** Rebuilding it takes an hour or more
   against busy public servers, so the finished file stays in the repository.
 - **AGPL-3.0** is required by the Swiss Ephemeris and is not a choice.
@@ -319,6 +360,8 @@ investigated again from scratch.
 3. ~~The Daily wheel (4.1) and the solar return's place (4.2).~~ Written as
    2.5.0 on 6 October 2026; to be committed, built with `release.bat` and published.
 4. ~~The Kerykeion list (4.10).~~ Written as 2.6.0 on 6 October 2026; to be committed,
+   built with `release.bat` and published.
+4a. ~~The review's repairs (3a).~~ Written as 2.7.0 on 7 October 2026; to be committed,
    built with `release.bat` and published.
 5. House systems (4.3) and the lunar return (4.4).
 6. Then whichever of 4.5 to 4.8 is wanted, with section 5's test work done

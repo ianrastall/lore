@@ -104,7 +104,11 @@ public class ChartSettingsTests
             Assert.Null(fresh.LastChartId);
             Assert.Equal("Chart", fresh.LastView);
 
-            new SettingsService(dir).SaveUi(new SettingsService.UiState("albert-einstein", "Worksheet"));
+            // Written behind the scenes; Flush waits for it, as closing the window does.
+            var saving = new SettingsService(dir);
+            saving.SaveUi(new SettingsService.UiState("albert-einstein", "Worksheet"));
+            saving.Flush();
+            Assert.Empty(Directory.GetFiles(dir, "*.tmp"));
             Assert.Equal(new SettingsService.UiState("albert-einstein", "Worksheet"), new SettingsService(dir).LoadUi());
 
             File.WriteAllText(Path.Combine(dir, "ui.json"), "not json at all");

@@ -1,4 +1,5 @@
 using Lore.Models;
+using System.Globalization;
 using System.Text.Json;
 
 namespace Lore.Services;
@@ -8,11 +9,14 @@ namespace Lore.Services;
 //
 // This is the one file holding the user's own (often family) data, so it is
 // written defensively:
-//   • a save goes to mycharts.json.tmp first and only then replaces the real file,
+//   • a save goes to a temporary file first and only then replaces the real file,
 //     so a crash or power cut mid-save leaves the previous version intact;
 //   • each save keeps the version it replaces as mycharts.json.bak;
-//   • a file that cannot be read is never overwritten: it is set aside under a
-//     dated name and the backup is tried instead, and LoadProblem says what happened.
+//   • a file that cannot be read is never overwritten: at start-up it is set aside
+//     under a dated name and the backup is tried instead (LoadProblem says what
+//     happened), and later on a save is refused rather than made over it;
+//   • a save reads the file, changes it and writes it back while holding
+//     mycharts.json.lock, so two Lore windows saving at the same moment take turns.
 public sealed class UserChartService
 {
     public const string MyChartsCategory = "My Charts";
@@ -27,8 +31,16 @@ public sealed class UserChartService
     private List<Celebrity> _charts = [];
     private bool _saveBlocked;
 
-    // One save at a time: two overlapping saves would fight over the same temporary file.
+    // One save at a time within this window; the lock file does the same between windows.
     private readonly SemaphoreSlim _saving = new(1, 1);
+
+    // How long a save waits for another Lore window to finish its own.
+    internal TimeSpan LockWait { get; init; } = TimeSpan.FromSeconds(5);
+
+    // The most an imported file may hold. A real My Charts file is a few hundred bytes a
+    // chart; anything near these sizes is some other file picked by mistake.
+    public const long MaxImportBytes = 10 * 1024 * 1024;
+    public const int MaxImportCharts = 10_000;
 
     public UserChartService()
         : this(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Lore"))
@@ -46,7 +58,7 @@ public sealed class UserChartService
 
     public string FilePath => _path;
     private string BackupPath => _path + ".bak";
-    private string TempPath => _path + ".tmp";
+    private string LockPath => _path + ".lock";
 
     // Set when loading needed a recovery step, for the status bar; null otherwise.
     public string? LoadProblem { get; private set; }
@@ -54,6 +66,10 @@ public sealed class UserChartService
     public async Task LoadAsync()
     {
         LoadProblem = null;
+
+        // Another window may be in the middle of a save. If it does not finish in time
+        // the file is read anyway: reading harms nothing, and a save takes the lock itself.
+        await using var held = await TryLockAsync();
 
         // No main file but a backup: a save was interrupted between its two steps.
         if (!File.Exists(_path))
@@ -134,8 +150,12 @@ public sealed class UserChartService
     // A chart with the same Id as one already here replaces it.
     public async Task<ImportResult> ImportAsync(string path)
     {
+        if (new FileInfo(path).Length > MaxImportBytes)
+            throw new InvalidDataException("That file is too large to be a list of Lore charts.");
         if (await TryReadAsync(path) is not { } incoming)
             throw new InvalidDataException("That file is not a list of Lore charts.");
+        if (incoming.Count > MaxImportCharts)
+            throw new InvalidDataException($"That file holds more than {MaxImportCharts:N0} charts, more than Lore brings in at once.");
 
         // Only people's own charts: anything else (a copy of the figure library, say)
         // would turn up twice in the list.
@@ -144,11 +164,13 @@ public sealed class UserChartService
         if (mine.Count > 0)
             await CommitAsync(list =>
             {
+                // Looked up by Id once, not searched for afresh with every chart.
+                var at = new Dictionary<string, int>(list.Count);
+                for (int i = 0; i < list.Count; i++) at[list[i].Id] = i;
                 foreach (var chart in mine)
                 {
-                    int i = list.FindIndex(c => c.Id == chart.Id);
-                    if (i >= 0) { list[i] = chart; replaced++; }
-                    else { list.Add(chart); added++; }
+                    if (at.TryGetValue(chart.Id, out int i)) { list[i] = chart; replaced++; }
+                    else { at[chart.Id] = list.Count; list.Add(chart); added++; }
                 }
             });
         return new ImportResult(added, replaced, incoming.Count - mine.Count);
@@ -159,10 +181,30 @@ public sealed class UserChartService
         await _saving.WaitAsync();
         try
         {
+            if (_saveBlocked)
+                throw new IOException("Saving is paused because the existing charts file couldn't be read; restart Lore.");
+
+            await using var held = await TryLockAsync()
+                ?? throw new IOException("Another Lore window is busy saving charts. Nothing was changed; try again in a moment.");
+
             // Start from what is on disk rather than from memory: a second Lore window may
             // have saved since this one loaded, and its charts must not be written over.
-            var candidate = new List<Celebrity>(
-                File.Exists(_path) && await TryReadAsync(_path) is { } onDisk ? onDisk : _charts);
+            List<Celebrity> candidate;
+            if (File.Exists(_path))
+            {
+                // A file that was readable at start-up and is not now must not be saved
+                // over, nor pushed onto the backup, which may be the last good copy.
+                if (await TryReadAsync(_path) is not { } onDisk)
+                    throw new InvalidDataException(
+                        "The saved charts file can no longer be read, so nothing was saved; the file and its backup " +
+                        "are as they were. Restart Lore and it will set the file aside and restore the backup.");
+                candidate = new List<Celebrity>(onDisk);
+            }
+            else
+            {
+                candidate = new List<Celebrity>(_charts);
+            }
+
             change(candidate);
             await SaveAsync(candidate);
             _charts = candidate;
@@ -170,6 +212,30 @@ public sealed class UserChartService
         finally
         {
             _saving.Release();
+        }
+    }
+
+    // Holds mycharts.json.lock open, shared with nobody, until disposed. Null if another
+    // window kept it for longer than LockWait (or the folder cannot be written to).
+    private async Task<FileStream?> TryLockAsync()
+    {
+        var giveUp = DateTime.UtcNow + LockWait;
+        while (true)
+        {
+            try
+            {
+                return new FileStream(LockPath, FileMode.OpenOrCreate, FileAccess.ReadWrite,
+                    FileShare.None, 1, FileOptions.DeleteOnClose);
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                if (DateTime.UtcNow >= giveUp)
+                {
+                    Diagnostics.Log($"Could not take {LockPath}: {ex.Message}");
+                    return null;
+                }
+            }
+            await Task.Delay(50);
         }
     }
 
@@ -183,7 +249,7 @@ public sealed class UserChartService
             // Well-formed JSON is not enough: "null", "[null]" or "[{}]" parse happily and
             // would break the app later. Treat those as unreadable too, so the caller sets
             // the file aside and falls back to the backup.
-            if (charts is null || charts.FirstOrDefault(c => !IsUsable(c)) is { } bad || charts.Contains(null!))
+            if (charts is null || !charts.TrueForAll(IsUsable))
             {
                 Diagnostics.Log($"{path} is valid JSON but not a usable chart list.");
                 return null;
@@ -198,52 +264,76 @@ public sealed class UserChartService
     }
 
     // A chart Lore can show and calculate: it has an id, a name, a readable date and
-    // (if given) time, and coordinates on the globe.
-    private static bool IsUsable(Celebrity? c)
+    // (if given) time, coordinates on the globe, and a moment of birth that can be
+    // worked out from them. The one test for every way a chart comes in: the file at
+    // start-up, an imported file, and the re-read before each save.
+    internal static bool IsUsable(Celebrity? c)
     {
         if (c is null || string.IsNullOrWhiteSpace(c.Id) || string.IsNullOrWhiteSpace(c.Name)) return false;
         if (!double.IsFinite(c.Latitude) || Math.Abs(c.Latitude) > 90) return false;
         if (!double.IsFinite(c.Longitude) || Math.Abs(c.Longitude) > 180) return false;
-        if (!double.IsFinite(c.UtcOffsetHours)) return false;
+        // No clock has ever been as much as eighteen hours from Greenwich.
+        if (!double.IsFinite(c.UtcOffsetHours) || Math.Abs(c.UtcOffsetHours) > 18) return false;
+
+        if (!DateOnly.TryParseExact(c.BirthDate, "yyyy-MM-dd", CultureInfo.InvariantCulture,
+                DateTimeStyles.None, out var date) || date.Year < 2 || date.Year > 9998)
+            return false;
+
+        // A time, if there is one, must be readable; and a chart that says its time is
+        // known must have one, or it would be drawn for noon with angles nobody recorded.
+        bool hasTime = !string.IsNullOrEmpty(c.BirthTime);
+        if (hasTime && !TimeOnly.TryParseExact(c.BirthTime, "HH:mm", CultureInfo.InvariantCulture,
+                DateTimeStyles.None, out _))
+            return false;
+        if (c.BirthTimeKnown && !hasTime) return false;
+
         try
         {
-            c.GetBirthDate();
-            c.GetBirthTime();
+            BirthTimeResolver.ToUtc(c);
             return true;
         }
-        catch (FormatException)
+        catch (Exception ex) when (ex is ArgumentException or OverflowException or InvalidOperationException)
         {
             return false;
         }
     }
 
+    // Call holding the lock.
     private async Task SaveAsync(List<Celebrity> charts)
     {
-        if (_saveBlocked)
-            throw new IOException("Saving is paused because the existing charts file couldn't be read; restart Lore.");
-
-        // Write the new version completely (and to disk) before touching the old one.
-        await using (var stream = new FileStream(TempPath, FileMode.Create, FileAccess.Write,
-                         FileShare.None, 4096, FileOptions.WriteThrough))
-        {
-            await JsonSerializer.SerializeAsync(stream, charts, JsonOpts);
-        }
-
-        if (!File.Exists(_path))
-        {
-            File.Move(TempPath, _path);
-            return;
-        }
-
+        // A name of its own, so nothing else can be holding or half-writing it.
+        string temp = $"{_path}.{Guid.NewGuid():N}.tmp";
         try
         {
-            // One step on NTFS: the new file takes the name, the old one becomes .bak.
-            File.Replace(TempPath, _path, BackupPath);
+            // Write the new version completely (and to disk) before touching the old one.
+            await using (var stream = new FileStream(temp, FileMode.CreateNew, FileAccess.Write,
+                             FileShare.None, 4096, FileOptions.WriteThrough))
+            {
+                await JsonSerializer.SerializeAsync(stream, charts, JsonOpts);
+            }
+
+            if (!File.Exists(_path))
+            {
+                File.Move(temp, _path);
+                return;
+            }
+
+            try
+            {
+                // One step on NTFS: the new file takes the name, the old one becomes .bak.
+                File.Replace(temp, _path, BackupPath);
+            }
+            catch (Exception ex) when (ex is IOException or PlatformNotSupportedException or UnauthorizedAccessException)
+            {
+                File.Copy(_path, BackupPath, overwrite: true);
+                File.Move(temp, _path, overwrite: true);
+            }
         }
-        catch (Exception ex) when (ex is IOException or PlatformNotSupportedException or UnauthorizedAccessException)
+        finally
         {
-            File.Copy(_path, BackupPath, overwrite: true);
-            File.Move(TempPath, _path, overwrite: true);
+            // Still there only if the save failed part-way.
+            try { File.Delete(temp); }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { }
         }
     }
 }

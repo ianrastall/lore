@@ -84,6 +84,7 @@ public sealed partial class ForecastViewModel : ObservableObject
     partial void OnChartChanged(NatalChart? value)
     {
         OnPropertyChanged(nameof(Title));
+        Reading = null; // the last person's list must not stay under the new heading
         Rebuild();
     }
 
@@ -136,7 +137,7 @@ public sealed partial class ForecastViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            Diagnostics.Log($"Forecast for {chart.Celebrity.Name} from {start} failed: {ex}");
+            Diagnostics.Log($"Forecast for chart {chart.Celebrity.Id} from {start} failed: {ex}");
             if (generation == _generation)
             {
                 Reading = null;

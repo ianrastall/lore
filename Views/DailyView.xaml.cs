@@ -16,14 +16,17 @@ public sealed partial class DailyView : UserControl
         set
         {
             if (ReferenceEquals(_viewModel, value)) return;
+            _viewModel.PropertyChanged -= OnViewModelChanged;
             _viewModel = value;
-            value.PropertyChanged += (_, e) =>
-            {
-                if (e.PropertyName == nameof(DailyViewModel.Reading))
-                    WheelCanvas.Invalidate();
-            };
+            value.PropertyChanged += OnViewModelChanged;
             Bindings.Update();
         }
+    }
+
+    private void OnViewModelChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(DailyViewModel.Reading))
+            WheelCanvas.Invalidate();
     }
 
     public DailyView()
@@ -33,8 +36,7 @@ public sealed partial class DailyView : UserControl
 
     // ── Transit wheel ─────────────────────────────────────────────────────────
 
-    // The reading is only drawn once it is this chart's: for a moment after another
-    // person is picked, the last one's reading is still up while the new one is worked out.
+    // The reading is only drawn if it is this chart's.
     private void WheelCanvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
     {
         if (ViewModel.Chart is { } chart && ViewModel.Reading is { } reading && reading.Name == chart.Celebrity.Name)
@@ -47,5 +49,6 @@ public sealed partial class DailyView : UserControl
 
     // x:Bind helpers.
     public bool Not(bool b) => !b;
+    public Microsoft.UI.Xaml.Media.SolidColorBrush BrushOf(string hex) => HexBrushConverter.ToBrush(hex);
     public Visibility HasText(string? s) => string.IsNullOrEmpty(s) ? Visibility.Collapsed : Visibility.Visible;
 }

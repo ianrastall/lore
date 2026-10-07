@@ -13,8 +13,20 @@ public static class TimeSensitivityService
     // different question (the whole day), handled separately.
     public const int MaxMinutes = 180;
 
+    // The check that suits a chart: a margin either side of its birth time, or the whole
+    // day if it has none. Made with the settings the chart itself was cast with.
+    public static TimeSensitivity? For(ChartService charts, NatalChart chart, int minutes,
+        CancellationToken cancel = default)
+    {
+        charts = charts.With(chart.Settings);
+        return chart.Timed
+            ? Analyse(charts, chart.Celebrity, minutes, cancel)
+            : AnalyseDay(charts, chart.Celebrity, cancel);
+    }
+
     // Null when there is nothing to test: no birth time, or no margin given.
-    public static TimeSensitivity? Analyse(ChartService charts, Celebrity person, int minutes)
+    public static TimeSensitivity? Analyse(ChartService charts, Celebrity person, int minutes,
+        CancellationToken cancel = default)
     {
         if (!person.BirthTimeKnown || minutes <= 0) return null;
         minutes = Math.Min(minutes, MaxMinutes);
@@ -22,7 +34,10 @@ public static class TimeSensitivityService
         var centre = BirthTimeResolver.ToUtc(person);
         var samples = new NatalChart[2 * minutes + 1];
         for (int i = 0; i < samples.Length; i++)
+        {
+            cancel.ThrowIfCancellationRequested();
             samples[i] = charts.CalculateAt(person, centre.AddMinutes(i - minutes));
+        }
 
         // Clock time at the birthplace for sample i, as the birth time itself is given.
         var recorded = person.GetBirthTime();
@@ -93,7 +108,7 @@ public static class TimeSensitivityService
     // (23 or 25 hours on a day the clocks changed). No body can enter a sign and leave it
     // again in ten minutes, so comparing neighbouring samples finds every change, and
     // each one is then narrowed to the minute.
-    public static TimeSensitivity? AnalyseDay(ChartService charts, Celebrity person)
+    public static TimeSensitivity? AnalyseDay(ChartService charts, Celebrity person, CancellationToken cancel = default)
     {
         if (person.BirthTimeKnown) return null;
 
@@ -106,7 +121,10 @@ public static class TimeSensitivityService
 
         var samples = new IReadOnlyList<PlanetPosition>[steps + 1];
         for (int i = 0; i <= steps; i++)
+        {
+            cancel.ThrowIfCancellationRequested();
             samples[i] = charts.CalculateSky(Jd(At(i)));
+        }
 
         PlanetPosition? Find(IReadOnlyList<PlanetPosition> sky, Planet body) => sky.FirstOrDefault(p => p.Planet == body);
 

@@ -17,14 +17,17 @@ public sealed partial class TimingView : UserControl
         set
         {
             if (ReferenceEquals(_viewModel, value)) return;
+            _viewModel.PropertyChanged -= OnViewModelChanged;
             _viewModel = value;
-            value.PropertyChanged += (_, e) =>
-            {
-                if (e.PropertyName == nameof(TimingViewModel.ReturnChart))
-                    WheelCanvas.Invalidate();
-            };
+            value.PropertyChanged += OnViewModelChanged;
             Bindings.Update();
         }
+    }
+
+    private void OnViewModelChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(TimingViewModel.ReturnChart))
+            WheelCanvas.Invalidate();
     }
 
     public TimingView()
@@ -34,10 +37,12 @@ public sealed partial class TimingView : UserControl
 
     // ── Place the return is cast for ──────────────────────────────────────────
 
-    private void PlaceBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+    private readonly SuggestionSearch _placeSearch = new();
+
+    private async void PlaceBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
     {
         if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
-            sender.ItemsSource = ViewModel.Suggest(sender.Text);
+            await _placeSearch.RunAsync(sender, ViewModel.Suggest);
     }
 
     // A suggestion was picked, or Enter pressed: take the pick, else the best match.
@@ -46,6 +51,7 @@ public sealed partial class TimingView : UserControl
         var city = args.ChosenSuggestion as City ?? ViewModel.Suggest(args.QueryText).FirstOrDefault();
         if (city is null) return;
 
+        _placeSearch.Cancel();
         ViewModel.CastFor(city);
         sender.Text = "";
         sender.ItemsSource = null;
