@@ -32,11 +32,11 @@ public sealed class TimingService
 
     // ── Solar return ──────────────────────────────────────────────────────────
 
-    // The solar return that falls in the given calendar year, cast for the birthplace.
-    // Null for a chart with no birth time: its Sun is known only to within half a
-    // degree, which leaves the moment of return uncertain by half a day and the return
-    // chart's angles meaningless.
-    public SolarReturn? SolarReturn(NatalChart natal, int year)
+    // The solar return that falls in the given calendar year, cast for the birthplace
+    // or, if one is given, for another place. Null for a chart with no birth time: its
+    // Sun is known only to within half a degree, which leaves the moment of return
+    // uncertain by half a day and the return chart's angles meaningless.
+    public SolarReturn? SolarReturn(NatalChart natal, int year, ReturnPlace? place = null)
     {
         if (!natal.Timed || natal.GetPlanet(Planet.Sun) is not { } sun) return null;
 
@@ -57,16 +57,19 @@ public sealed class TimingService
             if ((Off(mid) < 0) == (Off(lo) < 0)) lo = mid; else hi = mid;
         }
         var utc = DateTime.SpecifyKind(SwissEphemeris.JulianDayToDateTime((lo + hi) / 2), DateTimeKind.Utc);
-        return new SolarReturn { Year = year, Utc = utc, Chart = _charts.CalculateAt(natal.Celebrity, utc) };
+        var chart = place is null
+            ? _charts.CalculateAt(natal.Celebrity, utc)
+            : _charts.CalculateAt(natal.Celebrity, utc, place.Latitude, place.Longitude);
+        return new SolarReturn { Year = year, Utc = utc, Chart = chart, Place = place };
     }
 
     // The return in force on a date: the latest one on or before it. The date is a day
     // on the reader's own calendar, the one the return's time is shown in.
-    public SolarReturn? SolarReturnInForce(NatalChart natal, DateOnly asOf, DateTimeZone zone)
+    public SolarReturn? SolarReturnInForce(NatalChart natal, DateOnly asOf, DateTimeZone zone, ReturnPlace? place = null)
     {
         var dayEnds = zone.AtStartOfDay(new LocalDate(asOf.Year, asOf.Month, asOf.Day).PlusDays(1)).ToDateTimeUtc();
-        var thisYear = SolarReturn(natal, asOf.Year);
-        return thisYear is not null && thisYear.Utc < dayEnds ? thisYear : SolarReturn(natal, asOf.Year - 1);
+        var thisYear = SolarReturn(natal, asOf.Year, place);
+        return thisYear is not null && thisYear.Utc < dayEnds ? thisYear : SolarReturn(natal, asOf.Year - 1, place);
     }
 
     // ── Secondary progressions ────────────────────────────────────────────────
@@ -142,9 +145,11 @@ public sealed class TimingService
 
     // ── Written out ───────────────────────────────────────────────────────────
 
-    public TimingReading Compose(NatalChart natal, DateOnly asOf, DateTimeZone zone)
+    // `place`: where the solar return is cast for, if not the birthplace. The
+    // progressions do not depend on it.
+    public TimingReading Compose(NatalChart natal, DateOnly asOf, DateTimeZone zone, ReturnPlace? place = null)
     {
-        var solar = SolarReturnInForce(natal, asOf, zone);
+        var solar = SolarReturnInForce(natal, asOf, zone, place);
         var progression = Progress(natal, asOf);
         return new TimingReading
         {
@@ -181,10 +186,15 @@ public sealed class TimingService
             {
                 Title = $"The Sun returns on {local.ToString("d MMMM yyyy 'at' HH:mm", null)}",
                 Meta = $"your clock time  ·  {solar.Utc.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)} UT  ·  " +
-                       $"cast for the birthplace, {natal.Celebrity.BirthPlace}",
+                       (solar.Place is { } place
+                           ? $"cast for {place.Name}, not the birthplace ({natal.Celebrity.BirthPlace})"
+                           : $"cast for the birthplace, {natal.Celebrity.BirthPlace}"),
                 Text = "The solar return is the chart for the moment the Sun comes back to exactly where it stood at birth. " +
                        "It is read as a picture of the year from this birthday to the next, and its Ascendant and houses " +
-                       "matter most. The wheel beside this is the return chart."
+                       "matter most. The wheel beside this is the return chart." +
+                       (solar.Place is null ? "" :
+                           " The moment is the same wherever the return is cast for; the Ascendant, Midheaven and houses " +
+                           "below are those of the place chosen.")
             },
             new()
             {

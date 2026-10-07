@@ -18,17 +18,17 @@ public sealed class ChartService
         (Planet.Pluto,     SwissEphemeris.SE_PLUTO),
         (Planet.NorthNode, SwissEphemeris.SE_MEAN_NODE), // or the true node: see SweBody
         (Planet.Chiron,    SwissEphemeris.SE_CHIRON),
-        (Planet.Lilith,    SwissEphemeris.SE_MEAN_APOG),
+        (Planet.Lilith,    SwissEphemeris.SE_MEAN_APOG),    // or the true apogee: see SweBody
     ];
 
     // The house system and node type every calculation uses. Replaced as a whole when
     // the user changes a setting; each calculation reads it once.
     public ChartSettings Settings { get; set; } = ChartSettings.Default;
 
-    private static int SweBody(Planet planet, NodeType node) =>
-        planet == Planet.NorthNode && node == NodeType.True
-            ? SwissEphemeris.SE_TRUE_NODE
-            : PlanetMap[(int)planet].sweBody;
+    private static int SweBody(Planet planet, NodeType node, LilithType lilith) =>
+        planet == Planet.NorthNode && node == NodeType.True ? SwissEphemeris.SE_TRUE_NODE
+        : planet == Planet.Lilith && lilith == LilithType.True ? SwissEphemeris.SE_OSCU_APOG
+        : PlanetMap[(int)planet].sweBody;
 
     // Swiss Ephemeris (sweph.dll) keeps global internal state and is NOT thread-safe:
     // swe_calc_ut / swe_houses share buffers and the ephemeris-file cache. This app hits
@@ -49,12 +49,18 @@ public sealed class ChartService
 
     // The chart for this person's birthplace at a given instant rather than their
     // recorded birth time — what "if they were born ten minutes later" is tested with.
-    public NatalChart CalculateAt(Celebrity celebrity, DateTime utc)
+    public NatalChart CalculateAt(Celebrity celebrity, DateTime utc) =>
+        CalculateAt(celebrity, utc, celebrity.Latitude, celebrity.Longitude);
+
+    // The same, with the houses and angles taken for somewhere other than the birthplace
+    // (a solar return cast for where the person was living).
+    public NatalChart CalculateAt(Celebrity celebrity, DateTime utc, double latitude, double longitude)
     {
         var settings = Settings;
         double jd = SwissEphemeris.DateTimeToJulianDay(utc);
 
         List<PlanetPosition> planets;
+        var alternates = new List<AlternatePoint>();
         List<HouseCusp> houses;
         double asc, mc, vertex, armc;
         double? obliquity;
@@ -62,9 +68,17 @@ public sealed class ChartService
         string problem;
         lock (SweLock)
         {
-            planets = CalculatePlanets(jd, settings.Node);
+            planets = CalculatePlanets(jd, settings.Node, settings.Lilith);
             problem = _lastProblem ?? "";
-            (houses, asc, mc, vertex, armc, substituted) = CalculateHouses(jd, celebrity.Latitude, celebrity.Longitude, settings.Houses);
+
+            // The node and Lilith of the other kind, for the Worksheet.
+            var otherNode = settings.Node == NodeType.True ? NodeType.Mean : NodeType.True;
+            var otherLilith = settings.Lilith == LilithType.True ? LilithType.Mean : LilithType.True;
+            if (CalculateOne(jd, Planet.NorthNode, otherNode, otherLilith) is { } n)
+                alternates.Add(new($"North Node ({(otherNode == NodeType.True ? "true" : "mean")})", n));
+            if (CalculateOne(jd, Planet.Lilith, otherNode, otherLilith) is { } l)
+                alternates.Add(new($"Lilith ({(otherLilith == LilithType.True ? "true" : "mean")})", l));
+            (houses, asc, mc, vertex, armc, substituted) = CalculateHouses(jd, latitude, longitude, settings.Houses);
             var ecl = new double[6];
             obliquity = SwissEphemeris.CalcUt(jd, SwissEphemeris.SE_ECL_NUT, 0, ecl, nint.Zero) < 0 ? null : ecl[0];
         }
@@ -83,6 +97,7 @@ public sealed class ChartService
             Houses = houses,
             Aspects = aspects,
             AngleAspects = angleAspects,
+            Alternates = alternates,
             Ascendant = asc,
             Midheaven = mc,
             Vertex = vertex,
@@ -101,10 +116,10 @@ public sealed class ChartService
     // bodies, flags and lock as a natal calculation.
     public IReadOnlyList<PlanetPosition> CalculateSky(double jd)
     {
-        var node = Settings.Node;
+        var settings = Settings;
         lock (SweLock)
         {
-            return CalculatePlanets(jd, node);
+            return CalculatePlanets(jd, settings.Node, settings.Lilith);
         }
     }
 
@@ -113,7 +128,8 @@ public sealed class ChartService
     // calculation skips the body).
     public PlanetPosition? CalculateBody(double jd, Planet planet)
     {
-        int sweBody = SweBody(planet, Settings.Node);
+        var settings = Settings;
+        int sweBody = SweBody(planet, settings.Node, settings.Lilith);
         var xx = new double[6];
         int flags = SwissEphemeris.SEFLG_SWIEPH | SwissEphemeris.SEFLG_SPEED;
 
@@ -159,47 +175,25 @@ public sealed class ChartService
         return ascmc[SwissEphemeris.SE_ASC];
     }
 
-    private static List<PlanetPosition> CalculatePlanets(double jd, NodeType node)
+    private static List<PlanetPosition> CalculatePlanets(double jd, NodeType node, LilithType lilith)
     {
         _lastProblem = null;
         bool fallback = false;
         var missing = new List<string>();
         var result = new List<PlanetPosition>(PlanetMap.Length);
-        var xx = new double[6];
-        var eq = new double[6];
-        int flags = SwissEphemeris.SEFLG_SWIEPH | SwissEphemeris.SEFLG_SPEED;
 
         foreach (var (planet, _) in PlanetMap)
         {
-            int ret = SwissEphemeris.CalcUt(jd, SweBody(planet, node), flags, xx, nint.Zero);
-            if (ret < 0)
+            if (CalculateOne(jd, planet, node, lilith, out bool fromFiles) is not { } position)
             {
                 missing.Add(planet.Name()); // e.g. Chiron when its data file is absent
                 continue;
             }
-            // The flags that come back say which ephemeris was really used. (The mean
-            // node and mean Lilith are computed without any file, so they don't count.)
-            if ((ret & SwissEphemeris.SEFLG_SWIEPH) == 0 && planet is not (Planet.NorthNode or Planet.Lilith))
+            // (The mean node and mean Lilith are computed without any file, so they
+            // don't count.)
+            if (!fromFiles && planet is not (Planet.NorthNode or Planet.Lilith))
                 fallback = true;
-
-            // A second pass in equatorial coordinates, for the right ascension and
-            // declination. If it fails they are marked unknown rather than left at zero.
-            bool equatorial = SwissEphemeris.CalcUt(jd, SweBody(planet, node),
-                flags | SwissEphemeris.SEFLG_EQUATORIAL, eq, nint.Zero) >= 0;
-
-            result.Add(new PlanetPosition
-            {
-                Planet = planet,
-                Longitude = xx[0],
-                Latitude = xx[1],
-                Distance = xx[2],
-                SpeedLongitude = xx[3],
-                SpeedLatitude = xx[4],
-                HasEquatorial = equatorial,
-                RightAscension = equatorial ? eq[0] : 0,
-                Declination = equatorial ? eq[1] : 0,
-                SpeedDeclination = equatorial ? eq[4] : 0,
-            });
+            result.Add(position);
         }
 
         if (fallback || missing.Count > 0)
@@ -207,6 +201,42 @@ public sealed class ChartService
                 (fallback ? "The Swiss Ephemeris data files could not be read, so a less precise built-in model was used. " : "") +
                 (missing.Count > 0 ? $"Not available: {string.Join(", ", missing)}." : "");
         return result;
+    }
+
+    private static PlanetPosition? CalculateOne(double jd, Planet planet, NodeType node, LilithType lilith) =>
+        CalculateOne(jd, planet, node, lilith, out _);
+
+    // One body in full. Null if the ephemeris cannot supply it; `fromFiles` says whether
+    // the Swiss Ephemeris data files were really used (the flags that come back tell).
+    // Call inside SweLock.
+    private static PlanetPosition? CalculateOne(double jd, Planet planet, NodeType node, LilithType lilith, out bool fromFiles)
+    {
+        var xx = new double[6];
+        var eq = new double[6];
+        int flags = SwissEphemeris.SEFLG_SWIEPH | SwissEphemeris.SEFLG_SPEED;
+        int body = SweBody(planet, node, lilith);
+
+        int ret = SwissEphemeris.CalcUt(jd, body, flags, xx, nint.Zero);
+        fromFiles = ret >= 0 && (ret & SwissEphemeris.SEFLG_SWIEPH) != 0;
+        if (ret < 0) return null;
+
+        // A second pass in equatorial coordinates, for the right ascension and
+        // declination. If it fails they are marked unknown rather than left at zero.
+        bool equatorial = SwissEphemeris.CalcUt(jd, body, flags | SwissEphemeris.SEFLG_EQUATORIAL, eq, nint.Zero) >= 0;
+
+        return new PlanetPosition
+        {
+            Planet = planet,
+            Longitude = xx[0],
+            Latitude = xx[1],
+            Distance = xx[2],
+            SpeedLongitude = xx[3],
+            SpeedLatitude = xx[4],
+            HasEquatorial = equatorial,
+            RightAscension = equatorial ? eq[0] : 0,
+            Declination = equatorial ? eq[1] : 0,
+            SpeedDeclination = equatorial ? eq[4] : 0,
+        };
     }
 
     // `substituted` is set when the Swiss Ephemeris could not calculate the requested
@@ -269,11 +299,16 @@ public sealed class ChartService
     // Each body against the Ascendant and the Midheaven, on the same orbs. (The two
     // angles are not aspected to each other.)
     private static List<AngleAspect> CalculateAngleAspects(
-        List<PlanetPosition> planets, double asc, double mc, OrbSettings orbs)
+        List<PlanetPosition> planets, double asc, double mc, OrbSettings orbs) =>
+        AspectsToPoints(planets, [(NatalPoint.Ascendant, asc), (NatalPoint.Midheaven, mc)], orbs);
+
+    // Each body against each of some fixed points of the chart, on the chart's orbs.
+    public static List<AngleAspect> AspectsToPoints(
+        IReadOnlyList<PlanetPosition> planets, IReadOnlyList<(NatalPoint Point, double Longitude)> points, OrbSettings orbs)
     {
         var aspects = new List<AngleAspect>();
         foreach (var p in planets)
-            foreach (var (angle, lon) in new[] { (NatalPoint.Ascendant, asc), (NatalPoint.Midheaven, mc) })
+            foreach (var (angle, lon) in points)
                 foreach (var type in orbs.Types().OrderBy(t => Math.Abs(AngleBetween(p.Longitude, lon) - t.Angle())))
                 {
                     double orb = Math.Abs(AngleBetween(p.Longitude, lon) - type.Angle());

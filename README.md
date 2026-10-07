@@ -4,14 +4,14 @@
 
 > A Windows desktop application for computing and exploring astrological natal charts — and reading a daily horoscope from them — powered by the Swiss Ephemeris. Browse a curated library of historical figures — every one with a documented birth time — or add your own.
 
-**Latest release: v2.4.0** · [Download](../../releases/latest)
+**Latest release: v2.5.0** · [Download](../../releases/latest)
 
 ### Installing
 
-1. From the [latest release](../../releases/latest), download **`LoreSetup-2.4.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`LoreSetup-2.5.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user only (no administrator prompt), adds a Start-menu shortcut, and can be removed from *Settings → Apps* like any other program.
 
-**Prefer not to install?** Download **`Lore-2.4.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
+**Prefer not to install?** Download **`Lore-2.5.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
 
 > **The installer is not code-signed.** Lore is a free hobby project and does not carry a paid signing certificate, so Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"* — choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -28,7 +28,7 @@
 
 ### Chart Calculation
 - **Swiss Ephemeris** (`sweph.dll`) provides high-precision planetary positions for dates from 1200 CE to 2400 CE.
-- Computes positions for **13 bodies**: Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North Node (mean or true), Chiron, and Black Moon Lilith (Mean Apogee).
+- Computes positions for **13 bodies**: Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North Node (mean or true), Chiron, and Black Moon Lilith (mean or true apogee).
 - Calculates the **12 house cusps** (Placidus, Whole Sign, Equal, or Koch — your choice), Ascendant, and Midheaven.
 - Detects **five major aspects** (conjunction ☌, sextile ⚹, square □, trine △, opposition ☍) with per-aspect orbs, and flags each as applying or separating.
 - Detects **major configurations** — stellium, grand trine, T-square, and grand cross — from the positions and aspects (a T-square that is one arm of a grand cross is not reported twice).
@@ -56,9 +56,9 @@
 | **Chart Wheel** | Rendered chart wheel (Win2D / Direct2D), drawn on-screen and exportable as a high-resolution PNG. |
 | **Report** | Natural-language reading: Overview (Sun/Moon/Rising), planet-by-sign-degree-and-house paragraphs, major aspects, chart patterns (stellium, grand trine, T-square, grand cross), and elemental and modal balance. The Ascendant/Midheaven line shows their degrees and names the house system. |
 | **Worksheet** | The numbers behind the chart, uninterpreted: how the birth time became Universal Time, every position to the arc-second with latitude, declination, daily speed and house, the twelve house cusps, the derived points (South Node, Descendant, IC, Vertex, Parts of Fortune and Spirit), and a grid of every aspect — including those to the Ascendant and Midheaven — with orb and applying/separating. Below that come the further measurements: the Moon's phase, each planet's distance from the Sun, declination contacts and out-of-bounds planets, closeness to the angles, the balance of the chart by element, mode, polarity and house, the aspects in sum, and the chart's rulers and dispositors. A section headed *If the birth time is off* shows what would change, and when, if the recorded time were out by a margin you set. |
-| **Daily** | Daily horoscope for the selected chart on any date — generated from that day's transits. See below. |
+| **Daily** | Daily horoscope for the selected chart on any date — generated from that day's transits, with a wheel of the day's sky around the birth chart. See below. |
 | **Forecast** | The transits coming up for the selected chart over the next month to a year: when each comes into orb, is exact, and leaves, with the Daily view's written line for it. |
-| **Timing** | The solar return in force on a date, with its wheel, and the chart progressed to that date a day for a year. |
+| **Timing** | The solar return in force on a date, with its wheel, cast for the birthplace or for any city you choose, and the chart progressed to that date a day for a year. |
 | **Synastry** | The selected chart compared with a second person's: a written reading and a bi-wheel of the two charts. See below. |
 | **Legend** | Full-page reference — a grouped list of every glyph, colour, angle, house, and term; click any item for a fuller explanation. |
 
@@ -75,6 +75,7 @@ The **Daily** view writes a horoscope for the selected chart, for today or any d
 - **Deterministic and offline.** The same chart and date always give the same reading. Every sentence comes from an editable corpus (`Data\daily.json`, 585 bespoke transit lines); nothing is generated at run time.
 - **Explainable.** *Why this reading?* lists every transit in effect that day, how close it gets, and which ones the reading used.
 - **Honest about unknowns.** For a chart with no birth time, the houses, angles, and contacts to the natal Moon are left out rather than read from a noon guess.
+- **Transit wheel.** Beside the reading, the birth chart drawn inside and the moving planets (as they stand at the middle of the day) in a band around it, with each transit as an aspect line; the ones the reading uses are drawn heavier.
 
 It is a prompt for reflection, not a prediction: the ranking of transits is an editorial priority, not a probability.
 
@@ -120,11 +121,13 @@ Charts and readings can be exported in these formats:
 | Format | Contents |
 |---|---|
 | **PNG** | High-resolution chart wheel (1600 × 1600 px, offscreen Win2D render) |
+| **PNG — chart with tables** | The wheel with the Worksheet set out around and under it in one image (2400 px wide): birth data and settings, every position, the house cusps, the aspect grid, elements by mode, the Moon's phase, balance, rulers, declination, distance from the Sun, dispositors, the dignity score by planet, and a strip ordering everything by degree |
 | **PDF** | Full reading — birth data, chart wheel image, Big Three, written report, per-planet dignity table, and the worksheet |
 | **JSON** | Structured chart data (planets, houses, aspects, angles, detected patterns, and every Worksheet measurement, including the dignity score's breakdown) |
 | **XML** | Same structured data in XML |
 | **Text — worksheet** | The Worksheet view as plain text, for pasting into notes or checking against another program |
-| **PDF / Text — daily horoscope** | The daily reading for the date shown in the Daily view, with the full list of that day's transits |
+| **PDF / Text — daily horoscope** | The daily reading for the date shown in the Daily view, with the full list of that day's transits; the PDF includes the transit wheel |
+| **PNG — daily transit wheel** | The Daily view's wheel alone (1600 × 1600 px) |
 | **PDF / Text — forecast** | The transits ahead for the period shown in the Forecast view, month by month |
 | **PDF / Text — solar return and progressions** | The Timing view's reading for its date; the PDF includes the return chart's wheel |
 | **PDF — synastry reading** | The synastry reading on screen, with the bi-wheel and the full list of contacts between the two charts |
@@ -264,7 +267,7 @@ Produces a self-contained folder that runs with no installed .NET or VC++ runtim
 .\scripts\build-portable.ps1
 ```
 
-Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-2.4.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
+Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-2.5.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
 
 ### Step 4 — Installer
 
@@ -472,7 +475,17 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 2.4.0 (current)
+### 2.5.0 (current)
+- **Chart with tables, as one image** — a new export, **PNG — chart with tables**, draws the wheel with the Worksheet around and under it: birth data and the settings used, every position, the house cusps, the aspect grid, the bodies by element and mode, the Moon's phase, the balance of the chart, its rulers, declination, distance from the Sun, dispositors, the dignity score planet by planet, and a strip that orders everything by its degree within its sign. The plain wheel export is unchanged.
+- **True Lilith** — Settings has a new choice, *Black Moon Lilith*: the mean apogee (as before) or the true, osculating one that some chart services use, which can stand in a different sign. Whichever node and Lilith you choose, the Worksheet now lists the other kind of each beneath the positions for comparison.
+- **Quintile and biquintile** — the minor aspects (still off unless switched on) now include the quintile (72°) and biquintile (144°), on the same small orb, with words for them in the report.
+- **Aspects to the Vertex and the Part of Fortune** — on the Worksheet's aspect grid and list, and in the new image. The report, the patterns and the wheel's lines still read only the planets, the Ascendant and the Midheaven.
+- **Stationary planets** — a planet standing nearly still as it turns retrograde or direct is marked **S** on the wheel and on the Worksheet.
+- **Two more Worksheet tables** — *By degree* orders every body and angle by its degree within its sign, where the aspects fall; *Elements and modes* shows which bodies are in each of the twelve signs as a grid of four by three.
+- **A wheel for the Daily view** — the daily horoscope now has a wheel beside it: the birth chart inside, the day's sky in a band around it, and each of the day's transits drawn as a line from the moving planet to the natal point it touches, the ones the reading uses drawn heavier. It is in the daily PDF, and saves on its own as **PNG — daily transit wheel**. The Legend explains it under *Transit wheel*.
+- **Cast a solar return for another place** — the Timing view has a new box, *Cast the return for another place*, with the same city search as Add Chart. Many astrologers cast the return for where the person was living that year: the moment is the same, but the Ascendant, Midheaven and houses change with the place. The reading, the wheel's caption and the exports all say which place was used, and *Use the birthplace* goes back. The choice is dropped when another chart is picked.
+
+### 2.4.0
 - **Take your charts with you** — the new **⋯** button beside *Add chart* saves a copy of all of My Charts as one file and brings charts in from such a copy, for a backup or for moving to another PC. Bringing a copy in adds to what is there; it goes through the same checks and the same crash-safe save as any other change, so a damaged file changes nothing.
 - **Forecast and Timing as PDF** — both could only be saved as text. The Timing PDF includes the solar return's wheel.
 - **City search by several words** — "Paris France" or "Springfield Illinois" now finds the city; before, the whole phrase had to appear in the name, the region or the country alone.

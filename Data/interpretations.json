@@ -462,7 +462,9 @@
     "SemiSextile": "sits a little awkwardly beside",
     "SemiSquare": "chafes against",
     "Sesquiquadrate": "grates on",
-    "Quincunx": "has to keep adjusting to"
+    "Quincunx": "has to keep adjusting to",
+    "Quintile": "finds an inventive outlet with",
+    "Biquintile": "works with a practised knack beside"
   },
   "_aspects_comment": "Bespoke lines for the major aspects in the birth chart, keyed 'Point|Tone|Point'. Tone is Conjunction, Flow (sextile or trine) or Tension (square or opposition). The two points are always in standard order (Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North Node, Chiron, Lilith, Ascendant, Midheaven), so each pair has one line: 'Sun|Flow|Moon', never 'Moon|Flow|Sun'. Covered: every pair among the thirteen bodies that can occur, and each body with the Ascendant and Midheaven. An empty line gets a plainer sentence built from planetThemes / angleThemes and aspectToneLinks, followed by the aspectNotes line. Minor aspects always use aspectNotes.",
   "aspects": {
@@ -792,7 +794,9 @@
     "SemiSextile": "A minor aspect: neighbouring signs with little in common, a mild and easily missed friction.",
     "SemiSquare": "A minor aspect: a low-level irritation, half a square, that nags rather than confronts.",
     "Sesquiquadrate": "A minor aspect: a square and a half, an agitation that tends to surface under pressure.",
-    "Quincunx": "A minor aspect: the two have nothing in common by sign, so neither can simply have its way."
+    "Quincunx": "A minor aspect: the two have nothing in common by sign, so neither can simply have its way.",
+    "Quintile": "A minor aspect: a fifth of the circle, traditionally read as a talent or a knack that asks to be used.",
+    "Biquintile": "A minor aspect: two fifths of the circle, read like the quintile as a skill, here one that comes with practice."
   },
   "elements": {
     "Fire": "a fiery temperament — driven, enthusiastic, and quick to act",

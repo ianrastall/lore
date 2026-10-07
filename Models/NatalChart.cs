@@ -1,5 +1,8 @@
 namespace Lore.Models;
 
+// "North Node (true)" and where it stands.
+public sealed record AlternatePoint(string Name, PlanetPosition Position);
+
 public sealed class NatalChart
 {
     public required Celebrity Celebrity { get; init; }
@@ -9,6 +12,11 @@ public sealed class NatalChart
 
     // The bodies' aspects to the Ascendant and Midheaven; empty without a birth time.
     public IReadOnlyList<AngleAspect> AngleAspects { get; init; } = [];
+
+    // The North Node and Lilith of the kind the settings did not choose (the true node
+    // beside a mean one, and so on), for the Worksheet to set beside the ones in use.
+    // Nothing else reads them.
+    public IReadOnlyList<AlternatePoint> Alternates { get; init; } = [];
     public double Ascendant { get; init; }   // ecliptic longitude
     public double Midheaven { get; init; }   // ecliptic longitude
     public double Vertex { get; init; }      // where the prime vertical meets the ecliptic in the west
@@ -49,6 +57,8 @@ public sealed class NatalChart
     {
         NatalPointKind.Ascendant => Ascendant,
         NatalPointKind.Midheaven => Midheaven,
+        NatalPointKind.Vertex => Timed ? Vertex : null,
+        NatalPointKind.Fortune => Services.NatalMetricsService.Lot(this, spirit: false),
         _ => GetPlanet(point.Body)?.Longitude
     };
 

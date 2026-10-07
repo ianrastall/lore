@@ -53,6 +53,26 @@ public class DailyInterpreterTests
     }
 
     [Fact]
+    public void A_reading_carries_what_the_wheel_beside_it_draws()
+    {
+        var reading = Read(new DateOnly(2026, 10, 2));
+
+        // The outer band: every body, as it stands at the middle of the day.
+        Assert.Equal(Enum.GetValues<Planet>().Length, reading.Midday.Count);
+        var noon = new LocalDateTime(2026, 10, 2, 12, 0).InZoneLeniently(Chicago).ToDateTimeUtc();
+        double sunAtNoon = Repo.Charts.CalculateBody(SwissEphemeris.DateTimeToJulianDay(noon), Planet.Sun)!.Longitude;
+        Assert.Equal(sunAtNoon, reading.Midday.First(p => p.Planet == Planet.Sun).Longitude, 3);
+
+        // Each line: a mover in that band, to a point the birth chart has.
+        var natal = Repo.Charts.Calculate(Demo.Person(true));
+        Assert.All(reading.Events, e =>
+        {
+            Assert.Contains(reading.Midday, p => p.Planet == e.Mover);
+            Assert.NotNull(natal.LongitudeOf(e.Target));
+        });
+    }
+
+    [Fact]
     public void Without_a_birth_time_the_reading_says_so_and_mentions_no_houses()
     {
         var reading = Read(new DateOnly(2026, 10, 2), timed: false);

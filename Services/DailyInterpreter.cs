@@ -108,6 +108,7 @@ public sealed class DailyInterpreter
             Sections = sections,
             Events = ranked,
             Trace = ranked.Select(e => TraceLine(e, sky, zone)).ToList(),
+            Midday = sky.Midday,
         };
     }
 

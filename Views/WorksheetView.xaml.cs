@@ -56,6 +56,8 @@ public sealed partial class WorksheetView : UserControl
         Color.FromArgb(255, 200, 110, 110), // Semi-square
         Color.FromArgb(255, 200, 110, 110), // Sesquiquadrate
         Color.FromArgb(255, 170, 130, 200), // Quincunx
+        Color.FromArgb(255, 210, 190, 90),  // Quintile
+        Color.FromArgb(255, 210, 190, 90),  // Biquintile
     ];
 
     private const double CellWidth = 62, CellHeight = 40;

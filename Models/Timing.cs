@@ -1,12 +1,18 @@
 namespace Lore.Models;
 
+// Somewhere a solar return is cast for other than the birthplace: usually where the
+// person was living that year.
+public sealed record ReturnPlace(string Name, double Latitude, double Longitude);
+
 // The chart for the moment, in one particular year, when the Sun comes back to exactly
-// where it stood at birth — cast for the birthplace.
+// where it stood at birth — cast for the birthplace unless another place was chosen.
+// The moment is the same wherever it is cast for; the Ascendant and houses are not.
 public sealed class SolarReturn
 {
     public required int Year { get; init; }
     public required DateTime Utc { get; init; }
     public required NatalChart Chart { get; init; }
+    public ReturnPlace? Place { get; init; }        // null: the birthplace
 }
 
 // One progressed position beside the natal one it grew from.

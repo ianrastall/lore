@@ -79,7 +79,7 @@
                 <TextBlock Text="Positions"
                            Style="{StaticResource SubtitleTextBlockStyle}"
                            Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
-                <Grid ColumnDefinitions="34,150,200,100,100,110,60,40" Padding="0,2"
+                <Grid ColumnDefinitions="34,160,200,100,100,110,60,48" Padding="0,2"
                       BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}" BorderThickness="0,0,0,1">
                     <TextBlock Grid.Column="2" Text="Position" FontSize="12" Opacity="0.7"/>
                     <TextBlock Grid.Column="3" Text="Latitude" FontSize="12" Opacity="0.7" HorizontalAlignment="Right"/>
@@ -90,7 +90,7 @@
                 <ItemsControl ItemsSource="{x:Bind ViewModel.Worksheet.Positions, Mode=OneWay, FallbackValue={x:Null}}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate x:DataType="models:WorksheetRow">
-                            <Grid ColumnDefinitions="34,150,200,100,100,110,60,40" Padding="0,3">
+                            <Grid ColumnDefinitions="34,160,200,100,100,110,60,48" Padding="0,3">
                                 <TextBlock Grid.Column="0" Text="{x:Bind Symbol}" FontSize="15"/>
                                 <TextBlock Grid.Column="1" Text="{x:Bind Name}"/>
                                 <TextBlock Grid.Column="2" Text="{x:Bind Position}" IsTextSelectionEnabled="True"/>
@@ -105,7 +105,7 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
                 <TextBlock FontSize="11" Opacity="0.7" TextWrapping="Wrap" MaxWidth="790" HorizontalAlignment="Left"
-                           Text="Latitude is measured from the ecliptic, declination from the celestial equator; + is north. A negative speed means the body is moving backwards through the zodiac."/>
+                           Text="Latitude is measured from the ecliptic, declination from the celestial equator; + is north. A negative speed means the body is moving backwards through the zodiac: ℞ marks a planet that is retrograde, and S one that is stationary, standing nearly still as it turns (under about a tenth of its usual speed). The North Node and Lilith of the kind not chosen in Settings are given below the others for comparison; nothing else in Lore uses them."/>
             </StackPanel>
 
             <!-- House cusps -->

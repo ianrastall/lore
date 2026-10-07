@@ -6,9 +6,15 @@ public enum HouseSystem { Placidus, WholeSign, Equal, Koch }
 // the true node (the Moon's actual orbit crossing, which wobbles up to 1.5° either side).
 public enum NodeType { Mean, True }
 
+// Which Black Moon Lilith: the mean lunar apogee (a smoothed point that moves steadily
+// forwards) or the true, "osculating" apogee (the far point of the Moon's orbit as it
+// stands at that instant, which swings up to 30° either side of the mean one).
+public enum LilithType { Mean, True }
+
 // The calculation choices astrologers disagree on. They apply to every chart Lore
 // calculates, and each chart records the ones it was calculated with.
-public sealed record ChartSettings(HouseSystem Houses = HouseSystem.Placidus, NodeType Node = NodeType.Mean)
+public sealed record ChartSettings(
+    HouseSystem Houses = HouseSystem.Placidus, NodeType Node = NodeType.Mean, LilithType Lilith = LilithType.Mean)
 {
     public static readonly ChartSettings Default = new();
 
@@ -37,4 +43,6 @@ public static class ChartSettingsExtensions
     };
 
     public static string Name(this NodeType n) => n == NodeType.True ? "True node" : "Mean node";
+
+    public static string Name(this LilithType l) => l == LilithType.True ? "True Lilith" : "Mean Lilith";
 }

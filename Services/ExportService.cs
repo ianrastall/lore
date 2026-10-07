@@ -30,6 +30,31 @@ public static class ExportService
     public static Task<byte[]> RenderBiWheelPngAsync(Synastry synastry, int size = 1600) =>
         RenderPngAsync(size, ds => ChartRenderer.DrawBiWheel(ds, synastry, size, size));
 
+    // The Daily view's wheel: the birth chart inside, the day's sky around it.
+    public static Task<byte[]> RenderTransitWheelPngAsync(NatalChart natal, DailyReading reading, int size = 1600) =>
+        RenderPngAsync(size, ds => ChartRenderer.DrawTransitWheel(ds, natal, reading, size, size));
+
+    // The wheel with the Worksheet's tables around and under it. The page is drawn on a
+    // surface taller than it can need, then cut to the height it used.
+    public static async Task<byte[]> RenderChartSheetPngAsync(NatalChart chart)
+    {
+        var device = CanvasDevice.GetSharedDevice();
+        using var scratch = new CanvasRenderTarget(device, ChartSheetRenderer.Width, ChartSheetRenderer.MaxHeight, 96);
+        float used;
+        using (var ds = scratch.CreateDrawingSession())
+        {
+            used = ChartSheetRenderer.Draw(ds, chart);
+        }
+
+        int height = (int)Math.Ceiling(used);
+        using var target = new CanvasRenderTarget(device, ChartSheetRenderer.Width, height, 96);
+        using (var ds = target.CreateDrawingSession())
+        {
+            ds.DrawImage(scratch, 0, 0, new Windows.Foundation.Rect(0, 0, ChartSheetRenderer.Width, height));
+        }
+        return await SavePngAsync(target);
+    }
+
     private static async Task<byte[]> RenderPngAsync(int size, Action<CanvasDrawingSession> draw)
     {
         var device = CanvasDevice.GetSharedDevice();
@@ -38,7 +63,11 @@ public static class ExportService
         {
             draw(ds);
         }
+        return await SavePngAsync(target);
+    }
 
+    private static async Task<byte[]> SavePngAsync(CanvasRenderTarget target)
+    {
         using var stream = new InMemoryRandomAccessStream();
         await target.SaveAsync(stream, CanvasBitmapFileFormat.Png);
 
@@ -245,6 +274,7 @@ public static class ExportService
             EphemerisNote = chart.EphemerisNote,
             HouseSystem = chart.HouseSystemLabel,
             NodeType = chart.Settings.Node.Name(),
+            LilithType = chart.Settings.Lilith.Name(),
             AspectOrbs = chart.Settings.Orbs.Describe(),
             // The angles and houses are left out, not guessed, when there is no birth time.
             Ascendant = chart.Timed ? Round(chart.Ascendant) : null,
@@ -407,6 +437,7 @@ public sealed class ChartExport
     public string EphemerisNote { get; set; } = "";
     public string HouseSystem { get; set; } = "";
     public string NodeType { get; set; } = "";
+    public string LilithType { get; set; } = "";
     public string AspectOrbs { get; set; } = "";
     public double? Ascendant { get; set; }   // null without a birth time
     public string AscendantSign { get; set; } = "";

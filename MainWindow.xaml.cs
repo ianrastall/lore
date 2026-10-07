@@ -25,6 +25,7 @@ public sealed partial class MainWindow : Window
         // Show the saved calculation settings (index order matches the enums).
         HouseSystemCombo.SelectedIndex = (int)vm.Settings.Houses;
         NodeTypeCombo.SelectedIndex = (int)vm.Settings.Node;
+        LilithTypeCombo.SelectedIndex = (int)vm.Settings.Lilith;
         ShowOrbs(vm.Settings.Orbs);
         _settingsReady = true;
 
@@ -37,6 +38,23 @@ public sealed partial class MainWindow : Window
         };
         if (AppWindow.Presenter is OverlappedPresenter presenter)
             presenter.Maximize();
+
+#if DEBUG
+        // For checking the "chart with tables" image without clicking through a save
+        // dialog: with LORE_SHEET_OUT set to a file path, a debug build writes the image
+        // for the first chart it opens there.
+        if (Environment.GetEnvironmentVariable("LORE_SHEET_OUT") is { Length: > 0 } sheetOut)
+        {
+            bool written = false;
+            vm.ChartVM.PropertyChanged += async (_, e) =>
+            {
+                if (written || e.PropertyName != nameof(ChartViewModel.Chart) || vm.ChartVM.Chart is not { } first) return;
+                written = true;
+                try { await File.WriteAllBytesAsync(sheetOut, await ExportService.RenderChartSheetPngAsync(first)); }
+                catch (Exception ex) { Diagnostics.Log($"LORE_SHEET_OUT failed: {ex}"); }
+            };
+        }
+#endif
 
         // One-time data load. Window.Activated proved unreliable here (it never fired,
         // so the app started with empty lists), so drive it from the root element's
@@ -254,10 +272,12 @@ public sealed partial class MainWindow : Window
 
     private async Task ApplySettingsFromMenuAsync()
     {
-        if (!_settingsReady || HouseSystemCombo.SelectedIndex < 0 || NodeTypeCombo.SelectedIndex < 0) return;
+        if (!_settingsReady || HouseSystemCombo.SelectedIndex < 0 || NodeTypeCombo.SelectedIndex < 0 ||
+            LilithTypeCombo.SelectedIndex < 0) return;
         await ViewModel.ApplySettingsAsync(new Models.ChartSettings(
             (Models.HouseSystem)HouseSystemCombo.SelectedIndex,
-            (Models.NodeType)NodeTypeCombo.SelectedIndex) { Orbs = ReadOrbs() });
+            (Models.NodeType)NodeTypeCombo.SelectedIndex,
+            (Models.LilithType)LilithTypeCombo.SelectedIndex) { Orbs = ReadOrbs() });
     }
 
     private void ShowLegend_Click(object sender, RoutedEventArgs e) => ViewModel.ShowLegend = true;
@@ -266,11 +286,13 @@ public sealed partial class MainWindow : Window
     // ── Export ────────────────────────────────────────────────────────────────
     private async void ExportPdf_Click(object sender, RoutedEventArgs e) => await ExportAsync("pdf");
     private async void ExportPng_Click(object sender, RoutedEventArgs e) => await ExportAsync("png");
+    private async void ExportSheetPng_Click(object sender, RoutedEventArgs e) => await ExportAsync("sheetpng");
     private async void ExportJson_Click(object sender, RoutedEventArgs e) => await ExportAsync("json");
     private async void ExportXml_Click(object sender, RoutedEventArgs e) => await ExportAsync("xml");
     private async void ExportWorksheet_Click(object sender, RoutedEventArgs e) => await ExportAsync("worksheettxt");
     private async void ExportDailyPdf_Click(object sender, RoutedEventArgs e) => await ExportAsync("dailypdf");
     private async void ExportDailyText_Click(object sender, RoutedEventArgs e) => await ExportAsync("dailytxt");
+    private async void ExportDailyPng_Click(object sender, RoutedEventArgs e) => await ExportAsync("dailypng");
     private async void ExportForecastPdf_Click(object sender, RoutedEventArgs e) => await ExportAsync("forecastpdf");
     private async void ExportForecastText_Click(object sender, RoutedEventArgs e) => await ExportAsync("forecasttxt");
     private async void ExportTimingPdf_Click(object sender, RoutedEventArgs e) => await ExportAsync("timingpdf");
@@ -339,11 +361,13 @@ public sealed partial class MainWindow : Window
             {
                 "pdf"  => ("PDF document", ".pdf"),
                 "png"  => ("PNG image", ".png"),
+                "sheetpng" => ("PNG image", ".png"),
                 "json" => ("JSON data", ".json"),
                 "xml"  => ("XML data", ".xml"),
                 "worksheettxt" => ("Text file", ".txt"),
                 "dailypdf" => ("PDF document", ".pdf"),
                 "dailytxt" => ("Text file", ".txt"),
+                "dailypng" => ("PNG image", ".png"),
                 "forecastpdf" => ("PDF document", ".pdf"),
                 "forecasttxt" => ("Text file", ".txt"),
                 "timingpdf" => ("PDF document", ".pdf"),
@@ -360,6 +384,7 @@ public sealed partial class MainWindow : Window
                 daily ? SafeFileName($"{chart.Celebrity.Name} - daily {reading!.Date.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture)}") :
                 synastry ? SafeFileName($"{synastryReading!.FirstName} and {synastryReading.SecondName} - synastry") :
                 kind == "worksheettxt" ? SafeFileName($"{chart.Celebrity.Name} - worksheet") :
+                kind == "sheetpng" ? SafeFileName($"{chart.Celebrity.Name} - chart with tables") :
                 timed ? SafeFileName($"{chart.Celebrity.Name} - return and progressions {timing!.AsOf.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture)}") :
                 forecasting ? SafeFileName($"{chart.Celebrity.Name} - forecast from {forecast!.Start.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture)}") :
                 SafeFileName(chart.Celebrity.Name);
@@ -374,10 +399,13 @@ public sealed partial class MainWindow : Window
                                               await ExportService.RenderChartPngAsync(chart),
                                               worksheet, sensitivity),
                 "png"  => await ExportService.RenderChartPngAsync(chart),
+                "sheetpng" => await ExportService.RenderChartSheetPngAsync(chart),
                 "json" => ExportService.ToJson(chart),
                 "xml"  => ExportService.ToXml(chart),
                 "worksheettxt" => WorksheetService.ToText(WorksheetService.Build(chart), sensitivity),
-                "dailypdf" => DailyExportService.ToPdf(reading!),
+                "dailypdf" => DailyExportService.ToPdf(reading!,
+                                              await ExportService.RenderTransitWheelPngAsync(chart, reading!)),
+                "dailypng" => await ExportService.RenderTransitWheelPngAsync(chart, reading!),
                 "dailytxt" => DailyExportService.ToText(reading!),
                 "forecastpdf" => DailyExportService.ForecastToPdf(forecast!),
                 "forecasttxt" => DailyInterpreter.ForecastToText(forecast!),

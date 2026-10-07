@@ -18,7 +18,8 @@ public static class DailyExportService
         QuestPDF.Settings.License = LicenseType.Community;
     }
 
-    public static byte[] ToPdf(DailyReading reading)
+    // `wheelPng`: the transit wheel shown beside the reading, when the caller can draw it.
+    public static byte[] ToPdf(DailyReading reading, byte[]? wheelPng = null)
     {
         var doc = Document.Create(container =>
         {
@@ -38,6 +39,8 @@ public static class DailyExportService
                 page.Content().PaddingVertical(12).Column(col =>
                 {
                     col.Spacing(6);
+                    if (wheelPng is { Length: > 0 })
+                        col.Item().AlignCenter().Width(340).Image(wheelPng);
                     col.Item().Text($"The day reads as {reading.Tone.Label()}")
                         .FontSize(12).SemiBold().FontColor(reading.Tone.ColorHex());
 

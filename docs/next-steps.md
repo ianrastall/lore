@@ -13,7 +13,7 @@ note stays true.
 
 - Seven views: Chart, Report, Worksheet, Daily, Forecast, Timing, Synastry, plus the
   Legend. About 10,600 lines of C# and XAML; no file over 560 lines.
-- 229 tests, all passing, covering the calculation and data layer. They run on
+- 240 tests, all passing, covering the calculation and data layer. They run on
   GitHub on every push, followed by a build of the app itself (about 3 minutes).
 - The view models, the views and the three export services are **not** tested: they
   depend on WinUI or Win2D and the test project leaves them out.
@@ -73,22 +73,49 @@ in 2.4.0; item 7 is still open.
 
 ## 4. Features, in the order I would build them
 
-### 4.1 A wheel for the Daily view (transit bi-wheel). Medium.
+### 4.1 ~~A wheel for the Daily view (transit bi-wheel).~~ Done in 2.5.0.
 
-The Daily view is text only; Chart, Timing and Synastry all have a wheel. The
+`ChartRenderer.DrawTransitWheel`, drawn from `DailyReading.Midday` and `Events`; in
+the daily PDF and as its own PNG export. The Moon's lines are drawn from its midday
+place, not from where it was at the exact contact (the Legend says so).
+
+**Was:** The Daily view is text only; Chart, Timing and Synastry all have a wheel. The
 bi-wheel drawing already exists for Synastry (`Views/ChartRenderer.cs`,
 `SynastryView.xaml`): natal chart inside, a second set of planets in a band
 outside, contacts as lines. Feeding it `DaySky.Midday` in place of a partner's
 chart gives "today's sky around your chart", with the transits the reading uses
 drawn heavier. Mostly wiring, little new astronomy. Add a PNG export to match.
 
-### 4.2 Choose where a solar return is cast for. Small to medium.
+### 4.2 ~~Choose where a solar return is cast for.~~ Done in 2.5.0.
 
-`TimingService.SolarReturn` always casts the return for the birthplace. Many
+`ReturnPlace` on `TimingService.SolarReturn` and `Compose`; the box is in
+`TimingView`, the choice in `TimingViewModel.Place`. It is not saved: it goes back to
+the birthplace when another chart is picked or Lore is restarted. Remembering a place
+per chart (and per year) would be the next step if it is wanted.
+
+**Was:** `TimingService.SolarReturn` always casts the return for the birthplace. Many
 astrologers cast it for where the person was living that year, and the return's
 Ascendant and houses (the point of it) change completely with the place. The city
 search already exists; the Timing view needs a "cast for" box and
 `SolarReturn` a latitude and longitude. Say plainly which place was used.
+
+### 4.2a ~~Parity with Astro-Seek's chart image.~~ Done in 2.5.0 (asked for on 6 October 2026).
+
+Compared with an Astro-Seek PNG (true node, true Lilith, whole sign): every position
+agreed to the minute. Added what it had and Lore lacked: the true (osculating) Lilith
+as a setting (`LilithType`), quintile and biquintile among the minor aspects, aspects
+to the Vertex and Part of Fortune (Worksheet only: `ChartService.AspectsToPoints`),
+the stationary mark (`PlanetPosition.IsStationary`, a table of speed thresholds), the
+*By degree* and *Elements and modes* Worksheet tables, and the export **PNG — chart
+with tables** (`Views/ChartSheetRenderer.cs`).
+
+To look at that image without clicking through a save dialog, a debug build writes it
+for the first chart it opens when `LORE_SHEET_OUT` is set to a file path.
+
+Not done, and worth knowing: Astro-Seek also aspects the Vertex, Fortune and the angles
+to each other, and counts the Ascendant and Midheaven in its element table; Lore does
+neither. Its minor-aspect orbs are a little wider than Lore's 2°. The JSON and XML
+exports do not carry the Vertex and Fortune aspects or the alternate node and Lilith.
 
 ### 4.3 More house systems. Small.
 
@@ -139,14 +166,16 @@ values are already computed in `MainViewModel.ComputeVerdicts`; keep them on the
 
 Still open from `natal-chart-metrics-research.md`:
 
-- stations near birth (how many days before or after a planet turned);
+- stations near birth (how many days before or after a planet turned). 2.5.0 marks
+  a body stationary by its speed alone; the date of the station is still open;
 - swift or slow motion, and the other Lilly factors still left out of the dignity
   score (partile conjunctions, oriental/occidental, waxing Moon). Any change to
   the score needs the verdict bands redrawn and a note in the release, as 2.2.0
   did for the third house;
 - midpoints and antiscia;
-- kite and mystic rectangle patterns; quintiles and other harmonic aspects
-  (`AspectColors` is indexed by enum order, so add colours with the enum values);
+- kite and mystic rectangle patterns; harmonic aspects beyond the quintile and
+  biquintile added in 2.5.0 (three colour tables are indexed by enum order, in
+  `ChartRenderer`, `WorksheetView` and `ChartSheetRenderer`: add to all three);
 - altitude and azimuth; the Moon's age and the lunation before birth;
 - the asteroids Ceres, Pallas, Juno, Vesta (check the bundled `seas_*.se1` files
   cover them before promising);
@@ -213,8 +242,8 @@ investigated again from scratch.
 1. ~~Release 2.3.1 (section 2).~~ Built and committed; push and publish by hand.
 2. ~~The small items in section 3, as one release.~~ Written as 2.4.0; to be
    committed, built with `release.bat` and published.
-3. The Daily wheel (4.1) and the solar return's place (4.2): the two features
-   that reuse the most of what already exists.
+3. ~~The Daily wheel (4.1) and the solar return's place (4.2).~~ Written as
+   2.5.0 on 6 October 2026; to be committed, built with `release.bat` and published.
 4. House systems (4.3) and the lunar return (4.4).
 5. Then whichever of 4.5 to 4.8 is wanted, with section 5's test work done
    alongside the feature that touches the same code.

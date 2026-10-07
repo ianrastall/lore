@@ -40,6 +40,55 @@ public class TimingServiceTests
     }
 
     [Fact]
+    public void A_return_cast_for_another_place_keeps_its_moment_and_takes_that_places_angles()
+    {
+        var natal = Chart(); // Einstein, born in Ulm
+        var tokyo = new ReturnPlace("Tokyo, Japan", 35.6895, 139.6917);
+        var home = Timing.SolarReturn(natal, 1922)!;
+        var away = Timing.SolarReturn(natal, 1922, tokyo)!;
+
+        // The same instant and the same sky…
+        Assert.Equal(home.Utc, away.Utc);
+        Assert.Equal(home.Chart.GetPlanet(Planet.Moon)!.Longitude, away.Chart.GetPlanet(Planet.Moon)!.Longitude, 9);
+        Assert.Null(home.Place);
+        Assert.Same(tokyo, away.Place);
+
+        // …under a different horizon: the angles are those of a chart cast in Tokyo then.
+        Assert.True(Apart(home.Chart.Ascendant, away.Chart.Ascendant) > 30);
+        var bornThere = Repo.Charts.CalculateAt(new Celebrity
+        {
+            Id = "t", Name = "T", BirthDate = "1922-03-14", BirthTimeKnown = true,
+            BirthPlace = tokyo.Name, Latitude = tokyo.Latitude, Longitude = tokyo.Longitude,
+        }, away.Utc);
+        Assert.Equal(bornThere.Ascendant, away.Chart.Ascendant, 9);
+        Assert.Equal(bornThere.Midheaven, away.Chart.Midheaven, 9);
+        Assert.Equal(bornThere.Houses.Select(h => h.Longitude), away.Chart.Houses.Select(h => h.Longitude));
+
+        // The Midheaven turns with the longitude: about 130° of it between Ulm and Tokyo.
+        double turned = ((away.Chart.Armc - home.Chart.Armc) % 360 + 360) % 360;
+        Assert.Equal(tokyo.Longitude - natal.Celebrity.Longitude, turned, 6);
+    }
+
+    [Fact]
+    public void The_reading_says_which_place_the_return_was_cast_for()
+    {
+        var natal = Chart();
+        var asOf = new DateOnly(2026, 10, 4);
+
+        var home = Timing.Compose(natal, asOf, DateTimeZone.Utc);
+        Assert.Contains($"cast for the birthplace, {natal.Celebrity.BirthPlace}", home.Sections[0].Items[0].Meta);
+
+        var away = Timing.Compose(natal, asOf, DateTimeZone.Utc, new ReturnPlace("Tokyo, Japan", 35.6895, 139.6917));
+        Assert.Contains("cast for Tokyo, Japan, not the birthplace", away.Sections[0].Items[0].Meta);
+        Assert.Contains("those of the place chosen", away.Sections[0].Items[0].Text);
+        Assert.NotEqual(home.Sections[0].Items[1].Text, away.Sections[0].Items[1].Text); // the angles
+
+        // The progressions have nothing to do with the place.
+        Assert.Equal(home.Sections[1].Items.Select(i => i.Text), away.Sections[1].Items.Select(i => i.Text));
+        Assert.Contains("cast for Tokyo, Japan", System.Text.Encoding.UTF8.GetString(TimingService.ToText(away)));
+    }
+
+    [Fact]
     public void The_return_in_force_is_the_latest_one_on_or_before_the_date()
     {
         var natal = Chart(); // born 14 March

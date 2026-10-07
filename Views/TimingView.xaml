@@ -34,6 +34,27 @@
                               Width="16" Height="16" Margin="6,0,0,0"/>
             </StackPanel>
 
+            <!-- Where the solar return is cast for: the birthplace unless a city is chosen -->
+            <StackPanel Orientation="Horizontal" Spacing="8"
+                        Visibility="{x:Bind VisIf(ViewModel.CanChoosePlace), Mode=OneWay}">
+                <AutoSuggestBox x:Name="PlaceBox"
+                                Width="300"
+                                PlaceholderText="Cast the return for another place…"
+                                QueryIcon="Find"
+                                DisplayMemberPath="Display"
+                                TextMemberPath="Display"
+                                TextChanged="PlaceBox_TextChanged"
+                                QuerySubmitted="PlaceBox_QuerySubmitted"
+                                AutomationProperties.Name="Place to cast the solar return for"
+                                ToolTipService.ToolTip="Many astrologers cast the return for where the person was living that year. The moment is the same; the Ascendant and houses change with the place."/>
+                <TextBlock Text="{x:Bind ViewModel.PlaceText, Mode=OneWay}"
+                           VerticalAlignment="Center"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+                <Button Content="Use the birthplace"
+                        Command="{x:Bind ViewModel.UseBirthplaceCommand}"
+                        Visibility="{x:Bind VisIf(ViewModel.HasPlace), Mode=OneWay}"/>
+            </StackPanel>
+
             <TextBlock Text="{x:Bind ViewModel.ErrorText, Mode=OneWay}"
                        Foreground="#E5534B" TextWrapping="Wrap"
                        Visibility="{x:Bind HasText(ViewModel.ErrorText), Mode=OneWay}"/>

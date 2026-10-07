@@ -141,7 +141,7 @@ public sealed partial class MainViewModel : ObservableObject
         ChartVM = new ChartViewModel(interpreter, charts);
         DailyVM = new DailyViewModel(transits, dailyInterpreter);
         ForecastVM = new ForecastViewModel(transits, dailyInterpreter);
-        TimingVM = new TimingViewModel(new TimingService(charts));
+        TimingVM = new TimingViewModel(new TimingService(charts), cities);
         SynastryVM = new SynastryViewModel(charts, synastryInterpreter);
     }
 
@@ -307,6 +307,7 @@ public sealed partial class MainViewModel : ObservableObject
             await LoadChartAsync(again);
         }
         StatusMessage = $"Now using {settings.Houses.Name()} houses, the {settings.Node.Name().ToLowerInvariant()}, " +
+                        $"{(settings.Lilith == LilithType.True ? "true" : "mean")} Lilith " +
                         $"and {settings.Orbs.PresetName.ToLowerInvariant()} orbs.";
     }
 

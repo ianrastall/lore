@@ -26,12 +26,17 @@ public static class WorksheetService
         foreach (var point in metrics.Points)
             positions.Add(PointRow(chart, point.Symbol, point.Name, point.Longitude,
                 house: timed && point.Name is not ("Descendant" or "Imum Coeli")));
+        // Last, for comparison: the node and Lilith of the kind not in use.
+        foreach (var other in chart.Alternates)
+            positions.Add(BodyRow(chart, other.Position) with { Name = other.Name });
 
         var points = chart.Planets.Select(p => NatalPoint.Of(p.Planet)).ToList();
         if (timed)
         {
             points.Add(NatalPoint.Ascendant);
             points.Add(NatalPoint.Midheaven);
+            points.Add(NatalPoint.Vertex);
+            if (chart.LongitudeOf(NatalPoint.Fortune) is not null) points.Add(NatalPoint.Fortune);
         }
 
         return new Worksheet
@@ -73,7 +78,9 @@ public static class WorksheetService
             new("Zodiac", "Tropical, geocentric"),
             new("Houses", chart.Timed ? chart.HouseSystemLabel : "None — they need a birth time"),
             new("North Node", chart.Settings.Node.Name()),
-            new("Lilith", "Mean lunar apogee (Black Moon)"),
+            new("Lilith", chart.Settings.Lilith == LilithType.True
+                ? "True (osculating) lunar apogee (Black Moon)"
+                : "Mean lunar apogee (Black Moon)"),
         };
         if (chart.Timed)
         {
@@ -107,7 +114,7 @@ public static class WorksheetService
         Signed(p.Latitude), Signed(p.Declination),
         p.SpeedLongitude.ToString("+0.0000;-0.0000", CultureInfo.InvariantCulture) + "°",
         chart.Timed ? chart.GetHouseForLongitude(p.Longitude).ToString() : "",
-        p.IsRetrograde ? "℞" : "");
+        p.MotionMark);
 
     private static WorksheetRow PointRow(NatalChart chart, string symbol, string name, double longitude, bool house) => new(
         symbol, name, Dms(longitude), "", "", "",
@@ -178,7 +185,10 @@ public static class WorksheetService
                     [Body(a.Planet), a.House.ToString(), Arc(a.IntoHouse), a.NearestAngle, Arc(a.Distance)]).ToList(),
                 "Distances along the zodiac: how far each body is past the cusp of its house, and how far from the nearest of the Ascendant, Midheaven, Descendant and IC."));
 
+        sections.Add(ByDegree(chart));
+
         // The balance of the chart.
+        sections.Add(ElementsByMode(chart));
         {
             var d = m.Distribution;
             string Spread(IReadOnlyList<Tally> tallies) => string.Join("  ·  ",
@@ -262,6 +272,49 @@ public static class WorksheetService
         return sections;
     }
 
+    // Everything in the chart in order of its degree within its sign, whatever the sign.
+    // Points at nearly the same degree are in aspect by sign (or nearly so), which is
+    // how an astrologer scans a chart for contacts by eye.
+    private static WorksheetSection ByDegree(NatalChart chart)
+    {
+        var all = chart.Planets
+            .Select(p => (Name: $"{p.PlanetSymbol} {p.PlanetName}", p.Longitude))
+            .ToList();
+        if (chart.Timed)
+        {
+            all.Add(("↑ Ascendant", chart.Ascendant));
+            all.Add(("MC Midheaven", chart.Midheaven));
+        }
+        return new("By degree", ["Degree", "", "Sign"],
+            all.OrderBy(x => ZodiacSignExtensions.DegreeInSign(x.Longitude))
+               .Select(x => (IReadOnlyList<string>)
+               [
+                   ZodiacSignExtensions.FormatDegreeInSign(x.Longitude), x.Name,
+                   ZodiacSignExtensions.FromLongitude(x.Longitude).Name(),
+               ]).ToList(),
+            "Every body" + (chart.Timed ? ", and the Ascendant and Midheaven," : "") +
+            " in order of its degree within its sign, 0° to 30°, whatever the sign. Neighbours in this list are at " +
+            "nearly the same degree of their signs, which is where the major aspects fall.");
+    }
+
+    // Which bodies are in each element and mode: the twelve signs as a grid of four by
+    // three, one sign to a cell.
+    private static WorksheetSection ElementsByMode(NatalChart chart)
+    {
+        var modes = Enum.GetValues<Modality>();
+        var rows = Enum.GetValues<Element>().Select(element => (IReadOnlyList<string>)
+        [
+            element.ToString(),
+            .. modes.Select(mode =>
+            {
+                var here = chart.Planets.Where(p => p.Sign.GetElement() == element && p.Sign.GetModality() == mode).ToList();
+                return here.Count == 0 ? "·" : string.Join(" ", here.Select(p => p.PlanetSymbol));
+            }),
+        ]).ToList();
+        return new("Elements and modes", ["", .. modes.Select(m => m.ToString())], rows,
+            "Each cell is one sign (fire and cardinal is Aries, and so on) and holds the bodies in it. The counts are under Balance.");
+    }
+
     // An arc as degrees and minutes, cut off at the minute: 2°18'.
     private static string Arc(double degrees)
     {
@@ -278,8 +331,9 @@ public static class WorksheetService
 
     // ── Aspects ───────────────────────────────────────────────────────────────
 
-    // The chart's planet-to-planet aspects and its aspects to the Ascendant and
-    // Midheaven, closest first.
+    // The chart's planet-to-planet aspects and its aspects to the Ascendant, Midheaven,
+    // Vertex and Part of Fortune, closest first. (The last two are found here, for the
+    // Worksheet alone: the report and the wheel do not read them.)
     private static List<WorksheetAspect> Aspects(NatalChart chart)
     {
         var aspects = chart.Aspects
@@ -288,6 +342,14 @@ public static class WorksheetService
 
         aspects.AddRange(chart.AngleAspects.Select(a =>
             new WorksheetAspect(NatalPoint.Of(a.Planet), a.Angle, a.Type, a.Orb, a.IsApplying, a.OutOfSign)));
+
+        if (chart.Timed)
+        {
+            var extra = new List<(NatalPoint, double)> { (NatalPoint.Vertex, chart.Vertex) };
+            if (chart.LongitudeOf(NatalPoint.Fortune) is { } fortune) extra.Add((NatalPoint.Fortune, fortune));
+            aspects.AddRange(ChartService.AspectsToPoints(chart.Planets, extra, chart.Settings.Orbs).Select(a =>
+                new WorksheetAspect(NatalPoint.Of(a.Planet), a.Angle, a.Type, a.Orb, a.IsApplying, a.OutOfSign)));
+        }
 
         aspects.Sort((a, b) => a.Orb.CompareTo(b.Orb));
         return aspects;
@@ -307,9 +369,9 @@ public static class WorksheetService
 
         sb.AppendLine();
         sb.AppendLine("POSITIONS");
-        sb.AppendLine($"{"",-17}{"Position",-25}{"Latitude",-11}{"Declin.",-11}{"Speed/day",-11}{"House",-6}");
+        sb.AppendLine($"{"",-19}{"Position",-25}{"Latitude",-11}{"Declin.",-11}{"Speed/day",-11}{"House",-6}");
         foreach (var r in w.Positions)
-            sb.AppendLine($"{r.Name,-17}{r.Position,-25}{r.Latitude,-11}{r.Declination,-11}{r.Speed,-11}{r.House,-6}{(r.Motion.Length > 0 ? "retrograde" : "")}".TrimEnd());
+            sb.AppendLine($"{r.Name,-19}{r.Position,-25}{r.Latitude,-11}{r.Declination,-11}{r.Speed,-11}{r.House,-6}{MotionWord(r.Motion)}".TrimEnd());
 
         if (w.HasCusps)
         {
@@ -322,7 +384,7 @@ public static class WorksheetService
         sb.AppendLine();
         sb.AppendLine("ASPECTS (closest first; a = applying, s = separating; out of sign = within orb, but the signs are not in that aspect)");
         foreach (var a in w.Aspects)
-            sb.AppendLine($"{a.A.Name,-12}{a.Type.Name(),-16}{a.B.Name,-12}{a.OrbText}{(a.OutOfSign ? "  out of sign" : "")}");
+            sb.AppendLine($"{a.A.Name,-12}{a.Type.Name(),-16}{a.B.Name,-17}{a.OrbText}{(a.OutOfSign ? "  out of sign" : "")}");
 
         foreach (var section in w.Sections)
         {
@@ -357,6 +419,14 @@ public static class WorksheetService
     }
 
     // ── Formatting ────────────────────────────────────────────────────────────
+
+    private static string MotionWord(string mark) => mark switch
+    {
+        "℞" => "retrograde",
+        "S" => "stationary",
+        "S℞" => "stationary, retrograde",
+        _ => ""
+    };
 
     // A longitude as degrees, minutes and seconds within its sign: 12°39'27" Taurus.
     // Cut off at the second, never rounded up into the next one.

@@ -23,6 +23,7 @@ internal static partial class SwissEphemeris
     public const int SE_MEAN_NODE  = 10; // North Node (mean)
     public const int SE_TRUE_NODE  = 11; // North Node (true / osculating)
     public const int SE_MEAN_APOG  = 12; // Black Moon Lilith (mean lunar apogee)
+    public const int SE_OSCU_APOG  = 13; // Black Moon Lilith (true / osculating lunar apogee)
     public const int SE_CHIRON     = 15;
     public const int SE_ECL_NUT    = -1; // not a body: obliquity of the ecliptic and nutation
 

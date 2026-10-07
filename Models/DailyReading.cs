@@ -59,5 +59,8 @@ public sealed class DailyReading
     public required IReadOnlyList<TransitEvent> Events { get; init; }
     public required IReadOnlyList<string> Trace { get; init; }
 
+    // The sky halfway through the day: the outer band of the wheel beside the reading.
+    public IReadOnlyList<PlanetPosition> Midday { get; init; } = [];
+
     public string DateText => Date.ToString("dddd, d MMMM yyyy");
 }

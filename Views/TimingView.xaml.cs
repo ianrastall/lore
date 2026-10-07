@@ -1,3 +1,4 @@
+using Lore.Models;
 using Lore.ViewModels;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 using Microsoft.UI.Xaml;
@@ -29,6 +30,25 @@ public sealed partial class TimingView : UserControl
     public TimingView()
     {
         InitializeComponent();
+    }
+
+    // ── Place the return is cast for ──────────────────────────────────────────
+
+    private void PlaceBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+    {
+        if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
+            sender.ItemsSource = ViewModel.Suggest(sender.Text);
+    }
+
+    // A suggestion was picked, or Enter pressed: take the pick, else the best match.
+    private void PlaceBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+    {
+        var city = args.ChosenSuggestion as City ?? ViewModel.Suggest(args.QueryText).FirstOrDefault();
+        if (city is null) return;
+
+        ViewModel.CastFor(city);
+        sender.Text = "";
+        sender.ItemsSource = null;
     }
 
     // The solar return chart, drawn like any other chart.

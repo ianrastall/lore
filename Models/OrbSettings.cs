@@ -13,7 +13,8 @@ public sealed record OrbSettings(
     public const double Max = 15;
 
     // Whether the birth chart also looks for the minor aspects (semi-sextile, semi-square,
-    // sesquiquadrate, quincunx), and the one orb they all share. Off unless asked for.
+    // sesquiquadrate, quincunx, quintile, biquintile), and the one orb they all share.
+    // Off unless asked for.
     public bool MinorAspects { get; init; }
     public double Minor { get; init; } = 2;
 

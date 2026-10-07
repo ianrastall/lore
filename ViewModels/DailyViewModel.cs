@@ -56,6 +56,11 @@ public sealed partial class DailyViewModel : ObservableObject
     public string ToneText => Reading is null ? "" : $"The day reads as {Reading.Tone.Label()}";
     public SolidColorBrush ToneBrush => new(ParseHex(Reading?.Tone.ColorHex() ?? "#9AA0A6"));
 
+    // Under the wheel beside the reading.
+    public string WheelCaption => Reading is null ? "" :
+        $"Inner wheel: the birth chart   ·   Outer wheel: the sky at the middle of {Reading.Date:d MMMM}   ·   " +
+        "the lines are the day's transits, the ones the reading uses drawn heavier";
+
     public IReadOnlyList<DailySection> Sections => Reading?.Sections ?? [];
     public IReadOnlyList<string> Trace => Reading?.Trace ?? [];
     public string TraceHeader => Reading is null ? "" :
@@ -89,6 +94,7 @@ public sealed partial class DailyViewModel : ObservableObject
         OnPropertyChanged(nameof(DateText));
         OnPropertyChanged(nameof(ToneText));
         OnPropertyChanged(nameof(ToneBrush));
+        OnPropertyChanged(nameof(WheelCaption));
         OnPropertyChanged(nameof(Sections));
         OnPropertyChanged(nameof(Trace));
         OnPropertyChanged(nameof(TraceHeader));

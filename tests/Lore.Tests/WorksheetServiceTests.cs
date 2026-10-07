@@ -46,9 +46,10 @@ public class WorksheetServiceTests
     {
         var w = For("elvis-presley");
         // 13 bodies + Ascendant + Midheaven + South Node, Descendant, IC, Vertex, Fortune, Spirit
-        Assert.Equal(21, w.Positions.Count);
+        // + the node and Lilith of the other kind
+        Assert.Equal(23, w.Positions.Count);
         Assert.Equal(12, w.Cusps.Count);
-        Assert.Equal(15, w.Points.Count);
+        Assert.Equal(17, w.Points.Count); // the bodies, the two angles, the Vertex and Fortune
         Assert.Contains(w.Aspects, a => a.B.IsAngle);
     }
 
@@ -90,7 +91,7 @@ public class WorksheetServiceTests
         };
         var w = WorksheetService.Build(Repo.Charts.Calculate(untimed));
 
-        Assert.Equal(14, w.Positions.Count); // 13 bodies + the South Node, which needs no time
+        Assert.Equal(16, w.Positions.Count); // 13 bodies + the South Node, which needs no time, + the other node and Lilith
         Assert.All(w.Positions, r => Assert.Equal("", r.House));
         Assert.DoesNotContain(w.Sections, x => x.Title is "Angles and houses" or "House rulers");
         Assert.Empty(w.Cusps);

@@ -173,12 +173,14 @@
                             <MenuFlyout>
                                 <MenuFlyoutItem Text="PDF — full reading…" Click="ExportPdf_Click"/>
                                 <MenuFlyoutItem Text="PNG — chart image…" Click="ExportPng_Click"/>
+                                <MenuFlyoutItem Text="PNG — chart with tables…" Click="ExportSheetPng_Click"/>
                                 <MenuFlyoutItem Text="JSON — chart data…" Click="ExportJson_Click"/>
                                 <MenuFlyoutItem Text="XML — chart data…" Click="ExportXml_Click"/>
                                 <MenuFlyoutItem Text="Text — worksheet…" Click="ExportWorksheet_Click"/>
                                 <MenuFlyoutSeparator/>
                                 <MenuFlyoutItem Text="PDF — daily horoscope…" Click="ExportDailyPdf_Click"/>
                                 <MenuFlyoutItem Text="Text — daily horoscope…" Click="ExportDailyText_Click"/>
+                                <MenuFlyoutItem Text="PNG — daily transit wheel…" Click="ExportDailyPng_Click"/>
                                 <MenuFlyoutItem Text="PDF — forecast…" Click="ExportForecastPdf_Click"/>
                                 <MenuFlyoutItem Text="Text — forecast…" Click="ExportForecastText_Click"/>
                                 <MenuFlyoutItem Text="PDF — solar return and progressions…" Click="ExportTimingPdf_Click"/>
@@ -207,6 +209,12 @@
                                               SelectionChanged="Settings_Changed">
                                         <ComboBoxItem Content="Mean node"/>
                                         <ComboBoxItem Content="True node"/>
+                                    </ComboBox>
+                                    <ComboBox x:Name="LilithTypeCombo" Header="Black Moon Lilith"
+                                              HorizontalAlignment="Stretch"
+                                              SelectionChanged="Settings_Changed">
+                                        <ComboBoxItem Content="Mean Lilith"/>
+                                        <ComboBoxItem Content="True (osculating) Lilith"/>
                                     </ComboBox>
                                     <ComboBox x:Name="OrbPresetCombo" Header="Aspect orbs (birth chart)"
                                               HorizontalAlignment="Stretch"
@@ -240,7 +248,7 @@
                                     <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
                                         <CheckBox x:Name="MinorAspectsCheck" Grid.Column="0" VerticalAlignment="Bottom"
                                                   Content="Minor aspects"
-                                                  ToolTipService.ToolTip="Also find the semi-sextile (30°), semi-square (45°), sesquiquadrate (135°) and quincunx (150°), and the Yod pattern"
+                                                  ToolTipService.ToolTip="Also find the semi-sextile (30°), semi-square (45°), quintile (72°), sesquiquadrate (135°), biquintile (144°) and quincunx (150°), and the Yod pattern"
                                                   Checked="Minor_Changed" Unchecked="Minor_Changed"/>
                                         <NumberBox x:Name="OrbMinorBox" Grid.Column="1" Header="Minor orb"
                                                    Minimum="0" Maximum="15" SmallChange="0.5" SpinButtonPlacementMode="Compact"
@@ -248,7 +256,7 @@
                                     </Grid>
                                     <TextBlock TextWrapping="Wrap" FontSize="11"
                                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                               Text="House system and node apply to every chart, the daily horoscope and synastry. The orbs apply to aspects within a birth chart; synastry (6°) and the daily horoscope (1°) keep their own. Each chart shows which settings were used."/>
+                                               Text="House system, node and Lilith apply to every chart, the daily horoscope and synastry. The orbs apply to aspects within a birth chart; synastry (6°) and the daily horoscope (1°) keep their own. Each chart shows which settings were used."/>
                                 </StackPanel>
                             </Flyout>
                         </DropDownButton.Flyout>

@@ -3,11 +3,13 @@
     x:Class="Lore.Views.DailyView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:canvas="using:Microsoft.Graphics.Canvas.UI.Xaml"
     xmlns:models="using:Lore.Models">
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="24,16,24,24">
-        <StackPanel Spacing="16" MaxWidth="720" HorizontalAlignment="Left">
+    <Grid RowDefinitions="Auto,*">
 
+        <!-- Header: whose, which day, and how it reads -->
+        <StackPanel Grid.Row="0" Spacing="10" Padding="24,16,24,8">
             <StackPanel>
                 <TextBlock Text="{x:Bind ViewModel.Title, Mode=OneWay}"
                            Style="{StaticResource TitleTextBlockStyle}"/>
@@ -48,7 +50,17 @@
                 <TextBlock Text="{x:Bind ViewModel.ToneText, Mode=OneWay}"
                            FontSize="12" FontWeight="SemiBold" Foreground="#111318"/>
             </Border>
+        </StackPanel>
 
+        <!-- Reading on the left, the day's sky around the birth chart on the right -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MaxWidth="720"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+        <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" Padding="24,8,24,24">
+        <StackPanel Spacing="16">
             <ItemsControl ItemsSource="{x:Bind ViewModel.Sections, Mode=OneWay}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate x:DataType="models:DailySection">
@@ -97,5 +109,22 @@
                 </StackPanel>
             </Expander>
         </StackPanel>
-    </ScrollViewer>
+        </ScrollViewer>
+
+            <Grid Grid.Column="1" RowDefinitions="*,Auto"
+                  Visibility="{x:Bind HasText(ViewModel.WheelCaption), Mode=OneWay}">
+                <canvas:CanvasControl x:Name="WheelCanvas"
+                                      Grid.Row="0"
+                                      Draw="WheelCanvas_Draw"
+                                      SizeChanged="WheelCanvas_SizeChanged"
+                                      Margin="8"
+                                      AutomationProperties.Name="Transit wheel: the birth chart with the day's sky around it"/>
+                <TextBlock Grid.Row="1"
+                           Text="{x:Bind ViewModel.WheelCaption, Mode=OneWay}"
+                           FontSize="12" HorizontalAlignment="Center" Margin="8,0,8,12"
+                           TextWrapping="Wrap"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+            </Grid>
+        </Grid>
+    </Grid>
 </UserControl>

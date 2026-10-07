@@ -31,7 +31,8 @@ public class AngleAspectTests
     public void The_worksheet_and_the_report_carry_them()
     {
         var chart = Repo.Charts.Calculate(Repo.Figure("albert-einstein"));
-        Assert.Equal(27, WorksheetService.Build(chart).Aspects.Count);
+        // (The Worksheet also aspects the Vertex and Part of Fortune, which the report does not.)
+        Assert.Equal(27, WorksheetService.Build(chart).Aspects.Count(a => a.B.Kind is not (NatalPointKind.Vertex or NatalPointKind.Fortune)));
 
         var aspects = new ChartInterpreter(Repo.Data("interpretations.json")).Interpret(chart)
             .Single(s => s.Heading == "Major Aspects").Paragraphs;
@@ -120,7 +121,8 @@ public class AngleAspectTests
             int here = chart.Aspects.Count(a => a.OutOfSign) + chart.AngleAspects.Count(a => a.OutOfSign);
             found += here;
 
-            Assert.Equal(here, WorksheetService.Build(chart).Aspects.Count(a => a.OutOfSign));
+            Assert.Equal(here, WorksheetService.Build(chart).Aspects.Count(a =>
+                a.OutOfSign && a.B.Kind is not (NatalPointKind.Vertex or NatalPointKind.Fortune)));
             Assert.Equal(here, interpreter.Interpret(chart).Single(s => s.Heading == "Major Aspects")
                 .Paragraphs.Count(p => p.Contains("Out of sign: the two are in ")));
         }

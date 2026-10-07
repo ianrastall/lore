@@ -36,6 +36,8 @@ internal static class ChartRenderer
         Color.FromArgb(160, 200, 110, 110), // Semi-square    – dull red
         Color.FromArgb(160, 200, 110, 110), // Sesquiquadrate – dull red
         Color.FromArgb(160, 170, 130, 200), // Quincunx       – violet
+        Color.FromArgb(160, 210, 190, 90),  // Quintile       – pale gold
+        Color.FromArgb(160, 210, 190, 90),  // Biquintile     – pale gold
     ];
 
     // Minor aspects are drawn dashed, so they never read as one of the five majors.
@@ -107,15 +109,59 @@ internal static class ChartRenderer
         ds.DrawEllipse(cx, cy, r * BiDivider, r * BiDivider, RingOuter, 1.5f);
         if (inner.Timed) DrawHouses(ds, cx, cy, r, inner, BiDivider, BiAspect + 0.045f);
         DrawSynastryAspects(ds, cx, cy, r * BiAspect, synastry);
-        DrawPlanets(ds, cx, cy, r, inner, asc, BiInnerGlyph, BiDivider - 0.02f, 0.062f, centred: true);
-        DrawPlanets(ds, cx, cy, r, outer, asc, BiOuterGlyph, BiSignInner - 0.015f, 0.062f, centred: true);
+        DrawPlanets(ds, cx, cy, r, inner.Planets, asc, BiInnerGlyph, BiDivider - 0.02f, 0.062f, centred: true);
+        DrawPlanets(ds, cx, cy, r, outer.Planets, asc, BiOuterGlyph, BiSignInner - 0.015f, 0.062f, centred: true);
         if (inner.Timed) DrawAngles(ds, cx, cy, r, inner);
         if (outer.Timed)
         {
             DrawOuterAngle(ds, cx, cy, r, outer.Ascendant, asc, "ASC");
             DrawOuterAngle(ds, cx, cy, r, outer.Midheaven, asc, "MC");
         }
-        DrawBiWheelKey(ds, r, height, inner, outer);
+        DrawBiWheelKey(ds, r, height, $"Inner wheel: {inner.Celebrity.Name}", $"Outer wheel: {outer.Celebrity.Name}");
+    }
+
+    // ── Bi-wheel (transits) ──────────────────────────────────────────────────
+    // The same wheel with the day's sky in place of a second person: the birth chart in
+    // the middle, the planets as they stand at the middle of the day in the band around
+    // it, and each transit in effect as a line from the moving planet to the natal point.
+    public static void DrawTransitWheel(CanvasDrawingSession ds, NatalChart natal, DailyReading reading, float width, float height)
+    {
+        float cx = width / 2f;
+        float cy = height / 2f;
+        float r = Math.Min(cx, cy) * 0.93f;
+        double asc = WheelAsc(natal);
+
+        ds.Clear(Background);
+
+        DrawZodiacRing(ds, cx, cy, r, asc, BiSignInner, centred: true);
+        ds.DrawEllipse(cx, cy, r * BiDivider, r * BiDivider, RingOuter, 1.5f);
+        if (natal.Timed) DrawHouses(ds, cx, cy, r, natal, BiDivider, BiAspect + 0.045f);
+        DrawTransitLines(ds, cx, cy, r * BiAspect, natal, reading);
+        DrawPlanets(ds, cx, cy, r, natal.Planets, asc, BiInnerGlyph, BiDivider - 0.02f, 0.062f, centred: true);
+        DrawPlanets(ds, cx, cy, r, reading.Midday, asc, BiOuterGlyph, BiSignInner - 0.015f, 0.062f, centred: true);
+        if (natal.Timed) DrawAngles(ds, cx, cy, r, natal);
+        DrawBiWheelKey(ds, r, height, $"Inner wheel: {natal.Celebrity.Name}", $"Outer wheel: the sky on {reading.Date:d MMMM yyyy}");
+    }
+
+    // The day's transits, each a line from the moving planet (where it stands at the
+    // middle of the day) to the natal point it aspects. The ones the reading writes up
+    // are drawn heavier.
+    private static void DrawTransitLines(CanvasDrawingSession ds, float cx, float cy, float ringR, NatalChart natal, DailyReading reading)
+    {
+        double asc = WheelAsc(natal);
+        foreach (var e in reading.Events)
+        {
+            if (reading.Midday.FirstOrDefault(p => p.Planet == e.Mover) is not { } mover ||
+                natal.LongitudeOf(e.Target) is not { } target) continue;
+
+            var color = AspectColors[(int)e.Aspect];
+            double closeness = 1 - Math.Min(1, e.MinOrb / Services.TransitService.Orb);
+            byte alpha = (byte)(e.Shown ? 150 + (int)(closeness * 90) : 60 + (int)(closeness * 70));
+            color = Color.FromArgb(alpha, color.R, color.G, color.B);
+
+            ds.DrawLine(ToPoint(cx, cy, ringR, mover.Longitude, asc), ToPoint(cx, cy, ringR, target, asc),
+                        color, e.Shown ? 2f : 1f);
+        }
     }
 
     // The contacts between the two charts, each a line from the first person's point to
@@ -155,13 +201,13 @@ internal static class ChartRenderer
     }
 
     // Which wheel is whose, in the bottom-left corner (so it carries into the PNG and PDF).
-    private static void DrawBiWheelKey(CanvasDrawingSession ds, float r, float height, NatalChart inner, NatalChart outer)
+    private static void DrawBiWheelKey(CanvasDrawingSession ds, float r, float height, string inner, string outer)
     {
         float size = r * 0.042f;
         using var fmt = new CanvasTextFormat { FontSize = size, WordWrapping = CanvasWordWrapping.NoWrap };
         float x = size * 0.6f;
-        ds.DrawText($"Inner wheel: {inner.Celebrity.Name}", x, height - size * 3.2f, HouseColor, fmt);
-        ds.DrawText($"Outer wheel: {outer.Celebrity.Name}", x, height - size * 1.8f, OuterAngleColor, fmt);
+        ds.DrawText(inner, x, height - size * 3.2f, HouseColor, fmt);
+        ds.DrawText(outer, x, height - size * 1.8f, OuterAngleColor, fmt);
     }
 
     // A coloured halo just outside the zodiac ring for a notable chart — green for an
@@ -329,12 +375,12 @@ internal static class ChartRenderer
     // ── Planets ──────────────────────────────────────────────────────────────
 
     private static void DrawPlanets(CanvasDrawingSession ds, float cx, float cy, float r, NatalChart chart) =>
-        DrawPlanets(ds, cx, cy, r, chart, WheelAsc(chart), PlanetRing, HouseOuter * 0.88f, 0.072f);
+        DrawPlanets(ds, cx, cy, r, chart.Planets, WheelAsc(chart), PlanetRing, HouseOuter * 0.88f, 0.072f);
 
     // `asc` is the Ascendant the wheel is turned to: the chart's own, or in a bi-wheel
     // the inner chart's for both rings. `centred` sets each glyph squarely on its ring
     // rather than hanging below it, which the bi-wheel's narrower bands need.
-    private static void DrawPlanets(CanvasDrawingSession ds, float cx, float cy, float r, NatalChart chart,
+    private static void DrawPlanets(CanvasDrawingSession ds, float cx, float cy, float r, IReadOnlyList<PlanetPosition> planets,
         double asc, float glyphRing, float dotRing, float glyphSize, bool centred = false)
     {
         using var symFmt = new CanvasTextFormat { FontSize = r * glyphSize, HorizontalAlignment = CanvasHorizontalAlignment.Center };
@@ -343,7 +389,7 @@ internal static class ChartRenderer
         // Cluster avoidance: track used angles to offset overlapping planets
         var usedAngles = new List<double>();
 
-        foreach (var planet in chart.Planets)
+        foreach (var planet in planets)
         {
             double displayLon = ResolveOverlap(planet.Longitude, asc, usedAngles, r);
             usedAngles.Add(displayLon);
@@ -360,12 +406,12 @@ internal static class ChartRenderer
 
             ds.DrawText(planet.Planet.Symbol(), pt, color, symFmt);
 
-            // Retrograde marker
-            if (planet.IsRetrograde)
+            // Retrograde and stationary marker
+            if (planet.MotionMark.Length > 0)
             {
                 using var retFmt = new CanvasTextFormat { FontSize = r * 0.038f };
                 var retPt = new Vector2(pt.X + r * 0.04f, pt.Y + r * (centred ? 0.008f : 0.05f));
-                ds.DrawText("℞", retPt, Color.FromArgb(180, 200, 160, 100), retFmt);
+                ds.DrawText(planet.MotionMark, retPt, Color.FromArgb(180, 200, 160, 100), retFmt);
             }
         }
     }
