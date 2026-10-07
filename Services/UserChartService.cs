@@ -119,6 +119,41 @@ public sealed class UserChartService
 
     public Task RemoveAsync(Celebrity chart) => CommitAsync(list => list.RemoveAll(c => c.Id == chart.Id));
 
+    // ── Moving charts to another PC ───────────────────────────────────────────
+
+    // What an import did: charts new to this PC, charts that replaced one with the same
+    // Id, and entries left out because they were not somebody's own chart.
+    public sealed record ImportResult(int Added, int Replaced, int Skipped);
+
+    // The saved charts as a file of their own, in the same form as mycharts.json.
+    public byte[] ExportBytes() => JsonSerializer.SerializeToUtf8Bytes(_charts, JsonOpts);
+
+    // Merges a file written by ExportBytes (or a copy of mycharts.json) into the saved
+    // charts. It is read with the same checks as the real file and saved the same way,
+    // so a bad file changes nothing and the previous version is kept as the backup.
+    // A chart with the same Id as one already here replaces it.
+    public async Task<ImportResult> ImportAsync(string path)
+    {
+        if (await TryReadAsync(path) is not { } incoming)
+            throw new InvalidDataException("That file is not a list of Lore charts.");
+
+        // Only people's own charts: anything else (a copy of the figure library, say)
+        // would turn up twice in the list.
+        var mine = incoming.Where(c => c.Category == MyChartsCategory).ToList();
+        int added = 0, replaced = 0;
+        if (mine.Count > 0)
+            await CommitAsync(list =>
+            {
+                foreach (var chart in mine)
+                {
+                    int i = list.FindIndex(c => c.Id == chart.Id);
+                    if (i >= 0) { list[i] = chart; replaced++; }
+                    else { list.Add(chart); added++; }
+                }
+            });
+        return new ImportResult(added, replaced, incoming.Count - mine.Count);
+    }
+
     private async Task CommitAsync(Action<List<Celebrity>> change)
     {
         await _saving.WaitAsync();

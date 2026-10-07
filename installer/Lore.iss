@@ -14,13 +14,14 @@
 ;  (that script publishes the app and passes the /D defines below).
 ; ============================================================================
 
-; --- Defines (overridable from the command line via ISCC /D...) -------------
+; --- Defines (passed on the command line via ISCC /D...) --------------------
+; The version and the published folder come from build-installer.ps1, which reads
+; the version from Lore.csproj. There is no fallback: a guess would be a wrong one.
 #ifndef AppVersion
-  #define AppVersion "1.1.0"
+  #error AppVersion is not defined. Build with .\scripts\build-installer.ps1
 #endif
 #ifndef SourceDir
-  ; Path (relative to this .iss) to the published self-contained folder.
-  #define SourceDir "..\artifacts\Lore-1.1.0-portable"
+  #error SourceDir is not defined. Build with .\scripts\build-installer.ps1
 #endif
 #ifndef OutputDir
   #define OutputDir "..\artifacts"

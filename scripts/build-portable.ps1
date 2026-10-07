@@ -12,10 +12,10 @@ $root    = Split-Path -Parent $PSScriptRoot
 $csproj  = Join-Path $root 'Lore.csproj'
 
 # Name the output folder after the csproj <Version> so it always matches the build.
-$version = '1.1.0'
-if ((Get-Content -LiteralPath $csproj -Raw) -match '<Version>([^<]+)</Version>') {
-    $version = $Matches[1]
+if ((Get-Content -LiteralPath $csproj -Raw) -notmatch '<Version>([^<]+)</Version>') {
+    throw 'No <Version> found in Lore.csproj.'
 }
+$version = $Matches[1].Trim()
 $outDir  = Join-Path $root "artifacts\Lore-$version-portable"
 
 # sweph.dll must exist before publishing (built once by Build-SwephDll.ps1).

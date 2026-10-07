@@ -9,6 +9,10 @@ public sealed partial class AddChartDialog : ContentDialog
     private readonly CityService _cities;
     private readonly HospitalService _hospitals;
 
+    // Completes once the hospital list has been read (it is loaded when the dialog is
+    // first opened, so the first search may have to wait a moment for it).
+    private readonly Task _hospitalsReady;
+
     // IANA zone id of the chosen city; null until a city is picked (then the resolver
     // backfills from lat/lon). Latitude/longitude drive the geographic fallback.
     private string? _timeZoneId;
@@ -18,10 +22,11 @@ public sealed partial class AddChartDialog : ContentDialog
     // Set when editing an existing chart: its Id is kept so the save replaces it.
     private readonly Celebrity? _existing;
 
-    public AddChartDialog(CityService cities, HospitalService hospitals, Celebrity? existing = null)
+    public AddChartDialog(CityService cities, HospitalService hospitals, Task hospitalsReady, Celebrity? existing = null)
     {
         _cities = cities;
         _hospitals = hospitals;
+        _hospitalsReady = hospitalsReady;
         _existing = existing;
         InitializeComponent();
 
@@ -199,7 +204,11 @@ public sealed partial class AddChartDialog : ContentDialog
     private async void HospitalBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
     {
         if (args.Reason != AutoSuggestionBoxTextChangeReason.UserInput) return;
-        await SuggestAsync(sender, q => _hospitals.Search(q));
+        await SuggestAsync(sender, q =>
+        {
+            _hospitalsReady.Wait(); // already off the UI thread here
+            return _hospitals.Search(q);
+        });
     }
 
     private void HospitalBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)

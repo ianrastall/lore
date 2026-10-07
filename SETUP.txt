@@ -37,9 +37,11 @@ STEP 2 — BUILD AND TEST
 
 STEP 3 — RELEASE
 ──────────────────────────────────────────
-  Double-click  release.bat  (or run it). It builds sweph.dll if it is
-  missing, publishes the self-contained app, runs the personal-data safety
-  gate, and compiles the installer:
+  Set the version in one place: <Version> in Lore.csproj (and the file
+  names at the top of README.md). Then double-click  release.bat  (or run
+  it). It builds sweph.dll if it is missing, runs the tests (a failing
+  test stops the release), publishes the self-contained app, runs the
+  personal-data safety gate, and compiles the installer:
 
       artifacts\LoreSetup-<version>.exe
       artifacts\Lore-<version>-portable\

@@ -4,14 +4,14 @@
 
 > A Windows desktop application for computing and exploring astrological natal charts — and reading a daily horoscope from them — powered by the Swiss Ephemeris. Browse a curated library of historical figures — every one with a documented birth time — or add your own.
 
-**Latest release: v2.3.1** · [Download](../../releases/latest)
+**Latest release: v2.4.0** · [Download](../../releases/latest)
 
 ### Installing
 
-1. From the [latest release](../../releases/latest), download **`LoreSetup-2.3.1.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`LoreSetup-2.4.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user only (no administrator prompt), adds a Start-menu shortcut, and can be removed from *Settings → Apps* like any other program.
 
-**Prefer not to install?** Download **`Lore-2.3.1-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
+**Prefer not to install?** Download **`Lore-2.4.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
 
 > **The installer is not code-signed.** Lore is a free hobby project and does not carry a paid signing certificate, so Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"* — choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -43,10 +43,11 @@
 
 ### My Charts (Custom Entry)
 - **Add Chart** button opens a dialog to enter any name, date, time, and place.
-- City search autofills latitude, longitude, and IANA timezone from a bundled database of ~50,250 cities.
+- City search autofills latitude, longitude, and IANA timezone from a bundled database of ~50,250 cities. Several words narrow it down: "Springfield Illinois", "Paris France".
 - **Hospital search** autofills more precise coordinates from a bundled database of ~235,000 hospitals worldwide — including former names of renamed hospitals and hospitals that have since closed — because hospitals are where people are born, and precise coordinates sharpen the Ascendant and house cusps. The timezone is derived from the chosen coordinates.
 - Custom charts persist to `%LOCALAPPDATA%\Lore\mycharts.json` and appear under a dedicated **My Charts** category.
 - Custom charts can be **edited** (pencil button) or **deleted** (bin button, which asks first) from the browse list.
+- The **⋯** button beside them saves a copy of all your charts as one file, and brings charts in from such a copy — for a backup, or to move them to another PC. Bringing a copy in adds its charts to the ones already there; a chart that was already there (the same one, edited on either PC) is replaced by the copy's version.
 - Saving is crash-safe: a save is written to a temporary file before it replaces the real one, the previous version is kept as `mycharts.json.bak`, and a file that can't be read is never overwritten — it is set aside under a dated name and the backup restored, with a note in the status bar.
 
 ### Chart Views
@@ -124,6 +125,8 @@ Charts and readings can be exported in these formats:
 | **XML** | Same structured data in XML |
 | **Text — worksheet** | The Worksheet view as plain text, for pasting into notes or checking against another program |
 | **PDF / Text — daily horoscope** | The daily reading for the date shown in the Daily view, with the full list of that day's transits |
+| **PDF / Text — forecast** | The transits ahead for the period shown in the Forecast view, month by month |
+| **PDF / Text — solar return and progressions** | The Timing view's reading for its date; the PDF includes the return chart's wheel |
 | **PDF — synastry reading** | The synastry reading on screen, with the bi-wheel and the full list of contacts between the two charts |
 | **PNG — synastry bi-wheel** | The bi-wheel alone (1600 × 1600 px) |
 
@@ -261,7 +264,7 @@ Produces a self-contained folder that runs with no installed .NET or VC++ runtim
 .\scripts\build-portable.ps1
 ```
 
-Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-2.3.1-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
+Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-2.4.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
 
 ### Step 4 — Installer
 
@@ -469,7 +472,14 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 2.3.1 (current)
+### 2.4.0 (current)
+- **Take your charts with you** — the new **⋯** button beside *Add chart* saves a copy of all of My Charts as one file and brings charts in from such a copy, for a backup or for moving to another PC. Bringing a copy in adds to what is there; it goes through the same checks and the same crash-safe save as any other change, so a damaged file changes nothing.
+- **Forecast and Timing as PDF** — both could only be saved as text. The Timing PDF includes the solar return's wheel.
+- **City search by several words** — "Paris France" or "Springfield Illinois" now finds the city; before, the whole phrase had to appear in the name, the region or the country alone.
+- **A quicker start** — the list of 235,000 hospitals is now read when the Add Chart dialog is first opened, not every time Lore starts.
+- For anyone building Lore: `release.bat` runs the tests first and stops if one fails, and the version number is written in one place (`<Version>` in `Lore.csproj`).
+
+### 2.3.1
 A fixes release; nothing new to learn.
 - **Forecast: both dates when a planet turns round** — when a planet stations on a natal point and makes the same aspect twice close together, the forecast now lists both exact dates, where it could miss one.
 - **Two Lore windows** — with Lore open twice, a chart saved in one window is no longer overwritten by a save from the other.

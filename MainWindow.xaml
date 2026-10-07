@@ -39,7 +39,7 @@
                        Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"/>
 
             <!-- Add / edit / delete custom charts -->
-            <Grid Grid.Row="1" ColumnDefinitions="*,Auto,Auto" Margin="12,0,12,8" ColumnSpacing="6">
+            <Grid Grid.Row="1" ColumnDefinitions="*,Auto,Auto,Auto" Margin="12,0,12,8" ColumnSpacing="6">
                 <Button Grid.Column="0" HorizontalAlignment="Stretch"
                         Click="AddChart_Click"
                         ToolTipService.ToolTip="Add a chart of your own (Ctrl+N)">
@@ -61,6 +61,18 @@
                         AutomationProperties.Name="Delete this chart"
                         ToolTipService.ToolTip="Delete this chart">
                     <FontIcon Glyph="&#xE74D;" FontSize="14"/>
+                </Button>
+                <!-- My Charts as a file: for a backup, or to move them to another PC -->
+                <Button Grid.Column="3"
+                        AutomationProperties.Name="Save or bring in My Charts"
+                        ToolTipService.ToolTip="Save a copy of My Charts, or bring charts in from a copy">
+                    <FontIcon Glyph="&#xE712;" FontSize="14"/>
+                    <Button.Flyout>
+                        <MenuFlyout>
+                            <MenuFlyoutItem Text="Save a copy of My Charts…" Click="ExportMyCharts_Click"/>
+                            <MenuFlyoutItem Text="Bring in charts from a copy…" Click="ImportMyCharts_Click"/>
+                        </MenuFlyout>
+                    </Button.Flyout>
                 </Button>
             </Grid>
 
@@ -167,7 +179,9 @@
                                 <MenuFlyoutSeparator/>
                                 <MenuFlyoutItem Text="PDF — daily horoscope…" Click="ExportDailyPdf_Click"/>
                                 <MenuFlyoutItem Text="Text — daily horoscope…" Click="ExportDailyText_Click"/>
+                                <MenuFlyoutItem Text="PDF — forecast…" Click="ExportForecastPdf_Click"/>
                                 <MenuFlyoutItem Text="Text — forecast…" Click="ExportForecastText_Click"/>
+                                <MenuFlyoutItem Text="PDF — solar return and progressions…" Click="ExportTimingPdf_Click"/>
                                 <MenuFlyoutItem Text="Text — solar return and progressions…" Click="ExportTimingText_Click"/>
                                 <MenuFlyoutSeparator/>
                                 <MenuFlyoutItem Text="PDF — synastry reading…" Click="ExportSynastryPdf_Click"/>

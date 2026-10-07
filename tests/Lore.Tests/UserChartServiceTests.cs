@@ -135,6 +135,61 @@ public sealed class UserChartServiceTests : IDisposable
         Assert.Equal(new[] { "Ann", "Ben", "Cy" }, (await Fresh()).Charts.Select(c => c.Name));
     }
 
+    [Fact]
+    public async Task An_exported_copy_can_be_merged_into_another_PCs_charts()
+    {
+        var home = await Fresh();
+        await home.AddAsync(Chart("user-1", "Ann"));
+        await home.AddAsync(Chart("user-2", "Ben"));
+        string copy = Path.Combine(_dir, "copy.json");
+        File.WriteAllBytes(copy, home.ExportBytes());
+
+        // The other PC already has an older Ann and a chart of its own.
+        var away = new UserChartService(Path.Combine(_dir, "away"));
+        await away.LoadAsync();
+        await away.AddAsync(Chart("user-1", "Ann (old)"));
+        await away.AddAsync(Chart("user-7", "Gus"));
+
+        var result = await away.ImportAsync(copy);
+
+        Assert.Equal(new UserChartService.ImportResult(Added: 1, Replaced: 1, Skipped: 0), result);
+        Assert.Equal(new[] { "Ann", "Gus", "Ben" }, away.Charts.Select(c => c.Name));
+        Assert.True(File.Exists(Path.Combine(_dir, "away", "mycharts.json.bak")));
+    }
+
+    [Fact]
+    public async Task Importing_leaves_out_entries_that_are_not_someones_own_chart()
+    {
+        var store = await Fresh();
+        string file = Path.Combine(_dir, "mixed.json");
+        File.WriteAllText(file, """
+            [{"id":"user-1","name":"Ann","category":"My Charts","birthDate":"1980-05-17","latitude":53.8,"longitude":-1.55},
+             {"id":"elvis-presley","name":"Elvis Presley","category":"Musicians","birthDate":"1935-01-08","latitude":34.26,"longitude":-88.7}]
+            """);
+
+        var result = await store.ImportAsync(file);
+
+        Assert.Equal(new UserChartService.ImportResult(Added: 1, Replaced: 0, Skipped: 1), result);
+        Assert.Equal("Ann", Assert.Single(store.Charts).Name);
+    }
+
+    [Theory]
+    [InlineData("{ this is not json")]
+    [InlineData("[{}]")]
+    public async Task Importing_a_file_that_is_not_a_chart_list_changes_nothing(string contents)
+    {
+        var store = await Fresh();
+        await store.AddAsync(Chart("user-1", "Ann"));
+        string before = File.ReadAllText(MainFile);
+        string file = Path.Combine(_dir, "bad.json");
+        File.WriteAllText(file, contents);
+
+        await Assert.ThrowsAsync<InvalidDataException>(() => store.ImportAsync(file));
+
+        Assert.Equal("Ann", Assert.Single(store.Charts).Name);
+        Assert.Equal(before, File.ReadAllText(MainFile));
+    }
+
     [Theory]
     [InlineData("null")]
     [InlineData("[null]")]

@@ -13,7 +13,7 @@ note stays true.
 
 - Seven views: Chart, Report, Worksheet, Daily, Forecast, Timing, Synastry, plus the
   Legend. About 10,600 lines of C# and XAML; no file over 560 lines.
-- 218 tests, all passing, covering the calculation and data layer. They run on
+- 229 tests, all passing, covering the calculation and data layer. They run on
   GitHub on every push, followed by a build of the app itself (about 3 minutes).
 - The view models, the views and the three export services are **not** tested: they
   depend on WinUI or Win2D and the test project leaves them out.
@@ -40,30 +40,32 @@ at the top of `README.md`, add a 2.3.1 entry to the Version History, run
 
 ## 3. Small things worth doing soon
 
-Each is independent and low risk.
+Each is independent and low risk. Items 1 to 6 were done on 6 October 2026 and are
+in 2.4.0; item 7 is still open.
 
-1. **City search by several words.** `CityService.Search` still treats the whole
+1. ~~**City search by several words.**~~ Done; `CityServiceTests` added.
+   **Was:** `CityService.Search` still treats the whole
    query as one string, so "Paris France" or "Springfield Illinois" finds nothing.
    Copy the word-by-word matching now in `HospitalService.Search`, keep the
    population ranking, add a test (there is no `CityServiceTests` yet, and
    `CityService.cs` is not in the test project's file list).
-2. **Run the tests in `release.bat`.** A release can currently be built from code
+2. ~~**Run the tests in `release.bat`.**~~ Done. **Was:** A release can currently be built from code
    that fails its tests. One `dotnet test` line before the installer step.
-3. **One place for the version number.** It is written three times in `Lore.csproj`
+3. ~~**One place for the version number.**~~ Done: `<Version>` in `Lore.csproj` only (the README's file names are still typed by hand). **Was:** It is written three times in `Lore.csproj`
    and by hand in the README; the scripts and `installer\Lore.iss` carry a stale
    `1.1.0` fallback. Keep `<Version>` only and derive the other two; make the
    scripts fail rather than fall back.
-4. **Load the hospital list when it is first needed.** `MainViewModel.InitializeAsync`
+4. ~~**Load the hospital list when it is first needed.**~~ Done (`MainViewModel.EnsureHospitalsLoadedAsync`). **Was:** `MainViewModel.InitializeAsync`
    reads all 25 MB (235,000 entries) at every start, though it is only used inside
    the Add Chart dialog. Loading it on the dialog's first open shortens start-up and
    saves memory for everyone who never adds a chart. `HospitalService.LoadAsync`
    is already safe to call twice.
-5. **Export and import My Charts.** The only way to move saved charts to another PC
+5. ~~**Export and import My Charts.**~~ Done: the ⋯ button beside Add chart; `UserChartService.ExportBytes` and `ImportAsync`. Only entries in the My Charts category are brought in. **Was:** The only way to move saved charts to another PC
    is to find `%LOCALAPPDATA%\Lore\mycharts.json` by hand. Two menu items: save a
    copy, and merge a file in (by `Id`, through `UserChartService` so the same
    validation and backup apply). This is the most useful missing feature for
    someone with family charts entered.
-6. **Forecast and Timing as PDF.** Both export as text only, while Daily and
+6. ~~**Forecast and Timing as PDF.**~~ Done, in `DailyExportService`, which is now in the test project. **Was:** Both export as text only, while Daily and
    Synastry have PDFs. `DailyExportService` is a close model for both.
 7. **Uneven categories.** Spiritual has 1 figure, Media 2, Director and
    Entrepreneur 4 each, Historical and Royalty 5. Either fold the tiny ones into
@@ -208,10 +210,9 @@ investigated again from scratch.
 
 ## 7. Suggested order
 
-1. Release 2.3.1 (section 2).
-2. The small items in section 3, as one release: city search, tests in
-   `release.bat`, single version number, lazy hospital list, My Charts
-   export/import, Forecast and Timing PDFs.
+1. ~~Release 2.3.1 (section 2).~~ Built and committed; push and publish by hand.
+2. ~~The small items in section 3, as one release.~~ Written as 2.4.0; to be
+   committed, built with `release.bat` and published.
 3. The Daily wheel (4.1) and the solar return's place (4.2): the two features
    that reuse the most of what already exists.
 4. House systems (4.3) and the lunar return (4.4).

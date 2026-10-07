@@ -51,6 +51,24 @@ public sealed partial class MainViewModel : ObservableObject
     // (a precise birthplace: hospitals are where people are born).
     public HospitalService Hospitals { get; }
 
+    // The hospital list is 25 MB and only the Add-Chart dialog uses it, so it is read
+    // when that dialog first opens rather than at every start. Called on each open;
+    // the list is read once, off the UI thread, and the task never faults.
+    private string _hospitalsPath = "";
+    private Task? _hospitalsLoading;
+
+    public Task EnsureHospitalsLoadedAsync() => _hospitalsLoading ??= Task.Run(async () =>
+    {
+        try
+        {
+            await Hospitals.LoadAsync(_hospitalsPath);
+        }
+        catch (Exception ex)
+        {
+            Diagnostics.Log($"Hospital list could not be loaded: {ex}");
+        }
+    });
+
     [ObservableProperty]
     public partial ObservableCollection<Celebrity> DisplayedCelebrities { get; set; } = [];
 
@@ -139,7 +157,7 @@ public sealed partial class MainViewModel : ObservableObject
             await _celebrities.LoadAsync(dataPath);
             await _userCharts.LoadAsync();
             await Cities.LoadAsync(citiesPath);
-            await Hospitals.LoadAsync(hospitalsPath);
+            _hospitalsPath = hospitalsPath; // read later: see EnsureHospitalsLoadedAsync
             await RebuildPoolAsync();
             StatusMessage = _userCharts.LoadProblem ?? $"{_all.Count} people loaded.";
 
@@ -324,6 +342,50 @@ public sealed partial class MainViewModel : ObservableObject
         SynastryVM.Chart = null;
         await RebuildPoolAsync();
         StatusMessage = $"Deleted {c.Name}.";
+    }
+
+    // ── My Charts as a file, for moving to another PC ─────────────────────────
+
+    public int MyChartsCount => _userCharts.Charts.Count;
+
+    public byte[] ExportMyCharts() => _userCharts.ExportBytes();
+
+    // Merges a saved copy of My Charts into this PC's, then shows the result.
+    public async Task ImportMyChartsAsync(string path)
+    {
+        UserChartService.ImportResult result;
+        try
+        {
+            result = await _userCharts.ImportAsync(path);
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Couldn't bring in {Path.GetFileName(path)}: {ex.Message}";
+            Diagnostics.Log($"My Charts import failed ({path}): {ex}");
+            return;
+        }
+
+        if (result.Added + result.Replaced == 0)
+        {
+            StatusMessage = $"{Path.GetFileName(path)} has no charts of your own in it; nothing was changed.";
+            return;
+        }
+
+        string? selectedId = SelectedCelebrity?.Id;
+        bool keepCategory = SelectedCelebrity is not null && !SelectedIsCustom;
+        await RebuildPoolAsync();
+        if (!keepCategory) SelectedCategory = UserChartService.MyChartsCategory;
+        if (selectedId is not null &&
+            DisplayedCelebrities.FirstOrDefault(c => c.Id == selectedId) is { } again)
+        {
+            SelectedCelebrity = again;
+            await LoadChartAsync(again);
+        }
+
+        static string Charts(int n) => n == 1 ? "1 chart" : $"{n} charts";
+        StatusMessage = $"Brought in {Charts(result.Added + result.Replaced)}: {result.Added} new" +
+                        (result.Replaced > 0 ? $", {result.Replaced} replacing a chart already here" : "") +
+                        (result.Skipped > 0 ? $"; {result.Skipped} other entries left out" : "") + ".";
     }
 
     // Runs a My Charts save, reporting a failure in the status bar instead of losing

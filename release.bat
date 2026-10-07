@@ -6,7 +6,8 @@ REM ============================================================================
 REM  This is the ONE step to prep a release. It runs the full per-release chain:
 REM
 REM    1. Ensure Native\sweph.dll exists (built once by Build-SwephDll.ps1).
-REM    2. scripts\build-installer.ps1, which:
+REM    2. Run the tests (dotnet test); a failing test stops the release.
+REM    3. scripts\build-installer.ps1, which:
 REM         - publishes the self-contained app   (scripts\build-portable.ps1)
 REM         - runs the personal-data safety gate (scripts\assert-clean-release.ps1)
 REM         - compiles  artifacts\LoreSetup-<version>.exe   (needs Inno Setup)
@@ -30,6 +31,10 @@ if not exist "Native\sweph.dll" (
     %PS% "%~dp0Build-SwephDll.ps1"
     if errorlevel 1 goto :failed
 )
+
+echo [release] Running the tests...
+dotnet test "%~dp0tests\Lore.Tests" --nologo
+if errorlevel 1 goto :failed
 
 echo [release] Building the installer...
 %PS% "%~dp0scripts\build-installer.ps1" %*

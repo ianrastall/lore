@@ -77,7 +77,7 @@ public sealed partial class MainWindow : Window
         _dialogOpen = true;
         try
         {
-            var dialog = new AddChartDialog(ViewModel.Cities, ViewModel.Hospitals) { XamlRoot = Content.XamlRoot };
+            var dialog = new AddChartDialog(ViewModel.Cities, ViewModel.Hospitals, ViewModel.EnsureHospitalsLoadedAsync()) { XamlRoot = Content.XamlRoot };
             var result = await dialog.ShowAsync();
             if (result == Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary && dialog.Result is { } chart)
                 await ViewModel.AddCustomChartAsync(chart);
@@ -129,7 +129,7 @@ public sealed partial class MainWindow : Window
         _dialogOpen = true;
         try
         {
-            var dialog = new AddChartDialog(ViewModel.Cities, ViewModel.Hospitals, existing) { XamlRoot = Content.XamlRoot };
+            var dialog = new AddChartDialog(ViewModel.Cities, ViewModel.Hospitals, ViewModel.EnsureHospitalsLoadedAsync(), existing) { XamlRoot = Content.XamlRoot };
             var result = await dialog.ShowAsync();
             if (result == Microsoft.UI.Xaml.Controls.ContentDialogResult.Primary && dialog.Result is { } chart)
                 await ViewModel.UpdateCustomChartAsync(chart);
@@ -271,7 +271,9 @@ public sealed partial class MainWindow : Window
     private async void ExportWorksheet_Click(object sender, RoutedEventArgs e) => await ExportAsync("worksheettxt");
     private async void ExportDailyPdf_Click(object sender, RoutedEventArgs e) => await ExportAsync("dailypdf");
     private async void ExportDailyText_Click(object sender, RoutedEventArgs e) => await ExportAsync("dailytxt");
+    private async void ExportForecastPdf_Click(object sender, RoutedEventArgs e) => await ExportAsync("forecastpdf");
     private async void ExportForecastText_Click(object sender, RoutedEventArgs e) => await ExportAsync("forecasttxt");
+    private async void ExportTimingPdf_Click(object sender, RoutedEventArgs e) => await ExportAsync("timingpdf");
     private async void ExportTimingText_Click(object sender, RoutedEventArgs e) => await ExportAsync("timingtxt");
     private async void ExportSynastryPdf_Click(object sender, RoutedEventArgs e) => await ExportAsync("synastrypdf");
     private async void ExportSynastryPng_Click(object sender, RoutedEventArgs e) => await ExportAsync("synastrypng");
@@ -305,14 +307,16 @@ public sealed partial class MainWindow : Window
         }
 
         var forecast = ViewModel.ForecastVM.Reading;
-        if (kind == "forecasttxt" && (forecast is null || ViewModel.ForecastVM.IsBusy || forecast.Name != name))
+        bool forecasting = kind.StartsWith("forecast", StringComparison.Ordinal);
+        if (forecasting && (forecast is null || ViewModel.ForecastVM.IsBusy || forecast.Name != name))
         {
             ViewModel.StatusMessage = "The forecast is not ready yet — open the Forecast view, then try again in a moment.";
             return;
         }
 
         var timing = ViewModel.TimingVM.Reading;
-        if (kind == "timingtxt" && (timing is null || ViewModel.TimingVM.IsBusy || timing.Name != name))
+        bool timed = kind.StartsWith("timing", StringComparison.Ordinal);
+        if (timed && (timing is null || ViewModel.TimingVM.IsBusy || timing.Name != name))
         {
             ViewModel.StatusMessage = "The solar return and progressions are not ready yet — open the Timing view, then try again in a moment.";
             return;
@@ -340,7 +344,9 @@ public sealed partial class MainWindow : Window
                 "worksheettxt" => ("Text file", ".txt"),
                 "dailypdf" => ("PDF document", ".pdf"),
                 "dailytxt" => ("Text file", ".txt"),
+                "forecastpdf" => ("PDF document", ".pdf"),
                 "forecasttxt" => ("Text file", ".txt"),
+                "timingpdf" => ("PDF document", ".pdf"),
                 "timingtxt" => ("Text file", ".txt"),
                 "synastrypdf" => ("PDF document", ".pdf"),
                 "synastrypng" => ("PNG image", ".png"),
@@ -354,8 +360,8 @@ public sealed partial class MainWindow : Window
                 daily ? SafeFileName($"{chart.Celebrity.Name} - daily {reading!.Date.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture)}") :
                 synastry ? SafeFileName($"{synastryReading!.FirstName} and {synastryReading.SecondName} - synastry") :
                 kind == "worksheettxt" ? SafeFileName($"{chart.Celebrity.Name} - worksheet") :
-                kind == "timingtxt" ? SafeFileName($"{chart.Celebrity.Name} - return and progressions {timing!.AsOf.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture)}") :
-                kind == "forecasttxt" ? SafeFileName($"{chart.Celebrity.Name} - forecast from {forecast!.Start.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture)}") :
+                timed ? SafeFileName($"{chart.Celebrity.Name} - return and progressions {timing!.AsOf.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture)}") :
+                forecasting ? SafeFileName($"{chart.Celebrity.Name} - forecast from {forecast!.Start.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture)}") :
                 SafeFileName(chart.Celebrity.Name);
 
             var file = await picker.PickSaveFileAsync();
@@ -373,7 +379,10 @@ public sealed partial class MainWindow : Window
                 "worksheettxt" => WorksheetService.ToText(WorksheetService.Build(chart), sensitivity),
                 "dailypdf" => DailyExportService.ToPdf(reading!),
                 "dailytxt" => DailyExportService.ToText(reading!),
+                "forecastpdf" => DailyExportService.ForecastToPdf(forecast!),
                 "forecasttxt" => DailyInterpreter.ForecastToText(forecast!),
+                "timingpdf" => DailyExportService.TimingToPdf(timing!,
+                                              timing!.Return is { } solar ? await ExportService.RenderChartPngAsync(solar.Chart) : null),
                 "timingtxt" => TimingService.ToText(timing!),
                 "synastrypdf" => SynastryExportService.ToPdf(comparison!, synastryReading!,
                                               await ExportService.RenderBiWheelPngAsync(comparison!)),
@@ -388,6 +397,60 @@ public sealed partial class MainWindow : Window
         {
             ViewModel.StatusMessage = $"Export failed: {ex.Message}";
             Diagnostics.Log($"Export {kind} failed: {ex}");
+        }
+    }
+
+    // ── My Charts: save a copy, bring a copy in ───────────────────────────────
+
+    private async void ExportMyCharts_Click(object sender, RoutedEventArgs e)
+    {
+        if (ViewModel.MyChartsCount == 0)
+        {
+            ViewModel.StatusMessage = "There are no charts of your own to save yet.";
+            return;
+        }
+        try
+        {
+            // Taken before the dialog opens, like the other exports.
+            byte[] bytes = ViewModel.ExportMyCharts();
+            int count = ViewModel.MyChartsCount;
+
+            var picker = new FileSavePicker { SuggestedStartLocation = PickerLocationId.DocumentsLibrary };
+            InitializeWithWindow.Initialize(picker, WindowNative.GetWindowHandle(this));
+            picker.FileTypeChoices.Add("Lore charts", [".json"]);
+            picker.SuggestedFileName =
+                $"Lore - My Charts {DateTime.Now.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture)}";
+
+            var file = await picker.PickSaveFileAsync();
+            if (file is null) return; // user cancelled
+
+            await FileIO.WriteBytesAsync(file, bytes);
+            ViewModel.StatusMessage = $"Saved {count} of your charts to {file.Name}";
+        }
+        catch (Exception ex)
+        {
+            ViewModel.StatusMessage = $"Couldn't save a copy of My Charts: {ex.Message}";
+            Diagnostics.Log($"My Charts export failed: {ex}");
+        }
+    }
+
+    private async void ImportMyCharts_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var picker = new FileOpenPicker { SuggestedStartLocation = PickerLocationId.DocumentsLibrary };
+            InitializeWithWindow.Initialize(picker, WindowNative.GetWindowHandle(this));
+            picker.FileTypeFilter.Add(".json");
+
+            var file = await picker.PickSingleFileAsync();
+            if (file is null) return; // user cancelled
+
+            await ViewModel.ImportMyChartsAsync(file.Path);
+        }
+        catch (Exception ex)
+        {
+            ViewModel.StatusMessage = $"Couldn't bring in charts: {ex.Message}";
+            Diagnostics.Log($"My Charts import failed: {ex}");
         }
     }
 

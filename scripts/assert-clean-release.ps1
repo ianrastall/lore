@@ -20,7 +20,7 @@
          personal rows added by any means (skipped only if git is unavailable).
 
 .PARAMETER StageDir
-    The staged build output to inspect (e.g. artifacts\Lore-1.1.0-portable).
+    The staged build output to inspect (e.g. artifacts\Lore-2.3.1-portable).
 #>
 [CmdletBinding()]
 param(

@@ -24,13 +24,17 @@ public sealed class CityService
     {
         if (string.IsNullOrWhiteSpace(query)) return [];
         string q = query.Trim();
+        // Every word typed must be found, but each may be in the name, the region or the
+        // country: "Paris France" and "Springfield Illinois" both find their city.
+        string[] words = q.Split(' ', StringSplitOptions.RemoveEmptyEntries);
         return _cities
-            .Where(c => c.Name.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                        c.Admin.Contains(q, StringComparison.OrdinalIgnoreCase) ||
-                        c.Country.Contains(q, StringComparison.OrdinalIgnoreCase))
-            // Rank: names that start with the query first, then by population so the
-            // major city (Paris, France) beats the small one (Paris, Texas).
-            .OrderBy(c => c.Name.StartsWith(q, StringComparison.OrdinalIgnoreCase) ? 0 : 1)
+            .Where(c => words.All(w => c.Name.Contains(w, StringComparison.OrdinalIgnoreCase) ||
+                                       c.Admin.Contains(w, StringComparison.OrdinalIgnoreCase) ||
+                                       c.Country.Contains(w, StringComparison.OrdinalIgnoreCase)))
+            // Rank: names that start with the query (or its first word) first, then by
+            // population so the major city (Paris, France) beats the small one (Paris, Texas).
+            .OrderBy(c => c.Name.StartsWith(q, StringComparison.OrdinalIgnoreCase) ? 0
+                        : c.Name.StartsWith(words[0], StringComparison.OrdinalIgnoreCase) ? 1 : 2)
             .ThenByDescending(c => c.Population)
             .ThenBy(c => c.Name)
             .Take(max)
