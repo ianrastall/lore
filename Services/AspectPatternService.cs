@@ -3,7 +3,8 @@ using Lore.Models;
 namespace Lore.Services;
 
 // Detects the classic multi-body configurations from the chart's positions and
-// its already-computed aspects. A Yod needs the quincunx, so it is only found when
+// its already-computed aspects: stellium, grand trine, kite, grand cross, T-square,
+// mystic rectangle and yod. A Yod needs the quincunx, so it is only found when
 // the minor aspects are switched on. Kept separate from the interpreter so the
 // detection is testable and the report layer only has to render the result.
 //
@@ -30,10 +31,15 @@ public static class AspectPatternService
 
         var patterns = new List<AspectPattern>();
         patterns.AddRange(Stelliums(chart));
-        patterns.AddRange(GrandTrines(points, aspect, signs));
+        var trines = GrandTrines(points, aspect, signs).ToList();
+        var kites = Kites(points, aspect, trines);
+        // A grand trine that is the body of a kite is told as the kite.
+        patterns.AddRange(trines.Where(t => !kites.Any(k => t.Points.All(k.Points.Contains))));
+        patterns.AddRange(kites);
         var crosses = GrandCrosses(points, aspect, signs);
         patterns.AddRange(crosses);
         patterns.AddRange(TSquares(points, aspect, signs, crosses));
+        patterns.AddRange(MysticRectangles(points, aspect));
         patterns.AddRange(Yods(points, aspect));
         return patterns;
     }
@@ -71,10 +77,76 @@ public static class AspectPatternService
                         {
                             Type = PatternType.GrandTrine,
                             Points = new[] { points[i], points[j], points[k] },
-                            Element = signs[points[i]].GetElement()
+                            Element = Shared(new[] { i, j, k }.Select(x => signs[points[x]].GetElement()))
                         };
                     }
                 }
+    }
+
+    // ── Kite: a grand trine, and a fourth point opposite one corner of it and
+    //    sextile the other two ─────────────────────────────────────────────────
+    private static List<AspectPattern> Kites(
+        List<NatalPoint> points, Dictionary<(int, int), AspectType> aspect, List<AspectPattern> trines)
+    {
+        var found = new List<AspectPattern>();
+        foreach (var trine in trines)
+        {
+            var corners = trine.Points.Select(x => points.IndexOf(x)).ToArray();
+            for (int d = 0; d < points.Count; d++)
+            {
+                if (corners.Contains(d)) continue;
+                foreach (int tail in corners)
+                {
+                    if (!Is(aspect, d, tail, AspectType.Opposition) ||
+                        !corners.Where(c => c != tail).All(c => Is(aspect, d, c, AspectType.Sextile))) continue;
+                    found.Add(new AspectPattern
+                    {
+                        Type = PatternType.Kite,
+                        // The corner the fourth point opposes comes first.
+                        Points = [points[tail], .. trine.Points.Where(x => x != points[tail]), points[d]],
+                        Apex = points[d],
+                        Element = trine.Element,
+                    });
+                }
+            }
+        }
+        return found;
+    }
+
+    // ── Mystic Rectangle: two oppositions whose ends are joined by two sextiles
+    //    and two trines ───────────────────────────────────────────────────────
+    private static List<AspectPattern> MysticRectangles(
+        List<NatalPoint> points, Dictionary<(int, int), AspectType> aspect)
+    {
+        var found = new List<AspectPattern>();
+        for (int a = 0; a < points.Count; a++)
+            for (int b = a + 1; b < points.Count; b++)
+                for (int c = b + 1; c < points.Count; c++)
+                    for (int d = c + 1; d < points.Count; d++)
+                    {
+                        int[] q = { a, b, c, d };
+                        (int o1, int o2, int o3, int o4)[] pairings =
+                        {
+                            (0, 1, 2, 3), (0, 2, 1, 3), (0, 3, 1, 2)
+                        };
+                        foreach (var (o1, o2, o3, o4) in pairings)
+                        {
+                            if (!Is(aspect, q[o1], q[o2], AspectType.Opposition) ||
+                                !Is(aspect, q[o3], q[o4], AspectType.Opposition)) continue;
+                            bool Sides(AspectType near, AspectType far) =>
+                                Is(aspect, q[o1], q[o3], near) && Is(aspect, q[o2], q[o4], near) &&
+                                Is(aspect, q[o1], q[o4], far) && Is(aspect, q[o2], q[o3], far);
+                            if (!Sides(AspectType.Sextile, AspectType.Trine) && !Sides(AspectType.Trine, AspectType.Sextile)) continue;
+                            found.Add(new AspectPattern
+                            {
+                                Type = PatternType.MysticRectangle,
+                                // Each opposition's two ends side by side.
+                                Points = [points[q[o1]], points[q[o2]], points[q[o3]], points[q[o4]]],
+                            });
+                            break;
+                        }
+                    }
+        return found;
     }
 
     // ── Grand Cross: two oppositions joined by four squares ───────────────────
@@ -107,7 +179,7 @@ public static class AspectPatternService
                                 {
                                     Type = PatternType.GrandCross,
                                     Points = q.Select(i => points[i]).ToList(),
-                                    Modality = signs[points[q[0]]].GetModality()
+                                    Modality = Shared(q.Select(i => signs[points[i]].GetModality()))
                                 });
                                 break; // one grand cross per set of four
                             }
@@ -139,7 +211,7 @@ public static class AspectPatternService
                             Type = PatternType.TSquare,
                             Points = trio,
                             Apex = points[a],
-                            Modality = signs[points[a]].GetModality()
+                            Modality = Shared(trio.Select(x => signs[x].GetModality()))
                         };
                     }
                 }
@@ -169,6 +241,15 @@ public static class AspectPatternService
     }
 
     // ── helpers ───────────────────────────────────────────────────────────────
+
+    // The element or modality every point of a pattern has in common. Null when they
+    // differ: an aspect can hold across a sign boundary (29° Aries trine 1° Virgo), and
+    // the figure is then real but belongs to no one element or modality.
+    private static T? Shared<T>(IEnumerable<T> values) where T : struct, Enum
+    {
+        var distinct = values.Distinct().ToList();
+        return distinct.Count == 1 ? distinct[0] : null;
+    }
 
     // Every aspect in the chart, keyed by the positions of its two points in `points`.
     private static Dictionary<(int, int), AspectType> BuildAspectLookup(NatalChart chart, List<NatalPoint> points)

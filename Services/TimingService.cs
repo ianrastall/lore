@@ -83,9 +83,15 @@ public sealed class TimingService
     // on the reader's own calendar, the one the return's time is shown in.
     public SolarReturn? SolarReturnInForce(NatalChart natal, DateOnly asOf, DateTimeZone zone, ReturnPlace? place = null)
     {
-        var dayEnds = zone.AtStartOfDay(new LocalDate(asOf.Year, asOf.Month, asOf.Day).PlusDays(1)).ToDateTimeUtc();
-        var thisYear = SolarReturn(natal, asOf.Year, place);
-        return thisYear is not null && thisYear.Utc < dayEnds ? thisYear : SolarReturn(natal, asOf.Year - 1, place);
+        var dayEnds = BirthTimeResolver.StartOfDay(zone, new LocalDate(asOf.Year, asOf.Month, asOf.Day).PlusDays(1)).ToDateTimeUtc();
+        // A return is labelled with the year of the birthday it is looked for beside,
+        // and for a birthday at the turn of the year it can fall on the other side of
+        // it: the one labelled next year may already have happened by 31 December, and
+        // the one labelled last year may be the latest as late as 1 January.
+        for (int year = asOf.Year + 1; year >= asOf.Year - 2; year--)
+            if (SolarReturn(natal, year, place) is { } found && found.Utc < dayEnds)
+                return found;
+        return null;
     }
 
     // ── Secondary progressions ────────────────────────────────────────────────

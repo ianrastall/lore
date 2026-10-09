@@ -39,9 +39,19 @@ public sealed class PlanetPosition
     public double SpeedDeclination { get; init; } // degrees/day
     public double SpeedLatitude { get; init; }    // degrees/day
     public double Distance { get; init; }         // from the Earth, in astronomical units
+    // Set for the true (osculating) node or Lilith, as against the mean one.
+    public bool TruePoint { get; init; }
+
     // The mean node always runs backwards and mean Lilith always forwards; neither has
-    // retrograde periods, so neither is ever marked.
-    public bool IsRetrograde => SpeedLongitude < 0 && Planet is not (Planet.NorthNode or Planet.Lilith);
+    // retrograde periods, so neither is ever marked. The true Lilith does turn back and
+    // forth and is marked when it runs backwards. The node, true or mean, is not: going
+    // backwards is its ordinary motion.
+    public bool IsRetrograde => SpeedLongitude < 0 && Planet switch
+    {
+        Planet.NorthNode => false,
+        Planet.Lilith => TruePoint,
+        _ => true,
+    };
 
     // Standing nearly still, as a planet does for some days either side of turning
     // retrograde or direct: moving at under roughly a tenth of its usual speed. The Sun

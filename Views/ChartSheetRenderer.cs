@@ -121,7 +121,7 @@ internal static class ChartSheetRenderer
 
         // ── The tables, three abreast: each goes in whichever column is shortest ──
         var tables = new List<WorksheetSection>();
-        foreach (string title in new[] { "Distance from the Sun", "Angles and houses", "House rulers", "Dispositors" })
+        foreach (string title in new[] { "Distance from the Sun", "Motion", "Equator and horizon", "Angles and houses", "House rulers", "Dispositors", "Midpoints", "Almutens" })
             if (Section(title) is { } s) tables.Add(s);
         if (DignityService.ComputeIfTimed(chart) is { } score)
             tables.Add(new("Dignity", ["", "Essential", "Accidental", "Total", "From"],
@@ -247,7 +247,7 @@ internal static class ChartSheetRenderer
         }
         y += Small + 10;
         y += pen.Text("Under each aspect, how far it is from exact: a applying, s separating.   * out of sign." +
-                      (chart.Timed ? "   The Vertex (Vx) and Part of Fortune (⊗) are aspected here and nowhere else in Lore." : ""),
+                      (chart.Timed ? "   The Vertex (Vx) and the Parts of Fortune (⊗) and Spirit (⊕) are aspected here and nowhere else in Lore." : ""),
                       x, y, Small - 2, Soft, maxWidth: Math.Max(points.Count * cell, 900));
         return y;
     }

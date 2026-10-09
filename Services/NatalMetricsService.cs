@@ -28,6 +28,14 @@ public static class NatalMetricsService
         Aspects = Aspects(chart),
         Rulers = Rulers(chart),
         Dominants = Dominants(chart),
+        Sky = Sky(chart),
+        Motion = Motion(chart),
+        Spread = Spread(chart),
+        Almutens = Almutens(chart),
+        Midpoints = Midpoints(chart),
+        MidpointContacts = MidpointContacts(chart),
+        Antiscia = MirrorPoints(chart).Select(p => new Antiscion(p.Point, Normalize(180 - p.Longitude), Normalize(-p.Longitude))).ToList(),
+        AntisciaContacts = AntisciaContacts(chart),
     };
 
     // ── Further points ────────────────────────────────────────────────────────
@@ -42,6 +50,7 @@ public static class NatalMetricsService
         points.Add(new("Descendant", "↓", Normalize(chart.Ascendant + 180)));
         points.Add(new("Imum Coeli", "IC", Normalize(chart.Midheaven + 180)));
         points.Add(new("Vertex", "Vx", Normalize(chart.Vertex)));
+        points.Add(new("Anti-Vertex", "AVx", Normalize(chart.Vertex + 180)));
         if (Lot(chart, spirit: false) is { } fortune) points.Add(new("Part of Fortune", "⊗", fortune));
         if (Lot(chart, spirit: true) is { } spirit) points.Add(new("Part of Spirit", "⊕", spirit));
         return points;
@@ -93,6 +102,40 @@ public static class NatalMetricsService
         }
         return result;
     }
+
+    // ── The sky by other measures ─────────────────────────────────────────────
+
+    private static List<SkyPlace> Sky(NatalChart chart) => chart.Planets.Select(p =>
+    {
+        var horizon = chart.Timed && p.HasEquatorial && chart.GeoLatitude is { } latitude
+            ? Horizon(chart.Armc, latitude, p.RightAscension, p.Declination)
+            : ((double Altitude, double Azimuth)?)null;
+        return new SkyPlace(p.Planet,
+            p.HasEquatorial ? p.RightAscension : null,
+            p.Planet is Planet.NorthNode or Planet.Lilith ? null : p.Distance,
+            horizon?.Altitude, horizon?.Azimuth);
+    }).ToList();
+
+    // Height above the horizon, and bearing from north through east, of a point of the
+    // sky given by right ascension and declination, where the sidereal time is `armc`.
+    public static (double Altitude, double Azimuth) Horizon(double armc, double latitude, double rightAscension, double declination)
+    {
+        double h = Radians(armc - rightAscension), lat = Radians(latitude), dec = Radians(declination);
+        double sinAltitude = Math.Sin(lat) * Math.Sin(dec) + Math.Cos(lat) * Math.Cos(dec) * Math.Cos(h);
+        double azimuth = Math.Atan2(-Math.Cos(dec) * Math.Sin(h),
+            Math.Sin(dec) * Math.Cos(lat) - Math.Cos(dec) * Math.Sin(lat) * Math.Cos(h));
+        return (Math.Asin(Math.Clamp(sinAltitude, -1, 1)) * 180 / Math.PI, Normalize(azimuth * 180 / Math.PI));
+    }
+
+    // The seven classical planets' average motion in a day, in degrees, as the tradition
+    // gives it (Lilly's table): 0°59'08" for the Sun, and for Mercury and Venus, which
+    // keep company with it; 13°10'36" for the Moon; 0°31'27" for Mars, 0°04'59" for
+    // Jupiter and 0°02'01" for Saturn.
+    private static readonly double[] MeanSpeed = [0.9856, 13.1764, 0.9856, 0.9856, 0.5240, 0.0831, 0.0335];
+
+    private static List<Pace> Motion(NatalChart chart) => TenPlanets
+        .Select(chart.GetPlanet).OfType<PlanetPosition>()
+        .Select(p => new Pace(p.Planet, p.SpeedLongitude, p.Planet <= Planet.Saturn ? MeanSpeed[(int)p.Planet] : null)).ToList();
 
     // ── Declination ───────────────────────────────────────────────────────────
 
@@ -201,7 +244,114 @@ public static class NatalMetricsService
                 new("Eastern (houses 10–3)", In(10, 11, 12, 1, 2, 3)),
                 new("Western (houses 4–9)", In(4, 5, 6, 7, 8, 9)),
             ],
+            Quadrants = houses.Count == 0 ? [] :
+            [
+                new("First (houses 1–3)", In(1, 2, 3)),
+                new("Second (houses 4–6)", In(4, 5, 6)),
+                new("Third (houses 7–9)", In(7, 8, 9)),
+                new("Fourth (houses 10–12)", In(10, 11, 12)),
+            ],
+            PerHouse = houses.Count == 0 ? [] : Enumerable.Range(1, 12).Select(h => In(h)).ToList(),
         };
+    }
+
+    // The smallest arc holding all ten planets: the circle less the widest gap between
+    // neighbours.
+    private static Spread? Spread(NatalChart chart)
+    {
+        var planets = TenPlanets.Select(chart.GetPlanet).OfType<PlanetPosition>().OrderBy(p => p.Longitude).ToList();
+        if (planets.Count < 2) return null;
+
+        int after = 0; // the planet that follows the widest gap
+        double widest = -1;
+        for (int i = 0; i < planets.Count; i++)
+        {
+            double gap = Normalize(planets[i].Longitude - planets[(i + planets.Count - 1) % planets.Count].Longitude);
+            if (gap > widest) { widest = gap; after = i; }
+        }
+        return new Spread(360 - widest, widest, planets[after].Planet,
+            planets[(after + planets.Count - 1) % planets.Count].Planet,
+            planets.Select(p => p.Sign).Distinct().Count());
+    }
+
+    // ── Midpoints and antiscia ────────────────────────────────────────────────
+
+    // How close a point must be to a midpoint's axis, or to another's mirror point.
+    public const double MidpointOrb = 1.0, AntisciaOrb = 1.0;
+
+    // The points midpoints are taken between, and that can stand on one: the ten planets
+    // and the North Node, and with a birth time the Ascendant and Midheaven.
+    private static List<(NatalPoint Point, double Longitude)> MidpointPoints(NatalChart chart)
+    {
+        var points = chart.Planets.Where(p => p.Planet <= Planet.NorthNode)
+            .Select(p => (NatalPoint.Of(p.Planet), p.Longitude)).ToList();
+        if (chart.Timed)
+        {
+            points.Add((NatalPoint.Ascendant, chart.Ascendant));
+            points.Add((NatalPoint.Midheaven, chart.Midheaven));
+        }
+        return points;
+    }
+
+    private static List<Midpoint> Midpoints(NatalChart chart)
+    {
+        var points = MidpointPoints(chart);
+        var result = new List<Midpoint>();
+        for (int i = 0; i < points.Count; i++)
+            for (int j = i + 1; j < points.Count; j++)
+                result.Add(new Midpoint(points[i].Point, points[j].Point, MidpointOf(points[i].Longitude, points[j].Longitude)));
+        return result;
+    }
+
+    // Halfway between two longitudes by the shorter way round: 350° and 10° meet at 0°.
+    public static double MidpointOf(double a, double b) =>
+        Normalize(a + (Normalize(b - a + 180) - 180) / 2);
+
+    private static List<MidpointContact> MidpointContacts(NatalChart chart)
+    {
+        var points = MidpointPoints(chart);
+        var result = new List<MidpointContact>();
+        foreach (var mid in Midpoints(chart))
+            foreach (var (point, longitude) in points)
+            {
+                if (point == mid.A || point == mid.B) continue;
+                double orb = Math.Min(Separation(longitude, mid.Longitude), Separation(longitude, mid.Longitude + 180));
+                if (orb <= MidpointOrb) result.Add(new MidpointContact(point, mid.A, mid.B, orb));
+            }
+        result.Sort((x, y) => x.Orb.CompareTo(y.Orb));
+        return result;
+    }
+
+    // Every body, and with a birth time the Ascendant and Midheaven.
+    private static List<(NatalPoint Point, double Longitude)> MirrorPoints(NatalChart chart)
+    {
+        var points = chart.Planets.Select(p => (NatalPoint.Of(p.Planet), p.Longitude)).ToList();
+        if (chart.Timed)
+        {
+            points.Add((NatalPoint.Ascendant, chart.Ascendant));
+            points.Add((NatalPoint.Midheaven, chart.Midheaven));
+        }
+        return points;
+    }
+
+    // Two points are in antiscia when their longitudes add up to 180° (each is the
+    // other's reflection in the solstice axis), in contra-antiscia when they add up to
+    // 360°. The two angles are not paired with each other.
+    private static List<AntisciaContact> AntisciaContacts(NatalChart chart)
+    {
+        var points = MirrorPoints(chart);
+        var result = new List<AntisciaContact>();
+        for (int i = 0; i < points.Count; i++)
+            for (int j = i + 1; j < points.Count; j++)
+            {
+                if (points[i].Point.IsAngle && points[j].Point.IsAngle) continue;
+                double sum = points[i].Longitude + points[j].Longitude;
+                double antiscion = Separation(sum, 180), contra = Separation(sum, 0);
+                if (antiscion <= AntisciaOrb) result.Add(new AntisciaContact(points[i].Point, points[j].Point, false, antiscion));
+                if (contra <= AntisciaOrb) result.Add(new AntisciaContact(points[i].Point, points[j].Point, true, contra));
+            }
+        result.Sort((x, y) => x.Orb.CompareTo(y.Orb));
+        return result;
     }
 
     // ── Aspects in sum ────────────────────────────────────────────────────────
@@ -244,7 +394,7 @@ public static class NatalMetricsService
             p.Planet, p.Sign, DignityService.RulerOf(p.Sign),
             DignityService.TermRuler(p.Sign, p.DegreeInSign),
             DignityService.FaceRuler(p.Sign, p.DegreeInSign),
-            Chain(chart, p.Planet))).ToList();
+            Chain(chart, p.Planet), DignityService.TriplicityRulers(p.Sign))).ToList();
 
         // Where every chain ends: a planet in its own sign, or a ring of planets in each
         // other's. One ending shared by all, and that a single planet, is a final dispositor.
@@ -282,6 +432,29 @@ public static class NatalMetricsService
                               && dispositions.All(d => d.Chain[^1] == inDomicile[0]) ? inDomicile[0] : null,
             Loops = loops,
         };
+    }
+
+    // The almuten of each of the five places the tradition weighs a life by: the Sun,
+    // the Moon, the Ascendant, the Midheaven and the Part of Fortune. Needs a birth time,
+    // for three of the five and for the sect that picks the triplicity ruler.
+    private static List<Almuten> Almutens(NatalChart chart)
+    {
+        if (!chart.Timed) return [];
+        var places = new List<(string Name, double? Longitude)>
+        {
+            ("Sun", chart.GetPlanet(Planet.Sun)?.Longitude), ("Moon", chart.GetPlanet(Planet.Moon)?.Longitude),
+            ("Ascendant", chart.Ascendant), ("Midheaven", chart.Midheaven), ("Part of Fortune", Lot(chart, spirit: false)),
+        };
+        var result = new List<Almuten>();
+        foreach (var (name, place) in places)
+        {
+            if (place is not { } longitude) continue;
+            var points = DignityService.RulershipPoints(ZodiacSignExtensions.FromLongitude(longitude),
+                ZodiacSignExtensions.DegreeInSign(longitude), chart.IsDayChart);
+            int most = points.Values.Max();
+            result.Add(new Almuten(name, longitude, points.Where(kv => kv.Value == most).Select(kv => kv.Key).ToList(), most));
+        }
+        return result;
     }
 
     // From a body to the ruler of its sign, to the ruler of that planet's sign, and so on:

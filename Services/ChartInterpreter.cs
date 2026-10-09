@@ -220,7 +220,7 @@ public sealed class ChartInterpreter
 
         if (patterns.Count == 0)
         {
-            paras.Add("No major configuration (stellium, grand trine, T-square, grand cross, or yod) " +
+            paras.Add("No major configuration (stellium, grand trine, kite, T-square, grand cross, mystic rectangle, or yod) " +
                       "stands out — the aspects act more as individual links than a single locked figure.");
             return new ReportSection { Heading = "Chart Patterns", Paragraphs = paras };
         }
@@ -236,13 +236,13 @@ public sealed class ChartInterpreter
                               More(_c.StelliumSigns, p.Sign.Value.Name()));
                     break;
                 case PatternType.GrandTrine:
-                    paras.Add($"Grand Trine in {p.Element} — {names} form a closed triangle of trines, " +
+                    paras.Add($"Grand Trine{(p.Element is { } element ? $" in {element}" : MixedSigns)} — {names} form a closed triangle of trines, " +
                               "an easy, self-reinforcing circuit of talent that flows so naturally it can be taken for granted." +
                               More(_c.GrandTrines, p.Element?.ToString()));
                     break;
                 case PatternType.TSquare:
                     var ends = p.Points.Where(x => x != p.Apex).Select(Named);
-                    paras.Add($"T-Square in {p.Modality} signs — {Named(p.Apex!.Value)} stands at the apex, " +
+                    paras.Add($"T-Square{(p.Modality is { } mode ? $" in {mode} signs" : MixedSigns)} — {Named(p.Apex!.Value)} stands at the apex, " +
                               $"squaring the opposition between {string.Join(" and ", ends)}. " +
                               "A focal point of dynamic tension that pushes hard toward action and achievement." +
                               More(_c.TSquares, p.Modality?.ToString()) + More(_c.ApexPoints, p.Apex.Value.Name));
@@ -254,8 +254,21 @@ public sealed class ChartInterpreter
                               "drives keep pressing on a third that fits neither." +
                               More(_c.ApexPoints, p.Apex.Value.Name));
                     break;
+                case PatternType.Kite:
+                    var body = p.Points.Take(3).Select(Named).ToList();
+                    paras.Add($"Kite{(p.Element is { } kite ? $" in {kite}" : MixedSigns)} — {JoinNames(p.Points.Take(3).ToList())} form a grand trine, " +
+                              $"and {Named(p.Apex!.Value)} stands opposite {body[0]} and in sextile to {body[1]} and {body[2]}. " +
+                              "The opposition gives the trine's easy talent a direction and something to work against; " +
+                              $"{Named(p.Apex.Value)} is where it is put to use." +
+                              More(_c.GrandTrines, p.Element?.ToString()) + More(_c.ApexPoints, p.Apex.Value.Name));
+                    break;
+                case PatternType.MysticRectangle:
+                    paras.Add($"Mystic Rectangle — {Named(p.Points[0])} opposite {Named(p.Points[1])} and {Named(p.Points[2])} opposite {Named(p.Points[3])}, " +
+                              "the four joined round the outside by two sextiles and two trines. " +
+                              "Two tensions held in a frame of easy aspects: a figure of practical balance, where each pull has ready help on either side.");
+                    break;
                 case PatternType.GrandCross:
-                    paras.Add($"Grand Cross in {p.Modality} signs — {names} form two oppositions locked by four squares, " +
+                    paras.Add($"Grand Cross{(p.Modality is { } cross ? $" in {cross} signs" : MixedSigns)} — {names} form two oppositions locked by four squares, " +
                               "a demanding but powerful figure that seeks balance on all four fronts." +
                               More(_c.GrandCrosses, p.Modality?.ToString()));
                     break;
@@ -263,6 +276,10 @@ public sealed class ChartInterpreter
         }
         return new ReportSection { Heading = "Chart Patterns", Paragraphs = paras };
     }
+
+    // For a figure held together by an aspect that crosses a sign boundary: its points
+    // share no one element or modality, so none is named or read.
+    private const string MixedSigns = " across mixed signs";
 
     // "Mars", but "the Ascendant".
     private static string Named(NatalPoint p) => p.IsAngle ? "the " + p.Name : p.Name;

@@ -6,7 +6,9 @@ public enum PatternType
     GrandTrine,  // 3 bodies in mutual trine (a closed triangle)
     TSquare,     // an opposition with a third body square to both ends
     GrandCross,  // two oppositions locked together by four squares
-    Yod          // two points in sextile, both quincunx a third (needs the minor aspects on)
+    Yod,         // two points in sextile, both quincunx a third (needs the minor aspects on)
+    Kite,        // a grand trine with a fourth point opposite one corner and sextile the other two
+    MysticRectangle // two oppositions joined by two sextiles and two trines
 }
 
 // A multi-body configuration detected from the chart's positions and its
@@ -20,7 +22,7 @@ public sealed class AspectPattern
     public required IReadOnlyList<NatalPoint> Points { get; init; }
 
     public ZodiacSign? Sign { get; init; }      // Stellium: the shared sign
-    public Element? Element { get; init; }       // Grand Trine: the shared element
-    public Modality? Modality { get; init; }     // T-Square / Grand Cross: the shared modality
-    public NatalPoint? Apex { get; init; }       // T-Square: the point squaring both ends of the opposition; Yod: the point both quincunxes meet at
+    public Element? Element { get; init; }       // Grand Trine, and a Kite's trine: the shared element; null if the points are not all in one
+    public Modality? Modality { get; init; }     // T-Square / Grand Cross: the shared modality; null likewise
+    public NatalPoint? Apex { get; init; }       // T-Square: the point squaring both ends of the opposition; Yod: the point both quincunxes meet at; Kite: the fourth point, opposite a corner of the trine
 }

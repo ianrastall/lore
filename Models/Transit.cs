@@ -1,8 +1,8 @@
 namespace Lore.Models;
 
-// Vertex and Fortune are aspected on the Worksheet only: nothing transits them, and the
-// report, the patterns and the wheel's lines leave them alone.
-public enum NatalPointKind { Body, Ascendant, Midheaven, Vertex, Fortune }
+// Vertex, Fortune and Spirit are aspected on the Worksheet only: nothing transits them,
+// and the report, the patterns and the wheel's lines leave them alone.
+public enum NatalPointKind { Body, Ascendant, Midheaven, Vertex, Fortune, Spirit }
 
 // A fixed point in the birth chart that a moving (transiting) body can aspect: one of
 // the chart's thirteen bodies, or an angle. Angles are not Planet values, so they get
@@ -14,6 +14,7 @@ public readonly record struct NatalPoint(NatalPointKind Kind, Planet Body = Plan
     public static readonly NatalPoint Midheaven = new(NatalPointKind.Midheaven);
     public static readonly NatalPoint Vertex = new(NatalPointKind.Vertex);
     public static readonly NatalPoint Fortune = new(NatalPointKind.Fortune);
+    public static readonly NatalPoint Spirit = new(NatalPointKind.Spirit);
 
     public bool IsAngle => Kind != NatalPointKind.Body;
 
@@ -24,6 +25,7 @@ public readonly record struct NatalPoint(NatalPointKind Kind, Planet Body = Plan
         NatalPointKind.Midheaven => "Midheaven",
         NatalPointKind.Vertex => "Vertex",
         NatalPointKind.Fortune => "Part of Fortune",
+        NatalPointKind.Spirit => "Part of Spirit",
         _ => Body.Name()
     };
 
@@ -33,6 +35,7 @@ public readonly record struct NatalPoint(NatalPointKind Kind, Planet Body = Plan
         NatalPointKind.Midheaven => "MC",
         NatalPointKind.Vertex => "Vx",
         NatalPointKind.Fortune => "⊗",
+        NatalPointKind.Spirit => "⊕",
         _ => Body.Symbol()
     };
 }

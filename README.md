@@ -4,14 +4,14 @@
 
 > A Windows desktop application for computing and exploring astrological natal charts — and reading a daily horoscope from them — powered by the Swiss Ephemeris. Browse a curated library of historical figures — every one with a documented birth time — or add your own.
 
-**Latest release: v2.7.0** · [Download](../../releases/latest)
+**Latest release: v2.8.0** · [Download](../../releases/latest)
 
 ### Installing
 
-1. From the [latest release](../../releases/latest), download **`LoreSetup-2.7.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`LoreSetup-2.8.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user only (no administrator prompt), adds a Start-menu shortcut, and can be removed from *Settings → Apps* like any other program.
 
-**Prefer not to install?** Download **`Lore-2.7.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
+**Prefer not to install?** Download **`Lore-2.8.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
 
 > **The installer is not code-signed.** Lore is a free hobby project and does not carry a paid signing certificate, so Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"* — choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -31,7 +31,7 @@
 - Computes positions for **13 bodies**: Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North Node (mean or true), Chiron, and Black Moon Lilith (mean or true apogee).
 - Calculates the **12 house cusps** (Placidus, Whole Sign, Equal, or Koch — your choice), Ascendant, and Midheaven.
 - Detects **five major aspects** (conjunction ☌, sextile ⚹, square □, trine △, opposition ☍) with per-aspect orbs, and flags each as applying or separating.
-- Detects **major configurations** — stellium, grand trine, T-square, and grand cross — from the positions and aspects (a T-square that is one arm of a grand cross is not reported twice).
+- Detects **major configurations** — stellium, grand trine, kite, T-square, grand cross, mystic rectangle and (with the minor aspects on) yod — from the positions and aspects (a T-square that is one arm of a grand cross, or a grand trine that is the body of a kite, is not reported twice).
 - Retrograde detection for every planet from Mercury to Pluto, and Chiron.
 - **Further points and measurements** — the South Node, Descendant, IC, Vertex and the Parts of Fortune and Spirit; the lunar phase at birth; each planet's distance from the Sun; parallels, contra-parallels and out-of-bounds planets by declination; the balance of the chart; chart ruler, house rulers and dispositors.
 
@@ -54,8 +54,8 @@
 | View | Description |
 |---|---|
 | **Chart Wheel** | Rendered chart wheel (Win2D / Direct2D), drawn on-screen and exportable as a high-resolution PNG. |
-| **Report** | Natural-language reading: Overview (Sun/Moon/Rising), planet-by-sign-degree-and-house paragraphs, major aspects, chart patterns (stellium, grand trine, T-square, grand cross), and elemental and modal balance. The Ascendant/Midheaven line shows their degrees and names the house system. |
-| **Worksheet** | The numbers behind the chart, uninterpreted: how the birth time became Universal Time, every position to the arc-second with latitude, declination, daily speed and house, the twelve house cusps, the derived points (South Node, Descendant, IC, Vertex, Parts of Fortune and Spirit), and a grid of every aspect — including those to the Ascendant and Midheaven — with orb and applying/separating. Below that come the further measurements: the Moon's phase, each planet's distance from the Sun, declination contacts and out-of-bounds planets, closeness to the angles, the balance of the chart by element, mode, polarity and house, a weighted reckoning of which planet and which signs dominate, the aspects in sum, and the chart's rulers and dispositors. A section headed *If the birth time is off* shows what would change, and when, if the recorded time were out by a margin you set. |
+| **Report** | Natural-language reading: Overview (Sun/Moon/Rising), planet-by-sign-degree-and-house paragraphs, major aspects, chart patterns (stellium, grand trine, kite, T-square, grand cross, mystic rectangle, yod), and elemental and modal balance. The Ascendant/Midheaven line shows their degrees and names the house system. |
+| **Worksheet** | The numbers behind the chart, uninterpreted: how the birth time became Universal Time, every position to the arc-second with latitude, declination, daily speed and house, the twelve house cusps, the derived points (South Node, Descendant, IC, Vertex and Anti-Vertex, Parts of Fortune and Spirit), and a grid of every aspect — including those to the Ascendant, Midheaven, Vertex and the two lots — with orb and applying/separating. Below that come the further measurements: the Moon's phase and age and the New and Full Moon before birth, each planet's distance from the Sun, its speed beside its average and its nearest station, its right ascension, distance, altitude and azimuth, declination contacts and out-of-bounds planets, closeness to the angles, the balance of the chart by element, mode, polarity, house and quadrant and how widely the planets are spread, a weighted reckoning of which planet and which signs dominate, the aspects in sum, midpoints, antiscia, and the chart's rulers, dispositors, triplicity rulers and almutens. The top of the Worksheet also gives the Julian day, the Sun's height above or below the horizon, and the planetary day and hour of birth. A section headed *If the birth time is off* shows what would change, and when, if the recorded time were out by a margin you set. |
 | **Daily** | Daily horoscope for the selected chart on any date — generated from that day's transits, with a wheel of the day's sky around the birth chart. See below. |
 | **Forecast** | The transits coming up for the selected chart over the next month to a year: when each comes into orb, is exact, and leaves, with the Daily view's written line for it. Set among them, if you wish, is the sky's own calendar: New and Full Moons, eclipses, planets turning retrograde or direct, and the slow planets changing sign, each with the house of the chart it falls in. |
 | **Timing** | The solar return in force on a date, with its wheel, cast for the birthplace or for any city you choose; the annual profection (the house, sign and Lord of the Year); the chart progressed to that date a day for a year; the chart directed by solar arc; and, when another city is chosen, the birth chart relocated there. |
@@ -124,7 +124,7 @@ Charts and readings can be exported in these formats:
 | Format | Contents |
 |---|---|
 | **PNG** | High-resolution chart wheel (1600 × 1600 px, offscreen Win2D render) |
-| **PNG — chart with tables** | The wheel with the Worksheet set out around and under it in one image (2400 px wide): birth data and settings, every position, the house cusps, the aspect grid, elements by mode, the Moon's phase, balance, rulers, declination, distance from the Sun, dispositors, the dignity score by planet, and a strip ordering everything by degree |
+| **PNG — chart with tables** | The wheel with the Worksheet set out around and under it in one image (2400 px wide): birth data and settings, every position, the house cusps, the aspect grid, elements by mode, the Moon's phase, balance, rulers, declination, distance from the Sun, motion and stations, equator and horizon, dispositors, midpoints, almutens, the dignity score by planet, and a strip ordering everything by degree |
 | **PDF** | Full reading — birth data, chart wheel image, Big Three, written report, per-planet dignity table, and the worksheet |
 | **JSON** | Structured chart data (planets, houses, aspects, angles, detected patterns, and every Worksheet measurement, including the dignity score's breakdown) |
 | **XML** | Same structured data in XML |
@@ -270,7 +270,7 @@ Produces a self-contained folder that runs with no installed .NET or VC++ runtim
 .\scripts\build-portable.ps1
 ```
 
-Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-2.7.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
+Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-2.8.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
 
 ### Step 4 — Installer
 
@@ -482,7 +482,42 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 2.7.0 (current)
+### 2.8.0 (current)
+More measurements on the Worksheet, two more chart patterns, and a second round of repairs.
+
+**New on the Worksheet** (all of it in the text, PDF, JSON and XML exports too; the Legend explains each):
+- **Motion and stations** — each planet's speed beside its traditional average (swift or slow, Sun to Saturn), its motion in latitude and declination, and how many days before or after birth it last stood still or next will.
+- **Equator and horizon** — right ascension, distance from the Earth, and, with a birth time, each body's altitude and compass bearing at the birthplace. The Sun's height above or below the horizon is given beside *Sect*.
+- **The Moon before birth** — the Moon's age in days, and the New Moon and Full Moon before birth with their dates and degrees, marked if either was an eclipse.
+- **Planetary day and hour** of birth, counted from sunrise at the birthplace.
+- **Midpoints** — every point standing within 1° of the midpoint of two others, and the Sun/Moon midpoint.
+- **Antiscia** — each body's antiscion and contra-antiscion, and any other body within 1° of them.
+- **Almutens and triplicity rulers** — the planet with most rulership over the Sun, Moon, Ascendant, Midheaven and Part of Fortune, and the three triplicity rulers of every body's sign.
+- **More of the balance** — counts by quadrant and house by house, and the spread: the smallest arc of the zodiac that holds all ten planets.
+- **Smaller additions** — the Julian day, the Anti-Vertex, and aspects to the Part of Spirit in the aspect grid.
+- **JSON and XML catch up** — they now carry the aspects to the Vertex and the two lots and the North Node and Lilith of the kind not in use, which until now were on the Worksheet only.
+
+**In the Report:**
+- **Kite and mystic rectangle** are detected and described. A grand trine that is the body of a kite is told once, as the kite.
+- **A pattern that crosses a sign boundary is no longer given one element or modality.** A grand trine with one corner out of sign was called, say, "in Earth" and read as such; it is now described as *across mixed signs* and left unread by element. About a third of the bundled charts had at least one such line.
+
+**Repairs** (from a second review of the whole program):
+- **Your saved charts are safer still** — if another program (a backup or sync tool, a virus scanner) has the saved-charts file open when Lore starts, Lore no longer takes it for a damaged file and rolls back to the backup; it leaves everything alone and tries again at the next save. A damaged file is only set aside by the Lore window that holds the save lock.
+- **Saving a copy of My Charts** now includes charts saved in another open Lore window.
+- **Nothing is exported while the chart on screen is still the previous person's.** A chart that cannot be calculated clears the views instead of leaving the last one up.
+- **Changing two settings in quick succession** can no longer leave the old chart on screen with nobody selected.
+- **A chart saved while a search is in the box** is shown even if the search no longer matches it; the search is cleared.
+- **Day and night inside the polar circles** are taken from the Sun's real altitude. Near midsummer and midwinter above about 66° they could be reversed, and with them the Parts of Fortune and Spirit and the dignity score.
+- **The solar return in force** is right on the last day of the year for someone born at the turn of it; it could be a whole year stale.
+- **A forecast shows two passes, not one,** when a planet turns round just outside the one-degree orb and comes back.
+- **A chart marked "time unknown" is always cast for noon,** even if a file brought in from elsewhere still carries a time beside it.
+- **The birth-time check gives real clock times** when the clocks changed inside its window (it could name an hour that did not exist that day).
+- **The Timing view keeps the place you chose** when the same person's chart is recalculated after a change of settings.
+- **The true Lilith is marked retrograde** when it is running backwards.
+- **A birth on the day before a skipped calendar day** (Samoa, 29 December 2011) no longer loses its whole-day analysis.
+- **The solar-return PDF's wheel** no longer carries the birth chart's coloured verdict rim.
+
+### 2.7.0
 A release of repairs, from a review of the whole program. Nothing is added; a good deal is made safer and steadier.
 - **Your saved charts are better protected** — two Lore windows saving at the same moment now take turns, so neither loses the other's chart. If the saved-charts file is damaged while Lore is open, Lore refuses to save over it (and leaves the backup alone) and tells you to restart, which sets the damaged file aside and restores the backup.
 - **Stricter checks on charts brought in from a file** — a chart that says its birth time is known but gives none, has no date, or has an impossible clock offset is refused instead of being let in to cause trouble later. A missing birthplace is read as an empty one. Very large files are refused unread.

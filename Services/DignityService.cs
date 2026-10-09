@@ -188,6 +188,31 @@ public static class DignityService
     public static bool IsExalted(Planet planet, ZodiacSign sign) =>
         ExaltationSign.TryGetValue(planet, out var exalted) && exalted == sign;
 
+    // The three rulers of a sign's triplicity: by day, by night, and the one that shares
+    // with both.
+    public static IReadOnlyList<Planet> TriplicityRulers(ZodiacSign sign)
+    {
+        var (day, night, part) = Triplicity[sign.GetElement()];
+        return [day, night, part];
+    }
+
+    // How much of a degree each classical planet rules, on the scale the score uses:
+    // 5 for the sign, 4 for exaltation, 3 for the triplicity (the day ruler by day, the
+    // night ruler by night), 2 for the term, 1 for the face. The planet with most is
+    // the degree's almuten.
+    public static IReadOnlyDictionary<Planet, int> RulershipPoints(ZodiacSign sign, double degInSign, bool isDay)
+    {
+        var points = Classical.ToDictionary(p => p, _ => 0);
+        points[DomicileRuler[(int)sign]] += 5;
+        foreach (var (planet, exalted) in ExaltationSign)
+            if (exalted == sign) points[planet] += 4;
+        var trip = Triplicity[sign.GetElement()];
+        points[isDay ? trip.day : trip.night] += 3;
+        points[TermRuler(sign, degInSign)] += 2;
+        points[FaceRuler(sign, degInSign)] += 1;
+        return points;
+    }
+
     public static Planet FaceRuler(ZodiacSign sign, double degInSign) =>
         Faces[(int)sign][Math.Clamp((int)(degInSign / 10), 0, 2)];
 

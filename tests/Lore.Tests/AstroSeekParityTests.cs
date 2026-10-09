@@ -102,12 +102,12 @@ public class AstroSeekParityTests
     }
 
     [Fact]
-    public void The_Worksheet_aspects_the_Vertex_and_the_Part_of_Fortune()
+    public void The_Worksheet_aspects_the_Vertex_and_the_two_lots()
     {
         var chart = Calculate(Einstein, AsAstroSeek);
         var w = WorksheetService.Build(chart);
 
-        Assert.Equal([NatalPoint.Ascendant, NatalPoint.Midheaven, NatalPoint.Vertex, NatalPoint.Fortune], w.Points.Skip(13));
+        Assert.Equal([NatalPoint.Ascendant, NatalPoint.Midheaven, NatalPoint.Vertex, NatalPoint.Fortune, NatalPoint.Spirit], w.Points.Skip(13));
 
         var toPoints = w.Aspects.Where(a => a.B == NatalPoint.Vertex || a.B == NatalPoint.Fortune).ToList();
         Assert.NotEmpty(toPoints);

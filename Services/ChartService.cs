@@ -118,6 +118,9 @@ public sealed class ChartService
             Vertex = vertex,
             Armc = armc,
             Obliquity = obliquity,
+            SunAboveHorizon = SunIsUp(planets, armc, latitude),
+            GeoLatitude = latitude,
+            GeoLongitude = longitude,
             Settings = settings,
             CalculatedForUtc = utc,
             EphemerisNote = problem.Trim(),
@@ -125,6 +128,18 @@ public sealed class ChartService
                 ? $"Porphyry houses ({settings.Houses.Name()} cannot be calculated at this latitude)"
                 : $"{settings.Houses.Name()} houses",
         };
+    }
+
+    // Whether the Sun's centre is above the horizon of the place the chart is cast for,
+    // from its altitude there. Null if the Sun's equatorial position could not be had.
+    private static bool? SunIsUp(List<PlanetPosition> planets, double armc, double latitude)
+    {
+        if (planets.FirstOrDefault(p => p.Planet == Planet.Sun) is not { HasEquatorial: true } sun) return null;
+        const double Rad = Math.PI / 180;
+        double hourAngle = (armc - sun.RightAscension) * Rad;
+        double sinAltitude = Math.Sin(latitude * Rad) * Math.Sin(sun.Declination * Rad) +
+                             Math.Cos(latitude * Rad) * Math.Cos(sun.Declination * Rad) * Math.Cos(hourAngle);
+        return sinAltitude >= 0;
     }
 
     // The Davison chart of two people: an ordinary chart, cast for the moment halfway
@@ -190,8 +205,12 @@ public sealed class ChartService
             Longitude = xx[0],
             Latitude = xx[1],
             SpeedLongitude = xx[3],
+            TruePoint = IsTruePoint(planet, settings.Node, settings.Lilith),
         };
     }
+
+    private static bool IsTruePoint(Planet planet, NodeType node, LilithType lilith) =>
+        (planet == Planet.NorthNode && node == NodeType.True) || (planet == Planet.Lilith && lilith == LilithType.True);
 
     // The next eclipse after an instant, of the Sun (seen from anywhere on Earth) or of
     // the Moon: the moment it is greatest, and its kind in a word. Null if the
@@ -318,6 +337,7 @@ public sealed class ChartService
             Distance = xx[2],
             SpeedLongitude = xx[3],
             SpeedLatitude = xx[4],
+            TruePoint = IsTruePoint(planet, node, lilith),
             HasEquatorial = equatorial,
             RightAscension = equatorial ? eq[0] : 0,
             Declination = equatorial ? eq[1] : 0,

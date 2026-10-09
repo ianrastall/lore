@@ -85,11 +85,14 @@ public sealed class Celebrity
     [JsonIgnore]
     public string BirthDateLabel => JulianCalendar ? $"{BirthDate} O.S." : BirthDate;
 
+    // Noon when the time is unknown — even if a time is still written in the record
+    // (a file brought in from elsewhere may carry one beside birthTimeKnown: false):
+    // everything that says "placed for noon" must be describing what was calculated.
     public TimeOnly GetBirthTime()
     {
-        if (BirthTime is { Length: > 0 } t)
+        if (BirthTimeKnown && BirthTime is { Length: > 0 } t)
             return TimeOnly.ParseExact(t, "HH:mm", CultureInfo.InvariantCulture);
-        return new TimeOnly(12, 0); // noon default when unknown
+        return new TimeOnly(12, 0);
     }
 
     // UTC conversion lives in Services/BirthTimeResolver (it needs the tz database and a

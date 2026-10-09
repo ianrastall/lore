@@ -40,8 +40,10 @@ public static class TimeSensitivityService
         }
 
         // Clock time at the birthplace for sample i, as the birth time itself is given.
-        var recorded = person.GetBirthTime();
-        string Clock(int i) => recorded.AddMinutes(i - minutes).ToString("HH:mm", System.Globalization.CultureInfo.InvariantCulture);
+        // Read off the instant, not counted in minutes from the recorded time: across a
+        // change of the clocks the two part company by an hour.
+        var clock = BirthTimeResolver.Clock(person);
+        string Clock(int i) => clock(centre.AddMinutes(i - minutes));
 
         var holds = new List<string>();
         var changes = new List<string>();

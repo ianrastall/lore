@@ -204,11 +204,26 @@ public sealed partial class MainViewModel : ObservableObject
         }
     }
 
-    // Rebuilds the list of people and their verdicts. Returns the Id of whoever was
-    // selected just before the list was replaced (replacing it clears the selection),
-    // so that a caller can put the selection back: taken at that moment rather than at
-    // the start, in case someone else was picked while the verdicts were worked out.
-    private async Task<string?> RebuildPoolAsync()
+    // The latest pass of RebuildCoreAsync to have been started.
+    private Task? _rebuilding;
+
+    // Rebuilds the list of people and their verdicts, keeping whoever is selected
+    // selected. Of several passes under way at once only the latest fills the list in,
+    // so each caller waits for that one: when this returns, the list holds whatever the
+    // caller had just saved or changed.
+    private async Task RebuildPoolAsync()
+    {
+        _rebuilding = RebuildCoreAsync();
+        Task latest;
+        do
+        {
+            latest = _rebuilding;
+            await latest;
+        }
+        while (!ReferenceEquals(latest, _rebuilding));
+    }
+
+    private async Task RebuildCoreAsync()
     {
         int generation = ++_poolGeneration;
         var all = _all = [.. _celebrities.All, .. _userCharts.Charts];
@@ -218,18 +233,35 @@ public sealed partial class MainViewModel : ObservableObject
         // the settings in force now even if they are changed before it finishes.
         var charts = _charts.With(_charts.Settings);
         var verdicts = await Task.Run(() => ComputeVerdicts(charts, all));
-        // Written here, on the UI thread, and only by the latest pass: the list
-        // bindings read these values when the rows are next built, just below.
-        if (generation == _poolGeneration)
-            foreach (var (person, colorHex, label) in verdicts)
-            {
-                person.VerdictColorHex = colorHex;
-                person.VerdictLabel = label;
-            }
+        // A newer pass has started, with the newer list and settings, and it will fill
+        // the list in. Replacing the list here as well would only clear the selection
+        // from under it, leaving the chart on screen as it was before the change.
+        if (generation != _poolGeneration) return;
+
+        // Written here, on the UI thread: the list bindings read these values when the
+        // rows are next built, just below.
+        foreach (var (person, colorHex, label) in verdicts)
+        {
+            person.VerdictColorHex = colorHex;
+            person.VerdictLabel = label;
+        }
+        // Replacing the list clears the selection, so it is put back in the same breath:
+        // taken now rather than at the start, in case someone else was picked while the
+        // verdicts were worked out.
         string? selectedId = SelectedCelebrity?.Id;
         RefreshCategories();
         ApplyFilter();
-        return selectedId;
+        Reselect(selectedId);
+    }
+
+    // Selects the person with this Id as the list now has them: the same person again
+    // after the list was replaced, or the new record after an edit. Nobody, if the list
+    // as filtered no longer shows them.
+    private void Reselect(string? id)
+    {
+        if (id is null) return;
+        var again = DisplayedCelebrities.FirstOrDefault(c => c.Id == id);
+        if (!ReferenceEquals(SelectedCelebrity, again)) SelectedCelebrity = again;
     }
 
     // Score every chart so the browse list can highlight the notable ones. Only
@@ -359,16 +391,12 @@ public sealed partial class MainViewModel : ObservableObject
         _charts.Settings = settings;
         _settings?.Save(settings);
 
-        string? selectedId = await RebuildPoolAsync();
+        await RebuildPoolAsync();
         // A newer change overtook this one while the list was rescored; it will redraw
         // the chart and say what is in use.
         if (request != _settingsGeneration) return;
-        if (selectedId is not null &&
-            DisplayedCelebrities.FirstOrDefault(c => c.Id == selectedId) is { } again)
-        {
-            SelectedCelebrity = again;
-            await LoadChartAsync(again);
-        }
+        if (SelectedCelebrity is { } selected)
+            await LoadChartAsync(selected);
         StatusMessage = $"Now using {settings.Houses.Name()} houses, the {settings.Node.Name().ToLowerInvariant()}, " +
                         $"{(settings.Lilith == LilithType.True ? "true" : "mean")} Lilith " +
                         $"and {settings.Orbs.PresetName.ToLowerInvariant()} orbs.";
@@ -378,8 +406,7 @@ public sealed partial class MainViewModel : ObservableObject
     {
         if (!await TrySaveAsync(() => _userCharts.AddAsync(chart), $"add {chart.Name}")) return;
         await RebuildPoolAsync();
-        SelectedCategory = UserChartService.MyChartsCategory;
-        SelectedCelebrity = DisplayedCelebrities.FirstOrDefault(c => c.Id == chart.Id);
+        ShowSaved(chart);
     }
 
     // Saves an edited chart (same Id) and shows it again, recalculated.
@@ -387,10 +414,37 @@ public sealed partial class MainViewModel : ObservableObject
     {
         if (!await TrySaveAsync(() => _userCharts.UpdateAsync(chart), $"save changes to {chart.Name}")) return;
         await RebuildPoolAsync();
-        SelectedCategory = UserChartService.MyChartsCategory;
-        SelectedCelebrity = DisplayedCelebrities.FirstOrDefault(c => c.Id == chart.Id);
+        ShowSaved(chart);
         StatusMessage = $"Saved changes to {chart.Name}.";
     }
+
+    // Selects a chart that has just been saved. A search still in the box may not match
+    // it (it was typed to find someone else, or the name it found has just been changed),
+    // and must not hide the chart: the search is cleared if it would.
+    private void ShowSaved(Celebrity chart)
+    {
+        SelectedCategory = UserChartService.MyChartsCategory;
+        if (!DisplayedCelebrities.Any(c => c.Id == chart.Id))
+            SearchText = "";
+        Reselect(chart.Id);
+    }
+
+    // Empties every view: there is no chart to show.
+    private void ShowNoChart()
+    {
+        ChartVM.Chart = null;
+        DailyVM.Chart = null;
+        ForecastVM.Chart = null;
+        TimingVM.Chart = null;
+        SynastryVM.Chart = null;
+    }
+
+    // False while the chart on screen is not (or not yet) the selected person's: theirs
+    // is still being calculated and the one before is still showing. Nothing is exported
+    // then. (With nobody selected — the search box has been typed in, say — the chart
+    // still on screen is the current one.)
+    public bool ChartIsCurrent =>
+        !_calculating && (SelectedCelebrity is null || ReferenceEquals(ChartVM.Chart?.Celebrity, SelectedCelebrity));
 
     [RelayCommand]
     private async Task DeleteSelectedAsync()
@@ -399,20 +453,15 @@ public sealed partial class MainViewModel : ObservableObject
             return;
         if (!await TrySaveAsync(() => _userCharts.RemoveAsync(c), $"delete {c.Name}")) return;
         SelectedCelebrity = null;
-        ChartVM.Chart = null;
-        DailyVM.Chart = null;
-        ForecastVM.Chart = null;
-        TimingVM.Chart = null;
-        SynastryVM.Chart = null;
+        ShowNoChart();
         await RebuildPoolAsync();
         StatusMessage = $"Deleted {c.Name}.";
     }
 
     // ── My Charts as a file, for moving to another PC ─────────────────────────
 
-    public int MyChartsCount => _userCharts.Charts.Count;
-
-    public byte[] ExportMyCharts() => _userCharts.ExportBytes();
+    // The saved charts as they are in the file now, and how many (see UserChartService).
+    public Task<(byte[] Bytes, int Count)> ExportMyChartsAsync() => Task.Run(_userCharts.ExportAsync);
 
     // Merges a saved copy of My Charts into this PC's, then shows the result.
     public async Task ImportMyChartsAsync(string path)
@@ -437,14 +486,12 @@ public sealed partial class MainViewModel : ObservableObject
         }
 
         bool keepCategory = SelectedCelebrity is not null && !SelectedIsCustom;
-        string? selectedId = await RebuildPoolAsync();
+        await RebuildPoolAsync();
+        string? selectedId = SelectedCelebrity?.Id;
         if (!keepCategory) SelectedCategory = UserChartService.MyChartsCategory;
-        if (selectedId is not null &&
-            DisplayedCelebrities.FirstOrDefault(c => c.Id == selectedId) is { } again)
-        {
-            SelectedCelebrity = again;
-            await LoadChartAsync(again);
-        }
+        Reselect(selectedId);
+        if (SelectedCelebrity is { } selected)
+            await LoadChartAsync(selected);
 
         static string Charts(int n) => n == 1 ? "1 chart" : $"{n} charts";
         StatusMessage = $"Brought in {Charts(result.Added + result.Replaced)}: {result.Added} new" +
@@ -486,6 +533,15 @@ public sealed partial class MainViewModel : ObservableObject
                 var calculated = charts.Calculate(celebrity);
                 try
                 {
+                    // The lunations and stations around the birth, for the Worksheet.
+                    calculated.Events = NatalEventsService.Compute(charts, calculated);
+                }
+                catch (Exception ex)
+                {
+                    Diagnostics.Log($"Events around the birth of chart {celebrity.Id} could not be found: {ex}");
+                }
+                try
+                {
                     return (calculated, ChartViewModel.Analyse(charts, calculated, cancel.Token));
                 }
                 catch (Exception ex) when (ex is not OperationCanceledException)
@@ -509,7 +565,12 @@ public sealed partial class MainViewModel : ObservableObject
         catch (Exception ex)
         {
             if (generation == _loadGeneration)
+            {
+                // The chart of whoever was selected before must not stay on screen as
+                // if it were this person's.
+                ShowNoChart();
                 StatusMessage = $"Chart error: {ex.Message}";
+            }
         }
         finally
         {

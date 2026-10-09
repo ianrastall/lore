@@ -39,11 +39,27 @@ public sealed class NatalChart
     // The settings this chart was calculated with.
     public ChartSettings Settings { get; init; } = ChartSettings.Default;
 
-    // True when the Sun is above the horizon. The Sun sits on the ecliptic, so it is up
-    // exactly when its longitude lies in the half running from the Descendant over the
-    // Midheaven to the Ascendant — whatever the house system. Meaningless if not Timed.
-    public bool IsDayChart =>
-        GetPlanet(Planet.Sun) is { } sun && (((sun.Longitude - Ascendant) % 360) + 360) % 360 >= 180;
+    // The place the angles and houses were taken for: the birthplace, unless the chart
+    // was cast for somewhere else (a relocated chart, a return cast for another town).
+    public double? GeoLatitude { get; init; }
+    public double? GeoLongitude { get; init; }
+
+    // The lunations and stations around the birth and its planetary hour. Looked for in
+    // the ephemeris after the chart is cast, and only for a chart that is to be shown;
+    // null on any other, and the Worksheet then leaves those lines out.
+    public NatalEvents? Events { get; set; }
+
+    // Whether the Sun was above the horizon of the place the chart was cast for, worked
+    // out from its altitude there (see ChartService). Null on a chart built without it.
+    public bool? SunAboveHorizon { get; init; }
+
+    // True when the Sun is above the horizon, whatever the house system. Meaningless if
+    // not Timed. Taken from the Sun's altitude; only a chart without one falls back on
+    // the Sun's longitude lying in the half from the Descendant over the Midheaven to
+    // the Ascendant, which is the same thing except inside the polar circles, where the
+    // Ascendant is by convention kept east and that half can be the one below ground.
+    public bool IsDayChart => SunAboveHorizon ??
+        (GetPlanet(Planet.Sun) is { } sun && (((sun.Longitude - Ascendant) % 360) + 360) % 360 >= 180);
 
     // Without a birth time the planets are placed for noon and the Ascendant, Midheaven
     // and houses are unknown; nothing should be read from them.
@@ -67,6 +83,7 @@ public sealed class NatalChart
         NatalPointKind.Midheaven => Midheaven,
         NatalPointKind.Vertex => Timed ? Vertex : null,
         NatalPointKind.Fortune => Services.NatalMetricsService.Lot(this, spirit: false),
+        NatalPointKind.Spirit => Services.NatalMetricsService.Lot(this, spirit: true),
         _ => GetPlanet(point.Body)?.Longitude
     };
 

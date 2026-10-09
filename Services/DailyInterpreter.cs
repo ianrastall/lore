@@ -334,7 +334,7 @@ public sealed class DailyInterpreter
         // A pass that is never exact inside the forecast either turns back short of it,
         // or was exact before the forecast began, or will be after it ends.
         var first = new LocalDate(start.Year, start.Month, start.Day);
-        DateTime startUtc = zone.AtStartOfDay(first).ToDateTimeUtc(), endUtc = zone.AtStartOfDay(first.PlusDays(days)).ToDateTimeUtc();
+        DateTime startUtc = BirthTimeResolver.StartOfDay(zone, first).ToDateTimeUtc(), endUtc = BirthTimeResolver.StartOfDay(zone, first.PlusDays(days)).ToDateTimeUtc();
         string Closest(TransitPass p) =>
             p.EnterUtc is null && (p.PeakUtc - startUtc).TotalHours < 1
                 ? $"Already past exact as this forecast begins ({FormatOrb(p.MinOrb)} from it and easing)"

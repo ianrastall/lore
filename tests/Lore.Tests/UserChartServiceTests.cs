@@ -183,13 +183,84 @@ public sealed class UserChartServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task A_file_another_program_is_holding_is_not_taken_for_a_damaged_one()
+    {
+        var store = await Fresh();
+        await store.AddAsync(Chart("user-1", "Ann"));
+        await store.AddAsync(Chart("user-2", "Ben"));    // backup now holds Ann only
+        string main = File.ReadAllText(MainFile), backup = File.ReadAllText(BackupFile);
+
+        // Held as a backup tool might hold it: nobody else may read, though it could
+        // still be renamed. Starting up now must not roll back to the backup.
+        UserChartService during;
+        using (new FileStream(MainFile, FileMode.Open, FileAccess.ReadWrite, FileShare.Delete))
+        {
+            during = await Fresh();
+            Assert.Empty(during.Charts);
+            Assert.NotNull(during.LoadProblem);
+            await Assert.ThrowsAnyAsync<IOException>(() => during.AddAsync(Chart("user-3", "Cy")));
+            await Assert.ThrowsAnyAsync<IOException>(() => during.ExportAsync());
+        }
+
+        Assert.Empty(Directory.GetFiles(_dir, "mycharts.unreadable-*.json"));
+        Assert.Equal(main, File.ReadAllText(MainFile));
+        Assert.Equal(backup, File.ReadAllText(BackupFile));
+
+        // Once the file is free again a save works, and loses nothing.
+        await during.AddAsync(Chart("user-3", "Cy"));
+        Assert.Equal(new[] { "Ann", "Ben", "Cy" }, (await Fresh()).Charts.Select(c => c.Name));
+    }
+
+    [Fact]
+    public async Task A_damaged_file_is_not_set_aside_while_another_window_holds_the_lock()
+    {
+        var store = await Fresh();
+        await store.AddAsync(Chart("user-1", "Ann"));
+        await store.AddAsync(Chart("user-2", "Ben"));    // backup now holds Ann only
+        File.WriteAllText(MainFile, "{ this is not json");
+
+        using (new FileStream(MainFile + ".lock", FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
+        {
+            var waiting = new UserChartService(_dir) { LockWait = TimeSpan.FromMilliseconds(100) };
+            await waiting.LoadAsync();
+            Assert.Empty(waiting.Charts);
+            Assert.NotNull(waiting.LoadProblem);
+            Assert.Empty(Directory.GetFiles(_dir, "mycharts.unreadable-*.json"));
+            Assert.Equal("{ this is not json", File.ReadAllText(MainFile));
+        }
+
+        // With the lock free, the next start does the recovery.
+        Assert.Equal("Ann", Assert.Single((await Fresh()).Charts).Name);
+        Assert.Single(Directory.GetFiles(_dir, "mycharts.unreadable-*.json"));
+    }
+
+    [Fact]
+    public async Task An_export_includes_charts_saved_in_another_window()
+    {
+        var first = await Fresh();
+        await first.AddAsync(Chart("user-1", "Ann"));
+        var second = await Fresh();
+        await first.AddAsync(Chart("user-2", "Ben"));    // after the second window loaded
+
+        var (bytes, count) = await second.ExportAsync();
+
+        Assert.Equal(2, count);
+        string copy = Path.Combine(_dir, "copy.json");
+        File.WriteAllBytes(copy, bytes);
+        var away = new UserChartService(Path.Combine(_dir, "away"));
+        await away.LoadAsync();
+        await away.ImportAsync(copy);
+        Assert.Equal(new[] { "Ann", "Ben" }, away.Charts.Select(c => c.Name));
+    }
+
+    [Fact]
     public async Task An_exported_copy_can_be_merged_into_another_PCs_charts()
     {
         var home = await Fresh();
         await home.AddAsync(Chart("user-1", "Ann"));
         await home.AddAsync(Chart("user-2", "Ben"));
         string copy = Path.Combine(_dir, "copy.json");
-        File.WriteAllBytes(copy, home.ExportBytes());
+        File.WriteAllBytes(copy, (await home.ExportAsync()).Bytes);
 
         // The other PC already has an older Ann and a chart of its own.
         var away = new UserChartService(Path.Combine(_dir, "away"));

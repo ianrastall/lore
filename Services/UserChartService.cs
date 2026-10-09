@@ -78,13 +78,36 @@ public sealed class UserChartService
             return;
         }
 
-        if (await TryReadAsync(_path) is { } charts)
+        var (state, charts) = await ReadAsync(_path);
+        if (state == ReadState.Ok)
         {
-            _charts = charts;
+            _charts = charts!;
             return;
         }
 
-        // Unreadable. Keep it (it may still be recoverable by hand) and never write
+        // The file is there but could not be opened: another program has it (a backup
+        // or sync tool, a virus scanner) or access was refused. That says nothing about
+        // what is in it, so nothing is moved or restored; the next save reads it afresh.
+        if (state == ReadState.Unavailable)
+        {
+            _charts = [];
+            LoadProblem = "Your saved charts file is in use by another program, so your charts are not shown. " +
+                          "Nothing has been changed; restart Lore in a moment to see them.";
+            return;
+        }
+
+        // Its contents are damaged. Setting it aside and restoring the backup changes
+        // files, which only the holder of the lock may do: without it another window may
+        // be half-way through a save of its own.
+        if (held is null)
+        {
+            _charts = [];
+            LoadProblem = "Your saved charts file couldn't be read, and another Lore window is busy with it. " +
+                          "It has been left untouched; close the other window and restart Lore.";
+            return;
+        }
+
+        // Keep it (it may still be recoverable by hand) and never write
         // over it: move it aside, then fall back to the last good version.
         string keptAs = Path.Combine(Path.GetDirectoryName(_path)!,
             $"mycharts.unreadable-{DateTime.Now:yyyyMMdd-HHmmss}.json");
@@ -141,10 +164,38 @@ public sealed class UserChartService
     // Id, and entries left out because they were not somebody's own chart.
     public sealed record ImportResult(int Added, int Replaced, int Skipped);
 
-    // The saved charts as a file of their own, in the same form as mycharts.json.
-    public byte[] ExportBytes() => JsonSerializer.SerializeToUtf8Bytes(_charts, JsonOpts);
+    // The saved charts as a file of their own, in the same form as mycharts.json, and how
+    // many there are. Read from the file under the lock, as a save does, not taken from
+    // memory: another Lore window may have saved charts since this one loaded. Throws if
+    // the file cannot be read, rather than writing out an older copy as if it were whole.
+    public async Task<(byte[] Bytes, int Count)> ExportAsync()
+    {
+        await _saving.WaitAsync();
+        try
+        {
+            await using var held = await TryLockAsync()
+                ?? throw new IOException("Another Lore window is busy saving charts; try again in a moment.");
 
-    // Merges a file written by ExportBytes (or a copy of mycharts.json) into the saved
+            var charts = _charts;
+            if (File.Exists(_path))
+            {
+                var (state, onDisk) = await ReadAsync(_path);
+                charts = state switch
+                {
+                    ReadState.Ok => onDisk!,
+                    ReadState.Unavailable => throw new IOException("The saved charts file is in use by another program; try again in a moment."),
+                    _ => throw new InvalidDataException("The saved charts file can no longer be read. Restart Lore and it will restore the backup."),
+                };
+            }
+            return (JsonSerializer.SerializeToUtf8Bytes(charts, JsonOpts), charts.Count);
+        }
+        finally
+        {
+            _saving.Release();
+        }
+    }
+
+    // Merges a file written by ExportAsync (or a copy of mycharts.json) into the saved
     // charts. It is read with the same checks as the real file and saved the same way,
     // so a bad file changes nothing and the previous version is kept as the backup.
     // A chart with the same Id as one already here replaces it.
@@ -194,11 +245,15 @@ public sealed class UserChartService
             {
                 // A file that was readable at start-up and is not now must not be saved
                 // over, nor pushed onto the backup, which may be the last good copy.
-                if (await TryReadAsync(_path) is not { } onDisk)
+                var (state, onDisk) = await ReadAsync(_path);
+                if (state == ReadState.Unavailable)
+                    throw new IOException(
+                        "The saved charts file is in use by another program, so nothing was saved. Try again in a moment.");
+                if (state == ReadState.Invalid)
                     throw new InvalidDataException(
                         "The saved charts file can no longer be read, so nothing was saved; the file and its backup " +
                         "are as they were. Restart Lore and it will set the file aside and restore the backup.");
-                candidate = new List<Celebrity>(onDisk);
+                candidate = new List<Celebrity>(onDisk!);
             }
             else
             {
@@ -239,27 +294,49 @@ public sealed class UserChartService
         }
     }
 
-    private static async Task<List<Celebrity>?> TryReadAsync(string path)
-    {
-        try
-        {
-            await using var stream = File.OpenRead(path);
-            var charts = await JsonSerializer.DeserializeAsync<List<Celebrity>>(stream, JsonOpts);
+    // How reading a chart file went: it held a usable list; it was read and what it holds
+    // is damaged; or it could not be opened or read at all, which says nothing about what
+    // it holds and must never be taken for damage.
+    private enum ReadState { Ok, Invalid, Unavailable }
 
-            // Well-formed JSON is not enough: "null", "[null]" or "[{}]" parse happily and
-            // would break the app later. Treat those as unreadable too, so the caller sets
-            // the file aside and falls back to the backup.
-            if (charts is null || !charts.TrueForAll(IsUsable))
-            {
-                Diagnostics.Log($"{path} is valid JSON but not a usable chart list.");
-                return null;
-            }
-            return charts;
-        }
-        catch (Exception ex) when (ex is JsonException or IOException or UnauthorizedAccessException)
+    // The list, or null whichever way it failed: for a file nothing depends on telling apart.
+    private static async Task<List<Celebrity>?> TryReadAsync(string path) => (await ReadAsync(path)).Charts;
+
+    private static async Task<(ReadState State, List<Celebrity>? Charts)> ReadAsync(string path)
+    {
+        // A file held by something else is usually free again within a moment.
+        const int Attempts = 4;
+        for (int attempt = 1; ; attempt++)
         {
-            Diagnostics.Log($"Could not read {path}: {ex.Message}");
-            return null;
+            try
+            {
+                await using var stream = File.OpenRead(path);
+                var charts = await JsonSerializer.DeserializeAsync<List<Celebrity>>(stream, JsonOpts);
+
+                // Well-formed JSON is not enough: "null", "[null]" or "[{}]" parse happily and
+                // would break the app later. Treat those as damaged too, so the caller sets
+                // the file aside and falls back to the backup.
+                if (charts is null || !charts.TrueForAll(IsUsable))
+                {
+                    Diagnostics.Log($"{path} is valid JSON but not a usable chart list.");
+                    return (ReadState.Invalid, null);
+                }
+                return (ReadState.Ok, charts);
+            }
+            catch (JsonException ex)
+            {
+                Diagnostics.Log($"Could not read {path}: {ex.Message}");
+                return (ReadState.Invalid, null);
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                if (attempt == Attempts)
+                {
+                    Diagnostics.Log($"Could not open {path}: {ex.Message}");
+                    return (ReadState.Unavailable, null);
+                }
+            }
+            await Task.Delay(150);
         }
     }
 

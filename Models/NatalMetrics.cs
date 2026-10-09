@@ -26,6 +26,15 @@ public sealed class NatalMetrics
     public required Rulership Rulers { get; init; }
     public required Dominants Dominants { get; init; }
 
+    public IReadOnlyList<SkyPlace> Sky { get; init; } = [];               // one for each body
+    public IReadOnlyList<Pace> Motion { get; init; } = [];                // Sun to Pluto
+    public Spread? Spread { get; init; }
+    public IReadOnlyList<Almuten> Almutens { get; init; } = [];           // empty without a birth time
+    public IReadOnlyList<Midpoint> Midpoints { get; init; } = [];
+    public IReadOnlyList<MidpointContact> MidpointContacts { get; init; } = [];   // closest first
+    public IReadOnlyList<Antiscion> Antiscia { get; init; } = [];
+    public IReadOnlyList<AntisciaContact> AntisciaContacts { get; init; } = [];   // closest first
+
     public double? LongitudeOf(string point) => Points.FirstOrDefault(p => p.Name == point)?.Longitude;
 }
 
@@ -54,6 +63,46 @@ public sealed record DeclinationContact(Planet A, Planet B, bool Contra, double 
 // How close a body is to the nearest of the four angles, and how far into its house it is.
 public sealed record Angularity(Planet Planet, string NearestAngle, double Distance, int House, double IntoHouse);
 
+// Where a body is by the other two ways of measuring the sky. Right ascension is its
+// place round the celestial equator, in degrees; Distance is from the Earth, in
+// astronomical units (null for the node and Lilith, which are not bodies). Altitude is
+// its height above the horizon of the place the chart is cast for (negative below) and
+// Azimuth its compass bearing, from north through east: both for the centre of the
+// Earth and without the air's bending of light, as the Ascendant is, and both null
+// without a birth time.
+public sealed record SkyPlace(Planet Planet, double? RightAscension, double? Distance, double? Altitude, double? Azimuth);
+
+// How fast a planet is moving beside its average: Ratio is the one over the other,
+// whichever way it is going, and above 1 the planet is "swift". The average, and so the
+// ratio, is given for the Sun to Saturn only: the tradition has figures for those seven,
+// and seen from the Earth the three beyond hardly ever move at anything like theirs.
+public sealed record Pace(Planet Planet, double Speed, double? MeanSpeed)
+{
+    public double? Ratio => MeanSpeed is { } mean ? Math.Abs(Speed) / mean : null;
+}
+
+// How bunched the ten planets are: the smallest stretch of the zodiac that holds them
+// all, running from First round to Last, and the empty stretch that is the rest of it.
+public sealed record Spread(double Arc, double LargestGap, Planet First, Planet Last, int SignsOccupied);
+
+// The planet (or planets, level) with the most rulership over one degree of the chart.
+public sealed record Almuten(string Point, double Longitude, IReadOnlyList<Planet> Rulers, int Points);
+
+// The point halfway between two others, by the shorter way round. The point opposite
+// it is as much their midpoint; the two make the midpoint's axis.
+public sealed record Midpoint(NatalPoint A, NatalPoint B, double Longitude);
+
+// A third point standing on the axis of a midpoint.
+public sealed record MidpointContact(NatalPoint Point, NatalPoint A, NatalPoint B, double Orb);
+
+// A point's reflections in the two axes of the zodiac: its antiscion is as far the
+// other side of the solstice axis (0° Cancer – 0° Capricorn), its contra-antiscion as
+// far the other side of the equinox axis (0° Aries – 0° Libra).
+public sealed record Antiscion(NatalPoint Point, double Longitude, double Contra);
+
+// Two points each on the other's antiscion (or contra-antiscion).
+public sealed record AntisciaContact(NatalPoint A, NatalPoint B, bool Contra, double Orb);
+
 public sealed record Tally(string Name, int Count);
 
 // How the chart's bodies are spread. Total is how many bodies were counted (all those in
@@ -67,6 +116,8 @@ public sealed class Distribution
     public required IReadOnlyList<Tally> Polarities { get; init; }
     public IReadOnlyList<Tally> HouseTypes { get; init; } = [];     // angular / succedent / cadent
     public IReadOnlyList<Tally> Hemispheres { get; init; } = [];    // upper / lower, eastern / western, by house
+    public IReadOnlyList<Tally> Quadrants { get; init; } = [];      // houses 1–3, 4–6, 7–9, 10–12
+    public IReadOnlyList<int> PerHouse { get; init; } = [];         // twelve counts, house 1 first
 }
 
 public sealed class AspectSummary
@@ -87,8 +138,9 @@ public sealed record HouseRuler(int House, ZodiacSign CuspSign, Planet Ruler, Zo
 // Who rules the degree a body stands in: its sign (the dispositor), its Egyptian term
 // (bound) and its Chaldean face (decan). Chain follows dispositor to dispositor until it
 // reaches a planet in its own sign or comes back on itself.
+// Triplicity names the three rulers of the sign's element: by day, by night, and sharing.
 public sealed record Disposition(Planet Planet, ZodiacSign Sign, Planet SignRuler, Planet TermRuler, Planet FaceRuler,
-    IReadOnlyList<Planet> Chain);
+    IReadOnlyList<Planet> Chain, IReadOnlyList<Planet> Triplicity);
 
 public sealed class Rulership
 {

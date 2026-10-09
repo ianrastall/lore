@@ -43,7 +43,7 @@ public sealed partial class MainWindow : Window
 #if DEBUG
         // For checking the "chart with tables" image without clicking through a save
         // dialog: with LORE_SHEET_OUT set to a file path, a debug build writes the image
-        // for the first chart it opens there.
+        // for the first chart it opens there, with the JSON, XML and PDF exports beside it.
         if (Environment.GetEnvironmentVariable("LORE_SHEET_OUT") is { Length: > 0 } sheetOut)
         {
             bool written = false;
@@ -51,7 +51,16 @@ public sealed partial class MainWindow : Window
             {
                 if (written || e.PropertyName != nameof(ChartViewModel.Chart) || vm.ChartVM.Chart is not { } first) return;
                 written = true;
-                try { await File.WriteAllBytesAsync(sheetOut, await ExportService.RenderChartSheetPngAsync(first)); }
+                try
+                {
+                    await File.WriteAllBytesAsync(sheetOut, await ExportService.RenderChartSheetPngAsync(first));
+                    // And the data exports and the PDF beside it, under the same name.
+                    await File.WriteAllBytesAsync(Path.ChangeExtension(sheetOut, ".json"), ExportService.ToJson(first));
+                    await File.WriteAllBytesAsync(Path.ChangeExtension(sheetOut, ".xml"), ExportService.ToXml(first));
+                    await File.WriteAllBytesAsync(Path.ChangeExtension(sheetOut, ".pdf"), ExportService.ToPdf(
+                        first, vm.ChartVM.ReportSections, await ExportService.RenderChartPngAsync(first),
+                        vm.ChartVM.Worksheet, vm.ChartVM.Sensitivity));
+                }
                 catch (Exception ex) { Diagnostics.Log($"LORE_SHEET_OUT failed: {ex}"); }
             };
         }
@@ -368,6 +377,13 @@ public sealed partial class MainWindow : Window
             ViewModel.StatusMessage = "Select a chart first, then export.";
             return;
         }
+        // Someone else has just been picked and their chart is still being calculated:
+        // what is on screen is the person before, and must not be saved as this one.
+        if (!ViewModel.ChartIsCurrent)
+        {
+            ViewModel.StatusMessage = "The chart is still being calculated — try again in a moment.";
+            return;
+        }
 
         // Everything the export will use is taken now, before the save dialog is shown:
         // while that dialog is open another chart may be selected or a calculation may
@@ -460,7 +476,7 @@ public sealed partial class MainWindow : Window
                 "pdf" or "png" => await ExportService.RenderChartPngAsync(chart),
                 "sheetpng" => await ExportService.RenderChartSheetPngAsync(chart),
                 "dailypdf" or "dailypng" => await ExportService.RenderTransitWheelPngAsync(chart, reading!),
-                "timingpdf" when timing!.Return is { } solar => await ExportService.RenderChartPngAsync(solar.Chart),
+                "timingpdf" when timing!.Return is { } solar => await ExportService.RenderChartPngAsync(solar.Chart, showVerdict: false),
                 "synastrypdf" or "synastrypng" => await ExportService.RenderBiWheelPngAsync(comparison!),
                 _ => null,
             };
@@ -473,7 +489,7 @@ public sealed partial class MainWindow : Window
                 "png" or "sheetpng" or "dailypng" or "synastrypng" => wheel!,
                 "json" => ExportService.ToJson(chart),
                 "xml"  => ExportService.ToXml(chart),
-                "worksheettxt" => WorksheetService.ToText(WorksheetService.Build(chart), sensitivity),
+                "worksheettxt" => WorksheetService.ToText(worksheet ?? WorksheetService.Build(chart), sensitivity),
                 "dailypdf" => DailyExportService.ToPdf(reading!, wheel!),
                 "dailytxt" => DailyExportService.ToText(reading!),
                 "forecastpdf" => DailyExportService.ForecastToPdf(forecast!),
@@ -498,16 +514,16 @@ public sealed partial class MainWindow : Window
 
     private async void ExportMyCharts_Click(object sender, RoutedEventArgs e)
     {
-        if (ViewModel.MyChartsCount == 0)
-        {
-            ViewModel.StatusMessage = "There are no charts of your own to save yet.";
-            return;
-        }
         try
         {
-            // Taken before the dialog opens, like the other exports.
-            byte[] bytes = ViewModel.ExportMyCharts();
-            int count = ViewModel.MyChartsCount;
+            // Taken before the dialog opens, like the other exports — and from the file,
+            // which may hold charts saved in another Lore window since this one opened.
+            var (bytes, count) = await ViewModel.ExportMyChartsAsync();
+            if (count == 0)
+            {
+                ViewModel.StatusMessage = "There are no charts of your own to save yet.";
+                return;
+            }
 
             var picker = new FileSavePicker { SuggestedStartLocation = PickerLocationId.DocumentsLibrary };
             InitializeWithWindow.Initialize(picker, WindowNative.GetWindowHandle(this));

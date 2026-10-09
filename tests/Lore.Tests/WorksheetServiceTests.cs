@@ -45,11 +45,11 @@ public class WorksheetServiceTests
     public void A_timed_chart_lists_the_angles_the_Part_of_Fortune_and_twelve_cusps()
     {
         var w = For("elvis-presley");
-        // 13 bodies + Ascendant + Midheaven + South Node, Descendant, IC, Vertex, Fortune, Spirit
-        // + the node and Lilith of the other kind
-        Assert.Equal(23, w.Positions.Count);
+        // 13 bodies + Ascendant + Midheaven + South Node, Descendant, IC, Vertex, Anti-Vertex,
+        // Fortune, Spirit + the node and Lilith of the other kind
+        Assert.Equal(24, w.Positions.Count);
         Assert.Equal(12, w.Cusps.Count);
-        Assert.Equal(17, w.Points.Count); // the bodies, the two angles, the Vertex and Fortune
+        Assert.Equal(18, w.Points.Count); // the bodies, the two angles, the Vertex, Fortune and Spirit
         Assert.Contains(w.Aspects, a => a.B.IsAngle);
     }
 

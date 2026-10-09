@@ -70,8 +70,8 @@ public sealed class TransitService
         // The day runs from one local midnight to the next. Both ends are resolved
         // separately, so a 23- or 25-hour daylight-saving day comes out right.
         var local = new LocalDate(date.Year, date.Month, date.Day);
-        DateTime startUtc = zone.AtStartOfDay(local).ToDateTimeUtc();
-        DateTime endUtc = zone.AtStartOfDay(local.PlusDays(1)).ToDateTimeUtc();
+        DateTime startUtc = BirthTimeResolver.StartOfDay(zone, local).ToDateTimeUtc();
+        DateTime endUtc = BirthTimeResolver.StartOfDay(zone, local.PlusDays(1)).ToDateTimeUtc();
         double jd0 = SwissEphemeris.DateTimeToJulianDay(startUtc);
         double jd1 = SwissEphemeris.DateTimeToJulianDay(endUtc);
 
@@ -142,8 +142,8 @@ public sealed class TransitService
         if (!_pinned) return For(natal).Forecast(natal, start, days, zone, includeFast, cancel);
 
         var first = new LocalDate(start.Year, start.Month, start.Day);
-        double jd0 = SwissEphemeris.DateTimeToJulianDay(zone.AtStartOfDay(first).ToDateTimeUtc());
-        double jd1 = SwissEphemeris.DateTimeToJulianDay(zone.AtStartOfDay(first.PlusDays(days)).ToDateTimeUtc());
+        double jd0 = SwissEphemeris.DateTimeToJulianDay(BirthTimeResolver.StartOfDay(zone, first).ToDateTimeUtc());
+        double jd1 = SwissEphemeris.DateTimeToJulianDay(BirthTimeResolver.StartOfDay(zone, first.PlusDays(days)).ToDateTimeUtc());
 
         bool timed = natal.Celebrity.BirthTimeKnown;
         var targets = Targets(natal, timed);
@@ -175,18 +175,34 @@ public sealed class TransitService
                     foreach (double branch in Branches(natalLon, aspect.Angle()))
                     {
                         double D(int i) => Signed(lon[i] - branch);
+
+                        // The moment the body stations between samples i and i + 1, if it
+                        // does and is outside the orb when it does. Both samples may be
+                        // inside the orb with the body swinging out and back in between:
+                        // that is the end of one pass and the start of another.
+                        double? StationOutside(int i)
+                        {
+                            if ((speed[i] < 0) == (speed[i + 1] < 0)) return null;
+                            double station = Bisect(t => SpeedAt(mover, t), jds[i], jds[i + 1]);
+                            return OrbAt(mover, branch, station) > Orb ? station : null;
+                        }
+
+                        double? enteredAfter = null; // the station the last run ended at
                         for (int i = 0; i <= n; i++)
                         {
                             if (Math.Abs(D(i)) > Orb) continue;
                             int a = i;
-                            while (i < n && Math.Abs(D(i + 1)) <= Orb) i++;
-                            passes.Add(Pass(natal, timed, mover, point, natalLon, aspect, branch, jds, speed, D, a, i));
+                            double? leftBefore = null;
+                            while (i < n && Math.Abs(D(i + 1)) <= Orb && (leftBefore = StationOutside(i)) is null) i++;
+                            passes.Add(Pass(natal, timed, mover, point, natalLon, aspect, branch, jds, speed, D, a, i,
+                                enteredAfter, leftBefore));
+                            enteredAfter = leftBefore;
                         }
 
-                        // The one case sampling can miss: the body stations between two
-                        // samples, reaching into the orb and turning back before the next
-                        // one. Where it changes direction with both samples just outside
-                        // the orb, look for the closest approach in between.
+                        // The opposite case, which sampling can also miss: the body stations
+                        // between two samples, reaching into the orb and turning back before
+                        // the next one. Where it changes direction with both samples just
+                        // outside the orb, look for the closest approach in between.
                         for (int i = 0; i < n; i++)
                         {
                             if ((speed[i] < 0) == (speed[i + 1] < 0)) continue;
@@ -244,8 +260,8 @@ public sealed class TransitService
         if (!_pinned) return For(natal).SkyCalendar(natal, start, days, zone, cancel);
 
         var first = new LocalDate(start.Year, start.Month, start.Day);
-        double jd0 = SwissEphemeris.DateTimeToJulianDay(zone.AtStartOfDay(first).ToDateTimeUtc());
-        double jd1 = SwissEphemeris.DateTimeToJulianDay(zone.AtStartOfDay(first.PlusDays(days)).ToDateTimeUtc());
+        double jd0 = SwissEphemeris.DateTimeToJulianDay(BirthTimeResolver.StartOfDay(zone, first).ToDateTimeUtc());
+        double jd1 = SwissEphemeris.DateTimeToJulianDay(BirthTimeResolver.StartOfDay(zone, first.PlusDays(days)).ToDateTimeUtc());
         int n = Math.Max(1, (int)Math.Ceiling(jd1 - jd0));
         double At(int i) => Math.Min(jd0 + i, jd1);
 
@@ -364,15 +380,20 @@ public sealed class TransitService
     }
 
     // One run of samples [a..b] inside the orb, refined at both ends and at each crossing.
+    // `enteredAfter` and `leftBefore` are given when the run is bounded not by a sample
+    // outside the orb but by a station outside it, between two samples that are inside.
     private TransitPass Pass(
         NatalChart natal, bool timed, Planet mover, NatalPoint point, double natalLon, AspectType aspect,
-        double branch, double[] jds, double[] speed, Func<int, double> d, int a, int b)
+        double branch, double[] jds, double[] speed, Func<int, double> d, int a, int b,
+        double? enteredAfter = null, double? leftBefore = null)
     {
         int n = jds.Length - 1;
         double OutBy(double t) => OrbAt(mover, branch, t) - Orb; // negative inside the orb
 
-        double? enter = a > 0 ? Bisect(OutBy, jds[a - 1], jds[a]) : null;
-        double? leave = b < n ? Bisect(OutBy, jds[b], jds[b + 1]) : null;
+        double? enter = enteredAfter is { } turnedIn ? Bisect(OutBy, turnedIn, jds[a])
+            : a > 0 ? Bisect(OutBy, jds[a - 1], jds[a]) : null;
+        double? leave = leftBefore is { } turnedOut ? Bisect(OutBy, jds[b], turnedOut)
+            : b < n ? Bisect(OutBy, jds[b], jds[b + 1]) : null;
 
         // Exact wherever the signed distance changes sign between neighbouring samples.
         var exact = new List<double>();
@@ -649,11 +670,11 @@ public sealed class TransitService
     // ── Planetary hours ───────────────────────────────────────────────────────
 
     // The order the hours run in: the seven planets from slowest to fastest.
-    private static readonly Planet[] Chaldean =
+    internal static readonly Planet[] Chaldean =
         [Planet.Saturn, Planet.Jupiter, Planet.Mars, Planet.Sun, Planet.Venus, Planet.Mercury, Planet.Moon];
 
     // The planet each weekday is named for, Sunday first.
-    private static readonly Planet[] DayRulers =
+    internal static readonly Planet[] DayRulers =
         [Planet.Sun, Planet.Moon, Planet.Mars, Planet.Mercury, Planet.Jupiter, Planet.Venus, Planet.Saturn];
 
     // The planetary hours of the day that begins with the sunrise falling on a calendar

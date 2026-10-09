@@ -13,9 +13,9 @@ note stays true.
 
 - Seven views: Chart, Report, Worksheet, Daily, Forecast, Timing, Synastry, plus the
   Legend. About 10,600 lines of C# and XAML; no file over 560 lines.
-- 294 tests (as of 2.7.0), all passing, covering the calculation and data layer. They run on
+- 330 tests (as of 2.8.0), all passing, covering the calculation and data layer and the view models. They run on
   GitHub on every push, followed by a build of the app itself (about 3 minutes).
-- The view models, the views and the three export services are **not** tested: they
+- The views and the three export services are **not** tested: they
   depend on WinUI or Win2D and the test project leaves them out.
 - 1,314 bundled figures (212 until 7 October 2026), all rated AA or A. How the
   1,102 were found and checked, and the long list of who was looked up and left
@@ -62,7 +62,7 @@ in 2.4.0; item 7 is still open.
    the Add Chart dialog. Loading it on the dialog's first open shortens start-up and
    saves memory for everyone who never adds a chart. `HospitalService.LoadAsync`
    is already safe to call twice.
-5. ~~**Export and import My Charts.**~~ Done: the ⋯ button beside Add chart; `UserChartService.ExportBytes` and `ImportAsync`. Only entries in the My Charts category are brought in. **Was:** The only way to move saved charts to another PC
+5. ~~**Export and import My Charts.**~~ Done: the ⋯ button beside Add chart; `UserChartService.ExportAsync` (was `ExportBytes`) and `ImportAsync`. Only entries in the My Charts category are brought in. **Was:** The only way to move saved charts to another PC
    is to find `%LOCALAPPDATA%\Lore\mycharts.json` by hand. Two menu items: save a
    copy, and merge a file in (by `Id`, through `UserChartService` so the same
    validation and backup apply). This is the most useful missing feature for
@@ -130,6 +130,119 @@ New things worth knowing when working in this code:
   them (the main window calls it on closing, and the tests call it).
 - `MainViewModel.LoadChartAsync` works out the birth-time check beside the chart and
   hands both to `ChartViewModel.Show`.
+
+## 3b. The review of 2.7.0
+
+On 9 October 2026 a second Codex review (kept in `artifacts\reviews\`, which git
+ignores) listed 16 findings against 2.7.0: 12 moderate, 4 low. All 16 were checked
+against the code and acted on the same day. They went out with the measurements of
+section 3c as **2.8.0** (written 9 October 2026; to be committed, built with
+`release.bat` and published). The repairs alone took the tests from 294 to 315.
+
+What changed, by finding:
+
+1. and 12. **Saved charts.** `UserChartService` now tells a file it could not open
+   (in use by another program) from one whose contents are damaged. Only a damaged
+   file is set aside and the backup restored, and only while holding
+   `mycharts.json.lock`. A file that is merely busy is left alone, tried four times,
+   and read afresh by the next save.
+2. **Export while another chart loads.** `MainViewModel.ChartIsCurrent`; every export
+   is refused while it is false. A chart that fails to calculate now empties the views.
+3. **Settings changed quickly.** An overtaken `RebuildCoreAsync` returns before
+   touching the list; every caller of `RebuildPoolAsync` waits for the latest pass,
+   which puts the selection back itself (`Reselect`).
+4. **Patterns across a sign boundary.** `AspectPattern.Element` and `Modality` are
+   null unless every point shares them; the report then says "across mixed signs" and
+   adds no element or modality reading. The figure itself is kept.
+5. **Exporting My Charts** reads the file under the lock (`ExportAsync`), so it has
+   charts saved in another window.
+6. **Day or night near the poles.** `NatalChart.SunAboveHorizon`, from the Sun's
+   altitude at the place the chart is cast for (so a relocated chart or a return cast
+   elsewhere uses that place).
+7. **Solar return at the turn of the year.** `SolarReturnInForce` looks at the returns
+   labelled next year to two years back and takes the latest that has happened.
+8. **A forecast pass broken by a station** outside the orb is now two passes.
+9. **Unknown time with a time still written** is cast for noon (`Celebrity.GetBirthTime`).
+10. **Birth-time check across a clock change** reads each time off the instant
+    (`BirthTimeResolver.Clock`).
+11. **A chart saved under a search that hides it** clears the search (`ShowSaved`).
+13. **The Timing view's place** is kept when the same person is recalculated.
+14. **True Lilith** is marked retrograde when it is (`PlanetPosition.TruePoint`).
+15. **A skipped calendar day** (Samoa, 30 December 2011): `BirthTimeResolver.StartOfDay`,
+    used wherever a day's end is worked out.
+16. **Solar-return PDF** no longer draws the natal verdict rim.
+
+Decided differently from the review, and why:
+
+- **The chart on screen is not blanked the moment someone else is picked** (finding
+  2 suggested it), nor when the selection is dropped. Typing in the search box drops
+  the selection on every keystroke, and blanking would empty the window each time.
+  The harm was the export, and that is what is blocked.
+- **The node is never marked retrograde, true or mean** (finding 14 was about Lilith).
+  Going backwards is the node's ordinary motion.
+- **An imported record with a time beside "time unknown" is not rewritten**; the time
+  is simply ignored. Editing and saving the chart clears it.
+- **The birth-time check's window gives clock times only**, with no date or offset
+  added when it crosses midnight or a repeated hour.
+
+The view models are now in the test project (`ViewModelTests`, with a one-thread
+message queue, `UiThread.Run`, standing in for the window). That closes section 5.2
+and the open item in 3a.
+
+Seen in passing and left: "Saved changes to …" in the status bar is overwritten by
+the recalculated chart's (usually empty) ephemeris note a moment later.
+
+## 3c. The measurements in 2.8.0
+
+On 9 October 2026 the Worksheet was checked against the inventory in
+`natal-chart-metrics-research.md` and everything practical that was missing was added.
+The tests stand at 330 (`FurtherMeasurementTests`). What was built, and where:
+
+- **Pure arithmetic on a calculated chart**, in `NatalMetricsService` and `NatalMetrics`:
+  right ascension, distance, altitude and azimuth (`Sky`; `Horizon` is the formula);
+  swift or slow against Lilly's averages, Sun to Saturn (`Motion`); quadrants, counts
+  per house and the spread of the ten planets (`Distribution`, `Spread`); midpoints and
+  the points standing on them (1°); antiscia and contra-antiscia (1°); the almutens of
+  the Sun, Moon, Ascendant, Midheaven and Fortune (`DignityService.RulershipPoints`);
+  triplicity rulers on each `Disposition`; the Anti-Vertex.
+- **Looked for in the ephemeris**, in the new `NatalEventsService` and `NatalEvents`:
+  the New and Full Moon before birth (and whether either was an eclipse), each planet's
+  station before and after birth, and the planetary day and hour. About 10 ms a chart.
+  `MainViewModel.LoadChartAsync` works them out in the background and sets
+  `NatalChart.Events`; a chart calculated anywhere else has none, and the Worksheet
+  then leaves those lines out. (So does a JSON or XML file, though in practice every
+  export is of the chart on screen, which has them.)
+- **`NatalChart.GeoLatitude` and `GeoLongitude`**: the place the angles were taken for.
+- **`NatalPoint.Spirit`**, aspected on the Worksheet like the Vertex and Fortune
+  (`WorksheetService.PointAspects`, which the JSON and XML exports now use too).
+- **Kite and mystic rectangle** in `AspectPatternService`, with wording in
+  `ChartInterpreter`. Across the library at the standard orbs there are 1,043 kites and
+  491 mystic rectangles: common, because the orbs are wide.
+- **The chart-with-tables PNG** gained Motion, Equator and horizon, Midpoints and
+  Almutens (`ChartSheetRenderer` picks sections by title).
+- **Eight Legend entries** under *Worksheet measurements*.
+
+Left out on purpose, with reasons:
+
+- **Uranus, Neptune and Pluto are not rated swift or slow.** Seen from the Earth they
+  hardly ever move at their average, so every chart would call them swift.
+- **Midpoints count the axis only** (conjunction and opposition), not Ebertin's 45°
+  and 90° contacts, and there is no midpoint tree.
+- **One almuten convention** (sect ruler of the triplicity only). No chart-wide
+  almuten figuris: it needs the prenatal lunation's degree and the day and hour
+  rulers weighed in, and a stated recipe.
+- **No chart-shape names** (bundle, bowl, bucket…): the spread is given as a number.
+- **Altitude is geocentric and without refraction**, as the Ascendant is. Topocentric
+  positions would be a setting of their own.
+- **The dignity score is untouched.** Swift and slow are shown but not scored; scoring
+  them would mean redrawing the verdict bands.
+- **Not checked by running it:** the JSON and XML exports with the new fields (they are
+  built in `ExportService`, which the tests cannot reach), and the Worksheet view and
+  PDF on screen. The plain-text worksheet and the chart-with-tables image were looked at.
+
+Still open from the research note: mundane (fractional) house position, quantified
+uncertainty ranges, library percentiles, exaltation and mixed receptions, and the
+specialist modes listed under 4.8.
 
 ## 4. Features, in the order I would build them
 
@@ -227,17 +340,15 @@ values are already computed in `MainViewModel.ComputeVerdicts`; keep them on the
 
 Still open from `natal-chart-metrics-research.md`:
 
-- stations near birth (how many days before or after a planet turned). 2.5.0 marks
-  a body stationary by its speed alone; the date of the station is still open;
-- swift or slow motion, and the other Lilly factors still left out of the dignity
-  score (partile conjunctions, oriental/occidental, waxing Moon). Any change to
-  the score needs the verdict bands redrawn and a note in the release, as 2.2.0
-  did for the third house;
-- midpoints and antiscia;
-- kite and mystic rectangle patterns; harmonic aspects beyond the quintile and
-  biquintile added in 2.5.0 (three colour tables are indexed by enum order, in
-  `ChartRenderer`, `WorksheetView` and `ChartSheetRenderer`: add to all three);
-- altitude and azimuth; the Moon's age and the lunation before birth;
+- ~~stations near birth; swift or slow motion; midpoints and antiscia; kite and mystic
+  rectangle; altitude and azimuth; the Moon's age and the lunation before birth.~~
+  Done in 2.8.0 (section 3c);
+- the Lilly factors still left out of the dignity score (swift and slow, partile
+  conjunctions, oriental/occidental, waxing Moon). Any change to the score needs the
+  verdict bands redrawn and a note in the release, as 2.2.0 did for the third house;
+- harmonic aspects beyond the quintile and biquintile added in 2.5.0 (three colour
+  tables are indexed by enum order, in `ChartRenderer`, `WorksheetView` and
+  `ChartSheetRenderer`: add to all three);
 - the asteroids Ceres, Pallas, Juno, Vesta (check the bundled `seas_*.se1` files
   cover them before promising);
 - sidereal zodiac, fixed stars, harmonic and draconic charts: each a mode of its
@@ -363,6 +474,8 @@ investigated again from scratch.
    built with `release.bat` and published.
 4a. ~~The review's repairs (3a).~~ Written as 2.7.0 on 7 October 2026; to be committed,
    built with `release.bat` and published.
+4b. ~~The second review's repairs (3b) and the missing measurements (3c).~~ Written as
+   2.8.0 on 9 October 2026; to be committed, built with `release.bat` and published.
 5. House systems (4.3) and the lunar return (4.4).
 6. Then whichever of 4.5 to 4.8 is wanted, with section 5's test work done
    alongside the feature that touches the same code.

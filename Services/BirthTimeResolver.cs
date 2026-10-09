@@ -69,20 +69,50 @@ public static class BirthTimeResolver
         var date = new LocalDate(d.Year, d.Month, d.Day);
 
         var zone = c.UtcOffsetFixed ? null : ResolveZone(c.TimeZoneId, c.Latitude, c.Longitude);
-        if (zone is not null && !IsLocalMeanTime(zone, zone.AtStartOfDay(date).ToInstant()))
+        if (zone is not null && !IsLocalMeanTime(zone, StartOfDay(zone, date).ToInstant()))
         {
-            return (zone.AtStartOfDay(date).ToDateTimeUtc(),
-                    zone.AtStartOfDay(date.PlusDays(1)).ToDateTimeUtc(),
-                    utc => Instant.FromDateTimeUtc(DateTime.SpecifyKind(utc, DateTimeKind.Utc))
-                               .InZone(zone).ToString("HH:mm", System.Globalization.CultureInfo.InvariantCulture));
+            return (StartOfDay(zone, date).ToDateTimeUtc(),
+                    StartOfDay(zone, date.PlusDays(1)).ToDateTimeUtc(),
+                    utc => ClockIn(zone, utc));
         }
 
         // A fixed offset: set by hand, local mean time, or the fallback when no zone is known.
         double seconds = zone is not null ? LocalMeanTimeSeconds(c.Longitude) : c.UtcOffsetHours * 3600;
         var start = DateTime.SpecifyKind(new DateTime(d.Year, d.Month, d.Day).AddSeconds(-seconds), DateTimeKind.Utc);
-        return (start, start.AddDays(1),
-                utc => utc.AddSeconds(seconds).ToString("HH:mm", System.Globalization.CultureInfo.InvariantCulture));
+        return (start, start.AddDays(1), utc => ClockAt(seconds, utc));
     }
+
+    // The first moment of a calendar day in a zone, or of the next day the zone had if
+    // it never had this one: Samoa went from 29 to 31 December 2011 when it crossed the
+    // date line, and the day after the 29th there began on the 31st.
+    public static ZonedDateTime StartOfDay(DateTimeZone zone, LocalDate date)
+    {
+        for (int skipped = 0; ; skipped++)
+        {
+            try { return zone.AtStartOfDay(date.PlusDays(skipped)); }
+            catch (SkippedTimeException) when (skipped < 3) { }
+        }
+    }
+
+    // Turns an instant near the birth back into the clock time at the birthplace, by the
+    // rule ToUtc went the other way with: the zone's clock as it stood at that instant
+    // (so an hour the clocks skipped is skipped here too), or a fixed offset.
+    public static Func<DateTime, string> Clock(Celebrity c)
+    {
+        var zone = c.UtcOffsetFixed ? null : ResolveZone(c.TimeZoneId, c.Latitude, c.Longitude);
+        if (zone is null)
+            return utc => ClockAt(c.UtcOffsetHours * 3600, utc);
+        if (IsLocalMeanTime(zone, Instant.FromDateTimeUtc(DateTime.SpecifyKind(ToUtc(c), DateTimeKind.Utc))))
+            return utc => ClockAt(LocalMeanTimeSeconds(c.Longitude), utc);
+        return utc => ClockIn(zone, utc);
+    }
+
+    private static string ClockIn(DateTimeZone zone, DateTime utc) =>
+        Instant.FromDateTimeUtc(DateTime.SpecifyKind(utc, DateTimeKind.Utc))
+            .InZone(zone).ToString("HH:mm", System.Globalization.CultureInfo.InvariantCulture);
+
+    private static string ClockAt(double offsetSeconds, DateTime utc) =>
+        utc.AddSeconds(offsetSeconds).ToString("HH:mm", System.Globalization.CultureInfo.InvariantCulture);
 
     // The same conversion, spelled out for the worksheet: the instant, and the offset
     // that produced it with where that offset came from — "UTC-6 (CST, America/Chicago)".

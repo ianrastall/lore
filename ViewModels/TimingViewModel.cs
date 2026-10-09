@@ -32,9 +32,13 @@ public sealed partial class TimingViewModel : ObservableObject
 
     // Where the solar return is cast for, and the birth chart relocated to; null for the
     // birthplace. It belongs to the person (where they were living), so it is dropped
-    // when another chart is picked.
+    // when another person's chart is picked — but kept when the same person's chart is
+    // calculated again, after a change of settings or an edit.
     [ObservableProperty]
     public partial ReturnPlace? Place { get; set; }
+
+    // The Id of the person Place was chosen for.
+    private string? _placeFor;
 
     [ObservableProperty]
     public partial TimingReading? Reading { get; set; }
@@ -92,7 +96,10 @@ public sealed partial class TimingViewModel : ObservableObject
         OnPropertyChanged(nameof(CanChoosePlace));
         OnPropertyChanged(nameof(PlaceText));
         Reading = null; // the last person's reading must not stay under the new heading
-        if (Place is not null) Place = null; // which rebuilds
+        // (No chart at all, between one and the next, is not another person.)
+        bool samePerson = value is null || value.Celebrity.Id == _placeFor;
+        if (value is not null) _placeFor = value.Celebrity.Id;
+        if (Place is not null && !samePerson) Place = null; // which rebuilds
         else Rebuild();
     }
 

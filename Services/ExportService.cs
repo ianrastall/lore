@@ -23,8 +23,10 @@ public static class ExportService
     }
 
     // ── PNG (Win2D offscreen render, no on-screen control needed) ─────────────
-    public static Task<byte[]> RenderChartPngAsync(NatalChart chart, int size = 1600) =>
-        RenderPngAsync(size, ds => ChartRenderer.Draw(ds, chart, size, size));
+    // `showVerdict`: the coloured rim for the dignity verdict, which belongs to a birth
+    // chart and is left off a solar return's wheel, as it is on screen.
+    public static Task<byte[]> RenderChartPngAsync(NatalChart chart, int size = 1600, bool showVerdict = true) =>
+        RenderPngAsync(size, ds => ChartRenderer.Draw(ds, chart, size, size, showVerdict: showVerdict));
 
     // The synastry bi-wheel: the first chart inside, the second around it.
     public static Task<byte[]> RenderBiWheelPngAsync(Synastry synastry, int size = 1600) =>
@@ -271,6 +273,7 @@ public static class ExportService
             Longitude = c.Longitude,
             UtcOffsetHours = c.UtcOffsetHours,
             UniversalTime = chart.CalculatedForUtc.ToString("yyyy-MM-ddTHH:mm:ssZ", System.Globalization.CultureInfo.InvariantCulture),
+            JulianDay = Math.Round(SwissEphemeris.DateTimeToJulianDay(chart.CalculatedForUtc), 6),
             TimeConversion = BirthTimeResolver.Explain(c).offset,
             TimeZoneId = c.UtcOffsetFixed ? "" : BirthTimeResolver.ResolveZoneId(c.TimeZoneId, c.Latitude, c.Longitude) ?? "",
             UtcOffsetSetByHand = c.UtcOffsetFixed,
@@ -287,6 +290,7 @@ public static class ExportService
             Descendant = Point("Descendant"),
             ImumCoeli = Point("Imum Coeli"),
             Vertex = Point("Vertex"),
+            AntiVertex = Point("Anti-Vertex"),
             PartOfFortune = Point("Part of Fortune"),
             PartOfSpirit = Point("Part of Spirit"),
             SouthNode = Point("South Node"),
@@ -299,7 +303,35 @@ public static class ExportService
                 MoonAheadOfSun = Round(moon.Elongation),
                 Waxing = moon.Waxing,
                 IlluminatedFraction = Round(moon.Illumination),
+                AgeDays = chart.Events?.NewMoonBefore is { } since ? Round(since.DaysBefore) : null,
             } : null,
+            Lunations = new[] { chart.Events?.NewMoonBefore, chart.Events?.FullMoonBefore }.OfType<Lunation>()
+                .OrderByDescending(l => l.Utc).Select(l => new LunationExport
+                {
+                    Type = l.Full ? "Full Moon" : "New Moon",
+                    UniversalTime = l.Utc.ToString("yyyy-MM-ddTHH:mm:ssZ", System.Globalization.CultureInfo.InvariantCulture),
+                    Longitude = Round(l.Longitude),
+                    Sign = ZodiacSignExtensions.FromLongitude(l.Longitude).Name(),
+                    DaysBeforeBirth = Round(l.DaysBefore),
+                    Eclipse = l.Eclipse ?? "",
+                }).ToList(),
+            PlanetaryHour = chart.Events?.Hour is { } hour ? new PlanetaryHourExport
+            {
+                DayRuler = hour.DayRuler.Name(),
+                HourRuler = hour.HourRuler.Name(),
+                Hour = hour.Hour,
+                ByDay = hour.ByDay,
+                Sunrise = hour.SunriseUtc.ToString("yyyy-MM-ddTHH:mm:ssZ", System.Globalization.CultureInfo.InvariantCulture),
+                Sunset = hour.SunsetUtc.ToString("yyyy-MM-ddTHH:mm:ssZ", System.Globalization.CultureInfo.InvariantCulture),
+            } : null,
+            AlternatePoints = chart.Alternates.Select(a => new AlternatePointExport
+            {
+                Name = a.Name,
+                Sign = a.Position.Sign.Name(),
+                DegreeInSign = Round(a.Position.DegreeInSign),
+                Longitude = Round(a.Position.Longitude),
+                SpeedPerDay = Round(a.Position.SpeedLongitude),
+            }).ToList(),
             Planets = chart.Planets.Select(p => new PlanetExport
             {
                 Name = p.PlanetName,
@@ -324,8 +356,17 @@ public static class ExportService
                 SignRuler = m.Rulers.Dispositions.First(d => d.Planet == p.Planet).SignRuler.Name(),
                 TermRuler = m.Rulers.Dispositions.First(d => d.Planet == p.Planet).TermRuler.Name(),
                 FaceRuler = m.Rulers.Dispositions.First(d => d.Planet == p.Planet).FaceRuler.Name(),
+                TriplicityRulers = string.Join(", ", m.Rulers.Dispositions.First(d => d.Planet == p.Planet).Triplicity.Select(x => x.Name())),
                 House = chart.Timed ? chart.GetHouseForLongitude(p.Longitude) : null,
-                Retrograde = p.IsRetrograde
+                Retrograde = p.IsRetrograde,
+                Stationary = p.IsStationary,
+                SpeedAgainstAverage = m.Motion.FirstOrDefault(x => x.Planet == p.Planet)?.Ratio is { } ratio ? Round(ratio) : null,
+                Altitude = m.Sky.FirstOrDefault(x => x.Planet == p.Planet)?.Altitude is { } altitude ? Round(altitude) : null,
+                Azimuth = m.Sky.FirstOrDefault(x => x.Planet == p.Planet)?.Azimuth is { } azimuth ? Round(azimuth) : null,
+                Antiscion = Round(m.Antiscia.First(x => x.Point == NatalPoint.Of(p.Planet)).Longitude),
+                ContraAntiscion = Round(m.Antiscia.First(x => x.Point == NatalPoint.Of(p.Planet)).Contra),
+                StationBefore = StationOf(chart.Events?.Stations.FirstOrDefault(s => s.Planet == p.Planet)?.Before),
+                StationAfter = StationOf(chart.Events?.Stations.FirstOrDefault(s => s.Planet == p.Planet)?.After),
             }).ToList(),
             Houses = (chart.Timed ? chart.Houses : []).Select(h => new HouseExport
             {
@@ -345,7 +386,7 @@ public static class ExportService
                 AllowedOrb = a.Allowed,
                 Applying = a.IsApplying,
                 OutOfSign = a.OutOfSign
-            }).Concat(chart.AngleAspects.Select(a => new AspectExport
+            }).Concat(chart.AngleAspects.Concat(WorksheetService.PointAspects(chart)).Select(a => new AspectExport
             {
                 PlanetA = a.Planet.Name(),
                 PlanetB = a.Angle.Name,
@@ -356,6 +397,26 @@ public static class ExportService
                 Applying = a.IsApplying,
                 OutOfSign = a.OutOfSign
             })).ToList(),
+            MidpointContacts = m.MidpointContacts.Select(c => new MidpointContactExport
+            {
+                Point = c.Point.Name, MidpointOfA = c.A.Name, MidpointOfB = c.B.Name,
+                Orb = Round(c.Orb), AllowedOrb = NatalMetricsService.MidpointOrb,
+            }).ToList(),
+            Midpoints = m.Midpoints.Select(x => new MidpointExport
+            {
+                PointA = x.A.Name, PointB = x.B.Name, Longitude = Round(x.Longitude),
+                Sign = ZodiacSignExtensions.FromLongitude(x.Longitude).Name(),
+            }).ToList(),
+            AntisciaContacts = m.AntisciaContacts.Select(c => new AntisciaContactExport
+            {
+                PointA = c.A.Name, PointB = c.B.Name, Type = c.Contra ? "Contra-antiscion" : "Antiscion",
+                Orb = Round(c.Orb), AllowedOrb = NatalMetricsService.AntisciaOrb,
+            }).ToList(),
+            Almutens = m.Almutens.Select(a => new AlmutenExport
+            {
+                Place = a.Point, Longitude = Round(a.Longitude),
+                Almuten = string.Join(" and ", a.Rulers.Select(x => x.Name())), Points = a.Points,
+            }).ToList(),
             Patterns = AspectPatternService.Detect(chart).Select(p => new PatternExport
             {
                 Type = p.Type.ToString(),
@@ -382,6 +443,12 @@ public static class ExportService
                 Polarities = Tallies(m.Distribution.Polarities),
                 HouseTypes = Tallies(m.Distribution.HouseTypes),
                 Hemispheres = Tallies(m.Distribution.Hemispheres),
+                Quadrants = Tallies(m.Distribution.Quadrants),
+                PerHouse = m.Distribution.PerHouse.ToList(),
+                PlanetsWithinDegrees = m.Spread is { } spread ? Round(spread.Arc) : null,
+                WidestGapDegrees = m.Spread is { } gap ? Round(gap.LargestGap) : null,
+                SpreadFrom = m.Spread?.First.Name() ?? "",
+                SpreadTo = m.Spread?.Last.Name() ?? "",
             },
             Rulers = new RulersExport
             {
@@ -421,6 +488,13 @@ public static class ExportService
     }
 
     private static double Round(double v) => Math.Round(v, 4);
+
+    private static StationExport? StationOf(StationPoint? s) => s is null ? null : new StationExport
+    {
+        UniversalTime = s.Utc.ToString("yyyy-MM-ddTHH:mm:ssZ", System.Globalization.CultureInfo.InvariantCulture),
+        Turns = s.TurnsRetrograde ? "Retrograde" : "Direct",
+        DaysFromBirth = Round(s.Days),
+    };
 }
 
 // XmlSerializer requires public parameterless types with get/set members.
@@ -445,6 +519,7 @@ public sealed class ChartExport
     // and UniversalTime for what the calculation actually did.
     public double UtcOffsetHours { get; set; }
     public string UniversalTime { get; set; } = "";
+    public double JulianDay { get; set; }               // of that instant, in Universal Time
     public string TimeConversion { get; set; } = "";
     public string TimeZoneId { get; set; } = "";
     public bool UtcOffsetSetByHand { get; set; }
@@ -461,6 +536,7 @@ public sealed class ChartExport
     public double? Descendant { get; set; }
     public double? ImumCoeli { get; set; }
     public double? Vertex { get; set; }
+    public double? AntiVertex { get; set; }
     public double? PartOfFortune { get; set; }
     public double? PartOfSpirit { get; set; }
     public double? SouthNode { get; set; }
@@ -468,9 +544,20 @@ public sealed class ChartExport
     public double? SiderealTimeDegrees { get; set; }    // ARMC at the birthplace
     public double? Obliquity { get; set; }              // true obliquity of the ecliptic, degrees
     public MoonPhaseExport? MoonPhase { get; set; }
+    // The New and Full Moon before the birth, the later first. Empty, like PlanetaryHour
+    // and the planets' stations, in a file not written from a chart on screen.
+    public List<LunationExport> Lunations { get; set; } = [];
+    public PlanetaryHourExport? PlanetaryHour { get; set; }   // null without a birth time
+    // The North Node and Lilith of the kind the settings did not choose.
+    public List<AlternatePointExport> AlternatePoints { get; set; } = [];
     public List<PlanetExport> Planets { get; set; } = [];
     public List<HouseExport> Houses { get; set; } = [];
+    // Body to body, then body to Ascendant, Midheaven, Vertex and the two lots.
     public List<AspectExport> Aspects { get; set; } = [];
+    public List<MidpointContactExport> MidpointContacts { get; set; } = [];   // closest first
+    public List<MidpointExport> Midpoints { get; set; } = [];
+    public List<AntisciaContactExport> AntisciaContacts { get; set; } = [];   // closest first
+    public List<AlmutenExport> Almutens { get; set; } = [];                   // empty without a birth time
     public List<PatternExport> Patterns { get; set; } = [];
     public List<DeclinationContactExport> DeclinationContacts { get; set; } = [];
     public BalanceExport Balance { get; set; } = new();
@@ -485,6 +572,77 @@ public sealed class MoonPhaseExport
     public double MoonAheadOfSun { get; set; }           // degrees of longitude, 0–360
     public bool Waxing { get; set; }
     public double IlluminatedFraction { get; set; }      // 0–1
+    public double? AgeDays { get; set; }                 // since the New Moon before birth
+}
+
+public sealed class LunationExport
+{
+    public string Type { get; set; } = "";               // New Moon / Full Moon
+    public string UniversalTime { get; set; } = "";
+    public double Longitude { get; set; }                // the Moon's
+    public string Sign { get; set; } = "";
+    public double DaysBeforeBirth { get; set; }
+    public string Eclipse { get; set; } = "";            // total / partial / annular…; empty if it was none
+}
+
+public sealed class PlanetaryHourExport
+{
+    public string DayRuler { get; set; } = "";
+    public string HourRuler { get; set; } = "";
+    public int Hour { get; set; }                        // 1 at sunrise to 24
+    public bool ByDay { get; set; }
+    public string Sunrise { get; set; } = "";            // the sunrise the day began with, UT
+    public string Sunset { get; set; } = "";
+}
+
+public sealed class AlternatePointExport
+{
+    public string Name { get; set; } = "";
+    public string Sign { get; set; } = "";
+    public double DegreeInSign { get; set; }
+    public double Longitude { get; set; }
+    public double SpeedPerDay { get; set; }
+}
+
+public sealed class StationExport
+{
+    public string UniversalTime { get; set; } = "";
+    public string Turns { get; set; } = "";              // Retrograde / Direct
+    public double DaysFromBirth { get; set; }
+}
+
+public sealed class MidpointExport
+{
+    public string PointA { get; set; } = "";
+    public string PointB { get; set; } = "";
+    public double Longitude { get; set; }                // the nearer midpoint; the other is opposite
+    public string Sign { get; set; } = "";
+}
+
+public sealed class MidpointContactExport
+{
+    public string Point { get; set; } = "";
+    public string MidpointOfA { get; set; } = "";
+    public string MidpointOfB { get; set; } = "";
+    public double Orb { get; set; }
+    public double AllowedOrb { get; set; }
+}
+
+public sealed class AntisciaContactExport
+{
+    public string PointA { get; set; } = "";
+    public string PointB { get; set; } = "";
+    public string Type { get; set; } = "";               // Antiscion / Contra-antiscion
+    public double Orb { get; set; }
+    public double AllowedOrb { get; set; }
+}
+
+public sealed class AlmutenExport
+{
+    public string Place { get; set; } = "";
+    public double Longitude { get; set; }
+    public string Almuten { get; set; } = "";            // more than one name if level
+    public int Points { get; set; }
 }
 
 public sealed class DeclinationContactExport
@@ -511,6 +669,14 @@ public sealed class BalanceExport
     public List<TallyExport> Polarities { get; set; } = [];
     public List<TallyExport> HouseTypes { get; set; } = [];    // empty without a birth time
     public List<TallyExport> Hemispheres { get; set; } = [];   // empty without a birth time
+    public List<TallyExport> Quadrants { get; set; } = [];     // empty without a birth time
+    [XmlArrayItem("Count")]
+    public List<int> PerHouse { get; set; } = [];              // twelve counts, house 1 first
+    // The smallest arc of the zodiac holding the ten planets, running from one to the other.
+    public double? PlanetsWithinDegrees { get; set; }
+    public double? WidestGapDegrees { get; set; }
+    public string SpreadFrom { get; set; } = "";
+    public string SpreadTo { get; set; } = "";
 }
 
 // Which planet stands out, by Lore's own weighting, and the chart's balance with the
@@ -592,8 +758,17 @@ public sealed class PlanetExport
     public string SignRuler { get; set; } = "";
     public string TermRuler { get; set; } = "";
     public string FaceRuler { get; set; } = "";
+    public string TriplicityRulers { get; set; } = "";   // by day, by night, sharing
     public int? House { get; set; }          // null without a birth time
     public bool Retrograde { get; set; }
+    public bool Stationary { get; set; }
+    public double? SpeedAgainstAverage { get; set; }     // 1 = its average speed; Sun to Saturn
+    public double? Altitude { get; set; }                // degrees above the horizon; null without a birth time
+    public double? Azimuth { get; set; }                 // degrees from north through east
+    public double Antiscion { get; set; }
+    public double ContraAntiscion { get; set; }
+    public StationExport? StationBefore { get; set; }    // Mercury to Pluto
+    public StationExport? StationAfter { get; set; }
 }
 
 public sealed class HouseExport
@@ -619,11 +794,11 @@ public sealed class AspectExport
 
 public sealed class PatternExport
 {
-    public string Type { get; set; } = "";                 // Stellium / GrandTrine / TSquare / GrandCross
+    public string Type { get; set; } = "";                 // Stellium / GrandTrine / TSquare / GrandCross / Yod / Kite / MysticRectangle
     [XmlArrayItem("Planet")]
     public List<string> Planets { get; set; } = [];
     public string Sign { get; set; } = "";                 // Stellium: the shared sign
     public string Element { get; set; } = "";              // Grand Trine: the shared element
     public string Modality { get; set; } = "";             // T-Square / Grand Cross: the shared modality
-    public string Apex { get; set; } = "";                 // T-Square: the body squaring both ends
+    public string Apex { get; set; } = "";                 // T-Square: the body squaring both ends; Yod and Kite: the focal point
 }

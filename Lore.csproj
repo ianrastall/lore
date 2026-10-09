@@ -21,7 +21,7 @@
     <Configurations>Debug;Release</Configurations>
     <!-- The one place the version is written. The assembly and file versions follow
          from it, and the release scripts read it from here. -->
-    <Version>2.7.0</Version>
+    <Version>2.8.0</Version>
   </PropertyGroup>
 
   <!-- The test project lives under tests\ and builds separately; keep its files
