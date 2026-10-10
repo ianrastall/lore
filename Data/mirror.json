@@ -1,17 +1,21 @@
 {
-  "_comment": "Corpus for the reading that sets a person's inventory profile beside their chart (Services/MirrorInterpreter.cs). For each planet, `dials` names groups of inventory facets (by key, with a minus sign where a low score is what counts); each dial comes out low, mid or high: for a dial of several facets, when they average more than half a standard deviation from the reference group's mean; for a dial of one facet, when it is more than a whole one (the same line the profile draws between typical and low or high). `expressions` are tried in order and the first whose `when` fits is used: a dial not named in `when` may be anything. `lived` says how that expression counts when it is set against the planet's dignity in the chart: well, strain, or plain (neither). `unlived` is said when the chart gives the planet an easy place and the answers describe strain; `hardWon` when the chart gives it a hard place and the answers describe it lived well. The pairing of planets with facets is Lore's own design: no research connects any questionnaire score with any factor in a chart. An expression's `report` is the sentence added to that planet's paragraph in the Report ({name} is the person); an expression with none adds nothing. A planet's `daily` lines are added to a transit to that planet in the Daily and Forecast readings, by how the planet is lived (strain or well) and by the kind of transit (hard: square or opposition; easy: sextile or trine; a conjunction takes the hard line when the planet is lived with strain and the easy one when it is lived well). Nothing is generated at run time.",
+  "_comment": "Corpus for everything Lore says that depends on a person's answers to the personality inventory (Services/MirrorInterpreter.cs): the Chart and answers reading, and the sentences added to the Report, the Daily and the Forecast. It holds the rules as well as the words. PLANETS. `dials` names groups of inventory facets by key (a minus counts a facet the other way up); each dial comes out low, mid or high: for several facets, when they average more than half a standard deviation from the reference group's mean; for one, more than a whole one (the line the profile itself draws). `expressions` are tried in order and the first whose `when` fits is used; a dial not named may be anything, and the last expression takes whatever is left. An expression's `lived` (well, strain, plain) is what is set against the planet's dignity in the chart; its `report` sentence goes into the Report ({name} is the person); `hard` and `easy` go onto a transit to that planet in the Daily and Forecast (hard: square or opposition; easy: sextile or trine; a conjunction takes hard when lived is strain and easy otherwise); `text` is the paragraph in Chart and answers. (`hard` and `easy` speak of \"today\" and are for the Daily reading; a pass in the Forecast, which lasts days or weeks, takes the sentence in `forecast` instead, by how the planet is lived.) `also` entries add a sentence whenever their `when` fits. `unlived` is said when the chart gives the planet an easy place and the answers describe strain; `hardWon` the reverse. SIGNS. `signs` gives, for the planet in each sign, the level of each dial the sign would lead one to expect. `nouns` names each dial for the sentences in `compare`, which say whether the answers match that expectation, exceed it or fall short. `rising` does the same for the Ascendant against the Extraversion trait. ASPECTS, ELEMENTS, MODALITIES. Sentences added under an aspect of the birth chart between two planets the answers both speak of (neither with its catch-all expression), by its tone and how each end is lived ({a} {ea}: a planet and its expression); and under an element or mode the chart leans toward (strong) or lacks (weak), by whether the facets in its `dial` are high or low. Expression names must read after \"is\": \"Mars is held in\". The pairing of chart factors with facets is Lore's own design: no research connects any questionnaire score with any factor in a chart. Nothing is generated at run time.",
   "notes": {
     "intro": "This reading sets two things side by side: what the chart says of each planet, and what the answers to the questionnaire say about the part of life that planet stands for. The chart is not changed. Only the wording here depends on the answers.",
     "invented": "The pairing of planets with parts of the questionnaire is Lore's own, made by matching what each planet traditionally signifies with the facets that measure the nearest thing. No research connects a birth chart with measured personality, so an agreement here confirms nothing and a difference refutes nothing. It is a prompt for reflection.",
-    "covered": "Eight planets are read: the Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn and Neptune. Uranus, Pluto, Chiron, the North Node and Lilith have no facet that measures anything near them, and are left out.",
+    "covered": "Nine planets are read: the Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus and Neptune, and the Ascendant with them. Pluto, Chiron, the North Node and Lilith have no facet that measures anything near them, and are left out.",
     "untimed": "This chart has no birth time, so Lore does not score how well each planet is placed, and there is nothing to set the answers against in the second part. Only the first part is given.",
     "asWritten": "The chart gives these an easy place and the answers describe them lived easily. The Report can be read as it stands.",
     "asWrittenHard": "The chart gives these a difficult place and the answers describe difficulty there. The Report's account of the strain is the one being lived.",
     "noContrast": "For these the chart's placement is middling, or the answers are, and there is nothing to set against anything.",
     "none": "No planet shows a marked difference between the chart's account and the answers.",
     "closing": "Where the two accounts differ, neither is the true one. The chart says what the tradition expects of a placement; the answers say how a person sees themselves on one day. The difference is the thing to think about.",
-    "reportIntro": "{name} answered Lore's personality inventory on {date}. Where a planet's paragraph under The Planets ends with a sentence beginning “By {name}'s answers”, that sentence comes from the questionnaire and not from the chart. The pairing of planets with parts of the questionnaire is Lore's own, and nothing in the chart has been changed by it. The full comparison is under Chart and answers in the Inventory view.",
-    "reportNone": "For none of the seven traditional planets do the answers go against what the chart's placement would lead one to expect."
+    "reportIntro": "{name} answered Lore's personality inventory on {date}. Wherever a paragraph of this Report has a sentence beginning “By {name}'s answers”, everything from there to the end of that paragraph comes from the questionnaire and not from the chart: in the Overview, under each planet, under an aspect between two planets the answers speak of, and under the balance of elements and modes. The pairing of chart factors with parts of the questionnaire is Lore's own, and nothing in the chart has been changed by it. The full comparison is under Chart and answers in the Inventory view.",
+    "reportNone": "For none of the seven traditional planets do the answers go against what the chart's placement would lead one to expect.",
+    "signs": "For the Sun to Saturn the sign each planet is in leads one to expect more or less of certain things: push from a Mars in Aries, restraint from a Mars in Libra. Those expectations are set against the answers, and the reading says where the answers bear them out and where they go beyond or fall short. Uranus and Neptune stay years in a sign, which says nothing of one person, so they are read without it.",
+    "summary": "By {name}'s answers, taken as a whole: {list}.",
+    "summaryAll": "near the ordinary on all five of the broad traits",
+    "summaryRest": "near the ordinary on the rest"
   },
   "comparison": {
     "unlived": "unlived",
@@ -32,6 +36,8 @@
           "when": { "confidence": "high", "spirits": "high" },
           "lived": "well",
           "report": "By {name}'s answers this is lived to the full: confident, ambitious and glad to be seen.",
+          "hard": "By your answers you are sure of yourself and glad to be seen, so you are likely to meet this head-on. Check that it is the obstacle you are fighting and not your pride.",
+          "easy": "By your answers you are confident and in good spirits. Today gives that room; use it for something that matters to you.",
           "text": "The answers describe someone sure of their abilities, ambitious, at ease with being noticed, and in good spirits about it. This is the Sun doing what it is said to do: a clear sense of who one is, shown without apology."
         },
         {
@@ -39,6 +45,8 @@
           "when": { "confidence": "high" },
           "lived": "well",
           "report": "By {name}'s answers it shows as purpose and confidence more than as enjoyment.",
+          "hard": "By your answers you are driven and sure of your aims. A check today is more likely to redirect you than to stop you.",
+          "easy": "By your answers you have purpose to spare. Today is a good day to enjoy some of what it has earned.",
           "text": "The answers describe confidence and ambition, without unusual lightness of heart. There is a strong sense of purpose and of being equal to it; the enjoyment of it is quieter, or kept for later."
         },
         {
@@ -46,6 +54,8 @@
           "when": { "confidence": "low", "spirits": "low" },
           "lived": "strain",
           "report": "By {name}'s answers little of this is on show at present: confidence and spirits are both low.",
+          "hard": "By your answers your confidence and spirits are both low at present, so a challenge may land harder than it should. Do not take today's measure of yourself for the true one.",
+          "easy": "By your answers your confidence is low at present. Today offers some encouragement; let it in.",
           "text": "The answers describe doubt about one's own abilities, little push to excel, a wish not to be noticed, and few high spirits. Whatever the chart says of the Sun, it is not being shown: the sense of self is held back, or has been knocked."
         },
         {
@@ -53,6 +63,8 @@
           "when": { "confidence": "low" },
           "lived": "plain",
           "report": "By {name}'s answers it is lived modestly, without any need to be noticed.",
+          "hard": "By your answers you do not push yourself forward. Today may ask you to; it is all right to say what you want.",
+          "easy": "By your answers you are content without notice. Some may come your way today all the same.",
           "text": "The answers describe modesty: no great claims for oneself, no hunger for achievement or attention. The mood is not low. This is a Sun that does not need to be seen, which is a way of living it and not a failure to."
         },
         {
@@ -60,6 +72,8 @@
           "when": { "spirits": "high" },
           "lived": "well",
           "report": "By {name}'s answers it shows mostly as cheerfulness.",
+          "hard": "By your answers good humour is one of your strengths. Today will test it, and it is the right tool for the day.",
+          "easy": "By your answers you are cheerful by habit. Today meets you halfway.",
           "text": "The answers describe an ordinary measure of confidence and ambition, and more than the ordinary share of cheerfulness. The Sun shows here as warmth and good humour more than as drive."
         },
         {
@@ -67,6 +81,8 @@
           "when": { "spirits": "low" },
           "lived": "plain",
           "report": "By {name}'s answers it is lived steadily and without much gaiety.",
+          "hard": "By your answers you take things seriously. Today is serious enough without your adding to it.",
+          "easy": "By your answers you do not make much of pleasure. Today, let yourself.",
           "text": "The answers describe an ordinary measure of confidence and ambition, with little gaiety. The sense of self is steady enough; it is not much given to enjoying itself."
         },
         {
@@ -78,15 +94,29 @@
       ],
       "unlived": "The chart puts the Sun where it should shine without effort, and the answers describe self-doubt and low spirits. The tradition would say the confidence is there to be had. If that sounds wrong, ask what has stood in its way: the chart describes a capacity, and capacities can go unused for years.",
       "hardWon": "The chart gives the Sun a difficult place, where confidence is not supposed to come easily, and the answers describe someone who has it. On the tradition's own account that is not a gift but an achievement: a sense of self that was built and not handed over.",
-      "daily": {
-        "strain": {
-          "hard": "By your answers your confidence is low at present, so a challenge to it may land harder than it should. Go gently with yourself.",
-          "easy": "By your answers your confidence is low at present. This is a good day to let some encouragement in."
+      "nouns": {
+        "confidence": {
+          "high": "confidence and ambition",
+          "low": "modesty"
         },
-        "well": {
-          "hard": "By your answers you are sure of yourself, and likely to meet this head-on.",
-          "easy": "By your answers you are in a good position to make the most of this."
+        "spirits": {
+          "high": "cheerfulness",
+          "low": "soberness"
         }
+      },
+      "signs": {
+        "Aries": { "confidence": "high", "spirits": "high" },
+        "Taurus": { "confidence": "mid", "spirits": "mid" },
+        "Gemini": { "confidence": "mid", "spirits": "high" },
+        "Cancer": { "confidence": "low", "spirits": "mid" },
+        "Leo": { "confidence": "high", "spirits": "high" },
+        "Virgo": { "confidence": "low", "spirits": "low" },
+        "Libra": { "confidence": "mid", "spirits": "high" },
+        "Scorpio": { "confidence": "high", "spirits": "low" },
+        "Sagittarius": { "confidence": "high", "spirits": "high" },
+        "Capricorn": { "confidence": "high", "spirits": "low" },
+        "Aquarius": { "confidence": "mid", "spirits": "mid" },
+        "Pisces": { "confidence": "low", "spirits": "mid" }
       }
     },
     "Moon": {
@@ -101,6 +131,8 @@
           "when": { "unrest": "high", "feeling": "high" },
           "lived": "strain",
           "report": "By {name}'s answers these feelings run high, are closely watched, and unsettle.",
+          "hard": "By your answers you feel things intensely and are easily unsettled, and today may stir that. What you feel is likely to be bigger than its cause; wait before acting on it.",
+          "easy": "By your answers your feelings run high. Today they are likely to run somewhere pleasant.",
           "text": "The answers describe emotions that are felt intensely and that unsettle: worry, low moods and a sense of being overwhelmed, all closely attended to. The inner life is vivid and seldom at rest."
         },
         {
@@ -108,6 +140,8 @@
           "when": { "unrest": "high" },
           "lived": "strain",
           "report": "By {name}'s answers there is more worry and strain here than this suggests.",
+          "hard": "By your answers worry comes easily to you. Today may feed it; ask how much of it is today's and how much you brought with you.",
+          "easy": "By your answers you carry a good deal of worry. Take today as a rest from it.",
           "text": "The answers describe a good deal of worry, discouragement or strain, without any unusual interest in feelings for their own sake. The unease is there more as a weight than as something examined."
         },
         {
@@ -115,6 +149,8 @@
           "when": { "unrest": "low", "feeling": "high" },
           "lived": "well",
           "report": "By {name}'s answers these feelings are strongly felt and well carried.",
+          "hard": "By your answers you feel a great deal and are steady with it. Today asks for exactly that.",
+          "easy": "By your answers you are at home with your feelings. Today is a good day to share them.",
           "text": "The answers describe someone who feels a great deal and is not thrown by it. Emotions are noticed, valued and ridden out. This is the Moon at its most useful: sensitive without being fragile."
         },
         {
@@ -122,6 +158,8 @@
           "when": { "unrest": "low" },
           "lived": "well",
           "report": "By {name}'s answers the feeling side is kept on an even keel, with little worry.",
+          "hard": "By your answers you are hard to rattle, and likely to ride this out. Notice whether someone near you is taking it harder.",
+          "easy": "By your answers you are settled in yourself, and can simply enjoy this.",
           "text": "The answers describe an even temper: little worry, few low moods, steadiness under pressure. Feelings do not run the day. Others may find this calm, or may sometimes wish for more reaction."
         },
         {
@@ -129,6 +167,8 @@
           "when": { "feeling": "high" },
           "lived": "plain",
           "report": "By {name}'s answers a good deal of attention goes to these feelings.",
+          "hard": "By your answers you watch your feelings closely. Today gives you plenty to watch; you need not act on all of it.",
+          "easy": "By your answers you pay attention to how you feel. Today that is a pleasure.",
           "text": "The answers describe ordinary emotional weather, closely watched: feelings are experienced strongly and given a good deal of attention, without more worry or low mood than most people have."
         },
         {
@@ -136,6 +176,8 @@
           "when": { "feeling": "low" },
           "lived": "plain",
           "report": "By {name}'s answers little attention is paid to this side of life.",
+          "hard": "By your answers you do not make much of feelings. Today one may insist on being noticed.",
+          "easy": "By your answers feelings are not much on your mind. Today is a mild invitation to notice a good one.",
           "text": "The answers describe ordinary emotional weather and little interest in it: feelings come and go without being much noticed or discussed. The Moon is quiet, by inclination more than by effort."
         },
         {
@@ -147,28 +189,63 @@
       ],
       "unlived": "The chart gives the Moon an easy place, where feelings should settle of themselves, and the answers describe worry and strain. The tradition would say the capacity for ease is there. The unrest may belong to present circumstances more than to temperament; it is worth asking which.",
       "hardWon": "The chart gives the Moon a difficult place, where the tradition expects feelings to be hard to live with, and the answers describe calm. If that calm is real, it has been learned. It is also worth asking, honestly, whether it is calm or distance.",
-      "daily": {
-        "strain": {
-          "hard": "By your answers worry comes easily to you, and this may stir it. What you feel today is likely to be stronger than its cause.",
-          "easy": "By your answers you carry a good deal of worry. Take this as a chance to rest from it."
+      "nouns": {
+        "unrest": {
+          "high": "worry and unease",
+          "low": "calm"
         },
-        "well": {
-          "hard": "By your answers you are steady under pressure, and likely to ride this out.",
-          "easy": "By your answers you are settled in yourself, and can simply enjoy this."
+        "feeling": {
+          "high": "attention to feeling",
+          "low": "reserve about feeling"
         }
+      },
+      "signs": {
+        "Aries": { "unrest": "mid", "feeling": "mid" },
+        "Taurus": { "unrest": "low", "feeling": "mid" },
+        "Gemini": { "unrest": "mid", "feeling": "low" },
+        "Cancer": { "unrest": "high", "feeling": "high" },
+        "Leo": { "unrest": "low", "feeling": "high" },
+        "Virgo": { "unrest": "high", "feeling": "low" },
+        "Libra": { "unrest": "mid", "feeling": "mid" },
+        "Scorpio": { "unrest": "high", "feeling": "high" },
+        "Sagittarius": { "unrest": "low", "feeling": "mid" },
+        "Capricorn": { "unrest": "mid", "feeling": "low" },
+        "Aquarius": { "unrest": "low", "feeling": "low" },
+        "Pisces": { "unrest": "high", "feeling": "high" }
       }
     },
     "Mercury": {
-      "stands": "thought and speech",
+      "stands": "thought, speech and dealing",
       "dials": {
-        "ideas": ["O5"]
+        "ideas": ["O5"],
+        "candour": ["A2"]
       },
       "expressions": [
+        {
+          "name": "frank and inquiring",
+          "when": { "ideas": "high", "candour": "high" },
+          "lived": "well",
+          "report": "By {name}'s answers this mind enjoys ideas and speaks them plainly.",
+          "hard": "By your answers you love an idea and say what you think. Today that may start an argument; make it a good one.",
+          "easy": "By your answers you think freely and speak plainly. Today both are welcome.",
+          "text": "The answers describe a love of ideas together with plain dealing: theory and argument enjoyed for their own sake, and no inclination to flatter, manoeuvre or dress things up. What is thought is said."
+        },
+        {
+          "name": "subtle",
+          "when": { "ideas": "high", "candour": "low" },
+          "lived": "plain",
+          "report": "By {name}'s answers this mind enjoys ideas and is careful what it shows.",
+          "hard": "By your answers you are quick with ideas and careful what you reveal. Today may press you to show your hand.",
+          "easy": "By your answers you have a subtle mind. Today rewards the well-chosen word.",
+          "text": "The answers describe a love of ideas together with a readiness to manage what others see: quick with theory and argument, and not above flattery or a well-placed omission. This is Mercury much as the old stories paint him, clever and a little sly."
+        },
         {
           "name": "inquiring",
           "when": { "ideas": "high" },
           "lived": "well",
           "report": "By {name}'s answers this mind is used for pleasure: ideas are enjoyed for their own sake.",
+          "hard": "By your answers you enjoy an argument about ideas. Today may supply one.",
+          "easy": "By your answers you love ideas. This is a good day for them.",
           "text": "The answers describe a love of ideas: theory, argument and difficult reading enjoyed for their own sake. The mind is being used for pleasure as well as for need."
         },
         {
@@ -176,29 +253,68 @@
           "when": { "ideas": "low" },
           "lived": "plain",
           "report": "By {name}'s answers the thinking is kept to practical matters.",
+          "hard": "By your answers you prefer the concrete. Today's confusion is best met by asking what, exactly, needs doing.",
+          "easy": "By your answers you think to a purpose. Today things fall into place.",
           "text": "The answers describe a mind that prefers the concrete: little taste for abstraction or for discussion that leads nowhere. This says nothing about ability. It describes where thought is pointed, which is at things that can be used."
+        },
+        {
+          "name": "candid",
+          "when": { "candour": "high" },
+          "lived": "well",
+          "report": "By {name}'s answers what is thought is said, straight out.",
+          "hard": "By your answers you say things straight. Today that may be heard as bluntness; say it kindly.",
+          "easy": "By your answers you are straightforward with people. Today it is appreciated.",
+          "text": "The answers describe an ordinary interest in ideas and unusual straightforwardness: no flattery, no manoeuvring, things said as they are."
+        },
+        {
+          "name": "politic",
+          "when": { "candour": "low" },
+          "lived": "plain",
+          "report": "By {name}'s answers words are chosen with an eye to their effect.",
+          "hard": "By your answers you choose your words with an eye to their effect. Today someone may want a straight answer.",
+          "easy": "By your answers you know how to put things. Today that smooths the way.",
+          "text": "The answers describe an ordinary interest in ideas and a practised hand with people: willing to flatter, to bend a rule, or to say what will work rather than what is so."
         },
         {
           "name": "workaday",
           "when": {},
           "lived": "plain",
-          "text": "The answers describe an ordinary interest in ideas: taken up when they are useful or entertaining, and put down again. The questionnaire measures only this one side of Mercury, so little more can be said."
+          "text": "The answers describe an ordinary interest in ideas, taken up when they are useful or entertaining and put down again, and an ordinary measure of plain dealing. Nothing about Mercury stands out."
         }
       ],
-      "unlived": "The chart gives Mercury an easy place and the answers describe little appetite for ideas. The questionnaire measures only one side of Mercury, interest in abstract thought, so this is a thin comparison: quickness in speech, trade or craft would not show in it.",
+      "unlived": "The chart gives Mercury an easy place, where thought and speech should come readily, and the answers describe neither a love of ideas nor plain dealing. The questionnaire sees only these two sides of Mercury, so this is a narrow comparison: quickness in trade, craft or conversation would not show in it.",
       "hardWon": "The chart gives Mercury a difficult place and the answers describe a real love of ideas. Whatever stands in the way of thought or speech in the chart, the interest has survived it.",
-      "daily": {
-        "well": {
-          "hard": "By your answers you enjoy an argument about ideas. Today may supply one.",
-          "easy": "By your answers you love ideas. This is a good day for them."
+      "nouns": {
+        "ideas": {
+          "high": "appetite for ideas",
+          "low": "practical turn of mind"
+        },
+        "candour": {
+          "high": "candour",
+          "low": "tact and indirection"
         }
+      },
+      "signs": {
+        "Aries": { "ideas": "mid", "candour": "high" },
+        "Taurus": { "ideas": "low", "candour": "high" },
+        "Gemini": { "ideas": "high", "candour": "low" },
+        "Cancer": { "ideas": "low", "candour": "mid" },
+        "Leo": { "ideas": "mid", "candour": "high" },
+        "Virgo": { "ideas": "mid", "candour": "high" },
+        "Libra": { "ideas": "high", "candour": "low" },
+        "Scorpio": { "ideas": "high", "candour": "low" },
+        "Sagittarius": { "ideas": "high", "candour": "high" },
+        "Capricorn": { "ideas": "mid", "candour": "mid" },
+        "Aquarius": { "ideas": "high", "candour": "mid" },
+        "Pisces": { "ideas": "mid", "candour": "low" }
       }
     },
     "Venus": {
-      "stands": "relating, affection and harmony",
+      "stands": "relating, affection, harmony and taste",
       "dials": {
         "sociable": ["E1", "E2"],
-        "accord": ["A1", "A4"]
+        "accord": ["A1", "A4"],
+        "taste": ["O2"]
       },
       "expressions": [
         {
@@ -206,6 +322,8 @@
           "when": { "sociable": "high", "accord": "high" },
           "lived": "well",
           "report": "By {name}'s answers affection is given freely: people are liked, sought out and trusted.",
+          "hard": "By your answers you trust easily and like to agree. Today may ask you to hold a line; you can do it warmly.",
+          "easy": "By your answers affection comes easily to you. Today it is returned.",
           "text": "The answers describe someone who likes people, seeks them out, trusts them and would sooner agree than argue. Affection is offered freely and relationships come easily."
         },
         {
@@ -213,6 +331,8 @@
           "when": { "sociable": "high", "accord": "low" },
           "lived": "plain",
           "report": "By {name}'s answers company is enjoyed, with the guard kept up.",
+          "hard": "By your answers you enjoy people and keep your guard up. Today may show you where the guard is costing you.",
+          "easy": "By your answers you are good company on your own terms. Today you could afford to lower them a little.",
           "text": "The answers describe someone sociable and at ease in company who nonetheless keeps their guard up: slow to trust, and ready to contest a point. People are enjoyed more than they are relied on."
         },
         {
@@ -220,6 +340,8 @@
           "when": { "sociable": "low", "accord": "high" },
           "lived": "plain",
           "report": "By {name}'s answers this is kept for a few people, who are trusted completely.",
+          "hard": "By your answers you keep to a few people and give way to them readily. Today, check that you are not giving way too far.",
+          "easy": "By your answers your affection is kept for a few. Today is a good day to let one of them know.",
           "text": "The answers describe someone reserved, with little need of company, who trusts those they do let in and goes a long way to keep the peace with them. Affection is real and narrow: a few people, held closely."
         },
         {
@@ -227,6 +349,8 @@
           "when": { "sociable": "low", "accord": "low" },
           "lived": "strain",
           "report": "By {name}'s answers people are kept at a distance, and little of this is being shared.",
+          "hard": "By your answers you keep people at a distance, and today may seem to prove you right. Ask whether it has.",
+          "easy": "By your answers you are slow to let people near. Today it may be safe to let one a little closer.",
           "text": "The answers describe distance from people on every count: little wish for company, little trust, and no reluctance to quarrel. Whatever the chart says of Venus, relating is being kept at arm's length."
         },
         {
@@ -234,6 +358,8 @@
           "when": { "sociable": "high" },
           "lived": "well",
           "report": "By {name}'s answers it shows as ease and warmth in company.",
+          "hard": "By your answers you are at ease with people. Today that ease is a resource: use it to say the awkward thing.",
+          "easy": "By your answers company comes easily to you. Today it is likely to be good company.",
           "text": "The answers describe someone warm and fond of company, with an ordinary measure of trust and of willingness to give way. Venus shows as ease among people."
         },
         {
@@ -241,6 +367,8 @@
           "when": { "sociable": "low" },
           "lived": "plain",
           "report": "By {name}'s answers it is lived privately, away from crowds.",
+          "hard": "By your answers you keep to yourself. Today may push you into company; you may leave when you have had enough.",
+          "easy": "By your answers you are private by nature. Today offers company of the kind you might enjoy.",
           "text": "The answers describe someone who keeps to themselves: slow to make friends and happier out of a crowd, though no less trusting or agreeable than most. Venus is private here, not absent."
         },
         {
@@ -248,6 +376,8 @@
           "when": { "accord": "high" },
           "lived": "well",
           "report": "By {name}'s answers it shows as trust and a readiness to keep the peace.",
+          "hard": "By your answers you believe the best of people and meet them halfway. Today, make sure someone is meeting you.",
+          "easy": "By your answers you are generous in your dealings. Today the goodwill comes back.",
           "text": "The answers describe an ordinary liking for company together with unusual trust in people and readiness to keep the peace. Venus shows as goodwill: others are believed and met halfway."
         },
         {
@@ -255,6 +385,8 @@
           "when": { "accord": "low" },
           "lived": "strain",
           "report": "By {name}'s answers it comes with little trust and a readiness to argue.",
+          "hard": "By your answers you are slow to trust and quick to contest. Today will offer you a quarrel; you need not take it.",
+          "easy": "By your answers you do not take people on trust. Today someone may earn a little.",
           "text": "The answers describe an ordinary liking for company together with little trust and a readiness to argue. People are kept company with and not quite believed. Venus is hedged."
         },
         {
@@ -266,16 +398,46 @@
       ],
       "unlived": "The chart gives Venus an easy place, where affection and company should come without effort, and the answers describe distance and distrust. The tradition would say the warmth is available. Guardedness of this kind is more often learned than inborn; the chart suggests it need not be permanent.",
       "hardWon": "The chart gives Venus a difficult place, where relating is expected to be awkward or costly, and the answers describe someone open, trusting and at ease with people. That ease has been made, probably through relationships that taught it.",
-      "daily": {
-        "strain": {
-          "hard": "By your answers you are slow to trust, and this may seem to confirm your caution. Check whether it has earned it.",
-          "easy": "By your answers you keep people at a distance. Today it may be safe to let one a little closer."
+      "nouns": {
+        "sociable": {
+          "high": "sociability",
+          "low": "reserve"
         },
-        "well": {
-          "hard": "By your answers you are at ease with people, and can afford to say the awkward thing kindly.",
-          "easy": "By your answers company comes easily to you. Today it is likely to be good company."
+        "accord": {
+          "high": "trust and readiness to agree",
+          "low": "wariness"
+        },
+        "taste": {
+          "high": "feeling for art and beauty",
+          "low": "indifference to art and beauty"
         }
-      }
+      },
+      "signs": {
+        "Aries": { "sociable": "high", "accord": "low", "taste": "low" },
+        "Taurus": { "sociable": "mid", "accord": "mid", "taste": "high" },
+        "Gemini": { "sociable": "high", "accord": "mid", "taste": "mid" },
+        "Cancer": { "sociable": "low", "accord": "mid", "taste": "mid" },
+        "Leo": { "sociable": "high", "accord": "mid", "taste": "high" },
+        "Virgo": { "sociable": "low", "accord": "mid", "taste": "mid" },
+        "Libra": { "sociable": "high", "accord": "high", "taste": "high" },
+        "Scorpio": { "sociable": "low", "accord": "low", "taste": "mid" },
+        "Sagittarius": { "sociable": "high", "accord": "mid", "taste": "mid" },
+        "Capricorn": { "sociable": "low", "accord": "low", "taste": "low" },
+        "Aquarius": { "sociable": "mid", "accord": "mid", "taste": "mid" },
+        "Pisces": { "sociable": "mid", "accord": "high", "taste": "high" }
+      },
+      "also": [
+        {
+          "when": { "taste": "high" },
+          "report": "Art and beauty matter a great deal.",
+          "text": "The answers also describe a strong response to art and to natural beauty: they are noticed, sought out and felt."
+        },
+        {
+          "when": { "taste": "low" },
+          "report": "Art and beauty count for little.",
+          "text": "The answers also describe little interest in art or beauty for their own sake."
+        }
+      ]
     },
     "Mars": {
       "stands": "drive, anger and assertion",
@@ -289,6 +451,8 @@
           "when": { "push": "high", "heat": "high" },
           "lived": "strain",
           "report": "By {name}'s answers the drive is strong and so is the temper.",
+          "hard": "By your answers you are forceful and quick to anger, and today offers a fight. Decide beforehand whether it is worth having.",
+          "easy": "By your answers you have force to spare. Today it has somewhere useful to go.",
           "text": "The answers describe someone forceful, busy and quick to anger: ready to take charge and equally ready to flare. The drive is not in doubt. It comes with friction, and others will feel both."
         },
         {
@@ -296,6 +460,8 @@
           "when": { "push": "high" },
           "lived": "well",
           "report": "By {name}'s answers this drive is in full and well-governed use.",
+          "hard": "By your answers your drive is strong and well governed. An obstacle today is more likely to be met than resented.",
+          "easy": "By your answers you act readily and cleanly. Today that is likely to go well.",
           "text": "The answers describe drive that goes where it is pointed: assertive, active, glad of a challenge, and no more easily provoked than most. This is Mars working as it should, with force at the service of intention."
         },
         {
@@ -303,6 +469,8 @@
           "when": { "push": "low", "heat": "high" },
           "lived": "strain",
           "report": "By {name}'s answers this drive is felt more than it is used: the anger is there and the assertion is not.",
+          "hard": "By your answers you feel anger more than you show it. Today will add to the store; say the thing before it says itself.",
+          "easy": "By your answers your energy does not always find its way out. Today it has a clear road; take it.",
           "text": "The answers describe anger that is felt strongly and seldom acted on: little inclination to speak up or take the lead, and a quick temper underneath. Force that is not spent tends to turn into resentment, or to come out all at once."
         },
         {
@@ -310,6 +478,8 @@
           "when": { "push": "low" },
           "lived": "plain",
           "report": "By {name}'s answers little of this drive is being called on.",
+          "hard": "By your answers you seldom push. Today may push you; it is all right to push back.",
+          "easy": "By your answers you let others set the pace. Today is a good day to set it yourself.",
           "text": "The answers describe little push and no unusual heat: no wish to lead, a slow pace, no taste for excitement. Others are left to decide. This is peaceable, and it can also mean one's own wants go unstated."
         },
         {
@@ -317,6 +487,8 @@
           "when": { "heat": "high" },
           "lived": "strain",
           "report": "By {name}'s answers the temper is quicker than the drive is strong.",
+          "hard": "By your answers your temper is quicker than you might wish. Today will try it; count before you answer.",
+          "easy": "By your answers small things irritate you easily. Today fewer of them will.",
           "text": "The answers describe an ordinary level of drive with a temper that is quickly roused. The energy is not excessive; the irritation is. Small obstacles cost more than they should."
         },
         {
@@ -324,6 +496,8 @@
           "when": { "heat": "low" },
           "lived": "well",
           "report": "By {name}'s answers it is lived coolly, with a temper that is hard to rouse.",
+          "hard": "By your answers you are hard to provoke. Today tries, and is likely to fail.",
+          "easy": "By your answers you act without heat. Today that makes things simple.",
           "text": "The answers describe an ordinary level of drive and a temper that is hard to rouse. What Mars does here it does coolly."
         },
         {
@@ -335,15 +509,29 @@
       ],
       "unlived": "The chart gives Mars an easy place, where the tradition expects it to act cleanly and openly, and the answers describe anger with nowhere to go or force with too much friction. The directness is there to use. The question the chart puts is what is stopping it.",
       "hardWon": "The chart gives Mars a difficult place, where drive is expected to misfire, turn inward or cause trouble, and the answers describe energy that is direct and well governed. On the tradition's account that is a difficult placement that has been worked on.",
-      "daily": {
-        "strain": {
-          "hard": "By your answers your temper is quick, or kept under, so friction today may cost you more than it should. Decide beforehand what is worth a fight.",
-          "easy": "By your answers your energy does not always find its way out. Today it has a clear road."
+      "nouns": {
+        "push": {
+          "high": "push",
+          "low": "restraint"
         },
-        "well": {
-          "hard": "By your answers your drive is well in hand, and an obstacle today is more likely to be met than resented.",
-          "easy": "By your answers you act readily. Today that is likely to go well."
+        "heat": {
+          "high": "temper",
+          "low": "coolness"
         }
+      },
+      "signs": {
+        "Aries": { "push": "high", "heat": "high" },
+        "Taurus": { "push": "mid", "heat": "mid" },
+        "Gemini": { "push": "mid", "heat": "mid" },
+        "Cancer": { "push": "low", "heat": "high" },
+        "Leo": { "push": "high", "heat": "high" },
+        "Virgo": { "push": "mid", "heat": "mid" },
+        "Libra": { "push": "low", "heat": "low" },
+        "Scorpio": { "push": "high", "heat": "high" },
+        "Sagittarius": { "push": "high", "heat": "mid" },
+        "Capricorn": { "push": "high", "heat": "low" },
+        "Aquarius": { "push": "mid", "heat": "low" },
+        "Pisces": { "push": "low", "heat": "low" }
       }
     },
     "Jupiter": {
@@ -358,6 +546,8 @@
           "when": { "reach": "high", "excess": "high" },
           "lived": "strain",
           "report": "By {name}'s answers this is lived expansively, and to excess.",
+          "hard": "By your answers you reach for everything and find it hard to stop. Today may send the bill.",
+          "easy": "By your answers your appetite for life is large. Today feeds it; mind the measure.",
           "text": "The answers describe a large appetite in every direction: eager for new experience, generous to others, and not good at stopping. Jupiter is plainly active. Its traditional fault, too much of a good thing, is active with it."
         },
         {
@@ -365,13 +555,17 @@
           "when": { "reach": "high" },
           "lived": "well",
           "report": "By {name}'s answers this is lived generously and with a sense of proportion.",
+          "hard": "By your answers you give freely and keep your sense of proportion. Today asks for the proportion.",
+          "easy": "By your answers you are open-handed and know your limits. Today rewards both.",
           "text": "The answers describe someone who welcomes the new and gives freely to others, without being run by their appetites. This is Jupiter at its best: wide in outlook and open-handed, with a sense of proportion."
         },
         {
-          "name": "appetite without horizon",
+          "name": "all appetite",
           "when": { "reach": "low", "excess": "high" },
           "lived": "strain",
           "report": "By {name}'s answers the appetite is stronger than the reach.",
+          "hard": "By your answers you find it hard to stop at enough. Today may test that.",
+          "easy": "By your answers pleasure has a strong pull on you. Enjoy today, and look up from it now and then.",
           "text": "The answers describe strong cravings and little resistance to them, in a life that otherwise keeps to the familiar and does not go out of its way for others. Jupiter's excess is there without its largeness."
         },
         {
@@ -379,6 +573,8 @@
           "when": { "reach": "low" },
           "lived": "plain",
           "report": "By {name}'s answers this is lived within narrow, well-kept bounds.",
+          "hard": "By your answers you keep within familiar bounds. Today may show you one that is too tight.",
+          "easy": "By your answers you do not reach for much. Today something is within reach.",
           "text": "The answers describe a contained life: a liking for the familiar, a measured response to other people's needs, and appetites in hand. Nothing is overdone. Not much is reached for either."
         },
         {
@@ -386,6 +582,8 @@
           "when": { "excess": "high" },
           "lived": "strain",
           "report": "By {name}'s answers it shows mostly as a taste for pleasure.",
+          "hard": "By your answers you give in to temptation readily. Today offers one with a cost.",
+          "easy": "By your answers you like your pleasures. Today brings one; it will keep if you do not overdo it.",
           "text": "The answers describe an ordinary appetite for new experience and for helping others, and a stronger one for pleasure: cravings are felt keenly and often given in to."
         },
         {
@@ -393,6 +591,8 @@
           "when": { "excess": "low" },
           "lived": "well",
           "report": "By {name}'s answers it comes with unusual self-command.",
+          "hard": "By your answers you have your appetites in hand, which is what today asks for.",
+          "easy": "By your answers you are sparing with yourself. Today you can afford to be less so.",
           "text": "The answers describe an ordinary appetite for new experience and for helping others, with unusual self-command: temptation is easily resisted and little is overdone."
         },
         {
@@ -404,15 +604,29 @@
       ],
       "unlived": "The chart gives Jupiter an easy place, where growth and good judgment are supposed to arrive together, and the answers describe appetite that outruns sense. The tradition would say the judgment is available: this Jupiter knows when enough is enough, if it is asked.",
       "hardWon": "The chart gives Jupiter a difficult place, where the tradition expects either meanness or excess, and the answers describe generosity with proportion. That balance was not the easy path for this chart.",
-      "daily": {
-        "strain": {
-          "hard": "By your answers you find it hard to stop at enough, and today may test that.",
-          "easy": "By your answers you are inclined to overdo things. Enjoy this, and mind the measure."
+      "nouns": {
+        "reach": {
+          "high": "reach and generosity",
+          "low": "containment"
         },
-        "well": {
-          "hard": "By your answers you keep a sense of proportion, which is what this asks for.",
-          "easy": "By your answers you are open-handed and know your limits. Today rewards both."
+        "excess": {
+          "high": "appetite",
+          "low": "moderation"
         }
+      },
+      "signs": {
+        "Aries": { "reach": "high", "excess": "mid" },
+        "Taurus": { "reach": "low", "excess": "high" },
+        "Gemini": { "reach": "high", "excess": "mid" },
+        "Cancer": { "reach": "mid", "excess": "mid" },
+        "Leo": { "reach": "high", "excess": "high" },
+        "Virgo": { "reach": "low", "excess": "low" },
+        "Libra": { "reach": "mid", "excess": "mid" },
+        "Scorpio": { "reach": "mid", "excess": "mid" },
+        "Sagittarius": { "reach": "high", "excess": "high" },
+        "Capricorn": { "reach": "low", "excess": "low" },
+        "Aquarius": { "reach": "high", "excess": "low" },
+        "Pisces": { "reach": "high", "excess": "high" }
       }
     },
     "Saturn": {
@@ -427,6 +641,8 @@
           "when": { "discipline": "high", "inhibition": "high" },
           "lived": "strain",
           "report": "By {name}'s answers the discipline is real, and so is the fear of falling short that goes with it.",
+          "hard": "By your answers you hold yourself to a high standard and fear falling short. Today's pressure is likely to feel heavier than it is.",
+          "easy": "By your answers you are hard on yourself. Today the work shows; let it count.",
           "text": "The answers describe someone orderly, dutiful and careful who is also ill at ease under other people's eyes. The structure is real, and so is the fear of being found wanting that often drives it. Saturn is doing its work and exacting its price."
         },
         {
@@ -434,6 +650,8 @@
           "when": { "discipline": "high" },
           "lived": "well",
           "report": "By {name}'s answers this discipline is in daily use and sits easily.",
+          "hard": "By your answers discipline comes naturally to you. A demand today is one you can meet.",
+          "easy": "By your answers you are steady and organised. Today builds on that.",
           "text": "The answers describe self-discipline, order, a strong sense of duty and care before acting, without undue self-consciousness. This is Saturn as an asset: limits that are chosen and kept."
         },
         {
@@ -441,6 +659,8 @@
           "when": { "discipline": "low", "inhibition": "high" },
           "lived": "strain",
           "report": "By {name}'s answers the discipline is missing and the self-consciousness is not.",
+          "hard": "By your answers you feel judged and are short of structure to lean on. Today, do one small thing properly; it helps more than worrying.",
+          "easy": "By your answers you are uneasy about falling short. Today is a kind day to put one thing in order.",
           "text": "The answers describe little structure and a good deal of self-consciousness: tasks put off, rules worn lightly, and a sharp sense of being judged. Saturn's fear is present without its discipline, which is the least comfortable way to have it."
         },
         {
@@ -448,6 +668,8 @@
           "when": { "discipline": "low" },
           "lived": "plain",
           "report": "By {name}'s answers these limits are, for now, declined.",
+          "hard": "By your answers you wear rules lightly. Today one of them may insist.",
+          "easy": "By your answers you are not much governed by plans. Today a little structure would cost you nothing.",
           "text": "The answers describe someone not much governed by plans, rules or tidiness, and not unduly troubled by what others think of that. Saturn's limits are being declined. This is freedom, and it is also work left for later."
         },
         {
@@ -455,6 +677,8 @@
           "when": { "inhibition": "high" },
           "lived": "strain",
           "report": "By {name}'s answers it shows chiefly as unease about being judged.",
+          "hard": "By your answers you are uneasy under other people's eyes. Today may put you there; they are looking less closely than you think.",
+          "easy": "By your answers you feel others' judgment keenly. Today it is favourable.",
           "text": "The answers describe an ordinary measure of order and conscientiousness, and marked unease under other people's eyes. Saturn shows less as discipline than as the fear of being judged."
         },
         {
@@ -462,6 +686,8 @@
           "when": { "inhibition": "low" },
           "lived": "well",
           "report": "By {name}'s answers it is carried without anxiety.",
+          "hard": "By your answers you are not afraid of being judged. Today that is an advantage.",
+          "easy": "By your answers you carry your duties without anxiety. Today is light work.",
           "text": "The answers describe an ordinary measure of order and conscientiousness, and no fear of other people's judgment. Saturn's demands are met without anxiety."
         },
         {
@@ -473,16 +699,58 @@
       ],
       "unlived": "The chart gives Saturn an easy place, where discipline and authority are supposed to sit comfortably, and the answers describe either structure that is missing or structure held together by anxiety. The tradition would say that steadier ground is there. Fear is doing work here that habit could do instead.",
       "hardWon": "The chart gives Saturn a difficult place, where the tradition expects heaviness, delay or fear, and the answers describe discipline worn lightly. That is the result Saturn is said to give to those who put the years in.",
-      "daily": {
-        "strain": {
-          "hard": "By your answers you are hard on yourself, or uneasy under judgment. Today's pressure is likely to feel heavier than it is.",
-          "easy": "By your answers duty or self-doubt weighs on you. Today it sits a little lighter."
+      "nouns": {
+        "discipline": {
+          "high": "discipline and order",
+          "low": "looseness about rules and order"
         },
-        "well": {
-          "hard": "By your answers discipline comes naturally to you, and a demand today is one you can meet.",
-          "easy": "By your answers you are steady and organised. Today builds on that."
+        "inhibition": {
+          "high": "self-consciousness",
+          "low": "ease under other people's eyes"
         }
+      },
+      "signs": {
+        "Aries": { "discipline": "low", "inhibition": "low" },
+        "Taurus": { "discipline": "high", "inhibition": "mid" },
+        "Gemini": { "discipline": "low", "inhibition": "mid" },
+        "Cancer": { "discipline": "mid", "inhibition": "high" },
+        "Leo": { "discipline": "mid", "inhibition": "high" },
+        "Virgo": { "discipline": "high", "inhibition": "high" },
+        "Libra": { "discipline": "high", "inhibition": "mid" },
+        "Scorpio": { "discipline": "high", "inhibition": "mid" },
+        "Sagittarius": { "discipline": "mid", "inhibition": "low" },
+        "Capricorn": { "discipline": "high", "inhibition": "mid" },
+        "Aquarius": { "discipline": "high", "inhibition": "low" },
+        "Pisces": { "discipline": "low", "inhibition": "high" }
       }
+    },
+    "Uranus": {
+      "stands": "independence and the break with convention",
+      "dials": {
+        "unconvention": ["O6"]
+      },
+      "expressions": [
+        {
+          "name": "unconventional",
+          "when": { "unconvention": "high" },
+          "lived": "plain",
+          "report": "By {name}'s answers convention and authority are readily questioned.",
+          "text": "The answers describe someone who questions authority, tradition and the established order, and welcomes change in how society is run. The questionnaire's statements here are about politics, so this is one narrow window on Uranus."
+        },
+        {
+          "name": "traditional",
+          "when": { "unconvention": "low" },
+          "lived": "plain",
+          "report": "By {name}'s answers tradition and authority are respected.",
+          "text": "The answers describe respect for tradition, authority and the established order. Whatever Uranus does in this chart, it is not showing as a quarrel with convention."
+        },
+        {
+          "name": "moderate",
+          "when": {},
+          "lived": "plain",
+          "text": "The answers describe neither a strong attachment to tradition nor a strong wish to overturn it. Uranus does not stand out."
+        }
+      ]
     },
     "Neptune": {
       "stands": "imagination and compassion",
@@ -540,6 +808,142 @@
           "text": "The answers describe an ordinary measure of imagination and of sympathy. Neptune is neither prominent nor absent."
         }
       ]
+    }
+  },
+  "rising": {
+    "dial": ["E"],
+    "nouns": {
+      "high": "outgoingness",
+      "low": "reserve"
+    },
+    "signs": {
+      "Aries": "high",
+      "Taurus": "low",
+      "Gemini": "high",
+      "Cancer": "low",
+      "Leo": "high",
+      "Virgo": "low",
+      "Libra": "high",
+      "Scorpio": "low",
+      "Sagittarius": "high",
+      "Capricorn": "low",
+      "Aquarius": "mid",
+      "Pisces": "low"
+    }
+  },
+  "compare": {
+    "above": "{far}more {noun} than {body} in {sign} would suggest",
+    "below": "{far}less {noun} than {body} in {sign} would suggest",
+    "match": "the {noun} that {body} in {sign} describes",
+    "far": "far ",
+    "after": {
+      "differs": "That is {clause}.",
+      "match": "That bears out {clause}."
+    },
+    "alone": {
+      "differs": "By {name}'s answers there is {clause}.",
+      "match": "By {name}'s answers this bears out {clause}."
+    },
+    "inReading": "Against the sign: {clauses}.",
+    "asExpected": "Against the sign: much as {body} in {sign} would suggest.",
+    "also": "There is also {clause}."
+  },
+  "aspects": {
+    "Tension": {
+      "strain|strain": "By {name}'s answers both ends of this are under strain, {a} {ea} and {b} {eb}: the friction it describes is live.",
+      "strain|well": "By {name}'s answers the strain shows at one end only: {a} is {ea}, while {b} is {eb} and holds its side.",
+      "well|strain": "By {name}'s answers the strain shows at one end only: {b} is {eb}, while {a} is {ea} and holds its side.",
+      "well|well": "By {name}'s answers this tension is being carried well at both ends: {a} {ea}, {b} {eb}.",
+      "strain|plain": "By {name}'s answers the strain here falls on {a}, which is {ea}; {b} is {eb}.",
+      "plain|strain": "By {name}'s answers the strain here falls on {b}, which is {eb}; {a} is {ea}.",
+      "well|plain": "By {name}'s answers {a}, {ea}, carries its side of this well; {b} is {eb}.",
+      "plain|well": "By {name}'s answers {b}, {eb}, carries its side of this well; {a} is {ea}.",
+      "plain|plain": "By {name}'s answers neither end of this shows strain: {a} is {ea}, {b} {eb}."
+    },
+    "Flow": {
+      "strain|strain": "By {name}'s answers the ease this describes is not being drawn on: {a} is {ea} and {b} {eb}.",
+      "strain|well": "By {name}'s answers the help on offer here runs one way: {b}, {eb}, has something to lend {a}, which is {ea}.",
+      "well|strain": "By {name}'s answers the help on offer here runs one way: {a}, {ea}, has something to lend {b}, which is {eb}.",
+      "well|well": "By {name}'s answers this ease is in use at both ends: {a} {ea}, {b} {eb}.",
+      "strain|plain": "By {name}'s answers {a} is {ea} and could lean on this; {b} is {eb}.",
+      "plain|strain": "By {name}'s answers {b} is {eb} and could lean on this; {a} is {ea}.",
+      "well|plain": "By {name}'s answers {a}, {ea}, is making use of this; {b} is {eb}.",
+      "plain|well": "By {name}'s answers {b}, {eb}, is making use of this; {a} is {ea}.",
+      "plain|plain": "By {name}'s answers this ease joins {a}, {ea}, with {b}, {eb}."
+    },
+    "Conjunction": {
+      "strain|strain": "By {name}'s answers the two are bound together in difficulty: {a} {ea}, {b} {eb}.",
+      "strain|well": "By {name}'s answers the pair pulls two ways: {a} is {ea}, {b} {eb}.",
+      "well|strain": "By {name}'s answers the pair pulls two ways: {a} is {ea}, {b} {eb}.",
+      "well|well": "By {name}'s answers the two are bound together to good effect: {a} {ea}, {b} {eb}.",
+      "strain|plain": "By {name}'s answers {a}, {ea}, sets a strained tone for the pair; {b} is {eb}.",
+      "plain|strain": "By {name}'s answers {b}, {eb}, sets a strained tone for the pair; {a} is {ea}.",
+      "well|plain": "By {name}'s answers {a}, {ea}, sets an easy tone for the pair; {b} is {eb}.",
+      "plain|well": "By {name}'s answers {b}, {eb}, sets an easy tone for the pair; {a} is {ea}.",
+      "plain|plain": "By {name}'s answers the pair joins {a}, {ea}, with {b}, {eb}."
+    }
+  },
+  "elements": {
+    "Fire": {
+      "dial": ["E3", "E4", "E5", "E6"],
+      "strongHigh": "By {name}'s answers the fire is in evidence: assertive, active and high-spirited.",
+      "strongLow": "By {name}'s answers little of this fire is showing: the pace is slow and the spirits quiet.",
+      "weakHigh": "By {name}'s answers there is fire all the same: energy, assertion and high spirits that the chart's elements do not account for.",
+      "weakLow": "By {name}'s answers the lack of fire shows: little push, a slow pace, quiet spirits."
+    },
+    "Earth": {
+      "dial": ["C2", "C5", "C6"],
+      "strongHigh": "By {name}'s answers the earth is in evidence: orderly, disciplined and careful.",
+      "strongLow": "By {name}'s answers little of this earth is showing: plans, order and caution are worn lightly.",
+      "weakHigh": "By {name}'s answers there is earth all the same: order, discipline and care that the chart's elements do not account for.",
+      "weakLow": "By {name}'s answers the lack of earth shows: little taste for order, routine or caution."
+    },
+    "Air": {
+      "dial": ["O5", "E1", "E2"],
+      "strongHigh": "By {name}'s answers the air is in evidence: fond of ideas and of company.",
+      "strongLow": "By {name}'s answers little of this air is showing: neither ideas nor company are much sought.",
+      "weakHigh": "By {name}'s answers there is air all the same: a liking for ideas and for people that the chart's elements do not account for.",
+      "weakLow": "By {name}'s answers the lack of air shows: little appetite for abstract ideas or for much company."
+    },
+    "Water": {
+      "dial": ["O3", "A6", "N1"],
+      "strongHigh": "By {name}'s answers the water is in evidence: feelings are strong, and other people's troubles are felt.",
+      "strongLow": "By {name}'s answers little of this water is showing: feelings are kept cool and sympathy measured.",
+      "weakHigh": "By {name}'s answers there is water all the same: strong feeling and ready sympathy that the chart's elements do not account for.",
+      "weakLow": "By {name}'s answers the lack of water shows: feelings are cool and pity does not come easily."
+    }
+  },
+  "modalities": {
+    "Cardinal": {
+      "dial": ["E3", "C4"],
+      "strongHigh": "By {name}'s answers the initiative is in evidence: quick to take charge and set on achieving.",
+      "strongLow": "By {name}'s answers little of this initiative is showing: others are left to lead and ambition is modest.",
+      "weakHigh": "By {name}'s answers there is initiative all the same: a readiness to lead and to achieve that the chart's modes do not account for.",
+      "weakLow": "By {name}'s answers the lack of cardinal signs shows: little urge to lead or to strive."
+    },
+    "Fixed": {
+      "dial": ["C5", "-O4"],
+      "strongHigh": "By {name}'s answers the persistence is in evidence: tasks are seen through and the familiar preferred to change.",
+      "strongLow": "By {name}'s answers little of this fixity is showing: tasks are easily dropped and change is welcome.",
+      "weakHigh": "By {name}'s answers there is staying power all the same: persistence and a liking for the familiar that the chart's modes do not account for.",
+      "weakLow": "By {name}'s answers the lack of fixed signs shows: little staying power and a taste for change."
+    },
+    "Mutable": {
+      "dial": ["O4", "-C2"],
+      "strongHigh": "By {name}'s answers the adaptability is in evidence: variety is welcome and order is not insisted on.",
+      "strongLow": "By {name}'s answers little of this adaptability is showing: routine and order are preferred.",
+      "weakHigh": "By {name}'s answers there is adaptability all the same: a taste for variety and an easy way with disorder that the chart's modes do not account for.",
+      "weakLow": "By {name}'s answers the lack of mutable signs shows: a liking for routine and for things in their place."
+    }
+  },
+  "forecast": {
+    "strain": {
+      "hard": "By your answers your natal {planet} is {expression}. Expect this stretch to press on that.",
+      "easy": "By your answers your natal {planet} is {expression}. This stretch offers it some relief."
+    },
+    "well": {
+      "hard": "By your answers your natal {planet} is {expression}. You are well placed to handle this stretch.",
+      "easy": "By your answers your natal {planet} is {expression}. This stretch plays to that strength."
     }
   }
 }

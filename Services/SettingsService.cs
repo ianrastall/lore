@@ -18,7 +18,7 @@ public sealed class SettingsService
     private readonly string _path;
 
     public SettingsService()
-        : this(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Lore"))
+        : this(AppFolder.Path)
     {
     }
 

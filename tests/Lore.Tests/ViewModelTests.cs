@@ -191,7 +191,7 @@ public sealed class ViewModelTests : IDisposable
         Assert.Same(vm.InventoryVM.Reading, vm.ChartVM.Answers);
         Assert.Same(vm.InventoryVM.Reading, vm.DailyVM.Answers);
         Assert.Same(vm.InventoryVM.Reading, vm.ForecastVM.Answers);
-        Assert.EndsWith("By Ann's answers this drive is felt more than it is used: the anger is there and the assertion is not.", Mars());
+        Assert.Contains("By Ann's answers this drive is felt more than it is used: the anger is there and the assertion is not.", Mars());
         Assert.Equal("In the Light of the Answers", vm.ChartVM.ReportSections[^1].Heading);
 
         // Switched off: the Report is as it would be without the questionnaire, and the choice is kept.

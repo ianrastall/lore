@@ -179,6 +179,12 @@ public enum MirrorExpectation { Unknown, Easy, Middling, Strained }
 // HardWon: a hard placement lived well.
 public enum MirrorVerdict { NoContrast, AsWritten, AsWrittenHard, Unlived, HardWon }
 
+// One dial of a planet set against what its sign leads one to expect. Gap is how far the
+// answers are above (+) or below (−) that, in steps of low, mid, high; nought is a match
+// at high or at low (a match at mid is not recorded: there is nothing to say of it).
+// Clause is the comparison in words, to be set into a sentence.
+public sealed record MirrorComparison(string Dial, string Expected, string Actual, int Gap, string Clause);
+
 // One planet as the chart-and-answers reading has it.
 public sealed record MirrorPlanet(
     Planet Planet, PlanetPosition Position, string Expression, MirrorLived Lived, int? Dignity, MirrorExpectation Expectation)
@@ -188,7 +194,17 @@ public sealed record MirrorPlanet(
     public string DignityNotes { get; init; } = "";
     public IReadOnlyList<FacetScore> Facets { get; init; } = [];
 
-    // The sentence this adds to the planet's paragraph in the Report; empty for none.
+    // True when every one of its dials is middling, so that it has only the catch-all
+    // expression: the answers say nothing in particular of this planet.
+    public bool IsOrdinary { get; init; }
+
+    // Each of its dials against its sign, where there is anything to say; and that put
+    // into a line for the Chart and answers reading. Empty for Uranus and Neptune, whose
+    // sign belongs to a generation and not to a person.
+    public IReadOnlyList<MirrorComparison> Comparisons { get; init; } = [];
+    public string AgainstSign { get; init; } = "";
+
+    // What this adds to the planet's paragraph in the Report; empty for none.
     public string ReportLine { get; init; } = "";
 
     // What is added to a transit to this planet in the Daily and Forecast readings: one
@@ -196,13 +212,20 @@ public sealed record MirrorPlanet(
     public string DailyHard { get; init; } = "";
     public string DailyEasy { get; init; } = "";
 
+    // The same for a pass in the Forecast, which lasts days or weeks and is not "today".
+    public string ForecastHard { get; init; } = "";
+    public string ForecastEasy { get; init; } = "";
+
     // The line for a transit of a given tone. A conjunction takes whichever line goes
     // with how the planet is lived: the hard one under strain, the easy one otherwise.
-    public string DailyLine(TransitTone tone) => tone switch
+    public string DailyLine(TransitTone tone) => Hard(tone) ? DailyHard : DailyEasy;
+    public string ForecastLine(TransitTone tone) => Hard(tone) ? ForecastHard : ForecastEasy;
+
+    private bool Hard(TransitTone tone) => tone switch
     {
-        TransitTone.Tension => DailyHard,
-        TransitTone.Flow => DailyEasy,
-        _ => Lived == MirrorLived.Strain ? DailyHard : DailyEasy,
+        TransitTone.Tension => true,
+        TransitTone.Flow => false,
+        _ => Lived == MirrorLived.Strain,
     };
 
     public MirrorVerdict Verdict => (Expectation, Lived) switch
@@ -225,6 +248,22 @@ public sealed class MirrorReading
     // A closing section for the Report: what in it comes from the answers, and any
     // planet whose placement and answers disagree.
     public IReadOnlyList<string> ReportParagraphs { get; init; } = [];
+
+    // What the Report's Overview takes: a sentence each for "Sun", "Moon" and "Rising",
+    // where there is one, and a line on the five broad traits taken together.
+    public IReadOnlyDictionary<string, string> OverviewLines { get; init; } = new Dictionary<string, string>();
+    public string Summary { get; init; } = "";
+
+    // A sentence for an aspect of the birth chart, by AspectKey; and for an element or
+    // mode the chart leans toward or lacks.
+    public IReadOnlyDictionary<string, string> AspectLines { get; init; } = new Dictionary<string, string>();
+    public IReadOnlyDictionary<Element, string> ElementLines { get; init; } = new Dictionary<Element, string>();
+    public IReadOnlyDictionary<Modality, string> ModalityLines { get; init; } = new Dictionary<Modality, string>();
+
+    public static string AspectKey(NatalPoint a, NatalPoint b, AspectType type) => $"{a.Name}|{type}|{b.Name}";
+
+    public string AspectLine(NatalPoint a, NatalPoint b, AspectType type) =>
+        AspectLines.GetValueOrDefault(AspectKey(a, b, type)) ?? AspectLines.GetValueOrDefault(AspectKey(b, a, type)) ?? "";
 
     // The planet as this reading has it, if the reading is this chart's and reads it.
     public MirrorPlanet? For(NatalChart chart, Planet planet) =>

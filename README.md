@@ -111,14 +111,18 @@ The **Inventory** view offers a standard personality questionnaire for any chart
 - **Ten statements at a time**, fifteen to twenty-five minutes in all. Every answer is saved as it is given, so a sitting can be left and taken up again.
 - **The profile** gives each trait and facet as low, typical or high against published figures for 320,128 people who took the same questionnaire (Kajonius & Johnson, 2019), with a plain sentence for each. *Typical* is within one standard deviation of that group's average.
 - **The profile itself is not astrology.** No score in it is taken from the chart.
-- **Chart and answers.** A second reading, chosen with **Chart and answers** above the profile, sets the two side by side for eight planets (Sun to Saturn, and Neptune).
-  - *How each planet is being lived*: the facets that measure the nearest thing to what a planet stands for pick one of several named expressions. Mars, read from Assertiveness, Activity Level, Excitement-Seeking and Anger, may come out *direct*, *combative*, *held in*, *muted*, *short-fused*, *even-tempered* or *measured*. Each is given after the Report's own words for that planet in its sign.
+- **Chart and answers.** A second reading, chosen with **Chart and answers** above the profile, sets the two side by side for nine planets (the Sun to Neptune) and the Ascendant.
+  - *How each planet is being lived*: each planet has one or two *dials*, groups of facets that measure the nearest thing to what it stands for, and their pattern picks one of several named expressions. Mars, read for push (Assertiveness, Activity Level, Excitement-Seeking) and heat (Anger), may come out *direct*, *combative*, *held in*, *muted*, *short-fused*, *even-tempered* or *measured*. Each is given after the Report's own words for that planet in its sign.
+  - *Against the sign*: for the Sun to Saturn, the sign a planet is in says how much of each dial to expect (push from a Mars in Aries, restraint from a Mars in Libra), and the reading says where the answers bear that out and where there is more or less, or far more or less, than the sign would suggest.
   - *Where the chart and the answers part company*: the chart's expectation is the planet's dignity score (well placed, it "works easily"; badly placed, "with strain"). An easy placement lived with strain is called **unlived**; a hard one lived well, **hard-won**.
-  - The chart is never altered. The pairing of planets with facets is Lore's own design, and the reading says plainly that no research connects a birth chart with measured personality: it is a prompt for reflection. 54 expressions and 14 comparison paragraphs, in `Data\mirror.json`.
+  - The chart is never altered. The pairing of planets with facets is Lore's own design, and the reading says plainly that no research connects a birth chart with measured personality: it is a prompt for reflection.
+  - *Between the planets* and *The chart as a whole*: the closest aspects between planets the answers speak of, read by how each end is lived; the elements and modes the chart leans toward or lacks, set against facets of their own; and the five broad traits in a line.
+  - 61 expressions, an expectation for every dial of seven planets in each of the twelve signs, and 14 comparison paragraphs, in `Data\mirror.json`. The rules are tested against a simulated population of 3,000 people, so that every expression is somebody's and no catch-all swallows the rest.
 - **The Report, Daily and Forecast follow.** With the questionnaire answered, the answers also shape the wording of the other readings for that person:
-  - in the **Report**, each planet the answers have something to say about gains a sentence beginning *By (name)'s answers…*, and a closing section, *In the Light of the Answers*, says which sentences those are and names any planet whose placement and answers disagree;
-  - in the **Daily** and **Forecast** readings, a transit to a planet the answers describe as lived with strain, or lived well, gains a line beginning *By your answers…* saying how that is likely to bear on it: a square to a Mars that is *held in* is read differently from one to a Mars that is *direct*.
-  - Every such sentence is marked as coming from the answers, and nothing the readings said before is removed or reworded. Where the answers are ordinary, nothing is added. A tick-box in the Inventory view turns it off.
+  - in the **Report**, each planet the answers have something to say about gains a sentence or two beginning *By (name)'s answers…*, on how it is lived and how that sits with its sign; the **Overview** gains the same for the Sun, Moon and Rising signs and a line on the five traits; an **aspect** between two such planets gains a sentence on how its two ends are lived; the **balance** of elements and modes gains one where the answers bear on it; and a closing section, *In the Light of the Answers*, says which sentences those are and names any planet whose placement and answers disagree;
+  - in the **Daily** and **Forecast** readings, a transit to a planet the answers describe as lived with strain, or lived well, gains a line beginning *By your answers…* saying how that is likely to bear on it: a square to a Mars that is *held in* is read differently from one to a Mars that is *direct*. Every expression has lines of its own, and a natal planet gets its line once in a day and once in a month of the Forecast.
+  - Timing and Synastry take nothing from the answers.
+  - Every such sentence is marked as coming from the answers, and nothing the readings said before is removed or reworded. Where the answers are ordinary, the Report says so in one line and nothing else is added. A tick-box in the Inventory view turns it off.
 - **Private.** Answers are kept on the PC only, in a file of their own (`%LOCALAPPDATA%\Lore\inventories.json`), apart from your saved charts: they are never part of a My Charts export. One button deletes them, and deleting a chart deletes its answers.
 - **Not for the bundled figures**, who cannot answer a questionnaire.
 - **Text exports** of the profile and of the chart-and-answers reading.
@@ -516,7 +520,17 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 3.1.0 (current)
+### 3.2.0 (current)
+- **The answers now reach the whole Report.** Besides the planets, the **Overview** (Sun, Moon and Rising, and a line on the five broad traits), the **Major Aspects** and the balance of **elements and modes** take a sentence from the answers where they have something to say.
+- **Set against the sign.** The sign each planet is in (Sun to Saturn) now says how much of each quality to expect, and the readings say where the answers bear it out and where there is more or less: *That is far more push than Mars in Libra would suggest.*
+- **Much more wording, and tested for coverage.**
+  - Uranus is now read (from Liberalism); Mercury and Venus are read from more facets; 61 expressions in place of 54, each with its own lines for the Report, for a hard transit and for an easy one.
+  - The rules were measured against a simulated population built from the questionnaire's published structure, and redrawn so that every expression is met by at least one person in a hundred and no catch-all takes most people.
+- **Daily and Forecast.** A natal planet's line is given once in a day (on the day a transit is exact, or under the Moon's) and once in a month of the Forecast, which has lines of its own that do not speak of "today".
+- **Chart and answers** gains *Against the sign* under each planet, and two sections: *Between the planets* and *The chart as a whole*.
+- A debug build can be pointed at another data folder (`LORE_HOME`), so the app can be tried with made-up charts and never touch real ones.
+
+### 3.1.0
 - **The answers now shape the Report, the Daily and the Forecast.** In 3.0.0 the personality inventory fed one reading of its own. Now, for anyone who has answered it:
   - the **Report** adds a sentence to each planet the answers speak of, saying how they describe it lived (*By Ann's answers this drive is felt more than it is used…*), and ends with a section, *In the Light of the Answers*, naming any planet that is *unlived* or *hard-won*;
   - the **Daily** and **Forecast** readings add a line to a transit to such a planet (*By your answers your temper is quick, or kept under, so friction today may cost you more than it should…*), different for a hard transit and an easy one.

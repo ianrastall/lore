@@ -74,9 +74,9 @@ public sealed class DailyInterpreter
     // that is likely to bear on the day. Ignored unless it was made for this chart.
     public DailyReading Compose(NatalChart natal, DaySky sky, DateTimeZone zone, MirrorReading? answers = null)
     {
-        (_answers, _answersChart) = (answers, natal);
+        (_answers, _answersChart, _answersSaid) = (answers, natal, null);
         try { return ComposeDay(natal, sky, zone); }
-        finally { (_answers, _answersChart) = (null, null); }
+        finally { (_answers, _answersChart, _answersSaid) = (null, null, null); }
     }
 
     private DailyReading ComposeDay(NatalChart natal, DaySky sky, DateTimeZone zone)
@@ -309,7 +309,9 @@ public sealed class DailyInterpreter
         {
             Title = $"{e.Mover.Symbol()} {e.Mover.Name()} {e.Aspect.Verb()} your natal {target}",
             Meta = string.Join("  ·  ", meta),
-            Text = TransitText(e) + AnswersLine(e.Target, e.Tone)
+            Text = TransitText(e) +
+                   (!e.IsBackground && (e.Mover == Planet.Moon || e.Phase == TransitPhase.Exact)
+                       ? AnswersLine(e.Mover, e.Target, e.Tone, forecast: false) : "")
         };
     }
 
@@ -318,14 +320,26 @@ public sealed class DailyInterpreter
     private string TransitText(TransitEvent e) => TransitText(e.Mover, e.Tone, e.Target);
 
     // The planets as the person's answers describe them lived, for the reading being
-    // composed on this thread; null when there are none to use.
+    // composed on this thread (null when there are none to use), and which of them have
+    // had their line said already.
     [ThreadStatic] private static MirrorReading? _answers;
     [ThreadStatic] private static NatalChart? _answersChart;
+    [ThreadStatic] private static HashSet<string>? _answersSaid;
 
-    // " By your answers, …" for a transit to a natal planet, or nothing.
-    private static string AnswersLine(NatalPoint target, TransitTone tone) =>
-        target.Kind == NatalPointKind.Body && _answers is { } answers && _answersChart is { } chart &&
-        answers.For(chart, target.Body)?.DailyLine(tone) is { Length: > 0 } line ? " " + line : "";
+    // " By your answers, …" for a transit to a natal planet, or nothing: under a transit
+    // by one of the ten planets, and once only for each natal planet within `scope`. In
+    // a day's reading (`forecast` false) the scope is the day, and the line, which
+    // speaks of today, is kept for the day a transit is exact, or for the Moon's, which
+    // come and go within it. In the forecast the scope is a month, and the line is the
+    // one written for a stretch of days.
+    private static string AnswersLine(Planet mover, NatalPoint target, TransitTone tone, bool forecast, string scope = "")
+    {
+        if (mover > Planet.Pluto || target.Kind != NatalPointKind.Body ||
+            _answers is not { } answers || _answersChart is not { } chart ||
+            answers.For(chart, target.Body) is not { } planet) return "";
+        string line = forecast ? planet.ForecastLine(tone) : planet.DailyLine(tone);
+        return line.Length > 0 && (_answersSaid ??= []).Add($"{scope}|{target.Body}") ? " " + line : "";
+    }
 
     private string TransitText(Planet moving, TransitTone tone, NatalPoint natalPoint)
     {
@@ -347,9 +361,9 @@ public sealed class DailyInterpreter
         NatalChart natal, IReadOnlyList<TransitPass> passes, DateOnly start, int days, DateTimeZone zone,
         IReadOnlyList<SkyEvent>? sky = null, MirrorReading? answers = null)
     {
-        (_answers, _answersChart) = (answers, natal);
+        (_answers, _answersChart, _answersSaid) = (answers, natal, null);
         try { return ComposeAhead(natal, passes, start, days, zone, sky); }
-        finally { (_answers, _answersChart) = (null, null); }
+        finally { (_answers, _answersChart, _answersSaid) = (null, null, null); }
     }
 
     private ForecastReading ComposeAhead(
@@ -399,7 +413,8 @@ public sealed class DailyInterpreter
             {
                 Title = $"{p.Mover.Symbol()} {p.Mover.Name()} {p.Aspect.Verb()} your natal {target}",
                 Meta = string.Join("  ·  ", meta),
-                Text = TransitText(p.Mover, p.Tone, p.Target) + AnswersLine(p.Target, p.Tone),
+                Text = TransitText(p.Mover, p.Tone, p.Target) +
+                       AnswersLine(p.Mover, p.Target, p.Tone, forecast: true, Local(p.PeakUtc).ToString("yyyy-MM", null)),
             };
         }
 

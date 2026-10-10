@@ -13,7 +13,7 @@ note stays true.
 
 - Eight views: Chart, Report, Worksheet, Daily, Forecast, Timing, Synastry, Inventory
   (from 3.0.0), plus the Legend. About 10,600 lines of C# and XAML; no file over 560 lines.
-- 375 tests (as of 3.1.0), all passing, covering the calculation and data layer and the view models. They run on
+- 381 tests (as of 3.2.0), all passing, covering the calculation and data layer and the view models. They run on
   GitHub on every push, followed by a build of the app itself (about 3 minutes).
 - The views and the three export services are **not** tested: they
   depend on WinUI or Win2D and the test project leaves them out.
@@ -383,6 +383,40 @@ Not done, and deliberately: the transits a day's reading *chooses* are not re-ra
 the answers; the Overview's Sun, Moon and Rising paragraphs, the aspects and the
 balance are untouched; Timing and Synastry take nothing from the answers. Not looked at
 in the running app, for the reason given in 3e.
+
+## 3g. 3.2.0: the Overview, aspects and balance; the wording shored up
+
+Asked for by Ian on 10 October 2026, straight after 3.1.0: shape the Overview, aspects
+and balance too, and above all make the answers' content robust. Built the same day as
+**3.2.0** (interrupted once, and picked up in a second session). The tests stand at 381.
+
+- **Measured first.** A simulated population (facets drawn from the questionnaire's
+  published loadings, `tests/Lore.Tests/Reference/ipip-neo-120-loadings.json`) showed
+  which expressions nobody met and which catch-alls took nearly everyone. The rules
+  were redrawn to it, and `MirrorTests` holds the result: over 3,000 people every
+  expression is met by at least 1 in 100, no catch-all takes more than 55% (75% on a
+  one-facet planet), and nine people in ten are told something of three planets or more.
+- **Dials.** Each planet has one or two named dials (groups of facets; one-facet dials
+  use the profile's own line of one standard deviation, others `DialThreshold` 0.5).
+  Uranus is added (Liberalism); Mercury gains candour (Morality), Venus taste (Artistic
+  Interests, as `also` expressions that add to whichever main one fits). 61 expressions.
+- **Against the sign.** `signs` in `mirror.json` gives, for the Sun to Saturn, the level
+  of each dial a sign leads one to expect; `MirrorComparison` and `AgainstSign` carry the
+  result. In the Report only a dial the answers mark out is spoken of.
+- **Overview, aspects, balance.** `MirrorReading.OverviewLines`, `Summary`,
+  `AspectLines` (the six closest major aspects between two planets that are not
+  catch-all), `ElementLines`, `ModalityLines`; `ChartInterpreter.Leaning` is shared so
+  the Report and the answers agree on what the chart leans toward.
+- **Daily and Forecast.** A line once per natal planet per day (exact transits and the
+  Moon's only) and once per month in the Forecast, which has its own lines
+  (`forecast` in `mirror.json`).
+- **`AppFolder` and `LORE_HOME`.** The three stores take their folder from
+  `AppFolder.Path`; a debug build uses `LORE_HOME` when set. This is how the Report and
+  the Inventory view were looked at in the running app, with a made-up chart and
+  answers, without opening Ian's own. A release build ignores it.
+
+Still not done: the answers do not re-rank which transits a day chooses; Timing and
+Synastry take nothing from them; the Patterns section of the Report is untouched.
 
 ## 4. Features, in the order I would build them
 

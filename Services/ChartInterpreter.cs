@@ -88,20 +88,23 @@ public sealed class ChartInterpreter
         if (answers is not null && !answers.IsFor(chart)) answers = null;
         var sections = new List<ReportSection>
         {
-            Overview(chart, moonSigns),
+            Overview(chart, moonSigns, answers),
             Planets(chart, answers),
-            Aspects(chart),
+            Aspects(chart, answers),
             Patterns(chart),
-            Balance(chart),
-            ModalBalance(chart),
+            Balance(chart, answers),
+            ModalBalance(chart, answers),
         };
         if (answers is { ReportParagraphs.Count: > 0 })
             sections.Add(new ReportSection { Heading = "In the Light of the Answers", Paragraphs = [.. answers.ReportParagraphs] });
         return sections;
     }
 
-    private ReportSection Overview(NatalChart chart, IReadOnlyList<ZodiacSign>? moonSigns)
+    private ReportSection Overview(NatalChart chart, IReadOnlyList<ZodiacSign>? moonSigns, MirrorReading? answers)
     {
+        // " By Ann's answers …" for the Sun, the Moon or the rising sign, or nothing.
+        string Lived(string role) => answers?.OverviewLines.GetValueOrDefault(role) is { Length: > 0 } line ? " " + line : "";
+
         string name = FirstName(chart.Celebrity.Name);
         var paras = new List<string>();
 
@@ -110,7 +113,7 @@ public sealed class ChartInterpreter
         var risingSign = ZodiacSignExtensions.FromLongitude(chart.Ascendant);
 
         if (sun is not null)
-            paras.Add(Frame("Sun", _c.SunSigns, name, sun.Sign));
+            paras.Add(Frame("Sun", _c.SunSigns, name, sun.Sign) + Lived("Sun"));
         bool moonUnsure = !chart.Timed && moonSigns is { Count: > 1 };
         if (moonUnsure)
             paras.Add($"The Moon changed sign on the day {name} was born — it was in " +
@@ -118,7 +121,7 @@ public sealed class ChartInterpreter
                       "birth time the Moon sign can't be given. The Moon line under The Planets below is for noon.");
         else if (moon is not null)
         {
-            paras.Add(Frame("Moon", _c.MoonSigns, name, moon.Sign));
+            paras.Add(Frame("Moon", _c.MoonSigns, name, moon.Sign) + Lived("Moon"));
             // How the two fit together, by element.
             if (sun is not null)
             {
@@ -127,11 +130,14 @@ public sealed class ChartInterpreter
             }
         }
         if (chart.Timed)
-            paras.Add(Frame("Rising", _c.RisingSigns, name, risingSign));
+            paras.Add(Frame("Rising", _c.RisingSigns, name, risingSign) + Lived("Rising"));
         else
             paras.Add("Note: the birth time is unknown, so the planets are placed for noon. The Rising " +
                       "sign and the houses can't be known without a time and are left out, and the Moon " +
                       "may be up to seven degrees from where it is shown.");
+
+        // The five broad traits of the questionnaire, in a line.
+        if (answers is { Summary.Length: > 0 }) paras.Add(answers.Summary);
 
         return new ReportSection { Heading = "Overview", Paragraphs = paras };
     }
@@ -174,7 +180,7 @@ public sealed class ChartInterpreter
         return new ReportSection { Heading = "The Planets", Paragraphs = paras };
     }
 
-    private ReportSection Aspects(NatalChart chart)
+    private ReportSection Aspects(NatalChart chart, MirrorReading? answers = null)
     {
         var paras = new List<string>();
         if (chart.Aspects.Count == 0 && chart.AngleAspects.Count == 0)
@@ -195,6 +201,9 @@ public sealed class ChartInterpreter
             if (text.Length > 0) line += " " + text;
             if (a.OutOfSign)
                 line += $" Out of sign: the two are in {SignOf(a.A)} and {SignOf(a.B)}, which are not in this aspect to each other, so tradition reads it as weaker.";
+            // How the answers describe the two ends of it lived.
+            if (answers?.AspectLine(a.A, a.B, a.Type) is { Length: > 0 } lived)
+                line += " " + lived;
             paras.Add(line);
         }
         return new ReportSection { Heading = "Major Aspects", Paragraphs = paras };
@@ -313,14 +322,15 @@ public sealed class ChartInterpreter
         };
     }
 
-    private ReportSection Balance(NatalChart chart)
+    private ReportSection Balance(NatalChart chart, MirrorReading? answers = null)
     {
         // Every body in the chart counts once: the same tally the Worksheet shows.
         var counts = NatalMetricsService.ElementCounts(chart);
 
         var paras = Spread(counts, "elementsEven", _c.Elements, _c.ElementStrong, _c.ElementWeak,
             e => e.ToString(),
-            e => $"There is little or no {e}, which may be an area that needs conscious cultivation.");
+            e => $"There is little or no {e}, which may be an area that needs conscious cultivation.",
+            e => answers?.ElementLines.GetValueOrDefault(e) ?? "");
         if (paras.Count > 0)
             paras.Add($"Element tally — Fire: {counts[Element.Fire]}, Earth: {counts[Element.Earth]}, " +
                       $"Air: {counts[Element.Air]}, Water: {counts[Element.Water]}.");
@@ -332,39 +342,56 @@ public sealed class ChartInterpreter
     // single note instead.
     private List<string> Spread<T>(Dictionary<T, int> counts, string evenNote,
         Dictionary<string, string> labels, Dictionary<string, string> strong, Dictionary<string, string> weak,
-        Func<T, string> labelFallback, Func<T, string> weakFallback) where T : notnull
+        Func<T, string> labelFallback, Func<T, string> weakFallback, Func<T, string>? lived = null) where T : notnull
     {
+        // " By Ann's answers …" for one element or mode, or nothing.
+        string Lived(T key) => lived?.Invoke(key) is { Length: > 0 } line ? " " + line : "";
+
         var paras = new List<string>();
         int total = counts.Values.Sum();
         if (total == 0) return paras;
 
-        int max = counts.Values.Max(), min = counts.Values.Min();
+        int max = counts.Values.Max();
         string even = Lookup(_c.BalanceNotes, evenNote, "");
-        if (max - min <= 1 && even.Length > 0)
+        var (top, empty) = Leaning(counts);
+        if (top.Count == 0 && even.Length > 0)
         {
             paras.Add(even);
             return paras;
         }
+        if (top.Count == 0) top = counts.Where(kv => kv.Value == max).Select(kv => kv.Key).ToList();
 
-        var top = counts.Where(kv => kv.Value == max).Select(kv => kv.Key).ToList();
         foreach (var key in top)
         {
             string lead = top.Count == 1 ? "The chart leans toward" : paras.Count == 0 ? "The chart leans equally toward" : "And toward";
             paras.Add($"{lead} {key} ({max} of {total} bodies) — {Lookup(labels, key.ToString()!, labelFallback(key))}." +
-                      More(strong, key.ToString()));
+                      More(strong, key.ToString()) + Lived(key));
         }
-        foreach (var key in counts.Where(kv => kv.Value == 0).Select(kv => kv.Key))
-            paras.Add(Lookup(weak, key.ToString()!, weakFallback(key)));
+        foreach (var key in empty)
+            paras.Add(Lookup(weak, key.ToString()!, weakFallback(key)) + Lived(key));
         return paras;
     }
 
-    private ReportSection ModalBalance(NatalChart chart)
+    // Which of a tally's kinds the chart leans toward (those with most, more than one
+    // where they tie) and which it lacks altogether. Neither, where the spread is even:
+    // no kind has more than one body over any other.
+    public static (List<T> Strong, List<T> Empty) Leaning<T>(Dictionary<T, int> counts) where T : notnull
+    {
+        if (counts.Count == 0 || counts.Values.Sum() == 0) return ([], []);
+        int max = counts.Values.Max(), min = counts.Values.Min();
+        if (max - min <= 1) return ([], []);
+        return (counts.Where(kv => kv.Value == max).Select(kv => kv.Key).ToList(),
+                counts.Where(kv => kv.Value == 0).Select(kv => kv.Key).ToList());
+    }
+
+    private ReportSection ModalBalance(NatalChart chart, MirrorReading? answers = null)
     {
         var counts = NatalMetricsService.ModalityCounts(chart);
 
         var paras = Spread(counts, "modalitiesEven", _c.Modalities, _c.ModalityStrong, _c.ModalityWeak,
             ModalityFallback,
-            m => $"There is little or no {m} energy, which may be an area that needs conscious cultivation.");
+            m => $"There is little or no {m} energy, which may be an area that needs conscious cultivation.",
+            m => answers?.ModalityLines.GetValueOrDefault(m) ?? "");
         if (paras.Count > 0)
             paras.Add($"Modality tally — Cardinal: {counts[Modality.Cardinal]}, " +
                       $"Fixed: {counts[Modality.Fixed]}, Mutable: {counts[Modality.Mutable]}.");

@@ -43,7 +43,7 @@ public sealed class UserChartService
     public const int MaxImportCharts = 10_000;
 
     public UserChartService()
-        : this(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Lore"))
+        : this(AppFolder.Path)
     {
     }
 

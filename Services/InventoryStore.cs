@@ -24,7 +24,7 @@ public sealed class InventoryStore
     private Task _queue = Task.CompletedTask;
 
     public InventoryStore()
-        : this(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Lore"))
+        : this(AppFolder.Path)
     {
     }
 
