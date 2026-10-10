@@ -151,7 +151,8 @@ public sealed partial class MainViewModel : ObservableObject
         TransitService transits,
         DailyInterpreter dailyInterpreter,
         SynastryInterpreter synastryInterpreter,
-        SettingsService? settings = null)
+        SettingsService? settings = null,
+        DavisonInterpreter? davisonInterpreter = null)
     {
         _settings = settings;
         _celebrities = celebrities;
@@ -163,7 +164,7 @@ public sealed partial class MainViewModel : ObservableObject
         DailyVM = new DailyViewModel(transits, dailyInterpreter) { Home = settings?.LoadHome() };
         ForecastVM = new ForecastViewModel(transits, dailyInterpreter);
         TimingVM = new TimingViewModel(new TimingService(charts, dailyInterpreter.HouseTopic), cities);
-        SynastryVM = new SynastryViewModel(charts, synastryInterpreter);
+        SynastryVM = new SynastryViewModel(charts, synastryInterpreter, davisonInterpreter);
     }
 
     public async Task InitializeAsync(string dataPath, string citiesPath, string hospitalsPath)

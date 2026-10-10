@@ -61,9 +61,21 @@ public static class WorksheetService
         var c = chart.Celebrity;
         var (utc, offset) = BirthTimeResolver.Explain(c);
 
+        // A Davison chart is not a birth: it has no clock time to convert, and its moment
+        // is the one it was cast for, whatever the noon rule would say.
+        bool davison = c.Category == ChartService.DavisonCategory;
+        if (davison)
+        {
+            utc = chart.CalculatedForUtc;
+            offset = "None: the moment is worked out in Universal Time";
+        }
+
         var facts = new List<WorksheetFact>
         {
-            new("Born", chart.Timed
+            new("Born", davison
+                ? "Not a birth: the moment halfway between two births" +
+                  (chart.Timed ? "" : " (a birth time is missing, so it may be hours out)")
+                : chart.Timed
                 ? $"{c.BirthDate} at {c.BirthTime}, clock time at the birthplace"
                 : $"{c.BirthDate}, time unknown — calculated for 12:00 noon"),
             new("Calendar", c.JulianCalendar

@@ -152,6 +152,55 @@ public sealed class ViewModelTests : IDisposable
     });
 
     [Fact]
+    public void The_Synastry_view_switches_between_the_comparison_and_the_Davison_chart() => UiThread.Run(async () =>
+    {
+        var charts = new ChartService(Repo.Ephemeris);
+        var vm = new SynastryViewModel(charts, new SynastryInterpreter(Repo.Data("synastry.json")),
+            new DavisonInterpreter(Repo.Data("davison.json")));
+        async Task Built()
+        {
+            for (int i = 0; vm.IsBusy; i++)
+            {
+                Assert.True(i < 3000, "The synastry view did not settle.");
+                await Task.Delay(10);
+            }
+        }
+
+        vm.Chart = charts.Calculate(Repo.Figure("elvis-presley"));
+        vm.Partner = Repo.Figure("marilyn-monroe");
+        await Built();
+
+        // The comparison first: its sections, and no Davison chart on the wheel.
+        Assert.True(vm.ComparisonShown);
+        Assert.Equal("At a glance", vm.Sections[0].Heading);
+        Assert.StartsWith("Inner wheel: Elvis Presley", vm.WheelCaption);
+        Assert.NotNull(vm.DavisonChart);
+        Assert.NotNull(vm.DavisonChart!.Events); // looked up, for its worksheet
+
+        var changed = new List<string?>();
+        vm.PropertyChanged += (_, e) => changed.Add(e.PropertyName);
+        vm.ShowDavison = true;
+        Assert.True(vm.DavisonShown);
+        Assert.Equal("The relationship's own chart", vm.Sections[0].Heading);
+        Assert.Equal("The Davison chart of Elvis Presley and Marilyn Monroe", vm.WheelCaption);
+        Assert.Contains(nameof(SynastryViewModel.Sections), changed);
+        Assert.Contains(nameof(SynastryViewModel.DavisonShown), changed);
+
+        // The choice is kept when someone else is picked, and nothing of the last
+        // pair is shown while the new one is worked out.
+        vm.Partner = Repo.Figure("albert-einstein");
+        Assert.Empty(vm.Sections);
+        await Built();
+        Assert.True(vm.DavisonShown);
+        Assert.Equal("Elvis Presley & Albert Einstein", vm.Davison!.Title);
+
+        // With nobody to compare with there is no Davison chart to show.
+        vm.Partner = null;
+        Assert.False(vm.DavisonShown);
+        Assert.Null(vm.DavisonChart);
+    });
+
+    [Fact]
     public void The_place_a_return_is_cast_for_is_kept_when_the_same_persons_chart_is_recalculated() => UiThread.Run(async () =>
     {
         var charts = new ChartService(Repo.Ephemeris);

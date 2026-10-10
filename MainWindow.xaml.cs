@@ -346,6 +346,10 @@ public sealed partial class MainWindow : Window
     private async void ExportTimingText_Click(object sender, RoutedEventArgs e) => await ExportAsync("timingtxt");
     private async void ExportSynastryPdf_Click(object sender, RoutedEventArgs e) => await ExportAsync("synastrypdf");
     private async void ExportSynastryPng_Click(object sender, RoutedEventArgs e) => await ExportAsync("synastrypng");
+    private async void ExportDavisonPdf_Click(object sender, RoutedEventArgs e) => await ExportAsync("davisonpdf");
+    private async void ExportDavisonPng_Click(object sender, RoutedEventArgs e) => await ExportAsync("davisonpng");
+    private async void ExportDavisonSheetPng_Click(object sender, RoutedEventArgs e) => await ExportAsync("davisonsheetpng");
+    private async void ExportDavisonText_Click(object sender, RoutedEventArgs e) => await ExportAsync("davisontxt");
 
     // One export at a time: a second, started while the first is still being written,
     // would be competing with it for the same drawing surface and status line.
@@ -431,6 +435,16 @@ public sealed partial class MainWindow : Window
             return;
         }
 
+        // And the Davison exports the Davison chart of the same two people.
+        var davisonReading = ViewModel.SynastryVM.Davison;
+        bool davison = kind.StartsWith("davison", StringComparison.Ordinal);
+        if (davison && (comparison is null || davisonReading is null || ViewModel.SynastryVM.IsBusy ||
+                        !ReferenceEquals(comparison.First, chart)))
+        {
+            ViewModel.StatusMessage = "Open the Synastry view and choose someone to compare with first, then export.";
+            return;
+        }
+
         try
         {
             var (label, ext) = kind switch
@@ -450,6 +464,9 @@ public sealed partial class MainWindow : Window
                 "timingtxt" => ("Text file", ".txt"),
                 "synastrypdf" => ("PDF document", ".pdf"),
                 "synastrypng" => ("PNG image", ".png"),
+                "davisonpdf" => ("PDF document", ".pdf"),
+                "davisonpng" or "davisonsheetpng" => ("PNG image", ".png"),
+                "davisontxt" => ("Text file", ".txt"),
                 _      => throw new ArgumentOutOfRangeException(nameof(kind)),
             };
 
@@ -459,6 +476,8 @@ public sealed partial class MainWindow : Window
             picker.SuggestedFileName =
                 daily ? SafeFileName($"{chart.Celebrity.Name} - daily {reading!.Date.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture)}") :
                 synastry ? SafeFileName($"{synastryReading!.FirstName} and {synastryReading.SecondName} - synastry") :
+                davison ? SafeFileName($"{davisonReading!.FirstName} and {davisonReading.SecondName} - Davison chart" +
+                                       (kind == "davisonsheetpng" ? " with tables" : kind == "davisontxt" ? " worksheet" : "")) :
                 kind == "worksheettxt" ? SafeFileName($"{chart.Celebrity.Name} - worksheet") :
                 kind == "sheetpng" ? SafeFileName($"{chart.Celebrity.Name} - chart with tables") :
                 timed ? SafeFileName($"{chart.Celebrity.Name} - return and progressions {timing!.AsOf.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture)}") :
@@ -478,6 +497,8 @@ public sealed partial class MainWindow : Window
                 "dailypdf" or "dailypng" => await ExportService.RenderTransitWheelPngAsync(chart, reading!),
                 "timingpdf" when timing!.Return is { } solar => await ExportService.RenderChartPngAsync(solar.Chart, showVerdict: false),
                 "synastrypdf" or "synastrypng" => await ExportService.RenderBiWheelPngAsync(comparison!),
+                "davisonpdf" or "davisonpng" => await ExportService.RenderChartPngAsync(davisonReading!.Chart, showVerdict: false),
+                "davisonsheetpng" => await ExportService.RenderChartSheetPngAsync(davisonReading!.Chart, showVerdict: false),
                 _ => null,
             };
 
@@ -486,7 +507,7 @@ public sealed partial class MainWindow : Window
             byte[] bytes = await Task.Run(() => kind switch
             {
                 "pdf"  => ExportService.ToPdf(chart, report, wheel!, worksheet, sensitivity),
-                "png" or "sheetpng" or "dailypng" or "synastrypng" => wheel!,
+                "png" or "sheetpng" or "dailypng" or "synastrypng" or "davisonpng" or "davisonsheetpng" => wheel!,
                 "json" => ExportService.ToJson(chart),
                 "xml"  => ExportService.ToXml(chart),
                 "worksheettxt" => WorksheetService.ToText(worksheet ?? WorksheetService.Build(chart), sensitivity),
@@ -497,6 +518,9 @@ public sealed partial class MainWindow : Window
                 "timingpdf" => DailyExportService.TimingToPdf(timing!, wheel),
                 "timingtxt" => TimingService.ToText(timing!),
                 "synastrypdf" => SynastryExportService.ToPdf(comparison!, synastryReading!, wheel!),
+                "davisonpdf" => SynastryExportService.DavisonToPdf(comparison!, davisonReading!, wheel!,
+                    WorksheetService.Build(davisonReading!.Chart)),
+                "davisontxt" => WorksheetService.ToText(WorksheetService.Build(davisonReading!.Chart)),
                 _      => throw new ArgumentOutOfRangeException(nameof(kind)),
             });
 

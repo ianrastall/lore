@@ -38,14 +38,14 @@ public static class ExportService
 
     // The wheel with the Worksheet's tables around and under it. The page is drawn on a
     // surface taller than it can need, then cut to the height it used.
-    public static async Task<byte[]> RenderChartSheetPngAsync(NatalChart chart)
+    public static async Task<byte[]> RenderChartSheetPngAsync(NatalChart chart, bool showVerdict = true)
     {
         var device = CanvasDevice.GetSharedDevice();
         using var scratch = new CanvasRenderTarget(device, ChartSheetRenderer.Width, ChartSheetRenderer.MaxHeight, 96);
         float used;
         using (var ds = scratch.CreateDrawingSession())
         {
-            used = ChartSheetRenderer.Draw(ds, chart);
+            used = ChartSheetRenderer.Draw(ds, chart, showVerdict);
         }
 
         int height = (int)Math.Ceiling(used);

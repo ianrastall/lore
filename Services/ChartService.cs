@@ -147,6 +147,8 @@ public sealed class ChartService
     // the latitudes, and the longitude midway round the shorter side of the globe). With
     // a birth time missing the midpoint could be hours out, so the chart is then marked
     // untimed and its angles, houses and Moon are not to be read.
+    public const string DavisonCategory = "Davison";
+
     public NatalChart Davison(NatalChart first, NatalChart second)
     {
         var utc = first.CalculatedForUtc + (second.CalculatedForUtc - first.CalculatedForUtc) / 2;
@@ -160,7 +162,8 @@ public sealed class ChartService
         {
             Id = $"davison:{a.Id}:{b.Id}",
             Name = $"{a.Name} & {b.Name}",
-            Category = "Davison",
+            Category = DavisonCategory,
+            Source = "Worked out by Lore: the midpoint in time and place of the two births",
             BirthDate = utc.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture),
             BirthTime = utc.ToString("HH:mm", System.Globalization.CultureInfo.InvariantCulture),
             BirthTimeKnown = a.BirthTimeKnown && b.BirthTimeKnown,

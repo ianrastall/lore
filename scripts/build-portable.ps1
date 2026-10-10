@@ -37,7 +37,7 @@ $required = @(
     'App.xbf', 'MainWindow.xbf', 'SplashWindow.xbf', 'Views\ChartView.xbf', 'Views\DailyView.xbf', 'Views\SynastryView.xbf',
     'coreclr.dll', 'Microsoft.UI.Xaml.dll', 'Microsoft.Graphics.Canvas.dll',
     'sweph.dll',
-    'Data\celebrities.json', 'Data\daily.json', 'Data\synastry.json',
+    'Data\celebrities.json', 'Data\daily.json', 'Data\synastry.json', 'Data\davison.json',
     'Assets\splash.png',
     'Assets\Ephemeris\sepl_18.se1', 'Assets\Ephemeris\semo_18.se1', 'Assets\Ephemeris\seas_18.se1',
     'Assets\Ephemeris\sepl_12.se1'

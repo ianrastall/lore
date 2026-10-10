@@ -73,6 +73,7 @@ public partial class App : Application
         string interpPath    = Path.Combine(baseDir, "Data", "interpretations.json");
         string dailyPath     = Path.Combine(baseDir, "Data", "daily.json");
         string synastryPath  = Path.Combine(baseDir, "Data", "synastry.json");
+        string davisonPath   = Path.Combine(baseDir, "Data", "davison.json");
 
         var celebSvc    = new CelebrityService();
         var settings    = new SettingsService();
@@ -85,7 +86,8 @@ public partial class App : Application
         var daily       = new DailyInterpreter(dailyPath);
         var synastry    = new SynastryInterpreter(synastryPath);
         var mainVm      = new MainViewModel(celebSvc, chartSvc, interpreter, userCharts, cities, hospitals,
-                                            transits, daily, synastry, settings);
+                                            transits, daily, synastry, settings,
+                                            new DavisonInterpreter(davisonPath));
 
         var window = new MainWindow(mainVm);
         // What is still waiting to be written (the chart and view to come back to).

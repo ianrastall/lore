@@ -83,3 +83,15 @@ public sealed class SynastryReading
 
     public string Title => $"{FirstName} & {SecondName}";
 }
+
+// The reading of two people's Davison chart: the one chart cast for the midpoint of
+// their births, read as the chart of the relationship. Laid out like the other readings.
+public sealed class DavisonReading
+{
+    public required string FirstName { get; init; }
+    public required string SecondName { get; init; }
+    public required NatalChart Chart { get; init; }
+    public required IReadOnlyList<DailySection> Sections { get; init; }
+
+    public string Title => $"{FirstName} & {SecondName}";
+}

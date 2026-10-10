@@ -240,7 +240,7 @@
   },
   "notes": {
     "davison": "The Davison chart is cast for the moment halfway between the two births, at the place halfway between the two birthplaces. Unlike the comparison above, which sets one chart against the other, it is a single real chart, and astrologers read it as the chart of the relationship itself.",
-    "davisonUntimed": "a birth time is missing, so the midpoint may be hours out: the Ascendant, Midheaven, houses and Moon are left out",
+    "davisonPointer": "The Davison chart has a reading, a wheel and a worksheet of its own: choose Davison chart at the top of the Synastry view.",
     "unknownBirthTimeOne": "{name} has no recorded birth time, so that chart's Ascendant, Midheaven, houses and Moon are left out of the comparison.",
     "unknownBirthTimeBoth": "Neither chart has a recorded birth time, so the Ascendants, Midheavens, houses and Moons are left out of the comparison."
   }

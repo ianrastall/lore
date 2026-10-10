@@ -225,28 +225,15 @@ public sealed class SynastryInterpreter
         }
     }
 
-    // The Davison chart, stated and not interpreted: when and where it is cast for, and
-    // where everything in it stands.
+    // The Davison chart is read on its own (DavisonInterpreter); here it is only said
+    // what it is, when and where it is cast for, and where its reading is to be found.
     private DailySection DavisonSection(NatalChart d)
     {
-        static string Position(double longitude) =>
-            $"{ZodiacSignExtensions.FormatDegreeInSign(longitude)} {ZodiacSignExtensions.FromLongitude(longitude).Name()}";
         static string Coordinate(double value, char positive, char negative)
         {
             int total = (int)Math.Round(Math.Abs(value) * 60);
             return $"{total / 60}°{total % 60:D2}'{(value < 0 ? negative : positive)}";
         }
-
-        var lines = new List<string>();
-        if (d.Timed)
-        {
-            lines.Add($"Ascendant {Position(d.Ascendant)}");
-            lines.Add($"Midheaven {Position(d.Midheaven)}");
-        }
-        lines.AddRange(d.Planets
-            .Where(p => d.Timed || p.Planet != Planet.Moon)
-            .Select(p => $"{p.PlanetSymbol} {p.PlanetName} {Position(p.Longitude)}{(p.IsRetrograde ? " ℞" : "")}" +
-                         (d.Timed ? $" — {ChartInterpreter.Ordinal(d.GetHouseForLongitude(p.Longitude))} house" : "")));
 
         return new DailySection
         {
@@ -265,11 +252,8 @@ public sealed class SynastryInterpreter
                 },
                 new DailyItem
                 {
-                    Title = "Where everything stands in it",
-                    Meta = d.Timed ? d.HouseSystemLabel
-                        : Lookup(_c.Notes, "davisonUntimed",
-                            "a birth time is missing, so the midpoint may be hours out: the Ascendant, Midheaven, houses and Moon are left out"),
-                    Text = string.Join("\n", lines),
+                    Text = Lookup(_c.Notes, "davisonPointer",
+                        "The Davison chart has a reading, a wheel and a worksheet of its own: choose Davison chart at the top of the Synastry view."),
                 },
             ],
         };

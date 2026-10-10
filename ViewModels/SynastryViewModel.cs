@@ -14,6 +14,7 @@ public sealed partial class SynastryViewModel : ObservableObject
 
     private readonly ChartService? _charts;
     private readonly SynastryInterpreter? _interpreter;
+    private readonly DavisonInterpreter? _davison;
 
     // Bumped on every rebuild; a calculation that finishes after a newer one has started
     // is discarded, so switching quickly between people never shows a stale comparison.
@@ -28,10 +29,12 @@ public sealed partial class SynastryViewModel : ObservableObject
     // Stops a search a newer one has overtaken, rather than letting it run on.
     private CancellationTokenSource? _matchCancel;
 
-    public SynastryViewModel(ChartService? charts = null, SynastryInterpreter? interpreter = null)
+    public SynastryViewModel(ChartService? charts = null, SynastryInterpreter? interpreter = null,
+        DavisonInterpreter? davison = null)
     {
         _charts = charts;
         _interpreter = interpreter;
+        _davison = davison;
     }
 
     // The chart selected in the browse list: the first person, and the inner wheel.
@@ -48,6 +51,20 @@ public sealed partial class SynastryViewModel : ObservableObject
 
     [ObservableProperty]
     public partial SynastryReading? Reading { get; set; }
+
+    // The reading of the two people's Davison chart, the other thing the view can show.
+    [ObservableProperty]
+    public partial DavisonReading? Davison { get; set; }
+
+    // False: the comparison of the two charts and the bi-wheel. True: the Davison
+    // chart's reading and its wheel. Kept as it is when another person is chosen.
+    [ObservableProperty]
+    public partial bool ShowDavison { get; set; }
+
+    // The Davison chart is what is on screen (it has been asked for and there is one).
+    public bool DavisonShown => ShowDavison && Davison is not null;
+    public bool ComparisonShown => !DavisonShown;
+    public NatalChart? DavisonChart => Davison?.Chart;
 
     [ObservableProperty]
     public partial bool IsBusy { get; set; }
@@ -103,13 +120,15 @@ public sealed partial class SynastryViewModel : ObservableObject
     public bool HasPartner => Partner is not null;
 
     public string WheelCaption => Comparison is null ? "" :
+        DavisonShown ? $"The Davison chart of {Comparison.First.Celebrity.Name} and {Comparison.Second.Celebrity.Name}" :
         $"Inner wheel: {Comparison.First.Celebrity.Name}   ·   Outer wheel: {Comparison.Second.Celebrity.Name}";
 
     public string ToneText => Reading is null ? "" :
         $"The connection reads as {Reading.Tone.Label()} ({Reading.Tone.LevelText()})";
     public string ToneColorHex => Reading?.Tone.ColorHex() ?? "#9AA0A6";
 
-    public IReadOnlyList<DailySection> Sections => Reading?.Sections ?? [];
+    public IReadOnlyList<DailySection> Sections =>
+        DavisonShown ? Davison!.Sections : Reading?.Sections ?? [];
     public IReadOnlyList<string> Trace => Reading?.Trace ?? [];
     public string TraceHeader => Reading is null ? "" :
         $"Why this reading? — all {Reading.Aspects.Count} contacts between the two charts";
@@ -213,6 +232,18 @@ public sealed partial class SynastryViewModel : ObservableObject
 
     partial void OnComparisonChanged(Synastry? value) => OnPropertyChanged(nameof(WheelCaption));
 
+    partial void OnDavisonChanged(DavisonReading? value) => DavisonModeChanged();
+    partial void OnShowDavisonChanged(bool value) => DavisonModeChanged();
+
+    private void DavisonModeChanged()
+    {
+        OnPropertyChanged(nameof(DavisonShown));
+        OnPropertyChanged(nameof(ComparisonShown));
+        OnPropertyChanged(nameof(DavisonChart));
+        OnPropertyChanged(nameof(Sections));
+        OnPropertyChanged(nameof(WheelCaption));
+    }
+
     partial void OnReadingChanged(SynastryReading? value)
     {
         OnPropertyChanged(nameof(Title));
@@ -234,6 +265,7 @@ public sealed partial class SynastryViewModel : ObservableObject
         // goes at once, not when its replacement is ready.
         Comparison = null;
         Reading = null;
+        Davison = null;
         OnPropertyChanged(nameof(Title));
         OnPropertyChanged(nameof(PromptText));
 
@@ -247,18 +279,29 @@ public sealed partial class SynastryViewModel : ObservableObject
         IsBusy = true;
         try
         {
-            var (comparison, reading) = await Task.Run(() =>
+            var (comparison, reading, davison) = await Task.Run(() =>
             {
                 // The partner is cast with the settings the selected chart was cast with.
                 var charts = _charts.With(chart.Settings);
                 var other = charts.Calculate(partner);
-                var synastry = SynastryService.Compare(chart, other, charts.Davison(chart, other));
-                return (synastry, _interpreter.Compose(synastry));
+                var between = charts.Davison(chart, other);
+                try
+                {
+                    // The lunations and stations around its moment, for its worksheet.
+                    between.Events = NatalEventsService.Compute(charts, between);
+                }
+                catch (Exception ex)
+                {
+                    Diagnostics.Log($"Events around the Davison chart of {chart.Celebrity.Id} and {partner.Id} could not be found: {ex}");
+                }
+                var synastry = SynastryService.Compare(chart, other, between);
+                return (synastry, _interpreter.Compose(synastry), _davison?.Compose(synastry));
             });
             if (generation == _generation)
             {
                 Comparison = comparison;
                 Reading = reading;
+                Davison = davison;
             }
         }
         catch (Exception ex)
@@ -268,6 +311,7 @@ public sealed partial class SynastryViewModel : ObservableObject
             {
                 Comparison = null;
                 Reading = null;
+                Davison = null;
                 ErrorText = $"Could not build the synastry reading: {ex.Message}";
             }
         }

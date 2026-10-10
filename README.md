@@ -4,14 +4,14 @@
 
 > A Windows desktop application for computing and exploring astrological natal charts — and reading a daily horoscope from them — powered by the Swiss Ephemeris. Browse a curated library of historical figures — every one with a documented birth time — or add your own.
 
-**Latest release: v2.8.0** · [Download](../../releases/latest)
+**Latest release: v2.9.0** · [Download](../../releases/latest)
 
 ### Installing
 
-1. From the [latest release](../../releases/latest), download **`LoreSetup-2.8.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`LoreSetup-2.9.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user only (no administrator prompt), adds a Start-menu shortcut, and can be removed from *Settings → Apps* like any other program.
 
-**Prefer not to install?** Download **`Lore-2.8.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
+**Prefer not to install?** Download **`Lore-2.9.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
 
 > **The installer is not code-signed.** Lore is a free hobby project and does not carry a paid signing certificate, so Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"* — choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -90,7 +90,7 @@ The **Synastry** view compares the selected chart with a second person's — any
 - **A short, ranked reading.** *Closest bonds* (up to three conjunctions), *What comes easily* (up to four trines and sextiles), and *What takes work* (up to four squares and oppositions), chosen by closeness and by how personal the points are. Contacts between two slow planets, shared by everyone born in the same years, are listed but not written up.
 - **At a glance.** The two Sun signs and Moon signs compared by element, and an overall tone on a five-step scale (see below).
 - **House overlays.** Where each person's Sun, Moon, Venus, and Mars fall in the other's houses.
-- **Davison chart.** The reading ends with the chart for the moment and place halfway between the two births: when and where it is cast for, and where everything stands in it. Stated, not interpreted.
+- **Davison chart.** Beside the comparison the view has a second reading, chosen with **Davison chart** at the top: the one chart cast for the moment and place halfway between the two births, read as the chart of the relationship itself. It gives the relationship's Sun, Moon and rising sign, its seven planets by house, the closest aspects inside it, and any planet of either person that stands on one of its main points, and it has its own wheel. Its text comes from a corpus of its own (`Data\davison.json`, about 250 lines). With a birth time missing the midpoint may be hours out, so the Ascendant, Midheaven, houses and Moon are left out.
 - **Bi-wheel.** The selected chart drawn inside, the second person's planets in a band around it on the same zodiac, with the contacts between them as aspect lines (the ones the reading uses drawn heavier).
 - **Deterministic and offline.** Every sentence comes from an editable corpus (`Data\synastry.json`): 144 bespoke lines for the pairs that matter most, and assembled sentences for the rest.
 - **Explainable.** *Why this reading?* lists every contact found and which ones the reading used.
@@ -135,6 +135,9 @@ Charts and readings can be exported in these formats:
 | **PDF / Text — solar return and progressions** | The Timing view's whole reading for its date (solar return, profection, progressions, solar arc and any relocation); the PDF includes the return chart's wheel |
 | **PDF — synastry reading** | The synastry reading on screen, with the bi-wheel and the full list of contacts between the two charts |
 | **PNG — synastry bi-wheel** | The bi-wheel alone (1600 × 1600 px) |
+| **PDF — Davison reading** | The Davison chart's wheel and reading, followed by its full Worksheet |
+| **PNG — Davison wheel / chart with tables** | The Davison chart's wheel alone, or with the Worksheet's tables set out around it |
+| **Text — Davison worksheet** | The Davison chart's Worksheet as plain text |
 
 ---
 
@@ -161,6 +164,7 @@ Lore/
 │   ├── DailyExportService.cs  # Daily horoscope PDF / text export
 │   ├── SynastryService.cs     # Synastry, astronomy: aspects and house overlays between two charts
 │   ├── SynastryInterpreter.cs # Synastry, wording: rank, select, compose from synastry.json
+│   ├── DavisonInterpreter.cs  # The Davison chart's reading, composed from davison.json
 │   ├── SynastryScoring.cs     # Synastry, weighing: the five-step scale and the best/worst match search
 │   ├── SynastryExportService.cs # Synastry PDF export
 │   ├── ExportService.cs       # PNG / PDF / JSON / XML export
@@ -189,6 +193,7 @@ Lore/
 │   ├── interpretations.json   # Corpus for the natural-language report
 │   ├── daily.json             # Corpus for the daily horoscope (transit lines, Moon/Sun/house text)
 │   ├── synastry.json          # Corpus for the synastry reading (aspect lines, element and house text)
+│   ├── davison.json           # Corpus for the Davison reading (signs, houses, aspects of the relationship's chart)
 │   └── swisseph-2.10.3bfinal/ # Swiss Ephemeris C source + .se1 ephemeris files
 ├── Native/
 │   └── sweph.dll              # Built by Build-SwephDll.ps1 (not in repo)
@@ -270,7 +275,7 @@ Produces a self-contained folder that runs with no installed .NET or VC++ runtim
 .\scripts\build-portable.ps1
 ```
 
-Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-2.8.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
+Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-2.9.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
 
 ### Step 4 — Installer
 
@@ -482,7 +487,12 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 2.8.0 (current)
+### 2.9.0 (current)
+- **The Davison chart has a reading of its own.** Until now it was a list of positions at the end of the synastry reading. The Synastry view now switches between **Comparison** and **Davison chart**, and the second gives a full reading of the relationship's own chart: its Sun, Moon and rising sign; where its Sun, Moon, Mercury, Venus, Mars, Jupiter and Saturn fall by house; the closest aspects inside it; and whose own planets stand on its main points. Written from a new corpus of about 250 lines (`Data\davison.json`); nothing is generated.
+- **Its own wheel** in the Synastry view, in place of the bi-wheel while the Davison chart is chosen.
+- **Its own Worksheet and exports** — a PDF of the reading with the wheel and the complete Worksheet, the wheel as a PNG, the chart-with-tables PNG, and the Worksheet as text. The Worksheet says plainly that the chart is not a birth and gives the moment it is cast for.
+
+### 2.8.0
 More measurements on the Worksheet, two more chart patterns, and a second round of repairs.
 
 **New on the Worksheet** (all of it in the text, PDF, JSON and XML exports too; the Legend explains each):

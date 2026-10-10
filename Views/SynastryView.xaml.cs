@@ -26,7 +26,8 @@ public sealed partial class SynastryView : UserControl
 
     private void OnViewModelChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(SynastryViewModel.Comparison))
+        if (e.PropertyName is nameof(SynastryViewModel.Comparison) or nameof(SynastryViewModel.DavisonShown)
+            or nameof(SynastryViewModel.DavisonChart))
             WheelCanvas.Invalidate();
     }
 
@@ -65,7 +66,10 @@ public sealed partial class SynastryView : UserControl
 
     private void WheelCanvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
     {
-        if (ViewModel.Comparison is { } comparison)
+        // The Davison chart is drawn like any other, without a birth chart's verdict rim.
+        if (ViewModel.DavisonShown && ViewModel.DavisonChart is { } davison)
+            ChartRenderer.Draw(args.DrawingSession, davison, (float)sender.ActualWidth, (float)sender.ActualHeight, showVerdict: false);
+        else if (ViewModel.Comparison is { } comparison)
             ChartRenderer.DrawBiWheel(args.DrawingSession, comparison, (float)sender.ActualWidth, (float)sender.ActualHeight);
         else
             args.DrawingSession.Clear(Color.FromArgb(255, 18, 18, 30));
@@ -76,8 +80,14 @@ public sealed partial class SynastryView : UserControl
         WheelCanvas.Invalidate();
     }
 
+    // (The two buttons show the choice itself, not whether a Davison chart is there to
+    // be shown, so being set from the view model never changes it back.)
+    private void ComparisonRadio_Checked(object sender, RoutedEventArgs e) => ViewModel.ShowDavison = false;
+    private void DavisonRadio_Checked(object sender, RoutedEventArgs e) => ViewModel.ShowDavison = true;
+
     // x:Bind helpers.
     public bool Either(bool a, bool b) => a || b;
+    public bool Not(bool b) => !b;
 
     // The pill colour of a match or of the reading's tone, from its "#RRGGBB".
     public static Microsoft.UI.Xaml.Media.SolidColorBrush BrushOf(string hex) => HexBrushConverter.ToBrush(hex);

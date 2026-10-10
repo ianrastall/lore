@@ -47,7 +47,9 @@ internal static class ChartSheetRenderer
     ];
 
     // Returns the height of what was drawn, margins included.
-    public static float Draw(CanvasDrawingSession ds, NatalChart chart)
+    // `showVerdict`: the dignity verdict, in the heading and round the wheel; off for a
+    // chart that is not a birth chart.
+    public static float Draw(CanvasDrawingSession ds, NatalChart chart, bool showVerdict = true)
     {
         var w = WorksheetService.Build(chart);
         var pen = new Pen(ds);
@@ -57,7 +59,7 @@ internal static class ChartSheetRenderer
         // The wheel goes down first: it clears the whole surface to the background.
         const float top = 300;
         ds.Transform = Matrix3x2.CreateTranslation(Margin - 24, top);
-        ChartRenderer.Draw(ds, chart, WheelSize, WheelSize);
+        ChartRenderer.Draw(ds, chart, WheelSize, WheelSize, showVerdict: showVerdict);
         ds.Transform = Matrix3x2.Identity;
 
         // ── Header ────────────────────────────────────────────────────────────
@@ -71,7 +73,7 @@ internal static class ChartSheetRenderer
                       (chart.Timed ? $"   ·   {Fact("Sect")}" : ""),
                       Margin, y, Small + 2, Soft, maxWidth: Width - 2 * Margin) + 4;
         y += pen.Text($"Aspect orbs: {Fact("Aspect orbs")}", Margin, y, Small + 2, Soft, maxWidth: Width - 2 * Margin) + 4;
-        if (DignityService.ComputeIfTimed(chart) is { } verdict)
+        if (showVerdict && DignityService.ComputeIfTimed(chart) is { } verdict)
             pen.Text($"Dignity score {verdict.Total:+0;−0;0}: {verdict.Verdict.Label()}", Margin, y, Small + 2, ParseHex(verdict.Verdict.ColorHex()));
 
         // ── Beside the wheel: positions, cusps, elements by mode ──────────────

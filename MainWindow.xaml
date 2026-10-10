@@ -188,6 +188,11 @@
                                 <MenuFlyoutSeparator/>
                                 <MenuFlyoutItem Text="PDF — synastry reading…" Click="ExportSynastryPdf_Click"/>
                                 <MenuFlyoutItem Text="PNG — synastry bi-wheel…" Click="ExportSynastryPng_Click"/>
+                                <MenuFlyoutSeparator/>
+                                <MenuFlyoutItem Text="PDF — Davison reading…" Click="ExportDavisonPdf_Click"/>
+                                <MenuFlyoutItem Text="PNG — Davison wheel…" Click="ExportDavisonPng_Click"/>
+                                <MenuFlyoutItem Text="PNG — Davison chart with tables…" Click="ExportDavisonSheetPng_Click"/>
+                                <MenuFlyoutItem Text="Text — Davison worksheet…" Click="ExportDavisonText_Click"/>
                             </MenuFlyout>
                         </DropDownButton.Flyout>
                     </DropDownButton>

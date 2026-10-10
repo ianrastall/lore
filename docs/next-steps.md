@@ -13,7 +13,7 @@ note stays true.
 
 - Seven views: Chart, Report, Worksheet, Daily, Forecast, Timing, Synastry, plus the
   Legend. About 10,600 lines of C# and XAML; no file over 560 lines.
-- 330 tests (as of 2.8.0), all passing, covering the calculation and data layer and the view models. They run on
+- 338 tests (as of 2.9.0), all passing, covering the calculation and data layer and the view models. They run on
   GitHub on every push, followed by a build of the app itself (about 3 minutes).
 - The views and the three export services are **not** tested: they
   depend on WinUI or Win2D and the test project leaves them out.
@@ -244,6 +244,41 @@ Still open from the research note: mundane (fractional) house position, quantifi
 uncertainty ranges, library percentiles, exaltation and mixed receptions, and the
 specialist modes listed under 4.8.
 
+## 3d. 2.9.0: the Davison chart
+
+Asked for on 10 October 2026: a fuller Davison chart, and a look at the personality
+inventory (4.9). The Davison work was released as **2.9.0** on 10 October 2026, with
+338 tests.
+
+Done, the Davison chart:
+
+- `DavisonInterpreter` and `Data\davison.json` (about 250 lines: Sun, Moon and rising by
+  sign; seven planets by house; 108 aspect lines; contacts). `DavisonReading` in
+  `Models/SynastryReading.cs`.
+- `SynastryViewModel.ShowDavison` switches the view's sections and wheel; the choice is
+  kept when another partner is picked. The synastry reading itself now only says what
+  the Davison chart is and where its reading is.
+- The Davison chart gets `NatalEvents` like a chart on screen, so its Worksheet is
+  complete. `WorksheetService` knows a Davison chart by `ChartService.DavisonCategory`
+  and words *Born* and *Time conversion* accordingly.
+- Four exports (`davisonpdf`, `davisonpng`, `davisonsheetpng`, `davisontxt`);
+  `SynastryExportService.DavisonToPdf` is in the test project.
+- Aspects with no line of their own are written from building blocks; at most two of
+  those are let into a reading (`MaxAssembled`). The gaps are the angles in aspects
+  other than a conjunction, and Mercury, Jupiter and Saturn with the outer three.
+
+Not done: a Davison view of its own with the full Worksheet on screen (the Worksheet
+is in the PDF, the image and the text export); transits or progressions to the Davison
+chart; the composite chart (4.6). The view's subtitle and tone pill still describe the
+comparison while the Davison chart is shown.
+
+The personality inventory: on 10 October 2026 Ian said yes to stage one (the
+questionnaire, its scoring and a plain profile, no astrology attached) as **3.0.0**.
+Still unanswered: whether the outside opinion on `personality-inventory-proposal.md`
+came back, and whether "a modified horoscope" means the separate view the proposal
+describes or changing the Report or Daily text. Nothing beyond stage one is to be
+built until he has said.
+
 ## 4. Features, in the order I would build them
 
 ### 4.1 ~~A wheel for the Daily view (transit bi-wheel).~~ Done in 2.5.0.
@@ -389,7 +424,8 @@ Ian made the gaps the list for 2.6.0. What was built, and where:
   comes out as Mercury 41, Jupiter 37, Saturn 28, Mars 27, Moon 25, Sun 22, Venus 22,
   Pluto 6, Uranus 3, Neptune 1: nothing runs away with it. Not yet shown in the Report,
   the Chart view or the chart-with-tables PNG.
-- **Davison chart.** `ChartService.Davison`; a last section of the synastry reading.
+- **Davison chart.** `ChartService.Davison`; a last section of the synastry reading
+  (given a reading, wheel and exports of its own in 2.9.0: see 3d).
   Stated, not interpreted, and not drawn as a wheel.
 
 - **Planetary hours, and where the reader is.** Ian said yes to a saved place on

@@ -57,6 +57,20 @@
                 <TextBlock Text="{x:Bind ViewModel.ToneText, Mode=OneWay}"
                            FontSize="12" FontWeight="SemiBold" Foreground="#111318"/>
             </Border>
+
+            <!-- The two charts set against each other, or the one chart made from them -->
+            <StackPanel Orientation="Horizontal" Spacing="12"
+                        Visibility="{x:Bind HasText(ViewModel.ToneText), Mode=OneWay}">
+                <RadioButton x:Name="ComparisonRadio" Content="Comparison" GroupName="SynastryMode"
+                             AutomationProperties.Name="Show the comparison of the two charts"
+                             IsChecked="{x:Bind Not(ViewModel.ShowDavison), Mode=OneWay}"
+                             Checked="ComparisonRadio_Checked"/>
+                <RadioButton x:Name="DavisonRadio" Content="Davison chart" GroupName="SynastryMode"
+                             AutomationProperties.Name="Show the Davison chart of the two people"
+                             ToolTipService.ToolTip="One chart for the two of you, cast for the midpoint of your births"
+                             IsChecked="{x:Bind ViewModel.ShowDavison, Mode=OneWay}"
+                             Checked="DavisonRadio_Checked"/>
+            </StackPanel>
         </StackPanel>
 
         <!-- Until someone is chosen: the search of everyone against this chart -->
@@ -178,7 +192,8 @@
                     </ItemsControl>
 
                     <!-- The calculation trail behind the reading -->
-                    <Expander HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+                    <Expander HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                              Visibility="{x:Bind VisIf(ViewModel.ComparisonShown), Mode=OneWay}">
                         <Expander.Header>
                             <TextBlock Text="{x:Bind ViewModel.TraceHeader, Mode=OneWay}" TextWrapping="Wrap"/>
                         </Expander.Header>
