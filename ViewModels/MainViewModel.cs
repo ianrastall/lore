@@ -12,6 +12,7 @@ public sealed partial class MainViewModel : ObservableObject
     private readonly ChartService _charts;
     private readonly UserChartService _userCharts;
     private readonly SettingsService? _settings;
+    private readonly InventoryStore? _inventoryStore;
 
     private List<Celebrity> _all = [];
 
@@ -39,6 +40,10 @@ public sealed partial class MainViewModel : ObservableObject
 
     // The Synastry view's state: ChartVM's chart compared with a second person.
     public SynastryViewModel SynastryVM { get; }
+
+    // The Inventory view's state: the personality questionnaire for whoever ChartVM's
+    // chart belongs to. It reads nothing from the chart but whose it is.
+    public InventoryViewModel InventoryVM { get; }
 
     // Bumped per chart load; a calculation that finishes after a newer selection has
     // started is dropped instead of overwriting the newer chart.
@@ -130,6 +135,10 @@ public sealed partial class MainViewModel : ObservableObject
     [ObservableProperty]
     public partial bool ShowSynastry { get; set; }
 
+    // The Inventory view (likewise).
+    [ObservableProperty]
+    public partial bool ShowInventory { get; set; }
+
     // The Worksheet view (likewise).
     [ObservableProperty]
     public partial bool ShowWorksheet { get; set; }
@@ -152,7 +161,10 @@ public sealed partial class MainViewModel : ObservableObject
         DailyInterpreter dailyInterpreter,
         SynastryInterpreter synastryInterpreter,
         SettingsService? settings = null,
-        DavisonInterpreter? davisonInterpreter = null)
+        DavisonInterpreter? davisonInterpreter = null,
+        InventoryService? inventory = null,
+        InventoryStore? inventoryStore = null,
+        MirrorInterpreter? mirror = null)
     {
         _settings = settings;
         _celebrities = celebrities;
@@ -165,6 +177,8 @@ public sealed partial class MainViewModel : ObservableObject
         ForecastVM = new ForecastViewModel(transits, dailyInterpreter);
         TimingVM = new TimingViewModel(new TimingService(charts, dailyInterpreter.HouseTopic), cities);
         SynastryVM = new SynastryViewModel(charts, synastryInterpreter, davisonInterpreter);
+        _inventoryStore = inventoryStore;
+        InventoryVM = new InventoryViewModel(inventory, inventoryStore, mirror);
     }
 
     public async Task InitializeAsync(string dataPath, string citiesPath, string hospitalsPath)
@@ -438,6 +452,7 @@ public sealed partial class MainViewModel : ObservableObject
         ForecastVM.Chart = null;
         TimingVM.Chart = null;
         SynastryVM.Chart = null;
+        InventoryVM.Chart = null;
     }
 
     // False while the chart on screen is not (or not yet) the selected person's: theirs
@@ -455,6 +470,8 @@ public sealed partial class MainViewModel : ObservableObject
         if (!await TrySaveAsync(() => _userCharts.RemoveAsync(c), $"delete {c.Name}")) return;
         SelectedCelebrity = null;
         ShowNoChart();
+        // The answers given for this person go with their chart.
+        _inventoryStore?.Remove(c.Id);
         await RebuildPoolAsync();
         StatusMessage = $"Deleted {c.Name}.";
     }
@@ -557,6 +574,7 @@ public sealed partial class MainViewModel : ObservableObject
             ForecastVM.Chart = chart;
             TimingVM.Chart = chart;
             SynastryVM.Chart = chart;
+            InventoryVM.Chart = chart;
             StatusMessage = chart.EphemerisNote; // empty unless the ephemeris data is missing
         }
         catch (OperationCanceledException)

@@ -1,8 +1,12 @@
 # Proposal: a personality inventory beside the chart
 
-Written 6 October 2026 against Lore 2.5.0. **Nothing here is decided or built.** It is
-a proposal to be read by someone outside the project and picked apart. Section 9 lists
-the questions I would most like answered.
+Written 6 October 2026 against Lore 2.5.0, as a proposal to be read by someone outside
+the project and picked apart. Section 9 lists the questions I would most like answered.
+
+**Since built.** Stages one to three of section 7 are in Lore 3.0.0 (10 October 2026):
+see section 3e of `next-steps.md` for what was built and where it departs from this
+note. The view is called *Inventory*, not *Mirror*. Sections 6.3 and stage four are
+not built, and the questions in section 9 were never put to anyone.
 
 ## 1. The idea in one paragraph
 

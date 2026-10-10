@@ -74,6 +74,8 @@ public partial class App : Application
         string dailyPath     = Path.Combine(baseDir, "Data", "daily.json");
         string synastryPath  = Path.Combine(baseDir, "Data", "synastry.json");
         string davisonPath   = Path.Combine(baseDir, "Data", "davison.json");
+        string inventoryPath = Path.Combine(baseDir, "Data", "inventory.json");
+        string mirrorPath    = Path.Combine(baseDir, "Data", "mirror.json");
 
         var celebSvc    = new CelebrityService();
         var settings    = new SettingsService();
@@ -85,13 +87,16 @@ public partial class App : Application
         var transits    = new TransitService(chartSvc);
         var daily       = new DailyInterpreter(dailyPath);
         var synastry    = new SynastryInterpreter(synastryPath);
+        var inventoryStore = new InventoryStore();
         var mainVm      = new MainViewModel(celebSvc, chartSvc, interpreter, userCharts, cities, hospitals,
                                             transits, daily, synastry, settings,
-                                            new DavisonInterpreter(davisonPath));
+                                            new DavisonInterpreter(davisonPath),
+                                            new InventoryService(inventoryPath), inventoryStore,
+                                            new MirrorInterpreter(mirrorPath, interpreter));
 
         var window = new MainWindow(mainVm);
         // What is still waiting to be written (the chart and view to come back to).
-        window.Closed += (_, _) => settings.Flush();
+        window.Closed += (_, _) => { settings.Flush(); inventoryStore.Flush(); };
         return window;
     }
 

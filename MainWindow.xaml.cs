@@ -137,8 +137,8 @@ public sealed partial class MainWindow : Window
         ViewModel.ShowLegend = !ViewModel.ShowLegend;
     }
 
-    // Ctrl+1 … Ctrl+7, in the order the buttons run across the toolbar.
-    private static readonly string[] Views = ["Chart", "Report", "Worksheet", "Daily", "Forecast", "Timing", "Synastry"];
+    // Ctrl+1 … Ctrl+8, in the order the buttons run across the toolbar.
+    private static readonly string[] Views = ["Chart", "Report", "Worksheet", "Daily", "Forecast", "Timing", "Synastry", "Inventory"];
 
     private void ViewShortcut_Invoked(Microsoft.UI.Xaml.Input.KeyboardAccelerator sender, Microsoft.UI.Xaml.Input.KeyboardAcceleratorInvokedEventArgs args)
     {
@@ -149,7 +149,8 @@ public sealed partial class MainWindow : Window
 
     private void ShowView(string view) => ShowBody(
         report: view == "Report", worksheet: view == "Worksheet", daily: view == "Daily",
-        forecast: view == "Forecast", timing: view == "Timing", synastry: view == "Synastry");
+        forecast: view == "Forecast", timing: view == "Timing", synastry: view == "Synastry",
+        inventory: view == "Inventory");
 
     private async void EditChart_Click(object sender, RoutedEventArgs e)
     {
@@ -193,8 +194,9 @@ public sealed partial class MainWindow : Window
     private void ShowForecast_Click(object sender, RoutedEventArgs e) => ShowBody(forecast: true);
     private void ShowTiming_Click(object sender, RoutedEventArgs e) => ShowBody(timing: true);
     private void ShowSynastry_Click(object sender, RoutedEventArgs e) => ShowBody(synastry: true);
+    private void ShowInventory_Click(object sender, RoutedEventArgs e) => ShowBody(inventory: true);
 
-    private void ShowBody(bool report = false, bool worksheet = false, bool daily = false, bool forecast = false, bool timing = false, bool synastry = false)
+    private void ShowBody(bool report = false, bool worksheet = false, bool daily = false, bool forecast = false, bool timing = false, bool synastry = false, bool inventory = false)
     {
         ViewModel.ShowTiming = timing;
         TimingToggle.IsChecked = timing;
@@ -205,7 +207,9 @@ public sealed partial class MainWindow : Window
         ViewModel.ShowWorksheet = worksheet;
         ViewModel.ShowDaily = daily;
         ViewModel.ShowSynastry = synastry;
-        ChartToggle.IsChecked = !report && !worksheet && !daily && !forecast && !timing && !synastry;
+        ViewModel.ShowInventory = inventory;
+        InventoryToggle.IsChecked = inventory;
+        ChartToggle.IsChecked = !report && !worksheet && !daily && !forecast && !timing && !synastry && !inventory;
         ReportToggle.IsChecked = report;
         WorksheetToggle.IsChecked = worksheet;
         DailyToggle.IsChecked = daily;
@@ -213,7 +217,7 @@ public sealed partial class MainWindow : Window
 
         ViewModel.RememberView(
             report ? "Report" : worksheet ? "Worksheet" : daily ? "Daily" :
-            forecast ? "Forecast" : timing ? "Timing" : synastry ? "Synastry" : "Chart");
+            forecast ? "Forecast" : timing ? "Timing" : synastry ? "Synastry" : inventory ? "Inventory" : "Chart");
     }
 
     // False while the constructor is filling the settings boxes in.
@@ -350,6 +354,8 @@ public sealed partial class MainWindow : Window
     private async void ExportDavisonPng_Click(object sender, RoutedEventArgs e) => await ExportAsync("davisonpng");
     private async void ExportDavisonSheetPng_Click(object sender, RoutedEventArgs e) => await ExportAsync("davisonsheetpng");
     private async void ExportDavisonText_Click(object sender, RoutedEventArgs e) => await ExportAsync("davisontxt");
+    private async void ExportInventoryText_Click(object sender, RoutedEventArgs e) => await ExportAsync("inventorytxt");
+    private async void ExportMirrorText_Click(object sender, RoutedEventArgs e) => await ExportAsync("mirrortxt");
 
     // One export at a time: a second, started while the first is still being written,
     // would be competing with it for the same drawing surface and status line.
@@ -445,6 +451,16 @@ public sealed partial class MainWindow : Window
             return;
         }
 
+        // The personality profile on screen in the Inventory view, if it is this person's.
+        var profile = ViewModel.InventoryVM.Profile;
+        if (kind is "inventorytxt" or "mirrortxt" &&
+            (profile is null || !ReferenceEquals(ViewModel.InventoryVM.Chart, chart) ||
+             (kind == "mirrortxt" && ViewModel.InventoryVM.Reading is null)))
+        {
+            ViewModel.StatusMessage = "There is no personality profile for this chart yet: open the Inventory view and answer the questionnaire first.";
+            return;
+        }
+
         try
         {
             var (label, ext) = kind switch
@@ -466,7 +482,7 @@ public sealed partial class MainWindow : Window
                 "synastrypng" => ("PNG image", ".png"),
                 "davisonpdf" => ("PDF document", ".pdf"),
                 "davisonpng" or "davisonsheetpng" => ("PNG image", ".png"),
-                "davisontxt" => ("Text file", ".txt"),
+                "davisontxt" or "inventorytxt" or "mirrortxt" => ("Text file", ".txt"),
                 _      => throw new ArgumentOutOfRangeException(nameof(kind)),
             };
 
@@ -479,6 +495,8 @@ public sealed partial class MainWindow : Window
                 davison ? SafeFileName($"{davisonReading!.FirstName} and {davisonReading.SecondName} - Davison chart" +
                                        (kind == "davisonsheetpng" ? " with tables" : kind == "davisontxt" ? " worksheet" : "")) :
                 kind == "worksheettxt" ? SafeFileName($"{chart.Celebrity.Name} - worksheet") :
+                kind == "inventorytxt" ? SafeFileName($"{chart.Celebrity.Name} - personality profile") :
+                kind == "mirrortxt" ? SafeFileName($"{chart.Celebrity.Name} - chart and answers") :
                 kind == "sheetpng" ? SafeFileName($"{chart.Celebrity.Name} - chart with tables") :
                 timed ? SafeFileName($"{chart.Celebrity.Name} - return and progressions {timing!.AsOf.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture)}") :
                 forecasting ? SafeFileName($"{chart.Celebrity.Name} - forecast from {forecast!.Start.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture)}") :
@@ -521,6 +539,8 @@ public sealed partial class MainWindow : Window
                 "davisonpdf" => SynastryExportService.DavisonToPdf(comparison!, davisonReading!, wheel!,
                     WorksheetService.Build(davisonReading!.Chart)),
                 "davisontxt" => WorksheetService.ToText(WorksheetService.Build(davisonReading!.Chart)),
+                "inventorytxt" => ViewModel.InventoryVM.ProfileText(),
+                "mirrortxt" => ViewModel.InventoryVM.ReadingText(),
                 _      => throw new ArgumentOutOfRangeException(nameof(kind)),
             });
 
@@ -601,8 +621,8 @@ public sealed partial class MainWindow : Window
     public bool Not(bool b) => !b;
 
     // Body panes: the legend, when shown, hides the chart, report, daily and synastry views.
-    public Visibility VisChartBody(bool showReport, bool showWorksheet, bool showDaily, bool showForecast, bool showTiming, bool showSynastry, bool showLegend) =>
-        !showReport && !showWorksheet && !showDaily && !showForecast && !showTiming && !showSynastry && !showLegend ? Visibility.Visible : Visibility.Collapsed;
+    public Visibility VisChartBody(bool showReport, bool showWorksheet, bool showDaily, bool showForecast, bool showTiming, bool showSynastry, bool showInventory, bool showLegend) =>
+        !showReport && !showWorksheet && !showDaily && !showForecast && !showTiming && !showSynastry && !showInventory && !showLegend ? Visibility.Visible : Visibility.Collapsed;
     public Visibility VisReportBody(bool show, bool showLegend) =>
         show && !showLegend ? Visibility.Visible : Visibility.Collapsed;
 }

@@ -21,7 +21,7 @@
     <Configurations>Debug;Release</Configurations>
     <!-- The one place the version is written. The assembly and file versions follow
          from it, and the release scripts read it from here. -->
-    <Version>2.9.0</Version>
+    <Version>3.0.0</Version>
   </PropertyGroup>
 
   <!-- The test project lives under tests\ and builds separately; keep its files
@@ -95,6 +95,14 @@
     </Content>
     <!-- Corpus for the Davison reading (the relationship's chart: signs, houses, aspects) -->
     <Content Include="Data\davison.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <!-- The personality inventory: the IPIP-NEO-120's statements, keys, reference figures and descriptions -->
+    <Content Include="Data\inventory.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <!-- Corpus for the reading that sets the inventory profile beside the chart -->
+    <Content Include="Data\mirror.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
 

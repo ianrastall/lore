@@ -4,14 +4,14 @@
 
 > A Windows desktop application for computing and exploring astrological natal charts — and reading a daily horoscope from them — powered by the Swiss Ephemeris. Browse a curated library of historical figures — every one with a documented birth time — or add your own.
 
-**Latest release: v2.9.0** · [Download](../../releases/latest)
+**Latest release: v3.0.0** · [Download](../../releases/latest)
 
 ### Installing
 
-1. From the [latest release](../../releases/latest), download **`LoreSetup-2.9.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`LoreSetup-3.0.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user only (no administrator prompt), adds a Start-menu shortcut, and can be removed from *Settings → Apps* like any other program.
 
-**Prefer not to install?** Download **`Lore-2.9.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
+**Prefer not to install?** Download **`Lore-3.0.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
 
 > **The installer is not code-signed.** Lore is a free hobby project and does not carry a paid signing certificate, so Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"* — choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -60,6 +60,7 @@
 | **Forecast** | The transits coming up for the selected chart over the next month to a year: when each comes into orb, is exact, and leaves, with the Daily view's written line for it. Set among them, if you wish, is the sky's own calendar: New and Full Moons, eclipses, planets turning retrograde or direct, and the slow planets changing sign, each with the house of the chart it falls in. |
 | **Timing** | The solar return in force on a date, with its wheel, cast for the birthplace or for any city you choose; the annual profection (the house, sign and Lord of the Year); the chart progressed to that date a day for a year; the chart directed by solar arc; and, when another city is chosen, the birth chart relocated there. |
 | **Synastry** | The selected chart compared with a second person's: a written reading and a bi-wheel of the two charts. See below. |
+| **Inventory** | A standard personality questionnaire (the public-domain IPIP-NEO-120) for any chart of your own; the profile it gives, five broad traits and thirty facets, each set beside a reference group; and a reading that sets that profile beside the chart, planet by planet. See below. |
 | **Legend** | Full-page reference — a grouped list of every glyph, colour, angle, house, and term; click any item for a fuller explanation. |
 
 ![Lore showing the Worksheet's measurements for Albert Einstein: the Moon's phase, distance from the Sun, and declination](Assets/screenshot-einstein-worksheet.png)
@@ -103,6 +104,23 @@ The **Synastry** view compares the selected chart with a second person's — any
 
 Astrology has no agreed compatibility score; the scale is Lore's own, and it describes the symbolism between two charts rather than forecasting a relationship.
 
+### Personality Inventory
+The **Inventory** view offers a standard personality questionnaire for any chart under My Charts, and then reads the chart in the light of the answers. A chart is the same for everyone born at that minute and cannot know how a given person is living it; the questionnaire asks them.
+
+- **The questionnaire** is the **IPIP-NEO-120** (Johnson, 2014), from the International Personality Item Pool: 120 short statements, each answered from *very inaccurate* to *very accurate*, measuring the five traits of the Five-Factor Model (Neuroticism, Extraversion, Openness, Agreeableness, Conscientiousness) and thirty narrower facets. It is in the public domain. The statements are given word for word.
+- **Ten statements at a time**, fifteen to twenty-five minutes in all. Every answer is saved as it is given, so a sitting can be left and taken up again.
+- **The profile** gives each trait and facet as low, typical or high against published figures for 320,128 people who took the same questionnaire (Kajonius & Johnson, 2019), with a plain sentence for each. *Typical* is within one standard deviation of that group's average.
+- **The profile itself is not astrology.** No score in it is taken from the chart.
+- **Chart and answers.** A second reading, chosen with **Chart and answers** above the profile, sets the two side by side for eight planets (Sun to Saturn, and Neptune).
+  - *How each planet is being lived*: the facets that measure the nearest thing to what a planet stands for pick one of several named expressions. Mars, read from Assertiveness, Activity Level, Excitement-Seeking and Anger, may come out *direct*, *combative*, *held in*, *muted*, *short-fused*, *even-tempered* or *measured*. Each is given after the Report's own words for that planet in its sign.
+  - *Where the chart and the answers part company*: the chart's expectation is the planet's dignity score (well placed, it "works easily"; badly placed, "with strain"). An easy placement lived with strain is called **unlived**; a hard one lived well, **hard-won**.
+  - The chart is never altered. The pairing of planets with facets is Lore's own design, and the reading says plainly that no research connects a birth chart with measured personality: it is a prompt for reflection. 54 expressions and 14 comparison paragraphs, in `Data\mirror.json`.
+- **Private.** Answers are kept on the PC only, in a file of their own (`%LOCALAPPDATA%\Lore\inventories.json`), apart from your saved charts: they are never part of a My Charts export. One button deletes them, and deleting a chart deletes its answers.
+- **Not for the bundled figures**, who cannot answer a questionnaire.
+- **Text exports** of the profile and of the chart-and-answers reading.
+
+It is a description of how a person sees their own habits, not a measure of ability, worth or wellbeing.
+
 ### Traditional Dignity Scoring
 Every chart is scored against the **Lilly/Dorothean rubric**:
 
@@ -138,6 +156,8 @@ Charts and readings can be exported in these formats:
 | **PDF — Davison reading** | The Davison chart's wheel and reading, followed by its full Worksheet |
 | **PNG — Davison wheel / chart with tables** | The Davison chart's wheel alone, or with the Worksheet's tables set out around it |
 | **Text — Davison worksheet** | The Davison chart's Worksheet as plain text |
+| **Text — personality profile** | The Inventory view's profile: every trait and facet with its band, score and description |
+| **Text — chart and answers** | The reading that sets the profile beside the chart, planet by planet |
 
 ---
 
@@ -165,6 +185,9 @@ Lore/
 │   ├── SynastryService.cs     # Synastry, astronomy: aspects and house overlays between two charts
 │   ├── SynastryInterpreter.cs # Synastry, wording: rank, select, compose from synastry.json
 │   ├── DavisonInterpreter.cs  # The Davison chart's reading, composed from davison.json
+│   ├── InventoryService.cs    # The personality inventory: reads inventory.json, scores answers into a profile
+│   ├── InventoryStore.cs      # Where the answers are kept (inventories.json, apart from mycharts.json)
+│   ├── MirrorInterpreter.cs   # Chart and answers: which facets speak for which planet, composed from mirror.json
 │   ├── SynastryScoring.cs     # Synastry, weighing: the five-step scale and the best/worst match search
 │   ├── SynastryExportService.cs # Synastry PDF export
 │   ├── ExportService.cs       # PNG / PDF / JSON / XML export
@@ -194,6 +217,8 @@ Lore/
 │   ├── daily.json             # Corpus for the daily horoscope (transit lines, Moon/Sun/house text)
 │   ├── synastry.json          # Corpus for the synastry reading (aspect lines, element and house text)
 │   ├── davison.json           # Corpus for the Davison reading (signs, houses, aspects of the relationship's chart)
+│   ├── inventory.json         # The personality inventory: IPIP-NEO-120 statements, scoring keys, reference figures, descriptions
+│   ├── mirror.json            # Corpus for the reading that sets the inventory profile beside the chart
 │   └── swisseph-2.10.3bfinal/ # Swiss Ephemeris C source + .se1 ephemeris files
 ├── Native/
 │   └── sweph.dll              # Built by Build-SwephDll.ps1 (not in repo)
@@ -275,7 +300,7 @@ Produces a self-contained folder that runs with no installed .NET or VC++ runtim
 .\scripts\build-portable.ps1
 ```
 
-Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-2.9.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
+Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-3.0.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
 
 ### Step 4 — Installer
 
@@ -487,7 +512,14 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 2.9.0 (current)
+### 3.0.0 (current)
+- **A personality inventory.** A new **Inventory** view (Ctrl+8) offers the IPIP-NEO-120, a standard public-domain personality questionnaire, for any chart of your own: 120 statements, ten at a time, saved as you go. At the end it shows a profile of the five broad traits and thirty facets, each as low, typical or high against published figures for 320,128 people, with a sentence for each.
+- **The chart read in the light of the answers.** With a profile made, **Chart and answers** gives a reading of eight planets. For each it sets the Report's account of the planet beside one of several named ways of living it, chosen by the facets that measure the nearest thing: a Mars may be *direct*, *combative*, *held in* or *muted*; a Moon *tidal*, *uneasy*, *deep and calm* or *even*. It then sets that against the planet's dignity in the chart, and says where the two disagree: an easy placement lived with strain is **unlived**, a hard one lived well is **hard-won**.
+- **Honest about what it is.** The chart is never changed; only the wording of this one reading depends on the answers. The pairing of planets with facets is Lore's own, and the reading says so: no research connects a chart with measured personality, and it is offered as a prompt for reflection.
+- **Private by construction.** Answers stay on the PC in a file of their own and are never part of a My Charts export. They can be deleted from the view, and go when the chart is deleted.
+- **Export** — the profile, and the chart-and-answers reading, as text files.
+
+### 2.9.0
 - **The Davison chart has a reading of its own.** Until now it was a list of positions at the end of the synastry reading. The Synastry view now switches between **Comparison** and **Davison chart**, and the second gives a full reading of the relationship's own chart: its Sun, Moon and rising sign; where its Sun, Moon, Mercury, Venus, Mars, Jupiter and Saturn fall by house; the closest aspects inside it; and whose own planets stand on its main points. Written from a new corpus of about 250 lines (`Data\davison.json`); nothing is generated.
 - **Its own wheel** in the Synastry view, in place of the bi-wheel while the Davison chart is chosen.
 - **Its own Worksheet and exports** — a PDF of the reading with the wheel and the complete Worksheet, the wheel as a PNG, the chart-with-tables PNG, and the Worksheet as text. The Worksheet says plainly that the chart is not a birth and gives the moment it is cast for.

@@ -1,0 +1,121 @@
+using Lore.Models;
+using System.Globalization;
+using System.Text;
+using System.Text.Json;
+
+namespace Lore.Services;
+
+// The personality inventory: reads the instrument (Data\inventory.json) and scores a set
+// of answers into a profile of the five traits and their 30 facets. Plain arithmetic on
+// the published scoring keys and reference figures; nothing here knows about charts.
+public sealed class InventoryService
+{
+    private static readonly JsonSerializerOptions JsonOpts = new() { PropertyNameCaseInsensitive = true };
+
+    public InventoryInstrument Instrument { get; }
+
+    public int Count => Instrument.Items.Count;
+
+    // True when the instrument was read and is whole: every statement belongs to a known
+    // facet and every facet to a known trait. Without that nothing is offered.
+    public bool IsAvailable { get; }
+
+    public InventoryService(string inventoryJsonPath)
+    {
+        InventoryInstrument? read = null;
+        try
+        {
+            if (File.Exists(inventoryJsonPath))
+            {
+                using var stream = File.OpenRead(inventoryJsonPath);
+                read = JsonSerializer.Deserialize<InventoryInstrument>(stream, JsonOpts);
+            }
+        }
+        catch (Exception ex) when (ex is JsonException or IOException or UnauthorizedAccessException)
+        {
+            Diagnostics.Log($"The personality inventory could not be read from {inventoryJsonPath}: {ex.Message}");
+        }
+
+        Instrument = read ?? new InventoryInstrument();
+        var facets = Instrument.Facets.Select(f => f.Key).ToHashSet();
+        var domains = Instrument.Domains.Select(d => d.Key).ToHashSet();
+        IsAvailable = Instrument.Items.Count > 0 && Instrument.Choices.Count == 5 &&
+                      Instrument.Items.All(i => facets.Contains(i.Facet)) &&
+                      Instrument.Facets.All(f => domains.Contains(f.Domain) && f.Sd > 0) &&
+                      Instrument.Domains.All(d => d.Sd > 0) &&
+                      Instrument.Items.Select(i => i.N).SequenceEqual(Enumerable.Range(1, Instrument.Items.Count));
+    }
+
+    // How many of a set of answers have been given.
+    public int Answered(IReadOnlyList<int> answers) =>
+        Enumerable.Range(0, Count).Count(i => i < answers.Count && answers[i] is >= 1 and <= 5);
+
+    // The number of the first statement still unanswered, or null if none is.
+    public int? FirstUnanswered(IReadOnlyList<int> answers)
+    {
+        for (int i = 0; i < Count; i++)
+            if (i >= answers.Count || answers[i] is < 1 or > 5) return i + 1;
+        return null;
+    }
+
+    // Scores a complete set of answers: `answers[n - 1]` is the answer to statement n, 1
+    // (the first choice, "very inaccurate") to 5. Throws if any is missing.
+    public InventoryProfile Score(IReadOnlyList<int> answers, string name, DateOnly takenOn)
+    {
+        if (FirstUnanswered(answers) is { } missing)
+            throw new InvalidOperationException($"Statement {missing} has not been answered.");
+
+        var facets = Instrument.Facets.Select(facet =>
+        {
+            int raw = Instrument.Items.Where(i => i.Facet == facet.Key)
+                .Sum(i => i.Reversed ? 6 - answers[i.N - 1] : answers[i.N - 1]);
+            return new FacetScore(facet, raw, (raw - facet.Mean) / facet.Sd);
+        }).ToList();
+
+        return new InventoryProfile
+        {
+            Name = name,
+            TakenOn = takenOn,
+            Domains = Instrument.Domains.Select(domain =>
+            {
+                var own = facets.Where(f => f.Facet.Domain == domain.Key).ToList();
+                double score = own.Count == 0 ? 0 : own.Average(f => (double)f.Raw);
+                return new DomainScore(domain, score, (score - domain.Mean) / domain.Sd, own);
+            }).ToList(),
+        };
+    }
+
+    // The profile as plain text, for saving or pasting into notes.
+    public byte[] ToText(InventoryProfile p)
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine($"{p.Name} — Personality profile");
+        sb.AppendLine($"{Instrument.Instrument.Name}, answered on {p.TakenOn.ToString("d MMMM yyyy", CultureInfo.InvariantCulture)}");
+        sb.AppendLine();
+        sb.AppendLine(Caution);
+        foreach (var d in p.Domains)
+        {
+            sb.AppendLine();
+            sb.AppendLine($"{d.Name.ToUpperInvariant()}: {d.BandLabel} ({d.ScoreText}; {d.PercentileText})");
+            sb.AppendLine(d.Text);
+            foreach (var f in d.Facets)
+            {
+                sb.AppendLine();
+                sb.AppendLine($"  {f.Name}: {f.BandLabel} ({f.ScoreText})");
+                sb.AppendLine($"  {f.Text}");
+            }
+        }
+        sb.AppendLine();
+        sb.AppendLine("Reference figures: " + Instrument.Instrument.Norms);
+        sb.AppendLine("Questionnaire: " + Instrument.Instrument.Author + ". " + Instrument.Instrument.Licence);
+        sb.AppendLine();
+        sb.AppendLine(string.Create(CultureInfo.InvariantCulture, $"Generated by Lore on {DateTime.Now:yyyy-MM-dd}."));
+        return [.. Encoding.UTF8.GetPreamble(), .. Encoding.UTF8.GetBytes(sb.ToString())];
+    }
+
+    // Said wherever a profile is shown.
+    public const string Caution =
+        "This is what the answers say, set beside the answers of a large group of other people. It describes habits of " +
+        "feeling and behaving, as the person sees them; it is not a measure of ability, worth or wellbeing, and no part " +
+        "of it comes from the birth chart.";
+}

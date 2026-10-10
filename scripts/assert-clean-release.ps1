@@ -44,6 +44,10 @@ $problems = [System.Collections.Generic.List[string]]::new()
 #    "mycharts*" takes in the store and everything Lore writes beside it.
 $stray = Get-ChildItem -LiteralPath $StageDir -Recurse -File -Filter 'mycharts*' -ErrorAction SilentlyContinue
 foreach ($f in $stray) { $problems.Add("personal chart store bundled: $($f.FullName)") }
+#    Likewise the answers people have given to the personality inventory
+#    (inventories.json; Data\inventory.json, the questionnaire itself, is meant to ship).
+$stray = Get-ChildItem -LiteralPath $StageDir -Recurse -File -Filter 'inventories*' -ErrorAction SilentlyContinue
+foreach ($f in $stray) { $problems.Add("personality inventory answers bundled: $($f.FullName)") }
 
 # 2. The shipped figure library must contain no user-entered ("My Charts") charts.
 $celebPath = Join-Path $StageDir 'Data\celebrities.json'

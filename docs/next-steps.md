@@ -11,9 +11,9 @@ note stays true.
 
 ## 1. Where Lore stands
 
-- Seven views: Chart, Report, Worksheet, Daily, Forecast, Timing, Synastry, plus the
-  Legend. About 10,600 lines of C# and XAML; no file over 560 lines.
-- 338 tests (as of 2.9.0), all passing, covering the calculation and data layer and the view models. They run on
+- Eight views: Chart, Report, Worksheet, Daily, Forecast, Timing, Synastry, Inventory
+  (from 3.0.0), plus the Legend. About 10,600 lines of C# and XAML; no file over 560 lines.
+- 369 tests (as of 3.0.0), all passing, covering the calculation and data layer and the view models. They run on
   GitHub on every push, followed by a build of the app itself (about 3 minutes).
 - The views and the three export services are **not** tested: they
   depend on WinUI or Win2D and the test project leaves them out.
@@ -272,12 +272,86 @@ is in the PDF, the image and the text export); transits or progressions to the D
 chart; the composite chart (4.6). The view's subtitle and tone pill still describe the
 comparison while the Davison chart is shown.
 
-The personality inventory: on 10 October 2026 Ian said yes to stage one (the
+(See 3e for what was then built, which went further.) The personality inventory: on 10 October 2026 Ian said yes to stage one (the
 questionnaire, its scoring and a plain profile, no astrology attached) as **3.0.0**.
 Still unanswered: whether the outside opinion on `personality-inventory-proposal.md`
 came back, and whether "a modified horoscope" means the separate view the proposal
 describes or changing the Report or Daily text. Nothing beyond stage one is to be
 built until he has said.
+
+## 3e. 3.0.0: the personality inventory and the chart-and-answers reading
+
+Written 10 October 2026, as **3.0.0**. The tests stand at 369.
+
+Stages one to three of `personality-inventory-proposal.md` (section 7). Stage one, the
+questionnaire, its scoring and a plain profile, was built first. Ian then said (10
+October 2026) that the profile alone was half the job: the point of 120 questions is
+a reading influenced by the answers. That settled the proposal's open question in
+favour of its own design (sections 5 and 6), and stages two and three were built the
+same day, without waiting further for the outside opinion.
+
+The reading (`MirrorInterpreter`, `Data\mirror.json`, `MirrorReading`):
+
+- The corpus holds the rules as well as the words. Each planet has **dials**, groups of
+  facet keys (a minus counts a facet the other way up); a dial is low, mid or high when
+  its facets average more than 0.5 standard deviations from the reference mean, or 1.0
+  for a dial of one facet (so the reading never contradicts the profile's own band).
+  **Expressions** are tried in order and the first whose `when` fits is used; the last
+  takes whatever is left. 54 expressions over eight planets, written so that each says
+  only what its dials show.
+- Each expression is marked lived `well`, `strain` or `plain`. For the seven
+  traditional planets of a timed chart that is set against the dignity score: 5 or more
+  "works easily", −1 or less "works with strain" (about the top and bottom thirds of
+  9,198 planets in the library's timed figures). Easy and strain is *unlived*; strained
+  and well is *hard-won*: 14 paragraphs. The other cases are listed without comment.
+- Each planet's item gives the Report's own words for it in its sign
+  (`ChartInterpreter.PlanetInSign`, newly public), then the expression.
+- Changed from the proposal's table: Venus does not use Artistic Interests, Jupiter
+  does not use Liberalism (its statements are about American politics). Morality stays
+  unused. No facet speaks for two planets (a test holds that).
+- In the view: *Profile* or *Chart and answers* above the profile; the reading is
+  remade when the same person's chart is recalculated. A text export (`mirrortxt`).
+
+Not done: a PDF of either the profile or the reading; the proposal's section 6.3 (a
+measure of overall functioning); looking at earlier sittings; any change to the Report
+or the Daily reading, which are untouched by the answers. The reading in the running
+app was not looked at (Ian had Lore open with his own answers in it at the time, and
+neither was to be disturbed); it is covered by `MirrorTests` and a text dump.
+
+Stage one, as built:
+
+- `Data\inventory.json`: the IPIP-NEO-120's 120 statements with their keys (checked
+  item by item against ipip.ori.org on 10 October 2026: no differences), the 30 facets
+  and 5 traits with reference means and standard deviations, and Lore's own low /
+  typical / high sentence for each. **The statements must not be reworded.**
+- Reference figures: Kajonius & Johnson (2019), Table of descriptive statistics,
+  N = 320,128, sexes combined (PMC7871748). This settles the proposal's open point 8.6
+  for now: one combined set of figures, no age or sex bands. Bands are cut at one and
+  two standard deviations.
+- `InventoryService` (scoring, text export), `InventoryStore`
+  (`%LOCALAPPDATA%\Lore\inventories.json`, by chart Id, a list of dated sittings;
+  written in the background, `Flush` on closing), `InventoryViewModel`, `InventoryView`.
+  All but the view are in the test project (`InventoryTests`).
+- The release gate (`assert-clean-release.ps1`) refuses a build with an
+  `inventories*` file in it.
+- The view was looked at in the running app with a temporary answers file, which was
+  removed afterwards: introduction, a page of statements, and a profile.
+
+Departures from the proposal, and gaps:
+
+- Answers are in a file of their own, not "with the saved chart". So there is no
+  tick-box to include them in a My Charts export: they are never exported, and they do
+  not move to another PC with the charts.
+- Three bands plus "very", as proposed. No PDF export, only text.
+- A second sitting keeps the first, but only the latest finished one is shown; there
+  is no way to look at or compare earlier ones.
+- The Liberalism facet's statements are about American politics ("Tend to vote for
+  liberal political candidates"). They are kept as written; the profile says so.
+
+Never answered, and worth asking again before going further: whether the outside
+opinion on the proposal came back, and whether Ian also wants the answers to change the
+wording of the Report or the Daily reading (a much larger job: every line that could
+change needs alternatives written for it).
 
 ## 4. Features, in the order I would build them
 

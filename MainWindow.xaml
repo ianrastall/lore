@@ -24,6 +24,7 @@
             <KeyboardAccelerator Key="Number5" Modifiers="Control" Invoked="ViewShortcut_Invoked"/>
             <KeyboardAccelerator Key="Number6" Modifiers="Control" Invoked="ViewShortcut_Invoked"/>
             <KeyboardAccelerator Key="Number7" Modifiers="Control" Invoked="ViewShortcut_Invoked"/>
+            <KeyboardAccelerator Key="Number8" Modifiers="Control" Invoked="ViewShortcut_Invoked"/>
         </Grid.KeyboardAccelerators>
 
 
@@ -165,6 +166,11 @@
                     <ToggleButton x:Name="SynastryToggle" Content="Synastry"
                                   Click="ShowSynastry_Click"
                                   ToolTipService.ToolTip="Compare this chart with another person's (Ctrl+7)"/>
+                    <Border Width="1" Margin="4,6" Background="{ThemeResource DividerStrokeColorDefaultBrush}"/>
+                    <!-- The person, apart from the chart -->
+                    <ToggleButton x:Name="InventoryToggle" Content="Inventory"
+                                  Click="ShowInventory_Click"
+                                  ToolTipService.ToolTip="A personality questionnaire for one of your own charts, and the profile it gives (Ctrl+8)"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6">
@@ -193,6 +199,9 @@
                                 <MenuFlyoutItem Text="PNG — Davison wheel…" Click="ExportDavisonPng_Click"/>
                                 <MenuFlyoutItem Text="PNG — Davison chart with tables…" Click="ExportDavisonSheetPng_Click"/>
                                 <MenuFlyoutItem Text="Text — Davison worksheet…" Click="ExportDavisonText_Click"/>
+                                <MenuFlyoutSeparator/>
+                                <MenuFlyoutItem Text="Text — personality profile…" Click="ExportInventoryText_Click"/>
+                                <MenuFlyoutItem Text="Text — chart and answers…" Click="ExportMirrorText_Click"/>
                             </MenuFlyout>
                         </DropDownButton.Flyout>
                     </DropDownButton>
@@ -293,7 +302,7 @@
                                  x:Name="ChartViewControl"
                                  ViewModel="{x:Bind ViewModel.ChartVM}"
                                  RequestedTheme="Dark"
-                                 Visibility="{x:Bind VisChartBody(ViewModel.ShowReport, ViewModel.ShowWorksheet, ViewModel.ShowDaily, ViewModel.ShowForecast, ViewModel.ShowTiming, ViewModel.ShowSynastry, ViewModel.ShowLegend), Mode=OneWay}"/>
+                                 Visibility="{x:Bind VisChartBody(ViewModel.ShowReport, ViewModel.ShowWorksheet, ViewModel.ShowDaily, ViewModel.ShowForecast, ViewModel.ShowTiming, ViewModel.ShowSynastry, ViewModel.ShowInventory, ViewModel.ShowLegend), Mode=OneWay}"/>
                 <views:ReportView x:Name="ReportViewControl"
                                   ViewModel="{x:Bind ViewModel.ChartVM}"
                                   RequestedTheme="Dark"
@@ -318,6 +327,10 @@
                                     ViewModel="{x:Bind ViewModel.SynastryVM}"
                                     RequestedTheme="Dark"
                                     Visibility="{x:Bind VisReportBody(ViewModel.ShowSynastry, ViewModel.ShowLegend), Mode=OneWay}"/>
+                <views:InventoryView x:Name="InventoryViewControl"
+                                     ViewModel="{x:Bind ViewModel.InventoryVM}"
+                                     RequestedTheme="Dark"
+                                     Visibility="{x:Bind VisReportBody(ViewModel.ShowInventory, ViewModel.ShowLegend), Mode=OneWay}"/>
                 <views:LegendView x:Name="LegendViewControl"
                                   RequestedTheme="Dark"
                                   CloseRequested="Legend_CloseRequested"

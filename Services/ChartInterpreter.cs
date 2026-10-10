@@ -71,6 +71,13 @@ public sealed class ChartInterpreter
     // `moonSigns`: for a chart with no birth time, the signs the Moon passed through
     // that day (see TimeSensitivityService.AnalyseDay). More than one means the Moon's
     // sign is not known, and the report says so rather than reading the noon guess.
+    // What the Report says of a body in its sign, on its own and without a full stop:
+    // for a reading that sets something else beside it.
+    public string PlanetInSign(PlanetPosition p) =>
+        _c.PlanetInSign.TryGetValue($"{p.PlanetName}|{p.Sign.Name()}", out var bespoke) && !string.IsNullOrWhiteSpace(bespoke)
+            ? bespoke.TrimEnd('.')
+            : $"{Capitalise(Lookup(_c.PlanetThemes, p.PlanetName, "this energy"))} expressed {Lookup(_c.SignStyles, p.Sign.Name(), "in its own way")}";
+
     public IReadOnlyList<ReportSection> Interpret(NatalChart chart, IReadOnlyList<ZodiacSign>? moonSigns = null)
     {
         var sections = new List<ReportSection>
