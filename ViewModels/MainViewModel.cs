@@ -179,6 +179,17 @@ public sealed partial class MainViewModel : ObservableObject
         SynastryVM = new SynastryViewModel(charts, synastryInterpreter, davisonInterpreter);
         _inventoryStore = inventoryStore;
         InventoryVM = new InventoryViewModel(inventory, inventoryStore, mirror);
+        InventoryVM.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(InventoryViewModel.ShapeReadings) &&
+                InventoryVM.ShapeReadings != _ui.AnswersShapeReadings)
+            {
+                _ui = _ui with { AnswersShapeReadings = InventoryVM.ShapeReadings };
+                _settings?.SaveUi(_ui);
+            }
+            if (e.PropertyName is nameof(InventoryViewModel.Reading) or nameof(InventoryViewModel.ShapeReadings))
+                PassAnswersOn();
+        };
     }
 
     public async Task InitializeAsync(string dataPath, string citiesPath, string hospitalsPath)
@@ -201,6 +212,7 @@ public sealed partial class MainViewModel : ObservableObject
             if (_settings is not null)
             {
                 _ui = _settings.LoadUi();
+                InventoryVM.ShapeReadings = _ui.AnswersShapeReadings;
                 if (_ui.LastChartId is { } id && DisplayedCelebrities.FirstOrDefault(c => c.Id == id) is { } last)
                     SelectedCelebrity = last;
             }
@@ -444,6 +456,17 @@ public sealed partial class MainViewModel : ObservableObject
         Reselect(chart.Id);
     }
 
+    // Hands the chart-and-answers reading to the readings whose wording it shapes: the
+    // Report, the Daily and the Forecast. Each uses it only for the chart it was made
+    // for, so it does not matter that it arrives a moment before or after that chart.
+    private void PassAnswersOn()
+    {
+        var answers = InventoryVM.ShapeReadings ? InventoryVM.Reading : null;
+        ChartVM.Answers = answers;
+        DailyVM.Answers = answers;
+        ForecastVM.Answers = answers;
+    }
+
     // Empties every view: there is no chart to show.
     private void ShowNoChart()
     {
@@ -569,6 +592,8 @@ public sealed partial class MainViewModel : ObservableObject
                 }
             });
             if (generation != _loadGeneration) return; // superseded by a newer selection
+            // The inventory first: its reading is then in hand when the Report is written.
+            InventoryVM.Chart = chart;
             ChartVM.Show(chart, sensitivity);
             DailyVM.Chart = chart;
             ForecastVM.Chart = chart;

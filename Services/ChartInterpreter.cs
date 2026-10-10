@@ -78,17 +78,25 @@ public sealed class ChartInterpreter
             ? bespoke.TrimEnd('.')
             : $"{Capitalise(Lookup(_c.PlanetThemes, p.PlanetName, "this energy"))} expressed {Lookup(_c.SignStyles, p.Sign.Name(), "in its own way")}";
 
-    public IReadOnlyList<ReportSection> Interpret(NatalChart chart, IReadOnlyList<ZodiacSign>? moonSigns = null)
+    // `answers`: the reading that sets this person's inventory profile beside the chart,
+    // if they have answered the questionnaire. Each planet it reads then gains a sentence
+    // saying how the answers describe it lived, and the Report gains a closing section
+    // saying so. Ignored unless it was made for this chart.
+    public IReadOnlyList<ReportSection> Interpret(NatalChart chart, IReadOnlyList<ZodiacSign>? moonSigns = null,
+        MirrorReading? answers = null)
     {
+        if (answers is not null && !answers.IsFor(chart)) answers = null;
         var sections = new List<ReportSection>
         {
             Overview(chart, moonSigns),
-            Planets(chart),
+            Planets(chart, answers),
             Aspects(chart),
             Patterns(chart),
             Balance(chart),
             ModalBalance(chart),
         };
+        if (answers is { ReportParagraphs.Count: > 0 })
+            sections.Add(new ReportSection { Heading = "In the Light of the Answers", Paragraphs = [.. answers.ReportParagraphs] });
         return sections;
     }
 
@@ -128,7 +136,7 @@ public sealed class ChartInterpreter
         return new ReportSection { Heading = "Overview", Paragraphs = paras };
     }
 
-    private ReportSection Planets(NatalChart chart)
+    private ReportSection Planets(NatalChart chart, MirrorReading? answers)
     {
         var paras = new List<string>();
         foreach (var p in chart.Planets)
@@ -159,7 +167,9 @@ public sealed class ChartInterpreter
 
             string pos = ZodiacSignExtensions.FormatDegreeInSign(p.Longitude);
             string where = chart.Timed ? $" ({Ordinal(house)} house)" : "";
-            paras.Add($"{p.PlanetSymbol} {p.PlanetName} in {p.Sign.Name()} {pos}{where}: {core}{retro}");
+            // How the answers describe this planet lived, where they have something to say.
+            string lived = answers?.For(chart, p.Planet)?.ReportLine is { Length: > 0 } line ? " " + line : "";
+            paras.Add($"{p.PlanetSymbol} {p.PlanetName} in {p.Sign.Name()} {pos}{where}: {core}{retro}{lived}");
         }
         return new ReportSection { Heading = "The Planets", Paragraphs = paras };
     }

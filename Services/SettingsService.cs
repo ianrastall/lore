@@ -48,7 +48,9 @@ public sealed class SettingsService
     // Where the user left off: which chart was open and in which view. Kept apart from
     // the calculation settings (ui.json beside settings.json), since it changes with
     // every click and matters far less.
-    public sealed record UiState(string? LastChartId = null, string LastView = "Chart");
+    // AnswersShapeReadings: whether a person's inventory answers colour the wording of
+    // their Report, Daily and Forecast readings (see InventoryViewModel.ShapeReadings).
+    public sealed record UiState(string? LastChartId = null, string LastView = "Chart", bool AnswersShapeReadings = true);
 
     private string UiPath => Path.Combine(Path.GetDirectoryName(_path)!, "ui.json");
 

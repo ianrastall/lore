@@ -1,5 +1,5 @@
 {
-  "_comment": "Corpus for the reading that sets a person's inventory profile beside their chart (Services/MirrorInterpreter.cs). For each planet, `dials` names groups of inventory facets (by key, with a minus sign where a low score is what counts); each dial comes out low, mid or high: for a dial of several facets, when they average more than half a standard deviation from the reference group's mean; for a dial of one facet, when it is more than a whole one (the same line the profile draws between typical and low or high). `expressions` are tried in order and the first whose `when` fits is used: a dial not named in `when` may be anything. `lived` says how that expression counts when it is set against the planet's dignity in the chart: well, strain, or plain (neither). `unlived` is said when the chart gives the planet an easy place and the answers describe strain; `hardWon` when the chart gives it a hard place and the answers describe it lived well. The pairing of planets with facets is Lore's own design: no research connects any questionnaire score with any factor in a chart. Nothing is generated at run time.",
+  "_comment": "Corpus for the reading that sets a person's inventory profile beside their chart (Services/MirrorInterpreter.cs). For each planet, `dials` names groups of inventory facets (by key, with a minus sign where a low score is what counts); each dial comes out low, mid or high: for a dial of several facets, when they average more than half a standard deviation from the reference group's mean; for a dial of one facet, when it is more than a whole one (the same line the profile draws between typical and low or high). `expressions` are tried in order and the first whose `when` fits is used: a dial not named in `when` may be anything. `lived` says how that expression counts when it is set against the planet's dignity in the chart: well, strain, or plain (neither). `unlived` is said when the chart gives the planet an easy place and the answers describe strain; `hardWon` when the chart gives it a hard place and the answers describe it lived well. The pairing of planets with facets is Lore's own design: no research connects any questionnaire score with any factor in a chart. An expression's `report` is the sentence added to that planet's paragraph in the Report ({name} is the person); an expression with none adds nothing. A planet's `daily` lines are added to a transit to that planet in the Daily and Forecast readings, by how the planet is lived (strain or well) and by the kind of transit (hard: square or opposition; easy: sextile or trine; a conjunction takes the hard line when the planet is lived with strain and the easy one when it is lived well). Nothing is generated at run time.",
   "notes": {
     "intro": "This reading sets two things side by side: what the chart says of each planet, and what the answers to the questionnaire say about the part of life that planet stands for. The chart is not changed. Only the wording here depends on the answers.",
     "invented": "The pairing of planets with parts of the questionnaire is Lore's own, made by matching what each planet traditionally signifies with the facets that measure the nearest thing. No research connects a birth chart with measured personality, so an agreement here confirms nothing and a difference refutes nothing. It is a prompt for reflection.",
@@ -9,7 +9,9 @@
     "asWrittenHard": "The chart gives these a difficult place and the answers describe difficulty there. The Report's account of the strain is the one being lived.",
     "noContrast": "For these the chart's placement is middling, or the answers are, and there is nothing to set against anything.",
     "none": "No planet shows a marked difference between the chart's account and the answers.",
-    "closing": "Where the two accounts differ, neither is the true one. The chart says what the tradition expects of a placement; the answers say how a person sees themselves on one day. The difference is the thing to think about."
+    "closing": "Where the two accounts differ, neither is the true one. The chart says what the tradition expects of a placement; the answers say how a person sees themselves on one day. The difference is the thing to think about.",
+    "reportIntro": "{name} answered Lore's personality inventory on {date}. Where a planet's paragraph under The Planets ends with a sentence beginning “By {name}'s answers”, that sentence comes from the questionnaire and not from the chart. The pairing of planets with parts of the questionnaire is Lore's own, and nothing in the chart has been changed by it. The full comparison is under Chart and answers in the Inventory view.",
+    "reportNone": "For none of the seven traditional planets do the answers go against what the chart's placement would lead one to expect."
   },
   "comparison": {
     "unlived": "unlived",
@@ -29,36 +31,42 @@
           "name": "in full light",
           "when": { "confidence": "high", "spirits": "high" },
           "lived": "well",
+          "report": "By {name}'s answers this is lived to the full: confident, ambitious and glad to be seen.",
           "text": "The answers describe someone sure of their abilities, ambitious, at ease with being noticed, and in good spirits about it. This is the Sun doing what it is said to do: a clear sense of who one is, shown without apology."
         },
         {
           "name": "purposeful",
           "when": { "confidence": "high" },
           "lived": "well",
+          "report": "By {name}'s answers it shows as purpose and confidence more than as enjoyment.",
           "text": "The answers describe confidence and ambition, without unusual lightness of heart. There is a strong sense of purpose and of being equal to it; the enjoyment of it is quieter, or kept for later."
         },
         {
           "name": "dimmed",
           "when": { "confidence": "low", "spirits": "low" },
           "lived": "strain",
+          "report": "By {name}'s answers little of this is on show at present: confidence and spirits are both low.",
           "text": "The answers describe doubt about one's own abilities, little push to excel, a wish not to be noticed, and few high spirits. Whatever the chart says of the Sun, it is not being shown: the sense of self is held back, or has been knocked."
         },
         {
           "name": "unassuming",
           "when": { "confidence": "low" },
           "lived": "plain",
+          "report": "By {name}'s answers it is lived modestly, without any need to be noticed.",
           "text": "The answers describe modesty: no great claims for oneself, no hunger for achievement or attention. The mood is not low. This is a Sun that does not need to be seen, which is a way of living it and not a failure to."
         },
         {
           "name": "good-humoured",
           "when": { "spirits": "high" },
           "lived": "well",
+          "report": "By {name}'s answers it shows mostly as cheerfulness.",
           "text": "The answers describe an ordinary measure of confidence and ambition, and more than the ordinary share of cheerfulness. The Sun shows here as warmth and good humour more than as drive."
         },
         {
           "name": "sober",
           "when": { "spirits": "low" },
           "lived": "plain",
+          "report": "By {name}'s answers it is lived steadily and without much gaiety.",
           "text": "The answers describe an ordinary measure of confidence and ambition, with little gaiety. The sense of self is steady enough; it is not much given to enjoying itself."
         },
         {
@@ -69,7 +77,17 @@
         }
       ],
       "unlived": "The chart puts the Sun where it should shine without effort, and the answers describe self-doubt and low spirits. The tradition would say the confidence is there to be had. If that sounds wrong, ask what has stood in its way: the chart describes a capacity, and capacities can go unused for years.",
-      "hardWon": "The chart gives the Sun a difficult place, where confidence is not supposed to come easily, and the answers describe someone who has it. On the tradition's own account that is not a gift but an achievement: a sense of self that was built and not handed over."
+      "hardWon": "The chart gives the Sun a difficult place, where confidence is not supposed to come easily, and the answers describe someone who has it. On the tradition's own account that is not a gift but an achievement: a sense of self that was built and not handed over.",
+      "daily": {
+        "strain": {
+          "hard": "By your answers your confidence is low at present, so a challenge to it may land harder than it should. Go gently with yourself.",
+          "easy": "By your answers your confidence is low at present. This is a good day to let some encouragement in."
+        },
+        "well": {
+          "hard": "By your answers you are sure of yourself, and likely to meet this head-on.",
+          "easy": "By your answers you are in a good position to make the most of this."
+        }
+      }
     },
     "Moon": {
       "stands": "feeling, security and need",
@@ -82,36 +100,42 @@
           "name": "tidal",
           "when": { "unrest": "high", "feeling": "high" },
           "lived": "strain",
+          "report": "By {name}'s answers these feelings run high, are closely watched, and unsettle.",
           "text": "The answers describe emotions that are felt intensely and that unsettle: worry, low moods and a sense of being overwhelmed, all closely attended to. The inner life is vivid and seldom at rest."
         },
         {
           "name": "uneasy",
           "when": { "unrest": "high" },
           "lived": "strain",
+          "report": "By {name}'s answers there is more worry and strain here than this suggests.",
           "text": "The answers describe a good deal of worry, discouragement or strain, without any unusual interest in feelings for their own sake. The unease is there more as a weight than as something examined."
         },
         {
           "name": "deep and calm",
           "when": { "unrest": "low", "feeling": "high" },
           "lived": "well",
+          "report": "By {name}'s answers these feelings are strongly felt and well carried.",
           "text": "The answers describe someone who feels a great deal and is not thrown by it. Emotions are noticed, valued and ridden out. This is the Moon at its most useful: sensitive without being fragile."
         },
         {
           "name": "even",
           "when": { "unrest": "low" },
           "lived": "well",
+          "report": "By {name}'s answers the feeling side is kept on an even keel, with little worry.",
           "text": "The answers describe an even temper: little worry, few low moods, steadiness under pressure. Feelings do not run the day. Others may find this calm, or may sometimes wish for more reaction."
         },
         {
           "name": "attentive",
           "when": { "feeling": "high" },
           "lived": "plain",
+          "report": "By {name}'s answers a good deal of attention goes to these feelings.",
           "text": "The answers describe ordinary emotional weather, closely watched: feelings are experienced strongly and given a good deal of attention, without more worry or low mood than most people have."
         },
         {
           "name": "matter-of-fact",
           "when": { "feeling": "low" },
           "lived": "plain",
+          "report": "By {name}'s answers little attention is paid to this side of life.",
           "text": "The answers describe ordinary emotional weather and little interest in it: feelings come and go without being much noticed or discussed. The Moon is quiet, by inclination more than by effort."
         },
         {
@@ -122,7 +146,17 @@
         }
       ],
       "unlived": "The chart gives the Moon an easy place, where feelings should settle of themselves, and the answers describe worry and strain. The tradition would say the capacity for ease is there. The unrest may belong to present circumstances more than to temperament; it is worth asking which.",
-      "hardWon": "The chart gives the Moon a difficult place, where the tradition expects feelings to be hard to live with, and the answers describe calm. If that calm is real, it has been learned. It is also worth asking, honestly, whether it is calm or distance."
+      "hardWon": "The chart gives the Moon a difficult place, where the tradition expects feelings to be hard to live with, and the answers describe calm. If that calm is real, it has been learned. It is also worth asking, honestly, whether it is calm or distance.",
+      "daily": {
+        "strain": {
+          "hard": "By your answers worry comes easily to you, and this may stir it. What you feel today is likely to be stronger than its cause.",
+          "easy": "By your answers you carry a good deal of worry. Take this as a chance to rest from it."
+        },
+        "well": {
+          "hard": "By your answers you are steady under pressure, and likely to ride this out.",
+          "easy": "By your answers you are settled in yourself, and can simply enjoy this."
+        }
+      }
     },
     "Mercury": {
       "stands": "thought and speech",
@@ -134,12 +168,14 @@
           "name": "inquiring",
           "when": { "ideas": "high" },
           "lived": "well",
+          "report": "By {name}'s answers this mind is used for pleasure: ideas are enjoyed for their own sake.",
           "text": "The answers describe a love of ideas: theory, argument and difficult reading enjoyed for their own sake. The mind is being used for pleasure as well as for need."
         },
         {
           "name": "practical",
           "when": { "ideas": "low" },
           "lived": "plain",
+          "report": "By {name}'s answers the thinking is kept to practical matters.",
           "text": "The answers describe a mind that prefers the concrete: little taste for abstraction or for discussion that leads nowhere. This says nothing about ability. It describes where thought is pointed, which is at things that can be used."
         },
         {
@@ -150,7 +186,13 @@
         }
       ],
       "unlived": "The chart gives Mercury an easy place and the answers describe little appetite for ideas. The questionnaire measures only one side of Mercury, interest in abstract thought, so this is a thin comparison: quickness in speech, trade or craft would not show in it.",
-      "hardWon": "The chart gives Mercury a difficult place and the answers describe a real love of ideas. Whatever stands in the way of thought or speech in the chart, the interest has survived it."
+      "hardWon": "The chart gives Mercury a difficult place and the answers describe a real love of ideas. Whatever stands in the way of thought or speech in the chart, the interest has survived it.",
+      "daily": {
+        "well": {
+          "hard": "By your answers you enjoy an argument about ideas. Today may supply one.",
+          "easy": "By your answers you love ideas. This is a good day for them."
+        }
+      }
     },
     "Venus": {
       "stands": "relating, affection and harmony",
@@ -163,48 +205,56 @@
           "name": "open-armed",
           "when": { "sociable": "high", "accord": "high" },
           "lived": "well",
+          "report": "By {name}'s answers affection is given freely: people are liked, sought out and trusted.",
           "text": "The answers describe someone who likes people, seeks them out, trusts them and would sooner agree than argue. Affection is offered freely and relationships come easily."
         },
         {
           "name": "charming on its own terms",
           "when": { "sociable": "high", "accord": "low" },
           "lived": "plain",
+          "report": "By {name}'s answers company is enjoyed, with the guard kept up.",
           "text": "The answers describe someone sociable and at ease in company who nonetheless keeps their guard up: slow to trust, and ready to contest a point. People are enjoyed more than they are relied on."
         },
         {
           "name": "quietly devoted",
           "when": { "sociable": "low", "accord": "high" },
           "lived": "plain",
+          "report": "By {name}'s answers this is kept for a few people, who are trusted completely.",
           "text": "The answers describe someone reserved, with little need of company, who trusts those they do let in and goes a long way to keep the peace with them. Affection is real and narrow: a few people, held closely."
         },
         {
           "name": "guarded",
           "when": { "sociable": "low", "accord": "low" },
           "lived": "strain",
+          "report": "By {name}'s answers people are kept at a distance, and little of this is being shared.",
           "text": "The answers describe distance from people on every count: little wish for company, little trust, and no reluctance to quarrel. Whatever the chart says of Venus, relating is being kept at arm's length."
         },
         {
           "name": "sociable",
           "when": { "sociable": "high" },
           "lived": "well",
+          "report": "By {name}'s answers it shows as ease and warmth in company.",
           "text": "The answers describe someone warm and fond of company, with an ordinary measure of trust and of willingness to give way. Venus shows as ease among people."
         },
         {
           "name": "reserved",
           "when": { "sociable": "low" },
           "lived": "plain",
+          "report": "By {name}'s answers it is lived privately, away from crowds.",
           "text": "The answers describe someone who keeps to themselves: slow to make friends and happier out of a crowd, though no less trusting or agreeable than most. Venus is private here, not absent."
         },
         {
           "name": "accommodating",
           "when": { "accord": "high" },
           "lived": "well",
+          "report": "By {name}'s answers it shows as trust and a readiness to keep the peace.",
           "text": "The answers describe an ordinary liking for company together with unusual trust in people and readiness to keep the peace. Venus shows as goodwill: others are believed and met halfway."
         },
         {
           "name": "wary",
           "when": { "accord": "low" },
           "lived": "strain",
+          "report": "By {name}'s answers it comes with little trust and a readiness to argue.",
           "text": "The answers describe an ordinary liking for company together with little trust and a readiness to argue. People are kept company with and not quite believed. Venus is hedged."
         },
         {
@@ -215,7 +265,17 @@
         }
       ],
       "unlived": "The chart gives Venus an easy place, where affection and company should come without effort, and the answers describe distance and distrust. The tradition would say the warmth is available. Guardedness of this kind is more often learned than inborn; the chart suggests it need not be permanent.",
-      "hardWon": "The chart gives Venus a difficult place, where relating is expected to be awkward or costly, and the answers describe someone open, trusting and at ease with people. That ease has been made, probably through relationships that taught it."
+      "hardWon": "The chart gives Venus a difficult place, where relating is expected to be awkward or costly, and the answers describe someone open, trusting and at ease with people. That ease has been made, probably through relationships that taught it.",
+      "daily": {
+        "strain": {
+          "hard": "By your answers you are slow to trust, and this may seem to confirm your caution. Check whether it has earned it.",
+          "easy": "By your answers you keep people at a distance. Today it may be safe to let one a little closer."
+        },
+        "well": {
+          "hard": "By your answers you are at ease with people, and can afford to say the awkward thing kindly.",
+          "easy": "By your answers company comes easily to you. Today it is likely to be good company."
+        }
+      }
     },
     "Mars": {
       "stands": "drive, anger and assertion",
@@ -228,36 +288,42 @@
           "name": "combative",
           "when": { "push": "high", "heat": "high" },
           "lived": "strain",
+          "report": "By {name}'s answers the drive is strong and so is the temper.",
           "text": "The answers describe someone forceful, busy and quick to anger: ready to take charge and equally ready to flare. The drive is not in doubt. It comes with friction, and others will feel both."
         },
         {
           "name": "direct",
           "when": { "push": "high" },
           "lived": "well",
+          "report": "By {name}'s answers this drive is in full and well-governed use.",
           "text": "The answers describe drive that goes where it is pointed: assertive, active, glad of a challenge, and no more easily provoked than most. This is Mars working as it should, with force at the service of intention."
         },
         {
           "name": "held in",
           "when": { "push": "low", "heat": "high" },
           "lived": "strain",
+          "report": "By {name}'s answers this drive is felt more than it is used: the anger is there and the assertion is not.",
           "text": "The answers describe anger that is felt strongly and seldom acted on: little inclination to speak up or take the lead, and a quick temper underneath. Force that is not spent tends to turn into resentment, or to come out all at once."
         },
         {
           "name": "muted",
           "when": { "push": "low" },
           "lived": "plain",
+          "report": "By {name}'s answers little of this drive is being called on.",
           "text": "The answers describe little push and no unusual heat: no wish to lead, a slow pace, no taste for excitement. Others are left to decide. This is peaceable, and it can also mean one's own wants go unstated."
         },
         {
           "name": "short-fused",
           "when": { "heat": "high" },
           "lived": "strain",
+          "report": "By {name}'s answers the temper is quicker than the drive is strong.",
           "text": "The answers describe an ordinary level of drive with a temper that is quickly roused. The energy is not excessive; the irritation is. Small obstacles cost more than they should."
         },
         {
           "name": "even-tempered",
           "when": { "heat": "low" },
           "lived": "well",
+          "report": "By {name}'s answers it is lived coolly, with a temper that is hard to rouse.",
           "text": "The answers describe an ordinary level of drive and a temper that is hard to rouse. What Mars does here it does coolly."
         },
         {
@@ -268,7 +334,17 @@
         }
       ],
       "unlived": "The chart gives Mars an easy place, where the tradition expects it to act cleanly and openly, and the answers describe anger with nowhere to go or force with too much friction. The directness is there to use. The question the chart puts is what is stopping it.",
-      "hardWon": "The chart gives Mars a difficult place, where drive is expected to misfire, turn inward or cause trouble, and the answers describe energy that is direct and well governed. On the tradition's account that is a difficult placement that has been worked on."
+      "hardWon": "The chart gives Mars a difficult place, where drive is expected to misfire, turn inward or cause trouble, and the answers describe energy that is direct and well governed. On the tradition's account that is a difficult placement that has been worked on.",
+      "daily": {
+        "strain": {
+          "hard": "By your answers your temper is quick, or kept under, so friction today may cost you more than it should. Decide beforehand what is worth a fight.",
+          "easy": "By your answers your energy does not always find its way out. Today it has a clear road."
+        },
+        "well": {
+          "hard": "By your answers your drive is well in hand, and an obstacle today is more likely to be met than resented.",
+          "easy": "By your answers you act readily. Today that is likely to go well."
+        }
+      }
     },
     "Jupiter": {
       "stands": "expansion, generosity and excess",
@@ -281,36 +357,42 @@
           "name": "lavish",
           "when": { "reach": "high", "excess": "high" },
           "lived": "strain",
+          "report": "By {name}'s answers this is lived expansively, and to excess.",
           "text": "The answers describe a large appetite in every direction: eager for new experience, generous to others, and not good at stopping. Jupiter is plainly active. Its traditional fault, too much of a good thing, is active with it."
         },
         {
           "name": "generous",
           "when": { "reach": "high" },
           "lived": "well",
+          "report": "By {name}'s answers this is lived generously and with a sense of proportion.",
           "text": "The answers describe someone who welcomes the new and gives freely to others, without being run by their appetites. This is Jupiter at its best: wide in outlook and open-handed, with a sense of proportion."
         },
         {
           "name": "appetite without horizon",
           "when": { "reach": "low", "excess": "high" },
           "lived": "strain",
+          "report": "By {name}'s answers the appetite is stronger than the reach.",
           "text": "The answers describe strong cravings and little resistance to them, in a life that otherwise keeps to the familiar and does not go out of its way for others. Jupiter's excess is there without its largeness."
         },
         {
           "name": "contained",
           "when": { "reach": "low" },
           "lived": "plain",
+          "report": "By {name}'s answers this is lived within narrow, well-kept bounds.",
           "text": "The answers describe a contained life: a liking for the familiar, a measured response to other people's needs, and appetites in hand. Nothing is overdone. Not much is reached for either."
         },
         {
           "name": "indulgent",
           "when": { "excess": "high" },
           "lived": "strain",
+          "report": "By {name}'s answers it shows mostly as a taste for pleasure.",
           "text": "The answers describe an ordinary appetite for new experience and for helping others, and a stronger one for pleasure: cravings are felt keenly and often given in to."
         },
         {
           "name": "temperate",
           "when": { "excess": "low" },
           "lived": "well",
+          "report": "By {name}'s answers it comes with unusual self-command.",
           "text": "The answers describe an ordinary appetite for new experience and for helping others, with unusual self-command: temptation is easily resisted and little is overdone."
         },
         {
@@ -321,7 +403,17 @@
         }
       ],
       "unlived": "The chart gives Jupiter an easy place, where growth and good judgment are supposed to arrive together, and the answers describe appetite that outruns sense. The tradition would say the judgment is available: this Jupiter knows when enough is enough, if it is asked.",
-      "hardWon": "The chart gives Jupiter a difficult place, where the tradition expects either meanness or excess, and the answers describe generosity with proportion. That balance was not the easy path for this chart."
+      "hardWon": "The chart gives Jupiter a difficult place, where the tradition expects either meanness or excess, and the answers describe generosity with proportion. That balance was not the easy path for this chart.",
+      "daily": {
+        "strain": {
+          "hard": "By your answers you find it hard to stop at enough, and today may test that.",
+          "easy": "By your answers you are inclined to overdo things. Enjoy this, and mind the measure."
+        },
+        "well": {
+          "hard": "By your answers you keep a sense of proportion, which is what this asks for.",
+          "easy": "By your answers you are open-handed and know your limits. Today rewards both."
+        }
+      }
     },
     "Saturn": {
       "stands": "discipline, duty, caution and fear",
@@ -334,36 +426,42 @@
           "name": "strict with itself",
           "when": { "discipline": "high", "inhibition": "high" },
           "lived": "strain",
+          "report": "By {name}'s answers the discipline is real, and so is the fear of falling short that goes with it.",
           "text": "The answers describe someone orderly, dutiful and careful who is also ill at ease under other people's eyes. The structure is real, and so is the fear of being found wanting that often drives it. Saturn is doing its work and exacting its price."
         },
         {
           "name": "structured",
           "when": { "discipline": "high" },
           "lived": "well",
+          "report": "By {name}'s answers this discipline is in daily use and sits easily.",
           "text": "The answers describe self-discipline, order, a strong sense of duty and care before acting, without undue self-consciousness. This is Saturn as an asset: limits that are chosen and kept."
         },
         {
           "name": "exposed",
           "when": { "discipline": "low", "inhibition": "high" },
           "lived": "strain",
+          "report": "By {name}'s answers the discipline is missing and the self-consciousness is not.",
           "text": "The answers describe little structure and a good deal of self-consciousness: tasks put off, rules worn lightly, and a sharp sense of being judged. Saturn's fear is present without its discipline, which is the least comfortable way to have it."
         },
         {
           "name": "unbound",
           "when": { "discipline": "low" },
           "lived": "plain",
+          "report": "By {name}'s answers these limits are, for now, declined.",
           "text": "The answers describe someone not much governed by plans, rules or tidiness, and not unduly troubled by what others think of that. Saturn's limits are being declined. This is freedom, and it is also work left for later."
         },
         {
           "name": "self-conscious",
           "when": { "inhibition": "high" },
           "lived": "strain",
+          "report": "By {name}'s answers it shows chiefly as unease about being judged.",
           "text": "The answers describe an ordinary measure of order and conscientiousness, and marked unease under other people's eyes. Saturn shows less as discipline than as the fear of being judged."
         },
         {
           "name": "at ease",
           "when": { "inhibition": "low" },
           "lived": "well",
+          "report": "By {name}'s answers it is carried without anxiety.",
           "text": "The answers describe an ordinary measure of order and conscientiousness, and no fear of other people's judgment. Saturn's demands are met without anxiety."
         },
         {
@@ -374,7 +472,17 @@
         }
       ],
       "unlived": "The chart gives Saturn an easy place, where discipline and authority are supposed to sit comfortably, and the answers describe either structure that is missing or structure held together by anxiety. The tradition would say that steadier ground is there. Fear is doing work here that habit could do instead.",
-      "hardWon": "The chart gives Saturn a difficult place, where the tradition expects heaviness, delay or fear, and the answers describe discipline worn lightly. That is the result Saturn is said to give to those who put the years in."
+      "hardWon": "The chart gives Saturn a difficult place, where the tradition expects heaviness, delay or fear, and the answers describe discipline worn lightly. That is the result Saturn is said to give to those who put the years in.",
+      "daily": {
+        "strain": {
+          "hard": "By your answers you are hard on yourself, or uneasy under judgment. Today's pressure is likely to feel heavier than it is.",
+          "easy": "By your answers duty or self-doubt weighs on you. Today it sits a little lighter."
+        },
+        "well": {
+          "hard": "By your answers discipline comes naturally to you, and a demand today is one you can meet.",
+          "easy": "By your answers you are steady and organised. Today builds on that."
+        }
+      }
     },
     "Neptune": {
       "stands": "imagination and compassion",
@@ -387,36 +495,42 @@
           "name": "porous",
           "when": { "dream": "high", "compassion": "high" },
           "lived": "plain",
+          "report": "By {name}'s answers both the dreaming and the sympathy are strong.",
           "text": "The answers describe a vivid imagination and a tender heart: much time in daydream, and a ready response to other people's troubles. Neptune is fully present. The boundary between self and others, and between what is and what is imagined, is thin."
         },
         {
           "name": "dreaming",
           "when": { "dream": "high" },
           "lived": "plain",
+          "report": "By {name}'s answers the imagination is very active.",
           "text": "The answers describe a rich inner world of fantasy and daydream, with an ordinary or cooler response to others' misfortunes. The imagination is turned inward more than outward."
         },
         {
           "name": "tender",
           "when": { "compassion": "high" },
           "lived": "plain",
+          "report": "By {name}'s answers it shows as sympathy more than as dreaming.",
           "text": "The answers describe ready sympathy for those worse off, without any unusual taste for fantasy. Neptune shows as compassion more than as dreaming."
         },
         {
           "name": "matter-of-fact",
           "when": { "dream": "low", "compassion": "low" },
           "lived": "plain",
+          "report": "By {name}'s answers little of this is in use: facts and fairness come first.",
           "text": "The answers describe someone who keeps to facts and judges by fairness more than by pity. Neptune is the least used planet here: little is dreamed and little is dissolved."
         },
         {
           "name": "literal",
           "when": { "dream": "low" },
           "lived": "plain",
+          "report": "By {name}'s answers the imagination is seldom called on.",
           "text": "The answers describe little daydreaming and an ordinary measure of sympathy. Neptune's imagination is not much called on; attention stays with what is in front of it."
         },
         {
           "name": "unsentimental",
           "when": { "compassion": "low" },
           "lived": "plain",
+          "report": "By {name}'s answers pity plays little part.",
           "text": "The answers describe an ordinary imagination and little inclination to pity: other people's troubles are judged by what is fair more than felt. Neptune's compassion is not much called on."
         },
         {

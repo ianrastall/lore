@@ -152,6 +152,68 @@ public sealed class ViewModelTests : IDisposable
     });
 
     [Fact]
+    public void A_persons_answers_shape_their_Report_and_nobody_elses_and_can_be_switched_off() => UiThread.Run(async () =>
+    {
+        Directory.CreateDirectory(_dir);
+        string library = Path.Combine(_dir, "celebrities.json");
+        File.WriteAllText(library, JsonSerializer.Serialize(new[] { "elvis-presley", "marilyn-monroe" }.Select(Repo.Figure)));
+
+        var charts = new ChartService(Repo.Ephemeris);
+        var report = new ChartInterpreter(Repo.Data("interpretations.json"));
+        var store = new InventoryStore(Path.Combine(_dir, "store"));
+        var settings = new SettingsService(Path.Combine(_dir, "store"));
+        var inventory = new InventoryService(Repo.Data("inventory.json"));
+        var vm = new MainViewModel(
+            new CelebrityService(), charts, report, new UserChartService(Path.Combine(_dir, "store")), new CityService(),
+            new HospitalService(), new TransitService(charts), new DailyInterpreter(Repo.Data("daily.json")),
+            new SynastryInterpreter(Repo.Data("synastry.json")), settings, null, inventory, store,
+            new MirrorInterpreter(Repo.Data("mirror.json"), report));
+        vm.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(MainViewModel.DisplayedCelebrities)) vm.SelectedCelebrity = null;
+        };
+        await vm.InitializeAsync(library, Repo.Data("cities.json"), Repo.Data("hospitals.json"));
+
+        // Ann has answered the questionnaire: quick to anger, slow to assert.
+        var answers = Enumerable.Repeat(3, 120).ToArray();
+        foreach (var item in inventory.Instrument.Items)
+        {
+            if (item.Facet is "E3" or "E4" or "E5") answers[item.N - 1] = item.Reversed ? 5 : 1;
+            if (item.Facet == "N2") answers[item.N - 1] = item.Reversed ? 1 : 5;
+        }
+        store.Save("user-1", [new InventorySitting { Started = "2026-10-10", Completed = "2026-10-10", Answers = answers }]);
+
+        await vm.AddCustomChartAsync(Own("user-1", "Ann Example", "14:20"));
+        await Settled(vm);
+        string Mars() => vm.ChartVM.ReportSections.Single(s => s.Heading == "The Planets").Paragraphs.Single(p => p.Contains(" Mars in "));
+
+        Assert.True(vm.InventoryVM.HasReading);
+        Assert.Same(vm.InventoryVM.Reading, vm.ChartVM.Answers);
+        Assert.Same(vm.InventoryVM.Reading, vm.DailyVM.Answers);
+        Assert.Same(vm.InventoryVM.Reading, vm.ForecastVM.Answers);
+        Assert.EndsWith("By Ann's answers this drive is felt more than it is used: the anger is there and the assertion is not.", Mars());
+        Assert.Equal("In the Light of the Answers", vm.ChartVM.ReportSections[^1].Heading);
+
+        // Switched off: the Report is as it would be without the questionnaire, and the choice is kept.
+        vm.InventoryVM.ShapeReadings = false;
+        Assert.Null(vm.ChartVM.Answers);
+        Assert.DoesNotContain("By Ann's answers", Mars());
+        Assert.DoesNotContain(vm.ChartVM.ReportSections, s => s.Heading == "In the Light of the Answers");
+        settings.Flush();
+        Assert.False(new SettingsService(Path.Combine(_dir, "store")).LoadUi().AnswersShapeReadings);
+        vm.InventoryVM.ShapeReadings = true;
+        Assert.Contains("By Ann's answers", Mars());
+
+        // Someone with no answers: nothing of Ann's is carried over.
+        vm.SelectedCategory = MainViewModel.AllCategories;
+        vm.SelectedCelebrity = Row(vm, "elvis-presley");
+        await Settled(vm);
+        Assert.Null(vm.ChartVM.Answers);
+        Assert.DoesNotContain(vm.ChartVM.ReportSections.SelectMany(s => s.Paragraphs), p => p.Contains("answers"));
+        Assert.DoesNotContain(vm.ChartVM.ReportSections, s => s.Heading == "In the Light of the Answers");
+    });
+
+    [Fact]
     public void The_Synastry_view_switches_between_the_comparison_and_the_Davison_chart() => UiThread.Run(async () =>
     {
         var charts = new ChartService(Repo.Ephemeris);

@@ -221,6 +221,158 @@ public sealed class MirrorTests : IDisposable
         Assert.Contains("HOW EACH PLANET IS BEING LIVED", text);
     }
 
+    // ── Shaping the other readings ────────────────────────────────────────────
+
+    private static readonly ChartInterpreter Report = new(Repo.Data("interpretations.json"));
+
+    [Fact]
+    public void Every_expression_but_the_middling_ones_has_a_line_for_the_Report_and_each_scored_planet_lines_for_the_day()
+    {
+        using var doc = System.Text.Json.JsonDocument.Parse(File.ReadAllText(Repo.Data("mirror.json")));
+        foreach (var planet in doc.RootElement.GetProperty("planets").EnumerateObject())
+        {
+            var expressions = planet.Value.GetProperty("expressions").EnumerateArray().ToList();
+            foreach (var e in expressions)
+            {
+                bool middling = !e.GetProperty("when").EnumerateObject().Any();
+                bool has = e.TryGetProperty("report", out var line) && !string.IsNullOrWhiteSpace(line.GetString());
+                // Where the answers are ordinary the Report is left exactly as it was.
+                Assert.True(has != middling, $"{planet.Name}/{e.GetProperty("name").GetString()}");
+                if (has) Assert.StartsWith("By {name}'s answers", line.GetString());
+            }
+
+            // A line for the day wherever an expression counts as lived well or with strain.
+            var lived = expressions.Select(e => e.GetProperty("lived").GetString()!).Where(l => l != "plain").Distinct().ToList();
+            if (lived.Count == 0)
+            {
+                Assert.False(planet.Value.TryGetProperty("daily", out _), planet.Name);
+                continue;
+            }
+            var daily = planet.Value.GetProperty("daily");
+            Assert.Equal(lived.Order(), daily.EnumerateObject().Select(d => d.Name).Order());
+            Assert.All(daily.EnumerateObject(), d =>
+                Assert.All(new[] { "hard", "easy" }, kind => Assert.StartsWith("By your answers", d.Value.GetProperty(kind).GetString())));
+        }
+    }
+
+    [Fact]
+    public void The_Report_gains_a_sentence_for_each_planet_the_answers_speak_of_and_says_so_at_the_end()
+    {
+        var chart = Chart();
+        var plain = Report.Interpret(chart);
+        var answers = Mirror.Compose(chart, Profile(("E3", false), ("E4", false), ("E5", false), ("N2", true)));
+        var shaped = Report.Interpret(chart, null, answers);
+
+        string Line(IReadOnlyList<ReportSection> report, string planet) =>
+            report.Single(s => s.Heading == "The Planets").Paragraphs.Single(p => p.Contains($" {planet} in "));
+
+        // Mars is "held in": its paragraph is the one the Report always had, and one sentence more.
+        Assert.Equal(Line(plain, "Mars") + " By Elvis's answers this drive is felt more than it is used: the anger is there and the assertion is not.",
+            Line(shaped, "Mars"));
+        // Uranus is not read, and stays word for word.
+        Assert.Equal(Line(plain, "Uranus"), Line(shaped, "Uranus"));
+        // Nothing else in the Report moves.
+        foreach (string heading in new[] { "Overview", "Major Aspects", "Chart Patterns" })
+            Assert.Equal(plain.Single(s => s.Heading == heading).Paragraphs, shaped.Single(s => s.Heading == heading).Paragraphs);
+
+        var closing = shaped[^1];
+        Assert.Equal("In the Light of the Answers", closing.Heading);
+        Assert.StartsWith("Elvis answered Lore's personality inventory on 10 October 2026.", closing.Paragraphs[0]);
+        Assert.DoesNotContain(plain, s => s.Heading == "In the Light of the Answers");
+        Assert.DoesNotContain(shaped.SelectMany(s => s.Paragraphs), p => p.Contains('{'));
+    }
+
+    [Fact]
+    public void A_planet_whose_placement_and_answers_disagree_is_named_at_the_end_of_the_Report()
+    {
+        var chart = Chart();
+        var answers = Mirror.Compose(chart, Profile(("C5", false), ("C3", false), ("C2", false), ("C6", false), ("N4", true)));
+        var closing = Report.Interpret(chart, null, answers)[^1].Paragraphs;
+        Assert.Contains(closing, p => p.StartsWith("♄ Saturn, unlived: The chart gives Saturn an easy place"));
+    }
+
+    [Fact]
+    public void One_persons_answers_never_colour_another_persons_Report_or_day()
+    {
+        var elvis = Chart();
+        var marilyn = Chart("marilyn-monroe");
+        var answers = Mirror.Compose(elvis, Profile(("N1", true), ("N3", true), ("N6", true), ("N2", true)));
+
+        Assert.Equal(Report.Interpret(marilyn).SelectMany(s => s.Paragraphs),
+            Report.Interpret(marilyn, null, answers).SelectMany(s => s.Paragraphs));
+
+        var daily = new DailyInterpreter(Repo.Data("daily.json"));
+        var transits = new TransitService(Repo.Charts);
+        var date = new DateOnly(2026, 10, 2);
+        var zone = NodaTime.DateTimeZone.Utc;
+        string Text(MirrorReading? a) => string.Join("|", daily.Compose(marilyn, transits.Scan(marilyn, date, zone), zone, a)
+            .Sections.SelectMany(s => s.Items).Select(i => i.Text));
+        Assert.Equal(Text(null), Text(answers));
+    }
+
+    [Fact]
+    public void A_transit_to_a_planet_lived_with_strain_or_lived_well_gains_a_line_in_the_Daily_and_the_Forecast()
+    {
+        var chart = Chart();
+        var daily = new DailyInterpreter(Repo.Data("daily.json"));
+        var transits = new TransitService(Repo.Charts);
+        var zone = NodaTime.DateTimeZone.Utc;
+        var start = new DateOnly(2026, 10, 1);
+
+        // Every one of the seven lived with strain or well, so that any transit to one of them shows it.
+        var answers = Mirror.Compose(chart, Profile(
+            ("C1", false), ("C4", false), ("A5", true), ("E6", false),          // Sun dimmed
+            ("N1", true), ("N3", true), ("N6", true),                            // Moon uneasy
+            ("O5", true),                                                        // Mercury inquiring
+            ("E1", false), ("E2", false), ("A1", false), ("A4", false),          // Venus guarded
+            ("E3", true), ("E4", true), ("E5", true), ("N2", true),              // Mars combative
+            ("O4", true), ("A3", true), ("N5", true),                            // Jupiter lavish
+            ("C5", true), ("C3", true), ("C2", true), ("C6", true)));            // Saturn structured
+        Assert.All(answers.Planets.Where(p => p.Planet != Models.Planet.Neptune), p => Assert.NotEqual(MirrorLived.Plain, p.Lived));
+
+        var passes = transits.Forecast(chart, start, 91, zone);
+        var plain = daily.ComposeForecast(chart, passes, start, 91, zone);
+        var shaped = daily.ComposeForecast(chart, passes, start, 91, zone, null, answers);
+        var before = plain.Sections.SelectMany(s => s.Items).ToList();
+        var after = shaped.Sections.SelectMany(s => s.Items).ToList();
+        Assert.Equal(before.Select(i => i.Title), after.Select(i => i.Title));
+
+        string[] read = ["Sun", "Moon", "Mercury", "Venus", "Mars", "Jupiter", "Saturn"];
+        int changed = 0;
+        foreach (var (was, now) in before.Zip(after))
+        {
+            bool toRead = read.Any(planet => was.Title is { } t && t.EndsWith($"your natal {Symbol(planet)} {planet}"));
+            if (toRead)
+            {
+                Assert.StartsWith(was.Text + " By your answers", now.Text);
+                changed++;
+            }
+            else
+                Assert.Equal(was.Text, now.Text);   // transits to anything else read as they did
+        }
+        Assert.True(changed > 5);
+
+        // A square to Mars, lived combatively, takes the hard line; a trine the easy one.
+        var mars = answers.Planets.Single(p => p.Planet == Models.Planet.Mars);
+        Assert.StartsWith("By your answers your temper is quick", mars.DailyLine(TransitTone.Tension));
+        Assert.StartsWith("By your answers your energy does not always", mars.DailyLine(TransitTone.Flow));
+        Assert.Equal(mars.DailyHard, mars.DailyLine(TransitTone.Conjunction));   // under strain, a conjunction is hard
+        var saturn = answers.Planets.Single(p => p.Planet == Models.Planet.Saturn);
+        Assert.Equal(saturn.DailyEasy, saturn.DailyLine(TransitTone.Conjunction)); // lived well, it is easy
+
+        // The same in a day's reading: nothing is added, removed or reordered, only lengthened.
+        for (int day = 0; day < 20; day++)
+        {
+            var date = start.AddDays(day);
+            var a = daily.Compose(chart, transits.Scan(chart, date, zone), zone).Sections.SelectMany(s => s.Items).ToList();
+            var b = daily.Compose(chart, transits.Scan(chart, date, zone), zone, answers).Sections.SelectMany(s => s.Items).ToList();
+            Assert.Equal(a.Select(i => i.Title), b.Select(i => i.Title));
+            Assert.All(a.Zip(b), pair => Assert.True(pair.Second.Text == pair.First.Text || pair.Second.Text.StartsWith(pair.First.Text + " By your answers")));
+        }
+    }
+
+    private static string Symbol(string planet) => Enum.GetValues<Planet>().Single(p => p.Name() == planet).Symbol();
+
     // ── In the view ───────────────────────────────────────────────────────────
 
     [Fact]

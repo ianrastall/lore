@@ -4,14 +4,14 @@
 
 > A Windows desktop application for computing and exploring astrological natal charts — and reading a daily horoscope from them — powered by the Swiss Ephemeris. Browse a curated library of historical figures — every one with a documented birth time — or add your own.
 
-**Latest release: v3.0.0** · [Download](../../releases/latest)
+**Latest release: v3.1.0** · [Download](../../releases/latest)
 
 ### Installing
 
-1. From the [latest release](../../releases/latest), download **`LoreSetup-3.0.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`LoreSetup-3.1.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user only (no administrator prompt), adds a Start-menu shortcut, and can be removed from *Settings → Apps* like any other program.
 
-**Prefer not to install?** Download **`Lore-3.0.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
+**Prefer not to install?** Download **`Lore-3.1.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
 
 > **The installer is not code-signed.** Lore is a free hobby project and does not carry a paid signing certificate, so Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"* — choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -115,6 +115,10 @@ The **Inventory** view offers a standard personality questionnaire for any chart
   - *How each planet is being lived*: the facets that measure the nearest thing to what a planet stands for pick one of several named expressions. Mars, read from Assertiveness, Activity Level, Excitement-Seeking and Anger, may come out *direct*, *combative*, *held in*, *muted*, *short-fused*, *even-tempered* or *measured*. Each is given after the Report's own words for that planet in its sign.
   - *Where the chart and the answers part company*: the chart's expectation is the planet's dignity score (well placed, it "works easily"; badly placed, "with strain"). An easy placement lived with strain is called **unlived**; a hard one lived well, **hard-won**.
   - The chart is never altered. The pairing of planets with facets is Lore's own design, and the reading says plainly that no research connects a birth chart with measured personality: it is a prompt for reflection. 54 expressions and 14 comparison paragraphs, in `Data\mirror.json`.
+- **The Report, Daily and Forecast follow.** With the questionnaire answered, the answers also shape the wording of the other readings for that person:
+  - in the **Report**, each planet the answers have something to say about gains a sentence beginning *By (name)'s answers…*, and a closing section, *In the Light of the Answers*, says which sentences those are and names any planet whose placement and answers disagree;
+  - in the **Daily** and **Forecast** readings, a transit to a planet the answers describe as lived with strain, or lived well, gains a line beginning *By your answers…* saying how that is likely to bear on it: a square to a Mars that is *held in* is read differently from one to a Mars that is *direct*.
+  - Every such sentence is marked as coming from the answers, and nothing the readings said before is removed or reworded. Where the answers are ordinary, nothing is added. A tick-box in the Inventory view turns it off.
 - **Private.** Answers are kept on the PC only, in a file of their own (`%LOCALAPPDATA%\Lore\inventories.json`), apart from your saved charts: they are never part of a My Charts export. One button deletes them, and deleting a chart deletes its answers.
 - **Not for the bundled figures**, who cannot answer a questionnaire.
 - **Text exports** of the profile and of the chart-and-answers reading.
@@ -300,7 +304,7 @@ Produces a self-contained folder that runs with no installed .NET or VC++ runtim
 .\scripts\build-portable.ps1
 ```
 
-Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-3.0.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
+Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-3.1.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
 
 ### Step 4 — Installer
 
@@ -512,7 +516,14 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 3.0.0 (current)
+### 3.1.0 (current)
+- **The answers now shape the Report, the Daily and the Forecast.** In 3.0.0 the personality inventory fed one reading of its own. Now, for anyone who has answered it:
+  - the **Report** adds a sentence to each planet the answers speak of, saying how they describe it lived (*By Ann's answers this drive is felt more than it is used…*), and ends with a section, *In the Light of the Answers*, naming any planet that is *unlived* or *hard-won*;
+  - the **Daily** and **Forecast** readings add a line to a transit to such a planet (*By your answers your temper is quick, or kept under, so friction today may cost you more than it should…*), different for a hard transit and an easy one.
+- **Marked, additive and optional.** Each added sentence begins *By … answers*, so what comes from the questionnaire can always be told from what comes from the chart. Nothing the readings said before is taken out. Where the answers are ordinary, nothing is added. *Let the answers shape the Report, Daily and Forecast* in the Inventory view turns it off, and one person's answers never touch another person's readings.
+- 46 new sentences for the Report and 26 for the day, in `Data\mirror.json`.
+
+### 3.0.0
 - **A personality inventory.** A new **Inventory** view (Ctrl+8) offers the IPIP-NEO-120, a standard public-domain personality questionnaire, for any chart of your own: 120 statements, ten at a time, saved as you go. At the end it shows a profile of the five broad traits and thirty facets, each as low, typical or high against published figures for 320,128 people, with a sentence for each.
 - **The chart read in the light of the answers.** With a profile made, **Chart and answers** gives a reading of eight planets. For each it sets the Report's account of the planet beside one of several named ways of living it, chosen by the facets that measure the nearest thing: a Mars may be *direct*, *combative*, *held in* or *muted*; a Moon *tidal*, *uneasy*, *deep and calm* or *even*. It then sets that against the planet's dignity in the chart, and says where the two disagree: an easy placement lived with strain is **unlived**, a hard one lived well is **hard-won**.
 - **Honest about what it is.** The chart is never changed; only the wording of this one reading depends on the answers. The pairing of planets with facets is Lore's own, and the reading says so: no research connects a chart with measured personality, and it is offered as a prompt for reflection.

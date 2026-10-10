@@ -36,6 +36,8 @@ public sealed class MirrorInterpreter
         public List<Expression> Expressions { get; init; } = [];
         public string? Unlived { get; init; }
         public string? HardWon { get; init; }
+        // Lines for a transit to this planet: lived (strain | well) → kind (hard | easy).
+        public Dictionary<string, Dictionary<string, string>> Daily { get; init; } = new();
     }
 
     private sealed class Expression
@@ -43,6 +45,7 @@ public sealed class MirrorInterpreter
         public string Name { get; init; } = "";
         public Dictionary<string, string> When { get; init; } = new();   // dial → low | mid | high
         public string Lived { get; init; } = "plain";                    // well | strain | plain
+        public string? Report { get; init; }                             // added to the Report's paragraph
         public string Text { get; init; } = "";
     }
 
@@ -86,6 +89,7 @@ public sealed class MirrorInterpreter
     {
         var facets = profile.Domains.SelectMany(d => d.Facets).ToDictionary(f => f.Facet.Key);
         var dignity = DignityService.ComputeIfTimed(chart);
+        string name = chart.Celebrity.Name.Split(' ', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault() ?? chart.Celebrity.Name;
 
         var planets = new List<MirrorPlanet>();
         foreach (var planet in Read)
@@ -109,6 +113,9 @@ public sealed class MirrorInterpreter
                     .Select(k => facets.GetValueOrDefault(k.TrimStart('-'))).OfType<FacetScore>().ToList(),
                 Stands = entry.Stands,
                 DignityNotes = dignity?.Planets.FirstOrDefault(p => p.Planet == planet)?.Notes ?? "",
+                ReportLine = (expression.Report ?? "").Replace("{name}", name),
+                DailyHard = entry.Daily.GetValueOrDefault(expression.Lived)?.GetValueOrDefault("hard") ?? "",
+                DailyEasy = entry.Daily.GetValueOrDefault(expression.Lived)?.GetValueOrDefault("easy") ?? "",
             });
         }
 
@@ -119,6 +126,8 @@ public sealed class MirrorInterpreter
 
         return new MirrorReading
         {
+            ChartId = chart.Celebrity.Id,
+            ReportParagraphs = ForReport(chart, planets, name, profile.TakenOn),
             Name = chart.Celebrity.Name,
             TakenOn = profile.TakenOn,
             Planets = planets,
@@ -215,6 +224,31 @@ public sealed class MirrorInterpreter
         Group("Nothing to set against anything", MirrorVerdict.NoContrast, "noContrast");
 
         return new DailySection { Heading = "Where the chart and the answers part company", Items = items };
+    }
+
+    // What the Report says at its end when the answers have shaped it.
+    private List<string> ForReport(NatalChart chart, List<MirrorPlanet> planets, string name, DateOnly takenOn)
+    {
+        var paragraphs = new List<string>
+        {
+            Note("reportIntro").Replace("{name}", name)
+                .Replace("{date}", takenOn.ToString("d MMMM yyyy", CultureInfo.InvariantCulture)),
+        };
+        if (chart.Timed)
+        {
+            var differing = planets.Where(p => p.Verdict is MirrorVerdict.Unlived or MirrorVerdict.HardWon).ToList();
+            foreach (var p in differing)
+            {
+                var entry = _c.Planets[p.Planet.Name()];
+                string? text = p.Verdict == MirrorVerdict.Unlived ? entry.Unlived : entry.HardWon;
+                if (!string.IsNullOrWhiteSpace(text))
+                    paragraphs.Add($"{p.Planet.Symbol()} {p.Planet.Name()}, " +
+                                   $"{(p.Verdict == MirrorVerdict.Unlived ? _c.Comparison.GetValueOrDefault("unlived", "unlived") : _c.Comparison.GetValueOrDefault("hardWon", "hard-won"))}: {text}");
+            }
+            if (differing.Count == 0) paragraphs.Add(Note("reportNone"));
+        }
+        paragraphs.RemoveAll(string.IsNullOrWhiteSpace);
+        return paragraphs;
     }
 
     private DailySection Closing() => new()

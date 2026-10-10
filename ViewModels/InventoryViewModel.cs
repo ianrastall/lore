@@ -126,6 +126,11 @@ public sealed partial class InventoryViewModel : ObservableObject
     [ObservableProperty]
     public partial bool ShowReading { get; set; }
 
+    // Whether the answers also shape the wording of the Report, Daily and Forecast
+    // readings (MainViewModel passes the reading on to them, and remembers the choice).
+    [ObservableProperty]
+    public partial bool ShapeReadings { get; set; } = true;
+
     public bool HasReading => Reading is not null;
     public bool ReadingShown => IsProfile && ShowReading && Reading is not null;
     public bool ProfileShown => IsProfile && !ReadingShown;

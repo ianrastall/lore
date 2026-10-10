@@ -131,6 +131,10 @@
                          ToolTipService.ToolTip="How each planet of the chart is being lived, by the answers"
                          IsChecked="{x:Bind ViewModel.ShowReading, Mode=OneWay}"
                          Checked="ReadingRadio_Checked"/>
+            <Border Width="1" Margin="4,6" Background="{ThemeResource DividerStrokeColorDefaultBrush}"/>
+            <CheckBox Content="Let the answers shape the Report, Daily and Forecast"
+                      IsChecked="{x:Bind ViewModel.ShapeReadings, Mode=TwoWay}"
+                      ToolTipService.ToolTip="Adds a sentence to each planet in the Report, and to transits in the Daily and Forecast readings, saying how the answers describe that planet lived. Each begins “By … answers”. The chart itself is never changed."/>
         </StackPanel>
 
         <!-- The reading: chart and answers side by side -->

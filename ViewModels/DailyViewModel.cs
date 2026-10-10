@@ -78,6 +78,17 @@ public sealed partial class DailyViewModel : ObservableObject
     [RelayCommand]
     private void Today() => Date = DateOnly.FromDateTime(DateTime.Now);
 
+    // The reading that sets this person's inventory answers beside their chart, if the
+    // answers are to shape the wording here; null if there are none or they are not to.
+    [ObservableProperty]
+    public partial MirrorReading? Answers { get; set; }
+
+    partial void OnAnswersChanged(MirrorReading? oldValue, MirrorReading? newValue)
+    {
+        // Only the chart on screen's own answers change anything it says.
+        if (Chart is { } chart && (oldValue?.IsFor(chart) == true || newValue?.IsFor(chart) == true)) Rebuild();
+    }
+
     partial void OnChartChanged(NatalChart? value)
     {
         OnPropertyChanged(nameof(Title));
@@ -114,6 +125,7 @@ public sealed partial class DailyViewModel : ObservableObject
         var chart = Chart;
         var date = Date;
         var home = Home;
+        var answers = Answers;
         ErrorText = "";
 
         if (chart is null || _transits is null || _interpreter is null)
@@ -127,7 +139,7 @@ public sealed partial class DailyViewModel : ObservableObject
         try
         {
             var reading = await Task.Run(() =>
-                _interpreter.Compose(chart, _transits.Scan(chart, date, _zone, home), _zone));
+                _interpreter.Compose(chart, _transits.Scan(chart, date, _zone, home), _zone, answers));
             if (generation == _generation)
                 Reading = reading;
         }

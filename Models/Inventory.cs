@@ -188,6 +188,23 @@ public sealed record MirrorPlanet(
     public string DignityNotes { get; init; } = "";
     public IReadOnlyList<FacetScore> Facets { get; init; } = [];
 
+    // The sentence this adds to the planet's paragraph in the Report; empty for none.
+    public string ReportLine { get; init; } = "";
+
+    // What is added to a transit to this planet in the Daily and Forecast readings: one
+    // line for a square or opposition, one for a sextile or trine. Empty for none.
+    public string DailyHard { get; init; } = "";
+    public string DailyEasy { get; init; } = "";
+
+    // The line for a transit of a given tone. A conjunction takes whichever line goes
+    // with how the planet is lived: the hard one under strain, the easy one otherwise.
+    public string DailyLine(TransitTone tone) => tone switch
+    {
+        TransitTone.Tension => DailyHard,
+        TransitTone.Flow => DailyEasy,
+        _ => Lived == MirrorLived.Strain ? DailyHard : DailyEasy,
+    };
+
     public MirrorVerdict Verdict => (Expectation, Lived) switch
     {
         (MirrorExpectation.Easy, MirrorLived.Well) => MirrorVerdict.AsWritten,
@@ -201,6 +218,20 @@ public sealed record MirrorPlanet(
 // The reading that sets a person's inventory profile beside their chart.
 public sealed class MirrorReading
 {
+    // The chart it was made for. The other readings take wording from it only for this
+    // chart, so that one person's answers can never colour another's reading.
+    public required string ChartId { get; init; }
+
+    // A closing section for the Report: what in it comes from the answers, and any
+    // planet whose placement and answers disagree.
+    public IReadOnlyList<string> ReportParagraphs { get; init; } = [];
+
+    // The planet as this reading has it, if the reading is this chart's and reads it.
+    public MirrorPlanet? For(NatalChart chart, Planet planet) =>
+        chart.Celebrity.Id == ChartId ? Planets.FirstOrDefault(p => p.Planet == planet) : null;
+
+    public bool IsFor(NatalChart chart) => chart.Celebrity.Id == ChartId;
+
     public required string Name { get; init; }
     public required DateOnly TakenOn { get; init; }
     public required IReadOnlyList<MirrorPlanet> Planets { get; init; }

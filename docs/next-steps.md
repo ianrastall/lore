@@ -13,7 +13,7 @@ note stays true.
 
 - Eight views: Chart, Report, Worksheet, Daily, Forecast, Timing, Synastry, Inventory
   (from 3.0.0), plus the Legend. About 10,600 lines of C# and XAML; no file over 560 lines.
-- 369 tests (as of 3.0.0), all passing, covering the calculation and data layer and the view models. They run on
+- 375 tests (as of 3.1.0), all passing, covering the calculation and data layer and the view models. They run on
   GitHub on every push, followed by a build of the app itself (about 3 minutes).
 - The views and the three export services are **not** tested: they
   depend on WinUI or Win2D and the test project leaves them out.
@@ -314,7 +314,7 @@ The reading (`MirrorInterpreter`, `Data\mirror.json`, `MirrorReading`):
 
 Not done: a PDF of either the profile or the reading; the proposal's section 6.3 (a
 measure of overall functioning); looking at earlier sittings; any change to the Report
-or the Daily reading, which are untouched by the answers. The reading in the running
+or the Daily reading (done since, in 3.1.0: see 3f). The reading in the running
 app was not looked at (Ian had Lore open with his own answers in it at the time, and
 neither was to be disturbed); it is covered by `MirrorTests` and a text dump.
 
@@ -350,8 +350,39 @@ Departures from the proposal, and gaps:
 
 Never answered, and worth asking again before going further: whether the outside
 opinion on the proposal came back, and whether Ian also wants the answers to change the
-wording of the Report or the Daily reading (a much larger job: every line that could
-change needs alternatives written for it).
+wording of the Report or the Daily reading. (He did: see 3f.)
+
+## 3f. 3.1.0: the answers shape the Report, Daily and Forecast
+
+Asked for by Ian on 10 October 2026, straight after 3.0.0, and released the same day
+as **3.1.0**. The tests stand at 375.
+
+How it was kept from being "alternatives for every line":
+
+- Nothing existing is reworded. The answers **add** sentences, chosen by the
+  expression each planet already has in the chart-and-answers reading (3e).
+- `Data\mirror.json`: each expression may carry a `report` sentence (46 of the 54; the
+  eight catch-all "ordinary" expressions carry none, so ordinary answers change
+  nothing), and each of the seven traditional planets carries `daily` lines by how it
+  is lived (strain, well) and by the kind of transit (hard, easy): 26 lines. Neptune,
+  never "lived well" or "with strain", has none.
+- `MirrorPlanet.ReportLine`, `DailyHard`, `DailyEasy`, `DailyLine(tone)`;
+  `MirrorReading.ChartId`, `For(chart, planet)`, `ReportParagraphs`.
+- `ChartInterpreter.Interpret(chart, moonSigns, answers)` appends the sentence to the
+  planet's paragraph and adds the section *In the Light of the Answers*.
+  `DailyInterpreter.Compose` and `ComposeForecast` take `answers` and append the line
+  to a transit whose target is one of those planets (held in two `[ThreadStatic]`
+  fields for the length of one call, since the line is added deep inside).
+- Every reading checks `answers.IsFor(chart)`, so one person's answers cannot reach
+  another's reading whatever order things arrive in.
+- `MainViewModel.PassAnswersOn` hands `InventoryVM.Reading` to `ChartVM`, `DailyVM`
+  and `ForecastVM`; `InventoryViewModel.ShapeReadings` switches it off and is kept in
+  `ui.json` (`UiState.AnswersShapeReadings`).
+
+Not done, and deliberately: the transits a day's reading *chooses* are not re-ranked by
+the answers; the Overview's Sun, Moon and Rising paragraphs, the aspects and the
+balance are untouched; Timing and Synastry take nothing from the answers. Not looked at
+in the running app, for the reason given in 3e.
 
 ## 4. Features, in the order I would build them
 

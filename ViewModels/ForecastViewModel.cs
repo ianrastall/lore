@@ -81,6 +81,17 @@ public sealed partial class ForecastViewModel : ObservableObject
     [RelayCommand]
     private void FromToday() => Start = DateOnly.FromDateTime(DateTime.Now);
 
+    // The reading that sets this person's inventory answers beside their chart, if the
+    // answers are to shape the wording here; null if there are none or they are not to.
+    [ObservableProperty]
+    public partial MirrorReading? Answers { get; set; }
+
+    partial void OnAnswersChanged(MirrorReading? oldValue, MirrorReading? newValue)
+    {
+        // Only the chart on screen's own answers change anything it says.
+        if (Chart is { } chart && (oldValue?.IsFor(chart) == true || newValue?.IsFor(chart) == true)) Rebuild();
+    }
+
     partial void OnChartChanged(NatalChart? value)
     {
         OnPropertyChanged(nameof(Title));
@@ -113,6 +124,7 @@ public sealed partial class ForecastViewModel : ObservableObject
         var start = Start;
         int days = Spans[Math.Clamp(SpanIndex, 0, Spans.Length - 1)];
         bool fast = IncludeFast, sky = IncludeSky;
+        var answers = Answers;
         ErrorText = "";
 
         if (chart is null || _transits is null || _interpreter is null)
@@ -127,7 +139,7 @@ public sealed partial class ForecastViewModel : ObservableObject
         {
             var reading = await Task.Run(() =>
                 _interpreter.ComposeForecast(chart, _transits.Forecast(chart, start, days, _zone, fast, cancel.Token), start, days, _zone,
-                    sky ? _transits.SkyCalendar(chart, start, days, _zone, cancel.Token) : null));
+                    sky ? _transits.SkyCalendar(chart, start, days, _zone, cancel.Token) : null, answers));
             if (generation == _generation)
                 Reading = reading;
         }

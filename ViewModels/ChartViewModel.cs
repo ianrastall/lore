@@ -24,6 +24,18 @@ public sealed partial class ChartViewModel : ObservableObject
     [ObservableProperty]
     public partial IReadOnlyList<ReportSection> ReportSections { get; set; } = [];
 
+    // The reading that sets this person's inventory answers beside their chart, if the
+    // answers are to shape the wording here; null if there are none or they are not to.
+    [ObservableProperty]
+    public partial MirrorReading? Answers { get; set; }
+
+    // The Report is written again when the answers change (the chart is not).
+    partial void OnAnswersChanged(MirrorReading? value)
+    {
+        if (_interpreter is not null && Chart is { } chart)
+            ReportSections = _interpreter.Interpret(chart, Sensitivity?.MoonSigns, value);
+    }
+
     public string Title => Chart is null ? "" : Chart.Celebrity.Name;
 
     // The Chart view's aspect list: planet to planet, then planet to angle.
@@ -190,7 +202,7 @@ public sealed partial class ChartViewModel : ObservableObject
             : Analyse(_charts, value);
         // After the analysis above: the report draws on it for an untimed Moon.
         ReportSections = (_interpreter is not null && value is not null)
-            ? _interpreter.Interpret(value, Sensitivity?.MoonSigns)
+            ? _interpreter.Interpret(value, Sensitivity?.MoonSigns, Answers)
             : [];
         OnPropertyChanged(nameof(SubTitle));
         OnPropertyChanged(nameof(BigThreeText));
