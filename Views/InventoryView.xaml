@@ -141,7 +141,7 @@
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
                       Visibility="{x:Bind VisIf(ViewModel.ReadingShown), Mode=OneWay}">
             <ItemsControl ItemsSource="{x:Bind ViewModel.ReadingSections, Mode=OneWay}"
-                          Padding="24,0,24,24" MaxWidth="820" HorizontalAlignment="Left">
+                          Margin="24,0,24,24" MaxWidth="820" HorizontalAlignment="Left">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate x:DataType="models:DailySection">
                         <StackPanel Spacing="10" Margin="0,6,0,14">

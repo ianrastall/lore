@@ -4,14 +4,14 @@
 
 > A Windows desktop application for computing and exploring astrological natal charts — and reading a daily horoscope from them — powered by the Swiss Ephemeris. Browse a curated library of historical figures — every one with a documented birth time — or add your own.
 
-**Latest release: v3.1.0** · [Download](../../releases/latest)
+**Latest release: v3.2.0** · [Download](../../releases/latest)
 
 ### Installing
 
-1. From the [latest release](../../releases/latest), download **`LoreSetup-3.1.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`LoreSetup-3.2.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user only (no administrator prompt), adds a Start-menu shortcut, and can be removed from *Settings → Apps* like any other program.
 
-**Prefer not to install?** Download **`Lore-3.1.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
+**Prefer not to install?** Download **`Lore-3.2.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
 
 > **The installer is not code-signed.** Lore is a free hobby project and does not carry a paid signing certificate, so Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"* — choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -20,7 +20,7 @@
 > These warnings appear for any unsigned program, and only the first time. If you would rather not run an unsigned installer, you can [build Lore from source](#building-from-source) instead.
 
 
-![Lore showing the Albert Einstein report](Assets/screenshot-einstein-report.png)
+![Lore 3.2.0 showing the chart wheel for Albert Einstein, with his dignity score, planet list and aspects](Assets/screenshot-einstein-chart.png)
 
 ---
 
@@ -30,7 +30,7 @@
 - **Swiss Ephemeris** (`sweph.dll`) provides high-precision planetary positions for dates from 1200 CE to 2400 CE.
 - Computes positions for **13 bodies**: Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, North Node (mean or true), Chiron, and Black Moon Lilith (mean or true apogee).
 - Calculates the **12 house cusps** (Placidus, Whole Sign, Equal, or Koch — your choice), Ascendant, and Midheaven.
-- Detects **five major aspects** (conjunction ☌, sextile ⚹, square □, trine △, opposition ☍) with per-aspect orbs, and flags each as applying or separating.
+- Detects **five major aspects** (conjunction ☌, sextile ⚹, square □, trine △, opposition ☍) with per-aspect orbs, and flags each as applying or separating. The **minor aspects** (semi-sextile, semi-square, quintile, sesquiquadrate, biquintile, quincunx) can be switched on in Settings.
 - Detects **major configurations** — stellium, grand trine, kite, T-square, grand cross, mystic rectangle and (with the minor aspects on) yod — from the positions and aspects (a T-square that is one arm of a grand cross, or a grand trine that is the body of a kite, is not reported twice).
 - Retrograde detection for every planet from Mercury to Pluto, and Chiron.
 - **Further points and measurements** — the South Node, Descendant, IC, Vertex and the Parts of Fortune and Spirit; the lunar phase at birth; each planet's distance from the Sun; parallels, contra-parallels and out-of-bounds planets by declination; the balance of the chart; chart ruler, house rulers and dispositors.
@@ -63,7 +63,11 @@
 | **Inventory** | A standard personality questionnaire (the public-domain IPIP-NEO-120) for any chart of your own; the profile it gives, five broad traits and thirty facets, each set beside a reference group; and a reading that sets that profile beside the chart, planet by planet. See below. |
 | **Legend** | Full-page reference — a grouped list of every glyph, colour, angle, house, and term; click any item for a fuller explanation. |
 
-![Lore showing the Worksheet's measurements for Albert Einstein: the Moon's phase, distance from the Sun, and declination](Assets/screenshot-einstein-worksheet.png)
+Ctrl+1 to Ctrl+8 switch between the first eight views, F1 opens the Legend, Ctrl+N adds a chart and Ctrl+F jumps to the search box. Lore reopens on the chart and view you last had open.
+
+![Lore showing the written Report for Albert Einstein](Assets/screenshot-einstein-report.png)
+
+![Lore showing the Worksheet's measurements for Albert Einstein: the Moon's phase, distance from the Sun, and motion and stations](Assets/screenshot-einstein-worksheet.png)
 
 ### Daily Horoscope
 The **Daily** view writes a horoscope for the selected chart, for today or any date you step to, from that day's **transits** — the aspects the moving planets make to the fixed points of the birth chart.
@@ -106,6 +110,10 @@ Astrology has no agreed compatibility score; the scale is Lore's own, and it des
 
 ### Personality Inventory
 The **Inventory** view offers a standard personality questionnaire for any chart under My Charts, and then reads the chart in the light of the answers. A chart is the same for everyone born at that minute and cannot know how a given person is living it; the questionnaire asks them.
+
+![Lore showing the chart-and-answers reading for a made-up person: the Sun and Moon as the chart gives them, as the answers describe them, and set against the sign](Assets/screenshot-inventory-chart-and-answers.png)
+
+*(The person and the answers in this picture are made up.)*
 
 - **The questionnaire** is the **IPIP-NEO-120** (Johnson, 2014), from the International Personality Item Pool: 120 short statements, each answered from *very inaccurate* to *very accurate*, measuring the five traits of the Five-Factor Model (Neuroticism, Extraversion, Openness, Agreeableness, Conscientiousness) and thirty narrower facets. It is in the public domain. The statements are given word for word.
 - **Ten statements at a time**, fifteen to twenty-five minutes in all. Every answer is saved as it is given, so a sitting can be left and taken up again.
@@ -179,9 +187,13 @@ Lore/
 │                    #   Aspect, HouseCusp, ZodiacSign, DignityScore, …
 ├── Services/
 │   ├── SwissEphemeris.cs      # P/Invoke wrapper around Native\sweph.dll
-│   ├── SettingsService.cs     # House system / node type, saved to settings.json
+│   ├── AppFolder.cs           # Where the reader's own files live (%LOCALAPPDATA%\Lore)
+│   ├── SettingsService.cs     # House system, node, Lilith and orbs (settings.json); last view (ui.json); where you are (home.json)
 │   ├── WorksheetService.cs    # The Worksheet view's tables and its text export
+│   ├── WorksheetPdf.cs        # The Worksheet as pages of a PDF
 │   ├── NatalMetricsService.cs # Further measurements: derived points, lunar phase, declination, balance, rulers
+│   ├── NatalEventsService.cs  # Looked for in the ephemeris: lunations and stations around birth, planetary day and hour
+│   ├── AspectPatternService.cs # Stellium, grand trine, kite, T-square, grand cross, mystic rectangle, yod
 │   ├── TimeSensitivityService.cs # "If the birth time is off": what holds and what changes across a margin
 │   ├── ChartService.cs        # Orchestrates planet + house + aspect calculation
 │   ├── BirthTimeResolver.cs   # UTC conversion using NodaTime + GeoTimeZone
@@ -189,7 +201,8 @@ Lore/
 │   ├── ChartInterpreter.cs    # Report generation from interpretations.json corpus
 │   ├── TransitService.cs      # Daily horoscope, astronomy: a day's transits to a natal chart
 │   ├── DailyInterpreter.cs    # Daily horoscope, wording: rank, select, compose from daily.json
-│   ├── DailyExportService.cs  # Daily horoscope PDF / text export
+│   ├── DailyExportService.cs  # Daily, Forecast and Timing PDF / text export
+│   ├── TimingService.cs       # Solar return, profection, progressions, solar arc, relocation
 │   ├── SynastryService.cs     # Synastry, astronomy: aspects and house overlays between two charts
 │   ├── SynastryInterpreter.cs # Synastry, wording: rank, select, compose from synastry.json
 │   ├── DavisonInterpreter.cs  # The Davison chart's reading, composed from davison.json
@@ -197,24 +210,33 @@ Lore/
 │   ├── InventoryStore.cs      # Where the answers are kept (inventories.json, apart from mycharts.json)
 │   ├── MirrorInterpreter.cs   # Chart and answers: which facets speak for which planet, composed from mirror.json
 │   ├── SynastryScoring.cs     # Synastry, weighing: the five-step scale and the best/worst match search
-│   ├── SynastryExportService.cs # Synastry PDF export
+│   ├── SynastryExportService.cs # Synastry and Davison PDF export
 │   ├── ExportService.cs       # PNG / PDF / JSON / XML export
 │   ├── CelebrityService.cs    # Loads celebrities.json
 │   ├── UserChartService.cs    # Loads/saves mycharts.json
 │   ├── CityService.cs         # City autocomplete for Add-Chart dialog
-│   └── HospitalService.cs     # Hospital autocomplete for Add-Chart dialog
+│   ├── HospitalService.cs     # Hospital autocomplete for Add-Chart dialog
+│   └── Diagnostics.cs         # The error log (%TEMP%\lore-crash.txt)
 ├── ViewModels/
 │   ├── MainViewModel.cs       # Browse list, search/filter, category, add/delete
 │   ├── ChartViewModel.cs      # Chart + report state for the detail pane
 │   ├── DailyViewModel.cs      # Daily horoscope state: chart, date, generated reading
-│   └── SynastryViewModel.cs   # Synastry state: chart, partner, generated reading
+│   ├── ForecastViewModel.cs   # Forecast state: chart, start date, period, sky calendar
+│   ├── TimingViewModel.cs     # Timing state: chart, date, the place it is cast for
+│   ├── SynastryViewModel.cs   # Synastry state: chart, partner, comparison or Davison chart
+│   └── InventoryViewModel.cs  # Inventory state: the sitting in progress, profile, chart-and-answers reading
 ├── SplashWindow.xaml/.cs      # Launch splash: artwork + "Lore <version>", up while data loads
 ├── Views/
-│   ├── ChartRenderer.cs       # Win2D Direct2D chart wheel drawing
+│   ├── ChartRenderer.cs       # Win2D Direct2D chart wheel drawing (natal, transit and bi-wheel)
+│   ├── ChartSheetRenderer.cs  # The "chart with tables" image
 │   ├── ChartView.xaml/.cs     # Chart wheel + export controls
 │   ├── ReportView.xaml/.cs    # Natural-language report display
+│   ├── WorksheetView.xaml/.cs # The Worksheet's tables
 │   ├── DailyView.xaml/.cs     # Daily horoscope with date navigation
+│   ├── ForecastView.xaml/.cs  # Transits ahead, month by month
+│   ├── TimingView.xaml/.cs    # Solar return wheel and the Timing reading
 │   ├── SynastryView.xaml/.cs  # Synastry reading, partner picker, and bi-wheel
+│   ├── InventoryView.xaml/.cs # The questionnaire, the profile and the chart-and-answers reading
 │   ├── LegendView.xaml/.cs    # Glyph + colour legend
 │   └── AddChartDialog.xaml/.cs# Custom chart entry dialog
 ├── Data/
@@ -231,13 +253,15 @@ Lore/
 ├── Native/
 │   └── sweph.dll              # Built by Build-SwephDll.ps1 (not in repo)
 ├── tests/
-│   └── Lore.Tests/            # xUnit tests: calculations, transits, saved charts, figures vs Astro-Databank
+│   └── Lore.Tests/            # 381 xUnit tests: calculations, readings, saved charts, view models, figures vs Astro-Databank
 ├── Assets/
 │   ├── AppIcon.ico            # Indigo/gold "L" icon
 │   └── splash.png             # Splash-screen artwork (name + version drawn over it at launch)
+├── release.bat                # Tests, portable build and installer in one go
 └── scripts/
     ├── build-portable.ps1     # Self-contained portable build
     ├── build-installer.ps1    # Inno Setup installer
+    ├── assert-clean-release.ps1 # Refuses a build that contains anyone's own charts or answers
     ├── build-icons.ps1        # Icon generation (requires ImageMagick)
     ├── build-cities.py        # Regenerate cities.json from simplemaps CSV
     ├── build-swetest-reference.py # Regenerate the swetest comparison values for the tests
@@ -251,7 +275,7 @@ Lore/
 | Package | Role |
 |---|---|
 | `Microsoft.WindowsAppSDK` 1.8 | WinUI 3 framework (unpackaged) |
-| `Microsoft.Graphics.Win2D` | Direct2D-backed chart wheel rendering |
+| `Microsoft.Graphics.Win2D` 1.4 | Direct2D-backed chart wheel rendering |
 | `CommunityToolkit.Mvvm` 8 | Observable properties, relay commands |
 | `NodaTime` 3 | Historical DST-aware UTC conversion |
 | `GeoTimeZone` 5 | Offline lat/lon → IANA timezone mapping |
@@ -296,7 +320,7 @@ The `.csproj` automatically copies `sweph.dll` and the required `.se1` ephemeris
 dotnet test tests\Lore.Tests
 ```
 
-The tests cover the parts that must stay right: birth-time resolution (daylight saving, local mean time, historical city times), planet and Ascendant positions checked against Astro-Databank's published values, the daily transit scan checked against an independent calculation, the daily-horoscope corpus and wording, synastry (the contacts found between two charts, and the corpus and wording of the reading), crash-safe saving of My Charts (including recovery from a damaged file), and hospital search. `FigureLibraryTests` checks every bundled figure against its Astro-Databank record in `tests\Lore.Tests\Reference\adb-reference.json`: each well-documented (AA/A) birth time must match, and Lore must turn it into the same instant Astro-Databank does. Run them after editing `Data\celebrities.json`.
+The 381 tests cover the parts that must stay right: birth-time resolution (daylight saving, local mean time, historical city times), planet and Ascendant positions checked against Astro-Databank's published values, the daily transit scan checked against an independent calculation, the daily-horoscope corpus and wording, synastry (the contacts found between two charts, and the corpus and wording of the reading), the forecast, the Timing techniques, the Davison reading, the personality inventory's scoring and the chart-and-answers rules, the view models, crash-safe saving of My Charts (including recovery from a damaged file), and city and hospital search. They run on GitHub on every push. `FigureLibraryTests` checks every bundled figure against its Astro-Databank record in `tests\Lore.Tests\Reference\adb-reference.json`: each well-documented (AA/A) birth time must match, and Lore must turn it into the same instant Astro-Databank does. Run them after editing `Data\celebrities.json`.
 
 `SwetestReferenceTests` checks Lore against **swetest**, the Swiss Ephemeris's own command-line program, for fourteen moments and places chosen to be awkward: both ephemeris files and the seam between them, both hemispheres, the equator, the date line, and both polar circles. Every body's longitude, latitude, speed and declination, the Ascendant and Midheaven, and all twelve cusps under each of the four house systems must agree to a millionth of a degree. Because the two share an engine this checks that Lore asks it the right question, not the astronomy itself (the Astro-Databank comparison does that). The expected values live in `tests\Lore.Tests\Reference\swetest-reference.json`; `python scripts\build-swetest-reference.py` regenerates them (it needs `swetest64.exe` from the full Swiss Ephemeris download).
 
@@ -308,7 +332,7 @@ Produces a self-contained folder that runs with no installed .NET or VC++ runtim
 .\scripts\build-portable.ps1
 ```
 
-Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-3.1.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
+Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-3.2.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
 
 ### Step 4 — Installer
 
@@ -327,6 +351,8 @@ Then:
 ```
 
 Output: `artifacts\LoreSetup-<version>.exe`.
+
+`release.bat` does all of it in one go: it runs the tests (and stops if one fails), makes the portable build and the installer, and checks that nobody's own charts or answers are in either.
 
 > **Note:** The installer is unsigned, so Windows will warn about it the first time — see [Installing](#installing). The `.exe` is complete on its own; it does not need to be zipped with anything else to be shared.
 
@@ -459,6 +485,34 @@ Editable corpus for the natural-language report. Edit it to change what the Repo
 
 Names must match the app's display names (`North Node`, not `NorthNode`).
 
+### `Data\davison.json`
+
+Editable corpus for the Davison chart's reading (about 250 lines).
+
+- `sun`, `moon`, `rising` — the relationship's Sun, Moon and rising sign, one line per sign.
+- `houses` — 84 lines keyed `Planet|House` for the Sun to Saturn; `houseAreas` names each house.
+- `aspects` — 108 lines keyed `Point|Tone|Point`, as in `synastry.json`. `pointThemes` and `toneLinks` assemble a plainer sentence for a pair with no line of its own.
+- `contacts`, `personThemes` — one person's own planet standing on a main point of the Davison chart.
+- `notes` — what the chart is, and what is left out when a birth time is missing.
+
+### `Data\inventory.json`
+
+The personality inventory: the 120 statements of the IPIP-NEO-120 with their scoring keys (`items`), the five answers (`choices`), and the five traits and thirty facets (`domains`, `facets`), each with its reference mean and standard deviation and Lore's own low, typical and high sentence.
+
+The descriptions may be edited. **The statements and their keys must not be**: they are given word for word, and a reworded statement is no longer the one the reference figures were gathered with.
+
+### `Data\mirror.json`
+
+The rules and the words for the reading that sets the profile beside the chart, and for the sentences the answers add to the Report, Daily and Forecast.
+
+- `planets` — for each of the nine planets read: its `dials` (groups of facets; a minus sign counts a facet the other way up); its `expressions`, tried in order, the first whose `when` fits being used; its `unlived` and `hardWon` paragraphs, for when its dignity and the answers disagree; and, for the Sun to Saturn, `signs`, the level of each dial that each of the twelve signs leads one to expect.
+- `compare` — the sentence patterns for *Against the sign* ("more {noun} than {body} in {sign} would suggest").
+- `rising`, `aspects`, `elements`, `modalities` — the Ascendant, the aspects between two planets the answers speak of (by how each end is lived), and the balance of the chart.
+- `forecast` — the lines used in the Forecast, which do not speak of "today".
+- `comparison`, `notes` — the labels, the introduction, and the plain statements of what the reading is and is not.
+
+`MirrorTests` holds the rules to a simulated population of 3,000 people: after changing a `when`, run the tests.
+
 ---
 
 ## Calculation Settings
@@ -469,7 +523,10 @@ The **Settings** button in the toolbar holds the choices astrologers disagree on
 |---|---|
 | **House system** | Placidus *(default)*, Whole Sign, Equal, Koch |
 | **North Node** | Mean node *(default)*, True node |
+| **Black Moon Lilith** | Mean Lilith *(default)*, True (osculating) Lilith |
 | **Aspect orbs** | Standard *(default: 8°, sextile 6°)*, Tight, Wide, or your own figure for each aspect, with an optional extra for the Sun and Moon |
+| **Minor aspects** | Off *(default)*, or on with an orb of their own (2° unless changed) |
+| **Where you are** | A city, for the Daily view's planetary hours; it changes nothing about any chart |
 
 Changing the house system moves no planet and neither angle — only which house each planet falls in, and so the house part of the dignity score. Whether a chart is a day or night chart is taken from the Sun's position above or below the horizon, so it is the same under every system.
 
