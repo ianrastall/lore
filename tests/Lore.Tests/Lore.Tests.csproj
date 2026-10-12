@@ -20,27 +20,23 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageReference Include="PdfPig" Version="0.1.16" />
     <PackageReference Include="xunit" Version="2.9.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="3.1.4" />
-    <PackageReference Include="NodaTime" Version="3.3.5" />
-    <PackageReference Include="GeoTimeZone" Version="5.3.0" />
-    <PackageReference Include="QuestPDF" Version="2025.12.4" />
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
   </ItemGroup>
 
   <ItemGroup>
     <Using Include="Xunit" />
   </ItemGroup>
 
-  <!-- The app's own source, compiled in: everything that doesn't need WinUI. -->
+  <!-- The same assembly the app ships: models, services and view models (and, through
+       it, NodaTime, GeoTimeZone, QuestPDF and CommunityToolkit.Mvvm at the versions the
+       app uses). Only the views and the Win2D drawing are outside it. -->
   <ItemGroup>
-    <Compile Include="..\..\Models\*.cs" LinkBase="App\Models" />
-    <!-- Every service but the one that draws (ExportService needs Win2D): by rule, not
-         by a list, so a new service is compiled into the tests without being added here. -->
-    <Compile Include="..\..\Services\*.cs" Exclude="..\..\Services\ExportService.cs" LinkBase="App\Services" />
-    <!-- The view models hold no WinUI types, so their handling of selection, overtaken
-         work and export readiness can be tested like anything else. -->
-    <Compile Include="..\..\ViewModels\*.cs" LinkBase="App\ViewModels" />
+    <ProjectReference Include="..\..\Lore.Core\Lore.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\..\Native\sweph.dll" Link="sweph.dll" CopyToOutputDirectory="PreserveNewest" Condition="Exists('..\..\Native\sweph.dll')" />
     <None Include="Reference\*.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>

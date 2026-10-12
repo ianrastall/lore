@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Everything in Lore that needs no window: the models, the calculation and
+       interpretation services, the stores, the document exports and the view models.
+       The app (..\Lore.csproj) and the tests (..\tests\Lore.Tests) both reference this
+       one assembly, so what is tested is what ships. Nothing here may use WinUI or
+       Win2D; drawing stays in the app. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>Lore</RootNamespace>
+    <AssemblyName>Lore.Core</AssemblyName>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>preview</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <IsPackable>false</IsPackable>
+    <!-- The app's version, which is written once, in ..\Lore.csproj, and read from there. -->
+    <Version>$([System.Text.RegularExpressions.Regex]::Match($([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)..\Lore.csproj')), '&lt;Version&gt;([^&lt;]+)&lt;/Version&gt;').Groups[1].Value)</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Members marked internal are for the app and the tests, nobody else. -->
+    <InternalsVisibleTo Include="Lore" />
+    <InternalsVisibleTo Include="Lore.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Exact versions, so a release is built from the same packages it was tested
+         with (the time-zone data in NodaTime and GeoTimeZone decides birth times).
+         This is the one place each is written: the app and the tests take them from
+         here through the project reference. To update one, change its number and run
+         the tests. -->
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageReference Include="QuestPDF" Version="2025.12.4" />
+    <!-- NodaTime bundles the IANA tz database (historical DST, incl. the 1968–71 UK
+         year-round-BST experiment) so a birth instant resolves to the offset actually
+         in force on that date; GeoTimeZone maps lat/lon → IANA zone id offline, used to
+         backfill charts saved with only a numeric offset. -->
+    <PackageReference Include="NodaTime" Version="3.3.5" />
+    <PackageReference Include="GeoTimeZone" Version="5.3.0" />
+  </ItemGroup>
+
+</Project>

@@ -12,13 +12,16 @@ note stays true.
 ## 1. Where Lore stands
 
 - Eight views: Chart, Report, Worksheet, Daily, Forecast, Timing, Synastry, Inventory
-  (from 3.0.0), plus the Legend. About 18,700 lines of C# and XAML outside the tests
-  (counted 12 October 2026). The largest files are `TransitService.cs` (825),
-  `ExportService.cs` (806), `MainViewModel.cs` (679) and `WorksheetService.cs` (678).
-- 461 tests (12 October 2026; 381 as of 3.2.0), all passing, covering the calculation and data layer and the view models. They run on
+  (from 3.0.0), plus the Legend. About 19,100 lines of C# and XAML outside the tests
+  (counted 12 October 2026, at 3.4.0). The largest files are `WorksheetService.cs`
+  (678), `DailyInterpreter.cs` (667), `NatalMetricsService.cs` (612) and
+  `ChartDataExport.cs` (592, most of it the export's field list).
+- Two projects since 3.4.0: `Lore.Core` (models, services, view models; no WinUI) and
+  the app. The tests reference `Lore.Core`.
+- 484 tests (3.4.0; 381 as of 3.2.0), all passing, covering the calculation and data layer, the view models and what the exports say. They run on
   GitHub on every push, followed by a build of the app itself (about 3 minutes).
-- The views and the three export services are **not** tested: they
-  depend on WinUI or Win2D and the test project leaves them out.
+- The views and the Win2D drawing (`Services\ExportService.cs`, `Views\ChartRenderer.cs`)
+  are **not** tested. Everything else an export writes is (3i).
 - 1,314 bundled figures (212 until 7 October 2026), all rated AA or A. How the
   1,102 were found and checked, and the long list of who was looked up and left
   out, is in `scripts/celebrity-expansion-2026-10-07.md`. Three corpora: 307 natal
@@ -480,23 +483,67 @@ What changed, by finding:
 
 Not done, and why:
 
-- **No `Lore.Core` project** (finding 11). Moving the models, services and view models
-  into their own assembly touches every file and the release scripts. Worth doing as
-  its own piece of work, with a release behind it first.
-- **No splitting of the large classes, and the Legend is still in code** (finding 12).
-  Only the two shared pieces above were extracted.
-- **PDF contents are still not read back in tests** (finding 11): that needs a PDF
-  reader added to the test project.
-- **No timings were measured** for finding 10.
-- **`build-portable.ps1` was not run** after its change (it would have replaced the
-  3.2.0 folder in `artifacts\`). Its list-reading and JSON check were tried on their
-  own under Windows PowerShell 5.1. The next `release.bat` is its first full run.
+- ~~No `Lore.Core` project; the large classes not split and the Legend still in code;
+  PDF contents not read back; no timings.~~ All done in 3.4.0: see 3i.
 - **Two windows on the same person**: the later save stands, whole. Nothing merges two
   sittings of one person.
 - **The close dialog and the red save line were not seen on screen**: they need a save
   to fail. The store behind them is tested. The Inventory view was looked at in a debug
   build with a made-up untimed chart (`LORE_HOME`): header, estimate wording and the
   "Aquarius or Pisces" Moon all showed, and the window closed normally.
+
+## 3i. 3.4.0: the rest of the review
+
+Asked for by Ian on 12 October 2026, straight after 3.3.0: finish what 3h left partly
+done (findings 10, 11 and 12). Released the same day as **3.4.0**. The tests went from
+461 to 484. No calculation or reading changed.
+
+- **`Lore.Core`** (finding 11). `Models\`, `Services\` and `ViewModels\` moved under
+  `Lore.Core\` as a class library (net10.0, no WinUI); the app and the tests reference
+  it. NodaTime, GeoTimeZone, QuestPDF and CommunityToolkit.Mvvm are named once, in
+  `Lore.Core.csproj`. Its version is read from `Lore.csproj`, still the one place the
+  version is written. Members marked `internal` are open to the app and the tests
+  (`InternalsVisibleTo`). `Lore.Core.dll` is in `required-files.txt`.
+- **The export service split** (findings 11 and 12, and section 5.1). The JSON and XML
+  data is `ChartDataExport`, the chart's PDF is `ChartPdf`, both in the core. Only the
+  drawing of the wheels is left in the app's `ExportService`.
+- **Exports read back** (finding 11). `ExportContentTests` opens each PDF with PdfPig (a
+  test-only package) and checks the words, and checks the JSON and XML against the
+  chart. This closes section 5.1.
+- **A self-check of the packaged app** (findings 6 and 11). `Lore.exe --self-check
+  [report file]` runs `SelfCheck`: installed files, every corpus, the library, the
+  places, and a chart calculated and read from the bundled ephemeris; then it exits
+  with no window. It never opens `%LOCALAPPDATA%\Lore`. `build-portable.ps1` runs it
+  on the staged build and fails the release if it does not print OK. It takes about
+  four seconds.
+- **The Legend as data** (finding 12). `Data\legend.json`, 108 entries, read by
+  `LegendService` and checked (`LegendService.Fault`). `LegendView.xaml.cs` went from
+  439 lines to 190. **To add a Legend entry, edit the JSON**, not the view.
+- **`LatestOnly`** (finding 12, the "calculation coordinator"). One helper for "run in
+  the background, cancel what is overtaken, deliver only the latest", used by the
+  Daily, Forecast, Timing and Synastry view models in place of four hand-written
+  copies. `MainViewModel.LoadChartAsync` and `ChartViewModel.RebuildSensitivity` still
+  have their own (the first does more than one thing; the second waits before starting).
+- **Large classes split into files** (finding 12). `TransitService` is five files and
+  `MainViewModel` three, by responsibility. They are still one class each (`partial`):
+  the parts share too much private state to be pulled apart without rewriting them.
+- **Measured** (finding 10), with all 1,314 figures, on this PC (16 cores), in the test
+  harness and not in the window:
+  - selecting one chart, until every view is at rest: **47 ms**, against **473 ms**
+    when the forecast and the match search are worked out too (as before 3.3.0);
+  - ten charts in quick succession: 236 ms against 733 ms;
+  - next day in the Daily view: 32 ms; thirty days stepped at once: 31 ms (the
+    overtaken scans are cancelled).
+  No caching was added: at these figures there is nothing left for it to save.
+
+Not done:
+
+- **Not measured on a modest machine**, which is what the review asked for. The ratio
+  should hold; the absolute figures will be larger.
+- **No screenshots are compared.** The drawing code is still checked by eye.
+- **The release build was not opened on screen** (it would read Ian's own charts). The
+  debug build was, with made-up data: Inventory, the chart-and-answers reading and the
+  Legend. The release build passed its self-check.
 
 ## 4. Features, in the order I would build them
 
@@ -664,7 +711,7 @@ reading, its own corpus. Topocentric positions (the Moon moves by up to a degree
 be a setting if anyone asks.
 ## 5. Keeping it sound
 
-1. **Test what the exports write.** `ExportService` builds the JSON and XML
+1. ~~**Test what the exports write.**~~ Done in 3.4.0 (3i). **Was:** `ExportService` builds the JSON and XML
    objects and renders in the same class, so none of it is testable. Splitting the
    plain data-building half from the Win2D and QuestPDF half would let the tests
    check that the worksheet, JSON and XML agree on the same numbers. Medium.

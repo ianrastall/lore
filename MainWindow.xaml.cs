@@ -56,9 +56,9 @@ public sealed partial class MainWindow : Window
                 {
                     await File.WriteAllBytesAsync(sheetOut, await ExportService.RenderChartSheetPngAsync(first));
                     // And the data exports and the PDF beside it, under the same name.
-                    await File.WriteAllBytesAsync(Path.ChangeExtension(sheetOut, ".json"), ExportService.ToJson(first));
-                    await File.WriteAllBytesAsync(Path.ChangeExtension(sheetOut, ".xml"), ExportService.ToXml(first));
-                    await File.WriteAllBytesAsync(Path.ChangeExtension(sheetOut, ".pdf"), ExportService.ToPdf(
+                    await File.WriteAllBytesAsync(Path.ChangeExtension(sheetOut, ".json"), ChartDataExport.ToJson(first));
+                    await File.WriteAllBytesAsync(Path.ChangeExtension(sheetOut, ".xml"), ChartDataExport.ToXml(first));
+                    await File.WriteAllBytesAsync(Path.ChangeExtension(sheetOut, ".pdf"), ChartPdf.ToPdf(
                         first, vm.ChartVM.ReportSections, await ExportService.RenderChartPngAsync(first),
                         vm.ChartVM.Worksheet, vm.ChartVM.Sensitivity));
                 }
@@ -473,10 +473,10 @@ public sealed partial class MainWindow : Window
             // pages takes long enough to freeze the window if it is done on it.
             byte[] bytes = await Task.Run(() => kind switch
             {
-                "pdf"  => ExportService.ToPdf(chart, request.Report, wheel!, request.Worksheet, request.Sensitivity),
+                "pdf"  => ChartPdf.ToPdf(chart, request.Report, wheel!, request.Worksheet, request.Sensitivity),
                 "png" or "sheetpng" or "dailypng" or "synastrypng" or "davisonpng" or "davisonsheetpng" => wheel!,
-                "json" => ExportService.ToJson(chart),
-                "xml"  => ExportService.ToXml(chart),
+                "json" => ChartDataExport.ToJson(chart),
+                "xml"  => ChartDataExport.ToXml(chart),
                 "worksheettxt" => WorksheetService.ToText(request.Worksheet ?? WorksheetService.Build(chart), request.Sensitivity),
                 "dailypdf" => DailyExportService.ToPdf(request.Daily!, wheel!),
                 "dailytxt" => DailyExportService.ToText(request.Daily!),

@@ -4,14 +4,14 @@
 
 > A Windows desktop application for computing and exploring astrological natal charts — and reading a daily horoscope from them — powered by the Swiss Ephemeris. Browse a curated library of historical figures — every one with a documented birth time — or add your own.
 
-**Latest release: v3.3.0** · [Download](../../releases/latest)
+**Latest release: v3.4.0** · [Download](../../releases/latest)
 
 ### Installing
 
-1. From the [latest release](../../releases/latest), download **`LoreSetup-3.3.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`LoreSetup-3.4.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user only (no administrator prompt), adds a Start-menu shortcut, and can be removed from *Settings → Apps* like any other program.
 
-**Prefer not to install?** Download **`Lore-3.3.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
+**Prefer not to install?** Download **`Lore-3.4.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
 
 > **The installer is not code-signed.** Lore is a free hobby project and does not carry a paid signing certificate, so Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"* — choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -182,52 +182,63 @@ Charts and readings can be exported in these formats:
 
 ## Architecture
 
-The project follows MVVM, targeting **WinUI 3** (unpackaged) on **.NET 10**.
+The project follows MVVM, targeting **WinUI 3** (unpackaged) on **.NET 10**. It is two projects: **`Lore.Core`** holds the models, the calculation and reading services, the stores, the document exports and the view models, and uses no WinUI; **`Lore`** (the app) holds the window, the views and the Win2D drawing. The tests reference `Lore.Core`, so what is tested is the assembly that ships.
 
 ```
 Lore/
-├── Models/          # Plain data types: Celebrity, NatalChart, PlanetPosition,
-│                    #   Aspect, HouseCusp, ZodiacSign, DignityScore, …
+├── Lore.Core/       # Everything that needs no window, as one assembly the app and the tests share
+│   ├── Models/          # Plain data types: Celebrity, NatalChart, PlanetPosition,
+│   │                    #   Aspect, HouseCusp, ZodiacSign, DignityScore, …
+│   ├── Services/
+│   │   ├── SwissEphemeris.cs      # P/Invoke wrapper around Native\sweph.dll
+│   │   ├── AppFolder.cs           # Where the reader's own files live (%LOCALAPPDATA%\Lore)
+│   │   ├── SettingsService.cs     # House system, node, Lilith and orbs (settings.json); last view (ui.json); where you are (home.json)
+│   │   ├── WorksheetService.cs    # The Worksheet view's tables and its text export
+│   │   ├── WorksheetPdf.cs        # The Worksheet as pages of a PDF
+│   │   ├── NatalMetricsService.cs # Further measurements: derived points, lunar phase, declination, balance, rulers
+│   │   ├── NatalEventsService.cs  # Looked for in the ephemeris: lunations and stations around birth, planetary day and hour
+│   │   ├── AspectPatternService.cs # Stellium, grand trine, kite, T-square, grand cross, mystic rectangle, yod
+│   │   ├── TimeSensitivityService.cs # "If the birth time is off": what holds and what changes across a margin
+│   │   ├── ChartService.cs        # Orchestrates planet + house + aspect calculation
+│   │   ├── BirthTimeResolver.cs   # UTC conversion using NodaTime + GeoTimeZone
+│   │   ├── DignityService.cs      # Traditional dignity scoring (Lilly/Dorothean)
+│   │   ├── ChartInterpreter.cs    # Report generation from interpretations.json corpus
+│   │   ├── TransitService*.cs     # Daily horoscope, astronomy: a day's transits, the forecast, the sky calendar,
+│   │   │                          #   planetary hours and the void-of-course Moon (five files)
+│   │   ├── DailyInterpreter.cs    # Daily horoscope, wording: rank, select, compose from daily.json
+│   │   ├── DailyExportService.cs  # Daily, Forecast and Timing PDF / text export
+│   │   ├── TimingService.cs       # Solar return, profection, progressions, solar arc, relocation
+│   │   ├── SynastryService.cs     # Synastry, astronomy: aspects and house overlays between two charts
+│   │   ├── SynastryInterpreter.cs # Synastry, wording: rank, select, compose from synastry.json
+│   │   ├── DavisonInterpreter.cs  # The Davison chart's reading, composed from davison.json
+│   │   ├── InventoryService.cs    # The personality inventory: reads inventory.json, scores answers into a profile
+│   │   ├── InventoryStore.cs      # Where the answers are kept (inventories.json, apart from mycharts.json)
+│   │   ├── StoreFile.cs           # The lock file and safe replace both stores save with
+│   │   ├── InstalledFiles.cs      # The files Lore needs at run time, checked against required-files.txt
+│   │   ├── SelfCheck.cs           # "Lore.exe --self-check": a copy of Lore checks itself and exits
+│   │   ├── LegendService.cs       # The Legend's entries, read from legend.json and checked
+│   │   ├── MirrorInterpreter.cs   # Chart and answers: which facets speak for which planet, composed from mirror.json
+│   │   ├── SynastryScoring.cs     # Synastry, weighing: the five-step scale and the best/worst match search
+│   │   ├── SynastryExportService.cs # Synastry and Davison PDF export
+│   │   ├── ChartPdf.cs            # The chart's PDF reading (the wheel is handed in as a PNG)
+│   │   ├── ChartDataExport.cs     # The chart as JSON / XML data
+│   │   ├── CelebrityService.cs    # Loads celebrities.json
+│   │   ├── UserChartService.cs    # Loads/saves mycharts.json
+│   │   ├── CityService.cs         # City autocomplete for Add-Chart dialog
+│   │   ├── HospitalService.cs     # Hospital autocomplete for Add-Chart dialog
+│   │   └── Diagnostics.cs         # The error log (%TEMP%\lore-crash.txt)
+│   └── ViewModels/
+│       ├── MainViewModel*.cs      # Selection and the chart on screen; the list of people; the reader's own charts (three files)
+│       ├── ExportRequest.cs       # Everything one export will write, taken before the save dialog opens
+│       ├── LatestOnly.cs          # One background calculation at a time, the latest asked for
+│       ├── ChartViewModel.cs      # Chart + report state for the detail pane
+│       ├── DailyViewModel.cs      # Daily horoscope state: chart, date, generated reading
+│       ├── ForecastViewModel.cs   # Forecast state: chart, start date, period, sky calendar
+│       ├── TimingViewModel.cs     # Timing state: chart, date, the place it is cast for
+│       ├── SynastryViewModel.cs   # Synastry state: chart, partner, comparison or Davison chart
+│       └── InventoryViewModel.cs  # Inventory state: the sitting in progress, profile, chart-and-answers reading
 ├── Services/
-│   ├── SwissEphemeris.cs      # P/Invoke wrapper around Native\sweph.dll
-│   ├── AppFolder.cs           # Where the reader's own files live (%LOCALAPPDATA%\Lore)
-│   ├── SettingsService.cs     # House system, node, Lilith and orbs (settings.json); last view (ui.json); where you are (home.json)
-│   ├── WorksheetService.cs    # The Worksheet view's tables and its text export
-│   ├── WorksheetPdf.cs        # The Worksheet as pages of a PDF
-│   ├── NatalMetricsService.cs # Further measurements: derived points, lunar phase, declination, balance, rulers
-│   ├── NatalEventsService.cs  # Looked for in the ephemeris: lunations and stations around birth, planetary day and hour
-│   ├── AspectPatternService.cs # Stellium, grand trine, kite, T-square, grand cross, mystic rectangle, yod
-│   ├── TimeSensitivityService.cs # "If the birth time is off": what holds and what changes across a margin
-│   ├── ChartService.cs        # Orchestrates planet + house + aspect calculation
-│   ├── BirthTimeResolver.cs   # UTC conversion using NodaTime + GeoTimeZone
-│   ├── DignityService.cs      # Traditional dignity scoring (Lilly/Dorothean)
-│   ├── ChartInterpreter.cs    # Report generation from interpretations.json corpus
-│   ├── TransitService.cs      # Daily horoscope, astronomy: a day's transits to a natal chart
-│   ├── DailyInterpreter.cs    # Daily horoscope, wording: rank, select, compose from daily.json
-│   ├── DailyExportService.cs  # Daily, Forecast and Timing PDF / text export
-│   ├── TimingService.cs       # Solar return, profection, progressions, solar arc, relocation
-│   ├── SynastryService.cs     # Synastry, astronomy: aspects and house overlays between two charts
-│   ├── SynastryInterpreter.cs # Synastry, wording: rank, select, compose from synastry.json
-│   ├── DavisonInterpreter.cs  # The Davison chart's reading, composed from davison.json
-│   ├── InventoryService.cs    # The personality inventory: reads inventory.json, scores answers into a profile
-│   ├── InventoryStore.cs      # Where the answers are kept (inventories.json, apart from mycharts.json)
-│   ├── MirrorInterpreter.cs   # Chart and answers: which facets speak for which planet, composed from mirror.json
-│   ├── SynastryScoring.cs     # Synastry, weighing: the five-step scale and the best/worst match search
-│   ├── SynastryExportService.cs # Synastry and Davison PDF export
-│   ├── ExportService.cs       # PNG / PDF / JSON / XML export
-│   ├── CelebrityService.cs    # Loads celebrities.json
-│   ├── UserChartService.cs    # Loads/saves mycharts.json
-│   ├── CityService.cs         # City autocomplete for Add-Chart dialog
-│   ├── HospitalService.cs     # Hospital autocomplete for Add-Chart dialog
-│   └── Diagnostics.cs         # The error log (%TEMP%\lore-crash.txt)
-├── ViewModels/
-│   ├── MainViewModel.cs       # Browse list, search/filter, category, add/delete
-│   ├── ChartViewModel.cs      # Chart + report state for the detail pane
-│   ├── DailyViewModel.cs      # Daily horoscope state: chart, date, generated reading
-│   ├── ForecastViewModel.cs   # Forecast state: chart, start date, period, sky calendar
-│   ├── TimingViewModel.cs     # Timing state: chart, date, the place it is cast for
-│   ├── SynastryViewModel.cs   # Synastry state: chart, partner, comparison or Davison chart
-│   └── InventoryViewModel.cs  # Inventory state: the sitting in progress, profile, chart-and-answers reading
+│   └── ExportService.cs       # Draws the wheels the exports carry (Win2D), as PNG bytes
 ├── SplashWindow.xaml/.cs      # Launch splash: artwork + "Lore <version>", up while data loads
 ├── Views/
 │   ├── ChartRenderer.cs       # Win2D Direct2D chart wheel drawing (natal, transit and bi-wheel)
@@ -252,17 +263,19 @@ Lore/
 │   ├── davison.json           # Corpus for the Davison reading (signs, houses, aspects of the relationship's chart)
 │   ├── inventory.json         # The personality inventory: IPIP-NEO-120 statements, scoring keys, reference figures, descriptions
 │   ├── mirror.json            # Corpus for the reading that sets the inventory profile beside the chart
+│   ├── legend.json            # The Legend: every glyph, colour and term, explained
 │   └── swisseph-2.10.3bfinal/ # Swiss Ephemeris C source + .se1 ephemeris files
 ├── Native/
 │   └── sweph.dll              # Built by Build-SwephDll.ps1 (not in repo)
 ├── tests/
-│   └── Lore.Tests/            # 461 xUnit tests: calculations, readings, saved charts, view models, figures vs Astro-Databank
+│   └── Lore.Tests/            # 484 xUnit tests: calculations, readings, exports, saved charts and answers, view models, figures vs Astro-Databank
 ├── Assets/
 │   ├── AppIcon.ico            # Indigo/gold "L" icon
 │   └── splash.png             # Splash-screen artwork (name + version drawn over it at launch)
+├── required-files.txt         # The one list of the files Lore needs at run time
 ├── release.bat                # Tests, portable build and installer in one go
 └── scripts/
-    ├── build-portable.ps1     # Self-contained portable build
+    ├── build-portable.ps1     # Self-contained portable build, checked against required-files.txt and by its own self-check
     ├── build-installer.ps1    # Inno Setup installer
     ├── assert-clean-release.ps1 # Refuses a build that contains anyone's own charts or answers
     ├── build-icons.ps1        # Icon generation (requires ImageMagick)
@@ -283,6 +296,7 @@ Lore/
 | `NodaTime` 3 | Historical DST-aware UTC conversion |
 | `GeoTimeZone` 5 | Offline lat/lon → IANA timezone mapping |
 | `QuestPDF` 2025 | PDF generation (Community licence) |
+| `PdfPig` 0.1 | Tests only: reads the exported PDFs back |
 
 ---
 
@@ -323,7 +337,7 @@ The `.csproj` automatically copies `sweph.dll` and the required `.se1` ephemeris
 dotnet test tests\Lore.Tests
 ```
 
-The 461 tests cover the parts that must stay right: birth-time resolution (daylight saving, local mean time, historical city times), planet and Ascendant positions checked against Astro-Databank's published values, the daily transit scan checked against an independent calculation, the daily-horoscope corpus and wording, synastry (the contacts found between two charts, and the corpus and wording of the reading), the forecast, the Timing techniques, the Davison reading, the personality inventory's scoring and the chart-and-answers rules, the view models, crash-safe saving of My Charts (including recovery from a damaged file), and city and hospital search. They run on GitHub on every push. `FigureLibraryTests` checks every bundled figure against its Astro-Databank record in `tests\Lore.Tests\Reference\adb-reference.json`: each well-documented (AA/A) birth time must match, and Lore must turn it into the same instant Astro-Databank does. Run them after editing `Data\celebrities.json`.
+The 484 tests cover the parts that must stay right: birth-time resolution (daylight saving, local mean time, historical city times), planet and Ascendant positions checked against Astro-Databank's published values, the daily transit scan checked against an independent calculation, the daily-horoscope corpus and wording, synastry (the contacts found between two charts, and the corpus and wording of the reading), the forecast, the Timing techniques, the Davison reading, the personality inventory's scoring and the chart-and-answers rules, the view models, crash-safe saving of My Charts and of the inventory answers (including several windows at once and recovery from a damaged file), what each export says (the PDFs are read back, and the JSON and XML set against the chart), the Legend, and city and hospital search. They run on GitHub on every push. `FigureLibraryTests` checks every bundled figure against its Astro-Databank record in `tests\Lore.Tests\Reference\adb-reference.json`: each well-documented (AA/A) birth time must match, and Lore must turn it into the same instant Astro-Databank does. Run them after editing `Data\celebrities.json`.
 
 `SwetestReferenceTests` checks Lore against **swetest**, the Swiss Ephemeris's own command-line program, for fourteen moments and places chosen to be awkward: both ephemeris files and the seam between them, both hemispheres, the equator, the date line, and both polar circles. Every body's longitude, latitude, speed and declination, the Ascendant and Midheaven, and all twelve cusps under each of the four house systems must agree to a millionth of a degree. Because the two share an engine this checks that Lore asks it the right question, not the astronomy itself (the Astro-Databank comparison does that). The expected values live in `tests\Lore.Tests\Reference\swetest-reference.json`; `python scripts\build-swetest-reference.py` regenerates them (it needs `swetest64.exe` from the full Swiss Ephemeris download).
 
@@ -335,7 +349,9 @@ Produces a self-contained folder that runs with no installed .NET or VC++ runtim
 .\scripts\build-portable.ps1
 ```
 
-Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-3.3.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
+The script then checks the result three ways before it will pass it: every file in `required-files.txt` is there; each corpus is whole and is the same file as in the repository; and the packaged app is run as `Lore.exe --self-check`, which loads all its data, calculates and reads a chart from the bundled ephemeris, and exits without opening a window or touching anyone's saved charts.
+
+Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-3.4.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
 
 ### Step 4 — Installer
 
@@ -516,6 +532,10 @@ The rules and the words for the reading that sets the profile beside the chart, 
 
 `MirrorTests` holds the rules to a simulated population of 3,000 people: after changing a `when`, run the tests.
 
+### `Data\legend.json`
+
+The Legend's 108 entries, in the order they are listed. Each has a `symbol`, a `name`, the `group` it is listed under, a `short` line for the list and a `detail`; an aspect also has its line `color` (`#RRGGBB`). In `detail`, blocks are separated by a blank line, a block beginning `## ` is a sub-heading, a block whose lines all begin with a bullet is a list, and `**two asterisks**` either side mark bold. The tests check that every entry is whole; a damaged file leaves the Legend saying so and nothing else affected.
+
 ---
 
 ## Calculation Settings
@@ -580,7 +600,17 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 3.3.0 (current)
+### 3.4.0 (current)
+Work under the surface, finishing what the review behind 3.3.0 began. Nothing about how a chart is calculated or read has changed.
+- **One shared core.** The models, calculations, readings, stores and view models are now a library of their own (`Lore.Core`) that the app and the tests both use, so the tests run against the very code that ships.
+- **Exports are read back.** The tests now open each exported PDF and check what it says, and check the JSON and XML against the chart, number for number.
+- **The packaged app checks itself.** `Lore.exe --self-check` loads all of Lore's data, calculates and reads a chart, and exits; the release script runs it on the finished build before it will pass it.
+- **The Legend is data.** Its 108 entries moved out of the program into `Data\legend.json`, checked like the other texts. Its account of the questionnaire's reference group now matches the profile's.
+- **Tidier inside.** The two largest classes are split into files by what each part does, and the view models share one way of dropping work that has been overtaken.
+- **Measured.** Moving to another chart now settles in about a tenth of the time it took before 3.3.0 (47 ms against 473 ms on the PC it was measured on, with all 1,314 figures), because the Forecast and the search for matches wait until their view is opened.
+- 484 tests (461 before).
+
+### 3.3.0
 A release of repairs, after a review of the whole program. Most are in the personality inventory.
 - **Exports are always the person they were asked for.** A personality profile or chart-and-answers export is fixed before the save dialog opens; choosing someone else while it is open no longer changes what is written.
 - **Inventory answers are much harder to lose.**

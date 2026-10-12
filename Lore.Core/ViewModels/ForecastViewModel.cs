@@ -17,14 +17,11 @@ public sealed partial class ForecastViewModel : ObservableObject
     private readonly DailyInterpreter? _interpreter;
     private readonly DateTimeZone _zone = TransitService.LocalZone();
 
-    // Bumped on every rebuild; a calculation that finishes after a newer one has started
-    // is discarded, so changing the settings quickly never shows a stale list.
-    private int _generation;
 
-    // Stops the calculation a newer one has overtaken, rather than letting it run on
-    // to a result nobody will see: holding an arrow key down in the list would
-    // otherwise queue up a year's forecast for every person passed.
-    private CancellationTokenSource? _cancel;
+    // One forecast at a time, the latest asked for: changing the settings quickly never
+    // shows a stale list, and a forecast overtaken is stopped, not left to run on to a
+    // result nobody will see.
+    private readonly LatestOnly _latest = new();
 
     public ForecastViewModel(TransitService? transits = null, DailyInterpreter? interpreter = null)
     {
@@ -132,9 +129,6 @@ public sealed partial class ForecastViewModel : ObservableObject
 
     private async void Rebuild()
     {
-        int generation = ++_generation;
-        _cancel?.Cancel();
-        var cancel = _cancel = new CancellationTokenSource();
         var chart = Chart;
         var start = Start;
         int days = Spans[Math.Clamp(SpanIndex, 0, Spans.Length - 1)];
@@ -142,51 +136,30 @@ public sealed partial class ForecastViewModel : ObservableObject
         var answers = Answers;
         ErrorText = "";
 
-        if (chart is null || _transits is null || _interpreter is null)
+        // Nothing to forecast, or not on screen. Off screen nothing is worked out, and
+        // what was there (for other dates, or other answers) is not kept as if it were
+        // current: it is made when the view is next opened.
+        bool nothing = chart is null || _transits is null || _interpreter is null;
+        if (nothing || !IsActive)
         {
-            _stale = false;
+            _stale = !nothing;
+            _latest.Cancel();
             Reading = null;
-            IsBusy = false; // nothing is running for this (empty) state
-            return;
-        }
-
-        // Not on screen: nothing is worked out, and what was there (for other dates, or
-        // other answers) is not kept as if it were current.
-        if (!IsActive)
-        {
-            _stale = true;
-            Reading = null;
-            IsBusy = false;
+            IsBusy = false; // nothing is running for this state
             return;
         }
         _stale = false;
 
-        IsBusy = true;
-        try
-        {
-            var reading = await Task.Run(() =>
-                _interpreter.ComposeForecast(chart, _transits.Forecast(chart, start, days, _zone, fast, cancel.Token), start, days, _zone,
-                    sky ? _transits.SkyCalendar(chart, start, days, _zone, cancel.Token) : null, answers));
-            if (generation == _generation)
-                Reading = reading;
-        }
-        catch (OperationCanceledException)
-        {
-            // overtaken by a newer forecast
-        }
-        catch (Exception ex)
-        {
-            Diagnostics.Log($"Forecast for chart {chart.Celebrity.Id} from {start} failed: {ex}");
-            if (generation == _generation)
+        await _latest.Run(
+            cancel => _interpreter!.ComposeForecast(chart!, _transits!.Forecast(chart!, start, days, _zone, fast, cancel), start, days, _zone,
+                sky ? _transits.SkyCalendar(chart!, start, days, _zone, cancel) : null, answers),
+            busy => IsBusy = busy,
+            reading => Reading = reading,
+            ex =>
             {
+                Diagnostics.Log($"Forecast for chart {chart!.Celebrity.Id} from {start} failed: {ex}");
                 Reading = null;
                 ErrorText = $"Could not build the forecast: {ex.Message}";
-            }
-        }
-        finally
-        {
-            if (generation == _generation)
-                IsBusy = false;
-        }
+            });
     }
 }

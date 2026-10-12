@@ -6,6 +6,13 @@ using System.Collections.ObjectModel;
 
 namespace Lore.ViewModels;
 
+// The window's one view model: who is selected, what is on screen, and the view models
+// of the eight views, which all follow the chart shown here.
+//
+// The class is in three files: this one (selection, the chart on screen, settings),
+// MainViewModel.Library.cs (the list of people: building it, scoring it, filtering it)
+// and MainViewModel.MyCharts.cs (the reader's own charts and answers: saving, deleting,
+// moving to another PC).
 public sealed partial class MainViewModel : ObservableObject
 {
     private readonly CelebrityService _celebrities;
@@ -242,127 +249,6 @@ public sealed partial class MainViewModel : ObservableObject
         }
     }
 
-    // The latest pass of RebuildCoreAsync to have been started.
-    private Task? _rebuilding;
-
-    // Rebuilds the list of people and their verdicts, keeping whoever is selected
-    // selected. Of several passes under way at once only the latest fills the list in,
-    // so each caller waits for that one: when this returns, the list holds whatever the
-    // caller had just saved or changed.
-    private async Task RebuildPoolAsync()
-    {
-        _rebuilding = RebuildCoreAsync();
-        Task latest;
-        do
-        {
-            latest = _rebuilding;
-            await latest;
-        }
-        while (!ReferenceEquals(latest, _rebuilding));
-    }
-
-    private async Task RebuildCoreAsync()
-    {
-        int generation = ++_poolGeneration;
-        _poolCancel?.Cancel();
-        var cancel = _poolCancel = new CancellationTokenSource();
-        var all = _all = [.. _celebrities.All, .. _userCharts.Charts];
-        SynastryVM.SetPeople(all);
-        // Scoring runs the native Swiss Ephemeris calculation for every chart in the
-        // library (over 1,300), so it is kept off the UI thread, and it is done with
-        // the settings in force now even if they are changed before it finishes.
-        var charts = _charts.With(_charts.Settings);
-        List<(Celebrity Person, string ColorHex, string Label)> verdicts;
-        try
-        {
-            verdicts = await Task.Run(() => ComputeVerdicts(charts, all, cancel.Token));
-        }
-        catch (OperationCanceledException)
-        {
-            return; // overtaken: the newer pass scores the list
-        }
-        // A newer pass has started, with the newer list and settings, and it will fill
-        // the list in. Replacing the list here as well would only clear the selection
-        // from under it, leaving the chart on screen as it was before the change.
-        if (generation != _poolGeneration) return;
-
-        // Written here, on the UI thread: the list bindings read these values when the
-        // rows are next built, just below.
-        foreach (var (person, colorHex, label) in verdicts)
-        {
-            person.VerdictColorHex = colorHex;
-            person.VerdictLabel = label;
-        }
-        // Replacing the list clears the selection, so it is put back in the same breath:
-        // taken now rather than at the start, in case someone else was picked while the
-        // verdicts were worked out.
-        string? selectedId = SelectedCelebrity?.Id;
-        RefreshCategories();
-        ApplyFilter();
-        Reselect(selectedId);
-    }
-
-    // Selects the person with this Id as the list now has them: the same person again
-    // after the list was replaced, or the new record after an edit. Nobody, if the list
-    // as filtered no longer shows them.
-    private void Reselect(string? id)
-    {
-        if (id is null) return;
-        var again = DisplayedCelebrities.FirstOrDefault(c => c.Id == id);
-        if (!ReferenceEquals(SelectedCelebrity, again)) SelectedCelebrity = again;
-    }
-
-    // Score every chart so the browse list can highlight the notable ones. Only
-    // Extraordinary/Alarming get a coloured bar; Ordinary stays clear so the outliers
-    // stand out. Runs on a background thread (see RebuildPoolAsync).
-    private static List<(Celebrity Person, string ColorHex, string Label)> ComputeVerdicts(
-        ChartService charts, List<Celebrity> all, CancellationToken cancel = default)
-    {
-        var verdicts = new List<(Celebrity, string, string)>(all.Count);
-        foreach (var c in all)
-        {
-            cancel.ThrowIfCancellationRequested();
-            try
-            {
-                // No birth time, no score (see DignityService.ComputeIfTimed).
-                if (DignityService.ComputeIfTimed(charts.Calculate(c)) is not { } score)
-                {
-                    verdicts.Add((c, "#00000000", ""));
-                    continue;
-                }
-                // Translucent wash for the whole row: green (Extraordinary) / red
-                // (Alarming), transparent for Ordinary so the notable rows stand out.
-                string colorHex = score.Verdict switch
-                {
-                    Models.ChartVerdict.Extraordinary => "#553FB84F",
-                    Models.ChartVerdict.Alarming      => "#55E5534B",
-                    _                                 => "#00000000",
-                };
-                verdicts.Add((c, colorHex, $"Dignity {score.Total:+#;-#;0} · {score.Verdict.Label()}"));
-            }
-            catch
-            {
-                verdicts.Add((c, "#00000000", ""));
-            }
-        }
-        return verdicts;
-    }
-
-    // First entry in the category dropdown: clears the filter to show everyone.
-    public const string AllCategories = "All Categories";
-
-    private void RefreshCategories()
-    {
-        var cats = _all.Select(c => c.Category).Distinct().ToList();
-        // "All Categories" first, then My Charts (if any), then the rest alphabetically.
-        var ordered = new List<string> { AllCategories };
-        ordered.AddRange(cats.Where(c => c == UserChartService.MyChartsCategory));
-        ordered.AddRange(cats.Where(c => c != UserChartService.MyChartsCategory).OrderBy(c => c));
-        Categories = new ObservableCollection<string>(ordered);
-        if (string.IsNullOrEmpty(SelectedCategory))
-            SelectedCategory = AllCategories;
-    }
-
     partial void OnSelectedCelebrityChanged(Celebrity? value)
     {
         OnPropertyChanged(nameof(SelectedIsCustom));
@@ -391,30 +277,6 @@ public sealed partial class MainViewModel : ObservableObject
     // The Forecast and the Synastry view's search work only while their view is open.
     partial void OnShowForecastChanged(bool value) => ForecastVM.IsActive = value;
     partial void OnShowSynastryChanged(bool value) => SynastryVM.IsActive = value;
-
-    partial void OnSearchTextChanged(string value) => ApplyFilter();
-    partial void OnSelectedCategoryChanged(string? value) => ApplyFilter();
-
-    private void ApplyFilter()
-    {
-        IEnumerable<Celebrity> q = _all;
-
-        if (!string.IsNullOrWhiteSpace(SelectedCategory) && SelectedCategory != AllCategories)
-            q = q.Where(c => c.Category == SelectedCategory);
-
-        if (!string.IsNullOrWhiteSpace(SearchText))
-        {
-            string s = SearchText.Trim();
-            q = q.Where(c =>
-                c.Name.Contains(s, StringComparison.OrdinalIgnoreCase) ||
-                c.BirthPlace.Contains(s, StringComparison.OrdinalIgnoreCase));
-        }
-
-        DisplayedCelebrities = new ObservableCollection<Celebrity>(q.OrderBy(c => c.Name));
-    }
-
-    [RelayCommand]
-    private void ClearCategory() => SelectedCategory = AllCategories;
 
     // Where the reader is, for the Daily view's sunrise, sunset and planetary hours; null
     // if no city has been chosen. Saved as soon as it is set or cleared.
@@ -455,33 +317,6 @@ public sealed partial class MainViewModel : ObservableObject
                         $"and {settings.Orbs.PresetName.ToLowerInvariant()} orbs.";
     }
 
-    public async Task AddCustomChartAsync(Celebrity chart)
-    {
-        if (!await TrySaveAsync(() => _userCharts.AddAsync(chart), $"add {chart.Name}")) return;
-        await RebuildPoolAsync();
-        ShowSaved(chart);
-    }
-
-    // Saves an edited chart (same Id) and shows it again, recalculated.
-    public async Task UpdateCustomChartAsync(Celebrity chart)
-    {
-        if (!await TrySaveAsync(() => _userCharts.UpdateAsync(chart), $"save changes to {chart.Name}")) return;
-        await RebuildPoolAsync();
-        ShowSaved(chart);
-        StatusMessage = $"Saved changes to {chart.Name}.";
-    }
-
-    // Selects a chart that has just been saved. A search still in the box may not match
-    // it (it was typed to find someone else, or the name it found has just been changed),
-    // and must not hide the chart: the search is cleared if it would.
-    private void ShowSaved(Celebrity chart)
-    {
-        SelectedCategory = UserChartService.MyChartsCategory;
-        if (!DisplayedCelebrities.Any(c => c.Id == chart.Id))
-            SearchText = "";
-        Reselect(chart.Id);
-    }
-
     // Hands the chart-and-answers reading to the readings whose wording it shapes: the
     // Report, the Daily and the Forecast. Each uses it only for the chart it was made
     // for, so it does not matter that it arrives a moment before or after that chart.
@@ -511,103 +346,9 @@ public sealed partial class MainViewModel : ObservableObject
     public bool ChartIsCurrent =>
         !_calculating && (SelectedCelebrity is null || ReferenceEquals(ChartVM.Chart?.Celebrity, SelectedCelebrity));
 
-    [RelayCommand]
-    private async Task DeleteSelectedAsync()
-    {
-        if (SelectedCelebrity is not { } c || c.Category != UserChartService.MyChartsCategory)
-            return;
-        if (!await TrySaveAsync(() => _userCharts.RemoveAsync(c), $"delete {c.Name}")) return;
-        SelectedCelebrity = null;
-        ShowNoChart();
-        // The answers given for this person go with their chart. If the answers file
-        // cannot be changed just now they are still in it, and that is said: the store
-        // keeps the deletion and tries it again with its next save.
-        bool answersGone = _inventoryStore is null || await _inventoryStore.RemoveAsync(c.Id);
-        await RebuildPoolAsync();
-        StatusMessage = answersGone
-            ? $"Deleted {c.Name}."
-            : $"Deleted {c.Name}, but their inventory answers could not be removed from the answers file yet: " +
-              $"{_inventoryStore?.Problem ?? "the file could not be changed."}";
-    }
-
-    // ── Inventory answers not yet in the file ─────────────────────────────────
-
-    // True while something answered (or deleted) in this window has not reached the file.
-    public bool HasUnsavedAnswers => _inventoryStore is { State: not InventorySaveState.Saved };
-
-    // Why the last save of them failed, for the window to say before it closes.
-    public string? UnsavedAnswersProblem => _inventoryStore?.Problem;
-
-    // Waits for the answers on their way to the file and, if that save failed, tries it
-    // once more. True when everything is in the file.
-    public async Task<bool> SaveOutstandingAnswersAsync()
-    {
-        if (_inventoryStore is not { } store) return true;
-        if (await Task.Run(() => store.Flush())) return true;
-        return await store.RetryAsync();
-    }
-
     // What an export of `kind` would write, taken now (see ExportRequest), or null and
     // why not.
     public ExportRequest? PrepareExport(string kind, out string refusal) => ExportRequest.Prepare(this, kind, out refusal);
-
-    // ── My Charts as a file, for moving to another PC ─────────────────────────
-
-    // The saved charts as they are in the file now, and how many (see UserChartService).
-    public Task<(byte[] Bytes, int Count)> ExportMyChartsAsync() => Task.Run(_userCharts.ExportAsync);
-
-    // Merges a saved copy of My Charts into this PC's, then shows the result.
-    public async Task ImportMyChartsAsync(string path)
-    {
-        UserChartService.ImportResult result;
-        try
-        {
-            // Off the UI thread: the file is read, checked and merged chart by chart.
-            result = await Task.Run(() => _userCharts.ImportAsync(path));
-        }
-        catch (Exception ex)
-        {
-            StatusMessage = $"Couldn't bring in {Path.GetFileName(path)}: {ex.Message}";
-            Diagnostics.Log($"My Charts import failed ({path}): {ex}");
-            return;
-        }
-
-        if (result.Added + result.Replaced == 0)
-        {
-            StatusMessage = $"{Path.GetFileName(path)} has no charts of your own in it; nothing was changed.";
-            return;
-        }
-
-        bool keepCategory = SelectedCelebrity is not null && !SelectedIsCustom;
-        await RebuildPoolAsync();
-        string? selectedId = SelectedCelebrity?.Id;
-        if (!keepCategory) SelectedCategory = UserChartService.MyChartsCategory;
-        Reselect(selectedId);
-        if (SelectedCelebrity is { } selected)
-            await LoadChartAsync(selected);
-
-        static string Charts(int n) => n == 1 ? "1 chart" : $"{n} charts";
-        StatusMessage = $"Brought in {Charts(result.Added + result.Replaced)}: {result.Added} new" +
-                        (result.Replaced > 0 ? $", {result.Replaced} replacing a chart already here" : "") +
-                        (result.Skipped > 0 ? $"; {result.Skipped} other entries left out" : "") + ".";
-    }
-
-    // Runs a My Charts save, reporting a failure in the status bar instead of losing
-    // it (the save itself never damages the existing file; see UserChartService).
-    private async Task<bool> TrySaveAsync(Func<Task> save, string what)
-    {
-        try
-        {
-            await save();
-            return true;
-        }
-        catch (Exception ex)
-        {
-            StatusMessage = $"Couldn't {what}: {ex.Message}";
-            Diagnostics.Log($"My Charts save failed ({what}): {ex}");
-            return false;
-        }
-    }
 
     private async Task LoadChartAsync(Celebrity celebrity)
     {

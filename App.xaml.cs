@@ -10,6 +10,12 @@ public partial class App : Application
 
     public App()
     {
+        // "Lore.exe --self-check [report file]": check this copy and exit, with no
+        // window and without opening the reader's own folder (see SelfCheck). The
+        // release script runs it on the packaged build.
+        if (SelfCheck.ReportPath(Environment.GetCommandLineArgs()) is { } reportPath)
+            Environment.Exit(SelfCheck.RunAndReport(AppContext.BaseDirectory, reportPath));
+
         UseGregorianCalendar();
         InitializeComponent();
         UnhandledException += OnUnhandledException;

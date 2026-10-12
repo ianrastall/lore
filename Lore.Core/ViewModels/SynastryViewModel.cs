@@ -16,18 +16,15 @@ public sealed partial class SynastryViewModel : ObservableObject
     private readonly SynastryInterpreter? _interpreter;
     private readonly DavisonInterpreter? _davison;
 
-    // Bumped on every rebuild; a calculation that finishes after a newer one has started
-    // is discarded, so switching quickly between people never shows a stale comparison.
-    private int _generation;
-
     // Everyone who can be picked as the partner (the bundled figures and My Charts).
     private IReadOnlyList<Celebrity> _people = [];
 
-    // As _generation, for the search of everyone against the selected chart.
-    private int _matchGeneration;
 
-    // Stops a search a newer one has overtaken, rather than letting it run on.
-    private CancellationTokenSource? _matchCancel;
+    // The comparison with the chosen partner, and the search of everyone against the
+    // selected chart: of each, one at a time and the latest asked for, so switching
+    // quickly between people never shows a stale one and a search overtaken is stopped.
+    private readonly LatestOnly _latest = new();
+    private readonly LatestOnly _latestMatches = new();
 
     public SynastryViewModel(ChartService? charts = null, SynastryInterpreter? interpreter = null,
         DavisonInterpreter? davison = null)
@@ -207,49 +204,28 @@ public sealed partial class SynastryViewModel : ObservableObject
     // calculated for each person). A search overtaken by a newer one is discarded.
     private async void RebuildMatches()
     {
-        int generation = ++_matchGeneration;
-        _matchCancel?.Cancel();
-        var cancel = _matchCancel = new CancellationTokenSource();
         var chart = Chart;
         var people = _people;
         Matches = [];
 
-        if (chart is null || _charts is null || people.Count == 0)
+        // Nobody to search for, or the view is closed (then it is made when next opened).
+        bool nothing = chart is null || _charts is null || people.Count == 0;
+        if (nothing || !IsActive)
         {
-            _matchesStale = false;
-            IsSearching = false;
-            return;
-        }
-        if (!IsActive)
-        {
-            _matchesStale = true;
+            _matchesStale = !nothing;
+            _latestMatches.Cancel();
             IsSearching = false;
             return;
         }
         _matchesStale = false;
 
-        IsSearching = true;
-        try
-        {
-            // Everyone is cast with the settings the selected chart was cast with.
-            var charts = _charts.With(chart.Settings);
-            var matches = await Task.Run(() => SynastryScoring.Rank(charts, chart, people, cancel.Token));
-            if (generation == _matchGeneration)
-                Matches = matches;
-        }
-        catch (OperationCanceledException)
-        {
-            // overtaken by a newer search
-        }
-        catch (Exception ex)
-        {
-            Diagnostics.Log($"Synastry search for chart {chart.Celebrity.Id} failed: {ex}");
-        }
-        finally
-        {
-            if (generation == _matchGeneration)
-                IsSearching = false;
-        }
+        // Everyone is cast with the settings the selected chart was cast with.
+        var charts = _charts!.With(chart!.Settings);
+        await _latestMatches.Run(
+            cancel => SynastryScoring.Rank(charts, chart, people, cancel),
+            busy => IsSearching = busy,
+            matches => Matches = matches,
+            ex => Diagnostics.Log($"Synastry search for chart {chart.Celebrity.Id} failed: {ex}"));
     }
 
     partial void OnComparisonChanged(Synastry? value) => OnPropertyChanged(nameof(WheelCaption));
@@ -278,7 +254,6 @@ public sealed partial class SynastryViewModel : ObservableObject
 
     private async void Rebuild()
     {
-        int generation = ++_generation;
         var chart = Chart;
         var partner = Partner;
         ErrorText = "";
@@ -294,18 +269,18 @@ public sealed partial class SynastryViewModel : ObservableObject
         if (chart is null || partner is null || partner.Id == chart.Celebrity.Id ||
             _charts is null || _interpreter is null)
         {
+            _latest.Cancel();
             IsBusy = false;
             return;
         }
 
-        IsBusy = true;
-        try
-        {
-            var (comparison, reading, davison) = await Task.Run(() =>
+        await _latest.Run(
+            cancel =>
             {
                 // The partner is cast with the settings the selected chart was cast with.
                 var charts = _charts.With(chart.Settings);
                 var other = charts.Calculate(partner);
+                cancel.ThrowIfCancellationRequested();
                 var between = charts.Davison(chart, other);
                 try
                 {
@@ -316,31 +291,24 @@ public sealed partial class SynastryViewModel : ObservableObject
                 {
                     Diagnostics.Log($"Events around the Davison chart of {chart.Celebrity.Id} and {partner.Id} could not be found: {ex}");
                 }
+                cancel.ThrowIfCancellationRequested();
                 var synastry = SynastryService.Compare(chart, other, between);
                 return (synastry, _interpreter.Compose(synastry), _davison?.Compose(synastry));
-            });
-            if (generation == _generation)
+            },
+            busy => IsBusy = busy,
+            made =>
             {
-                Comparison = comparison;
-                Reading = reading;
-                Davison = davison;
-            }
-        }
-        catch (Exception ex)
-        {
-            Diagnostics.Log($"Synastry for charts {chart.Celebrity.Id} and {partner.Id} failed: {ex}");
-            if (generation == _generation)
+                Comparison = made.Item1;
+                Reading = made.Item2;
+                Davison = made.Item3;
+            },
+            ex =>
             {
+                Diagnostics.Log($"Synastry for charts {chart.Celebrity.Id} and {partner.Id} failed: {ex}");
                 Comparison = null;
                 Reading = null;
                 Davison = null;
                 ErrorText = $"Could not build the synastry reading: {ex.Message}";
-            }
-        }
-        finally
-        {
-            if (generation == _generation)
-                IsBusy = false;
-        }
+            });
     }
 }

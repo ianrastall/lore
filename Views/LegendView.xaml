@@ -3,7 +3,8 @@
     x:Class="Lore.Views.LegendView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Lore.Views">
+    xmlns:local="using:Lore.Views"
+    xmlns:models="using:Lore.Models">
 
     <UserControl.Resources>
         <CollectionViewSource x:Name="GroupedItems" IsSourceGrouped="True"/>
@@ -41,7 +42,7 @@
                     </Style>
                 </ListView.ItemContainerStyle>
                 <ListView.ItemTemplate>
-                    <DataTemplate x:DataType="local:LegendItem">
+                    <DataTemplate x:DataType="models:LegendItem">
                         <Grid ColumnDefinitions="32,*" Padding="0,4">
                             <TextBlock Grid.Column="0" Text="{x:Bind Symbol}"
                                        FontSize="18" VerticalAlignment="Center"/>

@@ -1,0 +1,767 @@
+{
+  "_comment": "The Legend: every glyph, colour and term Lore shows, explained (Services/LegendService.cs reads it; Views/LegendView shows it). Entries are listed under their `group`, in the order given here. `symbol`, `name`, `group`, `short` and `detail` are all required; `color` (#RRGGBB) is for an entry with a line colour of its own, such as an aspect. `detail` uses a little markup: blocks are separated by a blank line; a block beginning '## ' is a sub-heading; a block whose lines all begin with a bullet or a hyphen is a list; **two asterisks** either side mark bold. The tests check every entry is whole.",
+  "entries": [
+    {
+      "symbol": "✶",
+      "name": "Reading a chart",
+      "group": "Getting started",
+      "short": "start here",
+      "detail": "Every birth chart is a snapshot of the sky at one moment, seen from one place on Earth — the positions of the Sun, Moon, and planets set against a wheel of twelve signs and twelve houses. At first glance it can look like a lot at once. The good news is that nearly everything in it is built from just a few kinds of building block, combined. Learn to read the combination and the whole chart opens up.\n\n## The three questions\n\nMost of a chart is answered by three overlapping layers. For any planet, ask three things:\n\n• **What?** — the planet itself. The Sun is identity, the Moon is emotion, Mercury the mind, Venus love, Mars drive, and so on. This is the part of you in question.\n• **How?** — the sign the planet is in: its style or flavour. Mars in Aries acts boldly and head-on; Mars in Libra acts through charm and fairness.\n• **Where?** — the house the planet is in: the area of life where it plays out. Mars in the 10th house pushes hard at career; Mars in the 7th brings that drive into partnership.\n\nPut the three together and you have a short sentence: this part of me (planet), expressed this way (sign), in this area of life (house).\n\n## Putting it together\n\nTake Venus in Scorpio in the 5th house. Venus is love and pleasure (what); Scorpio makes it intense, private, and all-or-nothing (how); the 5th house is romance and creativity (where). Read as one line: a person who loves deeply and intensely, especially through romance and creative passion. That single method — what, how, where — unlocks most of the placements in a chart.\n\n## How the parts connect\n\nPlanets rarely act alone. The coloured lines across the wheel are aspects — angles between planets that show how those parts of you get along: flowing (trine, sextile), tense (square, opposition), or fused (conjunction). A chart is really a conversation among its planets, and the aspects tell you who is talking to whom, and in what tone.\n\n## Where to start\n\nWhen you first meet a chart, begin with the “Big Three”:\n\n• the **Sun** sign — your core identity;\n• the **Moon** sign — your inner, emotional self;\n• the **Rising** sign (Ascendant) — how you meet the world.\n\nTogether these sketch the person in broad strokes. From there, add the other planets by sign and house, then read the aspects between them, and a fuller portrait gradually comes into focus.\n\n## And the score\n\nFinally, Lore adds one traditional flourish: a dignity score that rates how comfortably the seven classical planets are placed (see the Chart assessment and dignity entries). It is a fascinating extra lens — but the heart of reading a chart is always the patient combining of **what**, **how**, and **where**."
+    },
+    {
+      "symbol": "☉",
+      "name": "Sun",
+      "group": "Planets & points",
+      "short": "identity, vitality",
+      "detail": "In astrology the Sun is the centre of the chart — the steady core the rest of the personality gathers around. Where the Moon shows what you feel and Mercury how you think, the Sun is the deeper sense of “I”: your identity, your conscious will, your vitality, and the direction you are growing toward across a whole life. It is the part of you that wants to matter, to be recognised for who you truly are, and to express something that feels essentially your own. When someone asks “what’s your sign?”, they mean your Sun sign — the constellation the Sun stood in at your birth.\n\nThe Sun spends about a month in each sign, so its sign is shared by everyone born within those few weeks. What turns a shared sign into a personal portrait is the house it falls in and the aspects (angles) it makes to other planets. The house is the stage on which you most want to shine: a 10th-house Sun, high overhead in the chart, often pours its need for significance into career and public reputation; a 5th-house Sun into creativity, performance, or romance; a 4th-house Sun into home and family, glowing most warmly in private.\n\nThe Sun feels most itself in the signs long tied to it. It rules Leo — the sign of warmth, pride, and creative display — and is “exalted,” or honoured, in Aries, the sign of bold beginnings. In the opposite signs, Aquarius and Libra, it works a little against its own grain, learning to shine through the group or through another person rather than in its own right. Think of a chart’s Sun as its keynote: everything else in the personality plays in relation to it."
+    },
+    {
+      "symbol": "☽",
+      "name": "Moon",
+      "group": "Planets & points",
+      "short": "emotions, needs",
+      "detail": "The Moon is your inner life — the part of you that feels, reacts, and needs. If the Sun is who you are becoming, the Moon is who you already are when no one is watching: your instincts, moods, memories, and the conditions that make you feel safe and cared for. It governs the impulse to nurture and to be nurtured, and it colours your bond with home, family, mother-figures, and the past. In everyday terms, the Moon is your emotional weather and your reflex — how you soothe yourself and what you reach for when life presses.\n\nThe Moon moves faster than anything else in the sky, crossing a whole sign in about two and a half days, so its position is exquisitely sensitive to your time of birth. Two babies born the same morning, hours apart, can have the Moon in different signs and quite different emotional makeups — which is a large part of why an accurate birth time matters so much. Its sign describes the texture of your feelings (fiery and quick to flare, earthy and steady, airy and needing to talk things out, watery and deeply impressionable), while its house shows the area of life where you most seek comfort and belonging.\n\nTraditionally the Moon rules Cancer, the sign of home and care, and is exalted — shown at its gentle best — in Taurus, with its love of safety and physical ease. Opposite those, in Capricorn and Scorpio, feeling is harder to trust and express, and often has to be earned through control or intensity. A well-supported Moon is one of the surest signs of an inner life that can rest."
+    },
+    {
+      "symbol": "☿",
+      "name": "Mercury",
+      "group": "Planets & points",
+      "short": "mind, speech",
+      "detail": "Mercury is the mind in motion — how you think, learn, question, and put things into words. It rules communication of every kind: talking and listening, reading and writing, teaching and bargaining, and the short trips and errands that stitch an ordinary day together. Named for the winged messenger of the gods, Mercury is the go-between: it carries meaning from person to person and from one part of the mind to another.\n\nIts sign shows the style of your intelligence — quick and versatile, careful and precise, big-picture, poetic, or bluntly practical — and its house shows the subjects and settings your mind turns to most naturally. A Mercury in the 3rd house lives for conversation and learning; in the 9th, it reaches for the far horizons of philosophy or foreign languages; in the 6th, it fastens onto craft, method, and the fixing of problems.\n\nBecause Mercury orbits close to the Sun, from Earth it never appears far from it — so your Mercury is always in the same sign as your Sun or one on either side. That nearness is why the mind and the core self are so intertwined. Traditionally Mercury rules two very different signs that show its two faces: Gemini, the quick, curious talker, and Virgo, the careful analyst, where it is also exalted. Adaptable by nature, Mercury takes on the colour of whatever sign, house, and company it keeps — the chart’s great chameleon."
+    },
+    {
+      "symbol": "♀",
+      "name": "Venus",
+      "group": "Planets & points",
+      "short": "love, values",
+      "detail": "Venus is the principle of attraction — what you love, what you find beautiful, and what you want to draw toward you. It shapes your taste, your pleasures, your affections, and your values: not just romance, but friendship, art, money, and the simple sense of what feels good and worthwhile. If Mars is desire that reaches out and takes, Venus is desire that invites and receives; the two together describe much of how wanting works in a life.\n\nIts sign describes your style of love and what pleases you — some Venus signs are warm and demonstrative, others cool and discerning, some playful, some fiercely loyal. Its house shows where you look for pleasure and connection: a 2nd-house Venus finds it in comfort, beauty, and material security; a 7th-house Venus in committed partnership; a 5th-house Venus in romance, flirtation, and creative play.\n\nLike Mercury, Venus never wanders far from the Sun in the sky, so it always sits near your core identity. In tradition Venus rules two signs that show its range: Taurus, the sensual love of the tangible — good food, touch, comfort, security — and Libra, the social love of harmony, fairness, and beautiful relationship. It is exalted in Pisces, where love becomes tender and boundless, and it is most tested in Aries, Scorpio, and Virgo, where desire can turn either too raw, too intense, or too critical to rest easy."
+    },
+    {
+      "symbol": "♂",
+      "name": "Mars",
+      "group": "Planets & points",
+      "short": "drive, action",
+      "detail": "Mars is your drive — the engine of action, courage, appetite, and, when crossed, anger. It is how you go after what you want, assert yourself, compete, and get things done, and it governs raw physical energy, sexuality, and the instinct to defend. Where Venus is the wanting that attracts, Mars is the wanting that acts: the push behind every “I will.”\n\nIts sign shows the style of your assertion — hot and direct, cool and strategic, stubbornly immovable, or restless and scattered — and its house shows the arena where you spend that energy most freely and where you tend to meet conflict. A 10th-house Mars drives hard at career and status; a 1st-house Mars comes at life head-first, with visible force; a 12th-house Mars fights quietly, behind the scenes, or struggles to own its own anger.\n\nWell placed, Mars gives boldness, stamina, and the healthy ability to say no; frustrated or afflicted, it can spill into friction, haste, cruelty, or accidents, which is why tradition names it one of the two “malefics” (Saturn is the other). The label is not a verdict of evil — it simply marks a force strong enough to harm when it is handled badly. Mars rules Aries, the sign of pure initiative, and traditionally Scorpio, the sign of depth and staying power, and it is exalted in Capricorn, where sheer drive becomes patient, disciplined ambition — Mars at its most effective."
+    },
+    {
+      "symbol": "♃",
+      "name": "Jupiter",
+      "group": "Planets & points",
+      "short": "growth, luck",
+      "detail": "Jupiter is the planet of expansion — growth, opportunity, faith, and good fortune. It shows where you naturally reach for more: more meaning, more experience, more room to grow. It rules higher learning, travel, philosophy and belief, generosity, and the buoyant confidence to say yes to life. In the old language Jupiter is the “greater benefic,” the most openly helpful influence in a chart, and where it sits often marks a place of ease, protection, and gifts that seem to arrive on their own.\n\nIts sign colours the flavour of your optimism and where you look for significance, while its house shows the department of life that tends to enjoy Jupiter’s luck and abundance. A 9th-house Jupiter flourishes through study, travel, and belief; a 2nd-house Jupiter tends to attract resources and material generosity; a 7th-house Jupiter blesses partnership. The one caution is built into the gift: Jupiter enlarges whatever it touches without much sense of a limit, so its shadow is excess — overconfidence, overpromising, or simply too much of a good thing.\n\nJupiter takes about a year to cross each sign and roughly twelve years to circle the whole zodiac, so it is a marker of longer chapters as much as of personality. It rules Sagittarius, the seeker of truth and far horizons, and traditionally Pisces, the sign of faith and compassion, and it is exalted in Cancer, where generosity becomes warm, protective care."
+    },
+    {
+      "symbol": "♄",
+      "name": "Saturn",
+      "group": "Planets & points",
+      "short": "discipline, limits",
+      "detail": "Saturn is the planet of limits — structure, discipline, time, and consequence. It marks where life asks for patience, effort, and maturity, and where the rewards, though slow, are the kind that last. Saturn rules boundaries and rules, duty and authority, aging, endurance, and the hard-earned respect that comes from doing a difficult thing well over many years. It is the inner taskmaster that says “not yet” and “do it properly,” and its pressure, uncomfortable as it is, builds the backbone of a life.\n\nIts sign shows the style of your discipline and the shape of your deepest fears; its house shows the area of life where you will meet the most testing, the most responsibility, and — if you keep at it — the most genuine mastery. A 10th-house Saturn often means a career built slowly against real obstacles; a 7th-house Saturn takes commitment seriously and may come to it late but for keeps; a 4th-house Saturn carries a weight around home and family that becomes, in time, a source of strength.\n\nBecause it restrains and denies, tradition calls Saturn the “greater malefic” — not an evil, but a cold, exacting force that wounds where it is badly placed and does its finest work where it is well supported. It rules Capricorn, the sign of ambition and mastery, and Aquarius, the sign of structure and principle, and is exalted in Libra, where limits become fairness, balance, and justice. Saturn is the slowest of the seven classical planets, spending about two and a half years in each sign."
+    },
+    {
+      "symbol": "♅",
+      "name": "Uranus",
+      "group": "Planets & points",
+      "short": "change, freedom",
+      "detail": "Uranus is the planet of sudden change — awakening, disruption, invention, and the urge to break free. Where Saturn builds and preserves, Uranus overturns: it rules the flash of insight, the rebellion against convention, the lightning-bolt event that jolts a life onto a new track. It is linked with originality, genius, technology, and the future, and with the part of you that would rather be authentic than comfortable.\n\nUranus is the first of the three modern “outer” planets — discovered in 1781, invisible to the naked eye, and unknown to the astrologers of the ancient world. It moves so slowly that it spends about seven years in each sign, so everyone born within those years shares its sign. That is why a Uranus sign describes the temper of a whole generation — its particular flavour of rebellion or innovation — more than any one person’s character.\n\nWhat makes Uranus personal is its house and its aspects. The house shows the area of life where you most need freedom and where change tends to arrive suddenly rather than gradually. And a close aspect between Uranus and one of your personal planets (Sun, Moon, Mercury, Venus, or Mars) is what draws that restless, electric, unconventional quality directly into your own nature — the mark of the individualist, the reformer, or the person who simply cannot be boxed in. Modern astrologers associate Uranus with Aquarius."
+    },
+    {
+      "symbol": "♆",
+      "name": "Neptune",
+      "group": "Planets & points",
+      "short": "dreams, ideals",
+      "detail": "Neptune is the planet of dissolving boundaries — dreams, imagination, spirituality, and illusion. It softens the hard edges of ordinary reality, inspiring compassion, art, music, mysticism, and longing for something higher or unseen. The same tide that brings inspiration can also bring fog, so Neptune governs escapism, glamour, deception, and self-deception too: its gifts and its confusions are two faces of one impulse, the wish to merge with something larger than the separate self.\n\nLike Uranus, Neptune is a slow-moving outer planet, invisible without a telescope and unknown to ancient astrologers. It lingers around fourteen years in each sign, so its sign is generational, tinting an era’s art, faith, and collective dreams. Its personal meaning comes from the house it occupies and the aspects it makes: the house shows the area of life touched by inspiration and idealism — and also where things can be hard to see clearly, where you may idealise, sacrifice, or be deceived.\n\nA close Neptune aspect to a personal planet threads that dreamy, sensitive, compassionate quality into your own character — often the signature of artists, healers, and deeply empathic people, who feel the world’s undercurrents more than most. Modern astrologers associate Neptune with Pisces, whose boundless, tender, impressionable nature it mirrors: the drop of water remembering it belongs to the sea."
+    },
+    {
+      "symbol": "♇",
+      "name": "Pluto",
+      "group": "Planets & points",
+      "short": "power, transformation",
+      "detail": "Pluto is the planet of depth and transformation — power, death and rebirth, and everything that is buried, hidden, intense, or taboo. It rules the great remaking processes of a life: crisis and survival, obsession and release, the collapse that clears the ground for something new to grow. Its emblem is the phoenix, the bird that burns to ash and rises again, and its work, though often painful, is ultimately about renewal rather than mere destruction.\n\nPluto is the slowest and most distant of the bodies Lore charts, taking anywhere from about twelve to over thirty years to cross a single sign, so its sign belongs to a whole generation and speaks to the deep collective changes of an age. As with the other outer planets, what makes Pluto personal is its house and its aspects. The house shows the area of life where you meet the most profound change, and where the themes of power, control, trust, and survival play out most intensely.\n\nA close aspect between Pluto and a personal planet pulls that transformative, all-or-nothing intensity into your individual story — the capacity to regenerate after loss, to see beneath surfaces, and, at the shadow end, to struggle with control or compulsion. Discovered in 1930 and later reclassified as a dwarf planet (astrology still uses it), Pluto is associated by modern astrologers with Scorpio, the sign of depth, secrecy, and profound transformation."
+    },
+    {
+      "symbol": "☊",
+      "name": "North Node",
+      "group": "Planets & points",
+      "short": "life direction",
+      "detail": "The North Node is not a planet or a body at all — it is a point in space where the Moon’s orbit crosses the ecliptic, the Sun’s apparent path through the year. (Eclipses happen when a New or Full Moon falls near this crossing, which is why the old name for the Nodes is the “dragon” that swallows the lights.) The North Node always travels with an opposite point, the South Node, sitting exactly across the chart from it, and together they form an axis of meaning rather than a single spot.\n\nAstrologically that axis describes the direction of growth over a lifetime. The South Node is read as what is already familiar — the talents, habits, and comfort zones you seem to arrive with and lean on by reflex, sometimes to the point of getting stuck. The North Node points the other way: toward the less-developed qualities you are here to grow into. The catch is that North-Node territory tends to feel awkward or unnatural at first, precisely because it is new — yet moving toward it brings the deepest sense of progress and purpose.\n\nIts sign describes the flavour of that growth (for example, a North Node in Leo is learning to step forward and be seen, having leaned on the crowd), and its house shows the area of life where the stretching happens. Because the Nodes are calculated points rather than planets, modern astrology treats them not as forces that act on you but as a compass — a quiet indication of where a life is trying to go."
+    },
+    {
+      "symbol": "⚷",
+      "name": "Chiron",
+      "group": "Planets & points",
+      "short": "wound & healing",
+      "detail": "Chiron is a small, comet-like body discovered in 1977, orbiting in the gap between Saturn and Uranus — fittingly, a bridge between the visible, structured world and the realm of sudden awakening. In Greek myth Chiron was a wise and gentle centaur, a teacher of heroes, who suffered a wound that could never fully heal; unable to cure himself, he devoted his immortal life to healing others. That story gives the point its meaning: the “wounded healer.”\n\nIn a chart, Chiron’s sign and especially its house show where you carry an old, tender ache — often something that traces back to early life and can feel like a recurring sore spot, a place where you feel not-quite-enough or easily hurt. The paradox at the heart of Chiron is that this very wound becomes a source of unusual understanding and skill: because you know the pain from the inside, you can meet it in others with rare compassion. The healing is seldom a clean cure; it is more the way a scar becomes both a mark of what happened and a place of hard-won strength.\n\nA close aspect from Chiron to a personal planet brings this theme into the foreground of a life, often in someone drawn to teaching, mentoring, medicine, counselling, or any work that turns personal pain into help for others. Chiron is a modern point with no rulership of its own; it is read as a meaningful, humanising thread in the larger weave of the chart."
+    },
+    {
+      "symbol": "⚸",
+      "name": "Black Moon Lilith",
+      "group": "Planets & points",
+      "short": "the untamed self",
+      "detail": "Black Moon Lilith is neither a planet nor a physical body — it is a calculated point. The Moon’s orbit around Earth is a slight ellipse, not a perfect circle, and every ellipse has two focal points; Earth sits at one, and Lilith marks the other, empty focus — in effect, the point the Moon swings farthest from Earth around. (Because it is a mathematical position rather than an object, you will sometimes see it called the Moon’s “mean apogee.”)\n\nThe point takes its meaning from the myth of Lilith, described in some traditions as the first woman, made equal to the first man, who refused to submit and left rather than be ruled. From that story Lilith comes to stand for the untamed, uncompromising self: raw instinct, independence, sexuality on one’s own terms, and the parts of a person that resist being managed, softened, or made “acceptable.” Its sign and house show where you most feel that wildness, where you may have been shamed or silenced for it, and where owning it again can be genuinely freeing.\n\nLike the other modern points, Lilith is used as a layer of nuance rather than a core pillar of the chart. Read gently, she often describes a person’s relationship with their own power and anger — the difference between a self that is edited for approval and one that is allowed, at last, to be whole."
+    },
+    {
+      "symbol": "S",
+      "name": "Stationary, and the true Lilith and node",
+      "group": "Planets & points",
+      "short": "standing still; two ways of reckoning",
+      "detail": "## Stationary\n\nFor a few days either side of turning retrograde or direct, a planet hardly moves against the zodiac: it is **stationary**, or making a *station*. Many astrologers read a stationary planet as unusually strong, its meaning held in one place and concentrated.\n\nLore marks a body **S** when it is moving at under about a tenth of its usual speed: beside its glyph on the wheel and in the last column of the Worksheet (**S℞** if it is also retrograde). The Sun and Moon are never stationary.\n\n## True or mean\n\nThe North Node and Black Moon Lilith can each be reckoned two ways, and **Settings** lets you choose.\n\n- The **mean** node and mean Lilith are smoothed averages. They move at a steady pace and are never retrograde or stationary.\n- The **true** node and the true (or *osculating*) Lilith follow the Moon’s orbit as it actually stands at that instant, wobbles included. The true node stays within a degree or two of the mean one; the true Lilith can be as much as 30° from the mean one, and so quite often in a different sign. Both stop and turn frequently.\n\nNeither is more correct: they answer slightly different questions, and astrologers are divided. Whichever you choose is used everywhere, and the Worksheet lists the other kind of each at the foot of its positions so you can compare."
+    },
+    {
+      "symbol": "℞",
+      "name": "Retrograde",
+      "group": "Planets & points",
+      "short": "turned inward",
+      "detail": "Retrograde is not a place in the chart but a condition a planet can be in. Seen from Earth, a planet sometimes appears to slow, halt, and drift backward against the fixed stars for a stretch of weeks or months before turning forward again. Nothing in the heavens actually reverses; it is an illusion of perspective — the same trick that makes a slower car seem to slide backward as your faster car overtakes it — caused by Earth and the other planet moving at different speeds along their orbits. Lore prints the symbol ℞ next to any planet that was retrograde at your birth.\n\nThe Sun and Moon are never retrograde; every other planet can be. Astrologically, a retrograde planet is thought to turn its energy inward — expressed more reflectively, privately, or on a delay, with a quality of revisiting and reconsidering rather than pushing straight ahead. It is less “broken” than internalised. A retrograde Mercury, for instance, tends toward second thoughts, editing, and deep rumination; a retrograde Venus toward rethinking what and whom one truly values; a retrograde Mars toward a drive that smoulders inwardly before it acts.\n\nMany people have one or more planets retrograde at birth, so it is entirely ordinary — not a flaw, but a flavour. Read well, a natal retrograde often marks an area where you do your real work on the inside first, and where your relationship to that planet’s themes is unusually thoughtful, original, or hard-won."
+    },
+    {
+      "symbol": "♈",
+      "name": "Aries",
+      "group": "Zodiac signs",
+      "short": "Cardinal Fire · Mars",
+      "detail": "Aries is the first sign of the zodiac, and it behaves like a beginning: fresh, direct, and impatient to act. Its keynote is initiative — the spark that starts things, takes the lead, and would rather leap and learn than wait and wonder. Aries is frank, courageous, and competitive, with a childlike directness that can be either refreshing or blunt. At its best it brings pioneering courage and a warm, straightforward heart; at its most unguarded, impulsiveness and a short fuse.\n\nEvery sign combines an element and a mode. The element here is fire — the energy of spirit, enthusiasm, and will — and the mode is cardinal, meaning it initiates, launching a new season (Aries begins spring). Cardinal fire is therefore pure ignition: the drive to start. Aries is ruled by Mars, the planet of action and assertion, which is the source of its bold, get-up-and-go quality.\n\nA sign shapes however a planet expresses itself. The Sun in Aries gives a bold, self-starting identity; the Moon in Aries, quick and fiery feelings; Venus in Aries, an ardent, pursuing style of love. As a rising sign (Ascendant), Aries meets the world head-first, with visible energy and a certain fearless immediacy. Wherever Aries falls in your chart is the area of life where you are most willing to go first, act on instinct, and fight for what you want — and where you may be learning a little patience."
+    },
+    {
+      "symbol": "♉",
+      "name": "Taurus",
+      "group": "Zodiac signs",
+      "short": "Fixed Earth · Venus",
+      "detail": "Taurus is the sign of steadiness and the senses. Where Aries rushes, Taurus settles — it wants security, comfort, and the slow enjoyment of tangible things: good food, touch, beauty, nature, and resources in reserve. Its keynote is stability. Patient, loyal, and hard to rattle, Taurus builds what lasts and holds its ground; the same steadiness, pushed too far, becomes stubbornness and a deep resistance to change.\n\nIts element is earth — practical, grounded, concerned with the material and the real — and its mode is fixed, meaning it sustains and stabilises rather than starts or shifts. Fixed earth is the most immovable combination in the zodiac: dependable, enduring, deeply rooted. Taurus is ruled by Venus, planet of love and pleasure, which gives the sign its sensual warmth, its eye for beauty, and its craving for ease and calm.\n\nA planet in Taurus takes on this grounded, unhurried quality. The Sun in Taurus gives a calm, reliable, pleasure-loving identity; the Moon in Taurus is emotionally steady and soothed by comfort and routine; Mercury in Taurus thinks slowly but thoroughly and rarely changes its mind. As a rising sign, Taurus meets the world with a placid, solid, reassuring presence. Wherever Taurus falls in your chart is where you seek security and lasting worth — and where you would rather keep things as they are than stir them up."
+    },
+    {
+      "symbol": "♊",
+      "name": "Gemini",
+      "group": "Zodiac signs",
+      "short": "Mutable Air · Mercury",
+      "detail": "Gemini is the sign of curiosity and connection — the mind reaching out to touch everything it can. Quick, versatile, and endlessly interested, Gemini loves information, conversation, variety, and play. Its keynote is exchange: it gathers ideas and passes them on, delighting in words, wit, and the crossing of many small worlds. The shadow of all this mobility is restlessness and scattered attention — a tendency to skim widely rather than dive deep.\n\nIts element is air — the realm of thought, language, and social connection — and its mode is mutable, meaning it adapts and shifts easily, closing out one season and turning toward the next. Mutable air is thought in constant motion: flexible, communicative, forever curious. Gemini is ruled by Mercury, planet of the mind and of messages, the source of its cleverness and its gift for talk.\n\nA planet in Gemini becomes more mental, verbal, and quick. The Sun in Gemini gives a curious, witty, many-sided identity; the Moon in Gemini needs mental stimulation and talks its feelings through; Mercury in Gemini, which it rules, is nimble and articulate, alive to every idea. As a rising sign, Gemini meets the world brightly and conversationally, youthful and alert. Wherever Gemini falls in your chart is where you seek variety, learning, and connection — and where you thrive on keeping your options, and your questions, open."
+    },
+    {
+      "symbol": "♋",
+      "name": "Cancer",
+      "group": "Zodiac signs",
+      "short": "Cardinal Water · Moon",
+      "detail": "Cancer is the sign of care and belonging — the home of the heart. Tender, protective, and deeply feeling, Cancer is attuned to emotional undercurrents and to the needs of the people it loves. Its keynote is nurture: it wants to shelter, feed, and hold close, and it treasures home, family, roots, and memory. Ruled by the ever-changing Moon, Cancer feels in tides; its moods rise and fall, and its soft exterior guards real strength — the crab’s shell over a fierce loyalty.\n\nIts element is water — the realm of emotion, intuition, and deep connection — and its mode is cardinal, meaning it initiates; Cancer begins summer. Cardinal water is feeling that moves and acts: the instinct to reach out, protect, and make a place safe. Its ruler, the Moon, ties the sign to instinct, care-giving, and the past.\n\nA planet in Cancer grows more sensitive, caring, and protective. The Sun in Cancer gives a gentle, home-loving, emotionally attuned identity; the Moon in Cancer, which it rules, feels everything deeply and needs a safe nest; Mars in Cancer defends what it loves rather than attacking outright. As a rising sign, Cancer meets the world cautiously and kindly, quick to sense the mood of a room. Wherever Cancer falls in your chart is where you seek emotional safety, and where your protective, caring instincts run strongest."
+    },
+    {
+      "symbol": "♌",
+      "name": "Leo",
+      "group": "Zodiac signs",
+      "short": "Fixed Fire · Sun",
+      "detail": "Leo is the sign of the heart and the spotlight — warm, proud, generous, and made to express itself. Ruled by the Sun, Leo radiates: it wants to create, to be seen, to love grandly and be loved in return, and to bring warmth and a little drama to whatever it touches. Its keynote is self-expression. At its best Leo is magnanimous, loyal, and dignified, a natural leader who lifts others; at its most unguarded it can be vain or hungry for applause.\n\nIts element is fire — spirit, enthusiasm, creative will — and its mode is fixed, meaning it sustains and holds; Leo is the steady heart of summer. Fixed fire is a warm, constant flame rather than a flare: enduring passion, loyalty, and pride. Its ruler is the Sun itself, centre of the chart, which is why Leo is so bound up with identity, confidence, and the urge to shine.\n\nA planet in Leo becomes warmer, bolder, and more expressive. The Sun in Leo, which it rules, gives a radiant, confident, creative identity; the Moon in Leo needs to feel special and loves generously; Venus in Leo loves with flair and devotion. As a rising sign, Leo meets the world with warmth, presence, and a touch of theatre. Wherever Leo falls in your chart is where you most want to shine, create, and be recognised — the stage on which you play from the heart."
+    },
+    {
+      "symbol": "♍",
+      "name": "Virgo",
+      "group": "Zodiac signs",
+      "short": "Mutable Earth · Mercury",
+      "detail": "Virgo is the sign of craft and care through detail — the quiet perfecter. Precise, practical, and discerning, Virgo notices what others miss and wants to make things work better: to refine, organise, heal, and be genuinely useful. Its keynote is service. Modest and industrious, Virgo takes real satisfaction in a job well done and a system that runs smoothly; its shadow is over-criticism — of others and, more harshly, of itself — and worry over small flaws.\n\nIts element is earth — grounded, practical, concerned with the tangible — and its mode is mutable, meaning it adapts and refines, easing one season toward the next. Mutable earth is practicality in motion: analysis, adjustment, and steady improvement. Virgo is ruled by Mercury, planet of the mind, which here turns analytical and exacting, focused on how things actually work.\n\nA planet in Virgo becomes more careful, observant, and improvement-minded. The Sun in Virgo gives a modest, capable, detail-loving identity; the Moon in Virgo finds comfort in order, routine, and being helpful; Mercury in Virgo, which it rules and where it is exalted, is sharp, methodical, and superb at analysis. As a rising sign, Virgo meets the world attentively and a little reservedly, quietly sizing things up. Wherever Virgo falls in your chart is where you seek to be useful and to get the details right — and where you may need to forgive yourself for being human."
+    },
+    {
+      "symbol": "♎",
+      "name": "Libra",
+      "group": "Zodiac signs",
+      "short": "Cardinal Air · Venus",
+      "detail": "Libra is the sign of balance and relationship — the self discovered through the other. Fair-minded, sociable, and refined, Libra is attuned to harmony, beauty, and the give-and-take between people. Its keynote is partnership. Charming and diplomatic, Libra seeks agreement and grace, weighing every side of a question (its symbol is the scales); the same even-handedness can tip into indecision, or into people-pleasing that loses the self in the effort to keep the peace.\n\nIts element is air — thought, language, and connection — and its mode is cardinal, meaning it initiates; Libra begins autumn, exactly opposite Aries’ spring. Cardinal air is the drive to relate: to reach toward others, to start conversations and partnerships, to create balance. Libra is ruled by Venus, planet of love and beauty, which gives the sign its social grace, its aesthetic eye, and its longing for harmony.\n\nA planet in Libra becomes more relational, tactful, and aesthetically attuned. The Sun in Libra gives a gracious, partnership-oriented identity; the Moon in Libra needs harmony and dislikes conflict; Venus in Libra, which it rules, loves elegantly and fairly. As a rising sign, Libra meets the world with charm and a wish to please. Wherever Libra falls in your chart is where you seek balance, beauty, and connection — and where you are learning to hold your own within a relationship rather than dissolve into it."
+    },
+    {
+      "symbol": "♏",
+      "name": "Scorpio",
+      "group": "Zodiac signs",
+      "short": "Fixed Water · Mars/Pluto",
+      "detail": "Scorpio is the sign of depth and intensity — the still surface over deep water. Private, penetrating, and emotionally powerful, Scorpio is drawn to what lies beneath: secrets, motives, taboos, and the great themes of power, intimacy, and transformation. Its keynote is depth. Loyal and all-or-nothing, Scorpio loves and commits with fierce intensity; its shadow is jealousy, control, and a long memory for wounds. It is the sign most at home with crisis — and most able to be reborn from it.\n\nIts element is water — emotion, intuition, deep connection — and its mode is fixed, meaning it sustains and holds; Scorpio is the concentrated heart of autumn. Fixed water is feeling under pressure: still, deep, and immensely powerful. Traditionally Scorpio is ruled by Mars, planet of drive and courage, which gives it staying power and edge; modern astrology adds Pluto, planet of transformation, deepening its link to death, rebirth, and the hidden.\n\nA planet in Scorpio becomes more intense, focused, and probing. The Sun in Scorpio gives a magnetic, private, deeply feeling identity; the Moon in Scorpio feels overwhelmingly and guards those feelings closely; Mars in Scorpio, which it traditionally rules, is relentless and strategic. As a rising sign, Scorpio meets the world watchfully, with a guarded intensity others often sense before they can name it. Wherever Scorpio falls in your chart is where you seek depth and truth, and where you are most profoundly transformed."
+    },
+    {
+      "symbol": "♐",
+      "name": "Sagittarius",
+      "group": "Zodiac signs",
+      "short": "Mutable Fire · Jupiter",
+      "detail": "Sagittarius is the sign of the seeker — the arrow aimed at far horizons. Optimistic, adventurous, and freedom-loving, Sagittarius wants to explore, to learn, and to find the larger meaning behind things, through travel, study, philosophy, or belief. Its keynote is the quest. Frank, warm, and enthusiastic, it speaks its mind and trusts the road ahead; its shadow is restlessness, over-promising, and a bluntness that can trample tact in its rush toward the truth.\n\nIts element is fire — spirit, enthusiasm, and will — and its mode is mutable, meaning it adapts and ranges widely, closing out autumn. Mutable fire is a travelling flame: enthusiasm that roams, always reaching for the next horizon. Sagittarius is ruled by Jupiter, planet of expansion and faith, which gives the sign its optimism, its hunger for meaning, and its generous, larger-than-life spirit.\n\nA planet in Sagittarius grows more adventurous, philosophical, and free. The Sun in Sagittarius gives an optimistic, freedom-loving, truth-seeking identity; the Moon in Sagittarius needs room to roam and feels best when hopeful; Mercury in Sagittarius thinks in big pictures rather than fine print. As a rising sign, Sagittarius meets the world openly and enthusiastically, ready for the next journey. Wherever Sagittarius falls in your chart is where you seek meaning, growth, and freedom — and where you would rather aim high and wide than settle for the small and certain."
+    },
+    {
+      "symbol": "♑",
+      "name": "Capricorn",
+      "group": "Zodiac signs",
+      "short": "Cardinal Earth · Saturn",
+      "detail": "Capricorn is the sign of ambition and mastery — the climber of the long mountain. Disciplined, responsible, and patient, Capricorn plays the long game: it builds, endures, and rises through sustained effort, respecting structure, competence, and time. Its keynote is achievement. Serious and self-reliant, it shoulders responsibility early and takes real pride in what it earns; its shadow is coldness, pessimism, or a workaholic hardness that forgets to rest or feel.\n\nIts element is earth — practical, grounded, concerned with the real — and its mode is cardinal, meaning it initiates; Capricorn begins winter, opposite Cancer’s summer. Cardinal earth is the drive to build something lasting in the material world: enterprise, structure, achievement. Capricorn is ruled by Saturn, planet of discipline and time, the source of its seriousness, its endurance, and its respect for rules and mastery.\n\nA planet in Capricorn becomes more disciplined, ambitious, and self-contained. The Sun in Capricorn gives a driven, responsible, quietly determined identity; the Moon in Capricorn keeps its feelings controlled and finds security in accomplishment; Mars in Capricorn, where it is exalted, works with patient, strategic power. As a rising sign, Capricorn meets the world seriously and capably — often older-seeming when young and, curiously, younger-seeming with age. Wherever Capricorn falls in your chart is where you are most ambitious and self-disciplined, willing to climb slowly toward something that lasts."
+    },
+    {
+      "symbol": "♒",
+      "name": "Aquarius",
+      "group": "Zodiac signs",
+      "short": "Fixed Air · Saturn/Uranus",
+      "detail": "Aquarius is the sign of the individual and the collective at once — the principled outsider who cares about the whole. Independent, inventive, and humane, Aquarius thinks for itself, prizes freedom and fairness, and is drawn to ideas, community, and the future. Its keynote is originality in service of the group. Friendly yet detached, it can be visionary and reforming; its shadow is aloofness, stubborn contrarianism, or living so much in the abstract that warmth grows thin.\n\nIts element is air — thought, ideas, social connection — and its mode is fixed, meaning it sustains and holds; Aquarius is the settled heart of winter. Fixed air is conviction: firmly held ideas and principles that resist being moved. Traditionally Aquarius is ruled by Saturn, which gives it structure, discipline, and social conscience; modern astrology adds Uranus, planet of change and invention, supplying its rebel streak and its love of the new.\n\nA planet in Aquarius becomes more independent, rational, and forward-looking. The Sun in Aquarius gives an original, principled, community-minded identity; the Moon in Aquarius needs freedom and processes feeling through the mind; Venus in Aquarius loves in an open, unconventional, friendship-first way. As a rising sign, Aquarius meets the world with friendly detachment and a distinctive, march-to-its-own-drum air. Wherever Aquarius falls in your chart is where you think independently, value the collective, and refuse to simply follow the crowd."
+    },
+    {
+      "symbol": "♓",
+      "name": "Pisces",
+      "group": "Zodiac signs",
+      "short": "Mutable Water · Jupiter/Neptune",
+      "detail": "Pisces is the last sign of the zodiac, and it carries a quality of return and dissolving — the drop remembering the sea. Compassionate, imaginative, and deeply impressionable, Pisces feels the moods of everyone around it and longs for something transcendent, whether through art, love, spirituality, or escape. Its keynote is boundlessness. Gentle, creative, and self-sacrificing, it dreams and empathises without limit; its shadow is a tendency to lose itself — in others, in illusion, in escapism — and to struggle with firm edges and boundaries.\n\nIts element is water — emotion, intuition, deep connection — and its mode is mutable, meaning it adapts and flows, closing out winter and the zodiac itself. Mutable water is feeling without banks: fluid, merging, endlessly receptive. Traditionally Pisces is ruled by Jupiter, planet of faith and meaning; modern astrology adds Neptune, planet of dreams and the unseen, deepening its mystical, compassionate, boundary-dissolving nature.\n\nA planet in Pisces grows softer, more intuitive, and more imaginative. The Sun in Pisces gives a gentle, dreamy, compassionate identity; the Moon in Pisces feels everything and absorbs the emotional weather around it; Venus in Pisces loves tenderly and unconditionally. As a rising sign, Pisces meets the world with a soft, sensitive, sometimes elusive presence. Wherever Pisces falls in your chart is where your boundaries are thinnest and your compassion and imagination run deepest — where you are most porous to the world, for better and for worse."
+    },
+    {
+      "symbol": "☌",
+      "name": "Conjunction",
+      "group": "Aspects (line colours)",
+      "short": "0° · blends",
+      "detail": "An aspect is a meaningful angle between two planets — a geometric relationship that shows how those two parts of the psyche get along. Lore draws a coloured line between any two planets that form one. What matters is how close the angle is to exact: the small margin of error allowed is called the “orb,” and the tighter the orb, the stronger the aspect.\n\nThe conjunction is the most intense aspect of all: two planets sitting at nearly the same point in the zodiac, 0° apart, drawn here as a white line. Their energies don’t so much relate as fuse — they blend into a single, amplified force that colours the whole chart. Whether that is fortunate or difficult depends entirely on the planets involved: Sun conjunct Jupiter pours confidence and luck into the identity, while Mars conjunct Saturn fuses drive with restraint — a mix that can mean disciplined power or grinding frustration.\n\nBecause a conjunction merges two planets so completely, it tends to be a defining feature of a personality rather than a passing note; the two can be hard to tell apart, always acting together. When you see planets joined by a white line, read them as a team that shares one seat.",
+      "color": "#DCDCDC"
+    },
+    {
+      "symbol": "⚹",
+      "name": "Sextile",
+      "group": "Aspects (line colours)",
+      "short": "60° · easy",
+      "detail": "The sextile is a gentle, supportive aspect: two planets 60° apart, drawn here in blue. It links planets in compatible elements (fire with air, or earth with water) and represents easy cooperation — a flow of talent, opportunity, and helpful connection between the two parts of the self.\n\nThe sextile is best understood as opportunity to be taken up, rather than a gift that simply arrives. Its energy is real but a little quiet: it opens doors and offers aptitudes, but you generally have to notice and use them for the benefit to show. Venus sextile Mercury, for instance, gives a natural charm and ease with words that flowers when you actually put it to work — in writing, teaching, diplomacy, or art.\n\nHarmonious but not lazy, the sextile is one of the most constructive aspects in a chart: a source of skills and lucky openings that reward a bit of initiative. When you see a blue line, think of it as a standing invitation between two planets — help that is there for the asking.",
+      "color": "#5AA0E6"
+    },
+    {
+      "symbol": "□",
+      "name": "Square",
+      "group": "Aspects (line colours)",
+      "short": "90° · tension",
+      "detail": "The square is the classic aspect of tension: two planets 90° apart, drawn here in red. They fall in signs that share a mode but clash in element and temperament, so the two pull against each other, each frustrating the other’s natural expression. A square feels like inner friction — a problem that keeps demanding to be solved.\n\nBut tension is not the same as misfortune. The square is widely regarded as the great engine of achievement: precisely because it will not let you rest, it drives growth, effort, and mastery. The discomfort is the point — it forces development that ease never would. Mars square Saturn, for example, sets drive against caution, and the person who works with that friction often builds extraordinary discipline out of what began as a struggle.\n\nMany accomplished, resilient people have prominent squares in their charts; the aspect tends to mark where you are challenged into becoming stronger. When you see a red line, read it as productive conflict — a place of grit that, worked with rather than against, becomes a genuine source of strength.",
+      "color": "#DC3C3C"
+    },
+    {
+      "symbol": "△",
+      "name": "Trine",
+      "group": "Aspects (line colours)",
+      "short": "120° · flowing",
+      "detail": "The trine is the most harmonious aspect: two planets 120° apart, drawn here in green. They fall in signs of the same element, so they understand each other instinctively, and their energies flow together with an ease that feels natural and unforced. A trine marks talent, grace, and the parts of life that simply come easily to you.\n\nThe gift of the trine is also its catch. Because these strengths arrive so effortlessly, they can be taken for granted or left undeveloped — the easy talent you never bothered to train. A Moon trine Neptune, for example, gives a natural imaginative and empathic gift, but whether it becomes real art or just pleasant daydreaming depends on whether the person ever puts it to use.\n\nWhere the square pushes and the trine soothes, a well-rounded chart usually wants some of each: challenge to build strength, and ease to enjoy and express it. When you see a green line, read it as a natural gift — grace that flows freely, and rewards you most when you don’t let it go to waste.",
+      "color": "#50C864"
+    },
+    {
+      "symbol": "☍",
+      "name": "Opposition",
+      "group": "Aspects (line colours)",
+      "short": "180° · balance",
+      "detail": "The opposition is the aspect of balance and confrontation: two planets 180° apart, sitting directly across the chart from each other, drawn here in orange. The two represent opposite needs or drives that must somehow be reconciled — a tug-of-war that, at its best, resolves into balance and, at its worst, swings restlessly from one extreme to the other.\n\nBecause the two planets face each other across the wheel, oppositions are very often experienced through other people. We tend to meet the far end of an opposition “out there” — projected onto partners, rivals, or close relationships — before recognising it as a tension we carry inside. Sun opposite Moon (the mark of being born under a Full Moon) sets the conscious self against the emotional self: a lifelong balancing of who I am against what I feel and need, often worked out through marriage and close bonds.\n\nThe work of an opposition is integration — learning to honour both ends rather than lurching between them or blaming the other person for the half you haven’t owned. When you see an orange line, read it as an axis seeking balance: two truths that are stronger held together than apart.",
+      "color": "#DC8C28"
+    },
+    {
+      "symbol": "⚻",
+      "name": "Minor aspects",
+      "group": "Aspects (line colours)",
+      "short": "30°, 45°, 135°, 150° · optional",
+      "detail": "Beyond the five major aspects there are subtler angles that some astrologers use and others ignore. Lore can find six of them, and leaves them **off** unless you switch them on under **Settings → Minor aspects**:\n\n- **Quintile Q (72°)** and **biquintile bQ (144°)** — a fifth and two fifths of the circle: read as a talent or knack, something the two planets do well together without strain.\n- **Semi-sextile ⚺ (30°)** — neighbouring signs, with little in common: a faint, slightly awkward link.\n- **Semi-square ∠ (45°)** — half a square: a low-level irritation that nags rather than confronts.\n- **Sesquiquadrate ⚼ (135°)** — a square and a half: agitation that tends to surface under pressure.\n- **Quincunx ⚻ (150°)** — two signs with nothing in common by element or mode, so neither planet can simply have its way; a point of constant adjustment.\n\nThey share one small orb (2° unless you change it), because a minor aspect only means anything when it is close. On the wheel they are drawn as **dashed** lines, so they are never mistaken for a major aspect, and the report marks each one as minor.\n\nWith the quincunx available Lore can also find a **Yod**: two planets in sextile that are both quincunx a third. Transits in the Daily view and the contacts in Synastry always use the five major aspects only.",
+      "color": "#AA82C8"
+    },
+    {
+      "symbol": "*",
+      "name": "Out of sign",
+      "group": "Aspects (line colours)",
+      "short": "in orb, wrong signs",
+      "detail": "Every aspect is also a relationship between **signs**. A trine joins signs four apart, of the same element; a square joins signs three apart, of the same mode; a conjunction belongs inside one sign.\n\nBecause Lore allows an orb, two planets can be within reach of an aspect by degree while their signs are not in that relationship. A planet at 28° Aries and another at 2° Taurus are only 4° apart — a conjunction by degree — but they are in different signs, of different elements. That is an **out-of-sign** (or dissociate) aspect.\n\nTraditional astrology reads an out-of-sign aspect as weaker, and the oldest practice does not count it at all; many modern astrologers treat it like any other. Lore keeps it and tells you: it carries a **star** in the Worksheet's aspect grid, and the report adds a sentence naming the two signs. The semi-square and sesquiquadrate are never marked, since 45° and 135° cross sign boundaries by their nature."
+    },
+    {
+      "symbol": "°",
+      "name": "Orbs",
+      "group": "Aspects (line colours)",
+      "short": "how close counts",
+      "detail": "The **orb** is how far from exact an aspect may be and still count. A square is exact at 90°; with an 8° orb, anything from 82° to 98° is read as a square, and the closer to 90° the stronger.\n\nThere is no agreed figure — orbs are a matter of school and taste — so Lore lets you choose under **Settings → Aspect orbs**:\n\n- **Standard** — 8° for every major aspect, 6° for the sextile. What Lore has always used.\n- **Tight** — 6°, 4° for the sextile, with 2° more when the Sun or Moon is involved.\n- **Wide** — 10°, 6° for the sextile.\n- or your own figure for each aspect, and for the Sun and Moon allowance.\n\nWider orbs find more aspects and more patterns; tighter orbs keep only the strong ones. The choice changes the lines on the wheel, the aspects in the report and the patterns found, and the Worksheet states which orbs were used.\n\nThese orbs apply to aspects **within a birth chart**, including those to the Ascendant and Midheaven. Synastry keeps its own (6°, 4° for a sextile) and the daily horoscope a tight 1°."
+    },
+    {
+      "symbol": "ASC",
+      "name": "Ascendant",
+      "group": "Chart angles",
+      "short": "rising sign · left",
+      "detail": "The Ascendant, or rising sign, is the zodiac degree that was climbing over the eastern horizon at the exact moment of your birth. Lore places it at the left of the wheel, at the 9 o’clock position, where each day’s Sun rises. It begins the 1st house and, with the Midheaven, is one of the four “angles” — the most personal and powerful points in a chart.\n\nWhere the Sun is your core self and the Moon your inner life, the Ascendant is your interface with the world: the impression you make, your instinctive manner and style, the “front door” of the personality, and, in traditional astrology, even the body and physical bearing. Someone with Leo rising comes across as warm and dramatic; Virgo rising, as neat and modest; Scorpio rising, as intense and hard to read — whatever their Sun sign underneath.\n\nBecause the whole sky appears to turn once a day, the Ascendant changes about every two hours and shifts a full degree roughly every four minutes — which is why an accurate birth time matters so much, and why it anchors the entire framework of houses. The planet that rules your rising sign becomes your “chart ruler,” a kind of personal significator for the nativity as a whole."
+    },
+    {
+      "symbol": "MC",
+      "name": "Midheaven",
+      "group": "Chart angles",
+      "short": "career · top",
+      "detail": "The Midheaven, or Medium Coeli (Latin for “middle of the sky”), is the point at the very top of the chart — the highest place the zodiac degrees reach, where the Sun stands at noon. It marks the cusp of the 10th house and is the second of the four angles, forming the vertical axis of the chart together with its opposite point, the Imum Coeli at the bottom.\n\nThe Midheaven is your most public point. It describes career and vocation, reputation and public role, worldly ambition, and the direction you are visibly heading in life — how the world sees you at your most elevated, your standing and your “what do you do.” Its sign and any nearby planets shape that public destiny: a Capricorn Midheaven aims at authority and achievement; a Pisces Midheaven toward vocations of art, care, or spirit.\n\nLike the Ascendant, the Midheaven depends on the exact time and place of birth, which is why a precise birth time sharpens not just your rising sign but the whole vertical spine of the chart — the axis running from your private roots below to your public summit above."
+    },
+    {
+      "symbol": "DSC",
+      "name": "Descendant",
+      "group": "Chart angles",
+      "short": "partnership · right",
+      "detail": "The Descendant sits directly opposite the Ascendant, on the right-hand (western) side of the wheel, where the Sun sets. It marks the cusp of the 7th house and completes the horizontal axis of the chart — the “relationship axis” that runs from the self on the left to the other on the right.\n\nIf the Ascendant is you, the Descendant is “the other”: partnership and marriage, close one-to-one relationships, and the qualities you look for — and often project — in the people you pair with. It frequently describes the type you are drawn to, and the traits you tend to see in a partner rather than own in yourself. Over a lifetime, the Descendant is where you meet, and gradually integrate, the parts of human nature that sit opposite your own front-facing style.\n\nBecause it is exactly opposite the Ascendant, the Descendant shares the same axis and the same sensitivity to birth time. Read the two together and they describe a single spectrum: how you show up, and what you seek in the ones who meet you there."
+    },
+    {
+      "symbol": "IC",
+      "name": "Imum Coeli",
+      "group": "Chart angles",
+      "short": "home · bottom",
+      "detail": "The Imum Coeli, or IC (Latin for “bottom of the sky”), is the lowest point of the chart, directly opposite the Midheaven, where the Sun sits at midnight. It marks the cusp of the 4th house and forms the base of the chart’s vertical axis — the private counterweight to the public Midheaven above.\n\nThe IC is your foundation: home, family, roots, ancestry, and the innermost, most private part of yourself — the ground you stand on and return to at the end of the day. It speaks to your origins and your sense of where you belong, the emotional bedrock beneath the visible life. Its sign and any planets there describe the atmosphere of your early home and the kind of inner base you build for yourself as an adult.\n\nTogether the four angles — Ascendant, Descendant, Midheaven, and IC — form the cross at the heart of every chart, the framework the twelve houses hang from. Lore marks all four with gold lines. Because they turn with the daily rotation of the sky, they are the points most dependent on an accurate birth time, and the truest signature of one particular moment and place."
+    },
+    {
+      "symbol": "1",
+      "name": "1st House",
+      "group": "Houses",
+      "short": "self",
+      "detail": "A house is one of twelve slices of the chart. Where the signs describe styles of energy and the planets are the actors, the houses are the stages — the concrete areas of life where all of it plays out. The twelve begin at the Ascendant and run counter-clockwise, and any planet falling in a house pours its nature into that department of life.\n\nThe 1st house begins at the Ascendant and is the house of the self. It governs your body and physical vitality, your appearance and manner, and the instinctive way you approach anything new — the self as it launches into the world. Planets here are worn openly and stamped strongly on the personality: someone with Mars in the 1st comes across as forceful and direct; someone with Neptune in the 1st, as dreamy and hard to pin down.\n\nAs the house of beginnings and of the body, the 1st is where your life force is most concentrated and visible. It naturally echoes the first sign, Aries, and its ruler Mars — the pure impulse to be and to act. It is also one of the four “angular” houses (the 1st, 4th, 7th, and 10th), the most prominent and active zones of the chart, so a planet here tends to shape a life loudly rather than quietly."
+    },
+    {
+      "symbol": "2",
+      "name": "2nd House",
+      "group": "Houses",
+      "short": "money & worth",
+      "detail": "The 2nd house is the house of resources and worth. Outwardly it governs money, income, possessions, and material security — what you earn, own, and want to hold onto. Inwardly it describes self-worth and values: the things, qualities, and principles you treasure, and the sense of “what I have” in the widest meaning, from your bank balance to your talents to your self-esteem.\n\nPlanets here shape your relationship with money and value. Jupiter in the 2nd often brings resources and a generous, abundant streak; Saturn in the 2nd can mean either scarcity and caution or slowly, soundly built wealth; Venus in the 2nd loves comfort, beauty, and nice things. The sign on the house shows your instinctive money style — cautious, extravagant, resourceful, or indifferent.\n\nThe 2nd naturally echoes Taurus and its ruler Venus — the steady enjoyment and accumulation of the tangible. It is a “succedent” house (one that follows an angular house), a zone of consolidation: less about dramatic action than about gathering, keeping, and stabilising what the 1st house set in motion."
+    },
+    {
+      "symbol": "3",
+      "name": "3rd House",
+      "group": "Houses",
+      "short": "mind & communication",
+      "detail": "The 3rd house is the house of the everyday mind and immediate surroundings. It governs communication in all its ordinary forms — talking, writing, texting, learning — along with siblings, neighbours, short trips, and the constant local traffic of information that fills a normal day. Where the 9th house (its opposite) reaches for distant horizons and big ideas, the 3rd stays close to home: the near, the practical, the day-to-day.\n\nPlanets here colour how you think and communicate. Mercury in the 3rd (very much at home) gives a quick, curious, talkative mind; Mars in the 3rd sharpens the tongue and the debating instinct; the Moon in the 3rd thinks out loud and processes life through conversation. The sign on the cusp describes the flavour of your everyday thinking and speech.\n\nThe 3rd naturally echoes Gemini and its ruler Mercury — curiosity, connection, and the exchange of ideas. It is a “cadent” house (the last of a set of three), a reflective, adaptable zone concerned with gathering, sorting, and passing along information rather than taking bold action. Angular, succedent, and cadent simply name the three rhythms every house belongs to — initiating, stabilising, and adapting."
+    },
+    {
+      "symbol": "4",
+      "name": "4th House",
+      "group": "Houses",
+      "short": "home & roots",
+      "detail": "The 4th house sits at the bottom of the chart, beginning at the IC, and is the house of home and roots. It governs your family and ancestry, your childhood and upbringing, your literal home and living situation, and the deep, private foundation of the self — the innermost place you retreat to and build from. In traditional astrology it also signifies one’s parents and the very end of life, the close of the whole story.\n\nPlanets here work in the private, foundational zone of life. The Moon in the 4th (deeply at home) ties emotional security tightly to family and dwelling; Saturn in the 4th can describe a heavy or dutiful early home; the Sun in the 4th centres a life around home and lineage. The sign on the cusp colours the atmosphere of your roots and the base you build as an adult.\n\nThe 4th naturally echoes Cancer and its ruler the Moon — nurture, belonging, and the past. As one of the four angular houses it is powerful and formative: whatever sits here quietly shapes the ground the rest of the life is built on."
+    },
+    {
+      "symbol": "5",
+      "name": "5th House",
+      "group": "Houses",
+      "short": "creativity & romance",
+      "detail": "The 5th house is the house of joy and self-expression — the part of life you do for the sheer pleasure of it. It governs creativity, play, hobbies, sports, and performance; romance, flirtation, and love affairs; and children, both literal and creative. If the 1st house is who you are, the 5th is what you make and how you play — the spontaneous overflow of the self into the world.\n\nPlanets here show where and how you shine and take pleasure. Venus in the 5th loves romance, art, and fun; the Sun in the 5th (a joyful placement) pours identity into creativity and play; Saturn in the 5th can make self-expression feel serious or blocked until it is patiently earned. The sign on the cusp describes your creative and romantic style.\n\nThe 5th naturally echoes Leo and its ruler the Sun — warmth, creativity, and the generous heart. It is a succedent house, a zone of enjoyment and personal expression rather than urgent action: where a life gives itself permission to create, love, and delight."
+    },
+    {
+      "symbol": "6",
+      "name": "6th House",
+      "group": "Houses",
+      "short": "work & health",
+      "detail": "The 6th house is the house of work, service, and health — the daily grind and the upkeep of the body. It governs your job in the everyday sense (routines, tasks, colleagues, the craft of doing something well), your habits and self-discipline, and your physical wellbeing, diet, and the small maintenance that keeps life running. It is the least glamorous house and one of the most practical: where life is quietly made or unmade in the details.\n\nPlanets here shape your relationship with work and health. Mercury in the 6th (at home) loves useful, detailed, problem-solving work; Mars in the 6th brings energy and drive to labour but can run the body hard; Saturn in the 6th is disciplined and dutiful, sometimes to the point of overwork. The sign on the cusp colours your working and health style.\n\nThe 6th naturally echoes Virgo and its ruler Mercury — service, skill, and improvement. It is a cadent house, adaptable and behind-the-scenes: not the applause, but the steady, humble effort that makes the applause possible."
+    },
+    {
+      "symbol": "7",
+      "name": "7th House",
+      "group": "Houses",
+      "short": "partnership",
+      "detail": "The 7th house begins at the Descendant and is the house of partnership — the great house of “the other.” It governs marriage and committed relationships, business partnerships, and close one-to-one bonds of every kind, including open rivals (the people who directly face us). Where the 1st house is the self, the 7th is everyone we meet as an equal across the table.\n\nPlanets here play out through relationship. Venus in the 7th seeks harmony and often partners well; Saturn in the 7th takes commitment seriously and may come to it late but for keeps; the Sun in the 7th finds much of its identity through partnership. The sign on the cusp describes what you look for in a partner — and often the qualities you meet in others rather than own in yourself.\n\nThe 7th naturally echoes Libra and its ruler Venus — balance, fairness, and union. As one of the four angular houses it is powerful and formative: for many people, the relationships described here are among the most defining forces of a whole life."
+    },
+    {
+      "symbol": "8",
+      "name": "8th House",
+      "group": "Houses",
+      "short": "intimacy & change",
+      "detail": "The 8th house is the house of depth, merging, and transformation — everything that is shared, hidden, or profound. It governs joint resources and other people’s money (debts, inheritances, taxes, a partner’s finances), deep intimacy and sexuality, and the great thresholds of loss, death, and rebirth. It is the counterpart to the 2nd house: where the 2nd is “what is mine,” the 8th is “what is ours,” and what happens when we truly entwine our lives with another.\n\nPlanets here operate in intense, often private territory. Pluto in the 8th (very much at home) deepens the themes of power and transformation; Venus in the 8th loves profoundly, sometimes possessively; the Moon in the 8th feels the undercurrents of intimacy and crisis keenly. The sign on the cusp colours how you handle merging, trust, and shared power.\n\nThe 8th naturally echoes Scorpio and its ruler Mars (with Pluto in modern astrology) — depth, intensity, and regeneration. It is a succedent house, and among the most psychologically charged zones of the chart: the place of what we cannot go through alone."
+    },
+    {
+      "symbol": "9",
+      "name": "9th House",
+      "group": "Houses",
+      "short": "meaning & travel",
+      "detail": "The 9th house is the house of meaning and the wider world — the search for truth beyond the familiar. It governs higher education, philosophy, religion and belief, long-distance travel and foreign cultures, law, and the big questions of what it all means. Opposite the everyday 3rd house, the 9th trades the near for the far: where the 3rd gathers facts, the 9th seeks wisdom.\n\nPlanets here shape your quest for meaning and adventure. Jupiter in the 9th (deeply at home) loves learning, travel, and belief and often brings luck through them; the Sun in the 9th centres identity on the search for truth or distant horizons; Mercury in the 9th thinks in big pictures and philosophies. The sign on the cusp describes the flavour of your beliefs and your wanderlust.\n\nThe 9th naturally echoes Sagittarius and its ruler Jupiter — the seeker of far horizons and larger meaning. It is a cadent house, reflective and expansive: less about doing than about understanding, and about the journeys, outer and inner, that widen a life."
+    },
+    {
+      "symbol": "10",
+      "name": "10th House",
+      "group": "Houses",
+      "short": "career & public role",
+      "detail": "The 10th house sits at the top of the chart, beginning at the Midheaven, and is the house of career and public standing — the summit of the chart, in full daylight. It governs your profession and vocation, your reputation and public role, worldly ambition and achievement, and your relationship with authority (and, in tradition, one parent — often the more worldly or public-facing one). It is how you are known “out there,” beyond home and private life.\n\nPlanets here are highly visible and shape your public destiny. Saturn in the 10th (at home) builds authority and career slowly and solidly; the Sun in the 10th needs to achieve and be recognised; Jupiter in the 10th can bring professional luck and standing. The sign on the cusp — your Midheaven sign — colours the shape of your vocation.\n\nThe 10th naturally echoes Capricorn and its ruler Saturn — ambition, structure, and mastery. As one of the four angular houses, and the most elevated, it is among the most powerful in the chart: whatever sits here tends to define how you are seen by the world."
+    },
+    {
+      "symbol": "11",
+      "name": "11th House",
+      "group": "Houses",
+      "short": "friends & hopes",
+      "detail": "The 11th house is the house of community and the future — the wider circle beyond the intimate. It governs friendships, groups, networks, and social causes, along with your hopes, wishes, and long-term goals: the ideals you move toward and the tribe you move with. Where the 10th house is your individual achievement, the 11th is what you belong to and dream of together with others.\n\nPlanets here shape your social life and aspirations. Uranus in the 11th (fittingly at home) draws you to unconventional groups and progressive causes; Jupiter in the 11th brings helpful friends and good fortune through networks; the Sun in the 11th finds identity through community and shared ideals. The sign on the cusp describes your style of friendship and the kind of future you long for.\n\nThe 11th naturally echoes Aquarius and its traditional ruler Saturn — community, principle, and the collective. It is a succedent house, a zone of alliance and aspiration: the friends, groups, and hopes that carry a life forward toward what it wishes to become."
+    },
+    {
+      "symbol": "12",
+      "name": "12th House",
+      "group": "Houses",
+      "short": "the hidden",
+      "detail": "The 12th house is the last and most mysterious house — the realm of what is hidden, dissolved, or beyond the ordinary self. It governs the unconscious, dreams, and the inner life; solitude, retreat, and seclusion (including hospitals, monasteries, and other places set apart from the world); secrets, self-undoing, and things that work behind the scenes; and a quality of spiritual surrender or letting-go. It is the house of endings, where the wheel completes itself before beginning again at the Ascendant.\n\nPlanets here work quietly, inwardly, and often unconsciously. Neptune in the 12th (at home) deepens imagination, compassion, and the pull toward the transcendent; the Sun in the 12th can give a private, self-effacing, inwardly rich nature; the Moon in the 12th feels things it cannot always name. The sign on the cusp colours the texture of your inner and hidden life.\n\nThe 12th naturally echoes Pisces and its traditional ruler Jupiter (with Neptune in modern astrology) — surrender, compassion, and dissolution. It is a cadent house, the most withdrawn zone of the chart: the deep water beneath the visible life, where we meet solitude, the unconscious, and, in the end, release."
+    },
+    {
+      "symbol": "☀",
+      "name": "Sect (day / night)",
+      "group": "Sect & triplicity",
+      "short": "the chart's basic team",
+      "detail": "Sect is the oldest and most fundamental division in traditional astrology, and Lore leans on it throughout its scoring. The idea is simple: the whole sky is split into a daytime team and a nighttime team, and your chart belongs to one or the other depending on whether you were born while the Sun was above or below the horizon.\n\nIf the Sun was above the horizon at your birth, you have a diurnal (“day”) chart; if below, a nocturnal (“night”) chart. Lore reads this from the Sun’s house — houses 7 through 12 sit above the horizon. It is remarkable how much this one fact changes. The three diurnal planets — Sun, Jupiter, and Saturn — are in their element by day, while the three nocturnal planets — Moon, Venus, and Mars — are in theirs by night. Mercury is the flexible one, joining whichever team fits.\n\nSect matters because a planet on the right team for its chart tends to behave better and more easily: even a difficult planet like Saturn is gentler in a day chart, and even fiery Mars is more constructive at night. Sect also sets the running order of the triplicity rulers (below). Working out whether a chart is day or night is the very first thing a traditional astrologer does, before judging anything else."
+    },
+    {
+      "symbol": "△",
+      "name": "Triplicity rulers",
+      "group": "Sect & triplicity",
+      "short": "three lords per element",
+      "detail": "The four elements — Fire, Earth, Air, and Water — group the twelve signs into four teams of three, each set forming a perfect triangle across the wheel (which is what “triplicity” means). In traditional astrology each element is looked after not by one planet but by three, a scheme codified by the ancient astrologer Dorotheus of Sidon.\n\nEach element has a day ruler, a night ruler, and a third “participating” ruler that lends a hand at all times:\n\n• Fire (Aries, Leo, Sagittarius): Sun / Jupiter / Saturn\n• Earth (Taurus, Virgo, Capricorn): Venus / Moon / Mars\n• Air (Gemini, Libra, Aquarius): Saturn / Mercury / Jupiter\n• Water (Cancer, Scorpio, Pisces): Venus / Mars / Moon\n\nIn a day chart the day ruler leads; in a night chart, the night ruler; the participating ruler helps either way. A planet standing in an element it helps to rule is said to have “the wind at its back” — it may not own the sign, but it enjoys steady outside support, like having allies and resources close at hand. In Lore’s scoring this is worth +3 (see the Triplicity entry under Essential dignity)."
+    },
+    {
+      "symbol": "⚖",
+      "name": "In / out of sect",
+      "group": "Sect & triplicity",
+      "short": "right team, right time",
+      "detail": "Once you know whether a chart is day or night (see Sect), you can tell which planets are “in sect” — playing on the home team — and which are “out of sect.” In a day chart the diurnal planets (Sun, Jupiter, Saturn) are in sect; in a night chart the nocturnal planets (Moon, Venus, Mars) are. Mercury adapts, taking the day team if it rises ahead of the Sun and the night team if it follows.\n\nA planet in sect tends to work smoothly and show its better side; a planet out of sect is a little out of place — working the wrong shift, so to speak — and is more prone to difficulty unless it is otherwise well placed. This is one reason the same planet can behave so differently in two charts: a night-born Saturn, out of sect, can be harsher than a day-born one, and a day-born Mars can run hotter than a night-born one.\n\nSect also sets the pecking order of the triplicity rulers, deciding which of the three lords of an element takes the lead. It is a quiet but pervasive influence — a large part of why two people with otherwise similar placements can still feel quite different."
+    },
+    {
+      "symbol": "+5",
+      "name": "Domicile",
+      "group": "Essential dignity",
+      "short": "at home · +5",
+      "detail": "Domicile is the strongest of the essential dignities — the family of strengths a planet gains from the sign and degree it occupies. A planet is in its domicile when it sits in a sign it rules: Mars in Aries, Venus in Taurus or Libra, the Moon in Cancer, and so on. This is the planet completely at home — on its own ground, autonomous, free to act fully as itself.\n\nThink of it as a person operating in their own house, by their own rules: whatever the planet signifies, it can express clearly and confidently, without borrowing anyone’s permission. A dignified planet is not necessarily “nice,” but it is competent and self-possessed, able to deliver what it promises.\n\nIn Lore’s scoring, domicile is worth +5 — the highest essential score a placement can earn. Along with exaltation, triplicity, term, and face, it is one of the five ways a planet can gain essential dignity, and the single clearest sign that a planet is in good condition by sign."
+    },
+    {
+      "symbol": "+4",
+      "name": "Exaltation",
+      "group": "Essential dignity",
+      "short": "honoured guest · +4",
+      "detail": "Exaltation is the second-strongest essential dignity. Each of the seven classical planets has one sign where it is “exalted” — honoured and shown at its best, even though it does not own the sign. The Sun is exalted in Aries, the Moon in Taurus, Jupiter in Cancer, Mars in Capricorn, Venus in Pisces, Saturn in Libra, and Mercury in Virgo (which it also rules).\n\nIf domicile is a planet at home, exaltation is a planet as the honoured guest — welcomed warmly, given the best seat, held in high esteem. It functions strongly and is well regarded, though there can be a faint note of being on show, or of a strength a little larger than life. Either way it is a clear mark of a planet in fine condition.\n\nIn Lore’s scoring, exaltation is worth +4, just below domicile — a firm sign of a planet in good standing, and one of the five essential dignities the score weighs."
+    },
+    {
+      "symbol": "+3",
+      "name": "Triplicity",
+      "group": "Essential dignity",
+      "short": "friends & support · +3",
+      "detail": "Triplicity is the essential dignity a planet gains by standing in an element it helps to rule. Each element has three ruling planets — a day ruler, a night ruler, and a participating ruler — so a planet can earn this dignity in any sign of “its” element (see Triplicity rulers under Sect & triplicity for the full scheme).\n\nWhere domicile is a planet at home and exaltation an honoured guest, triplicity is a planet among friends: it may not own the place, but it has allies, support, and favourable conditions — “the wind at its back.” It is a gentler, more social kind of strength than domicile, and a common one, since three planets share each element.\n\nIn Lore’s scoring, triplicity is worth +3. Following the Dorothean system, Lore counts all three rulers — day, night, and participating — so a planet that is any of the three lords of the element it sits in earns the dignity. It is one of the surest signs that a planet, even without domicile or exaltation, is decently supported."
+    },
+    {
+      "symbol": "+2",
+      "name": "Term (bound)",
+      "group": "Essential dignity",
+      "short": "a say in the degree · +2",
+      "detail": "Terms, also called bounds, are a finer layer of essential dignity that works by degree rather than by whole sign. Each sign is divided into five unequal segments, and each segment is assigned to one of the five non-luminary planets (Mercury, Venus, Mars, Jupiter, Saturn). Where a planet sits within a term it rules, it gains a modest dignity in that exact stretch of the zodiac.\n\nBecause terms depend on the precise degree, they are the reason two planets in the same sign can be in slightly different condition — one may fall in a term it rules, the other not. There are several historical versions of the table; Lore uses the Egyptian terms, the set most widely used across the tradition.\n\nIn Lore’s scoring a term is worth +2. It is a quieter, more technical strength than domicile, exaltation, or triplicity — not a grand statement, but a real measure of competence in that particular degree, and often the detail that lifts a planet out of being “peregrine” (see below) into having a genuine share in its place."
+    },
+    {
+      "symbol": "+1",
+      "name": "Face (decan)",
+      "group": "Essential dignity",
+      "short": "a toehold · +1",
+      "detail": "Faces, also called decans, are the finest and gentlest layer of essential dignity. Each sign is divided into three equal parts of 10° each, and each part is ruled by a planet, running in the old “Chaldean order” of the planets by speed and beginning with Mars at the very start of Aries. A planet sitting in a face it rules gains a small dignity in that ten-degree stretch.\n\nA face is the slightest share a planet can have in its surroundings — enough, in the traditional image, to keep it from being wholly a stranger, but not much more. On its own it signifies only a faint footing; its main practical use is that, like a term, it can save a planet from being “peregrine” — having no share at all.\n\nIn Lore’s scoring a face is worth +1, the smallest of the five essential dignities (domicile +5, exaltation +4, triplicity +3, term +2, face +1). Small as it is, it completes the ladder of essential dignity, which together measures how much a planet belongs in the sign and degree where it finds itself."
+    },
+    {
+      "symbol": "−5",
+      "name": "Detriment",
+      "group": "Essential dignity",
+      "short": "hostile ground · −5",
+      "detail": "Detriment is the first of the essential debilities — the ways a planet can be weakened, rather than strengthened, by its sign. A planet is in detriment when it occupies the sign directly opposite one it rules: Mars in Libra (opposite its own Aries), the Moon in Capricorn (opposite Cancer), Venus in Aries or Scorpio, and so on.\n\nIf domicile is a planet at home, detriment is a planet in exile — in foreign, uncongenial territory, working against its own grain. Whatever it signifies tends to come out awkwardly, under strain, or in a compromised way; the planet can still act, but it is out of place and rarely at ease. It is the mirror image of domicile, and one of the clearer marks of a planet in poor condition.\n\nIn Lore’s scoring, detriment costs −5 — as heavy a debility as domicile is a strength. A planet in detriment is not doomed (a strong house or supportive aspects can help a great deal), but by sign alone it starts from a real disadvantage."
+    },
+    {
+      "symbol": "−4",
+      "name": "Fall",
+      "group": "Essential dignity",
+      "short": "brought low · −4",
+      "detail": "Fall is the second essential debility, the counterpart of exaltation. A planet is in its fall when it sits in the sign opposite its exaltation: the Sun in Libra (opposite its exaltation in Aries), Saturn in Aries, Jupiter in Capricorn, Venus in Virgo, and so on.\n\nWhere exaltation is the honoured guest given the best seat, fall is the guest turned away at the door — undervalued, out of favour, lacking the esteem the planet would like. It is a milder debility than detriment: the planet is not in hostile territory so much as overlooked and underestimated, and it can struggle with a certain lack of confidence or standing in what it signifies.\n\nIn Lore’s scoring, fall costs −4, just less than detriment. Like all the essential dignities and debilities, it is judged by sign (and, for terms and faces, by exact degree) — a measure of how welcome a planet is in the place it happens to occupy, quite apart from the house it lands in or the aspects it makes."
+    },
+    {
+      "symbol": "−5",
+      "name": "Peregrine",
+      "group": "Essential dignity",
+      "short": "a wanderer · −5",
+      "detail": "Peregrine means “wandering” or “foreign,” and it describes a planet with no share at all in the sign and degree it occupies — none of the five essential dignities (domicile, exaltation, triplicity, term, or face), and not in its detriment or fall either. It is neither strengthened nor formally weakened by its sign; it simply has no home ground to stand on.\n\nThe traditional image is a wanderer or a stranger far from home: with no resources of its own, a peregrine planet is easily swayed by whatever it happens to meet — the aspects it makes, the company it keeps — and tends to act without much steadiness or purpose. It is a surprisingly common condition, and not a catastrophe, but it does describe a planet somewhat adrift.\n\nIn Lore’s scoring a peregrine planet costs −5. Lore treats it as separate from detriment and fall, so a planet is only called peregrine when it has no dignity and no debility by sign — the truly neutral, unmoored case. It is one reason the small dignities matter: a single term or face is enough to give a planet a foothold and lift it clear of the peregrine state."
+    },
+    {
+      "symbol": "◇",
+      "name": "House strength",
+      "group": "Accidental dignity",
+      "short": "how prominent",
+      "detail": "Essential dignity asks whether a planet is well placed by sign; accidental dignity asks a different question — how well placed it is by circumstance: its house, its motion, and its relationship to the Sun. The two work together. A planet can be strong in character but muffled by circumstance, or modest by sign yet loud and effective by placement.\n\nHouse strength is the largest piece of accidental dignity. Where a planet sits among the twelve houses shapes how prominently and effectively it acts. The four angular houses (1st, 4th, 7th, 10th) are the most powerful and visible — a planet there makes itself strongly felt in a life. The succedent houses (2nd, 5th, 8th, 11th) are moderate, and the cadent houses (3rd, 6th, 9th, 12th) are the quietest and most hidden, where a planet works behind the scenes or with less force.\n\nLore follows the traditional point table of the 17th-century astrologer William Lilly, awarding the most to angular placements and least (even a small penalty) to the weakest cadent ones. A brilliant planet tucked in a cadent house may accomplish quietly; an ordinary one on an angle can dominate a whole chart."
+    },
+    {
+      "symbol": "℞",
+      "name": "Direct / retrograde",
+      "group": "Accidental dignity",
+      "short": "forward or turned in",
+      "detail": "A planet’s motion is one of the accidental dignities — the strengths and weaknesses that come from a planet’s circumstances rather than its sign. Most of the time the planets move “direct,” or forward, through the zodiac; periodically they appear to slow, stop, and travel backward for a while, a state called retrograde (see the Retrograde entry for why this happens).\n\nIn traditional scoring, moving direct counts as a small strength: the planet goes about its business in the normal, outward way. Being retrograde counts as a mild weakness: its energy is turned inward, delayed, or expressed less straightforwardly, so it is a little less able to act freely in the world. This is a matter of function, not fate — a retrograde planet is not “bad,” simply more internalised.\n\nIn Lore this applies to the five non-luminary classical planets; the Sun and Moon are never retrograde and so are never scored on motion. It is one of several accidental conditions — alongside house placement and closeness to the Sun — that together describe how freely a planet can express whatever its sign has given it."
+    },
+    {
+      "symbol": "★",
+      "name": "Cazimi",
+      "group": "Accidental dignity",
+      "short": "heart of the Sun · +5",
+      "detail": "Cazimi, from an Arabic phrase meaning “in the heart,” is the most fortunate of the solar conditions — the accidental dignities that come from a planet’s nearness to the Sun. A planet is cazimi when it sits extremely close to the Sun, within about 17 arc-minutes (roughly a quarter of a degree) — so close that it is right in the Sun’s heart.\n\nThis is the exception to the general rule that closeness to the Sun harms a planet (see Combust and Under the beams). At this tiny distance the effect flips: rather than being overwhelmed, the planet is said to be enthroned — carried in the Sun’s heart like a favoured advisor beside the king — and is greatly strengthened. It is a rare and striking placement.\n\nIn Lore’s scoring, cazimi is worth +5, on a par with the strongest essential dignity. Because it depends on an exact, tiny separation from the Sun, it is uncommon — but where it occurs it can lift a planet dramatically, turning what would otherwise be a harmful nearness into a signal honour."
+    },
+    {
+      "symbol": "☌",
+      "name": "Combust",
+      "group": "Accidental dignity",
+      "short": "burned by the Sun · −5",
+      "detail": "Combustion is the most serious of the solar afflictions. A planet is “combust” when it lies within about 8½° of the Sun — close enough to be scorched by its glare — but is not in the tiny cazimi range right at the Sun’s heart. In the old image, the planet is burned up by the Sun, its own light lost in the blaze.\n\nA combust planet tends to struggle to express itself clearly; whatever it signifies can be overshadowed or consumed, as though the person cannot quite get at that part of themselves. Because Mercury and Venus never stray far from the Sun, they are the planets most often found combust — a reminder that the condition is common and not a disaster, simply a real handicap.\n\nIn Lore’s scoring, combustion costs −5. It is one of three solar conditions the score weighs: cazimi (a rare, powerful strength right at the Sun’s heart), combustion (this close, harsh burning), and being under the Sun’s beams (a gentler dimming a little farther out)."
+    },
+    {
+      "symbol": "○",
+      "name": "Under the beams",
+      "group": "Accidental dignity",
+      "short": "dimmed by the Sun · −4",
+      "detail": "“Under the Sun’s beams” is the mildest of the three solar conditions. A planet is under the beams when it lies within about 17° of the Sun — near enough to be dimmed by the Sun’s light, but farther out than the roughly 8½° that would make it combust, and well beyond the tiny cazimi range at the Sun’s very heart.\n\nThe image is of a planet washed out by the Sun’s glare, the way a star becomes invisible near dawn. Its light is obscured rather than burned away, so the weakening is real but gentler than combustion: the planet can still function, but with reduced clarity or visibility in what it signifies. As it moves farther from the Sun it eventually emerges from the beams and shines on its own again.\n\nIn Lore’s scoring, being under the beams costs −4. Together, cazimi (+5), combustion (−5), and under the beams (−4) form a graded scale of a planet’s relationship to the Sun — from enthroned at the very centre, to burned close in, to merely dimmed a little farther out."
+    },
+    {
+      "symbol": "🟢",
+      "name": "Extraordinary",
+      "group": "Chart assessment",
+      "short": "strong dignity",
+      "detail": "The Chart assessment is Lore’s single headline number, and it comes from adding up the traditional condition of the seven classical planets (Sun through Saturn). For each one, Lore totals the essential dignities and debilities — domicile, exaltation, triplicity, term, and face, minus detriment, fall, and peregrine — and the accidental ones — house strength, direct or retrograde motion, and the solar conditions (cazimi, combust, under the beams). Summed across all seven, this gives the chart’s overall score.\n\nAn Extraordinary chart is one whose total lands in the top band: the classical planets come out largely strong and well-placed, with dignities clearly outweighing debilities. In the browse list these charts are marked with a green wash so they stand out.\n\nIt is worth saying plainly what this does and does not mean. The score measures traditional planetary “ease” — how smoothly the classical planets are positioned to operate — not a person’s worth, talent, or destiny. It is a fascinating lens on a chart, never a verdict on a life."
+    },
+    {
+      "symbol": "⚪",
+      "name": "Ordinary",
+      "group": "Chart assessment",
+      "short": "typical",
+      "detail": "An Ordinary chart is one whose total falls in the broad middle band of the Chart assessment — neither notably strong nor notably afflicted, but the balanced, common case that most charts fall into. In the browse list these are left unmarked, so the rarer strong and afflicted charts can stand out.\n\nMost people land here, and that includes a great many remarkable, accomplished, and beloved figures. This is by design and worth dwelling on: the assessment measures the traditional ease of the seven classical planets — how smoothly they are placed to do their work — and that is simply not the same thing as fame, character, happiness, or achievement. Plenty of extraordinary lives are built on perfectly ordinary charts, and the reverse is just as true.\n\nThe three bands are calibrated against a large set of well-timed real charts, so “Ordinary” genuinely means typical. If your own chart, or a friend’s, comes out Ordinary, that is the most usual result of all — a sound, workable set of placements, not a disappointment."
+    },
+    {
+      "symbol": "🔴",
+      "name": "Alarming",
+      "group": "Chart assessment",
+      "short": "afflicted",
+      "detail": "An Alarming chart is one whose total falls in the lowest band of the Chart assessment: among the seven classical planets, debilities clearly outweigh dignities, so the planets are, in the traditional sense, under strain — poorly placed by sign, house, or condition. In the browse list these charts carry a red wash.\n\nThe name is deliberately dramatic, and just as deliberately not to be taken too seriously. A low score is “interesting,” not doom: it points to friction and challenge in the classical placements, but says nothing about a person’s worth, and it certainly does not predict a hard life. In fact a striking number of remarkable, resilient, hugely accomplished people score in this band — difficulty and greatness often keep close company.\n\nRemember what the number measures: the traditional ease of the seven classical planets, nothing more. An Alarming chart simply carries more of the classical debilities — detriment, fall, peregrine, hard house placements, combustion — than most. Read it as a distinctive, characterful signature, not a warning."
+    },
+    {
+      "symbol": "☄",
+      "name": "Transits",
+      "group": "Daily horoscope",
+      "short": "today's sky on your chart",
+      "detail": "A birth chart is a snapshot: the sky frozen at one moment. The planets, of course, kept moving — and a **transit** is what happens when one of them, in today’s sky, comes into aspect with a point in that frozen birth chart. “Mars square your natal Venus” means that Mars, today, stands 90° from where Venus stood when you were born.\n\nThe Daily view is built entirely from these. For the date shown, Lore works out where every body is across the whole day, hour by hour, and finds each moment one of them forms a conjunction, sextile, square, trine or opposition to one of your natal planets, to Chiron, Lilith or the North Node, or to your Ascendant or Midheaven.\n\n## A tight orb\n\nIn a birth chart Lore allows aspects an orb of 6–8°. For transits it allows only **1°**. That narrowness is the point: it means a transit marks particular days rather than a whole season, so the reading changes from one day to the next.\n\n## Moving and natal are different roles\n\nThe same two planets read differently depending on which one is moving. Saturn crossing your natal Mercury is a weeks-long pressure on how you think; Mercury crossing your natal Saturn is a single serious-minded day. The Daily view always names the moving planet first and the natal point second."
+    },
+    {
+      "symbol": "◔",
+      "name": "Highlights & longer themes",
+      "group": "Daily horoscope",
+      "short": "fast and slow planets",
+      "detail": "The planets move at very different speeds, and the Daily view sorts the day’s transits accordingly.\n\n## Today’s highlights\n\nThe **Sun, Moon, Mercury, Venus and Mars** move quickly: a contact from one of them lasts hours (the Moon) or a day or two (the rest). These are the day’s foreground — what makes today different from yesterday. Up to three are shown, in the order they happen.\n\n## Longer-running themes\n\n**Jupiter, Saturn, Uranus, Neptune and Pluto**, along with **Chiron**, the **North Node** and **Lilith**, move slowly: a contact from one of them stays within orb for weeks or months. These form the backdrop — the same theme will appear day after day, building, peaking and easing. Up to three are shown.\n\n## Which ones are chosen\n\nOn most days more transits are in effect than fit comfortably on a page. Lore ranks them — closer contacts, weightier planets, more personal natal points, and contacts that are exact today come first — and shows the top few. This ranking is an editorial choice about what deserves attention, not a measure of how likely anything is to happen. The full list is always available under **Why this reading?** at the bottom of the Daily view."
+    },
+    {
+      "symbol": "◷",
+      "name": "Building · Exact · Easing",
+      "group": "Daily horoscope",
+      "short": "where a transit stands",
+      "detail": "Each transit in the Daily view carries a note on its timing.\n\n- **Exact** — the transit perfects on this day. For the fast planets the clock time is given (“Exact at 3:10 PM”), in your own time zone.\n- **Building** — the moving planet is still closing in; the contact is getting stronger. Where Lore can find it, the date it becomes exact is shown.\n- **Easing** — the contact has passed its peak and is fading. The date it was exact is shown where it can be found.\n\nSometimes a planet slows, stops and turns back just short of an exact contact, so it comes close without ever perfecting. In that case the note simply gives how close it gets (“within 0.3°”).\n\nA planet marked **retrograde** is, for now, appearing to move backwards through the zodiac. A slow planet can therefore cross the same natal point three times — forwards, backwards, and forwards again — over the better part of a year."
+    },
+    {
+      "symbol": "◍",
+      "name": "Day tone",
+      "group": "Daily horoscope",
+      "short": "flowing, mixed, demanding",
+      "detail": "The coloured label at the top of the Daily view sums up the balance of the transits chosen for the reading.\n\n- **Flowing** — mostly trines and sextiles: the easy aspects, where things tend to cooperate.\n- **Demanding** — mostly squares and oppositions: the hard aspects, which bring friction, pressure and the push to act.\n- **Mixed** — a fairly even blend of the two.\n- **Focused** — the main contacts are conjunctions, which concentrate attention on a theme rather than easing or obstructing it.\n- **Quiet** — nothing is within orb; an unremarkable day for this chart.\n\nA conjunction takes its colour from the planet arriving: Venus or Jupiter counts as easy, Mars, Saturn or Pluto as hard. The slow background transits count for half as much as the day’s own highlights, since they are present every day for weeks.\n\nLike the rest of the reading, the tone is a way of reading the day’s symbolism — a prompt for reflection, not a forecast."
+    },
+    {
+      "symbol": "☽",
+      "name": "Moon & Sun by house",
+      "group": "Daily horoscope",
+      "short": "the day's backdrop",
+      "detail": "Alongside the transits, the Daily view opens with three pieces of general weather.\n\n## The Moon’s sign and phase\n\nThe Moon changes sign every two and a half days, and its sign sets the general mood — the same for everyone. If it changes sign during the day, the time is given. The **phase** (New, First Quarter, Full, Last Quarter, and the stages between) places the day within the monthly cycle of beginning, building, culminating and letting go.\n\n## The Moon in your house\n\nWhat makes the Moon personal is which of **your** twelve houses it is passing through — the area of life where your feelings are engaged for a couple of days.\n\n## The Sun in your house\n\nThe Sun spends about a month in each house, and marks the area of life in the spotlight for that month.\n\nBoth house placements depend on an accurate birth time. For a chart whose birth time is unknown, the Daily view leaves out the houses, the Ascendant and Midheaven, and contacts to the natal Moon, and says so."
+    },
+    {
+      "symbol": "◎",
+      "name": "Transit wheel",
+      "group": "Daily horoscope",
+      "short": "the day's sky around the chart",
+      "detail": "The wheel beside the daily reading shows the day’s sky set around the birth chart.\n\n- The **inner wheel** is the birth chart, with its houses and its gold Ascendant and Midheaven lines.\n- The **outer band** holds the moving planets where they stand at the middle of the day being read, on the same zodiac.\n\nThe lines across the middle are the day’s transits, in the usual aspect colours, each running from the moving planet to the natal point it touches. The transits the reading writes up are drawn heavier; the rest are faint.\n\nThe Moon covers about thirteen degrees in a day, so a contact it makes early or late in the day is drawn from where it stands at midday, a few degrees from where it was when the contact was exact. The time given in the reading is the exact one.\n\nFor a chart with no birth time the wheel has no houses or angles and starts from 0° Aries on the left."
+    },
+    {
+      "symbol": "☽",
+      "name": "Void-of-course Moon",
+      "group": "Daily horoscope",
+      "short": "between its last aspect and the next sign",
+      "detail": "The Moon spends about two and a half days in each sign, and while there it makes a run of aspects to the Sun and planets. After the **last** of them it makes no more until it enters the next sign. For that stretch it is said to be **void of course**.\n\nIt can last a few minutes or the better part of a day. Tradition treats it as a pause: suited to routine, rest and finishing what is already begun, and less to starting anything you want to come to something.\n\nWhen a void falls in the day being read, the Daily view lists it under **Also in the sky** with its hours on your clock, the aspect that began it and the sign that ends it. It is the same for everyone and needs no birth time.\n\nLore counts the conjunction, sextile, square, trine and opposition to the Sun and the planets Mercury to Pluto, exact to the minute. That is the usual modern rule. Astrologers who count only the planets out to Saturn, or who allow an orb, will get somewhat different hours."
+    },
+    {
+      "symbol": "☼",
+      "name": "Planetary hours",
+      "group": "Daily horoscope",
+      "short": "sunrise, sunset and whose hour it is",
+      "detail": "Each day of the week belongs to a planet, and most of their names still say so: Sunday the **Sun**, Monday the **Moon**, Tuesday **Mars**, Wednesday **Mercury**, Thursday **Jupiter**, Friday **Venus**, Saturday **Saturn**.\n\nThe **planetary hours** carry the same idea down to the hour. The daylight, from sunrise to sunset, is cut into twelve equal hours, and so is the night, from sunset to the next sunrise. They are not clock hours: in summer the hours of the day are long and those of the night short, and in winter the other way round.\n\nThe first hour after sunrise belongs to the planet of the day. The rest follow in the *Chaldean order*, slowest planet to fastest: Saturn, Jupiter, Mars, Sun, Venus, Mercury, Moon, round and round. Count twenty-four hours on from Sunday’s sunrise and you arrive at the Moon, which is why Monday follows Sunday.\n\nTradition picks the hour of a planet for the things that planet governs: an hour of Mercury for a letter, an hour of Venus for a reconciliation.\n\n## Telling Lore where you are\n\nSunrise and sunset depend on the place, so the hours do too. Under **Settings**, choose your city in **Where you are**. The Daily view then ends with a *Planetary hours* section: whose day it is, the times of sunrise and sunset, and the twelve hours of the day and of the night on your clock, each with its planet. *Clear* removes the place and the section with it.\n\nThe place is kept on this PC only and is used for nothing else: no chart is calculated from it. Lore assumes your clock is set to the time of the place you choose.\n\nSunrise and sunset are the moments the Sun’s upper edge touches a sea-level horizon, allowing for refraction, as an almanac gives them. Inside the polar circles, on days when the Sun does not both rise and set, there are no planetary hours and the section is left out.\n\nThe planetary day runs from sunrise, not midnight: before sunrise it is still the night of the day before."
+    },
+    {
+      "symbol": "☾",
+      "name": "Sky calendar",
+      "group": "Forecast and timing",
+      "short": "what the sky itself is doing",
+      "detail": "The Forecast lists the transits to your chart. With **Include the sky calendar** ticked it sets among them, in date order, the things the sky does whoever is looking:\n\n- **New and Full Moons**, with the degree and sign they fall at.\n- **Eclipses**. A solar eclipse is a New Moon and a lunar eclipse a Full Moon, so each replaces the ordinary entry and says what kind it is: total, annular, partial, or (for the Moon) penumbral. A solar eclipse is listed if it can be seen from anywhere on Earth.\n- **Stations**: the moment a planet from Mercury to Pluto stops and turns retrograde or direct. A retrograde says when it will end, even if that is after the forecast does.\n- **Changes of sign** by Jupiter, Saturn, Uranus, Neptune and Pluto. A planet going backwards over a boundary *goes back into* the sign before.\n\nWhat makes each of these yours is the **house of your chart it falls in**, which is given beside the time when the birth time is known. A New Moon in your 4th house is a fresh start at home; the same New Moon is in someone else’s 10th.\n\nThe times are on your own clock. The faster planets’ changes of sign are left out: the Sun changes every month and Mercury, Venus and Mars every few weeks."
+    },
+    {
+      "symbol": "12",
+      "name": "Annual profection",
+      "group": "Forecast and timing",
+      "short": "one house for each year of life",
+      "detail": "A **profection** is one of the oldest and simplest timing techniques. The Ascendant is moved on by one whole sign for each year of life, so each birthday brings the next house of the birth chart to the fore:\n\n- from birth to the first birthday, the **1st house**;\n- from the first birthday, the 2nd; and so on;\n- at 12, 24, 36, 48… the count is back at the 1st.\n\nSo ages 0, 12, 24, 36 are 1st-house years, ages 6, 18, 30, 42 are 7th-house years, and so on round.\n\nThe sign reached is the **sign of the year**, and the planet that rules it is the **Lord of the Year**. Astrologers who use profections watch that planet through the year: where it stands in the birth chart, where it falls in the solar return, and the transits to and from it.\n\nThe Timing view gives the age, the house and what it is about, the sign, the Lord of the Year and where it stands in the birth chart, with the dates the year runs between.\n\nThe count is by **whole signs** from the rising sign, whatever house system the chart is drawn in, and uses the traditional rulers (Mars for Scorpio, Saturn for Aquarius, Jupiter for Pisces). It needs a birth time, since without one there is no rising sign to count from."
+    },
+    {
+      "symbol": "→",
+      "name": "Solar arc directions",
+      "group": "Forecast and timing",
+      "short": "the whole chart moved on together",
+      "detail": "Secondary progressions move each planet at its own pace, so the slow ones hardly move in a lifetime. **Solar arc directions** move everything by the same amount: the distance the progressed Sun has travelled since birth, about one degree for each year of life.\n\nThe chart keeps its shape and turns as a whole. At thirty, every planet and both angles stand about thirty degrees further on than at birth, and Pluto moves as far as the Moon.\n\nThe Timing view gives the arc, the directed position of every point, and the **contacts**: any directed point within one degree of a conjunction, sextile, square, trine or opposition to a point in the birth chart. Since a degree is about a year, each contact listed is within a year or so of exact.\n\nA point is never listed against itself: everything is the same arc from its own birth position, which says nothing. Without a birth time the Moon and the angles are left out."
+    },
+    {
+      "symbol": "⌖",
+      "name": "Relocated chart",
+      "group": "Forecast and timing",
+      "short": "the same birth, somewhere else",
+      "detail": "A **relocated chart** keeps the moment of birth and changes the place, as if you had been born at that instant where you live now.\n\nThe planets stay in the same signs and degrees and keep all their aspects to one another. What changes is the horizon: the **Ascendant, Midheaven and houses** are those of the new place, so the planets fall in different houses there. Astrologers read it for how a place brings out different parts of the same chart.\n\nIn the Timing view, choosing a place in the **Cast for another place…** box does two things: the solar return is cast for that place, and a section at the end gives the birth chart relocated there, with the new angles and each planet’s house beside its house at the birthplace.\n\nA move east or west turns the chart steadily, about one degree of Midheaven for each degree of longitude. A move north or south changes the Ascendant and the house sizes. It needs a birth time."
+    },
+    {
+      "symbol": "⚭",
+      "name": "Synastry",
+      "group": "Synastry",
+      "short": "two charts compared",
+      "detail": "**Synastry** is the comparison of two birth charts: where one person’s planets fall in relation to the other’s. “Her Venus trine his Mars” means that Venus in her chart stands 120° from Mars in his.\n\nThe Synastry view takes the chart selected in the list and a second person you choose in the **Compare with…** box. Lore then tries every point in one chart against every point in the other — the thirteen bodies, the Ascendant and the Midheaven on each side — and keeps each pair that forms a conjunction, sextile, square, trine or opposition.\n\n## A slightly tighter orb\n\nWithin one chart Lore allows, unless you change it in Settings, an orb of 8° (6° for a sextile). Between two charts it allows **6°** (4° for a sextile): two whole charts laid over each other make far more contacts than one, and the looser ones say little.\n\n## What the reading shows\n\n- **Closest bonds** — up to three conjunctions, where a point in one chart sits on a point in the other.\n- **What comes easily** — up to four trines and sextiles.\n- **What takes work** — up to four squares and oppositions.\n\nCloser contacts and more personal points (Sun, Moon, Venus, Mars, the Ascendant) come first. Two slow planets in aspect — one person’s Neptune to the other’s Pluto — are shared by everyone born in the same years, so they are listed but not written up. The full list is under **Why this reading?** at the bottom.\n\n## The overall tone\n\nThe coloured label places the pair on a five-step scale: **Soulmates** (+2), **Harmonious** (+1), **Mixed** (0), **Challenging** (−1) and **Adversaries** (−2). It comes from the share of the contacts between the two charts that are easy ones — trines, sextiles and the kinder conjunctions — each counted by how close it is and how personal its two points are. Contacts between two slow planets, shared by everyone born in the same years, are left out.\n\nAstrology has no agreed compatibility score, so the scale is Lore’s own. Its steps are set against every pair of figures in the library: about half of all pairs read as Mixed, about a fifth each as Harmonious and Challenging, and about one in fourteen at each end. So **Mixed** means typical, and the two outer steps are uncommon. The outer steps also need a fair number of contacts behind them, so two charts joined by one stray trine are not called Soulmates.\n\nIt is a description of the symbolism, not a verdict on the relationship: hard aspects mean intensity and friction, which plenty of lasting partnerships have, and the names of the outer steps are shorthand, not a forecast.\n\n## Best and worst matches\n\nUntil you choose someone to compare with, the Synastry view shows a search: the selected chart compared with every figure in the library and every chart of your own. The twelve best and twelve worst are listed, each with its step on the scale and its share of easy contacts, and a line above counts how many charts fall on each step. Click any name to read the full comparison; the ✕ beside the name brings the lists back.\n\nFor a chart with no birth time, its Ascendant, Midheaven, houses and Moon are left out of the comparison, and the reading says so."
+    },
+    {
+      "symbol": "◎",
+      "name": "Bi-wheel",
+      "group": "Synastry",
+      "short": "one chart around the other",
+      "detail": "The wheel beside the synastry reading is a **bi-wheel**: two charts drawn on one zodiac.\n\n- The **inner wheel** is the chart selected in the list, with its houses and its gold Ascendant and Midheaven lines. The whole wheel is turned so that this person’s Ascendant is on the left.\n- The **outer band** holds the second person’s planets at the same zodiac positions. Their Ascendant and Midheaven are marked with short blue ticks.\n\nBecause both sets of planets share one zodiac, a conjunction between the two people shows as glyphs side by side, one in each ring, and an opposition as glyphs facing each other across the wheel.\n\nThe lines across the middle are the contacts between the two charts, in the usual aspect colours, each running from the first person’s point to the second’s. The contacts the reading writes up are drawn heavier; the rest are faint."
+    },
+    {
+      "symbol": "⌂",
+      "name": "House overlays",
+      "group": "Synastry",
+      "short": "your planets in their houses",
+      "detail": "Besides the aspects, the synastry reading shows where each person’s **Sun, Moon, Venus and Mars** fall in the other person’s houses. The houses belong to one chart; the planets are borrowed from the other.\n\nThe house tells you which area of the house-owner’s life the other person touches. Someone whose Sun falls in your 7th house is readily seen as a partner; in your 4th, they feel like home; in your 10th, they affect your ambitions and standing.\n\nPlanets that fall in the same house are read together. Overlays need the house-owner’s birth time, so a chart without one has no houses for the other person’s planets to fall in."
+    },
+    {
+      "symbol": "½",
+      "name": "Davison chart",
+      "group": "Synastry",
+      "short": "one chart for the two of you",
+      "detail": "Synastry sets one chart against another. The **Davison chart**, named for the astrologer Ronald Davison, makes one chart out of two: it is cast for the moment **halfway between the two births**, at the place **halfway between the two birthplaces**.\n\nTwo people born on 1 January 1990 and 1 January 1994 have a Davison chart for 1 January 1992; if one was born in London and the other in New York, it is cast for a point in the middle of the Atlantic. It is a real chart, with a real sky, and astrologers read it as the chart of the relationship itself.\n\nChoose **Davison chart** at the top of the Synastry view to see its wheel and its reading:\n\n- **Its character**: the relationship’s Sun (what it is for), Moon (how it feels from inside) and rising sign (the face it shows the world).\n- **Where its life is lived**: the house each of its seven planets falls in.\n- **How it works**: the closest aspects inside the chart. Two of Uranus, Neptune and Pluto in aspect are left out, since they belong to the years and not to the two of you.\n- **Each of you in it**: any planet of your own that stands within 3° of the Davison chart’s Sun, Moon, Venus, Mars, Saturn, Ascendant or Midheaven. The Davison chart is a real sky and not an average of your two charts, so nothing makes this happen; where it does, that person is closely tied to that side of the relationship.\n\nThe Export menu has the reading as a PDF, with the chart’s complete Worksheet, and the wheel as an image.\n\nThe place is the average of the two latitudes and the longitude midway round the shorter side of the globe. If either birth time is missing the midpoint could be hours out, so the Ascendant, Midheaven, houses and Moon are left out.\n\nRead it as a description of a relationship’s habits, not as a forecast of how it will go.\n\n(The other well-known relationship chart, the *composite*, is made from the midpoints of each pair of planets and is not a real sky. Lore does not draw it.)"
+    },
+    {
+      "symbol": "☋",
+      "name": "South Node, Vertex and the lots",
+      "group": "Worksheet measurements",
+      "short": "points worked out from others",
+      "detail": "Besides the bodies and the two angles, the Worksheet lists points that are calculated from them rather than observed.\n\n• The **South Node** is the point exactly opposite the North Node. It needs no birth time.\n• The **Descendant** and **IC** are the points opposite the Ascendant and Midheaven.\n• The **Vertex** is where the prime vertical — the circle running due east, overhead and due west — meets the zodiac in the west. Some astrologers read it as a point of fated meetings. It moves as fast as the Ascendant, so it needs an accurate birth time.\n• The **Part of Fortune** and **Part of Spirit** are the two best-known *lots*: distances between the Sun and Moon, measured out from the Ascendant. By day Fortune is Ascendant + Moon − Sun and Spirit is Ascendant + Sun − Moon; by night the two formulas swap. Fortune is read for the body and material circumstances, Spirit for intention and what a person sets out to do.\n\nThe **Anti-Vertex** is the point opposite the Vertex.\n\nThe Worksheet's aspect grid includes the Vertex and both lots; nothing else in Lore aspects them.\n\nExcept for the South Node, none of these is shown for a chart with no birth time."
+    },
+    {
+      "symbol": "◐",
+      "name": "Lunar phase at birth",
+      "group": "Worksheet measurements",
+      "short": "where the Moon was in its cycle",
+      "detail": "The Worksheet gives how far the Moon was **ahead of the Sun** in the zodiac at birth: 0° at New Moon, 90° at First Quarter, 180° at Full Moon, 270° at Last Quarter. Below 180° the Moon is waxing; above it, waning.\n\nThe cycle is divided into eight phases, each centred on its exact moment, so *Full Moon* covers 157°30' to 202°30'. That is one convention among several — some astrologers begin each phase at its exact moment instead — which is why the angle itself is always shown.\n\nThe **lit** figure is the share of the Moon's disc that was illuminated. It is not the same thing as the angle: the disc is half lit at 90°, but already three-quarters lit at 120°.\n\nFor a chart with no birth time the figures are for noon, and the Moon may have been 6° or 7° either side."
+    },
+    {
+      "symbol": "∥",
+      "name": "Parallels and out of bounds",
+      "group": "Worksheet measurements",
+      "short": "contacts by declination",
+      "detail": "Aspects are measured along the zodiac. **Declination** is the other direction: how far north or south of the celestial equator a body is.\n\nTwo bodies at the same declination, on the same side of the equator, are **parallel**, and are read much like a conjunction. Two at equal declinations on opposite sides are **contra-parallel**, read like an opposition. Lore allows 1° for both — a common choice, not a universal one.\n\nThe Sun never goes further from the equator than the tilt of the Earth's axis, about 23°26' (the Worksheet gives the exact figure for the birth date, as *Obliquity*). A body beyond that limit is **out of bounds**: outside the band the Sun keeps to. The Moon, Mercury, Venus and Mars can all be; the Worksheet says by how much. Astrologers who use it read an out-of-bounds planet as acting outside the usual rules."
+    },
+    {
+      "symbol": "☼",
+      "name": "Distance from the Sun",
+      "group": "Worksheet measurements",
+      "short": "morning or evening, and how close",
+      "detail": "For each planet the Worksheet gives its distance from the Sun along the zodiac and which side it is on. A planet **east** of the Sun follows it across the sky and is seen after sunset, as an evening star; one to the **west** rises before the Sun, as a morning star. Tradition calls these occidental and oriental.\n\nA planet very close to the Sun is lost in its light. The *Condition* column names the traditional stages — under the beams, combust, cazimi — on the same limits the dignity score uses; see those entries."
+    },
+    {
+      "symbol": "♔",
+      "name": "Chart ruler and dispositors",
+      "group": "Worksheet measurements",
+      "short": "who answers to whom",
+      "detail": "Each sign has a ruling planet. The planet ruling the sign a body stands in is that body's **dispositor**: Venus in Aries answers to Mars. The Worksheet uses the traditional rulers throughout, so Mars rules Scorpio, Saturn Aquarius and Jupiter Pisces.\n\n• The **chart ruler** is the ruler of the rising sign, and its sign and house are read as a keynote of the whole chart.\n• Each **house ruler** is the ruler of the sign on that house's cusp; where it sits links one area of life to another.\n• Following dispositor to dispositor makes a **chain**. It ends when it reaches a planet in its own sign, or comes back on itself.\n• If every chain ends at one planet in its own sign, that planet is the **final dispositor**. Many charts have none.\n• Two planets in each other's signs are in **mutual reception** — each is the other's host.\n\nThe *Term* and *Face* columns name the rulers of the smaller divisions of each sign; see those entries under Essential dignity."
+    },
+    {
+      "symbol": "%",
+      "name": "Balance and aspect counts",
+      "group": "Worksheet measurements",
+      "short": "the chart in numbers",
+      "detail": "The Worksheet counts how the chart's thirteen bodies are spread: by element, by mode, by polarity (fire and air against earth and water), by kind of house, by half and quarter of the chart, and house by house. Every body counts once, and the counts are the same ones the Report's balance paragraphs are written from.\n\nThe halves of the chart are taken **by house** — houses 7 to 12 are the upper half — so they follow whichever house system you have chosen.\n\n*Aspects in sum* counts the aspects between the bodies and names the closest. A planet is **unaspected** when it makes no major aspect to any other body. That depends on the orbs in Settings: widen them and fewer planets are unaspected.\n\n**Spread** is the smallest stretch of the zodiac that holds all ten planets, Sun to Pluto, and the widest empty stretch that is the rest of the circle. A chart with everything inside 120° is tightly bunched; one with no gap wider than 60° is spread all round.\n\nThese are counts, not scores. They describe how the chart is arranged and say nothing on their own about how strong anything is."
+    },
+    {
+      "symbol": "♛",
+      "name": "Dominant planets and weighted balance",
+      "group": "Worksheet measurements",
+      "short": "which planet stands out",
+      "detail": "The dignity score asks how well placed the seven classical planets are. The **Dominant planets** table on the Worksheet asks a different question, in the modern manner: which planet **stands out** in this chart? It scores all ten planets, strongest first, and shows what each total is made of.\n\n- **The lights**: the Sun and Moon start with 3 points each.\n- **On an angle**: within 10° of the Ascendant (up to 10 points), the Midheaven (8), the Descendant or IC (6), fading evenly to nothing at 10°.\n- **Aspects**: each major aspect to another planet, more for a closer one. A conjunction is worth up to 4, an opposition, square or trine 3, a sextile 2. An aspect between two of Uranus, Neptune and Pluto counts half, since a whole generation shares it.\n- **Dignity**: in its own sign 5, exalted 4.\n- **Rulership**: ruling the rising sign 8, the Sun’s sign 5, the Moon’s sign 4, the Midheaven’s sign 3. The modern ruler of Scorpio, Aquarius or Pisces gets half as much beside the traditional one.\n\nThe planet at the top is the chart’s dominant. A planet can be dominant and poorly dignified at once: prominent is not the same as comfortable.\n\n**These weights are Lore’s own.** There is no agreed formula; every program that names a dominant planet weighs these things differently, and a close second in Lore may well come first elsewhere. Read the breakdown, not just the name.\n\n## Weighted balance\n\nThe *Balance* table counts every body once. *Weighted balance* counts the same elements, modes and signs with the points that matter most counting for more: the Sun, Moon and Ascendant 3 each; Mercury, Venus and Mars 2; Jupiter to Pluto and the Midheaven 1. The North Node, Chiron and Lilith are left out. A chart with three slow planets in water but the Sun, Moon and Ascendant in fire is a fiery chart, and this table says so.\n\nWithout a birth time the angles take no part in either table."
+    },
+    {
+      "symbol": "↻",
+      "name": "Motion and stations",
+      "group": "Worksheet measurements",
+      "short": "how fast, and how near to standing still",
+      "detail": "The **Motion** table gives each planet's speed along the zodiac in degrees a day, and for the Sun to Saturn sets it beside the planet's average. Above 100% the planet is **swift**, below it **slow**. The tradition counts a swift planet as stronger and a slow one as hampered; the averages are the ones William Lilly gives. Uranus, Neptune and Pluto are not rated: seen from the Earth they almost never move at their average.\n\nThe next two columns are the planet's motion north or south, by ecliptic latitude and by declination.\n\nA **station** is the moment a planet stands still before turning retrograde or direct. The last column gives the nearer of the last station before birth and the first after it. A planet born within a few days of its station is also marked **S** in the positions table, and astrologers read it as unusually emphatic.\n\nThe stations are looked up for the chart on screen. A chart with no birth time is placed at noon, so its figures may be half a day out."
+    },
+    {
+      "symbol": "⌖",
+      "name": "Equator and horizon",
+      "group": "Worksheet measurements",
+      "short": "where each body was in the sky",
+      "detail": "The zodiac is one way of saying where a planet is. The **Equator and horizon** table gives two others.\n\n• **Right ascension** is the planet's place round the celestial equator, in hours (24 to the circle). With declination it fixes the planet among the stars.\n• **Distance** is from the Earth, in astronomical units: 1 AU is the Earth's mean distance from the Sun.\n• **Altitude** is how high the planet stood above the horizon at the birthplace, or how far below it (−).\n• **Azimuth** is its compass bearing, from north round through east: 90° is due east, 180° due south.\n\nAltitude and azimuth need a birth time. They are reckoned the way the Ascendant is, from the centre of the Earth and without the bending of light by the air, so a body within about a degree of the horizon may really have been seen on the other side of it. For the Moon, which is close, the difference can reach a degree.\n\nThe Sun's altitude is what makes a chart a day or a night chart, and is given beside *Sect* at the top of the Worksheet."
+    },
+    {
+      "symbol": "●",
+      "name": "Lunations before birth",
+      "group": "Worksheet measurements",
+      "short": "the Moon's age, and the prenatal New and Full Moon",
+      "detail": "Under *The Moon's phase* the Worksheet gives the **New Moon and the Full Moon before birth**: when each happened, where the Moon stood, and how many days before the birth. If one of them was an eclipse it says so.\n\nThe **Moon's age** is the time since that New Moon, in days. A lunation is about 29½ days long.\n\nWhichever of the two came last is marked *the lunation before birth*. Traditional astrology calls it the prenatal syzygy and treats its degree as a sensitive point of the chart.\n\nFor a chart with no birth time the days are counted to noon and may be half a day out."
+    },
+    {
+      "symbol": "⏳",
+      "name": "Planetary day and hour",
+      "group": "Worksheet measurements",
+      "short": "which planet ruled the hour of birth",
+      "detail": "Each day of the week belongs to a planet: Sunday to the Sun, Monday to the Moon, Tuesday to Mars, Wednesday to Mercury, Thursday to Jupiter, Friday to Venus, Saturday to Saturn. The planetary day runs from **sunrise to sunrise**, not from midnight, so someone born at four in the morning on a Tuesday was born in Monday's day, the Moon's.\n\nDaylight and darkness are each divided into twelve **hours**, long in summer days and short in winter ones. The first hour belongs to the planet of the day and the rest follow in the Chaldean order: Saturn, Jupiter, Mars, Sun, Venus, Mercury, Moon.\n\nThe Worksheet gives the day and hour of birth at the top, counted from sunrise at the birthplace. It needs a birth time, and is left out where the Sun did not rise and set that day."
+    },
+    {
+      "symbol": "∕",
+      "name": "Midpoints",
+      "group": "Worksheet measurements",
+      "short": "who stands halfway between whom",
+      "detail": "The **midpoint** of two planets is the degree halfway between them. The degree opposite it is as much their midpoint, and the two make an axis.\n\nA third planet standing on that axis is read as bringing the pair together: Mars on the Sun/Moon midpoint ties drive to the core of the personality. The technique comes from the Hamburg school and Reinhold Ebertin.\n\nThe Worksheet lists every point that stands within **1°** of a midpoint, closest first. Midpoints are taken between the ten planets, the North Node, and, with a birth time, the Ascendant and Midheaven. It also gives the place of the Sun/Moon midpoint, the one most often asked for.\n\nSome astrologers also count points at 45° and 90° to a midpoint, and use wider orbs. Lore keeps to the axis itself."
+    },
+    {
+      "symbol": "⇋",
+      "name": "Antiscia",
+      "group": "Worksheet measurements",
+      "short": "reflections across the solstices and equinoxes",
+      "detail": "A planet's **antiscion** is its mirror image across the line joining 0° Cancer and 0° Capricorn, the two solstices. 10° Gemini reflects to 20° Cancer: the two degrees are equally far from the solstice, and the Sun gives days of the same length at both.\n\nThe **contra-antiscion** is the point opposite the antiscion: the planet's reflection across 0° Aries and 0° Libra, the equinoxes.\n\nTraditional astrologers read a planet standing on another's antiscion as a hidden conjunction, and one on its contra-antiscion as a hidden opposition. The Worksheet gives both reflections for every body and names any other that stands within **1°** of them."
+    },
+    {
+      "symbol": "♚",
+      "name": "Almutens and triplicity rulers",
+      "group": "Worksheet measurements",
+      "short": "which planet has most say over a degree",
+      "detail": "Five kinds of ruler have a claim on any degree of the zodiac: the ruler of its sign, the planet exalted there, the ruler of its triplicity, and the rulers of its term and face. The **almuten** is the planet with the largest combined claim.\n\nLore scores them as the dignity score does: sign 5, exaltation 4, triplicity 3, term 2, face 1. For the triplicity it counts the day ruler in a day chart and the night ruler in a night chart. Planets level on points are named together.\n\nThe Worksheet gives the almuten of five places: the Sun, the Moon, the Ascendant, the Midheaven and the Part of Fortune. It needs a birth time.\n\nThe **Triplicity rulers** table lists, for every body, the three rulers of its sign's element: one that leads by day, one by night, and one that shares with both. Lore follows Dorotheus.\n\nThere is more than one way to reckon an almuten. Some authors count all three triplicity rulers, and some weigh the five dignities differently, so another program may name another planet."
+    },
+    {
+      "symbol": "◇",
+      "name": "Kite and mystic rectangle",
+      "group": "Worksheet measurements",
+      "short": "two more chart patterns",
+      "detail": "The Report's *Chart Patterns* section looks for seven figures. Two of them are built from others.\n\nA **kite** is a grand trine with a fourth point opposite one of its corners and in sextile to the other two. The opposition gives the trine's easy flow something to push against, and the fourth point is where it is put to use. A grand trine that is part of a kite is described once, as the kite.\n\nA **mystic rectangle** is two oppositions whose four ends are joined round the outside by two sextiles and two trines: two tensions held in a frame of easy aspects.\n\nBoth depend on the orbs in Settings. With wide orbs they are common; tighten the orbs and fewer charts have them."
+    },
+    {
+      "symbol": "≡",
+      "name": "The personality inventory",
+      "group": "Personality inventory",
+      "short": "a questionnaire, not astrology",
+      "detail": "The **Inventory** view offers a standard personality questionnaire for any chart under My Charts, and shows the profile it gives. **It is not astrology.** Nothing in the profile is taken from the chart, and the chart is not changed by it.\n\nThe questionnaire is the **IPIP-NEO-120**, built by the psychologist John A. Johnson from the International Personality Item Pool, a public-domain collection of personality statements. It has 120 short statements, such as *Make friends easily* or *Leave a mess in my room*, each answered on five steps from *very inaccurate* to *very accurate*. Lore gives the statements word for word.\n\nIt takes fifteen to twenty-five minutes. Every answer is saved as you give it, so you can stop and come back. It should be answered by the person the chart belongs to, honestly and without hurrying; there are no right answers.\n\n**Your answers stay on this PC.** They are kept in a file of their own, apart from your saved charts, and are never part of a My Charts export. *Delete the answers* removes them, and deleting a chart removes its answers too.\n\nThe figures Lore comes with cannot answer a questionnaire, so the view is for your own charts only."
+    },
+    {
+      "symbol": "▥",
+      "name": "Traits, facets and bands",
+      "group": "Personality inventory",
+      "short": "how to read the profile",
+      "detail": "The profile is in five parts, the five broad traits most personality research is organised around:\n\n- **Neuroticism**: how readily a person feels distress. The name is the standard one and not a judgment.\n- **Extraversion**: how much a person is drawn to people, activity and excitement.\n- **Openness to Experience**: interest in imagination, art, feeling, novelty and ideas.\n- **Agreeableness**: trust, frankness, helpfulness and sympathy in dealing with others.\n- **Conscientiousness**: order, duty, ambition and care in handling tasks.\n\nEach trait is made of six **facets**, thirty in all, and each facet rests on four statements. Hover over a facet to see what it measures. Some facet names are technical terms that sound like verdicts (*Depression*, *Immoderation*, *Vulnerability*); they name a tendency everyone has in some degree, not a condition.\n\nEvery score is set beside a **reference group**: 320,128 people in the United States, aged 19 to 69, who took the same questionnaire on the internet of their own accord (Kajonius and Johnson, 2019). They are volunteers of both sexes and all those ages together, not a cross-section of any population, and nobody is compared with people of their own age or sex. Where a score is given as so many “in 100”, that is an estimate worked out from the group's average and spread, not a count.\n\n- **Typical** is within one standard deviation of that group’s average, where about two people in three fall.\n- **Low** and **High** are beyond that, about one person in six each way.\n- **Very low** and **Very high** are beyond two standard deviations, about one in forty.\n\nThe bar shows roughly what share of the reference group scored lower.\n\n**How far to trust it.** The questionnaire is well studied and the five traits are measured reliably. A single facet, on four statements, is a rough placing; the mood of the day moves some of them. The reference group was mostly young and answered in English, so a score is a comparison with them, not with everyone. And it is a self-report: it records how a person sees themselves.\n\nLow is not bad and high is not good. The profile describes style, not ability, worth or wellbeing."
+    },
+    {
+      "symbol": "⇄",
+      "name": "Chart and answers",
+      "group": "Personality inventory",
+      "short": "the chart read in the light of the questionnaire",
+      "detail": "A chart is the same for everyone born at that minute. It cannot know how a particular person is living it: the same Mars can be courage in one person and a short temper in another. Once the questionnaire has been answered, **Chart and answers** (above the profile in the Inventory view) sets the two side by side.\n\n## How each planet is being lived\n\nNine planets are read, the Sun to Neptune. Each has one or two **dials**: groups of facets that measure the nearest thing to what the planet stands for, each coming out low, middling or high.\n\n- **Sun**: confidence (Self-Efficacy, Achievement-Striving, and Modesty counted the other way up) and spirits (Cheerfulness)\n- **Moon**: unrest (Anxiety, Depression, Vulnerability) and feeling (Emotionality)\n- **Mercury**: ideas (Intellect) and candour (Morality)\n- **Venus**: sociability (Friendliness, Gregariousness), accord (Trust, Cooperation) and taste (Artistic Interests)\n- **Mars**: push (Assertiveness, Activity Level, Excitement-Seeking) and heat (Anger)\n- **Jupiter**: reach (Adventurousness, Altruism) and excess (Immoderation)\n- **Saturn**: discipline (Self-Discipline, Dutifulness, Orderliness, Cautiousness) and inhibition (Self-Consciousness)\n- **Uranus**: unconvention (Liberalism)\n- **Neptune**: dream (Imagination) and compassion (Sympathy)\n\nThe pattern of a planet’s dials picks one of several named **expressions**. Mars, for instance, is *direct* when assertiveness and activity are high and anger is not; *combative* when both are high; *held in* when anger is high and assertiveness low; *muted* when both are low. The reading gives the Report’s own words for the planet in its sign, then the expression.\n\n## Against the sign\n\nFor the Sun to Saturn, the sign a planet is in leads one to expect more or less of each dial: push from a Mars in Aries, restraint from a Mars in Libra. Each dial is set against that, and the reading says where the answers **bear out** the sign, where there is **more** or **less** than it would suggest, and where **far** more or less. Uranus and Neptune stay years in a sign, which says nothing of one person, so they are read without it. The Ascendant is set in the same way against Extraversion as a whole.\n\n## Where the chart and the answers part company\n\nLore already scores how well each of the seven traditional planets is placed (see *Dignity score*). A well-placed planet is expected to work easily, a badly placed one with strain. Set against how the answers say it is lived, that gives four cases:\n\n- easy in the chart, lived well: **as the chart has it**;\n- easy in the chart, lived with strain: **unlived**. The trouble is not in the placement; look to circumstance or habit;\n- hard in the chart, lived with strain: as the chart has it, the hard way;\n- hard in the chart, lived well: **hard-won**. A difficult placement that has been worked on.\n\nIt needs a birth time, since the dignity score does.\n\n## Between the planets, and the chart as a whole\n\n- **Aspects.** Up to six of the closest major aspects between two planets the answers both speak of get a sentence, by how each end is lived: a square whose strain *shows at one end only*, a trine whose ease *is not being drawn on*.\n- **Elements and modes.** Where the chart leans toward an element or mode, or lacks one, a group of facets that goes with it is consulted (for Fire: Assertiveness, Activity Level, Excitement-Seeking, Cheerfulness), and the reading says whether the answers show it in evidence or not.\n- **The five traits in a line**: which are high, which low, and which near the ordinary.\n\n## In the Report, the Daily and the Forecast\n\nThe same expressions also shape the other readings for a person who has answered the questionnaire:\n\n- **Report**: each planet the answers have something to say about gains a sentence or two, beginning *By (name)’s answers*: how it is lived, and how that sits with its sign. The **Overview** gains the same for the Sun, Moon and Rising signs and the line on the five traits; an **aspect** gains its sentence; and the **balance** of elements and modes gains one where the answers bear on it. A closing section, *In the Light of the Answers*, says which sentences those are and names any planet that is unlived or hard-won.\n- **Daily** and **Forecast**: a transit to a planet that the answers describe as lived with strain, or lived well, gains a line beginning *By your answers*. A hard transit (square or opposition) and an easy one (sextile or trine) get different lines; a conjunction takes the hard line when the planet is lived with strain and the easy one when it is lived well. Each expression has lines of its own. A natal planet gets its line once in a day (on the day a transit is exact, or under the Moon’s) and once in a month of the Forecast, so it is not repeated under every transit.\n\nNothing those readings said before is removed or reworded, and where the answers are ordinary the Report says so in one line and adds nothing else. Untick **Let the answers shape the Report, Daily and Forecast** in the Inventory view to read them without it.\n\n## What this is and is not\n\n**The chart is never changed**: every position, aspect and score is what it was. Only wording depends on the answers, and every sentence that does is marked as coming from them.\n\n**The pairing of planets with facets is Lore’s own invention.** The questionnaire is well studied; astrology is not, and large studies have found no relation between birth charts and measured personality. So where the chart and the answers agree, nothing has been confirmed, and where they differ, nothing has been refuted: agreements and differences should be expected about as often as chance gives them. Read it as a prompt for reflection.\n\nPluto, Chiron, the North Node and Lilith are left out: nothing in the questionnaire measures anything near them. Uranus rests on a single facet and is thinly covered."
+    },
+    {
+      "symbol": "AA",
+      "name": "Rodden rating",
+      "group": "Birth data",
+      "short": "where the time came from",
+      "detail": "A chart is only as good as its birth time, and birth times come from very different places. The **Rodden rating**, devised by the astrologer Lois Rodden and used by the Astro-Databank collection, is the standard shorthand for the source:\n\n- **AA** — from a birth certificate or birth record.\n- **A** — from the person, their family or a close associate, by memory.\n- **B** — from a biography or autobiography.\n- **C** — caution: no source given, or a vague or rectified time.\n- **DD** — “dirty data”: two or more sources disagree.\n- **X** — no time of birth is known.\n- **XX** — the date itself is in doubt.\n\nThe rating grades the **source**, not the precision. A birth certificate is rated AA even when it gives a time rounded to the quarter hour, and a mother's memory of “3:17” is rated A however exact it sounds.\n\nEvery figure bundled with Lore is rated AA or A. For a chart of your own you can set a rating and a note of the source in the Add / Edit Chart dialog. Both are shown beside the birth data and on the Worksheet."
+    },
+    {
+      "symbol": "±",
+      "name": "If the birth time is off",
+      "group": "Birth data",
+      "short": "what a few minutes change",
+      "detail": "The Ascendant moves about one degree every four minutes, so a birth time that is ten minutes out can put a planet in a different house, and one that is an hour out can change the Rising sign. Recorded times are often rounded to the quarter or half hour.\n\nOn the **Worksheet**, the section *If the birth time is off* lets you set a margin in minutes. Lore recalculates the chart at every minute from that long before the recorded time to that long after, and reports:\n\n- what **holds throughout** — for example the Rising sign, or every planet's sign;\n- what **depends on the time**, with the clock time at which it changes — “Mars: the 8th house until 11:22, then the 7th house”.\n\nRead the parts that hold with confidence and the parts that change with caution. If you know roughly how reliable a time is, you can save the margin with a chart of your own; it then shows as “± 15 min” beside the birth time.\n\nFor a chart with **no birth time**, the same check runs across the whole day. There is no Ascendant, Midheaven or house to report, but Lore says where the Moon could be and whether it, or any other body, changed sign that day — in which case the Moon sign cannot be given."
+    },
+    {
+      "symbol": "O.S.",
+      "name": "Old Style dates",
+      "group": "Birth data",
+      "short": "the Julian calendar",
+      "detail": "Until the Gregorian reform, Europe kept the **Julian calendar**, which by the sixteenth century had drifted ten days from the seasons. Catholic countries changed in 1582; Britain and its colonies in 1752; Russia in 1918; Greece in 1923. A date recorded under the old calendar is called **Old Style** (O.S.).\n\nIt matters because the two calendars give the same day different dates. Isaac Newton was born on 25 December 1642 Old Style, which is 4 January 1643 in today's calendar. Read the Old Style date as if it were Gregorian and the Sun lands ten degrees from where it really was.\n\nFor a birth in or before 1923, the Add / Edit Chart dialog offers **This is an Old Style (Julian calendar) date**, and shows the modern date the chart will be calculated for. The date is kept as you entered it and marked “O.S.” wherever it appears.\n\nThe figures bundled with Lore are all given in the modern calendar already."
+    }
+  ]
+}

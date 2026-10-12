@@ -21,34 +21,33 @@
     <Configurations>Debug;Release</Configurations>
     <!-- The one place the version is written. The assembly and file versions follow
          from it, and the release scripts read it from here. -->
-    <Version>3.3.0</Version>
+    <Version>3.4.0</Version>
   </PropertyGroup>
 
-  <!-- The test project lives under tests\ and builds separately; keep its files
-       out of the app (the SDK would otherwise compile every .cs under this folder). -->
+  <!-- The test project (tests\) and the core library (Lore.Core\) live under this
+       folder and build separately; keep their files out of the app (the SDK would
+       otherwise compile every .cs under this folder). -->
   <ItemGroup>
-    <Compile Remove="tests\**" />
-    <None Remove="tests\**" />
-    <Content Remove="tests\**" />
-    <Page Remove="tests\**" />
+    <Compile Remove="tests\**;Lore.Core\**" />
+    <None Remove="tests\**;Lore.Core\**" />
+    <Content Remove="tests\**;Lore.Core\**" />
+    <Page Remove="tests\**;Lore.Core\**" />
+  </ItemGroup>
+
+  <!-- Everything that needs no window: models, services, view models. The tests
+       reference the same assembly. -->
+  <ItemGroup>
+    <ProjectReference Include="Lore.Core\Lore.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <!-- Exact versions, so a release is built from the same packages it was tested
-         with (the time-zone data in NodaTime and GeoTimeZone decides birth times).
-         To update one, change its number here and in tests\Lore.Tests\Lore.Tests.csproj,
-         then run the tests. -->
+         with. The packages the calculations rest on (NodaTime, GeoTimeZone, QuestPDF,
+         CommunityToolkit.Mvvm) are written once, in Lore.Core\Lore.Core.csproj, and
+         reach the app through the reference above. -->
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260921001" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.9169" PrivateAssets="all" />
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     <PackageReference Include="Microsoft.Graphics.Win2D" Version="1.4.0" />
-    <PackageReference Include="QuestPDF" Version="2025.12.4" />
-    <!-- NodaTime bundles the IANA tz database (historical DST, incl. the 1968–71 UK
-         year-round-BST experiment) so a birth instant resolves to the offset actually
-         in force on that date; GeoTimeZone maps lat/lon → IANA zone id offline, used to
-         backfill charts saved with only a numeric offset. -->
-    <PackageReference Include="NodaTime" Version="3.3.5" />
-    <PackageReference Include="GeoTimeZone" Version="5.3.0" />
   </ItemGroup>
 
   <!-- Convenience property: root of the bundled Swiss Ephemeris source tree -->
@@ -111,6 +110,10 @@
     </Content>
     <!-- Corpus for the reading that sets the inventory profile beside the chart -->
     <Content Include="Data\mirror.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <!-- The Legend's entries: every glyph, colour and term, explained -->
+    <Content Include="Data\legend.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
 

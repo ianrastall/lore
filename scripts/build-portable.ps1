@@ -54,7 +54,7 @@ if ($missing.Count -gt 0) {
 # Each of the files Lore's readings are written from must also be whole: a file cut
 # short would pass the check above and leave a reading empty. (The two large lists of
 # places are left to the tests, which read them in full.)
-foreach ($corpus in 'interpretations', 'daily', 'synastry', 'davison', 'inventory', 'mirror') {
+foreach ($corpus in 'interpretations', 'daily', 'synastry', 'davison', 'inventory', 'mirror', 'legend') {
     $staged = Join-Path $outDir "Data\$corpus.json"
     try {
         $null = Get-Content -LiteralPath $staged -Raw -Encoding UTF8 | ConvertFrom-Json
@@ -67,6 +67,23 @@ foreach ($corpus in 'interpretations', 'daily', 'synastry', 'davison', 'inventor
         throw "Portable build: Data\$corpus.json differs from the one in the repository."
     }
 }
+
+# Last, the packaged app is run: "Lore.exe --self-check" loads every corpus, the figure
+# library and the places from the staged folder, calls the Swiss Ephemeris library and
+# calculates and reads a chart, then exits with no window (Services\SelfCheck.cs). It
+# does not open %LOCALAPPDATA%\Lore, so nobody's own charts or answers are touched.
+$report = Join-Path ([System.IO.Path]::GetTempPath()) "lore-self-check-$([guid]::NewGuid().ToString('N')).txt"
+$check = Start-Process -FilePath (Join-Path $outDir 'Lore.exe') -ArgumentList '--self-check', "`"$report`"" -PassThru
+if (-not $check.WaitForExit(180000)) {
+    $check.Kill()
+    throw 'Portable build: Lore.exe --self-check did not finish within three minutes.'
+}
+$found = if (Test-Path -LiteralPath $report) { Get-Content -LiteralPath $report } else { @('(no report was written)') }
+Remove-Item -LiteralPath $report -ErrorAction SilentlyContinue
+if ($check.ExitCode -ne 0 -or ($found -join '') -ne 'OK') {
+    throw "Portable build failed its self-check (exit code $($check.ExitCode)):`n  $($found -join "`n  ")"
+}
+Write-Host 'Self-check of the packaged app: OK' -ForegroundColor Green
 
 # Safety gate: never package personal (user-entered) charts. Throws to abort the build.
 & (Join-Path $PSScriptRoot 'assert-clean-release.ps1') -StageDir $outDir

@@ -14,6 +14,7 @@
 
 publish: Lore.exe
 Lore.dll
+Lore.Core.dll
 Lore.pri
 publish: coreclr.dll
 publish: Microsoft.UI.Xaml.dll
@@ -46,6 +47,7 @@ Data\synastry.json
 Data\davison.json
 Data\inventory.json
 Data\mirror.json
+Data\legend.json
 
 Assets\AppIcon.ico
 Assets\splash.png

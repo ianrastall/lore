@@ -14,13 +14,11 @@ public sealed partial class DailyViewModel : ObservableObject
     private readonly DailyInterpreter? _interpreter;
     private readonly DateTimeZone _zone = TransitService.LocalZone();
 
-    // Bumped on every rebuild; a calculation that finishes after a newer one has started
-    // is discarded, so flicking quickly through dates or people never shows a stale day.
-    private int _generation;
 
-    // Stops the scan a newer one has overtaken, rather than letting it run on: holding
-    // the next-day button down would otherwise queue a day's scan for every day passed.
-    private CancellationTokenSource? _cancel;
+    // One reading at a time, the latest asked for: flicking quickly through dates or
+    // people never shows a stale day, and the scan for a day already passed is stopped
+    // (holding the next-day button down would otherwise queue one for every day).
+    private readonly LatestOnly _latest = new();
 
     public DailyViewModel(TransitService? transits = null, DailyInterpreter? interpreter = null)
     {
@@ -125,9 +123,6 @@ public sealed partial class DailyViewModel : ObservableObject
 
     private async void Rebuild()
     {
-        int generation = ++_generation;
-        _cancel?.Cancel();
-        var cancel = _cancel = new CancellationTokenSource();
         var chart = Chart;
         var date = Date;
         var home = Home;
@@ -136,40 +131,26 @@ public sealed partial class DailyViewModel : ObservableObject
 
         if (chart is null || _transits is null || _interpreter is null)
         {
+            _latest.Cancel();
             Reading = null;
             IsBusy = false; // nothing is running for this (empty) state
             return;
         }
 
-        IsBusy = true;
-        try
-        {
-            var reading = await Task.Run(() =>
+        await _latest.Run(
+            cancel =>
             {
-                var sky = _transits.Scan(chart, date, _zone, home, cancel.Token);
-                cancel.Token.ThrowIfCancellationRequested();
+                var sky = _transits.Scan(chart, date, _zone, home, cancel);
+                cancel.ThrowIfCancellationRequested();
                 return _interpreter.Compose(chart, sky, _zone, answers);
-            });
-            if (generation == _generation)
-                Reading = reading;
-        }
-        catch (OperationCanceledException)
-        {
-            // overtaken by a newer date or chart
-        }
-        catch (Exception ex)
-        {
-            Diagnostics.Log($"Daily reading for chart {chart.Celebrity.Id} on {date} failed: {ex}");
-            if (generation == _generation)
+            },
+            busy => IsBusy = busy,
+            reading => Reading = reading,
+            ex =>
             {
+                Diagnostics.Log($"Daily reading for chart {chart.Celebrity.Id} on {date} failed: {ex}");
                 Reading = null;
                 ErrorText = $"Could not build the daily reading: {ex.Message}";
-            }
-        }
-        finally
-        {
-            if (generation == _generation)
-                IsBusy = false;
-        }
+            });
     }
 }
