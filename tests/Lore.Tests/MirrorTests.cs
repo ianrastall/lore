@@ -715,7 +715,7 @@ public sealed class MirrorTests : IDisposable
     // ── In the view ───────────────────────────────────────────────────────────
 
     [Fact]
-    public void The_view_makes_the_reading_with_the_profile_and_again_when_the_chart_is_recalculated()
+    public async Task The_view_makes_the_reading_with_the_profile_and_again_when_the_chart_is_recalculated()
     {
         static Celebrity Person() => new()
         {
@@ -750,7 +750,7 @@ public sealed class MirrorTests : IDisposable
         Assert.False(vm.ReadingShown);
         vm.AbandonCommand.Execute(null);
         Assert.NotNull(vm.Reading);
-        vm.DeleteAnswers();
+        Assert.True(await vm.DeleteAnswersAsync());
         Assert.Null(vm.Reading);
     }
 }

@@ -18,6 +18,9 @@ public sealed partial class TimingViewModel : ObservableObject
     // is discarded, so changing the date quickly never shows a stale result.
     private int _generation;
 
+    // Stops the calculation a newer one has overtaken, rather than letting it run on.
+    private CancellationTokenSource? _cancel;
+
     public TimingViewModel(TimingService? timing = null, CityService? cities = null)
     {
         _timing = timing;
@@ -127,6 +130,8 @@ public sealed partial class TimingViewModel : ObservableObject
     private async void Rebuild()
     {
         int generation = ++_generation;
+        _cancel?.Cancel();
+        var cancel = _cancel = new CancellationTokenSource();
         var chart = Chart;
         var asOf = AsOf;
         var place = Place;
@@ -142,9 +147,13 @@ public sealed partial class TimingViewModel : ObservableObject
         IsBusy = true;
         try
         {
-            var reading = await Task.Run(() => _timing.Compose(chart, asOf, _zone, place));
+            var reading = await Task.Run(() => _timing.Compose(chart, asOf, _zone, place, cancel.Token));
             if (generation == _generation)
                 Reading = reading;
+        }
+        catch (OperationCanceledException)
+        {
+            // overtaken by a newer date, place or chart
         }
         catch (Exception ex)
         {

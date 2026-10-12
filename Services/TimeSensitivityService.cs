@@ -144,6 +144,7 @@ public static class TimeSensitivityService
         var holds = new List<string>();
         var changes = new List<string>();
         var moonSigns = new List<ZodiacSign>();
+        var signChanges = new Dictionary<Planet, IReadOnlyList<ZodiacSign>>();
         var bodies = samples[0].Select(p => p.Planet).ToList();
         int held = 0;
         foreach (var body in bodies)
@@ -151,7 +152,7 @@ public static class TimeSensitivityService
             if (Find(samples[0], body) is not { } first) continue;
             var current = first.Sign;
             var parts = new List<string> { current.Name() };
-            if (body == Planet.Moon) moonSigns.Add(current);
+            var signs = new List<ZodiacSign> { current };
 
             for (int i = 1; i <= steps; i++)
             {
@@ -159,11 +160,15 @@ public static class TimeSensitivityService
                 parts[^1] += $" until {clock(ChangeTime(body, current, At(i - 1), At(i)))}";
                 parts.Add(next.Name());
                 current = next;
-                if (body == Planet.Moon) moonSigns.Add(next);
+                signs.Add(next);
             }
+            if (body == Planet.Moon) moonSigns.AddRange(signs);
 
             if (parts.Count > 1)
+            {
                 changes.Add($"{body.Name()}: {string.Join(", then ", parts)}");
+                signChanges[body] = signs.Distinct().ToList();
+            }
             else
             {
                 held++;
@@ -188,6 +193,7 @@ public static class TimeSensitivityService
             Holds = holds,
             Changes = changes,
             MoonSigns = moonSigns.Distinct().ToList(),
+            SignChanges = signChanges,
         };
     }
 

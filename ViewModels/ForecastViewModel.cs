@@ -35,6 +35,21 @@ public sealed partial class ForecastViewModel : ObservableObject
     [ObservableProperty]
     public partial NatalChart? Chart { get; set; }
 
+    // False while the Forecast view is not the one open. A forecast is a scan of months
+    // of sky, so nothing is worked out then: what would have been is worked out when the
+    // view is next opened. (True unless the main view model says otherwise.)
+    [ObservableProperty]
+    public partial bool IsActive { get; set; } = true;
+
+    // An input changed while the view was closed; the reading on hand, if any, is not
+    // for what is now set.
+    private bool _stale;
+
+    partial void OnIsActiveChanged(bool value)
+    {
+        if (value && _stale) Rebuild();
+    }
+
     [ObservableProperty]
     public partial DateOnly Start { get; set; } = DateOnly.FromDateTime(DateTime.Now);
 
@@ -129,10 +144,22 @@ public sealed partial class ForecastViewModel : ObservableObject
 
         if (chart is null || _transits is null || _interpreter is null)
         {
+            _stale = false;
             Reading = null;
             IsBusy = false; // nothing is running for this (empty) state
             return;
         }
+
+        // Not on screen: nothing is worked out, and what was there (for other dates, or
+        // other answers) is not kept as if it were current.
+        if (!IsActive)
+        {
+            _stale = true;
+            Reading = null;
+            IsBusy = false;
+            return;
+        }
+        _stale = false;
 
         IsBusy = true;
         try

@@ -12,8 +12,10 @@ note stays true.
 ## 1. Where Lore stands
 
 - Eight views: Chart, Report, Worksheet, Daily, Forecast, Timing, Synastry, Inventory
-  (from 3.0.0), plus the Legend. About 10,600 lines of C# and XAML; no file over 560 lines.
-- 381 tests (as of 3.2.0), all passing, covering the calculation and data layer and the view models. They run on
+  (from 3.0.0), plus the Legend. About 18,700 lines of C# and XAML outside the tests
+  (counted 12 October 2026). The largest files are `TransitService.cs` (825),
+  `ExportService.cs` (806), `MainViewModel.cs` (679) and `WorksheetService.cs` (678).
+- 461 tests (12 October 2026; 381 as of 3.2.0), all passing, covering the calculation and data layer and the view models. They run on
   GitHub on every push, followed by a build of the app itself (about 3 minutes).
 - The views and the three export services are **not** tested: they
   depend on WinUI or Win2D and the test project leaves them out.
@@ -418,6 +420,84 @@ and balance too, and above all make the answers' content robust. Built the same 
 Still not done: the answers do not re-rank which transits a day chooses; Timing and
 Synastry take nothing from them; the Patterns section of the Report is untouched.
 
+## 3h. 3.3.0: the review of 3.2.0
+
+On 11 October 2026 a third review (`docs/Lore-codebase-review.md`) listed 14 findings
+against 3.2.0, most of them in the personality inventory. They were acted on on 12
+October 2026 and released the same day as **3.3.0**. The tests went
+from 381 to 461.
+
+What changed, by finding:
+
+1. **Personality exports.** `ViewModels/ExportRequest.cs`: everything an export will
+   write is taken before the save dialog opens, the profile and the chart-and-answers
+   reading as finished bytes (`InventoryViewModel.ExportText`). The window draws and
+   writes from the request only. An export with no profile behind it is refused, never
+   written empty.
+2. **Two windows saving answers.** `InventoryStore` holds `inventories.json.lock` across
+   read, merge and write, as `UserChartService` does. The lock and the temp-file
+   replace are shared in `Services/StoreFile.cs`.
+3. **Failed saves.** The store keeps what a failed save was to write and writes it with
+   the next save or `RetryAsync`. `State` is Saved, Pending or Failed; `SaveAsync` and
+   `RemoveAsync` say whether the file changed. The Inventory view shows a red line with
+   *Try again*, and closing the window waits for the answers and asks if they cannot be
+   saved (`MainWindow.OnClosing`).
+4. **A damaged answers file** is set aside under a unique name and the backup
+   (`inventories.json.bak`, new) restored, at start-up or later. If it cannot be moved,
+   nothing is saved over it. A file that cannot be read stops the questionnaire being
+   offered (`InventoryStore.IsReadable`).
+5. **Uncertain signs.** `TimeSensitivity.SignChanges` lists every body that changed sign
+   on an untimed birth day; `SignsInDoubt` is the one rule. The chart-and-answers
+   reading names both signs, compares with neither, and leaves out an untimed Moon's
+   aspects and the element and mode lines. The Report says the same of a Sun that
+   changed sign, and notes any such planet under The Planets.
+6. **Required files.** `required-files.txt` is the one list. `build-portable.ps1` checks
+   a build against it (and that each corpus is whole and matches the repository); Lore
+   checks it at start-up and names what is missing in the status bar
+   (`InstalledFiles`). The three "if it exists" conditions are gone from `Lore.csproj`.
+   Without its corpus the Report says it is unavailable (`ChartInterpreter.IsAvailable`).
+7. **The questionnaire file** is checked whole before use (`InventoryService.Fault`):
+   120 statements, 30 facets, 5 traits, 4 and 6 to each, no nulls or repeats, usable
+   reference figures. 32 damaged variants are tested.
+8. **A renamed chart** has its profile scored again under the new name.
+9. **Old Style 29 February** in 1700, 1800 and 1900 can be stored and entered:
+   `Celebrity.GetRecordedDate` reads the date in its own calendar, and the Add chart
+   dialog offers a tick-box when 28 February of such a year is picked with Old Style
+   on. (This was a known limit in section 6; it is struck out there.)
+10. **Background work.** The Forecast and the Synastry match search are worked out when
+    their view is opened (`IsActive`), not for every chart selected. Daily, Timing and
+    the library scoring now stop when overtaken. Daily, Timing and the comparison with
+    a chosen partner are still made at once, so their exports work from any view.
+11. **Tests.** The test project takes every service but `ExportService` by rule, not by
+    a list. New: `InventoryStoreTests` (eight windows at once, a second process holding
+    the lock, failed saves, damage), `UncertainSignTests`, `InstalledFilesTests`, and
+    export, rename and laziness tests in `ViewModelTests`.
+13. **Percentiles** are worded as estimates ("higher than an estimated 85 in 100 of the
+    reference group"), and the reference group is described: United States, internet
+    volunteers, aged 19 to 69, both sexes and all ages together.
+14. **Drift.** The Inventory header follows what is on screen; the pair count is gone
+    from the `SynastryScoring` comment; the line count above is dated.
+
+Not done, and why:
+
+- **No `Lore.Core` project** (finding 11). Moving the models, services and view models
+  into their own assembly touches every file and the release scripts. Worth doing as
+  its own piece of work, with a release behind it first.
+- **No splitting of the large classes, and the Legend is still in code** (finding 12).
+  Only the two shared pieces above were extracted.
+- **PDF contents are still not read back in tests** (finding 11): that needs a PDF
+  reader added to the test project.
+- **No timings were measured** for finding 10.
+- **`build-portable.ps1` was not run** after its change (it would have replaced the
+  3.2.0 folder in `artifacts\`). Its list-reading and JSON check were tried on their
+  own under Windows PowerShell 5.1. The next `release.bat` is its first full run.
+- **Two windows on the same person**: the later save stands, whole. Nothing merges two
+  sittings of one person.
+- **The close dialog and the red save line were not seen on screen**: they need a save
+  to fail. The store behind them is tested. The Inventory view was looked at in a debug
+  build with a made-up untimed chart (`LORE_HOME`): header, estimate wording and the
+  "Aquarius or Pisces" Moon all showed, and the window closed normally.
+
 ## 4. Features, in the order I would build them
 
 ### 4.1 ~~A wheel for the Daily view (transit bi-wheel).~~ Done in 2.5.0.
@@ -612,15 +692,16 @@ be a setting if anyone asks.
 Checked on 6 October 2026 and judged not worth changing. Recorded so they are not
 investigated again from scratch.
 
-- **Old Style 29 February** in 1300, 1400, 1500, 1700, 1800 and 1900 cannot be
-  entered: `Celebrity.GetBirthDate` parses the recorded date as Gregorian and the
-  date picker has no such day. Workaround: enter the modern date with Old Style
-  unticked. A fix must change the picker as well as the parsing.
+- ~~**Old Style 29 February** cannot be entered.~~ Fixed on 12 October 2026 (3h,
+  finding 9): the date is read in its own calendar, and the dialog has a tick-box for
+  the day the picker lacks.
 - **Daily and Forecast do not repeat the missing-ephemeris warning.** The status
   bar gives it when the chart loads, and the built-in fallback always supplies the
   Sun and Moon, so the "defaults to New Moon / Aries" branches in
   `TransitService` cannot be reached in practice.
 - **Every view is calculated on every selection**, not only the one on screen.
+  (Changed on 12 October 2026 for the Forecast and the match search only: see 3h,
+  finding 10. The rest of this entry still holds for Daily and Timing.)
   Measured: daily scan 17 ms, 91-day forecast 117 ms, year forecast 489 ms, match
   search against 212 charts 82 ms, all off the UI thread, and now cancelled when
   overtaken. (With 1,314 figures the match search has not been timed again; by

@@ -143,10 +143,11 @@ public sealed class InventoryProfile
         return 100 * (z >= 0 ? 1 - tail : tail);
     }
 
-    // "higher than about 85 in 100", kept away from the two ends, which no short
-    // questionnaire can tell apart.
+    // "higher than an estimated 85 in 100 of the reference group", kept away from the
+    // two ends, which no short questionnaire can tell apart. Said as an estimate because
+    // it is one: read off the bell curve above, not counted in the reference data.
     public static string PercentileText(double percentile) =>
-        $"higher than about {Math.Clamp((int)Math.Round(percentile / 5) * 5, 5, 95)} in 100";
+        $"higher than an estimated {Math.Clamp((int)Math.Round(percentile / 5) * 5, 5, 95)} in 100 of the reference group";
 }
 
 // One sitting of the questionnaire as it is saved: the answers, 1 to 5 in the order of
@@ -203,6 +204,10 @@ public sealed record MirrorPlanet(
     // sign belongs to a generation and not to a person.
     public IReadOnlyList<MirrorComparison> Comparisons { get; init; } = [];
     public string AgainstSign { get; init; } = "";
+
+    // For a chart with no birth time, when the planet's sign is not known: the signs it
+    // may have been in (none named when the day was not scanned). Null when it is known.
+    public IReadOnlyList<ZodiacSign>? SignsInDoubt { get; init; }
 
     // What this adds to the planet's paragraph in the Report; empty for none.
     public string ReportLine { get; init; } = "";

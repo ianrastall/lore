@@ -126,6 +126,71 @@ public class BirthTimeResolverTests
     }
 
     [Theory]
+    [InlineData("1700-02-29", 1700, 3, 11)]   // eleven days apart from 1 March 1700 Old Style
+    [InlineData("1800-02-29", 1800, 3, 12)]   // twelve
+    [InlineData("1900-02-29", 1900, 3, 13)]   // thirteen
+    [InlineData("1700-02-28", 1700, 3, 10)]
+    [InlineData("1700-03-01", 1700, 3, 12)]
+    [InlineData("1600-02-29", 1600, 3, 10)]   // a leap day in both calendars
+    public void An_Old_Style_leap_day_the_Gregorian_calendar_never_had_is_a_date_like_any_other(
+        string recorded, int year, int month, int day)
+    {
+        Celebrity Born(bool julian) => new()
+        {
+            Id = "t", Name = "T", BirthDate = recorded, JulianCalendar = julian, BirthTime = "09:00", BirthTimeKnown = true,
+            Latitude = 59.94, Longitude = 30.31, TimeZoneId = "Europe/Moscow",
+        };
+        var person = Born(julian: true);
+
+        Assert.Equal(new DateOnly(year, month, day), BirthTimeResolver.GregorianDate(person));
+        Assert.True(UserChartService.IsUsable(person));
+        Assert.Equal($"{recorded} O.S.", person.BirthDateLabel);
+
+        // It calculates, and for the same instant as the Gregorian date written out.
+        var gregorian = new Celebrity
+        {
+            Id = "t", Name = "T", BirthDate = $"{year:D4}-{month:D2}-{day:D2}", BirthTime = "09:00", BirthTimeKnown = true,
+            Latitude = 59.94, Longitude = 30.31, TimeZoneId = "Europe/Moscow",
+        };
+        Assert.Equal(BirthTimeResolver.ToUtc(gregorian), BirthTimeResolver.ToUtc(person));
+        Assert.Equal(Repo.Charts.Calculate(gregorian).GetPlanet(Planet.Sun)!.Longitude,
+            Repo.Charts.Calculate(person).GetPlanet(Planet.Sun)!.Longitude, 9);
+        Assert.Contains($"in the Gregorian calendar it is {year:D4}-{month:D2}-{day:D2}",
+            System.Text.Encoding.UTF8.GetString(WorksheetService.ToText(WorksheetService.Build(Repo.Charts.Calculate(person)))));
+
+        // The same text as a Gregorian date is only a date if that calendar had the day.
+        bool gregorianToo = DateOnly.TryParseExact(recorded, "yyyy-MM-dd", out _);
+        Assert.Equal(gregorianToo, UserChartService.IsUsable(Born(julian: false)));
+        if (!gregorianToo)
+        {
+            Assert.Throws<FormatException>(() => Born(julian: false).GetRecordedDate());
+            Assert.True(Celebrity.IsJulianOnly(person.GetRecordedDate().Year, 2, 29));
+        }
+    }
+
+    [Theory]
+    [InlineData("1701-02-29", true)]    // not a leap year in either calendar
+    [InlineData("1700-02-30", true)]
+    [InlineData("1700-13-01", true)]
+    [InlineData("1700-00-10", true)]
+    [InlineData("1700-2-29", true)]     // not in the stored form
+    [InlineData("0000-01-01", false)]
+    [InlineData("1990-02-29", false)]
+    [InlineData("not a date", false)]
+    [InlineData("", false)]
+    public void What_is_not_a_date_of_its_calendar_is_refused(string recorded, bool julian)
+    {
+        var person = new Celebrity
+        {
+            Id = "t", Name = "T", BirthDate = recorded, JulianCalendar = julian, BirthTimeKnown = false,
+            Latitude = 51.5, Longitude = -0.13, TimeZoneId = "Europe/London",
+        };
+        Assert.False(Celebrity.TryParseDate(recorded, julian, out _, out _, out _));
+        Assert.Throws<FormatException>(() => person.GetRecordedDate());
+        Assert.False(UserChartService.IsUsable(person));
+    }
+
+    [Theory]
     [InlineData("th-TH")] // Thai Buddhist calendar: year 2533 for 1990
     [InlineData("fa-IR")] // Persian calendar
     [InlineData("ar-SA")] // Umm al-Qura calendar

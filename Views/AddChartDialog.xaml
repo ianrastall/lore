@@ -33,6 +33,11 @@
                 <CheckBox x:Name="JulianCheck" Visibility="Collapsed"
                           Content="This is an Old Style (Julian calendar) date"
                           Checked="Julian_Changed" Unchecked="Julian_Changed"/>
+                <!-- The date picker has no 29 February in 1700, 1800 or 1900, which the Old Style
+                     calendar did: offered when 28 February of such a year is picked -->
+                <CheckBox x:Name="JulianLeapCheck" Visibility="Collapsed"
+                          Content="It was 29 February (the Old Style calendar had one that year)"
+                          Checked="Julian_Changed" Unchecked="Julian_Changed"/>
                 <TextBlock x:Name="JulianText" Visibility="Collapsed" TextWrapping="Wrap" FontSize="12"
                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
             </StackPanel>

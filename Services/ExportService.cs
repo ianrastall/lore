@@ -116,8 +116,10 @@ public static class ExportService
         // be mistaken for someone's sign.
         string rising = ZodiacSignExtensions.FromLongitude(chart.Ascendant).Name();
         var bigParts = new List<string>();
-        if (chart.GetPlanet(Planet.Sun) is { } sunP)  bigParts.Add($"☉ Sun {sunP.Sign.Name()}");
-        // With no birth time the Moon may have changed sign during the day: name both.
+        // With no birth time the Sun or the Moon may have changed sign during the day: name both.
+        if (!chart.Timed && sensitivity?.SignChanges.GetValueOrDefault(Planet.Sun) is { Count: > 1 } suns)
+            bigParts.Add($"☉ Sun {string.Join(" or ", suns.Select(s => s.Name()))}");
+        else if (chart.GetPlanet(Planet.Sun) is { } sunP)  bigParts.Add($"☉ Sun {sunP.Sign.Name()}");
         if (!chart.Timed && sensitivity is { MoonSigns.Count: > 1 })
             bigParts.Add($"☽ Moon {string.Join(" or ", sensitivity.MoonSigns.Select(s => s.Name()))}");
         else if (chart.GetPlanet(Planet.Moon) is { } moonP) bigParts.Add($"☽ Moon {moonP.Sign.Name()}");

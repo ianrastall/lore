@@ -57,6 +57,13 @@ public sealed partial class MainViewModel : ObservableObject
     private int _poolGeneration;
     private int _settingsGeneration;
 
+    // Stops the scoring of the library that a newer rebuild of the list has overtaken.
+    private CancellationTokenSource? _poolCancel;
+
+    // Files Lore is installed with that are not there (see InstalledFiles), in words
+    // for the status bar; null when all are. Set by the app when it starts.
+    public string? InstallProblem { get; init; }
+
     // The two things the progress ring stands for. They are kept apart because they
     // overlap: the first chart starts calculating before the data load has returned,
     // and either may finish first.
@@ -174,9 +181,12 @@ public sealed partial class MainViewModel : ObservableObject
         Hospitals = hospitals;
         ChartVM = new ChartViewModel(interpreter, charts);
         DailyVM = new DailyViewModel(transits, dailyInterpreter) { Home = settings?.LoadHome() };
-        ForecastVM = new ForecastViewModel(transits, dailyInterpreter);
+        // The forecast and the search for matches are the two costly readings, so each
+        // is worked out when its view is first opened for a chart, not for every chart
+        // passed in the list (see OnShowForecastChanged, OnShowSynastryChanged).
+        ForecastVM = new ForecastViewModel(transits, dailyInterpreter) { IsActive = false };
         TimingVM = new TimingViewModel(new TimingService(charts, dailyInterpreter.HouseTopic), cities);
-        SynastryVM = new SynastryViewModel(charts, synastryInterpreter, davisonInterpreter);
+        SynastryVM = new SynastryViewModel(charts, synastryInterpreter, davisonInterpreter) { IsActive = false };
         _inventoryStore = inventoryStore;
         InventoryVM = new InventoryViewModel(inventory, inventoryStore, mirror);
         InventoryVM.PropertyChanged += (_, e) =>
@@ -206,7 +216,8 @@ public sealed partial class MainViewModel : ObservableObject
             await Cities.LoadAsync(citiesPath);
             _hospitalsPath = hospitalsPath; // read later: see EnsureHospitalsLoadedAsync
             await RebuildPoolAsync();
-            StatusMessage = _userCharts.LoadProblem ?? $"{_all.Count} people loaded.";
+            StatusMessage = _userCharts.LoadProblem ?? _inventoryStore?.RecoveryNote ?? _inventoryStore?.Problem ??
+                            InstallProblem ?? $"{_all.Count} people loaded.";
 
             // Pick up where the last session left off.
             if (_settings is not null)
@@ -253,13 +264,23 @@ public sealed partial class MainViewModel : ObservableObject
     private async Task RebuildCoreAsync()
     {
         int generation = ++_poolGeneration;
+        _poolCancel?.Cancel();
+        var cancel = _poolCancel = new CancellationTokenSource();
         var all = _all = [.. _celebrities.All, .. _userCharts.Charts];
         SynastryVM.SetPeople(all);
         // Scoring runs the native Swiss Ephemeris calculation for every chart in the
         // library (over 1,300), so it is kept off the UI thread, and it is done with
         // the settings in force now even if they are changed before it finishes.
         var charts = _charts.With(_charts.Settings);
-        var verdicts = await Task.Run(() => ComputeVerdicts(charts, all));
+        List<(Celebrity Person, string ColorHex, string Label)> verdicts;
+        try
+        {
+            verdicts = await Task.Run(() => ComputeVerdicts(charts, all, cancel.Token));
+        }
+        catch (OperationCanceledException)
+        {
+            return; // overtaken: the newer pass scores the list
+        }
         // A newer pass has started, with the newer list and settings, and it will fill
         // the list in. Replacing the list here as well would only clear the selection
         // from under it, leaving the chart on screen as it was before the change.
@@ -295,11 +316,12 @@ public sealed partial class MainViewModel : ObservableObject
     // Extraordinary/Alarming get a coloured bar; Ordinary stays clear so the outliers
     // stand out. Runs on a background thread (see RebuildPoolAsync).
     private static List<(Celebrity Person, string ColorHex, string Label)> ComputeVerdicts(
-        ChartService charts, List<Celebrity> all)
+        ChartService charts, List<Celebrity> all, CancellationToken cancel = default)
     {
         var verdicts = new List<(Celebrity, string, string)>(all.Count);
         foreach (var c in all)
         {
+            cancel.ThrowIfCancellationRequested();
             try
             {
                 // No birth time, no score (see DignityService.ComputeIfTimed).
@@ -365,6 +387,10 @@ public sealed partial class MainViewModel : ObservableObject
             SetBusy(calculating: false);
         }
     }
+
+    // The Forecast and the Synastry view's search work only while their view is open.
+    partial void OnShowForecastChanged(bool value) => ForecastVM.IsActive = value;
+    partial void OnShowSynastryChanged(bool value) => SynastryVM.IsActive = value;
 
     partial void OnSearchTextChanged(string value) => ApplyFilter();
     partial void OnSelectedCategoryChanged(string? value) => ApplyFilter();
@@ -493,11 +519,37 @@ public sealed partial class MainViewModel : ObservableObject
         if (!await TrySaveAsync(() => _userCharts.RemoveAsync(c), $"delete {c.Name}")) return;
         SelectedCelebrity = null;
         ShowNoChart();
-        // The answers given for this person go with their chart.
-        _inventoryStore?.Remove(c.Id);
+        // The answers given for this person go with their chart. If the answers file
+        // cannot be changed just now they are still in it, and that is said: the store
+        // keeps the deletion and tries it again with its next save.
+        bool answersGone = _inventoryStore is null || await _inventoryStore.RemoveAsync(c.Id);
         await RebuildPoolAsync();
-        StatusMessage = $"Deleted {c.Name}.";
+        StatusMessage = answersGone
+            ? $"Deleted {c.Name}."
+            : $"Deleted {c.Name}, but their inventory answers could not be removed from the answers file yet: " +
+              $"{_inventoryStore?.Problem ?? "the file could not be changed."}";
     }
+
+    // ── Inventory answers not yet in the file ─────────────────────────────────
+
+    // True while something answered (or deleted) in this window has not reached the file.
+    public bool HasUnsavedAnswers => _inventoryStore is { State: not InventorySaveState.Saved };
+
+    // Why the last save of them failed, for the window to say before it closes.
+    public string? UnsavedAnswersProblem => _inventoryStore?.Problem;
+
+    // Waits for the answers on their way to the file and, if that save failed, tries it
+    // once more. True when everything is in the file.
+    public async Task<bool> SaveOutstandingAnswersAsync()
+    {
+        if (_inventoryStore is not { } store) return true;
+        if (await Task.Run(() => store.Flush())) return true;
+        return await store.RetryAsync();
+    }
+
+    // What an export of `kind` would write, taken now (see ExportRequest), or null and
+    // why not.
+    public ExportRequest? PrepareExport(string kind, out string refusal) => ExportRequest.Prepare(this, kind, out refusal);
 
     // ── My Charts as a file, for moving to another PC ─────────────────────────
 
@@ -572,6 +624,7 @@ public sealed partial class MainViewModel : ObservableObject
             var (chart, sensitivity) = await Task.Run(() =>
             {
                 var calculated = charts.Calculate(celebrity);
+                cancel.Token.ThrowIfCancellationRequested();
                 try
                 {
                     // The lunations and stations around the birth, for the Worksheet.
@@ -593,13 +646,14 @@ public sealed partial class MainViewModel : ObservableObject
             });
             if (generation != _loadGeneration) return; // superseded by a newer selection
             // The inventory first: its reading is then in hand when the Report is written.
-            InventoryVM.Chart = chart;
+            // It takes the scan of the birth day too, which says (for a chart with no
+            // birth time) which signs are in doubt, as the Report is told below.
+            InventoryVM.ShowChart(chart, sensitivity);
             ChartVM.Show(chart, sensitivity);
             DailyVM.Chart = chart;
             ForecastVM.Chart = chart;
             TimingVM.Chart = chart;
             SynastryVM.Chart = chart;
-            InventoryVM.Chart = chart;
             StatusMessage = chart.EphemerisNote; // empty unless the ephemeris data is missing
         }
         catch (OperationCanceledException)

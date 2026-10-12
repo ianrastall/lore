@@ -213,6 +213,185 @@ public sealed class ViewModelTests : IDisposable
         Assert.DoesNotContain(vm.ChartVM.ReportSections, s => s.Heading == "In the Light of the Answers");
     });
 
+    // The main view model with the inventory in it, and two people who have answered.
+    private async Task<(MainViewModel Vm, InventoryStore Store)> StartWithAnswers()
+    {
+        Directory.CreateDirectory(_dir);
+        string library = Path.Combine(_dir, "celebrities.json");
+        File.WriteAllText(library, JsonSerializer.Serialize(new[] { "elvis-presley", "marilyn-monroe" }.Select(Repo.Figure)));
+
+        var charts = new ChartService(Repo.Ephemeris);
+        var report = new ChartInterpreter(Repo.Data("interpretations.json"));
+        var store = new InventoryStore(Path.Combine(_dir, "store"));
+        var vm = new MainViewModel(
+            new CelebrityService(), charts, report, new UserChartService(Path.Combine(_dir, "store")), new CityService(),
+            new HospitalService(), new TransitService(charts), new DailyInterpreter(Repo.Data("daily.json")),
+            new SynastryInterpreter(Repo.Data("synastry.json")), null, new DavisonInterpreter(Repo.Data("davison.json")),
+            new InventoryService(Repo.Data("inventory.json")), store, new MirrorInterpreter(Repo.Data("mirror.json"), report));
+        vm.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(MainViewModel.DisplayedCelebrities)) vm.SelectedCelebrity = null;
+        };
+        await vm.InitializeAsync(library, Repo.Data("cities.json"), Repo.Data("hospitals.json"));
+
+        store.Save("user-1", [new InventorySitting { Started = "2026-10-10", Completed = "2026-10-10", Answers = Enumerable.Repeat(4, 120).ToArray() }]);
+        store.Save("user-2", [new InventorySitting { Started = "2026-10-10", Completed = "2026-10-10", Answers = Enumerable.Repeat(2, 120).ToArray() }]);
+        await vm.AddCustomChartAsync(Own("user-2", "Ben Other", "09:00"));
+        await Settled(vm);
+        await vm.AddCustomChartAsync(Own("user-1", "Ann Example", "14:20"));
+        await Settled(vm);
+        return (vm, store);
+    }
+
+    private static string Text(byte[] bytes) => System.Text.Encoding.UTF8.GetString(bytes).TrimStart('\uFEFF');
+
+    [Fact]
+    public void A_personality_export_asked_for_one_person_is_theirs_whoever_is_selected_while_the_save_dialog_is_open() => UiThread.Run(async () =>
+    {
+        var (vm, _) = await StartWithAnswers();
+        Assert.Equal("Ann Example", vm.ChartVM.Chart!.Celebrity.Name);
+
+        // The export is asked for: everything it will write is taken here, before the dialog.
+        var profile = vm.PrepareExport("inventorytxt", out string refused)!;
+        var reading = vm.PrepareExport("mirrortxt", out _)!;
+        Assert.Equal("", refused);
+        Assert.Equal("Ann Example - personality profile", profile.SuggestedName);
+        Assert.Equal(("Text file", ".txt"), (profile.Label, profile.Extension));
+        Assert.Equal("Ann Example - chart and answers", reading.SuggestedName);
+
+        // The dialog is open. Someone else is picked, and their chart arrives.
+        vm.SelectedCelebrity = Row(vm, "user-2");
+        await Settled(vm);
+        Assert.Equal("Ben Other", vm.InventoryVM.Profile!.Name);
+
+        // What is written is still Ann's, name and contents both.
+        Assert.StartsWith("Ann Example — Personality profile", Text(profile.Text!));
+        Assert.StartsWith("Ann Example — The chart and the answers", Text(reading.Text!));
+        Assert.Equal("Ann Example", profile.Chart.Celebrity.Name);
+
+        // Asked for now, it is Ben's, under Ben's name.
+        var bens = vm.PrepareExport("inventorytxt", out _)!;
+        Assert.Equal("Ben Other - personality profile", bens.SuggestedName);
+        Assert.StartsWith("Ben Other — Personality profile", Text(bens.Text!));
+
+        // His answers are deleted while a dialog for them is open: the file asked for
+        // is still written whole, and a new export is refused, never written empty.
+        Assert.True(await vm.InventoryVM.DeleteAnswersAsync());
+        Assert.StartsWith("Ben Other — Personality profile", Text(bens.Text!));
+        Assert.Null(vm.PrepareExport("inventorytxt", out refused));
+        Assert.StartsWith("There is no personality profile for this chart yet", refused);
+        Assert.Null(vm.PrepareExport("mirrortxt", out _));
+    });
+
+    [Fact]
+    public void An_export_is_refused_with_a_reason_until_what_it_would_write_is_this_persons() => UiThread.Run(async () =>
+    {
+        var (vm, _) = await StartWithAnswers();
+
+        // Nothing of another kind is carried in a request that does not use it.
+        var pdf = vm.PrepareExport("pdf", out _)!;
+        Assert.Same(vm.ChartVM.Chart, pdf.Chart);
+        Assert.Same(vm.ChartVM.ReportSections, pdf.Report);
+        Assert.Same(vm.ChartVM.Worksheet, pdf.Worksheet);
+        Assert.Null(pdf.Text);
+        Assert.Null(pdf.Daily);
+        Assert.Equal("Ann Example", pdf.SuggestedName);
+        Assert.Equal("Ann Example - worksheet", vm.PrepareExport("worksheettxt", out _)!.SuggestedName);
+        Assert.Equal("Ann Example - chart with tables", vm.PrepareExport("sheetpng", out _)!.SuggestedName);
+
+        // The daily reading, once it is there, is carried with its own date.
+        for (int i = 0; vm.DailyVM.IsBusy || vm.DailyVM.Reading is null; i++)
+        {
+            Assert.True(i < 3000, "The daily reading did not arrive.");
+            await Task.Delay(10);
+        }
+        var daily = vm.PrepareExport("dailytxt", out _)!;
+        Assert.Same(vm.DailyVM.Reading, daily.Daily);
+        Assert.Equal($"Ann Example - daily {vm.DailyVM.Date:yyyy-MM-dd}", daily.SuggestedName);
+
+        // Synastry with nobody chosen, and the forecast with its view never opened.
+        Assert.Null(vm.PrepareExport("synastrypdf", out string refused));
+        Assert.StartsWith("Open the Synastry view", refused);
+        Assert.Null(vm.PrepareExport("davisontxt", out refused));
+        Assert.StartsWith("Open the Synastry view", refused);
+        Assert.Null(vm.PrepareExport("forecasttxt", out refused));
+        Assert.Contains("open the Forecast view", refused);
+
+        // While the next person's chart is still being calculated, nothing at all.
+        vm.SelectedCelebrity = Row(vm, "user-2");
+        Assert.Null(vm.PrepareExport("pdf", out refused));
+        Assert.StartsWith("The chart is still being calculated", refused);
+        Assert.Null(vm.PrepareExport("inventorytxt", out _));
+        await Settled(vm);
+        Assert.Equal("Ben Other", vm.PrepareExport("pdf", out _)!.SuggestedName);
+
+        Assert.Throws<ArgumentOutOfRangeException>(() => vm.PrepareExport("nonsense", out _));
+        Assert.Equal("a_b", ExportRequest.SafeFileName("a/b"));
+        Assert.Equal("chart", ExportRequest.SafeFileName("  "));
+    });
+
+    [Fact]
+    public void The_forecast_and_the_search_for_matches_wait_until_their_view_is_opened() => UiThread.Run(async () =>
+    {
+        var (vm, _) = await StartWithAnswers();
+        async Task Idle(Func<bool> busy, string what)
+        {
+            for (int i = 0; busy(); i++)
+            {
+                Assert.True(i < 3000, $"{what} did not settle.");
+                await Task.Delay(10);
+            }
+        }
+
+        // Charts have been selected and neither view opened: nothing was worked out.
+        Assert.False(vm.ForecastVM.IsActive);
+        Assert.False(vm.ForecastVM.IsBusy);
+        Assert.Null(vm.ForecastVM.Reading);
+        Assert.False(vm.SynastryVM.IsSearching);
+        Assert.Empty(vm.SynastryVM.Matches);
+
+        // Opened: each is worked out for the chart on screen.
+        vm.ShowForecast = true;
+        Assert.True(vm.ForecastVM.IsBusy);
+        await Idle(() => vm.ForecastVM.IsBusy, "The forecast");
+        Assert.Equal("Ann Example", vm.ForecastVM.Reading!.Name);
+        Assert.NotNull(vm.PrepareExport("forecasttxt", out _));
+
+        vm.ShowForecast = false;
+        vm.ShowSynastry = true;
+        Assert.True(vm.SynastryVM.IsSearching);
+        await Idle(() => vm.SynastryVM.IsSearching, "The search");
+        Assert.Equal(3, vm.SynastryVM.Matches.Count);   // the two figures and Ben
+
+        // Closed again, and someone else picked: the forecast on hand is not kept as
+        // theirs, and is made when the view is next opened.
+        vm.ShowSynastry = false;
+        Assert.NotNull(vm.ForecastVM.Reading);          // closing a view throws nothing away
+        vm.SelectedCelebrity = Row(vm, "user-2");
+        await Settled(vm);
+        Assert.Null(vm.ForecastVM.Reading);
+        Assert.False(vm.ForecastVM.IsBusy);
+        Assert.Empty(vm.SynastryVM.Matches);
+        vm.ShowForecast = true;
+        await Idle(() => vm.ForecastVM.IsBusy, "The forecast");
+        Assert.Equal("Ben Other", vm.ForecastVM.Reading!.Name);
+    });
+
+    [Fact]
+    public void Work_nobody_is_waiting_for_is_given_up()
+    {
+        var chart = Repo.Charts.Calculate(Repo.Figure("elvis-presley"));
+        using var cancelled = new CancellationTokenSource();
+        cancelled.Cancel();
+        var utc = NodaTime.DateTimeZone.Utc;
+        var date = new DateOnly(2026, 10, 12);
+
+        Assert.Throws<OperationCanceledException>(() => new TransitService(Repo.Charts).Scan(chart, date, utc, null, cancelled.Token));
+        Assert.Throws<OperationCanceledException>(() => new TimingService(Repo.Charts).Compose(chart, date, utc, null, cancelled.Token));
+        // And not given up when somebody is.
+        Assert.NotEmpty(new TransitService(Repo.Charts).Scan(chart, date, utc, null, CancellationToken.None).Events);
+    }
+
     [Fact]
     public void The_Synastry_view_switches_between_the_comparison_and_the_Davison_chart() => UiThread.Run(async () =>
     {

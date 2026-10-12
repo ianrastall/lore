@@ -75,11 +75,47 @@ public sealed class Celebrity
     [JsonIgnore] public string VerdictColorHex { get; set; } = "#00000000";
     [JsonIgnore] public string VerdictLabel { get; set; } = "";
 
-    // The date as recorded: Old Style if JulianCalendar is set. BirthTimeResolver
-    // turns it into the Gregorian date the calculation uses.
-    // (Invariant culture: the stored text is always a Gregorian-style yyyy-MM-dd,
-    // whatever calendar Windows is set to.)
-    public DateOnly GetBirthDate() => DateOnly.ParseExact(BirthDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+    // The date as recorded, as its year, month and day: Old Style if JulianCalendar is
+    // set. It is read by the rules of the calendar it is in, so an Old Style 29 February
+    // in 1700, 1800 or 1900, which the Julian calendar had and the Gregorian did not, is
+    // a date like any other. BirthTimeResolver turns it into the Gregorian date the
+    // calculation uses. Throws FormatException for text that is not a date.
+    public (int Year, int Month, int Day) GetRecordedDate() =>
+        TryParseDate(BirthDate, JulianCalendar, out int year, out int month, out int day)
+            ? (year, month, day)
+            : throw new FormatException(
+                $"'{BirthDate}' is not a date in the {(JulianCalendar ? "Julian" : "Gregorian")} calendar (yyyy-MM-dd).");
+
+    // The recorded date as a DateOnly, for anything that shows it in a date picker.
+    // DateOnly is Gregorian, so this cannot give an Old Style 29 February of a year the
+    // Gregorian calendar gave none: ask GetRecordedDate for that.
+    public DateOnly GetBirthDate()
+    {
+        var (year, month, day) = GetRecordedDate();
+        return new DateOnly(year, month, day);
+    }
+
+    // Reads "yyyy-MM-dd" as a date of the Julian or the Gregorian calendar. (Digits only:
+    // the stored text is always in this form, whatever calendar Windows is set to.)
+    public static bool TryParseDate(string? text, bool julian, out int year, out int month, out int day)
+    {
+        year = month = day = 0;
+        if (text is not { Length: 10 } || text[4] != '-' || text[7] != '-') return false;
+        if (!int.TryParse(text.AsSpan(0, 4), NumberStyles.None, CultureInfo.InvariantCulture, out year) ||
+            !int.TryParse(text.AsSpan(5, 2), NumberStyles.None, CultureInfo.InvariantCulture, out month) ||
+            !int.TryParse(text.AsSpan(8, 2), NumberStyles.None, CultureInfo.InvariantCulture, out day))
+            return false;
+        return year >= 1 && month is >= 1 and <= 12 && day >= 1 && day <= DaysInMonth(year, month, julian);
+    }
+
+    // The Julian calendar has a leap day every fourth year without exception; the
+    // Gregorian drops it in century years not divisible by 400.
+    public static int DaysInMonth(int year, int month, bool julian) =>
+        month == 2 && julian ? (year % 4 == 0 ? 29 : 28) : DateTime.DaysInMonth(year, month);
+
+    // True for a day the Julian calendar had and the Gregorian did not.
+    public static bool IsJulianOnly(int year, int month, int day) =>
+        month == 2 && day == 29 && !DateTime.IsLeapYear(year);
 
     // The recorded date for display, marked when it is Old Style: "1642-12-25 O.S."
     [JsonIgnore]

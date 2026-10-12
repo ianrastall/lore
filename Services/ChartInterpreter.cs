@@ -55,6 +55,26 @@ public sealed class ChartInterpreter
 
     private readonly Corpus _c;
 
+    // False when the corpus is missing or has nothing in it. No Report is written then:
+    // the sentences that would be left are the bare fallbacks, which read as a Report
+    // and are not one.
+    public bool IsAvailable => _c.PlanetInSign.Count > 0 && _c.SunSigns.Count > 0;
+
+    // What is shown in place of the Report when the corpus cannot be used.
+    public static readonly IReadOnlyList<ReportSection> Unavailable =
+    [
+        new ReportSection
+        {
+            Heading = "The Report is not available",
+            Paragraphs =
+            [
+                @"The text the Report is written from (Data\interpretations.json) is missing or empty, so no Report can be " +
+                "given for this chart. The chart itself, the Worksheet and the other views are not affected. Installing Lore " +
+                "again, or unzipping the portable copy afresh, puts the file back.",
+            ],
+        },
+    ];
+
     public ChartInterpreter(string interpretationsJsonPath)
     {
         if (File.Exists(interpretationsJsonPath))
@@ -82,14 +102,18 @@ public sealed class ChartInterpreter
     // if they have answered the questionnaire. Each planet it reads then gains a sentence
     // saying how the answers describe it lived, and the Report gains a closing section
     // saying so. Ignored unless it was made for this chart.
+    // `signChanges`: for a chart with no birth time, every body that changed sign that
+    // day (TimeSensitivity.SignChanges). Each is said to be in doubt where it is read.
     public IReadOnlyList<ReportSection> Interpret(NatalChart chart, IReadOnlyList<ZodiacSign>? moonSigns = null,
-        MirrorReading? answers = null)
+        MirrorReading? answers = null, IReadOnlyDictionary<Planet, IReadOnlyList<ZodiacSign>>? signChanges = null)
     {
+        if (!IsAvailable) return Unavailable;
         if (answers is not null && !answers.IsFor(chart)) answers = null;
+        if (chart.Timed) signChanges = null;
         var sections = new List<ReportSection>
         {
-            Overview(chart, moonSigns, answers),
-            Planets(chart, answers),
+            Overview(chart, moonSigns, answers, signChanges),
+            Planets(chart, answers, signChanges),
             Aspects(chart, answers),
             Patterns(chart),
             Balance(chart, answers),
@@ -100,7 +124,8 @@ public sealed class ChartInterpreter
         return sections;
     }
 
-    private ReportSection Overview(NatalChart chart, IReadOnlyList<ZodiacSign>? moonSigns, MirrorReading? answers)
+    private ReportSection Overview(NatalChart chart, IReadOnlyList<ZodiacSign>? moonSigns, MirrorReading? answers,
+        IReadOnlyDictionary<Planet, IReadOnlyList<ZodiacSign>>? signChanges)
     {
         // " By Ann's answers …" for the Sun, the Moon or the rising sign, or nothing.
         string Lived(string role) => answers?.OverviewLines.GetValueOrDefault(role) is { Length: > 0 } line ? " " + line : "";
@@ -112,7 +137,14 @@ public sealed class ChartInterpreter
         var moon = chart.GetPlanet(Planet.Moon);
         var risingSign = ZodiacSignExtensions.FromLongitude(chart.Ascendant);
 
-        if (sun is not null)
+        // Once a month the Sun changes sign during a day, and then without a birth time
+        // the Sun sign is no more known than the Moon's.
+        bool sunUnsure = signChanges?.GetValueOrDefault(Planet.Sun) is { Count: > 1 };
+        if (sunUnsure)
+            paras.Add($"The Sun changed sign on the day {name} was born — it was in " +
+                      $"{string.Join(" or ", signChanges![Planet.Sun].Select(s => s.Name()))} depending on the hour — so without a " +
+                      "birth time the Sun sign can't be given. The Sun line under The Planets below is for noon.");
+        else if (sun is not null)
             paras.Add(Frame("Sun", _c.SunSigns, name, sun.Sign) + Lived("Sun"));
         bool moonUnsure = !chart.Timed && moonSigns is { Count: > 1 };
         if (moonUnsure)
@@ -123,7 +155,7 @@ public sealed class ChartInterpreter
         {
             paras.Add(Frame("Moon", _c.MoonSigns, name, moon.Sign) + Lived("Moon"));
             // How the two fit together, by element.
-            if (sun is not null)
+            if (sun is not null && !sunUnsure)
             {
                 string blend = Lookup(_c.SunMoonBlend, $"{sun.Sign.GetElement()}|{moon.Sign.GetElement()}", "");
                 if (blend.Length > 0) paras.Add(blend);
@@ -142,7 +174,8 @@ public sealed class ChartInterpreter
         return new ReportSection { Heading = "Overview", Paragraphs = paras };
     }
 
-    private ReportSection Planets(NatalChart chart, MirrorReading? answers)
+    private ReportSection Planets(NatalChart chart, MirrorReading? answers,
+        IReadOnlyDictionary<Planet, IReadOnlyList<ZodiacSign>>? signChanges)
     {
         var paras = new List<string>();
         foreach (var p in chart.Planets)
@@ -175,7 +208,12 @@ public sealed class ChartInterpreter
             string where = chart.Timed ? $" ({Ordinal(house)} house)" : "";
             // How the answers describe this planet lived, where they have something to say.
             string lived = answers?.For(chart, p.Planet)?.ReportLine is { Length: > 0 } line ? " " + line : "";
-            paras.Add($"{p.PlanetSymbol} {p.PlanetName} in {p.Sign.Name()} {pos}{where}: {core}{retro}{lived}");
+            // With no birth time, a body that changed sign that day is read for noon and said to be.
+            string doubt = signChanges?.GetValueOrDefault(p.Planet) is { Count: > 1 } signs
+                ? $" This is its place at noon: on the day it was in {string.Join(" or ", signs.Select(s => s.Name()))}, depending on the hour, " +
+                  "so without a birth time the sign is not certain."
+                : "";
+            paras.Add($"{p.PlanetSymbol} {p.PlanetName} in {p.Sign.Name()} {pos}{where}: {core}{retro}{doubt}{lived}");
         }
         return new ReportSection { Heading = "The Planets", Paragraphs = paras };
     }

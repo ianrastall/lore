@@ -90,13 +90,38 @@ public sealed partial class InventoryViewModel : ObservableObject
     private List<InventorySitting> _sittings = [];
     private InventorySitting? _current;
 
+    // The finished sitting the profile on screen was scored from.
+    private InventorySitting? _shown;
+
+    // The scan of the birth day that came with the chart on screen, if it has no birth
+    // time (see ShowChart), and the chart it came with.
+    private TimeSensitivity? _day;
+    private NatalChart? _dayFor;
+
+    // The window's thread, to come back to when the store reports from a background one.
+    private readonly SynchronizationContext? _ui = SynchronizationContext.Current;
+
     public InventoryViewModel(InventoryService? inventory = null, InventoryStore? store = null,
         MirrorInterpreter? mirror = null)
     {
         _inventory = inventory;
         _store = store;
         _mirror = mirror;
+        if (store is not null) store.StatusChanged += OnStoreChanged;
     }
+
+    // Takes a chart with the scan of its birth day, which says which signs are in doubt
+    // when there is no birth time; the chart-and-answers reading does not read those.
+    public void ShowChart(NatalChart? chart, TimeSensitivity? day)
+    {
+        bool same = ReferenceEquals(Chart, chart) && !ReferenceEquals(_day, day);
+        _day = day;
+        _dayFor = chart;
+        Chart = chart;
+        if (same) Compose(); // the same chart, now with its scan
+    }
+
+    private TimeSensitivity? Day => ReferenceEquals(_dayFor, Chart) ? _day : null;
 
     [ObservableProperty]
     public partial NatalChart? Chart { get; set; }
@@ -136,6 +161,13 @@ public sealed partial class InventoryViewModel : ObservableObject
     public bool ProfileShown => IsProfile && !ReadingShown;
     public IReadOnlyList<DailySection> ReadingSections => Reading?.Sections ?? [];
 
+    // Under the title: what is on screen. The profile takes nothing from the chart; the
+    // chart-and-answers reading is made of both, and says so.
+    public string HeaderText => ReadingShown
+        ? "The personality profile set beside the birth chart: what the chart says of each planet, and what the answers say " +
+          "of the part of life it stands for. The pairing of the two is Lore's own, and the chart is not changed by it."
+        : "A standard personality questionnaire and the profile it gives. It is not astrology: nothing here is taken from the chart.";
+
     partial void OnReadingChanged(MirrorReading? value) => ReadingModeChanged();
     partial void OnShowReadingChanged(bool value) => ReadingModeChanged();
     partial void OnStageChanged(InventoryStage value) => ReadingModeChanged();
@@ -146,6 +178,7 @@ public sealed partial class InventoryViewModel : ObservableObject
         OnPropertyChanged(nameof(ReadingShown));
         OnPropertyChanged(nameof(ProfileShown));
         OnPropertyChanged(nameof(ReadingSections));
+        OnPropertyChanged(nameof(HeaderText));
     }
 
     // Sets the profile on screen beside the chart on screen; nothing if either is missing.
@@ -154,7 +187,7 @@ public sealed partial class InventoryViewModel : ObservableObject
         try
         {
             Reading = _mirror is { IsAvailable: true } && Chart is { } chart && Profile is { } profile
-                ? _mirror.Compose(chart, profile) : null;
+                ? _mirror.Compose(chart, profile, Day) : null;
         }
         catch (Exception ex)
         {
@@ -165,6 +198,18 @@ public sealed partial class InventoryViewModel : ObservableObject
 
     // The reading on screen as plain text, for the export.
     public byte[] ReadingText() => Reading is { } reading ? MirrorInterpreter.ToText(reading) : [];
+
+    // The text export of the profile (or, with `reading`, of the chart-and-answers
+    // reading) as it stands now for `chart`: the finished bytes, so that nothing chosen
+    // or changed afterwards can alter what is written. Null if what is on screen is not
+    // this chart's, or there is no profile (or reading) for it.
+    public byte[]? ExportText(NatalChart chart, bool reading)
+    {
+        if (!ReferenceEquals(Chart, chart) || _inventory is null || Profile is not { } profile) return null;
+        if (profile.Name != chart.Celebrity.Name) return null;
+        if (!reading) return _inventory.ToText(profile);
+        return Reading is { } made && made.IsFor(chart) && made.Name == chart.Celebrity.Name ? MirrorInterpreter.ToText(made) : null;
+    }
 
     private Celebrity? Person => Chart?.Celebrity;
     private int Count => _inventory?.Count ?? 0;
@@ -188,13 +233,14 @@ public sealed partial class InventoryViewModel : ObservableObject
         $"The {_inventory.Instrument.Instrument.Name} is a standard, public-domain personality questionnaire: {Count} short statements, " +
         "each answered on a five-point scale from very inaccurate to very accurate. It takes fifteen to twenty-five minutes, " +
         "and can be left and taken up again: every answer is saved as it is given. At the end Lore shows a profile of five broad " +
-        "traits and thirty narrower facets, each set beside the answers of a large group of other people.";
+        "traits and thirty narrower facets, each set beside the answers of a large group of other people who took it on the internet.";
     public string PrivacyText =>
         "The answers are kept on this PC only, in a file of their own beside your saved charts. They are not part of a " +
         "My Charts export, and nothing is sent anywhere. They can be deleted at any time.";
     public string AstrologyText =>
         "The questionnaire has nothing to do with astrology and the profile is not drawn from the chart. It is here to be set beside the chart, not to be explained by it.";
     public string Caution => InventoryService.Caution;
+    public string EstimateText => InventoryService.EstimateNote;
     public string NormsText => _inventory is null ? "" : "Reference figures: " + _inventory.Instrument.Instrument.Norms;
     public string SourceText => _inventory is null ? "" :
         $"Questionnaire: {_inventory.Instrument.Instrument.Author}. {_inventory.Instrument.Instrument.Licence}";
@@ -234,12 +280,55 @@ public sealed partial class InventoryViewModel : ObservableObject
         // The same person's chart, calculated again: where they had got to is kept.
         if (oldValue?.Celebrity.Id == newValue?.Celebrity.Id && newValue is not null && Stage != InventoryStage.NoChart)
         {
-            OnPropertyChanged(nameof(Title));
+            // The profile carries the person's name: renamed, it is scored again under
+            // the new one, so that the heading, the profile and its export agree.
+            if (Profile is { } profile && _shown is { } shown && _inventory is not null &&
+                profile.Name != newValue.Celebrity.Name)
+                Profile = _inventory.Score(shown.Answers, newValue.Celebrity.Name, profile.TakenOn);
+            Refresh();
             Compose(); // the houses or the dignities may have changed with a setting
             return;
         }
         Load();
     }
+
+    // ── Whether the answers have reached the file ─────────────────────────────
+
+    // Said, in the view, while answers given here are not in the file: empty otherwise.
+    public string SaveProblem => _store is { State: InventorySaveState.Failed } store
+        ? (store.Problem ?? "The latest answers could not be saved.") +
+          " What has been answered or deleted in this window is kept here while Lore stays open, but it is not in the file yet: " +
+          "anything deleted is still there, and anything answered would be lost if Lore were closed now. " +
+          "It is tried again with the next answer, or now with Try again."
+        : "";
+    public bool HasSaveProblem => SaveProblem.Length > 0;
+
+    [RelayCommand]
+    private async Task RetrySave()
+    {
+        if (_store is not null) await _store.RetryAsync();
+    }
+
+    // The store reports from the thread its writes run on.
+    private void OnStoreChanged()
+    {
+        if (_ui is not null && !ReferenceEquals(SynchronizationContext.Current, _ui)) _ui.Post(_ => StoreChanged(), null);
+        else StoreChanged();
+    }
+
+    private void StoreChanged()
+    {
+        OnPropertyChanged(nameof(SaveProblem));
+        OnPropertyChanged(nameof(HasSaveProblem));
+        // The answers file could not be read and now can be.
+        if (Stage == InventoryStage.Unavailable && _inventory is { IsAvailable: true } && _store is { IsReadable: true }) Load();
+    }
+
+    // Why nothing is offered: the questionnaire's own file, or the file of answers.
+    public string UnavailableText => _inventory is not { IsAvailable: true }
+        ? "The questionnaire could not be read (Data\\inventory.json is missing or damaged). Reinstalling Lore will put it back."
+        : (_store?.Problem ?? "The answers already given could not be read.") +
+          " Until they can be, the questionnaire is not offered here, so that nothing is saved over them.";
 
     // Works out where the person on screen stands: no sitting, one under way, or a
     // finished one to show.
@@ -247,6 +336,7 @@ public sealed partial class InventoryViewModel : ObservableObject
     {
         _sittings = [];
         _current = null;
+        _shown = null;
         Profile = null;
         Reading = null;
         Questions = [];
@@ -264,7 +354,15 @@ public sealed partial class InventoryViewModel : ObservableObject
             // Answers from a file that does not fit this questionnaire are not guessed at.
             _sittings.RemoveAll(s => s.Answers.Length != Count);
             _current = _sittings.LastOrDefault(s => !s.IsComplete);
-            if (_current is not null)
+            // The file of answers is there and cannot be read: what this person has
+            // already answered is not known, and beginning afresh would save over it.
+            if (_store is { IsReadable: false })
+            {
+                _sittings = [];
+                _current = null;
+                Stage = InventoryStage.Unavailable;
+            }
+            else if (_current is not null)
                 Ask(FirstUnansweredPage());
             else if (_sittings.LastOrDefault(s => s.IsComplete) is { } done)
                 Show(done);
@@ -278,6 +376,9 @@ public sealed partial class InventoryViewModel : ObservableObject
     private void Begin()
     {
         if (Person is null || _inventory is not { IsAvailable: true }) return;
+        // Not while the answers already given cannot be read: a new sitting would be
+        // saved in place of whatever is there.
+        if (_store is { IsReadable: false }) return;
         _current = new InventorySitting
         {
             Started = DateOnly.FromDateTime(DateTime.Now).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
@@ -336,18 +437,21 @@ public sealed partial class InventoryViewModel : ObservableObject
         Load();
     }
 
-    // Removes every answer saved for this person.
-    public void DeleteAnswers()
+    // Removes every answer saved for this person. They go from this window at once;
+    // the task says whether they have gone from the file too (SaveProblem says so if not).
+    public async Task<bool> DeleteAnswersAsync()
     {
-        if (Person is not { } person) return;
-        _store?.Remove(person.Id);
+        if (Person is not { } person) return false;
+        var removed = _store?.RemoveAsync(person.Id);
         Load();
+        return removed is null || await removed;
     }
 
     private void Ask(int page)
     {
         if (_current is null || _inventory is null) return;
         Stage = InventoryStage.Asking;
+        _shown = null;
         Profile = null;
         Reading = null;
         Notice = "";
@@ -377,6 +481,7 @@ public sealed partial class InventoryViewModel : ObservableObject
         var taken = DateOnly.TryParseExact(done.Completed, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var d)
             ? d : DateOnly.FromDateTime(DateTime.Now);
         Questions = [];
+        _shown = done;
         Profile = _inventory.Score(done.Answers, person.Name, taken);
         Stage = InventoryStage.Profile;
         Compose();
@@ -399,7 +504,8 @@ public sealed partial class InventoryViewModel : ObservableObject
                      nameof(Title), nameof(IsNoChart), nameof(IsNotOffered), nameof(IsUnavailable), nameof(IsIntroduction),
                      nameof(IsAsking), nameof(IsProfile), nameof(NotOfferedText), nameof(Answered), nameof(Progress),
                      nameof(ProgressText), nameof(PageText), nameof(CanGoBack), nameof(CanGoOn), nameof(IsLastPage),
-                     nameof(Domains), nameof(TakenText),
+                     nameof(Domains), nameof(TakenText), nameof(UnavailableText), nameof(HeaderText),
+                     nameof(SaveProblem), nameof(HasSaveProblem),
                  })
             OnPropertyChanged(name);
     }

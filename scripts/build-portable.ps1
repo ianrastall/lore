@@ -31,20 +31,40 @@ if (Test-Path -LiteralPath $outDir) {
 & dotnet publish $csproj -c Release -r win-x64 --self-contained true --nologo -o $outDir
 if ($LASTEXITCODE -ne 0) { throw 'Self-contained publish failed.' }
 
-# Verify the layout carries everything the app needs at runtime.
-$required = @(
-    'Lore.exe', 'Lore.dll', 'Lore.pri',
-    'App.xbf', 'MainWindow.xbf', 'SplashWindow.xbf', 'Views\ChartView.xbf', 'Views\DailyView.xbf', 'Views\SynastryView.xbf', 'Views\InventoryView.xbf',
-    'coreclr.dll', 'Microsoft.UI.Xaml.dll', 'Microsoft.Graphics.Canvas.dll',
-    'sweph.dll',
-    'Data\celebrities.json', 'Data\daily.json', 'Data\synastry.json', 'Data\davison.json', 'Data\inventory.json', 'Data\mirror.json',
-    'Assets\splash.png',
-    'Assets\Ephemeris\sepl_18.se1', 'Assets\Ephemeris\semo_18.se1', 'Assets\Ephemeris\seas_18.se1',
-    'Assets\Ephemeris\sepl_12.se1'
-)
-foreach ($r in $required) {
-    if (-not (Test-Path -LiteralPath (Join-Path $outDir $r))) {
-        throw "Portable build is missing: $r"
+# Verify the layout carries everything the app needs at runtime. The list is
+# required-files.txt, the same one Lore reads when it starts (Services\InstalledFiles.cs);
+# "publish:" marks a file only a published build has, and all of them are wanted here.
+$manifest = Join-Path $root 'required-files.txt'
+$required = Get-Content -LiteralPath $manifest |
+    ForEach-Object { $_.Trim() } |
+    Where-Object { $_ -and -not $_.StartsWith('#') } |
+    ForEach-Object { ($_ -replace '^publish:\s*', '').Trim() }
+if (@($required).Count -lt 20) { throw "required-files.txt lists too few files to be right: $manifest" }
+
+$missing = @()
+foreach ($r in @($required) + 'required-files.txt') {
+    $staged = Join-Path $outDir $r
+    if (-not (Test-Path -LiteralPath $staged -PathType Leaf)) { $missing += $r }
+    elseif ((Get-Item -LiteralPath $staged).Length -eq 0) { $missing += "$r (empty)" }
+}
+if ($missing.Count -gt 0) {
+    throw "Portable build is missing: $($missing -join ', ')"
+}
+
+# Each of the files Lore's readings are written from must also be whole: a file cut
+# short would pass the check above and leave a reading empty. (The two large lists of
+# places are left to the tests, which read them in full.)
+foreach ($corpus in 'interpretations', 'daily', 'synastry', 'davison', 'inventory', 'mirror') {
+    $staged = Join-Path $outDir "Data\$corpus.json"
+    try {
+        $null = Get-Content -LiteralPath $staged -Raw -Encoding UTF8 | ConvertFrom-Json
+    } catch {
+        throw "Portable build: Data\$corpus.json is not valid JSON ($($_.Exception.Message))"
+    }
+    # And the same bytes as the reviewed file in the repository.
+    $source = Join-Path $root "Data\$corpus.json"
+    if ((Get-FileHash -LiteralPath $staged).Hash -ne (Get-FileHash -LiteralPath $source).Hash) {
+        throw "Portable build: Data\$corpus.json differs from the one in the repository."
     }
 }
 

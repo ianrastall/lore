@@ -69,6 +69,101 @@ public sealed class InventoryTests : IDisposable
         Assert.False(new InventoryService(bad).IsAvailable);
     }
 
+    // A questionnaire file that is perfectly good JSON and not a good questionnaire.
+    // Each of these once got past the check, or brought Lore down as it started.
+    public static TheoryData<string, string> Mutations => new()
+    {
+        { "the whole file null", "null" },
+        { "the whole file a list", "[]" },
+        { "no facets", """{"facets":null}""" },
+        { "facets null", "$.facets = null" },
+        { "items null", "$.items = null" },
+        { "domains null", "$.domains = null" },
+        { "choices null", "$.choices = null" },
+        { "instrument null", "$.instrument = null" },
+        { "a facet that is null", "$.facets[3] = null" },
+        { "a statement that is null", "$.items[10] = null" },
+        { "a trait that is null", "$.domains[1] = null" },
+        { "a choice that is null", "$.choices[2] = null" },
+        { "four choices", "$.choices.pop" },
+        { "119 statements", "$.items.pop" },
+        { "29 facets", "$.facets.pop" },
+        { "four traits", "$.domains.pop" },
+        { "a facet key given twice", "$.facets[1].key = \"N1\"" },
+        { "a trait key given twice", "$.domains[1].key = \"N\"" },
+        { "a facet with no key", "$.facets[0].key = null" },
+        { "a facet in an unknown trait", "$.facets[0].domain = \"Z\"" },
+        { "a facet with no trait", "$.facets[0].domain = null" },
+        { "a facet moved to another trait", "$.facets[0].domain = \"E\"" },
+        { "a statement in an unknown facet", "$.items[0].facet = \"Z9\"" },
+        { "a statement with no facet", "$.items[0].facet = null" },
+        { "a statement moved to another facet", "$.items[0].facet = \"E1\"" },
+        { "a statement with no words", "$.items[0].text = \"\"" },
+        { "statements out of order", "$.items[0].n = 2" },
+        { "a spread of nought", "$.facets[5].sd = 0" },
+        { "a negative spread", "$.domains[2].sd = -1" },
+        { "a spread too large to be a number", "$.facets[5].sd = 1e999" },
+        { "a mean off the scale", "$.facets[5].mean = 400" },
+        { "a mean that is not a number", "$.domains[0].mean = \"about eleven\"" },
+    };
+
+    [Theory]
+    [MemberData(nameof(Mutations))]
+    public void A_questionnaire_that_is_good_JSON_and_not_whole_is_refused_without_bringing_anything_down(string what, string change)
+    {
+        Directory.CreateDirectory(_dir);
+        string path = Path.Combine(_dir, "inventory.json");
+        if (change.StartsWith('$'))
+        {
+            // "$.facets[3].key = value" or "$.items.pop", applied to the real instrument.
+            var root = System.Text.Json.Nodes.JsonNode.Parse(File.ReadAllText(Repo.Data("inventory.json")))!;
+            var parts = change.Split(" = ", 2);
+            var steps = parts[0][2..].Split('.');
+            System.Text.Json.Nodes.JsonNode At(string step, System.Text.Json.Nodes.JsonNode from)
+            {
+                int bracket = step.IndexOf('[');
+                return bracket < 0 ? from[step]! : from[step[..bracket]]![int.Parse(step[(bracket + 1)..^1])]!;
+            }
+            var parent = steps[..^1].Aggregate(root, (node, step) => At(step, node));
+            string last = steps[^1];
+            if (last == "pop")
+            {
+                parent.AsArray().RemoveAt(parent.AsArray().Count - 1);
+            }
+            else
+            {
+                var value = System.Text.Json.Nodes.JsonNode.Parse(parts[1]);
+                int bracket = last.IndexOf('[');
+                if (bracket < 0) parent[last] = value;
+                else parent[last[..bracket]]![int.Parse(last[(bracket + 1)..^1])] = value;
+            }
+            File.WriteAllText(path, root.ToJsonString());
+        }
+        else
+        {
+            File.WriteAllText(path, change);
+        }
+
+        var service = new InventoryService(path);   // must not throw, whatever is in the file
+
+        Assert.False(service.IsAvailable, what);
+        Assert.Equal(0, service.Count);
+        // And the view built on it says so, for a chart of the reader's own.
+        var vm = new InventoryViewModel(service, null) { Chart = Own() };
+        Assert.Equal(InventoryStage.Unavailable, vm.Stage);
+        Assert.Contains("inventory.json", vm.UnavailableText);
+    }
+
+    [Fact]
+    public void The_real_questionnaire_passes_the_same_check_after_a_round_trip()
+    {
+        Directory.CreateDirectory(_dir);
+        string path = Path.Combine(_dir, "inventory.json");
+        File.WriteAllText(path, System.Text.Json.Nodes.JsonNode.Parse(File.ReadAllText(Repo.Data("inventory.json")))!.ToJsonString());
+        Assert.True(new InventoryService(path).IsAvailable);
+        Assert.Null(InventoryService.Fault(Inventory.Instrument));
+    }
+
     // ── Scoring ───────────────────────────────────────────────────────────────
 
     [Fact]
@@ -156,9 +251,9 @@ public sealed class InventoryTests : IDisposable
         Assert.Equal(84.134, InventoryProfile.PercentileOf(1), 2);
         Assert.Equal(15.866, InventoryProfile.PercentileOf(-1), 2);
         Assert.Equal(97.725, InventoryProfile.PercentileOf(2), 2);
-        Assert.Equal("higher than about 85 in 100", InventoryProfile.PercentileText(84.1));
-        Assert.Equal("higher than about 95 in 100", InventoryProfile.PercentileText(99.99));
-        Assert.Equal("higher than about 5 in 100", InventoryProfile.PercentileText(0.01));
+        Assert.Equal("higher than an estimated 85 in 100 of the reference group", InventoryProfile.PercentileText(84.1));
+        Assert.Equal("higher than an estimated 95 in 100 of the reference group", InventoryProfile.PercentileText(99.99));
+        Assert.Equal("higher than an estimated 5 in 100 of the reference group", InventoryProfile.PercentileText(0.01));
     }
 
     [Fact]
@@ -183,6 +278,36 @@ public sealed class InventoryTests : IDisposable
         Assert.All(Inventory.Instrument.Domains, d => Assert.Contains(d.Name.ToUpperInvariant() + ":", text));
         Assert.All(Inventory.Instrument.Facets, f => Assert.Contains($"  {f.Name}: ", text));
         Assert.Contains("320,128 people", text);
+
+        // What the placing is, and against whom: an estimate from a bell curve, set
+        // against volunteers of all ages and both sexes, not a count and not a peer group.
+        Assert.Contains("higher than an estimated", text);
+        Assert.Contains("is an estimate, not a count", text);
+        Assert.Contains("nobody is compared with people of their own age or sex", text);
+        Assert.Contains("in the United States", text);
+        Assert.Contains("aged 19 to 69", text);
+        Assert.Contains("not a cross-section of any population", text);
+    }
+
+    [Fact]
+    public void The_line_under_the_title_follows_what_is_on_screen()
+    {
+        var store = new InventoryStore(_dir);
+        store.Save("user-1", [new InventorySitting { Started = "2026-10-10", Completed = "2026-10-10", Answers = All(4) }]);
+        var vm = new InventoryViewModel(Inventory, store, new MirrorInterpreter(Repo.Data("mirror.json"))) { Chart = Own() };
+
+        Assert.True(vm.ProfileShown);
+        Assert.Contains("nothing here is taken from the chart", vm.HeaderText);
+
+        var changed = new List<string?>();
+        vm.PropertyChanged += (_, e) => changed.Add(e.PropertyName);
+        vm.ShowReading = true;
+        Assert.Contains(nameof(InventoryViewModel.HeaderText), changed);
+        Assert.DoesNotContain("nothing here is taken from the chart", vm.HeaderText);
+        Assert.Contains("set beside the birth chart", vm.HeaderText);
+
+        vm.ShowReading = false;
+        Assert.Contains("nothing here is taken from the chart", vm.HeaderText);
     }
 
     // ── Where the answers are kept ────────────────────────────────────────────
@@ -350,7 +475,7 @@ public sealed class InventoryTests : IDisposable
     }
 
     [Fact]
-    public void Finishing_needs_every_statement_and_then_shows_the_profile()
+    public async Task Finishing_needs_every_statement_and_then_shows_the_profile()
     {
         var vm = View(out var store);
         vm.Chart = Own();
@@ -387,7 +512,7 @@ public sealed class InventoryTests : IDisposable
         later.AbandonCommand.Execute(null);
         Assert.Equal(InventoryStage.Profile, later.Stage);   // back to the finished one
 
-        later.DeleteAnswers();
+        Assert.True(await later.DeleteAnswersAsync());
         Assert.Equal(InventoryStage.Introduction, later.Stage);
         Assert.Null(later.Profile);
     }

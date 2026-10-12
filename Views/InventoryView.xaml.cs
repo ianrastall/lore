@@ -46,7 +46,7 @@ public sealed partial class InventoryView : UserControl
     {
         if (await Confirm("Delete the answers?",
                 "Every answer saved for this person is deleted, with the profile made from them. It can't be undone.", "Delete"))
-            ViewModel.DeleteAnswers();
+            await ViewModel.DeleteAnswersAsync(); // the view says so if the file could not be changed
     }
 
     private bool _asking;

@@ -21,7 +21,7 @@
     <Configurations>Debug;Release</Configurations>
     <!-- The one place the version is written. The assembly and file versions follow
          from it, and the release scripts read it from here. -->
-    <Version>3.2.0</Version>
+    <Version>3.3.0</Version>
   </PropertyGroup>
 
   <!-- The test project lives under tests\ and builds separately; keep its files
@@ -36,7 +36,7 @@
   <ItemGroup>
     <!-- Exact versions, so a release is built from the same packages it was tested
          with (the time-zone data in NodaTime and GeoTimeZone decides birth times).
-         To update one, change its number here and in testsore.testsore.tests.csproj,
+         To update one, change its number here and in tests\Lore.Tests\Lore.Tests.csproj,
          then run the tests. -->
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260921001" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.9169" PrivateAssets="all" />
@@ -76,13 +76,21 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>Assets\splash.png</TargetPath>
     </Content>
-    <Content Include="Data\cities.json" Condition="Exists('Data\cities.json')">
+    <!-- None of these is optional: without its file a reading or the place search is
+         simply not there. So none is included "if it exists" - a checkout that lacks one
+         fails to build, where it used to build an app with that part quietly missing. -->
+    <Content Include="Data\cities.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\hospitals.json" Condition="Exists('Data\hospitals.json')">
+    <Content Include="Data\hospitals.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\interpretations.json" Condition="Exists('Data\interpretations.json')">
+    <Content Include="Data\interpretations.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <!-- The one list of the files Lore needs at run time: checked against a published
+         build by scripts\build-portable.ps1, and by Lore itself when it starts. -->
+    <Content Include="required-files.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <!-- Corpus for the daily horoscope (transit lines, Moon/Sun/house text) -->

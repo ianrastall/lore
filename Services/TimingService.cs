@@ -237,13 +237,20 @@ public sealed class TimingService
     // `place`: where the solar return is cast for, if not the birthplace, and where the
     // birth chart is relocated to. The profection, progressions and solar arc do not
     // depend on it.
-    public TimingReading Compose(NatalChart natal, DateOnly asOf, DateTimeZone zone, ReturnPlace? place = null)
+    // `cancel`: looked at between the steps, each of which is a search of its own, so
+    // that a reading nobody is waiting for any more is given up part-way.
+    public TimingReading Compose(NatalChart natal, DateOnly asOf, DateTimeZone zone, ReturnPlace? place = null,
+        CancellationToken cancel = default)
     {
+        cancel.ThrowIfCancellationRequested();
         var solar = SolarReturnInForce(natal, asOf, zone, place);
+        cancel.ThrowIfCancellationRequested();
         var profection = Profect(natal, asOf);
         var progression = Progress(natal, asOf);
+        cancel.ThrowIfCancellationRequested();
         var solarArc = Direct(natal, progression);
         var relocation = Relocate(natal, place);
+        cancel.ThrowIfCancellationRequested();
 
         var sections = new List<DailySection> { ReturnSection(natal, solar, zone) };
         if (ProfectionSection(natal, profection) is { } profected) sections.Add(profected);

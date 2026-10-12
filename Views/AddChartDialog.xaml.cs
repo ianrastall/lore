@@ -77,10 +77,16 @@ public sealed partial class AddChartDialog : ContentDialog
         int rating = RoddenRating.All.ToList().FindIndex(r => r.Code == c.RoddenRating);
         RatingCombo.SelectedIndex = rating + 1; // -1 (none, or not one of Rodden's) -> "Not rated"
 
-        DateField.SelectedDate = PickerDate(c.GetBirthDate());
+        // An Old Style 29 February of a year the picker's calendar gives none is shown
+        // as the 28th with the box under it ticked.
+        var (year, month, day) = c.GetRecordedDate();
+        bool julianOnly = c.JulianCalendar && Celebrity.IsJulianOnly(year, month, day);
+        DateField.SelectedDate = PickerDate(new DateOnly(year, month, julianOnly ? 28 : day));
         var t = c.GetBirthTime();
         TimeField.SelectedTime = new TimeSpan(t.Hour, t.Minute, 0);
         JulianCheck.IsChecked = c.JulianCalendar;
+        RefreshCalendar();
+        JulianLeapCheck.IsChecked = julianOnly;
         RefreshCalendar();
         TimeUnknownCheck.IsChecked = !c.BirthTimeKnown;
         TimeField.IsEnabled = c.BirthTimeKnown;
@@ -115,6 +121,23 @@ public sealed partial class AddChartDialog : ContentDialog
         RefreshResolvedOffset();
     }
 
+    // The picker shows the Gregorian calendar, which has no 29 February in 1700, 1800 or
+    // 1900 (nor 1300, 1400, 1500); the Julian calendar had. With Old Style ticked and
+    // 28 February of such a year picked, a second box says it was the day after.
+    private bool CanBeJulianLeapDay =>
+        IsJulian && DateField.SelectedDate is { } picked &&
+        picked.Month == 2 && picked.Day == 28 && Celebrity.DaysInMonth(picked.Year, 2, julian: true) == 29 &&
+        !DateTime.IsLeapYear(picked.Year);
+
+    // The date as it is to be recorded: what the picker shows, or the 29 February the
+    // picker cannot show.
+    private (int Year, int Month, int Day) RecordedDate()
+    {
+        var picked = DateField.SelectedDate?.DateTime ?? new DateTime(1990, 1, 1);
+        bool leapDay = CanBeJulianLeapDay && JulianLeapCheck.IsChecked == true;
+        return (picked.Year, picked.Month, leapDay ? 29 : picked.Day);
+    }
+
     // Offer the Old Style tick-box for early dates, and when it is ticked show the
     // Gregorian date the chart will actually be calculated for.
     private void RefreshCalendar()
@@ -122,9 +145,14 @@ public sealed partial class AddChartDialog : ContentDialog
         bool early = (DateField.SelectedDate?.Year ?? int.MaxValue) <= LastJulianYear;
         JulianCheck.Visibility = early ? Microsoft.UI.Xaml.Visibility.Visible : Microsoft.UI.Xaml.Visibility.Collapsed;
 
-        if (IsJulian && DateField.SelectedDate is { } picked)
+        bool leapDay = CanBeJulianLeapDay;
+        JulianLeapCheck.Visibility = leapDay ? Microsoft.UI.Xaml.Visibility.Visible : Microsoft.UI.Xaml.Visibility.Collapsed;
+        if (!leapDay && JulianLeapCheck.IsChecked == true) JulianLeapCheck.IsChecked = false;
+
+        if (IsJulian && DateField.SelectedDate is not null)
         {
-            var gregorian = BirthTimeResolver.GregorianDate(DateOnly.FromDateTime(picked.DateTime), julian: true);
+            var (year, month, day) = RecordedDate();
+            var gregorian = BirthTimeResolver.GregorianDate(year, month, day, julian: true);
             JulianText.Text = $"Calculated for {gregorian:d MMMM yyyy} in today's (Gregorian) calendar.";
             JulianText.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
         }
@@ -223,8 +251,8 @@ public sealed partial class AddChartDialog : ContentDialog
             return;
         }
 
-        var picked = DateField.SelectedDate?.DateTime ?? new DateTime(1990, 1, 1);
-        var date = BirthTimeResolver.GregorianDate(DateOnly.FromDateTime(picked), IsJulian);
+        var (recordedYear, recordedMonth, recordedDay) = RecordedDate();
+        var date = BirthTimeResolver.GregorianDate(recordedYear, recordedMonth, recordedDay, IsJulian);
         var time = TimeField.SelectedTime ?? new TimeSpan(12, 0, 0);
         var (offset, label, zoneId) = BirthTimeResolver.Describe(
             _timeZoneId, LatBox.Value, LonBox.Value,
@@ -254,7 +282,7 @@ public sealed partial class AddChartDialog : ContentDialog
             return;
         }
 
-        var date = DateField.SelectedDate!.Value;
+        var (year, month, day) = RecordedDate();
         bool timeKnown = TimeUnknownCheck.IsChecked != true;
         var time = TimeField.SelectedTime ?? new TimeSpan(12, 0, 0);
 
@@ -265,7 +293,7 @@ public sealed partial class AddChartDialog : ContentDialog
             Category = UserChartService.MyChartsCategory,
             // Built from the numbers, not formatted: a format would follow the Windows
             // regional calendar and could store a Buddhist or Persian year.
-            BirthDate = $"{date.Year:D4}-{date.Month:D2}-{date.Day:D2}",
+            BirthDate = $"{year:D4}-{month:D2}-{day:D2}",
             JulianCalendar = IsJulian,
             BirthTime = timeKnown ? $"{time.Hours:D2}:{time.Minutes:D2}" : null,
             BirthTimeKnown = timeKnown,

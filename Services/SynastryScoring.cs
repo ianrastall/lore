@@ -55,11 +55,13 @@ public static class SynastryScoring
     // ── Two charts ────────────────────────────────────────────────────────────
 
     // Where the five bands fall, as the share of the weight that is on the easy side.
-    // They are set against every pair in the bundled library (22,366 of them), not at
-    // fixed distances from an even split: sextiles and trines between them cover more of
-    // the circle than squares and oppositions, so the typical pair is a little over half
-    // easy (the median share is 0.54). Measured from there, about 7% of pairs read as
-    // Soulmates, 18% Harmonious, 50% Mixed, 18% Challenging and 7% Adversaries.
+    // They are set against every pair in the bundled library, not at fixed distances
+    // from an even split: sextiles and trines between them cover more of the circle than
+    // squares and oppositions, so the typical pair is a little over half easy (the
+    // median share was 0.54 when they were drawn, against the 212 figures the library
+    // then had). Measured from there, about 7% of pairs read as Soulmates, 18%
+    // Harmonious, 50% Mixed, 18% Challenging and 7% Adversaries. The library has grown
+    // since; SynastryScoringTests holds those proportions against whatever it now is.
     private const double SoulmatesShare = 0.665;
     private const double HarmoniousShare = 0.595;
     private const double ChallengingShare = 0.48;

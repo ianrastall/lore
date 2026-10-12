@@ -18,6 +18,10 @@ public sealed partial class DailyViewModel : ObservableObject
     // is discarded, so flicking quickly through dates or people never shows a stale day.
     private int _generation;
 
+    // Stops the scan a newer one has overtaken, rather than letting it run on: holding
+    // the next-day button down would otherwise queue a day's scan for every day passed.
+    private CancellationTokenSource? _cancel;
+
     public DailyViewModel(TransitService? transits = null, DailyInterpreter? interpreter = null)
     {
         _transits = transits;
@@ -122,6 +126,8 @@ public sealed partial class DailyViewModel : ObservableObject
     private async void Rebuild()
     {
         int generation = ++_generation;
+        _cancel?.Cancel();
+        var cancel = _cancel = new CancellationTokenSource();
         var chart = Chart;
         var date = Date;
         var home = Home;
@@ -139,9 +145,17 @@ public sealed partial class DailyViewModel : ObservableObject
         try
         {
             var reading = await Task.Run(() =>
-                _interpreter.Compose(chart, _transits.Scan(chart, date, _zone, home), _zone, answers));
+            {
+                var sky = _transits.Scan(chart, date, _zone, home, cancel.Token);
+                cancel.Token.ThrowIfCancellationRequested();
+                return _interpreter.Compose(chart, sky, _zone, answers);
+            });
             if (generation == _generation)
                 Reading = reading;
+        }
+        catch (OperationCanceledException)
+        {
+            // overtaken by a newer date or chart
         }
         catch (Exception ex)
         {

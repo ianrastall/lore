@@ -24,14 +24,22 @@ public static class BirthTimeResolver
 
     // The birth date in the Gregorian calendar, which everything is calculated in. An
     // Old Style (Julian) date is converted: 25 December 1642 becomes 4 January 1643.
-    public static DateOnly GregorianDate(Celebrity c) =>
-        GregorianDate(c.GetBirthDate(), c.JulianCalendar);
-
-    public static DateOnly GregorianDate(DateOnly recorded, bool julian)
+    // The recorded date is taken as year, month and day and read in its own calendar
+    // before anything else: 29 February 1700 Old Style is a real day (11 March 1700),
+    // though no Gregorian date has that month and day in that year.
+    public static DateOnly GregorianDate(Celebrity c)
     {
-        if (!julian) return recorded;
-        var iso = new LocalDate(recorded.Year, recorded.Month, recorded.Day, CalendarSystem.Julian)
-            .WithCalendar(CalendarSystem.Iso);
+        var (year, month, day) = c.GetRecordedDate();
+        return GregorianDate(year, month, day, c.JulianCalendar);
+    }
+
+    public static DateOnly GregorianDate(DateOnly recorded, bool julian) =>
+        GregorianDate(recorded.Year, recorded.Month, recorded.Day, julian);
+
+    public static DateOnly GregorianDate(int year, int month, int day, bool julian)
+    {
+        if (!julian) return new DateOnly(year, month, day);
+        var iso = new LocalDate(year, month, day, CalendarSystem.Julian).WithCalendar(CalendarSystem.Iso);
         return new DateOnly(iso.Year, iso.Month, iso.Day);
     }
 

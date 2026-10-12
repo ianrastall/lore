@@ -272,27 +272,7 @@ public sealed class UserChartService
 
     // Holds mycharts.json.lock open, shared with nobody, until disposed. Null if another
     // window kept it for longer than LockWait (or the folder cannot be written to).
-    private async Task<FileStream?> TryLockAsync()
-    {
-        var giveUp = DateTime.UtcNow + LockWait;
-        while (true)
-        {
-            try
-            {
-                return new FileStream(LockPath, FileMode.OpenOrCreate, FileAccess.ReadWrite,
-                    FileShare.None, 1, FileOptions.DeleteOnClose);
-            }
-            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
-            {
-                if (DateTime.UtcNow >= giveUp)
-                {
-                    Diagnostics.Log($"Could not take {LockPath}: {ex.Message}");
-                    return null;
-                }
-            }
-            await Task.Delay(50);
-        }
-    }
+    private Task<FileStream?> TryLockAsync() => StoreFile.TryLockAsync(LockPath, LockWait);
 
     // How reading a chart file went: it held a usable list; it was read and what it holds
     // is damaged; or it could not be opened or read at all, which says nothing about what
@@ -352,8 +332,8 @@ public sealed class UserChartService
         // No clock has ever been as much as eighteen hours from Greenwich.
         if (!double.IsFinite(c.UtcOffsetHours) || Math.Abs(c.UtcOffsetHours) > 18) return false;
 
-        if (!DateOnly.TryParseExact(c.BirthDate, "yyyy-MM-dd", CultureInfo.InvariantCulture,
-                DateTimeStyles.None, out var date) || date.Year < 2 || date.Year > 9998)
+        // Read in the calendar the chart says it is in (see Celebrity.GetRecordedDate).
+        if (!Celebrity.TryParseDate(c.BirthDate, c.JulianCalendar, out int year, out _, out _) || year < 2 || year > 9998)
             return false;
 
         // A time, if there is one, must be readable; and a chart that says its time is
@@ -379,7 +359,7 @@ public sealed class UserChartService
     private async Task SaveAsync(List<Celebrity> charts)
     {
         // A name of its own, so nothing else can be holding or half-writing it.
-        string temp = $"{_path}.{Guid.NewGuid():N}.tmp";
+        string temp = StoreFile.TempPath(_path);
         try
         {
             // Write the new version completely (and to disk) before touching the old one.
@@ -388,29 +368,11 @@ public sealed class UserChartService
             {
                 await JsonSerializer.SerializeAsync(stream, charts, JsonOpts);
             }
-
-            if (!File.Exists(_path))
-            {
-                File.Move(temp, _path);
-                return;
-            }
-
-            try
-            {
-                // One step on NTFS: the new file takes the name, the old one becomes .bak.
-                File.Replace(temp, _path, BackupPath);
-            }
-            catch (Exception ex) when (ex is IOException or PlatformNotSupportedException or UnauthorizedAccessException)
-            {
-                File.Copy(_path, BackupPath, overwrite: true);
-                File.Move(temp, _path, overwrite: true);
-            }
+            StoreFile.Replace(temp, _path, BackupPath);
         }
         finally
         {
-            // Still there only if the save failed part-way.
-            try { File.Delete(temp); }
-            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException) { }
+            StoreFile.DeleteTemp(temp);
         }
     }
 }

@@ -12,7 +12,15 @@
         <StackPanel Grid.Row="0" Padding="24,16,24,8">
             <TextBlock Text="{x:Bind ViewModel.Title, Mode=OneWay}"
                        Style="{StaticResource TitleTextBlockStyle}"/>
-            <TextBlock Text="A standard personality questionnaire and the profile it gives. It is not astrology: nothing here is taken from the chart."
+            <!-- Answers given here that have not reached the file -->
+            <StackPanel Orientation="Horizontal" Spacing="12" Margin="0,6,0,2"
+                        Visibility="{x:Bind VisIf(ViewModel.HasSaveProblem), Mode=OneWay}">
+                <TextBlock Text="{x:Bind ViewModel.SaveProblem, Mode=OneWay}" Foreground="#E5534B"
+                           TextWrapping="Wrap" MaxWidth="820" VerticalAlignment="Center"/>
+                <Button Content="Try again" Command="{x:Bind ViewModel.RetrySaveCommand}" VerticalAlignment="Center"
+                        AutomationProperties.Name="Try again to save the answers"/>
+            </StackPanel>
+            <TextBlock Text="{x:Bind ViewModel.HeaderText, Mode=OneWay}"
                        Opacity="0.7" FontSize="12" Margin="0,2,0,0" TextWrapping="Wrap" MaxWidth="900" HorizontalAlignment="Left"/>
         </StackPanel>
 
@@ -31,7 +39,7 @@
         <!-- The questionnaire's own file is missing -->
         <TextBlock Grid.Row="1" Margin="24,8" MaxWidth="720" HorizontalAlignment="Left"
                    Foreground="#E5534B"
-                   Text="The questionnaire could not be read (Data\inventory.json is missing or damaged). Reinstalling Lore will put it back."
+                   Text="{x:Bind ViewModel.UnavailableText, Mode=OneWay}"
                    TextWrapping="Wrap"
                    Visibility="{x:Bind VisIf(ViewModel.IsUnavailable), Mode=OneWay}"/>
 
@@ -226,7 +234,9 @@
 
                 <TextBlock TextWrapping="Wrap" FontSize="12" MaxWidth="820" HorizontalAlignment="Left"
                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                           Text="Low, typical and high are set against the reference group: typical is within one standard deviation of its average, where about two people in three fall; low and high are beyond that, about one in six each way. Each bar shows roughly what share of that group scored lower. A facet rests on four statements, so read its bar as a rough placing and not as a measurement; the mood of the day moves some of them."/>
+                           Text="Low, typical and high are set against the reference group: typical is within one standard deviation of its average, where about two people in three fall; low and high are beyond that, about one in six each way. Each bar is an estimate of what share of that group scored lower. A facet rests on four statements, so read its bar as a rough placing and not as a measurement; the mood of the day moves some of them."/>
+                <TextBlock Text="{x:Bind ViewModel.EstimateText}" FontSize="12" TextWrapping="Wrap" MaxWidth="820" HorizontalAlignment="Left"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
                 <TextBlock Text="{x:Bind ViewModel.NormsText, Mode=OneWay}" FontSize="12" Opacity="0.7" TextWrapping="Wrap" MaxWidth="820" HorizontalAlignment="Left"/>
                 <TextBlock Text="{x:Bind ViewModel.SourceText, Mode=OneWay}" FontSize="12" Opacity="0.7" TextWrapping="Wrap" MaxWidth="820" HorizontalAlignment="Left"/>
 

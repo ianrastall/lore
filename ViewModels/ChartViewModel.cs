@@ -33,7 +33,7 @@ public sealed partial class ChartViewModel : ObservableObject
     partial void OnAnswersChanged(MirrorReading? value)
     {
         if (_interpreter is not null && Chart is { } chart)
-            ReportSections = _interpreter.Interpret(chart, Sensitivity?.MoonSigns, value);
+            ReportSections = _interpreter.Interpret(chart, Sensitivity?.MoonSigns, value, Sensitivity?.SignChanges);
     }
 
     public string Title => Chart is null ? "" : Chart.Celebrity.Name;
@@ -153,8 +153,10 @@ public sealed partial class ChartViewModel : ObservableObject
     private static string BuildBigThree(NatalChart chart, TimeSensitivity? sensitivity)
     {
         var parts = new List<string>();
-        if (chart.GetPlanet(Planet.Sun) is { } sun)   parts.Add($"☉ Sun {sun.Sign.Name()}");
-        // With no birth time the Moon may have changed sign during the day: name both.
+        // With no birth time the Sun or the Moon may have changed sign during the day: name both.
+        if (!chart.Timed && sensitivity?.SignChanges.GetValueOrDefault(Planet.Sun) is { Count: > 1 } suns)
+            parts.Add($"☉ Sun {string.Join(" or ", suns.Select(x => x.Name()))}");
+        else if (chart.GetPlanet(Planet.Sun) is { } sun)   parts.Add($"☉ Sun {sun.Sign.Name()}");
         if (!chart.Timed && sensitivity is { MoonSigns.Count: > 1 } s)
             parts.Add($"☽ Moon {string.Join(" or ", s.MoonSigns.Select(x => x.Name()))}");
         else if (chart.GetPlanet(Planet.Moon) is { } moon)  parts.Add($"☽ Moon {moon.Sign.Name()}");
@@ -202,7 +204,7 @@ public sealed partial class ChartViewModel : ObservableObject
             : Analyse(_charts, value);
         // After the analysis above: the report draws on it for an untimed Moon.
         ReportSections = (_interpreter is not null && value is not null)
-            ? _interpreter.Interpret(value, Sensitivity?.MoonSigns, Answers)
+            ? _interpreter.Interpret(value, Sensitivity?.MoonSigns, Answers, Sensitivity?.SignChanges)
             : [];
         OnPropertyChanged(nameof(SubTitle));
         OnPropertyChanged(nameof(BigThreeText));

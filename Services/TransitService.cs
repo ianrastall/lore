@@ -63,9 +63,12 @@ public sealed class TransitService
 
     // `home`: where the reader is, for sunrise, sunset and the planetary hours; without
     // it they are left out.
-    public DaySky Scan(NatalChart natal, DateOnly date, DateTimeZone zone, HomePlace? home = null)
+    // `cancel`: looked at as the day is sampled and searched, so that a scan nobody is
+    // waiting for any more is given up part-way.
+    public DaySky Scan(NatalChart natal, DateOnly date, DateTimeZone zone, HomePlace? home = null,
+        CancellationToken cancel = default)
     {
-        if (!_pinned) return For(natal).Scan(natal, date, zone, home);
+        if (!_pinned) return For(natal).Scan(natal, date, zone, home, cancel);
 
         // The day runs from one local midnight to the next. Both ends are resolved
         // separately, so a 23- or 25-hour daylight-saving day comes out right.
@@ -80,6 +83,7 @@ public sealed class TransitService
         var skies = new IReadOnlyList<PlanetPosition>[n + 1];
         for (int i = 0; i <= n; i++)
         {
+            cancel.ThrowIfCancellationRequested();
             jds[i] = jd0 + (jd1 - jd0) * i / n;
             skies[i] = _charts.CalculateSky(jds[i]);
         }
@@ -103,10 +107,14 @@ public sealed class TransitService
 
         var events = new List<TransitEvent>();
         foreach (var (mover, track) in tracks)
+        {
+            cancel.ThrowIfCancellationRequested();
             foreach (var (point, lon) in targets)
                 foreach (var aspect in AspectTypeExtensions.Majors)
                     if (FindEvent(natal, timed, mover, track, jds, point, lon, aspect) is { } e)
                         events.Add(e);
+        }
+        cancel.ThrowIfCancellationRequested();
 
         var (phase, phaseExact) = MoonPhaseFor(tracks, jds);
         var (moonSign, moonEnters, moonIngress) = MoonSignFor(tracks, jds);

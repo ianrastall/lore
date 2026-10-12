@@ -4,14 +4,14 @@
 
 > A Windows desktop application for computing and exploring astrological natal charts — and reading a daily horoscope from them — powered by the Swiss Ephemeris. Browse a curated library of historical figures — every one with a documented birth time — or add your own.
 
-**Latest release: v3.2.0** · [Download](../../releases/latest)
+**Latest release: v3.3.0** · [Download](../../releases/latest)
 
 ### Installing
 
-1. From the [latest release](../../releases/latest), download **`LoreSetup-3.2.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`LoreSetup-3.3.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user only (no administrator prompt), adds a Start-menu shortcut, and can be removed from *Settings → Apps* like any other program.
 
-**Prefer not to install?** Download **`Lore-3.2.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
+**Prefer not to install?** Download **`Lore-3.3.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
 
 > **The installer is not code-signed.** Lore is a free hobby project and does not carry a paid signing certificate, so Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"* — choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -132,6 +132,9 @@ The **Inventory** view offers a standard personality questionnaire for any chart
   - Timing and Synastry take nothing from the answers.
   - Every such sentence is marked as coming from the answers, and nothing the readings said before is removed or reworded. Where the answers are ordinary, the Report says so in one line and nothing else is added. A tick-box in the Inventory view turns it off.
 - **Private.** Answers are kept on the PC only, in a file of their own (`%LOCALAPPDATA%\Lore\inventories.json`), apart from your saved charts: they are never part of a My Charts export. One button deletes them, and deleting a chart deletes its answers.
+- **Kept safe.** The answers file is saved as the saved charts are: two Lore windows take turns, the version before each save is kept as a backup, and a file that cannot be read is set aside, never written over. If a save fails the view says so and offers **Try again**, and Lore asks before closing with answers unsaved.
+- **Estimates, and against whom.** Each "higher than an estimated 85 in 100" is worked out from the reference group's average and spread, not counted. That group is people in the United States who took the questionnaire on the internet of their own accord, aged 19 to 69, both sexes and all ages together.
+- **Without a birth time**, a planet that changed sign on the day (most often the Moon) is named as the two signs it may be in and is not compared with either.
 - **Not for the bundled figures**, who cannot answer a questionnaire.
 - **Text exports** of the profile and of the chart-and-answers reading.
 
@@ -253,7 +256,7 @@ Lore/
 ├── Native/
 │   └── sweph.dll              # Built by Build-SwephDll.ps1 (not in repo)
 ├── tests/
-│   └── Lore.Tests/            # 381 xUnit tests: calculations, readings, saved charts, view models, figures vs Astro-Databank
+│   └── Lore.Tests/            # 461 xUnit tests: calculations, readings, saved charts, view models, figures vs Astro-Databank
 ├── Assets/
 │   ├── AppIcon.ico            # Indigo/gold "L" icon
 │   └── splash.png             # Splash-screen artwork (name + version drawn over it at launch)
@@ -320,7 +323,7 @@ The `.csproj` automatically copies `sweph.dll` and the required `.se1` ephemeris
 dotnet test tests\Lore.Tests
 ```
 
-The 381 tests cover the parts that must stay right: birth-time resolution (daylight saving, local mean time, historical city times), planet and Ascendant positions checked against Astro-Databank's published values, the daily transit scan checked against an independent calculation, the daily-horoscope corpus and wording, synastry (the contacts found between two charts, and the corpus and wording of the reading), the forecast, the Timing techniques, the Davison reading, the personality inventory's scoring and the chart-and-answers rules, the view models, crash-safe saving of My Charts (including recovery from a damaged file), and city and hospital search. They run on GitHub on every push. `FigureLibraryTests` checks every bundled figure against its Astro-Databank record in `tests\Lore.Tests\Reference\adb-reference.json`: each well-documented (AA/A) birth time must match, and Lore must turn it into the same instant Astro-Databank does. Run them after editing `Data\celebrities.json`.
+The 461 tests cover the parts that must stay right: birth-time resolution (daylight saving, local mean time, historical city times), planet and Ascendant positions checked against Astro-Databank's published values, the daily transit scan checked against an independent calculation, the daily-horoscope corpus and wording, synastry (the contacts found between two charts, and the corpus and wording of the reading), the forecast, the Timing techniques, the Davison reading, the personality inventory's scoring and the chart-and-answers rules, the view models, crash-safe saving of My Charts (including recovery from a damaged file), and city and hospital search. They run on GitHub on every push. `FigureLibraryTests` checks every bundled figure against its Astro-Databank record in `tests\Lore.Tests\Reference\adb-reference.json`: each well-documented (AA/A) birth time must match, and Lore must turn it into the same instant Astro-Databank does. Run them after editing `Data\celebrities.json`.
 
 `SwetestReferenceTests` checks Lore against **swetest**, the Swiss Ephemeris's own command-line program, for fourteen moments and places chosen to be awkward: both ephemeris files and the seam between them, both hemispheres, the equator, the date line, and both polar circles. Every body's longitude, latitude, speed and declination, the Ascendant and Midheaven, and all twelve cusps under each of the four house systems must agree to a millionth of a degree. Because the two share an engine this checks that Lore asks it the right question, not the astronomy itself (the Astro-Databank comparison does that). The expected values live in `tests\Lore.Tests\Reference\swetest-reference.json`; `python scripts\build-swetest-reference.py` regenerates them (it needs `swetest64.exe` from the full Swiss Ephemeris download).
 
@@ -332,7 +335,7 @@ Produces a self-contained folder that runs with no installed .NET or VC++ runtim
 .\scripts\build-portable.ps1
 ```
 
-Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-3.2.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
+Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-3.3.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
 
 ### Step 4 — Installer
 
@@ -577,7 +580,22 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 3.2.0 (current)
+### 3.3.0 (current)
+A release of repairs, after a review of the whole program. Most are in the personality inventory.
+- **Exports are always the person they were asked for.** A personality profile or chart-and-answers export is fixed before the save dialog opens; choosing someone else while it is open no longer changes what is written.
+- **Inventory answers are much harder to lose.**
+  - Two Lore windows saving answers at the same moment no longer overwrite each other.
+  - A save that fails is kept and tried again; the Inventory view says so in red, with **Try again**, and Lore asks before closing with answers unsaved.
+  - A damaged answers file is set aside and the backup restored (there is now a backup); it is never written over.
+- **An uncertain sign is no longer read as certain.** For a chart with no birth time, **Chart and answers** names a Moon that changed sign that day as *Aquarius or Pisces*, compares the answers with neither, and leaves out the Moon's aspects. A Sun that changed sign that day is treated the same way, in the Report too.
+- **Old Style 29 February** in 1700, 1800 and 1900 can now be entered: with *Old Style* ticked and 28 February picked, a second box says it was the day after.
+- **A renamed chart** takes its personality profile and exports with it.
+- **Percentiles are worded as the estimates they are**, and the reference group is described (see Personality Inventory above).
+- **A copy of Lore with a file missing says which**, in the status bar, and the Report says it is unavailable when its text is not there. A damaged questionnaire file can no longer stop Lore opening.
+- **Quicker to move through the list.** The Forecast and the search for matches are worked out when their view is opened, not for every chart passed; work that has been overtaken stops.
+- 461 tests (381 before).
+
+### 3.2.0
 - **The answers now reach the whole Report.** Besides the planets, the **Overview** (Sun, Moon and Rising, and a line on the five broad traits), the **Major Aspects** and the balance of **elements and modes** take a sentence from the answers where they have something to say.
 - **Set against the sign.** The sign each planet is in (Sun to Saturn) now says how much of each quality to expect, and the readings say where the answers bear it out and where there is more or less: *That is far more push than Mars in Libra would suggest.*
 - **Much more wording, and tested for coverage.**

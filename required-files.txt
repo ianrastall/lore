@@ -1,0 +1,60 @@
+# The files Lore cannot do without at run time, as they lie beside Lore.exe.
+#
+# This is the one list. It is read in three places, so that none of them can drift:
+#   - scripts\build-portable.ps1 refuses a published build that lacks any of them;
+#   - Lore itself checks them when it starts (Services\InstalledFiles.cs) and says in
+#     the status bar which are missing, rather than carrying on with a reading quietly
+#     switched off;
+#   - the tests check that each one that comes from the repository is there to be
+#     copied, and that Lore.csproj does copy it.
+#
+# One path to a line. "publish:" marks a file that only a published (self-contained)
+# build has; a development build is not expected to. Add a line here when Lore gains a
+# file it needs.
+
+publish: Lore.exe
+Lore.dll
+Lore.pri
+publish: coreclr.dll
+publish: Microsoft.UI.Xaml.dll
+publish: Microsoft.Graphics.Canvas.dll
+sweph.dll
+LICENSE.txt
+
+# The compiled views
+App.xbf
+MainWindow.xbf
+SplashWindow.xbf
+Views\AddChartDialog.xbf
+Views\ChartView.xbf
+Views\DailyView.xbf
+Views\ForecastView.xbf
+Views\InventoryView.xbf
+Views\LegendView.xbf
+Views\ReportView.xbf
+Views\SynastryView.xbf
+Views\TimingView.xbf
+Views\WorksheetView.xbf
+
+# The figure library, the places, and what every reading is written from
+Data\celebrities.json
+Data\cities.json
+Data\hospitals.json
+Data\interpretations.json
+Data\daily.json
+Data\synastry.json
+Data\davison.json
+Data\inventory.json
+Data\mirror.json
+
+Assets\AppIcon.ico
+Assets\splash.png
+
+# Swiss Ephemeris data, 1200 to 2400
+Assets\Ephemeris\sepl_12.se1
+Assets\Ephemeris\sepl_18.se1
+Assets\Ephemeris\semo_12.se1
+Assets\Ephemeris\semo_18.se1
+Assets\Ephemeris\seas_12.se1
+Assets\Ephemeris\seas_18.se1
+Assets\Ephemeris\seleapsec.txt

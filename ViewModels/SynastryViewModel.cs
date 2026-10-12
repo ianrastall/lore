@@ -41,6 +41,20 @@ public sealed partial class SynastryViewModel : ObservableObject
     [ObservableProperty]
     public partial NatalChart? Chart { get; set; }
 
+    // False while the Synastry view is not the one open. The search compares the chart
+    // with everyone in the library, so it is not run then; it runs when the view is next
+    // opened. (The comparison with a chosen partner is one chart, and is always made.)
+    [ObservableProperty]
+    public partial bool IsActive { get; set; } = true;
+
+    // The chart or the list of people changed while the view was closed.
+    private bool _matchesStale;
+
+    partial void OnIsActiveChanged(bool value)
+    {
+        if (value && _matchesStale) RebuildMatches();
+    }
+
     // The person chosen to compare with: the second person, and the outer wheel.
     [ObservableProperty]
     public partial Celebrity? Partner { get; set; }
@@ -202,9 +216,17 @@ public sealed partial class SynastryViewModel : ObservableObject
 
         if (chart is null || _charts is null || people.Count == 0)
         {
+            _matchesStale = false;
             IsSearching = false;
             return;
         }
+        if (!IsActive)
+        {
+            _matchesStale = true;
+            IsSearching = false;
+            return;
+        }
+        _matchesStale = false;
 
         IsSearching = true;
         try

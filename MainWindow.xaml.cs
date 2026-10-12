@@ -39,6 +39,7 @@ public sealed partial class MainWindow : Window
         };
         if (AppWindow.Presenter is OverlappedPresenter presenter)
             presenter.Maximize();
+        AppWindow.Closing += OnClosing;
 
 #if DEBUG
         // For checking the "chart with tables" image without clicking through a save
@@ -96,6 +97,56 @@ public sealed partial class MainWindow : Window
 
     // Only one dialog can be open at a time; a second Ctrl+N while one is up does nothing.
     private bool _dialogOpen;
+
+    // Set once it is settled that the window may go: everything is saved, or the reader
+    // has said to close without what could not be.
+    private bool _closeNow;
+
+    // Inventory answers are saved in the background as they are given. Closing waits for
+    // the ones still on their way, and if they cannot be saved it says so and asks,
+    // rather than letting them go without a word.
+    private async void OnClosing(AppWindow sender, AppWindowClosingEventArgs args)
+    {
+        if (_closeNow || !ViewModel.HasUnsavedAnswers) return;
+        args.Cancel = true;
+        try
+        {
+            while (!await ViewModel.SaveOutstandingAnswersAsync())
+            {
+                if (_dialogOpen) return; // another dialog is up: stay open, and ask on the next close
+                _dialogOpen = true;
+                Microsoft.UI.Xaml.Controls.ContentDialogResult answer;
+                try
+                {
+                    answer = await new Microsoft.UI.Xaml.Controls.ContentDialog
+                    {
+                        Title = "Some inventory answers are not saved",
+                        Content = (ViewModel.UnsavedAnswersProblem ?? "The inventory answers file could not be written.") +
+                                  "\n\nIf Lore closes now, what was answered or deleted in the Inventory view since the last " +
+                                  "successful save is lost. Answers saved earlier are not affected.",
+                        PrimaryButtonText = "Try again",
+                        SecondaryButtonText = "Close without saving them",
+                        CloseButtonText = "Keep Lore open",
+                        DefaultButton = Microsoft.UI.Xaml.Controls.ContentDialogButton.Primary,
+                        RequestedTheme = ElementTheme.Dark,
+                        XamlRoot = Content.XamlRoot,
+                    }.ShowAsync();
+                }
+                finally
+                {
+                    _dialogOpen = false;
+                }
+                if (answer == Microsoft.UI.Xaml.Controls.ContentDialogResult.None) return; // stay open
+                if (answer == Microsoft.UI.Xaml.Controls.ContentDialogResult.Secondary) break;
+            }
+        }
+        catch (Exception ex)
+        {
+            Diagnostics.Log($"Saving the inventory answers before closing failed: {ex}");
+        }
+        _closeNow = true;
+        Close();
+    }
 
     private async void AddChart_Click(object sender, RoutedEventArgs e) => await AddChartAsync();
 
@@ -381,126 +432,24 @@ public sealed partial class MainWindow : Window
 
     private async Task ExportCoreAsync(string kind)
     {
-        var chart = ViewModel.ChartVM.Chart;
-        if (chart is null)
-        {
-            ViewModel.StatusMessage = "Select a chart first, then export.";
-            return;
-        }
-        // Someone else has just been picked and their chart is still being calculated:
-        // what is on screen is the person before, and must not be saved as this one.
-        if (!ViewModel.ChartIsCurrent)
-        {
-            ViewModel.StatusMessage = "The chart is still being calculated — try again in a moment.";
-            return;
-        }
-
-        // Everything the export will use is taken now, before the save dialog is shown:
-        // while that dialog is open another chart may be selected or a calculation may
-        // finish, and the file must not end up with one person's wheel and another's text.
-        var report = ViewModel.ChartVM.ReportSections;
-        var worksheet = ViewModel.ChartVM.Worksheet;
-        var sensitivity = ViewModel.ChartVM.Sensitivity;
-        string name = chart.Celebrity.Name;
-
-        // The daily exports write the reading already on screen (for whatever date the
-        // Daily view is set to) rather than recalculating it — but only once it is the
-        // reading for this chart, not the previous one still showing while this one loads.
-        var reading = ViewModel.DailyVM.Reading;
-        bool daily = kind.StartsWith("daily", StringComparison.Ordinal);
-        if (daily && (reading is null || ViewModel.DailyVM.IsBusy || reading.Name != name))
-        {
-            ViewModel.StatusMessage = "The daily horoscope is not ready yet — try again in a moment.";
-            return;
-        }
-
-        var forecast = ViewModel.ForecastVM.Reading;
-        bool forecasting = kind.StartsWith("forecast", StringComparison.Ordinal);
-        if (forecasting && (forecast is null || ViewModel.ForecastVM.IsBusy || forecast.Name != name))
-        {
-            ViewModel.StatusMessage = "The forecast is not ready yet — open the Forecast view, then try again in a moment.";
-            return;
-        }
-
-        var timing = ViewModel.TimingVM.Reading;
-        bool timed = kind.StartsWith("timing", StringComparison.Ordinal);
-        if (timed && (timing is null || ViewModel.TimingVM.IsBusy || timing.Name != name))
-        {
-            ViewModel.StatusMessage = "The solar return and progressions are not ready yet — open the Timing view, then try again in a moment.";
-            return;
-        }
-
-        // Likewise the synastry exports write the comparison already on screen.
-        var comparison = ViewModel.SynastryVM.Comparison;
-        var synastryReading = ViewModel.SynastryVM.Reading;
-        bool synastry = kind.StartsWith("synastry", StringComparison.Ordinal);
-        if (synastry && (comparison is null || synastryReading is null || ViewModel.SynastryVM.IsBusy ||
-                         !ReferenceEquals(comparison.First, chart)))
-        {
-            ViewModel.StatusMessage = "Open the Synastry view and choose someone to compare with first, then export.";
-            return;
-        }
-
-        // And the Davison exports the Davison chart of the same two people.
-        var davisonReading = ViewModel.SynastryVM.Davison;
-        bool davison = kind.StartsWith("davison", StringComparison.Ordinal);
-        if (davison && (comparison is null || davisonReading is null || ViewModel.SynastryVM.IsBusy ||
-                        !ReferenceEquals(comparison.First, chart)))
-        {
-            ViewModel.StatusMessage = "Open the Synastry view and choose someone to compare with first, then export.";
-            return;
-        }
-
-        // The personality profile on screen in the Inventory view, if it is this person's.
-        var profile = ViewModel.InventoryVM.Profile;
-        if (kind is "inventorytxt" or "mirrortxt" &&
-            (profile is null || !ReferenceEquals(ViewModel.InventoryVM.Chart, chart) ||
-             (kind == "mirrortxt" && ViewModel.InventoryVM.Reading is null)))
-        {
-            ViewModel.StatusMessage = "There is no personality profile for this chart yet: open the Inventory view and answer the questionnaire first.";
-            return;
-        }
-
         try
         {
-            var (label, ext) = kind switch
+            // Everything the export will use is taken now, before the save dialog is shown:
+            // while that dialog is open another chart may be selected, a calculation may
+            // finish or answers be deleted, and the file must not end up with one person's
+            // name and another's contents. From here on only `request` is read, never the
+            // view models (see ExportRequest).
+            if (ExportRequest.Prepare(ViewModel, kind, out string refusal) is not { } request)
             {
-                "pdf"  => ("PDF document", ".pdf"),
-                "png"  => ("PNG image", ".png"),
-                "sheetpng" => ("PNG image", ".png"),
-                "json" => ("JSON data", ".json"),
-                "xml"  => ("XML data", ".xml"),
-                "worksheettxt" => ("Text file", ".txt"),
-                "dailypdf" => ("PDF document", ".pdf"),
-                "dailytxt" => ("Text file", ".txt"),
-                "dailypng" => ("PNG image", ".png"),
-                "forecastpdf" => ("PDF document", ".pdf"),
-                "forecasttxt" => ("Text file", ".txt"),
-                "timingpdf" => ("PDF document", ".pdf"),
-                "timingtxt" => ("Text file", ".txt"),
-                "synastrypdf" => ("PDF document", ".pdf"),
-                "synastrypng" => ("PNG image", ".png"),
-                "davisonpdf" => ("PDF document", ".pdf"),
-                "davisonpng" or "davisonsheetpng" => ("PNG image", ".png"),
-                "davisontxt" or "inventorytxt" or "mirrortxt" => ("Text file", ".txt"),
-                _      => throw new ArgumentOutOfRangeException(nameof(kind)),
-            };
+                ViewModel.StatusMessage = refusal;
+                return;
+            }
+            var chart = request.Chart;
 
             var picker = new FileSavePicker { SuggestedStartLocation = PickerLocationId.DocumentsLibrary };
             InitializeWithWindow.Initialize(picker, WindowNative.GetWindowHandle(this));
-            picker.FileTypeChoices.Add(label, [ext]);
-            picker.SuggestedFileName =
-                daily ? SafeFileName($"{chart.Celebrity.Name} - daily {reading!.Date.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture)}") :
-                synastry ? SafeFileName($"{synastryReading!.FirstName} and {synastryReading.SecondName} - synastry") :
-                davison ? SafeFileName($"{davisonReading!.FirstName} and {davisonReading.SecondName} - Davison chart" +
-                                       (kind == "davisonsheetpng" ? " with tables" : kind == "davisontxt" ? " worksheet" : "")) :
-                kind == "worksheettxt" ? SafeFileName($"{chart.Celebrity.Name} - worksheet") :
-                kind == "inventorytxt" ? SafeFileName($"{chart.Celebrity.Name} - personality profile") :
-                kind == "mirrortxt" ? SafeFileName($"{chart.Celebrity.Name} - chart and answers") :
-                kind == "sheetpng" ? SafeFileName($"{chart.Celebrity.Name} - chart with tables") :
-                timed ? SafeFileName($"{chart.Celebrity.Name} - return and progressions {timing!.AsOf.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture)}") :
-                forecasting ? SafeFileName($"{chart.Celebrity.Name} - forecast from {forecast!.Start.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture)}") :
-                SafeFileName(chart.Celebrity.Name);
+            picker.FileTypeChoices.Add(request.Label, [request.Extension]);
+            picker.SuggestedFileName = request.SuggestedName;
 
             var file = await picker.PickSaveFileAsync();
             if (file is null) return; // user cancelled
@@ -512,11 +461,11 @@ public sealed partial class MainWindow : Window
             {
                 "pdf" or "png" => await ExportService.RenderChartPngAsync(chart),
                 "sheetpng" => await ExportService.RenderChartSheetPngAsync(chart),
-                "dailypdf" or "dailypng" => await ExportService.RenderTransitWheelPngAsync(chart, reading!),
-                "timingpdf" when timing!.Return is { } solar => await ExportService.RenderChartPngAsync(solar.Chart, showVerdict: false),
-                "synastrypdf" or "synastrypng" => await ExportService.RenderBiWheelPngAsync(comparison!),
-                "davisonpdf" or "davisonpng" => await ExportService.RenderChartPngAsync(davisonReading!.Chart, showVerdict: false),
-                "davisonsheetpng" => await ExportService.RenderChartSheetPngAsync(davisonReading!.Chart, showVerdict: false),
+                "dailypdf" or "dailypng" => await ExportService.RenderTransitWheelPngAsync(chart, request.Daily!),
+                "timingpdf" when request.Timing!.Return is { } solar => await ExportService.RenderChartPngAsync(solar.Chart, showVerdict: false),
+                "synastrypdf" or "synastrypng" => await ExportService.RenderBiWheelPngAsync(request.Comparison!),
+                "davisonpdf" or "davisonpng" => await ExportService.RenderChartPngAsync(request.Davison!.Chart, showVerdict: false),
+                "davisonsheetpng" => await ExportService.RenderChartSheetPngAsync(request.Davison!.Chart, showVerdict: false),
                 _ => null,
             };
 
@@ -524,23 +473,22 @@ public sealed partial class MainWindow : Window
             // pages takes long enough to freeze the window if it is done on it.
             byte[] bytes = await Task.Run(() => kind switch
             {
-                "pdf"  => ExportService.ToPdf(chart, report, wheel!, worksheet, sensitivity),
+                "pdf"  => ExportService.ToPdf(chart, request.Report, wheel!, request.Worksheet, request.Sensitivity),
                 "png" or "sheetpng" or "dailypng" or "synastrypng" or "davisonpng" or "davisonsheetpng" => wheel!,
                 "json" => ExportService.ToJson(chart),
                 "xml"  => ExportService.ToXml(chart),
-                "worksheettxt" => WorksheetService.ToText(worksheet ?? WorksheetService.Build(chart), sensitivity),
-                "dailypdf" => DailyExportService.ToPdf(reading!, wheel!),
-                "dailytxt" => DailyExportService.ToText(reading!),
-                "forecastpdf" => DailyExportService.ForecastToPdf(forecast!),
-                "forecasttxt" => DailyInterpreter.ForecastToText(forecast!),
-                "timingpdf" => DailyExportService.TimingToPdf(timing!, wheel),
-                "timingtxt" => TimingService.ToText(timing!),
-                "synastrypdf" => SynastryExportService.ToPdf(comparison!, synastryReading!, wheel!),
-                "davisonpdf" => SynastryExportService.DavisonToPdf(comparison!, davisonReading!, wheel!,
-                    WorksheetService.Build(davisonReading!.Chart)),
-                "davisontxt" => WorksheetService.ToText(WorksheetService.Build(davisonReading!.Chart)),
-                "inventorytxt" => ViewModel.InventoryVM.ProfileText(),
-                "mirrortxt" => ViewModel.InventoryVM.ReadingText(),
+                "worksheettxt" => WorksheetService.ToText(request.Worksheet ?? WorksheetService.Build(chart), request.Sensitivity),
+                "dailypdf" => DailyExportService.ToPdf(request.Daily!, wheel!),
+                "dailytxt" => DailyExportService.ToText(request.Daily!),
+                "forecastpdf" => DailyExportService.ForecastToPdf(request.Forecast!),
+                "forecasttxt" => DailyInterpreter.ForecastToText(request.Forecast!),
+                "timingpdf" => DailyExportService.TimingToPdf(request.Timing!, wheel),
+                "timingtxt" => TimingService.ToText(request.Timing!),
+                "synastrypdf" => SynastryExportService.ToPdf(request.Comparison!, request.Synastry!, wheel!),
+                "davisonpdf" => SynastryExportService.DavisonToPdf(request.Comparison!, request.Davison!, wheel!,
+                    WorksheetService.Build(request.Davison!.Chart)),
+                "davisontxt" => WorksheetService.ToText(WorksheetService.Build(request.Davison!.Chart)),
+                "inventorytxt" or "mirrortxt" => request.Text!,
                 _      => throw new ArgumentOutOfRangeException(nameof(kind)),
             });
 
@@ -606,13 +554,6 @@ public sealed partial class MainWindow : Window
             ViewModel.StatusMessage = $"Couldn't bring in charts: {ex.Message}";
             Diagnostics.Log($"My Charts import failed: {ex}");
         }
-    }
-
-    private static string SafeFileName(string name)
-    {
-        var cleaned = string.Join("_", name.Split(Path.GetInvalidFileNameChars(),
-            StringSplitOptions.RemoveEmptyEntries)).Trim();
-        return string.IsNullOrEmpty(cleaned) ? "chart" : cleaned;
     }
 
     // x:Bind helpers for the Chart/Report/Legend view switch (instance methods so x:Bind can call them).

@@ -144,8 +144,15 @@ public sealed class MirrorInterpreter
 
     public bool IsAvailable => _c.Planets.Count > 0;
 
-    public MirrorReading Compose(NatalChart chart, InventoryProfile profile)
+    // `day`: for a chart with no birth time, the scan of its whole day (see
+    // TimeSensitivityService.AnalyseDay), which says which bodies changed sign. A sign
+    // that is not known is not read: the planet is still set against the answers, but
+    // not against a sign, and the reading names the signs it may have been in. Without
+    // a scan the Moon's sign is taken to be in doubt, never read as the noon guess.
+    public MirrorReading Compose(NatalChart chart, InventoryProfile profile, TimeSensitivity? day = null)
     {
+        IReadOnlyList<ZodiacSign>? Doubt(Planet planet) => TimeSensitivity.SignsInDoubt(chart, day, planet);
+
         // Every facet and every trait by its key, as standard deviations from the mean.
         var scores = profile.Domains.SelectMany(d => d.Facets).ToDictionary(f => f.Facet.Key, f => f.Z);
         foreach (var d in profile.Domains) scores[d.Domain.Key] = d.Z;
@@ -170,7 +177,9 @@ public sealed class MirrorInterpreter
             // Each dial against what the planet's sign would lead one to expect.
             string sign = position.Sign.Name(), body = Body(planet);
             var comparisons = new List<MirrorComparison>();
-            bool hasSigns = entry.Signs.TryGetValue(sign, out var expected);
+            var doubt = Doubt(planet);
+            Dictionary<string, string>? expected = null;
+            bool hasSigns = doubt is null && entry.Signs.TryGetValue(sign, out expected);
             if (hasSigns)
                 foreach (var (dial, level) in levels)
                     if (entry.Nouns.TryGetValue(dial, out var noun) &&
@@ -217,7 +226,9 @@ public sealed class MirrorInterpreter
                 DignityNotes = dignity?.Planets.FirstOrDefault(p => p.Planet == planet)?.Notes ?? "",
                 IsOrdinary = expression.When.Count == 0,
                 Comparisons = comparisons,
-                AgainstSign = !hasSigns ? ""
+                SignsInDoubt = doubt,
+                AgainstSign = doubt is not null ? SignUnsure(body, doubt)
+                    : !hasSigns ? ""
                     : comparisons.Count == 0 ? _c.Compare.AsExpected.Replace("{body}", body).Replace("{sign}", sign)
                     : _c.Compare.InReading.Replace("{clauses}", string.Join("; ", comparisons.Select(c => c.Clause))),
                 ReportLine = line,
@@ -239,8 +250,11 @@ public sealed class MirrorInterpreter
         }
 
         var aspects = Aspects(chart, planets, name);
-        var elements = Balance(NatalMetricsService.ElementCounts(chart), _c.Elements, scores, name);
-        var modalities = Balance(NatalMetricsService.ModalityCounts(chart), _c.Modalities, scores, name);
+        // The balance counts every body by its sign, so one sign in doubt puts the count
+        // in doubt, and nothing is said of it.
+        bool counted = !chart.Planets.Any(p => Doubt(p.Planet) is not null);
+        var elements = counted ? Balance(NatalMetricsService.ElementCounts(chart), _c.Elements, scores, name) : [];
+        var modalities = counted ? Balance(NatalMetricsService.ModalityCounts(chart), _c.Modalities, scores, name) : [];
         string summary = Summary(profile, name);
 
         var sections = new List<DailySection> { Opening(chart), Lived(chart, planets) };
@@ -310,6 +324,17 @@ public sealed class MirrorInterpreter
         Fill(_c.Compare.Alone.GetValueOrDefault(c.Gap == 0 ? "match" : "differs", "By {name}'s answers there is {clause}."), name)
             .Replace("{clause}", c.Clause);
 
+    // "Aquarius or Pisces"
+    private static string Either(IReadOnlyList<ZodiacSign> signs) => string.Join(" or ", signs.Select(s => s.Name()));
+
+    // "Without a birth time the sign the Moon was in is not known (Aquarius or Pisces,
+    // depending on the hour), so the answers are not set against a sign."
+    private string SignUnsure(string body, IReadOnlyList<ZodiacSign> signs) =>
+        _c.Notes.GetValueOrDefault("signUnsure",
+                "Without a birth time the sign {body} was in is not known{signs}, so the answers are not set against a sign.")
+            .Replace("{body}", body)
+            .Replace("{signs}", signs.Count > 1 ? $" ({Either(signs)}, depending on the hour)" : "");
+
     private static string Body(Planet planet) => planet is Planet.Sun or Planet.Moon ? "the " + planet.Name() : planet.Name();
 
     private static string Fill(string? line, string name) => (line ?? "").Replace("{name}", name);
@@ -335,6 +360,9 @@ public sealed class MirrorInterpreter
 
         foreach (var x in chart.Aspects.Where(x => x.Type.IsMajor()).OrderBy(x => x.Orb))
         {
+            // Placed for noon, the Moon may be seven degrees from where it was: an aspect
+            // to it may not have been one. (The other readings leave it out likewise.)
+            if (!chart.Timed && (x.PlanetA == Planet.Moon || x.PlanetB == Planet.Moon)) continue;
             if (!_c.Aspects.TryGetValue(x.Type.Tone().ToString(), out var templates)) continue;
             if (planets.FirstOrDefault(p => p.Planet == x.PlanetA) is not { IsOrdinary: false } a ||
                 planets.FirstOrDefault(p => p.Planet == x.PlanetB) is not { IsOrdinary: false } b) continue;
@@ -430,9 +458,13 @@ public sealed class MirrorInterpreter
         Heading = "How each planet is being lived",
         Items = planets.Select(p =>
         {
-            string where = $"{p.Planet.Name()} in {p.Position.Sign.Name()}" +
-                           (chart.Timed ? $", {ChartInterpreter.Ordinal(chart.GetHouseForLongitude(p.Position.Longitude))} house" : "");
-            string report = _report?.PlanetInSign(p.Position) ?? "";
+            // A sign in doubt is named as the two it may be, and the Report's words for a
+            // planet in one of them are not borrowed.
+            string where = p.SignsInDoubt is { } doubt
+                ? p.Planet.Name() + (doubt.Count > 1 ? $" in {Either(doubt)}, depending on the hour of birth" : ", its sign not known without a birth time")
+                : $"{p.Planet.Name()} in {p.Position.Sign.Name()}" +
+                  (chart.Timed ? $", {ChartInterpreter.Ordinal(chart.GetHouseForLongitude(p.Position.Longitude))} house" : "");
+            string report = p.SignsInDoubt is null && _report is { IsAvailable: true } ? _report.PlanetInSign(p.Position) : "";
             return new DailyItem
             {
                 Title = $"{p.Planet.Symbol()} {p.Planet.Name()}: {p.Expression}",

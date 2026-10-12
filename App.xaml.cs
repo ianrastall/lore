@@ -92,11 +92,19 @@ public partial class App : Application
                                             transits, daily, synastry, settings,
                                             new DavisonInterpreter(davisonPath),
                                             new InventoryService(inventoryPath), inventoryStore,
-                                            new MirrorInterpreter(mirrorPath, interpreter));
+                                            new MirrorInterpreter(mirrorPath, interpreter))
+        {
+            // Anything Lore is installed with that is not there is said, not left to
+            // show as a reading that is empty. (coreclr.dll is beside a published build
+            // and not beside one run from the development tools.)
+            InstallProblem = InstalledFiles.Problem(baseDir, published: File.Exists(Path.Combine(baseDir, "coreclr.dll"))),
+        };
 
         var window = new MainWindow(mainVm);
-        // What is still waiting to be written (the chart and view to come back to).
-        window.Closed += (_, _) => { settings.Flush(); inventoryStore.Flush(); };
+        // What is still waiting to be written (the chart and view to come back to). The
+        // window has already waited for the inventory answers, and asked what to do if
+        // they could not be saved (MainWindow.OnClosing); this is the last chance.
+        window.Closed += (_, _) => { settings.Flush(); inventoryStore.Flush(TimeSpan.FromSeconds(3)); };
         return window;
     }
 
