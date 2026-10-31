@@ -132,10 +132,39 @@ public sealed partial class SynastryViewModel : ObservableObject
     [ObservableProperty]
     public partial string FinderScope { get; set; } = EveryScope;
 
-    partial void OnFinderScopeChanged(string value) => RebuildFinder();
+    partial void OnFinderScopeChanged(string value)
+    {
+        OnPropertyChanged(nameof(SelectedScope));
+        RebuildFinder();
+    }
 
-    public IReadOnlyList<string> FinderScopes =>
-        [EveryScope, .. _people.Select(p => p.Category).Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal)];
+    // The list the box offers, kept as it is unless the categories themselves change, since
+    // a box given a new list forgets what was selected in it.
+    public IReadOnlyList<string> FinderScopes { get; private set; } = [EveryScope];
+
+    // FinderScope as the box binds it. A box empties itself while its list is replaced, and
+    // sets this to null: that is not a choice, and is ignored.
+    public object? SelectedScope
+    {
+        get => FinderScope;
+        set { if (value is string scope) FinderScope = scope; }
+    }
+
+    private void RefreshScopes()
+    {
+        IReadOnlyList<string> scopes = [EveryScope, .. _people.Select(p => p.Category).Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal)];
+        if (scopes.SequenceEqual(FinderScopes)) return;
+        FinderScopes = scopes;
+        OnPropertyChanged(nameof(FinderScopes));
+        // The last chart of a category may have gone, and the choice with it.
+        if (!scopes.Contains(FinderScope)) FinderScope = EveryScope;
+        OnPropertyChanged(nameof(SelectedScope));
+    }
+
+    // Said wherever a list's scores have been moved by the selected person's answers, so
+    // that nobody takes them for the charts' own.
+    private bool ScoredAsLived => Chart is { } chart && Answers?.IsFor(chart) == true;
+    private string AsLivedNote => ScoredAsLived ? ", taking the answers into account" : "";
 
     private IEnumerable<SynastryMatch> InScope =>
         FinderScope == EveryScope ? Matches : Matches.Where(m => m.Person.Category == FinderScope);
@@ -149,7 +178,8 @@ public sealed partial class SynastryViewModel : ObservableObject
             if (Trios.Count == 0) return "";
             int golden = Trios.Count(t => t.Tone == TrioTone.Golden);
             string among = FinderScope == EveryScope ? "" : $" in {FinderScope}";
-            return $"Tried {Trios.Count:n0} trios from {Chart?.Celebrity.Name}'s top {Math.Min(ConnectionsTried, InScope.Count())} connections{among}: {golden:n0} Golden.";
+            int connections = Math.Min(ConnectionsTried, InScope.Count());
+            return $"Tried {Trios.Count:n0} {(Trios.Count == 1 ? "trio" : "trios")} from {Chart?.Celebrity.Name}'s top {connections} connections{among}{AsLivedNote}: {golden:n0} Golden.";
         }
     }
     public bool ReadingShown => Reading is not null && !ThirdsShown;
@@ -167,7 +197,7 @@ public sealed partial class SynastryViewModel : ObservableObject
         {
             if (ThirdMatches.Count == 0) return "";
             int golden = ThirdMatches.Count(m => m.Tone == TrioTone.Golden);
-            return $"Tried {ThirdMatches.Count} charts as the third: {golden} Golden.";
+            return $"Tried {ThirdMatches.Count} charts as the third{AsLivedNote}: {golden} Golden.";
         }
     }
 
@@ -220,7 +250,7 @@ public sealed partial class SynastryViewModel : ObservableObject
             ];
             var counts = scale.Select(t =>
                 $"{Matches.Count(m => m.Compatibility.Level == t.Level())} {t.Label()} ({t.LevelText()})");
-            return $"Compared with {Matches.Count} charts:  {string.Join("  ·  ", counts)}";
+            return $"Compared with {Matches.Count} charts{AsLivedNote}:  {string.Join("  ·  ", counts)}";
         }
     }
 
@@ -251,7 +281,7 @@ public sealed partial class SynastryViewModel : ObservableObject
     public void SetPeople(IReadOnlyList<Celebrity> people)
     {
         _people = people;
-        OnPropertyChanged(nameof(FinderScopes));
+        RefreshScopes();
         if (Partner is { } current)
         {
             var match = people.FirstOrDefault(p => p.Id == current.Id);

@@ -4,16 +4,16 @@ A Windows desktop application for computing and exploring astrological natal cha
 
 Part of Jupiter. Follows Jupiter style standard 1.1.
 
-**Latest release: v4.2.0** · [Download](../../releases/latest)
+**Latest release: v4.2.1** · [Download](../../releases/latest)
 
 ### Installing
 
 Lore 4 needs **Windows 11 24H2** or later, 64-bit.
 
-1. From the [latest release](../../releases/latest), download **`Lore-4.2.0-win-x64-setup.exe`**. It is a single file with everything inside it; there is nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`Lore-4.2.1-win-x64-setup.exe`**. It is a single file with everything inside it; there is nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user, adds **Lore** to the Start menu, and can be removed from *Settings > Apps* like any other program. An earlier Lore is upgraded in place, and your saved charts, answers and settings stay as they are.
 
-**Prefer not to install?** `Lore-4.2.0-win-x64-portable.zip` is the same program as a folder. Unzip it anywhere and run `Lore.exe` from inside it. Delete the folder to remove it.
+**Prefer not to install?** `Lore-4.2.1-win-x64-portable.zip` is the same program as a folder. Unzip it anywhere and run `Lore.exe` from inside it. Delete the folder to remove it.
 
 > **The installer is not code-signed.** Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"*. Choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -601,7 +601,10 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 4.2.0 (current)
+### 4.2.1 (current)
+- Corrections from seeing 4.2.0 on screen. **At the usual window size the five answers to a statement ran off the edge, so "Very accurate" could not be chosen.** They now share the width and wrap, and the bar under the statements fits. This was in earlier versions too. **Look among** in the finder starts on *Everyone* and keeps what is chosen. The match list and the finder say when their scores take the answers into account. Chart and answers is headed as such, whichever questionnaire it was opened from, and one trio is no longer "1 trios".
+
+### 4.2.0
 - **Character scales.** A second questionnaire in the Inventory view: 96 public-domain statements on Self-Directedness, Cooperativeness and Self-Transcendence. They read Pluto, the North Node, Chiron and Lilith for the first time, and say whether each body is on its higher or lower side.
 - **Life areas.** Twelve quick ratings, one to a house, which the Daily, Forecast and Timing readings speak to for six months.
 - **The answers now reach further.** Timing, Synastry, Trine, chart patterns, and each planet in its house. A single facet at the end of the scale is spoken of where its dial's average hid it, and the reading says what has moved between sittings. Any one questionnaire is enough to begin.

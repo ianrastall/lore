@@ -217,9 +217,9 @@
                 <TextBlock Text="{x:Bind ViewModel.FinderSummary, Mode=OneWay}" Style="{StaticResource JupiterBodyTextStyle}" TextWrapping="Wrap" />
                 <TextBlock Style="{StaticResource JupiterCaptionTextStyle}" TextWrapping="Wrap" MaxWidth="900" HorizontalAlignment="Left"
                            Text="This person's best matches, tried two at a time as trios with them, best first. Golden needs no pair in difficulty and a strong grand trine through all three charts. The scale is Lore's own: astrology has no agreed score for three people. Select a row to read the three together." />
-                <ComboBox Header="Look among" MinWidth="200" SelectedIndex="0"
+                <ComboBox Header="Look among" MinWidth="200"
                           ItemsSource="{x:Bind ViewModel.FinderScopes, Mode=OneWay}"
-                          SelectionChanged="Scope_SelectionChanged"
+                          SelectedItem="{x:Bind ViewModel.SelectedScope, Mode=TwoWay}"
                           AutomationProperties.Name="Whom the finder looks among" />
             </StackPanel>
             <ListView Grid.Row="1" MaxWidth="720" HorizontalAlignment="Left"

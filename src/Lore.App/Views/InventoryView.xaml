@@ -98,7 +98,7 @@
             </StackPanel>
 
             <ScrollViewer x:Name="QuestionScroller" Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="24,0,24,8">
-                <ItemsControl ItemsSource="{x:Bind ViewModel.Questions, Mode=OneWay}" MaxWidth="980" HorizontalAlignment="Left">
+                <ItemsControl ItemsSource="{x:Bind ViewModel.Questions, Mode=OneWay}" MaxWidth="1200" HorizontalAlignment="Stretch">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate x:DataType="vm:InventoryQuestion">
                             <Grid Margin="0,0,0,16">
@@ -110,14 +110,37 @@
                                            Foreground="{ThemeResource JupiterSecondaryTextBrush}" />
                                 <StackPanel Grid.Column="1">
                                     <TextBlock Text="{x:Bind Text}" Style="{StaticResource JupiterBodyStrongTextStyle}" TextWrapping="Wrap" />
-                                    <!-- Five choices in a row, least to most accurate -->
-                                    <StackPanel Orientation="Horizontal" Spacing="16" AutomationProperties.Name="{x:Bind Text}">
-                                        <RadioButton GroupName="{x:Bind GroupName}" Content="{x:Bind Choice1}" MinWidth="0" IsChecked="{x:Bind Is1, Mode=TwoWay}" />
-                                        <RadioButton GroupName="{x:Bind GroupName}" Content="{x:Bind Choice2}" MinWidth="0" IsChecked="{x:Bind Is2, Mode=TwoWay}" />
-                                        <RadioButton GroupName="{x:Bind GroupName}" Content="{x:Bind Choice3}" MinWidth="0" IsChecked="{x:Bind Is3, Mode=TwoWay}" />
-                                        <RadioButton GroupName="{x:Bind GroupName}" Content="{x:Bind Choice4}" MinWidth="0" IsChecked="{x:Bind Is4, Mode=TwoWay}" />
-                                        <RadioButton GroupName="{x:Bind GroupName}" Content="{x:Bind Choice5}" MinWidth="0" IsChecked="{x:Bind Is5, Mode=TwoWay}" />
-                                    </StackPanel>
+                                    <!-- Five choices sharing the width, least to most accurate: a long
+                                         one wraps, and none can run off the edge of the window -->
+                                    <Grid ColumnSpacing="8" AutomationProperties.Name="{x:Bind Text}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <RadioButton GroupName="{x:Bind GroupName}" MinWidth="0" IsChecked="{x:Bind Is1, Mode=TwoWay}"
+                                                     AutomationProperties.Name="{x:Bind Choice1}">
+                                            <TextBlock Text="{x:Bind Choice1}" TextWrapping="Wrap" />
+                                        </RadioButton>
+                                        <RadioButton Grid.Column="1" GroupName="{x:Bind GroupName}" MinWidth="0" IsChecked="{x:Bind Is2, Mode=TwoWay}"
+                                                     AutomationProperties.Name="{x:Bind Choice2}">
+                                            <TextBlock Text="{x:Bind Choice2}" TextWrapping="Wrap" />
+                                        </RadioButton>
+                                        <RadioButton Grid.Column="2" GroupName="{x:Bind GroupName}" MinWidth="0" IsChecked="{x:Bind Is3, Mode=TwoWay}"
+                                                     AutomationProperties.Name="{x:Bind Choice3}">
+                                            <TextBlock Text="{x:Bind Choice3}" TextWrapping="Wrap" />
+                                        </RadioButton>
+                                        <RadioButton Grid.Column="3" GroupName="{x:Bind GroupName}" MinWidth="0" IsChecked="{x:Bind Is4, Mode=TwoWay}"
+                                                     AutomationProperties.Name="{x:Bind Choice4}">
+                                            <TextBlock Text="{x:Bind Choice4}" TextWrapping="Wrap" />
+                                        </RadioButton>
+                                        <RadioButton Grid.Column="4" GroupName="{x:Bind GroupName}" MinWidth="0" IsChecked="{x:Bind Is5, Mode=TwoWay}"
+                                                     AutomationProperties.Name="{x:Bind Choice5}">
+                                            <TextBlock Text="{x:Bind Choice5}" TextWrapping="Wrap" />
+                                        </RadioButton>
+                                    </Grid>
                                 </StackPanel>
                             </Grid>
                         </DataTemplate>
@@ -126,27 +149,35 @@
             </ScrollViewer>
 
             <Border Grid.Row="2" Padding="24,12,24,12" BorderThickness="0,1,0,0" BorderBrush="{ThemeResource JupiterSeparatorBrush}">
-                <StackPanel Orientation="Horizontal" Spacing="8">
-                    <Button Content="Back" Command="{x:Bind ViewModel.PreviousCommand}"
-                            IsEnabled="{x:Bind ViewModel.CanGoBack, Mode=OneWay}"
-                            AutomationProperties.Name="The ten statements before" />
-                    <Button Content="Next" Style="{StaticResource AccentButtonStyle}"
-                            Command="{x:Bind ViewModel.NextCommand}"
-                            Visibility="{x:Bind VisIf(ViewModel.CanGoOn), Mode=OneWay}"
-                            AutomationProperties.Name="The next ten statements" />
-                    <Button Content="{x:Bind ViewModel.FinishText, Mode=OneWay}" Style="{StaticResource AccentButtonStyle}"
-                            Command="{x:Bind ViewModel.FinishCommand}"
-                            Visibility="{x:Bind VisIf(ViewModel.IsLastPage), Mode=OneWay}" />
-                    <ProgressBar Width="224" Minimum="0" Maximum="100" VerticalAlignment="Center"
+                <Grid ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Content="Back" Command="{x:Bind ViewModel.PreviousCommand}"
+                                IsEnabled="{x:Bind ViewModel.CanGoBack, Mode=OneWay}"
+                                AutomationProperties.Name="The ten statements before" />
+                        <Button Content="Next" Style="{StaticResource AccentButtonStyle}"
+                                Command="{x:Bind ViewModel.NextCommand}"
+                                Visibility="{x:Bind VisIf(ViewModel.CanGoOn), Mode=OneWay}"
+                                AutomationProperties.Name="The next ten statements" />
+                        <Button Content="{x:Bind ViewModel.FinishText, Mode=OneWay}" Style="{StaticResource AccentButtonStyle}"
+                                Command="{x:Bind ViewModel.FinishCommand}"
+                                Visibility="{x:Bind VisIf(ViewModel.IsLastPage), Mode=OneWay}" />
+                    </StackPanel>
+                    <ProgressBar Grid.Column="1" Minimum="0" Maximum="100" VerticalAlignment="Center"
                                  Value="{x:Bind ViewModel.Progress, Mode=OneWay}"
                                  AutomationProperties.Name="How much of the questionnaire is answered" />
-                    <TextBlock VerticalAlignment="Center" Style="{StaticResource JupiterCaptionTextStyle}">
+                    <TextBlock Grid.Column="2" VerticalAlignment="Center" Style="{StaticResource JupiterCaptionTextStyle}">
                         <Run Text="{x:Bind ViewModel.PageText, Mode=OneWay}" />
                         <Run Text="  ·  " />
                         <Run Text="{x:Bind ViewModel.ProgressText, Mode=OneWay}" />
                     </TextBlock>
-                    <HyperlinkButton Content="Stop and discard this sitting" Click="Abandon_Click" />
-                </StackPanel>
+                    <HyperlinkButton Grid.Column="3" Content="Stop and discard this sitting" Click="Abandon_Click" />
+                </Grid>
             </Border>
         </Grid>
 

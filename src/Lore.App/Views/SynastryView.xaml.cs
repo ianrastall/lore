@@ -86,12 +86,6 @@ public sealed partial class SynastryView : UserControl
     }
 
     // A row of the finder: both of the others at once.
-    private void Scope_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        if (sender is ComboBox { SelectedItem: string scope })
-            ViewModel.FinderScope = scope;
-    }
-
     private void Trio_ItemClick(object sender, ItemClickEventArgs e)
     {
         if (e.ClickedItem is TrioFind found)

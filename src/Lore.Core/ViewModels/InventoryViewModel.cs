@@ -242,6 +242,7 @@ public sealed partial class InventoryViewModel : ObservableObject
         OnPropertyChanged(nameof(LifeAreasShown));
         OnPropertyChanged(nameof(ReadingSections));
         OnPropertyChanged(nameof(HeaderText));
+        OnPropertyChanged(nameof(Title));
     }
 
     // Everything the person has reported, set beside the chart on screen; nothing if there
@@ -312,7 +313,7 @@ public sealed partial class InventoryViewModel : ObservableObject
         _ => "Personality inventory",
     };
 
-    public string Title => Person is null ? PartName : $"{Person.Name} — {PartName}";
+    public string Title => Person is null ? PartName : $"{Person.Name} — {(ReadingShown ? "Chart and answers" : PartName)}";
 
     public bool IsNoChart => Stage == InventoryStage.NoChart;
     public bool IsNotOffered => Stage == InventoryStage.NotOffered;

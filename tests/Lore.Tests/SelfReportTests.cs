@@ -561,6 +561,12 @@ public sealed class SelfReportTests : IDisposable
         Assert.NotNull(vm.Reading);     // the life areas alone make a reading
         Assert.Equal(12, vm.Reading!.Houses.Count);
 
+        // The reading is of all three, and says so whichever part it was opened from.
+        vm.ShowReading = true;
+        Assert.Equal("Ann Example — Chart and answers", vm.Title);
+        vm.ShowReading = false;
+        Assert.Equal("Ann Example — Life areas", vm.Title);
+
         vm.Part = InventoryPart.Character;
         Assert.Equal(InventoryStage.Introduction, vm.Stage);
         Assert.NotNull(vm.Reading);     // going to another part keeps it
@@ -638,5 +644,51 @@ public sealed class SelfReportTests : IDisposable
         Assert.Contains(UserChartService.MyChartsCategory, vm.FinderScopes);
         Assert.Contains("Musician", vm.FinderScopes);
         Assert.Equal(vm.FinderScopes.Count, vm.FinderScopes.Distinct().Count());
+        Assert.Equal(SynastryViewModel.EveryScope, vm.SelectedScope);
+
+        // The box's list is not replaced by the same list, which would empty the box.
+        var scopes = vm.FinderScopes;
+        vm.SetPeople([Person(), Repo.Figure("elvis-presley"), Repo.Figure("albert-einstein")]);
+        Assert.Same(scopes, vm.FinderScopes);
+
+        // A box emptying itself is not a choice.
+        vm.SelectedScope = "Musician";
+        vm.SelectedScope = null;
+        Assert.Equal("Musician", vm.FinderScope);
+
+        // A category that has gone takes the choice with it.
+        vm.SetPeople([Person(), Repo.Figure("albert-einstein")]);
+        Assert.Equal(SynastryViewModel.EveryScope, vm.FinderScope);
+        Assert.Equal(SynastryViewModel.EveryScope, vm.SelectedScope);
+    }
+
+    [Fact]
+    public async Task A_list_scored_with_the_answers_says_so()
+    {
+        var chart = Repo.Charts.Calculate(Person());
+        var vm = new SynastryViewModel(Repo.Charts, Synastry) { Chart = chart };
+        vm.SetPeople([.. Repo.Figures.Take(5)]);
+        for (int i = 0; vm.IsSearching || vm.Matches.Count == 0; i++)
+        {
+            Assert.True(i < 200, "the search did not finish");
+            await Task.Delay(50);
+        }
+        Assert.DoesNotContain("answers", vm.MatchesSummary);
+
+        vm.Answers = Mirror.Compose(chart, Strained());
+        for (int i = 0; vm.IsSearching || vm.Matches.Count == 0; i++)
+        {
+            Assert.True(i < 200, "the search did not finish");
+            await Task.Delay(50);
+        }
+        Assert.Contains("taking the answers into account", vm.MatchesSummary);
+    }
+
+    [Fact]
+    public void One_trio_is_not_called_trios()
+    {
+        var vm = new SynastryViewModel { Chart = Repo.Charts.Calculate(Person()) };
+        vm.Trios = [new TrioFind(Person("a", "Ben"), Person("b", "Cara"), TrioTone.Mixed, 0, 0.5, 1)];
+        Assert.Contains("Tried 1 trio from", vm.FinderSummary);
     }
 }
