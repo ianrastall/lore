@@ -11,7 +11,8 @@ Version 4.0.0 · 31 October 2026 · Repository `D:/jupiter/lore`, branch `main`,
 | Content | `content/` in the repository, `Data\` in the installed app |
 | Swiss Ephemeris | `third_party/swisseph`, compiled to `Native/sweph.dll` (not committed) |
 | Release | `build/build.ps1`, `build/installer.iss` |
-| Installed app | Ian's machine: `D:\Lore`, all-users install (admin needed to upgrade) |
+| Installed app | Ian's machine: `D:\Lore`, all-users install, 4.0.0 (admin needed to upgrade) |
+| Other apps | Jupiter HUD 0.4.1 runs `Lore.exe --daily-reading`; keep `lore.daily.v1` stable |
 | Reader's data | `%LOCALAPPDATA%\Lore`. Never in the repository. |
 
 ## Commands
@@ -23,7 +24,7 @@ dotnet build src\Lore.App -c Debug
 dotnet test tests\Lore.Tests
 ```
 
-A debug build honors `LORE_HOME`, so it can be run with made-up charts. Use it for every screenshot and UI check, so that nobody's real charts or answers are shown. A release build ignores it.
+A debug build honors `LORE_HOME`, so it can be run with made-up charts. Use it for every screenshot and UI check, so that nobody's real charts or answers are shown. A release build ignores it. Ask Ian before opening any window or installer on his machine: he plays online chess on it.
 
 ## Toolchain
 
