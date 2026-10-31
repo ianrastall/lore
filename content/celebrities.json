@@ -4627,22 +4627,6 @@
     "bio": "Spanish actor who won an Oscar for his chilling role in No Country for Old Men."
   },
   {
-    "id": "gerard-depardieu",
-    "name": "Gérard Depardieu",
-    "category": "Actor",
-    "birthDate": "1948-12-27",
-    "birthTime": "08:00",
-    "birthTimeKnown": true,
-    "birthPlace": "Châteauroux, France",
-    "latitude": 46.8167,
-    "longitude": 1.7,
-    "timeZoneId": "Europe/Paris",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank: quoted birth certificate or record; https://www.astro.com/astro-databank/Depardieu%2C_G%C3%A9rard",
-    "bio": "French actor of more than two hundred films, among them Cyrano de Bergerac and Jean de Florette."
-  },
-  {
     "id": "alain-delon",
     "name": "Alain Delon",
     "category": "Actor",
@@ -6265,22 +6249,6 @@
     "bio": "American director and screenwriter of Platoon, Wall Street and JFK."
   },
   {
-    "id": "roman-polanski",
-    "name": "Roman Polanski",
-    "category": "Director",
-    "birthDate": "1933-08-18",
-    "birthTime": "10:30",
-    "birthTimeKnown": true,
-    "birthPlace": "Paris, France",
-    "latitude": 48.8667,
-    "longitude": 2.3333,
-    "timeZoneId": "Europe/Paris",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank: birth certificate or record in hand; https://www.astro.com/astro-databank/Polanski%2C_Roman",
-    "bio": "Polish-French director of Rosemary's Baby, Chinatown and The Pianist."
-  },
-  {
     "id": "luis-bunuel",
     "name": "Luis Buñuel",
     "category": "Director",
@@ -6683,22 +6651,6 @@
     "bio": "German-born Hollywood director of sophisticated comedies such as Ninotchka and To Be or Not to Be."
   },
   {
-    "id": "leni-riefenstahl",
-    "name": "Leni Riefenstahl",
-    "category": "Director",
-    "birthDate": "1902-08-22",
-    "birthTime": "20:00",
-    "birthTimeKnown": true,
-    "birthPlace": "Berlin, Germany",
-    "latitude": 52.4833,
-    "longitude": 13.35,
-    "timeZoneId": "Europe/Berlin",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank: birth certificate or record in hand; https://www.astro.com/astro-databank/Riefenstahl%2C_Leni",
-    "bio": "German filmmaker whose technically brilliant films served Nazi propaganda."
-  },
-  {
     "id": "terry-gilliam",
     "name": "Terry Gilliam",
     "category": "Director",
@@ -7068,22 +7020,6 @@
     "roddenRating": "AA",
     "source": "Astro-Databank: birth certificate or record in hand; https://www.astro.com/astro-databank/Rodgers%2C_Aaron",
     "bio": "American football quarterback, four-time NFL Most Valuable Player and Super Bowl champion."
-  },
-  {
-    "id": "o-j-simpson",
-    "name": "O.J. Simpson",
-    "category": "Athlete",
-    "birthDate": "1947-07-09",
-    "birthTime": "08:08",
-    "birthTimeKnown": true,
-    "birthPlace": "San Francisco, CA",
-    "latitude": 37.7833,
-    "longitude": -122.4167,
-    "timeZoneId": "America/Los_Angeles",
-    "utcOffsetHours": -8.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank: quoted birth certificate or record; https://www.astro.com/astro-databank/Simpson%2C_O.J.",
-    "bio": "American football star and actor whose 1995 murder trial transfixed the world."
   },
   {
     "id": "joe-namath",
@@ -15793,22 +15729,6 @@
     "bio": "King of the Belgians from 1993 until his abdication in 2013."
   },
   {
-    "id": "leopold-ii-of-belgium",
-    "name": "Leopold II of Belgium",
-    "category": "Royalty",
-    "birthDate": "1835-04-09",
-    "birthTime": "01:30",
-    "birthTimeKnown": true,
-    "birthPlace": "Brussels, Belgium",
-    "latitude": 50.8333,
-    "longitude": 4.3333,
-    "timeZoneId": "Europe/Brussels",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank: quoted birth certificate or record; https://www.astro.com/astro-databank/Leopold_II%2C_King_of_Belgium",
-    "bio": "King of the Belgians whose private rule of the Congo became a byword for colonial atrocity."
-  },
-  {
     "id": "akihito",
     "name": "Akihito",
     "category": "Royalty",
@@ -16323,38 +16243,6 @@
     "bio": "American politician, Governor of California since 2019."
   },
   {
-    "id": "adolf-hitler",
-    "name": "Adolf Hitler",
-    "category": "Political",
-    "birthDate": "1889-04-20",
-    "birthTime": "18:30",
-    "birthTimeKnown": true,
-    "birthPlace": "Braunau, Austria",
-    "latitude": 48.25,
-    "longitude": 13.0667,
-    "timeZoneId": "Europe/Vienna",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank: birth certificate or record in hand; https://www.astro.com/astro-databank/Hitler%2C_Adolf",
-    "bio": "Austrian-born dictator of Nazi Germany who started the Second World War and ordered the Holocaust."
-  },
-  {
-    "id": "benito-mussolini",
-    "name": "Benito Mussolini",
-    "category": "Political",
-    "birthDate": "1883-07-29",
-    "birthTime": "14:00",
-    "birthTimeKnown": true,
-    "birthPlace": "Predappio, Italy",
-    "latitude": 44.1,
-    "longitude": 11.9667,
-    "timeZoneId": "Europe/Rome",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank: birth certificate or record in hand; https://www.astro.com/astro-databank/Mussolini%2C_Benito",
-    "bio": "Italian dictator and founder of Fascism, who ruled Italy from 1922 to 1943."
-  },
-  {
     "id": "volodymyr-zelensky",
     "name": "Volodymyr Zelensky",
     "category": "Political",
@@ -16385,22 +16273,6 @@
     "roddenRating": "AA",
     "source": "Astro-Databank: birth certificate or record in hand; https://www.astro.com/astro-databank/Per%C3%B3n%2C_Eva",
     "bio": "Argentine First Lady known as Evita, adored by the poor and immortalised in a musical."
-  },
-  {
-    "id": "francisco-franco",
-    "name": "Francisco Franco",
-    "category": "Political",
-    "birthDate": "1892-12-04",
-    "birthTime": "00:30",
-    "birthTimeKnown": true,
-    "birthPlace": "El Ferrol, Spain",
-    "latitude": 43.4833,
-    "longitude": -8.2333,
-    "timeZoneId": "Europe/Madrid",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank: quoted birth certificate or record; https://www.astro.com/astro-databank/Franco%2C_Francisco",
-    "bio": "Spanish general who won the Civil War and ruled Spain as dictator until 1975."
   },
   {
     "id": "konrad-adenauer",
@@ -16594,22 +16466,6 @@
     "roddenRating": "AA",
     "source": "Astro-Databank: quoted birth certificate or record; https://www.astro.com/astro-databank/Le_Pen%2C_Marine",
     "bio": "French politician, long-time leader of the National Rally and three-time presidential candidate."
-  },
-  {
-    "id": "jean-marie-le-pen",
-    "name": "Jean-Marie Le Pen",
-    "category": "Political",
-    "birthDate": "1928-06-20",
-    "birthTime": "03:00",
-    "birthTimeKnown": true,
-    "birthPlace": "La Trinite sur Mer, France",
-    "latitude": 47.5833,
-    "longitude": -3.0283,
-    "timeZoneId": "Europe/Paris",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank: birth certificate or record in hand; https://www.astro.com/astro-databank/Le_Pen%2C_Jean-Marie",
-    "bio": "French far-right politician who founded the National Front."
   },
   {
     "id": "jean-luc-melenchon",
@@ -17300,22 +17156,6 @@
     "bio": "German philosopher and industrialist who wrote The Communist Manifesto with Marx."
   },
   {
-    "id": "philippe-petain",
-    "name": "Philippe Pétain",
-    "category": "Political",
-    "birthDate": "1856-04-24",
-    "birthTime": "22:30",
-    "birthTimeKnown": true,
-    "birthPlace": "Cauchy-à-la-Tour, France",
-    "latitude": 50.5,
-    "longitude": 2.45,
-    "timeZoneId": "Europe/Paris",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank: birth certificate or record in hand; https://www.astro.com/astro-databank/P%C3%A9tain%2C_Philippe",
-    "bio": "French marshal, the hero of Verdun who later headed the collaborationist Vichy regime."
-  },
-  {
     "id": "giuseppe-garibaldi",
     "name": "Giuseppe Garibaldi",
     "category": "Historical",
@@ -17396,22 +17236,6 @@
     "bio": "American politician, Governor of Alaska and 2008 vice-presidential nominee."
   },
   {
-    "id": "joseph-mccarthy",
-    "name": "Joseph McCarthy",
-    "category": "Political",
-    "birthDate": "1908-11-14",
-    "birthTime": "15:00",
-    "birthTimeKnown": true,
-    "birthPlace": "Grand Chute, WI",
-    "latitude": 44.2833,
-    "longitude": -88.4167,
-    "timeZoneId": "America/Chicago",
-    "utcOffsetHours": -6.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank: birth certificate or record in hand; https://www.astro.com/astro-databank/McCarthy%2C_Joseph",
-    "bio": "American senator whose anti-communist crusade gave the world the word McCarthyism."
-  },
-  {
     "id": "alexei-navalny",
     "name": "Alexei Navalny",
     "category": "Political",
@@ -17428,22 +17252,6 @@
     "bio": "Russian opposition leader and anti-corruption campaigner who died in an Arctic prison in 2024."
   },
   {
-    "id": "nicolae-ceausescu",
-    "name": "Nicolae Ceaușescu",
-    "category": "Political",
-    "birthDate": "1918-02-05",
-    "birthTime": "12:00",
-    "birthTimeKnown": true,
-    "birthPlace": "Scornicesti, Romania",
-    "latitude": 44.57,
-    "longitude": 24.55,
-    "timeZoneId": "Europe/Bucharest",
-    "utcOffsetHours": 2.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank: quoted birth certificate or record; https://www.astro.com/astro-databank/Ceausescu%2C_Nicolae",
-    "bio": "Communist dictator of Romania, overthrown and executed in the revolution of 1989."
-  },
-  {
     "id": "hirohito",
     "name": "Hirohito",
     "category": "Royalty",
@@ -17458,22 +17266,6 @@
     "roddenRating": "A",
     "source": "Astro-Databank: news report; https://www.astro.com/astro-databank/Hirohito%2C_Emperor_of_Japan",
     "bio": "Emperor of Japan for sixty-two years, through the Second World War and the post-war recovery."
-  },
-  {
-    "id": "augusto-pinochet",
-    "name": "Augusto Pinochet",
-    "category": "Political",
-    "birthDate": "1915-11-25",
-    "birthTime": "19:30",
-    "birthTimeKnown": true,
-    "birthPlace": "Valparaíso, Chile",
-    "latitude": -33.0333,
-    "longitude": -71.6333,
-    "timeZoneId": "America/Santiago",
-    "utcOffsetHours": -4.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank: birth certificate or record in hand; https://www.astro.com/astro-databank/Pinochet%2C_Augusto",
-    "bio": "Chilean general who seized power in 1973 and ruled as dictator until 1990."
   },
   {
     "id": "salvador-allende",
@@ -17538,22 +17330,6 @@
     "roddenRating": "AA",
     "source": "Astro-Databank: quoted birth certificate or record; https://www.astro.com/astro-databank/Hindenburg%2C_Paul_von",
     "bio": "German field marshal and president who appointed Hitler chancellor in 1933."
-  },
-  {
-    "id": "erich-honecker",
-    "name": "Erich Honecker",
-    "category": "Political",
-    "birthDate": "1912-08-25",
-    "birthTime": "18:00",
-    "birthTimeKnown": true,
-    "birthPlace": "Neunkirchen, Germany",
-    "latitude": 49.3333,
-    "longitude": 7.1667,
-    "timeZoneId": "Europe/Berlin",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank: quoted birth certificate or record; https://www.astro.com/astro-databank/Honecker%2C_Erich",
-    "bio": "Leader of East Germany from 1971 until just before the fall of the Berlin Wall."
   },
   {
     "id": "charles-lindbergh",

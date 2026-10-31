@@ -702,6 +702,26 @@ the note at the end):
 - **A partner who is not saved**: today the second person must be in the library
   or in My Charts.
 
+### 4.6a Contemporaries in synastry and trios. Medium. Asked for on 31 October 2026.
+
+Ian's requirement: a synastry, and above all a trio, in which everyone could conceivably
+have known each other is the more interesting situation. It must at least be noted, and
+may be preferred.
+
+- **Death dates come first.** `Celebrity` and `content/celebrities.json` hold birth dates
+  only, so nothing can tell who was alive when. Add an optional `deathDate`; about 600
+  figures were born before 1930 and most of the library's dead need the date. The research
+  prompt now asks for it on every new figure.
+- **The test** is that lifetimes overlap. For a trio, each pair overlapping is enough: three
+  lifetimes that overlap in pairs always share a moment. My Charts people count as living.
+- **Noted:** say so on the pair and the trio, in the result lists and in the reading.
+- **Preferred:** keep the astrological order first, and within a level or tone put
+  contemporaries ahead, in `SynastryScoring.Rank`, `TrioService.Rank` and
+  `TrioService.FindTrios`. `FindTrios` takes its cast of 100 before it pairs anyone, so a
+  preference applied only to the final sort would come too late: it has to reach the cast.
+- **Open:** whether a brief overlap counts (a newborn and someone of ninety were alive at
+  the same time, but could not really know each other). Start with plain overlap.
+
 ### 4.7 Finding people in the list. Small to medium.
 
 The browse list sorts by name and filters by category and text. Useful additions:
