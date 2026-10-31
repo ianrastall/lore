@@ -4,16 +4,16 @@ A Windows desktop application for computing and exploring astrological natal cha
 
 Part of Jupiter. Follows Jupiter style standard 1.1.
 
-**Latest release: v4.2.1** · [Download](../../releases/latest)
+**Latest release: v4.3.0** · [Download](../../releases/latest)
 
 ### Installing
 
 Lore 4 needs **Windows 11 24H2** or later, 64-bit.
 
-1. From the [latest release](../../releases/latest), download **`Lore-4.2.1-win-x64-setup.exe`**. It is a single file with everything inside it; there is nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`Lore-4.3.0-win-x64-setup.exe`**. It is a single file with everything inside it; there is nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user, adds **Lore** to the Start menu, and can be removed from *Settings > Apps* like any other program. An earlier Lore is upgraded in place, and your saved charts, answers and settings stay as they are.
 
-**Prefer not to install?** `Lore-4.2.1-win-x64-portable.zip` is the same program as a folder. Unzip it anywhere and run `Lore.exe` from inside it. Delete the folder to remove it.
+**Prefer not to install?** `Lore-4.3.0-win-x64-portable.zip` is the same program as a folder. Unzip it anywhere and run `Lore.exe` from inside it. Delete the folder to remove it.
 
 > **The installer is not code-signed.** Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"*. Choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -89,7 +89,7 @@ The **Daily** view writes a horoscope for the selected chart, for today or any d
 It is a prompt for reflection, not a prediction: the ranking of transits is an editorial priority, not a probability.
 
 ### Synastry
-The **Synastry** view compares the selected chart with a second person's — any bundled figure or any of your own charts, chosen in the **Compare with…** box.
+The **Synastry** view compares the selected chart with a second person's — any bundled figure or any of your own charts. Press **+** beside a name in the Charts list, or type in the **Compare with…** box. The **+** fills the next empty place, and in Trine that is the third person once there is a second; the selected chart stays selected. Right-clicking a name offers the same from any view.
 
 ![Lore showing the synastry reading and bi-wheel for Albert Einstein and Mata Hari](docs/images/screenshot-einstein-hari-synastry.png)
 
@@ -601,7 +601,11 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 4.2.1 (current)
+### 4.3.0 (current)
+- **The splash screen is back.** Lore opens with the portrait of Lauren, for whom it is named and made, as it did until 4.0.
+- **No typing to choose a person.** In the Synastry view each name in the Charts list has a **+** that fills the next empty place in the comparison, without changing who is selected. Right-click a name for the same from any view.
+
+### 4.2.1
 - Corrections from seeing 4.2.0 on screen. **At the usual window size the five answers to a statement ran off the edge, so "Very accurate" could not be chosen.** They now share the width and wrap, and the bar under the statements fits. This was in earlier versions too. **Look among** in the finder starts on *Everyone* and keeps what is chosen. The match list and the finder say when their scores take the answers into account. Chart and answers is headed as such, whichever questionnaire it was opened from, and one trio is no longer "1 trios".
 
 ### 4.2.0

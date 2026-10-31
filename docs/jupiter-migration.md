@@ -34,7 +34,7 @@ Calculations, corpora, stores and exports are unchanged; `content/celebrities.js
 
 | Removed | In its place |
 | --- | --- |
-| Splash window | The main window opens at once; the status bar reports the load |
+| Splash window | Restored in 4.3.0: removing it was a mistake. See [exceptions](jupiter-exceptions.md) |
 | Settings flyout | Settings window (File > Settings) |
 | Toolbar of toggle buttons, Export and Legend buttons | Menu bar and view selector |
 | NumberBox (rule JUP004) | `NumberField`, a typed number checked when focus leaves |

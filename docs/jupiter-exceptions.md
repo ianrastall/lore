@@ -40,6 +40,8 @@ These keep existing installs and data working, and are not the Jupiter defaults 
 
 **Character scores.** The character scales have no reference group, so their bars and bands are placed on the five-point scale itself, unlike the personality profile's. The view says so.
 
+**The splash screen.** Lore opens with the portrait of Lauren, for whom it is named and made. It is the app's signature and is not to be removed. Section 6's "no decorative imagery" is about the working window; the splash stands apart from it for two seconds or so, and keeps its own peach ground and Georgia lettering, declared with `jupiter-allow` in `SplashWindow.xaml`. It was removed in 4.0 as a simplification and restored in 4.3.
+
 **Tri-wheel.** The Trine view's wheel has no houses, since it would have to choose one person's; it is turned to the first chart's Ascendant. Its grand trine triangles are part of the wheel's content palette, with gold for a Golden trio's strongest.
 
 **Reading text size (section 4).** Long-form text defaults to 16 / 26 and has four steps, set from the View menu and bound through `ReadingText`. `FontSize` and `LineHeight` are therefore bindings and not style values.
