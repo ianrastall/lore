@@ -730,7 +730,16 @@ have known each other is the more interesting situation.
 - **Open:** whether a brief overlap counts (a newborn and someone of ninety were alive at
   the same time, but could not really know each other). Any overlap counts for now.
 
-### 4.6b A fuller record for every figure. Medium. Asked for on 31 October 2026.
+### 4.6b A fuller record for every figure. Gathered on 31 October 2026; nothing reads it yet.
+
+**Done, as data only:** `wikidataId`, `sitelinks`, the connections, dated events, birth and
+other names, occupations and portrait file names, in `content/records` (not installed until
+something uses it), and the 15-minute margin on the 646 rounded birth times. What was found,
+what Wikidata lacked and what it got wrong are in `scripts/celebrity-records-2026-10-31.md`.
+**Not done:** the prominence sort (4.7), connections in the reading, events in Timing and
+Forecast, and Open Gauquelin, whose licence terms have to be checked first.
+
+The plan as written:
 
 Ian's direction: as complete a dataset as can be had, past what Astro-Databank offers. Each
 field below names what will read it. A figure must pass the birth-time rule first, so nothing
@@ -757,8 +766,8 @@ Everything else comes from Wikidata, which is structured and citable, in one pas
 
 **Birth-time quality** matters more than any of these. 646 of the 1,313 times (49%) fall exactly
 on :00 or :30, where an honest spread would give about 3%, so most of those were rounded by
-whoever wrote them down. `birthTimeUncertaintyMinutes` exists to say so and is set on nobody.
-Set it to 15 on those figures. New figures get it from the research prompt.
+whoever wrote them down. `birthTimeUncertaintyMinutes` says so: 15 on those figures. New figures get it from the
+research prompt.
 
 **A second source for birth times.** Astro-Databank's own bar is what we cannot beat by searching
 harder, only by going round it. Open Gauquelin (opengauquelin.org) is an openly licensed database

@@ -1,5 +1,6 @@
 using Lore.Models;
 using Lore.Services;
+using Lore.ViewModels;
 
 namespace Lore.Tests;
 
@@ -19,6 +20,72 @@ public class TimeSensitivityServiceTests
         Assert.Null(TimeSensitivityService.Analyse(Repo.Charts, Person(), 0));
         Assert.Null(TimeSensitivityService.Analyse(Repo.Charts, Person(timed: false), 30));
     }
+
+    // Every figure whose time is on the hour or half hour carries a 15-minute margin, so
+    // this is the check their charts run when they are opened.
+    [Fact]
+    public void The_margin_on_rounded_birth_times_can_be_followed_right_across_the_library()
+    {
+        var rounded = Repo.Figures.Where(f => f.BirthTimeUncertaintyMinutes > 0).ToList();
+        Assert.InRange(rounded.Count, 600, 700);
+        int rising = 0, midheaven = 0, sect = 0, any = 0;
+        foreach (var figure in rounded)
+        {
+            var chart = Repo.Charts.Calculate(figure);
+            var result = ChartViewModel.Analyse(Repo.Charts, chart)!;
+            Assert.Equal(15, result.Minutes);
+            Assert.False(result.WholeDay, figure.Name);
+            Assert.Empty(result.MoonSigns);
+            Assert.Empty(result.SignChanges);
+
+            // Whatever may change, the sign at the recorded time is the one the chart shows.
+            bool Changes(string subject) => result.Changes.Any(c => c.StartsWith(subject + ":"));
+            string sign = ZodiacSignExtensions.FromLongitude(chart.Ascendant).Name();
+            if (Changes("Rising sign"))
+            {
+                Assert.Contains(result.Changes, c => c.StartsWith("Rising sign:") && c.Contains(sign));
+                rising++;
+            }
+            else
+            {
+                Assert.Contains(result.Holds, h => h.StartsWith($"Rising sign: {sign} throughout"));
+            }
+            midheaven += Changes("Midheaven") ? 1 : 0;
+            sect += Changes("Sect") ? 1 : 0;
+            any += result.HasChanges ? 1 : 0;
+        }
+
+        // Half an hour moves the angles about 7°, so about one chart in four has its Rising
+        // sign in doubt, and as many their Midheaven. Nearly every chart has a body near
+        // enough to a house cusp for the panel to name something.
+        double Share(int count) => (double)count / rounded.Count;
+        Assert.InRange(Share(rising), 0.18, 0.32);
+        Assert.InRange(Share(midheaven), 0.18, 0.32);
+        Assert.InRange(Share(sect), 0.01, 0.06);
+        Assert.InRange(Share(any), 0.90, 1.00);
+    }
+
+    [Fact]
+    public void A_rounded_birth_time_says_so_and_changes_nothing_in_the_report()
+    {
+        var interpreter = new ChartInterpreter(Repo.Data("interpretations.json"));
+        var vm = new ChartViewModel(interpreter, Repo.Charts);
+
+        var einstein = Repo.Charts.Calculate(Repo.Figure("albert-einstein"));   // 11:30
+        vm.Show(einstein, ChartViewModel.Analyse(Repo.Charts, einstein));
+        Assert.Contains("11:30 (± 15 min)", vm.SubTitle);
+        Assert.Equal(15, vm.UncertaintyMinutes);
+        Assert.True(vm.HasSensitivity);
+        Assert.Equal(Report(interpreter.Interpret(einstein)), Report(vm.ReportSections));
+
+        var elvis = Repo.Charts.Calculate(Repo.Figure("elvis-presley"));        // 04:35
+        vm.Show(elvis, ChartViewModel.Analyse(Repo.Charts, elvis));
+        Assert.DoesNotContain("±", vm.SubTitle);
+        Assert.False(vm.HasSensitivity);
+    }
+
+    private static string Report(IEnumerable<ReportSection> sections) =>
+        string.Join("|", sections.Select(s => System.Text.Json.JsonSerializer.Serialize(s)));
 
     [Fact]
     public void A_one_minute_margin_changes_nothing_for_an_ordinary_chart()

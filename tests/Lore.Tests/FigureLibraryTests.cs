@@ -90,6 +90,15 @@ public class FigureLibraryTests
     public void Well_known_lifetimes_are_as_recorded(string id, string? died) =>
         Assert.Equal(died, Repo.Figure(id).DeathDate);
 
+    // A time on the hour or half hour has usually been rounded by whoever wrote it down.
+    [Fact]
+    public void Rounded_birth_times_carry_a_margin_and_no_others_do()
+    {
+        Assert.All(Repo.Figures, f => Assert.True(
+            f.BirthTimeUncertaintyMinutes == (f.BirthTime![3..] is "00" or "30" ? 15 : 0),
+            $"{f.Name}: {f.BirthTime} ± {f.BirthTimeUncertaintyMinutes}"));
+    }
+
     [Fact]
     public void Every_figure_has_a_Wikidata_item_of_its_own()
     {
