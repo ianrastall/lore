@@ -2,10 +2,10 @@
 rem ===========================================================================
 rem  Lore - Hospital database builder (double-click me)
 rem
-rem  Rebuilds Data\hospitals.json, the list the Add-Chart dialog searches.
+rem  Rebuilds content\hospitals.json, the list the Add-Chart dialog searches.
 rem  Pipeline:
-rem    Stage 1  wikidata_hospitals.py  -> Data\hospitals_wikidata.csv  (Wikidata)
-rem    Stage 2  build-hospitals.py     -> Data\hospitals.json          (+ OpenStreetMap)
+rem    Stage 1  wikidata_hospitals.py  -> content\hospitals_wikidata.csv  (Wikidata)
+rem    Stage 2  build-hospitals.py     -> content\hospitals.json          (+ OpenStreetMap)
 rem
 rem  You normally only need Stage 2 (option 1): the Wikidata CSV is committed,
 rem  and OpenStreetMap is where the small local hospitals come from.
@@ -87,10 +87,10 @@ call :ask_countries
 echo -- Step 1 of 2: querying Wikidata for hospitals worldwide --
 echo    (this is the slow part; progress is saved after each country,
 echo     so you can re-run and it resumes)
-python scripts\wikidata_hospitals.py -o Data\hospitals_wikidata.csv --checkpoint Data\.wikidata_progress.json
+python scripts\wikidata_hospitals.py -o content\hospitals_wikidata.csv --checkpoint content\.wikidata_progress.json
 if errorlevel 1 (
     echo.
-    echo ERROR: the Wikidata step failed. Data\hospitals.json was NOT rebuilt.
+    echo ERROR: the Wikidata step failed. content\hospitals.json was NOT rebuilt.
     goto end
 )
 echo.
@@ -111,15 +111,15 @@ goto report
 if errorlevel 1 (
     echo.
     echo ERROR: the build failed - see the messages above.
-    echo Data\hospitals.json may be unchanged.
+    echo content\hospitals.json may be unchanged.
     goto end
 )
 echo.
 echo ============================================================
-echo   Done. Data\hospitals.json has been rebuilt.
+echo   Done. content\hospitals.json has been rebuilt.
 echo.
 echo   To ship it, commit and push:
-echo       git add Data\hospitals.json
+echo       git add content\hospitals.json
 echo       git commit -m "Rebuild hospital database"
 echo       git push
 echo ============================================================

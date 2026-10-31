@@ -11,7 +11,7 @@ codes, coordinates the right way round). The astronomy is checked separately, ag
 Astro-Databank's published positions.
 
 Needs swetest64.exe, which is in the full Swiss Ephemeris download but not in the repo:
-    Data/swisseph-2.10.3bfinal/swisseph-2.10.3bfinal/windows/programs/swetest64.exe
+    third_party/swisseph/windows/programs/swetest64.exe
 
     python scripts/build-swetest-reference.py
 """
@@ -21,7 +21,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-SWE = ROOT / "Data" / "swisseph-2.10.3bfinal" / "swisseph-2.10.3bfinal"
+SWE = ROOT / "third_party" / "swisseph"
 SWETEST = SWE / "windows" / "programs" / "swetest64.exe"
 OUT = ROOT / "tests" / "Lore.Tests" / "Reference" / "swetest-reference.json"
 

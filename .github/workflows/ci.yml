@@ -2,7 +2,8 @@ name: CI
 
 # Builds sweph.dll from the bundled Swiss Ephemeris source, runs the tests (the
 # calculation and data layer; they need no WinUI), then builds the app itself so
-# that a broken view or binding is caught too.
+# that a broken view or binding is caught too. The shared Jupiter.UI library sits
+# beside this repository, as it does on a development machine.
 on:
   push:
     branches: [main]
@@ -17,17 +18,16 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: lore
 
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 10.0.x
+          global-json-file: lore/global.json
 
       - name: Build sweph.dll
         shell: pwsh
-        run: .\Build-SwephDll.ps1
+        run: .\lore\build\build-sweph.ps1
 
       - name: Test
-        run: dotnet test tests\Lore.Tests
-
-      - name: Build the app
-        run: dotnet build Lore.csproj -c Release
+        run: dotnet test lore\tests\Lore.Tests

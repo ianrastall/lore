@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-Generate Data/hospitals.json (the app's hospital-search database).
+Generate content/hospitals.json (the app's hospital-search database).
 
 Sources merged:
 
-  1. Data/hospitals_wikidata.csv  -- the original Wikidata export (curated but
+  1. content/hospitals_wikidata.csv  -- the original Wikidata export (curated but
      notability-filtered: only hospitals someone made a Wikidata item for, so
      it misses most small/local hospitals). Always used; committed to the repo.
 
@@ -28,7 +28,7 @@ Sources merged:
   5. OpenHistoricalMap (CC0), the historical sister project of OpenStreetMap,
      whose hospitals carry start and end dates -- labelled e.g. "(1878-1945)".
 
-Entries without a city get the nearest town from Data/cities.json (within
+Entries without a city get the nearest town from content/cities.json (within
 25 km), and entries without a country (OpenHistoricalMap) get the country of
 the nearest town.
 
@@ -50,7 +50,7 @@ Standard library only -- no `pip install` required. Run from the project root:
 OpenStreetMap is fetched one country at a time (each hospital is labelled with
 the country whose administrative boundary the query used, since OSM's own
 addr:country tag is usually absent). Results are cached under
-Data/.osm_cache/ so a re-run or a crash resumes instead of refetching; pass
+content/.osm_cache/ so a re-run or a crash resumes instead of refetching; pass
 --refresh to ignore the cache.
 
 Note on the OECD API: it is a *statistics* store (GDP, prices, health
@@ -77,10 +77,10 @@ import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-CSV_IN = ROOT / "Data" / "hospitals_wikidata.csv"
-CITIES_IN = ROOT / "Data" / "cities.json"
-JSON_OUT = ROOT / "Data" / "hospitals.json"
-CACHE_DIR = ROOT / "Data" / ".osm_cache"
+CSV_IN = ROOT / "content" / "hospitals_wikidata.csv"
+CITIES_IN = ROOT / "content" / "cities.json"
+JSON_OUT = ROOT / "content" / "hospitals.json"
+CACHE_DIR = ROOT / "content" / ".osm_cache"
 
 # Bump when the per-country OSM query or its processing changes, so stale cache
 # files from an older version are refetched rather than silently reused.
@@ -554,7 +554,7 @@ def load_ohm(refresh: bool) -> list[dict]:
 # ── nearest town for entries with no city / country ──────────────────────────
 
 def fill_places(records: list[dict]) -> None:
-    """Give city-less entries the nearest town in Data/cities.json (within 25 km),
+    """Give city-less entries the nearest town in content/cities.json (within 25 km),
     and country-less ones that town's country (within 50 km)."""
     if not CITIES_IN.exists():
         return
@@ -595,7 +595,7 @@ def fill_places(records: list[dict]) -> None:
 # ── merge + write ────────────────────────────────────────────────────────────
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="Build Data/hospitals.json.")
+    ap = argparse.ArgumentParser(description="Build content/hospitals.json.")
     ap.add_argument("--no-osm", action="store_true",
                     help="use only the Wikidata CSV (skip OpenStreetMap)")
     ap.add_argument("--countries", default="",

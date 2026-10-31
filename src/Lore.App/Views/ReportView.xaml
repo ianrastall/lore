@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="Lore.Views.ReportView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:models="using:Lore.Models"
+    xmlns:views="using:Lore.Views">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="24,16,24,24">
+        <StackPanel Spacing="16" MaxWidth="720" HorizontalAlignment="Left">
+
+            <StackPanel Spacing="4">
+                <TextBlock Text="{x:Bind ViewModel.Title, Mode=OneWay}" Style="{StaticResource JupiterPageHeadingTextStyle}" TextWrapping="Wrap" />
+                <TextBlock Text="A generated reading: a starting point, not the last word."
+                           Style="{StaticResource JupiterCaptionTextStyle}" TextWrapping="Wrap" />
+            </StackPanel>
+
+            <ItemsControl ItemsSource="{x:Bind ViewModel.ReportSections, Mode=OneWay}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="models:ReportSection">
+                        <StackPanel Spacing="12" Margin="0,0,0,24">
+                            <TextBlock Text="{x:Bind Heading}" Style="{StaticResource JupiterSectionHeadingTextStyle}" TextWrapping="Wrap" />
+                            <ItemsControl ItemsSource="{x:Bind Paragraphs}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="x:String">
+                                        <TextBlock Text="{x:Bind}" Style="{StaticResource JupiterBodyTextStyle}"
+                                                   FontSize="{x:Bind views:ReadingText.Current.FontSize, Mode=OneWay}"
+                                                   LineHeight="{x:Bind views:ReadingText.Current.LineHeight, Mode=OneWay}"
+                                                   TextWrapping="Wrap" IsTextSelectionEnabled="True" Margin="0,0,0,8" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

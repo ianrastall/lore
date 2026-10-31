@@ -5,12 +5,12 @@
     (Board Meeting / CTML Workspace / Minerva): a dark square field, a thin bright
     inset frame, and a bold centered letter -- here an "L" in gold on deep indigo.
 
-    Produces Assets\LoreIconMaster.png (1024x1024) and Assets\AppIcon.ico.
+    Produces src\Lore.App\Assets\LoreIconMaster.png (1024x1024) and AppIcon.ico.
     Requires ImageMagick (`magick`) on PATH.
 #>
 $ErrorActionPreference = 'Stop'
 
-$assets = Join-Path (Split-Path -Parent $PSScriptRoot) 'Assets'
+$assets = Join-Path (Split-Path -Parent $PSScriptRoot) 'src\Lore.App\Assets'
 $master = Join-Path $assets 'LoreIconMaster.png'
 $ico    = Join-Path $assets 'AppIcon.ico'
 

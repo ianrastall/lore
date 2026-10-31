@@ -11,20 +11,20 @@ namespace Lore.Tests;
 // Locations and shared, expensive objects for the tests.
 internal static class Repo
 {
-    // The repository root: the nearest folder above the test binaries holding Lore.csproj.
+    // The repository root: the nearest folder above the test binaries holding Lore.slnx.
     public static string Root { get; } = FindRoot();
 
-    public static string Data(string file) => Path.Combine(Root, "Data", file);
+    public static string Data(string file) => Path.Combine(Root, "content", file);
 
     public static string Ephemeris =>
-        Path.Combine(Root, "Data", "swisseph-2.10.3bfinal", "swisseph-2.10.3bfinal", "ephe");
+        Path.Combine(Root, "third_party", "swisseph", "ephe");
 
     private static string FindRoot()
     {
         for (var dir = new DirectoryInfo(AppContext.BaseDirectory); dir is not null; dir = dir.Parent)
-            if (File.Exists(Path.Combine(dir.FullName, "Lore.csproj")))
+            if (File.Exists(Path.Combine(dir.FullName, "Lore.slnx")))
                 return dir.FullName;
-        throw new DirectoryNotFoundException("Could not find the repository root (Lore.csproj) above " + AppContext.BaseDirectory);
+        throw new DirectoryNotFoundException("Could not find the repository root (Lore.slnx) above " + AppContext.BaseDirectory);
     }
 
     private static readonly Lazy<ChartService> LazyCharts = new(() => new ChartService(Ephemeris));

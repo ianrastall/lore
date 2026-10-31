@@ -1,0 +1,36 @@
+{
+  "project": "lore",
+  "status": "planning scaffold; existing sources not migrated",
+  "priority": "important",
+  "track": "Windows desktop",
+  "source_candidates": [
+    "D:/dev/proj/lore"
+  ],
+  "related_portfolio_entries": [
+    {
+      "id": "dir-114",
+      "kind": "top-level directory",
+      "current_path": "D:\\dev\\proj\\kerykeion",
+      "group": "lore",
+      "relationship": "upstream reference / dependency",
+      "observed_state": "Library/reference source",
+      "purpose": "Kerykeion Python astrology library and CLI source/examples; reference or integration material adjacent in subject to Lore. No direct dependency relationship was verified.",
+      "evidence": "D:\\dev\\proj\\kerykeion\\cli\\README.md",
+      "organization_note": "",
+      "disposition": "Keep as dependency/reference; record upstream and any local adaptations. Exclude from new product count."
+    },
+    {
+      "id": "dir-120",
+      "kind": "top-level directory",
+      "current_path": "D:\\dev\\proj\\lore",
+      "group": "lore",
+      "relationship": "distinct project / tool",
+      "observed_state": "Documented release",
+      "purpose": "Lore: natal charts and daily horoscopes using Swiss Ephemeris, with a curated historical-person library and local installer/portable releases.",
+      "evidence": "D:\\dev\\proj\\lore\\README.md",
+      "organization_note": "",
+      "disposition": "Review alongside group; retain current source until a product/repository decision."
+    }
+  ],
+  "source_evidence_status": "local documents and original inventory; no application/build/release verification in this planning pass"
+}

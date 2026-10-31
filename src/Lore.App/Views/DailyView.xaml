@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="Lore.Views.DailyView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:canvas="using:Microsoft.Graphics.Canvas.UI.Xaml"
+    xmlns:views="using:Lore.Views">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Whose, which day, and how it reads -->
+        <StackPanel Spacing="8" Padding="24,16,24,8">
+            <StackPanel Spacing="4">
+                <TextBlock Text="{x:Bind ViewModel.Title, Mode=OneWay}" Style="{StaticResource JupiterPageHeadingTextStyle}" TextWrapping="Wrap" />
+                <TextBlock Text="Generated from the day's transits to this chart: a prompt for reflection, not a prediction."
+                           Style="{StaticResource JupiterCaptionTextStyle}" TextWrapping="Wrap" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Command="{x:Bind ViewModel.PreviousDayCommand}"
+                        AutomationProperties.Name="Previous day" ToolTipService.ToolTip="Previous day">
+                    <FontIcon Glyph="&#xE76B;" Style="{StaticResource JupiterSmallIconStyle}" />
+                </Button>
+                <CalendarDatePicker Date="{x:Bind ViewModel.PickerDate, Mode=TwoWay}"
+                                    DateFormat="{}{dayofweek.full} {day.integer} {month.full} {year.full}"
+                                    MinWidth="232" AutomationProperties.Name="Date" />
+                <Button Command="{x:Bind ViewModel.NextDayCommand}"
+                        AutomationProperties.Name="Next day" ToolTipService.ToolTip="Next day">
+                    <FontIcon Glyph="&#xE76C;" Style="{StaticResource JupiterSmallIconStyle}" />
+                </Button>
+                <Button Content="Today" Command="{x:Bind ViewModel.TodayCommand}" IsEnabled="{x:Bind Not(ViewModel.IsToday), Mode=OneWay}" />
+                <ProgressRing IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}" Width="16" Height="16" />
+            </StackPanel>
+
+            <InfoBar Severity="Error" Title="The reading could not be made" IsClosable="False"
+                     Message="{x:Bind ViewModel.ErrorText, Mode=OneWay}"
+                     IsOpen="{x:Bind IsNotEmpty(ViewModel.ErrorText), Mode=OneWay}" />
+
+            <!-- The day's tone -->
+            <StackPanel Orientation="Horizontal" Spacing="8" Visibility="{x:Bind HasText(ViewModel.ToneText), Mode=OneWay}">
+                <Border Width="12" Height="12" VerticalAlignment="Center" CornerRadius="{StaticResource ControlCornerRadius}"
+                        Background="{x:Bind BrushOf(ViewModel.ToneColorHex), Mode=OneWay}" />
+                <TextBlock Text="{x:Bind ViewModel.ToneText, Mode=OneWay}" Style="{StaticResource JupiterBodyStrongTextStyle}" />
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Reading on the left, the day's sky around the birth chart on the right -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MaxWidth="720" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="24,8,24,24">
+                <StackPanel Spacing="16">
+                    <views:ReadingList Sections="{x:Bind ViewModel.Sections, Mode=OneWay}" />
+
+                    <!-- The calculation trail behind the reading -->
+                    <Expander HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                              Visibility="{x:Bind HasText(ViewModel.TraceHeader), Mode=OneWay}">
+                        <Expander.Header>
+                            <TextBlock Text="{x:Bind ViewModel.TraceHeader, Mode=OneWay}" Style="{StaticResource JupiterBodyTextStyle}" TextWrapping="Wrap" />
+                        </Expander.Header>
+                        <StackPanel Spacing="8">
+                            <TextBlock Style="{StaticResource JupiterCaptionTextStyle}" TextWrapping="Wrap"
+                                       Text="Each line is a moving planet in aspect to a point in this birth chart. The reading uses the closest and most significant few: up to three from the faster planets (Sun to Mars) and three from the slower ones." />
+                            <ItemsControl ItemsSource="{x:Bind ViewModel.Trace, Mode=OneWay}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="x:String">
+                                        <TextBlock Text="{x:Bind}" Style="{StaticResource JupiterCaptionTextStyle}" TextWrapping="Wrap" Margin="0,0,0,4" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Expander>
+                </StackPanel>
+            </ScrollViewer>
+
+            <Grid Grid.Column="1" Visibility="{x:Bind HasText(ViewModel.WheelCaption), Mode=OneWay}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <canvas:CanvasControl x:Name="WheelCanvas" Margin="8"
+                                      Draw="WheelCanvas_Draw" SizeChanged="WheelCanvas_SizeChanged"
+                                      AutomationProperties.Name="Transit wheel: the birth chart with the day's sky around it" />
+                <TextBlock Grid.Row="1" Text="{x:Bind ViewModel.WheelCaption, Mode=OneWay}"
+                           Style="{StaticResource JupiterCaptionTextStyle}"
+                           HorizontalAlignment="Center" Margin="8,0,8,12" TextWrapping="Wrap" />
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -1,0 +1,12 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+  </Configurations>
+  <Folder Name="/src/">
+    <Project Path="src/Lore.App/Lore.App.csproj" />
+    <Project Path="src/Lore.Core/Lore.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Lore.Tests/Lore.Tests.csproj" />
+  </Folder>
+</Solution>

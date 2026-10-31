@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentDialog
+    x:Class="Lore.Views.AddChartDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:views="using:Lore.Views"
+    Title="New chart"
+    PrimaryButtonText="Create"
+    CloseButtonText="Cancel"
+    DefaultButton="Primary"
+    RequestedTheme="Dark">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="580" Padding="0,0,16,0">
+        <!-- The four parts of the form: who, when, where, and how reliable. -->
+        <StackPanel Spacing="16" Width="400">
+
+            <TextBox x:Name="NameBox" Header="Name" PlaceholderText="e.g. Jane Doe" />
+
+            <!-- When -->
+            <TextBlock Text="When" Style="{StaticResource JupiterSectionHeadingTextStyle}" />
+
+            <StackPanel Spacing="4">
+                <DatePicker x:Name="DateField" Header="Birth date" />
+                <!-- Shown only for years in which some country was still on the Julian calendar -->
+                <CheckBox x:Name="JulianCheck" Visibility="Collapsed"
+                          Content="This is an Old Style (Julian calendar) date"
+                          Checked="Julian_Changed" Unchecked="Julian_Changed" />
+                <!-- The date picker has no 29 February in 1700, 1800 or 1900, which the Old Style
+                     calendar did: offered when 28 February of such a year is picked -->
+                <CheckBox x:Name="JulianLeapCheck" Visibility="Collapsed"
+                          Content="It was 29 February (the Old Style calendar had one that year)"
+                          Checked="Julian_Changed" Unchecked="Julian_Changed" />
+                <TextBlock x:Name="JulianText" Visibility="Collapsed" Style="{StaticResource JupiterCaptionTextStyle}" TextWrapping="Wrap" />
+            </StackPanel>
+
+            <StackPanel Spacing="4">
+                <TimePicker x:Name="TimeField" Header="Birth time" ClockIdentifier="24HourClock" />
+                <CheckBox x:Name="TimeUnknownCheck" Content="Birth time unknown"
+                          Checked="TimeUnknown_Changed" Unchecked="TimeUnknown_Changed" />
+            </StackPanel>
+
+            <!-- Where -->
+            <TextBlock Text="Where" Style="{StaticResource JupiterSectionHeadingTextStyle}" />
+
+            <AutoSuggestBox x:Name="HospitalBox"
+                            Header="Hospital (the most precise; search by name)"
+                            PlaceholderText="Start typing a hospital…"
+                            TextChanged="HospitalBox_TextChanged"
+                            SuggestionChosen="HospitalBox_SuggestionChosen"
+                            DisplayMemberPath="Display"
+                            TextMemberPath="Display"
+                            QueryIcon="Find" />
+
+            <AutoSuggestBox x:Name="CityBox"
+                            Header="Or a city or town"
+                            PlaceholderText="Start typing a city…"
+                            TextChanged="CityBox_TextChanged"
+                            SuggestionChosen="CityBox_SuggestionChosen"
+                            DisplayMemberPath="Display"
+                            TextMemberPath="Display"
+                            QueryIcon="Find" />
+
+            <TextBox x:Name="PlaceBox" Header="Birthplace, as it will be shown" PlaceholderText="e.g. Boston, USA" />
+
+            <StackPanel Spacing="4">
+                <Grid ColumnSpacing="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <views:NumberField x:Name="LatBox" Header="Latitude" Minimum="-90" Maximum="90" ValueChanged="Place_ValueChanged" />
+                    <views:NumberField x:Name="LonBox" Grid.Column="1" Header="Longitude" Minimum="-180" Maximum="180" ValueChanged="Place_ValueChanged" />
+                </Grid>
+                <TextBlock x:Name="ResolvedOffsetText" Style="{StaticResource JupiterCaptionTextStyle}" TextWrapping="Wrap"
+                           Text="Pick a birthplace to resolve its time zone." />
+            </StackPanel>
+
+            <!-- How reliable -->
+            <TextBlock Text="How reliable" Style="{StaticResource JupiterSectionHeadingTextStyle}" />
+
+            <views:NumberField x:Name="UncertaintyBox"
+                               Header="The time could be off by up to (minutes either way; 0 if exact)"
+                               Minimum="0" Maximum="180" />
+
+            <ComboBox x:Name="RatingCombo" HorizontalAlignment="Stretch" Header="Where the birth time comes from (Rodden rating)" />
+            <TextBox x:Name="SourceBox" Header="Source (optional)" PlaceholderText="e.g. birth certificate; mother's memory" />
+
+            <!-- Seldom needed, so tucked away -->
+            <Expander x:Name="OffsetExpander" Header="Time zone override" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                <StackPanel Spacing="8">
+                    <TextBlock Style="{StaticResource JupiterCaptionTextStyle}" TextWrapping="Wrap"
+                               Text="Lore works out the offset from the place and date. Tick this only if you know it is wrong for this birth, or the clock time fell in an hour that was repeated." />
+                    <CheckBox x:Name="OffsetFixedCheck" Content="Set the UTC offset myself"
+                              Checked="OffsetFixed_Changed" Unchecked="OffsetFixed_Changed" />
+                    <views:NumberField x:Name="UtcBox" Header="UTC offset in hours (east of Greenwich is positive)"
+                                       Minimum="-14" Maximum="14" IsEnabled="False" />
+                </StackPanel>
+            </Expander>
+
+            <TextBox x:Name="NoteBox" Header="Note (optional)" PlaceholderText="anything you'd like to remember"
+                     TextWrapping="Wrap" AcceptsReturn="True" MinHeight="64" />
+
+            <TextBlock x:Name="ErrorText" Style="{StaticResource JupiterBodyTextStyle}"
+                       Foreground="{ThemeResource JupiterErrorBrush}" TextWrapping="Wrap" Visibility="Collapsed" />
+        </StackPanel>
+    </ScrollViewer>
+</ContentDialog>

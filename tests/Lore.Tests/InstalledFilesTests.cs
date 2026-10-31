@@ -16,10 +16,12 @@ public sealed class InstalledFilesTests : IDisposable
         try { Directory.Delete(_dir, recursive: true); } catch (IOException) { }
     }
 
-    private static string Manifest => Path.Combine(Repo.Root, InstalledFiles.ManifestName);
+    private static string AppFolder => Path.Combine(Repo.Root, "src", "Lore.App");
+    private static string Manifest => Path.Combine(AppFolder, InstalledFiles.ManifestName);
+    private static string Project => Path.Combine(AppFolder, "Lore.App.csproj");
 
     [Fact]
-    public void The_list_names_every_data_file_and_every_view_and_each_is_there_to_ship()
+    public void The_list_names_every_data_file_and_each_is_there_to_ship()
     {
         var published = InstalledFiles.Read(Manifest, published: true);
         var development = InstalledFiles.Read(Manifest, published: false);
@@ -30,17 +32,16 @@ public sealed class InstalledFilesTests : IDisposable
 
         // Everything in Data\ that Lore reads, and nothing listed that is not in the repository.
         // (A name beginning with a dot is a script's scratch file, not part of Lore.)
-        var data = Directory.GetFiles(Path.Combine(Repo.Root, "Data"), "*.json").Select(Path.GetFileName)
+        var data = Directory.GetFiles(Path.Combine(Repo.Root, "content"), "*.json").Select(Path.GetFileName)
             .Where(f => !f!.StartsWith('.')).Select(f => @"Data\" + f).ToList();
         Assert.Equal(data.Order(), published.Where(f => f.StartsWith(@"Data\")).Order());
 
-        // A view that is not listed would not be missed from a build until it was opened.
-        var views = Directory.GetFiles(Path.Combine(Repo.Root, "Views"), "*.xaml").Select(f => @"Views\" + Path.GetFileNameWithoutExtension(f) + ".xbf")
-            .Concat(Directory.GetFiles(Repo.Root, "*.xaml").Select(f => Path.GetFileNameWithoutExtension(f) + ".xbf")).ToList();
-        Assert.Equal(views.Order(), published.Where(f => f.EndsWith(".xbf")).Order());
+        // The views are compiled into Lore.pri, so the list names that file and not each view.
+        Assert.Contains("Lore.pri", development);
+        Assert.DoesNotContain(published, f => f.EndsWith(".xbf"));
 
         // The six ephemeris files the project copies.
-        string project = File.ReadAllText(Path.Combine(Repo.Root, "Lore.csproj"));
+        string project = File.ReadAllText(Project);
         foreach (string file in published.Where(f => f.StartsWith(@"Assets\Ephemeris\")))
             Assert.Contains($"<TargetPath>{file}</TargetPath>", project);
     }
@@ -49,10 +50,11 @@ public sealed class InstalledFilesTests : IDisposable
     public void The_project_copies_every_listed_data_file_whether_or_not_it_exists()
     {
         // "Include it if it is there" is how a build came to ship without its Report.
-        string project = File.ReadAllText(Path.Combine(Repo.Root, "Lore.csproj"));
-        foreach (string file in InstalledFiles.Read(Manifest, published: true).Where(f => f.StartsWith(@"Data\")).Append(InstalledFiles.ManifestName))
-            Assert.Contains($"<Content Include=\"{file}\">", project);
-        Assert.DoesNotContain("Condition=\"Exists('Data\\", project);
+        string project = File.ReadAllText(Project);
+        foreach (string file in InstalledFiles.Read(Manifest, published: true).Where(f => f.StartsWith(@"Data\")))
+            Assert.Contains($"<TargetPath>{file}</TargetPath>", project);
+        Assert.Contains($"<Content Include=\"{InstalledFiles.ManifestName}\">", project);
+        Assert.DoesNotContain("Condition=\"Exists('..\\..\\content", project);
     }
 
     [Fact]

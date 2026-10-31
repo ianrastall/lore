@@ -100,14 +100,14 @@ public sealed class LegendAndSelfCheckTests : IDisposable
     private string Stage()
     {
         string stage = Path.Combine(_dir, "stage");
-        foreach (string file in InstalledFiles.Read(Path.Combine(Repo.Root, InstalledFiles.ManifestName), published: false)
+        foreach (string file in InstalledFiles.Read(Path.Combine(Repo.Root, "src", "Lore.App", InstalledFiles.ManifestName), published: false)
                      .Append(InstalledFiles.ManifestName))
         {
             string to = Path.Combine(stage, file);
             Directory.CreateDirectory(Path.GetDirectoryName(to)!);
             string from =
-                file == InstalledFiles.ManifestName ? Path.Combine(Repo.Root, file) :
-                file.StartsWith(@"Data\") ? Path.Combine(Repo.Root, file) :
+                file == InstalledFiles.ManifestName ? Path.Combine(Repo.Root, "src", "Lore.App", file) :
+                file.StartsWith(@"Data\") ? Repo.Data(Path.GetFileName(file)) :
                 file.StartsWith(@"Assets\Ephemeris\") ? Path.Combine(Repo.Ephemeris, Path.GetFileName(file) == "seleapsec.txt" ? @"..\seleapsec.txt" : Path.GetFileName(file)) :
                 "";
             if (from.Length > 0) File.Copy(from, to);

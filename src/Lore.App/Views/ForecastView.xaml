@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="Lore.Views.ForecastView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:views="using:Lore.Views">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="24,16,24,24">
+        <StackPanel Spacing="16" MaxWidth="720" HorizontalAlignment="Left">
+
+            <StackPanel Spacing="4">
+                <TextBlock Text="{x:Bind ViewModel.Title, Mode=OneWay}" Style="{StaticResource JupiterPageHeadingTextStyle}" TextWrapping="Wrap" />
+                <TextBlock Text="The transits coming up for this chart, in the order they peak, with what the sky itself is doing set among them: a prompt for reflection, not a prediction. The Moon's quick contacts are left to the Daily view."
+                           Style="{StaticResource JupiterCaptionTextStyle}" TextWrapping="Wrap" />
+            </StackPanel>
+
+            <!-- From when, and for how long -->
+            <StackPanel Spacing="8">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <CalendarDatePicker Date="{x:Bind ViewModel.PickerDate, Mode=TwoWay}"
+                                        DateFormat="{}{day.integer} {month.full} {year.full}"
+                                        MinWidth="192" VerticalAlignment="Center" AutomationProperties.Name="From" />
+                    <ComboBox SelectedIndex="{x:Bind ViewModel.SpanIndex, Mode=TwoWay}" MinWidth="152" VerticalAlignment="Center"
+                              AutomationProperties.Name="How far ahead">
+                        <ComboBoxItem Content="One month" />
+                        <ComboBoxItem Content="Three months" />
+                        <ComboBoxItem Content="Six months" />
+                        <ComboBoxItem Content="One year" />
+                    </ComboBox>
+                    <Button Content="From today" Command="{x:Bind ViewModel.FromTodayCommand}" VerticalAlignment="Center" />
+                    <ProgressRing IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}" Width="16" Height="16" VerticalAlignment="Center" />
+                </StackPanel>
+                <CheckBox Content="Include the Sun, Mercury, Venus and Mars"
+                          IsChecked="{x:Bind ViewModel.IncludeFast, Mode=TwoWay}"
+                          ToolTipService.ToolTip="Untick to list only Jupiter and beyond: fewer transits, each lasting weeks" />
+                <CheckBox Content="Include the sky calendar"
+                          IsChecked="{x:Bind ViewModel.IncludeSky, Mode=TwoWay}"
+                          ToolTipService.ToolTip="New and Full Moons, eclipses, planets turning retrograde or direct, and the slow planets changing sign: the same for everyone, each with the house of this chart it falls in" />
+            </StackPanel>
+
+            <InfoBar Severity="Error" Title="The forecast could not be made" IsClosable="False"
+                     Message="{x:Bind ViewModel.ErrorText, Mode=OneWay}"
+                     IsOpen="{x:Bind IsNotEmpty(ViewModel.ErrorText), Mode=OneWay}" />
+
+            <TextBlock Text="{x:Bind ViewModel.Summary, Mode=OneWay}" Style="{StaticResource JupiterBodyTextStyle}"
+                       Foreground="{ThemeResource JupiterSecondaryTextBrush}" TextWrapping="Wrap"
+                       Visibility="{x:Bind HasText(ViewModel.Summary), Mode=OneWay}" />
+
+            <views:ReadingList Sections="{x:Bind ViewModel.Sections, Mode=OneWay}" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

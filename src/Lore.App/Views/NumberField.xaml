@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="Lore.Views.NumberField"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- A number in a text box, checked when focus leaves (style standard, section 8). -->
+    <StackPanel Spacing="4">
+        <TextBox x:Name="Box" LostFocus="Box_LostFocus" KeyDown="Box_KeyDown" InputScope="Number" />
+        <StackPanel x:Name="Problem" Orientation="Horizontal" Spacing="4" Visibility="Collapsed">
+            <FontIcon Glyph="&#xE783;" Style="{StaticResource JupiterSmallIconStyle}" Foreground="{ThemeResource JupiterErrorBrush}" />
+            <TextBlock x:Name="ProblemText" Style="{StaticResource JupiterCaptionTextStyle}"
+                       Foreground="{ThemeResource JupiterErrorBrush}" TextWrapping="Wrap" />
+        </StackPanel>
+    </StackPanel>
+</UserControl>

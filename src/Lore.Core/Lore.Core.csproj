@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Everything in Lore that needs no window: the models, the calculation and
+       interpretation services, the stores, the document exports and the view models.
+       The app (..\Lore.App) and the tests (..\..\tests\Lore.Tests) both reference this
+       one assembly, so what is tested is what ships. Nothing here may use WinUI or
+       Win2D; drawing stays in the app. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>Lore</RootNamespace>
+    <AssemblyName>Lore.Core</AssemblyName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Members marked internal are for the app and the tests, nobody else. -->
+    <InternalsVisibleTo Include="Lore" />
+    <InternalsVisibleTo Include="Lore.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="QuestPDF" />
+    <!-- NodaTime bundles the IANA tz database (historical DST, incl. the 1968–71 UK
+         year-round-BST experiment) so a birth instant resolves to the offset actually
+         in force on that date; GeoTimeZone maps lat/lon → IANA zone id offline, used to
+         backfill charts saved with only a numeric offset. -->
+    <PackageReference Include="NodaTime" />
+    <PackageReference Include="GeoTimeZone" />
+  </ItemGroup>
+
+</Project>

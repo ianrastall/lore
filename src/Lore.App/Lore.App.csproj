@@ -1,0 +1,157 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
+    <!-- Windows 11 24H2: the oldest release still serviced for Home and Pro editions (checked October 2026). -->
+    <TargetPlatformMinVersion>10.0.26100.0</TargetPlatformMinVersion>
+    <SupportedOSPlatformVersion>10.0.26100.0</SupportedOSPlatformVersion>
+    <RootNamespace>Lore</RootNamespace>
+    <AssemblyName>Lore</AssemblyName>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\AppIcon.ico</ApplicationIcon>
+    <UseWinUI>true</UseWinUI>
+    <WinUISDKReferences>false</WinUISDKReferences>
+    <!-- Unpackaged: the Windows App SDK and .NET runtimes ship with the app. -->
+    <WindowsPackageType>None</WindowsPackageType>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <SelfContained>true</SelfContained>
+    <!-- Required even unpackaged: it adds the app .pri and compiled XAML (.xbf) to publish output. -->
+    <EnableMsixTooling>true</EnableMsixTooling>
+    <DefineConstants>$(DefineConstants);DISABLE_XAML_GENERATED_MAIN</DefineConstants>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <PublishTrimmed>false</PublishTrimmed>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <SweRoot>$(RepoRoot)third_party\swisseph\</SweRoot>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Manifest Include="$(ApplicationManifest)" />
+  </ItemGroup>
+
+  <!-- Everything that needs no window: models, services, view models. The tests
+       reference the same assembly. -->
+  <ItemGroup>
+    <ProjectReference Include="..\Lore.Core\Lore.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.WindowsAppSDK" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" />
+    <PackageReference Include="Microsoft.Graphics.Win2D" />
+    <PackageReference Include="CommunityToolkit.WinUI.Controls.Sizers" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Lore's own licence (AGPL-3.0) travels with every build -->
+    <Content Include="$(RepoRoot)LICENSE">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>LICENSE.txt</TargetPath>
+    </Content>
+    <Content Include="Assets\AppIcon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <!-- The one list of the files Lore needs at run time: checked against a published
+         build by build\build.ps1, and by Lore itself when it starts. -->
+    <Content Include="required-files.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+
+    <!-- None of these is optional: without its file a reading or the place search is
+         simply not there. So none is included "if it exists" - a checkout that lacks one
+         fails to build, where it used to build an app with that part quietly missing. -->
+    <Content Include="$(RepoRoot)content\celebrities.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Data\celebrities.json</TargetPath>
+    </Content>
+    <Content Include="$(RepoRoot)content\cities.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Data\cities.json</TargetPath>
+    </Content>
+    <Content Include="$(RepoRoot)content\hospitals.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Data\hospitals.json</TargetPath>
+    </Content>
+    <Content Include="$(RepoRoot)content\interpretations.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Data\interpretations.json</TargetPath>
+    </Content>
+    <!-- Corpus for the daily horoscope (transit lines, Moon/Sun/house text) -->
+    <Content Include="$(RepoRoot)content\daily.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Data\daily.json</TargetPath>
+    </Content>
+    <!-- Corpus for the synastry reading (aspect lines between two charts, house overlays) -->
+    <Content Include="$(RepoRoot)content\synastry.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Data\synastry.json</TargetPath>
+    </Content>
+    <!-- Corpus for the Davison reading (the relationship's chart: signs, houses, aspects) -->
+    <Content Include="$(RepoRoot)content\davison.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Data\davison.json</TargetPath>
+    </Content>
+    <!-- The personality inventory: the IPIP-NEO-120's statements, keys, reference figures and descriptions -->
+    <Content Include="$(RepoRoot)content\inventory.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Data\inventory.json</TargetPath>
+    </Content>
+    <!-- Corpus for the reading that sets the inventory profile beside the chart -->
+    <Content Include="$(RepoRoot)content\mirror.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Data\mirror.json</TargetPath>
+    </Content>
+    <!-- The Legend's entries: every glyph, colour and term, explained -->
+    <Content Include="$(RepoRoot)content\legend.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Data\legend.json</TargetPath>
+    </Content>
+
+    <!-- sweph.dll built by build\build-sweph.ps1; lives in Native\ but must sit next to
+         the exe (the DLL loader searches the app root, not subfolders) -->
+    <Content Include="$(RepoRoot)Native\sweph.dll" Condition="Exists('$(RepoRoot)Native\sweph.dll')">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>sweph.dll</TargetPath>
+    </Content>
+
+    <!--
+      Ephemeris data files copied from the bundled source tree.
+      Each pair covers a 600-year window:
+        _12  = 1200–1800 CE  (needed for da Vinci, Shakespeare, Newton, Mozart…)
+        _18  = 1800–2400 CE  (needed for nearly everyone else)
+      seleapsec.txt carries leap-second data for UTC↔TT conversion.
+    -->
+    <Content Include="$(SweRoot)ephe\sepl_12.se1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Assets\Ephemeris\sepl_12.se1</TargetPath>
+    </Content>
+    <Content Include="$(SweRoot)ephe\sepl_18.se1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Assets\Ephemeris\sepl_18.se1</TargetPath>
+    </Content>
+    <Content Include="$(SweRoot)ephe\semo_12.se1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Assets\Ephemeris\semo_12.se1</TargetPath>
+    </Content>
+    <Content Include="$(SweRoot)ephe\semo_18.se1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Assets\Ephemeris\semo_18.se1</TargetPath>
+    </Content>
+    <Content Include="$(SweRoot)ephe\seas_12.se1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Assets\Ephemeris\seas_12.se1</TargetPath>
+    </Content>
+    <Content Include="$(SweRoot)ephe\seas_18.se1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Assets\Ephemeris\seas_18.se1</TargetPath>
+    </Content>
+    <Content Include="$(SweRoot)seleapsec.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Assets\Ephemeris\seleapsec.txt</TargetPath>
+    </Content>
+  </ItemGroup>
+
+  <!-- Jupiter style standard 1.1: shared resources, accent service and the style check. -->
+  <Import Project="$(RepoRoot)..\jupiter-ui\build\Jupiter.UI.targets" />
+
+</Project>

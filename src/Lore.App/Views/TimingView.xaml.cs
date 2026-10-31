@@ -1,0 +1,73 @@
+using Lore.Models;
+using Lore.ViewModels;
+using Microsoft.Graphics.Canvas.UI.Xaml;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+
+namespace Lore.Views;
+
+public sealed partial class TimingView : UserControl
+{
+    private TimingViewModel _viewModel = new();
+
+    public TimingViewModel ViewModel
+    {
+        get => _viewModel;
+        set
+        {
+            if (ReferenceEquals(_viewModel, value)) return;
+            _viewModel.PropertyChanged -= OnViewModelChanged;
+            _viewModel = value;
+            value.PropertyChanged += OnViewModelChanged;
+            Bindings.Update();
+        }
+    }
+
+    private void OnViewModelChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(TimingViewModel.ReturnChart))
+            WheelCanvas.Invalidate();
+    }
+
+    public TimingView()
+    {
+        InitializeComponent();
+    }
+
+    // ── Place the return is cast for ──────────────────────────────────────────
+
+    private readonly SuggestionSearch _placeSearch = new();
+
+    private async void PlaceBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+    {
+        if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
+            await _placeSearch.RunAsync(sender, ViewModel.Suggest);
+    }
+
+    // A suggestion was picked, or Enter pressed: take the pick, else the best match.
+    private void PlaceBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+    {
+        var city = args.ChosenSuggestion as City ?? ViewModel.Suggest(args.QueryText).FirstOrDefault();
+        if (city is null) return;
+
+        _placeSearch.Cancel();
+        ViewModel.CastFor(city);
+        sender.Text = "";
+        sender.ItemsSource = null;
+    }
+
+    // The solar return chart, drawn like any other chart.
+    private void WheelCanvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
+    {
+        if (ViewModel.ReturnChart is { } chart)
+            ChartRenderer.Draw(args.DrawingSession, chart, (float)sender.ActualWidth, (float)sender.ActualHeight, showVerdict: false);
+        else
+            args.DrawingSession.Clear(ChartRenderer.Background);
+    }
+
+    private void WheelCanvas_SizeChanged(object sender, SizeChangedEventArgs e) => WheelCanvas.Invalidate();
+
+    // x:Bind helpers.
+    public Visibility VisIf(bool b) => b ? Visibility.Visible : Visibility.Collapsed;
+    public bool IsNotEmpty(string? s) => !string.IsNullOrEmpty(s);
+}

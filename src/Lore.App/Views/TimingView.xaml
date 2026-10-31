@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="Lore.Views.TimingView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:canvas="using:Microsoft.Graphics.Canvas.UI.Xaml"
+    xmlns:views="using:Lore.Views">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Whose, and as of when -->
+        <StackPanel Spacing="8" Padding="24,16,24,8">
+            <StackPanel Spacing="4">
+                <TextBlock Text="{x:Bind ViewModel.Title, Mode=OneWay}" Style="{StaticResource JupiterPageHeadingTextStyle}" TextWrapping="Wrap" />
+                <TextBlock Text="Ways of carrying the birth chart forward to a date: the solar return and the profection for that year, the chart progressed a day for each year of life, and the chart directed by solar arc. Choose another place and the birth chart is relocated there too. The positions are given as they are; nothing here is interpreted."
+                           Style="{StaticResource JupiterCaptionTextStyle}" TextWrapping="Wrap" MaxWidth="900" HorizontalAlignment="Left" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Command="{x:Bind ViewModel.PreviousYearCommand}"
+                        AutomationProperties.Name="A year earlier" ToolTipService.ToolTip="A year earlier">
+                    <FontIcon Glyph="&#xE76B;" Style="{StaticResource JupiterSmallIconStyle}" />
+                </Button>
+                <CalendarDatePicker Date="{x:Bind ViewModel.PickerDate, Mode=TwoWay}"
+                                    DateFormat="{}{day.integer} {month.full} {year.full}"
+                                    MinWidth="192" AutomationProperties.Name="Date" />
+                <Button Command="{x:Bind ViewModel.NextYearCommand}"
+                        AutomationProperties.Name="A year later" ToolTipService.ToolTip="A year later">
+                    <FontIcon Glyph="&#xE76C;" Style="{StaticResource JupiterSmallIconStyle}" />
+                </Button>
+                <Button Content="Today" Command="{x:Bind ViewModel.TodayCommand}" />
+                <ProgressRing IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}" Width="16" Height="16" />
+            </StackPanel>
+
+            <!-- Where the solar return is cast for: the birthplace unless a city is chosen -->
+            <StackPanel Orientation="Horizontal" Spacing="8" Visibility="{x:Bind VisIf(ViewModel.CanChoosePlace), Mode=OneWay}">
+                <AutoSuggestBox x:Name="PlaceBox" Width="320"
+                                PlaceholderText="Cast for another place…"
+                                QueryIcon="Find"
+                                DisplayMemberPath="Display"
+                                TextMemberPath="Display"
+                                TextChanged="PlaceBox_TextChanged"
+                                QuerySubmitted="PlaceBox_QuerySubmitted"
+                                AutomationProperties.Name="Place to cast the solar return and relocated chart for"
+                                ToolTipService.ToolTip="Many astrologers cast the return for where the person was living that year. The moment is the same; the Ascendant and houses change with the place. The birth chart is relocated to the same place, further down." />
+                <TextBlock Text="{x:Bind ViewModel.PlaceText, Mode=OneWay}" Style="{StaticResource JupiterBodyTextStyle}"
+                           Foreground="{ThemeResource JupiterSecondaryTextBrush}" VerticalAlignment="Center" />
+                <Button Content="Use the birthplace" Command="{x:Bind ViewModel.UseBirthplaceCommand}"
+                        Visibility="{x:Bind VisIf(ViewModel.HasPlace), Mode=OneWay}" />
+            </StackPanel>
+
+            <InfoBar Severity="Error" Title="The timing could not be worked out" IsClosable="False"
+                     Message="{x:Bind ViewModel.ErrorText, Mode=OneWay}"
+                     IsOpen="{x:Bind IsNotEmpty(ViewModel.ErrorText), Mode=OneWay}" />
+        </StackPanel>
+
+        <!-- Text on the left, the return chart's wheel on the right -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="24,8,16,24">
+                <views:ReadingList Sections="{x:Bind ViewModel.Sections, Mode=OneWay}" MaxWidth="720" HorizontalAlignment="Left" />
+            </ScrollViewer>
+
+            <Grid Grid.Column="1" Padding="0,0,16,16" Visibility="{x:Bind VisIf(ViewModel.HasReturnChart), Mode=OneWay}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock Text="{x:Bind ViewModel.WheelCaption, Mode=OneWay}" Style="{StaticResource JupiterCaptionTextStyle}"
+                           Margin="8,0,0,4" TextWrapping="Wrap" />
+                <canvas:CanvasControl x:Name="WheelCanvas" Grid.Row="1"
+                                      Draw="WheelCanvas_Draw" SizeChanged="WheelCanvas_SizeChanged"
+                                      AutomationProperties.Name="Solar return wheel" />
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

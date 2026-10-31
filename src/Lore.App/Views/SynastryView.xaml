@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="Lore.Views.SynastryView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:canvas="using:Microsoft.Graphics.Canvas.UI.Xaml"
+    xmlns:local="using:Lore.Views"
+    xmlns:models="using:Lore.Models">
+
+    <UserControl.Resources>
+        <DataTemplate x:Key="MatchTemplate" x:DataType="models:SynastryMatch">
+            <Grid ColumnSpacing="12" Padding="0,4,0,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="32" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Border Width="12" Height="12" VerticalAlignment="Center" CornerRadius="{StaticResource ControlCornerRadius}"
+                        Background="{x:Bind local:SynastryView.BrushOf(ColorHex)}" />
+                <TextBlock Grid.Column="1" Text="{x:Bind LevelText}" Style="{StaticResource JupiterBodyStrongTextStyle}" VerticalAlignment="Center" />
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="{x:Bind Name}" Style="{StaticResource JupiterBodyTextStyle}" TextTrimming="CharacterEllipsis" />
+                    <TextBlock Text="{x:Bind Detail}" Style="{StaticResource JupiterCaptionTextStyle}" TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+                <StackPanel Grid.Column="3" HorizontalAlignment="Right">
+                    <TextBlock Text="{x:Bind ToneLabel}" Style="{StaticResource JupiterBodyTextStyle}" HorizontalAlignment="Right" />
+                    <TextBlock Text="{x:Bind ShareText}" Style="{StaticResource JupiterCaptionTextStyle}" HorizontalAlignment="Right" />
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Who is compared with whom -->
+        <StackPanel Spacing="8" Padding="24,16,24,8">
+            <StackPanel Spacing="4">
+                <TextBlock Text="{x:Bind ViewModel.Title, Mode=OneWay}" Style="{StaticResource JupiterPageHeadingTextStyle}" TextWrapping="Wrap" />
+                <TextBlock Text="Generated from the contacts between the two birth charts: a prompt for reflection, not a verdict."
+                           Style="{StaticResource JupiterCaptionTextStyle}" TextWrapping="Wrap" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <AutoSuggestBox x:Name="PartnerBox" Width="320"
+                                PlaceholderText="Compare with…"
+                                QueryIcon="Find"
+                                DisplayMemberPath="Name"
+                                TextMemberPath="Name"
+                                TextChanged="PartnerBox_TextChanged"
+                                QuerySubmitted="PartnerBox_QuerySubmitted"
+                                AutomationProperties.Name="Person to compare with" />
+                <TextBlock Text="{x:Bind ViewModel.PartnerText, Mode=OneWay}" Style="{StaticResource JupiterBodyTextStyle}"
+                           Foreground="{ThemeResource JupiterSecondaryTextBrush}" VerticalAlignment="Center" />
+                <Button Style="{StaticResource JupiterSubtleButtonStyle}" Command="{x:Bind ViewModel.ClearPartnerCommand}"
+                        Visibility="{x:Bind VisIf(ViewModel.HasPartner), Mode=OneWay}"
+                        AutomationProperties.Name="Clear the comparison" ToolTipService.ToolTip="Clear the comparison">
+                    <FontIcon Glyph="&#xE711;" Style="{StaticResource JupiterSmallIconStyle}" />
+                </Button>
+                <ProgressRing IsActive="{x:Bind Either(ViewModel.IsBusy, ViewModel.IsSearching), Mode=OneWay}" Width="16" Height="16" />
+            </StackPanel>
+
+            <TextBlock Text="{x:Bind ViewModel.PromptText, Mode=OneWay}" Style="{StaticResource JupiterBodyTextStyle}" TextWrapping="Wrap"
+                       Visibility="{x:Bind HasText(ViewModel.PromptText), Mode=OneWay}" />
+
+            <InfoBar Severity="Error" Title="The comparison could not be made" IsClosable="False"
+                     Message="{x:Bind ViewModel.ErrorText, Mode=OneWay}"
+                     IsOpen="{x:Bind IsNotEmpty(ViewModel.ErrorText), Mode=OneWay}" />
+
+            <!-- The overall tone -->
+            <StackPanel Orientation="Horizontal" Spacing="8" Visibility="{x:Bind HasText(ViewModel.ToneText), Mode=OneWay}">
+                <Border Width="12" Height="12" VerticalAlignment="Center" CornerRadius="{StaticResource ControlCornerRadius}"
+                        Background="{x:Bind ToneBrush(ViewModel.ToneColorHex), Mode=OneWay}" />
+                <TextBlock Text="{x:Bind ViewModel.ToneText, Mode=OneWay}" Style="{StaticResource JupiterBodyStrongTextStyle}" />
+            </StackPanel>
+
+            <!-- The two charts set against each other, or the one chart made from them -->
+            <StackPanel Orientation="Horizontal" Spacing="12" Visibility="{x:Bind HasText(ViewModel.ToneText), Mode=OneWay}">
+                <RadioButton x:Name="ComparisonRadio" Content="Comparison" GroupName="SynastryMode"
+                             AutomationProperties.Name="Show the comparison of the two charts"
+                             IsChecked="{x:Bind Not(ViewModel.ShowDavison), Mode=OneWay}"
+                             Checked="ComparisonRadio_Checked" />
+                <RadioButton x:Name="DavisonRadio" Content="Davison chart" GroupName="SynastryMode"
+                             AutomationProperties.Name="Show the Davison chart of the two people"
+                             ToolTipService.ToolTip="One chart for the two of you, cast for the midpoint of your births"
+                             IsChecked="{x:Bind ViewModel.ShowDavison, Mode=OneWay}"
+                             Checked="DavisonRadio_Checked" />
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Until someone is chosen: the search of everyone against this chart -->
+        <Grid Grid.Row="1" Padding="24,8,24,16" RowSpacing="12" Visibility="{x:Bind VisIf(ViewModel.ShowMatches), Mode=OneWay}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel Spacing="4">
+                <TextBlock Text="{x:Bind ViewModel.MatchesHeading, Mode=OneWay}" Style="{StaticResource JupiterSectionHeadingTextStyle}" />
+                <TextBlock Text="{x:Bind ViewModel.MatchesSummary, Mode=OneWay}" Style="{StaticResource JupiterBodyTextStyle}" TextWrapping="Wrap"
+                           IsTextSelectionEnabled="True" />
+                <TextBlock Style="{StaticResource JupiterCaptionTextStyle}" TextWrapping="Wrap" MaxWidth="900" HorizontalAlignment="Left"
+                           Text="Every chart in the library, and every chart of your own, compared with this one. Each is placed on a five-step scale, from +2 to −2, by the share of the contacts between the two charts that are easy ones (trines, sextiles and the kinder conjunctions), each counted by how close and how personal it is. The scale is Lore's own: astrology has no agreed compatibility score. Select a name to read the comparison." />
+            </StackPanel>
+            <Grid Grid.Row="1" ColumnSpacing="32" MaxWidth="980" HorizontalAlignment="Left">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid RowSpacing="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Best matches" Style="{StaticResource JupiterPaneHeadingTextStyle}" />
+                    <ListView Grid.Row="1" ItemsSource="{x:Bind ViewModel.BestMatches, Mode=OneWay}"
+                              ItemTemplate="{StaticResource MatchTemplate}"
+                              SelectionMode="None" IsItemClickEnabled="True" ItemClick="Match_ItemClick"
+                              AutomationProperties.Name="Best matches" />
+                </Grid>
+                <Grid Grid.Column="1" RowSpacing="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Worst matches" Style="{StaticResource JupiterPaneHeadingTextStyle}" />
+                    <ListView Grid.Row="1" ItemsSource="{x:Bind ViewModel.WorstMatches, Mode=OneWay}"
+                              ItemTemplate="{StaticResource MatchTemplate}"
+                              SelectionMode="None" IsItemClickEnabled="True" ItemClick="Match_ItemClick"
+                              AutomationProperties.Name="Worst matches" />
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <!-- Reading on the left, bi-wheel on the right -->
+        <Grid Grid.Row="1" Visibility="{x:Bind HasText(ViewModel.ToneText), Mode=OneWay}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MaxWidth="720" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="24,8,24,24">
+                <StackPanel Spacing="16">
+                    <local:ReadingList Sections="{x:Bind ViewModel.Sections, Mode=OneWay}" />
+
+                    <!-- The calculation trail behind the reading -->
+                    <Expander HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                              Visibility="{x:Bind VisIf(ViewModel.ComparisonShown), Mode=OneWay}">
+                        <Expander.Header>
+                            <TextBlock Text="{x:Bind ViewModel.TraceHeader, Mode=OneWay}" Style="{StaticResource JupiterBodyTextStyle}" TextWrapping="Wrap" />
+                        </Expander.Header>
+                        <StackPanel Spacing="8">
+                            <TextBlock Style="{StaticResource JupiterCaptionTextStyle}" TextWrapping="Wrap"
+                                       Text="Each line is a point in one chart in aspect to a point in the other, within 6° of exact (4° for a sextile). The reading uses the closest and most personal few: up to three conjunctions, four easy aspects and four hard ones." />
+                            <ItemsControl ItemsSource="{x:Bind ViewModel.Trace, Mode=OneWay}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="x:String">
+                                        <TextBlock Text="{x:Bind}" Style="{StaticResource JupiterCaptionTextStyle}" TextWrapping="Wrap" Margin="0,0,0,4" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Expander>
+                </StackPanel>
+            </ScrollViewer>
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <canvas:CanvasControl x:Name="WheelCanvas" Margin="8"
+                                      Draw="WheelCanvas_Draw" SizeChanged="WheelCanvas_SizeChanged"
+                                      AutomationProperties.Name="Bi-wheel of the two charts" />
+                <TextBlock Grid.Row="1" Text="{x:Bind ViewModel.WheelCaption, Mode=OneWay}"
+                           Style="{StaticResource JupiterCaptionTextStyle}"
+                           HorizontalAlignment="Center" Margin="8,0,8,12" TextWrapping="Wrap" />
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

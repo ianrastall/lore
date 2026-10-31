@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Generate Data/cities.json (the app's city-search database) from the simplemaps
+Generate content/cities.json (the app's city-search database) from the simplemaps
 world-cities CSV, adding the standard UTC offset each city needs -- the CSV has
 no timezone data, so we map lat/lon -> IANA timezone -> standard (non-DST) offset.
 
@@ -29,8 +29,8 @@ from zoneinfo import ZoneInfo
 from timezonefinder import TimezoneFinder
 
 ROOT = Path(__file__).resolve().parent.parent
-CSV_IN = ROOT / "Data" / "simplemaps_worldcities_basicv1.91.4" / "worldcities.csv"
-JSON_OUT = ROOT / "Data" / "cities.json"
+CSV_IN = ROOT / "content" / "simplemaps_worldcities_basicv1.91.4" / "worldcities.csv"
+JSON_OUT = ROOT / "content" / "cities.json"
 
 # Reference instants used to derive the *standard* offset. Subtracting the DST
 # component makes the result hemisphere-agnostic (Jan is DST in the south).
@@ -65,7 +65,7 @@ def standard_offset_hours(tz_name: str) -> float:
 def main() -> int:
     if not CSV_IN.exists():
         sys.exit(f"Source CSV not found: {CSV_IN}\n"
-                 "Restore the simplemaps folder under Data/ (it is gitignored).")
+                 "Restore the simplemaps folder under content/ (it is gitignored).")
 
     tf = TimezoneFinder()
     cities: list[dict] = []
