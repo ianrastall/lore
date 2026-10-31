@@ -20,12 +20,12 @@ The first measurement used random answers and showed 63% of pairs moving. Random
 
 | Check | Result |
 | --- | --- |
-| Tests | RESULT_TESTS |
+| Tests | 545 of 545 passed |
 | App build | 0 warnings, 0 errors; style check at Error severity with 0 violations |
 | Figure library | 1,327 figures, every date, clock time, rating and UTC instant matches its reference |
-| Release build | RESULT_BUILD |
-| Personal-data gate | RESULT_GATE |
-| `--self-check` on the published build | RESULT_SELFCHECK |
+| Release build | `build/build.ps1` built the installer and portable zip with no errors |
+| Personal-data gate | Passed: 1,327 figures, 0 personal charts |
+| `--self-check` on the published build | OK |
 
 ## Exercised
 
@@ -35,7 +35,7 @@ Off screen, through the view models: all three questionnaires answered in turn, 
 
 - **The Inventory view's new panels on screen**: the part selector, the character profile and the life-area list. They build and pass the style check, and the view model behind them is tested. Nobody has looked at them.
 - **The Synastry view's Look among box on screen**, and the reading with as-lived tones.
-- **The installed upgrade.** STATUS_INSTALL
+- **The installed upgrade.** Not done. It needs an elevation prompt on Ian's machine, so it waits for him to say when. The installed copy is still 4.1.0 until then.
 - **A person's real answers.** The reading was tested with made-up answers and simulated populations.
 - **Whether the pairing of chart factors with these scales means anything.** No research connects a birth chart with measured personality. The readings say so.
 - **Three figures' details**, listed in `scripts/celebrity-expansion-2026-10-31.md`, were read from a search summary and not from the record.
