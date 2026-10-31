@@ -464,6 +464,11 @@ public class TrioServiceTests
         Assert.Equal(plain.Tone, lived.Tone);
         Assert.NotNull(lived.LivedTone);
         Assert.NotNull(lived.Pairs[0].AsLived);
+
+        // A pair's words stay the charts', and its detail line says what the answers make of it.
+        var pairs = Interpreter.ComposeTrio(lived).Sections.Single(s => s.Heading == "The three pairs").Items;
+        Assert.Contains("by the answers", pairs[0].Meta);
+        Assert.DoesNotContain("by the answers", pairs[2].Meta);
         Assert.Null(lived.Pairs[2].AsLived);                  // the pair it has no part in
         Assert.Equal(answers, lived.Answers[0]);
 

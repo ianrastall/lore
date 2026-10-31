@@ -571,7 +571,7 @@ public sealed class MirrorInterpreter
                 Title = $"{p.Planet.Symbol()} {p.Planet.Name()}: {p.Expression}",
                 Meta = string.Join("  ·  ", p.Facets.Select(f => $"{f.Name} {f.BandLabel.ToLowerInvariant()}")
                     .Concat(p.Scales.Select(s => $"{s.Name} {s.BandLabel.ToLowerInvariant()}"))),
-                Text = $"The chart: {where}, the planet of {p.Stands}." + (report.Length > 0 ? $" {report}." : "") +
+                Text = $"The chart: {where}, the {(p.Planet > Planet.Pluto ? "point" : "planet")} of {p.Stands}." + (report.Length > 0 ? $" {report}." : "") +
                        $"\nThe answers: {p.Text}" +
                        (p.AgainstSign.Length > 0 ? $"\n{p.AgainstSign}" : "") +
                        (p.HouseLine.Length > 0 ? $"\nIn its house: {p.HouseLine}" : "") +

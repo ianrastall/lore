@@ -1,7 +1,7 @@
 {
   "_comment": "Corpus for everything Lore says that depends on a person's answers to the personality inventory (Services/MirrorInterpreter.cs): the Chart and answers reading, and the sentences added to the Report, the Daily and the Forecast. It holds the rules as well as the words. PLANETS. `dials` names groups of inventory facets by key (a minus counts a facet the other way up); each dial comes out low, mid or high: for several facets, when they average more than half a standard deviation from the reference group's mean; for one, more than a whole one (the line the profile itself draws). `expressions` are tried in order and the first whose `when` fits is used; a dial not named may be anything, and the last expression takes whatever is left. An expression's `lived` (well, strain, plain) is what is set against the planet's dignity in the chart; its `report` sentence goes into the Report ({name} is the person); `hard` and `easy` go onto a transit to that planet in the Daily and Forecast (hard: square or opposition; easy: sextile or trine; a conjunction takes hard when lived is strain and easy otherwise); `text` is the paragraph in Chart and answers. (`hard` and `easy` speak of \"today\" and are for the Daily reading; a pass in the Forecast, which lasts days or weeks, takes the sentence in `forecast` instead, by how the planet is lived.) `also` entries add a sentence whenever their `when` fits. `unlived` is said when the chart gives the planet an easy place and the answers describe strain; `hardWon` the reverse. SIGNS. `signs` gives, for the planet in each sign, the level of each dial the sign would lead one to expect. `nouns` names each dial for the sentences in `compare`, which say whether the answers match that expectation, exceed it or fall short. `rising` does the same for the Ascendant against the Extraversion trait. ASPECTS, ELEMENTS, MODALITIES. Sentences added under an aspect of the birth chart between two planets the answers both speak of (neither with its catch-all expression), by its tone and how each end is lived ({a} {ea}: a planet and its expression); and under an element or mode the chart leans toward (strong) or lacks (weak), by whether the facets in its `dial` are high or low. Expression names must read after \"is\": \"Mars is held in\". The pairing of chart factors with facets is Lore's own design: no research connects any questionnaire score with any factor in a chart. Nothing is generated at run time.",
   "notes": {
-    "intro": "This reading sets two things side by side: what the chart says of each planet, and what the answers to the questionnaire say about the part of life that planet stands for. The chart is not changed. Only the wording here depends on the answers.",
+    "intro": "This reading sets two things side by side: what the chart says of each planet, and what the answers to the questionnaires say about the part of life that planet stands for. The chart is not changed. Only the wording here depends on the answers.",
     "invented": "The pairing of planets with parts of the questionnaire is Lore's own, made by matching what each planet traditionally signifies with the facets that measure the nearest thing. No research connects a birth chart with measured personality, so an agreement here confirms nothing and a difference refutes nothing. It is a prompt for reflection.",
     "covered": "Nine planets are read from the personality answers: the Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus and Neptune, and the Ascendant with them. Pluto, the North Node, Chiron and Lilith are read from the character answers, when those have been given.",
     "untimed": "This chart has no birth time, so Lore does not score how well each planet is placed, and there is nothing to set the answers against in the second part. Only the first part is given. The planets are placed for noon: the Moon may be seven degrees from where it is shown, so its aspects are left out, and a planet that changed sign on the day is not read by its sign.",
@@ -11,7 +11,7 @@
     "noContrast": "For these the chart's placement is middling, or the answers are, and there is nothing to set against anything.",
     "none": "No planet shows a marked difference between the chart's account and the answers.",
     "closing": "Where the two accounts differ, neither is the true one. The chart says what the tradition expects of a placement; the answers say how a person sees themselves on one day. The difference is the thing to think about.",
-    "reportIntro": "{name} answered Lore's personality inventory on {date}. Wherever a paragraph of this Report has a sentence beginning “By {name}'s answers”, everything from there to the end of that paragraph comes from the questionnaire and not from the chart: in the Overview, under each planet, under an aspect between two planets the answers speak of, and under the balance of elements and modes. The pairing of chart factors with parts of the questionnaire is Lore's own, and nothing in the chart has been changed by it. The full comparison is under Chart and answers in the Inventory view.",
+    "reportIntro": "{name} answered Lore's personality inventory on {date}. Wherever a paragraph of this Report has a sentence beginning “By {name}'s answers”, everything from there to the end of that paragraph comes from the questionnaire and not from the chart: in the Overview, under each planet, under an aspect between two planets the answers speak of, under a chart pattern, and under the balance of elements and modes. The pairing of chart factors with parts of the questionnaire is Lore's own, and nothing in the chart has been changed by it. The full comparison is under Chart and answers in the Inventory view.",
     "reportNone": "For none of the seven traditional planets do the answers go against what the chart's placement would lead one to expect.",
     "signs": "For the Sun to Saturn the sign each planet is in leads one to expect more or less of certain things: push from a Mars in Aries, restraint from a Mars in Libra. Those expectations are set against the answers, and the reading says where the answers bear them out and where they go beyond or fall short. Uranus and Neptune stay years in a sign, which says nothing of one person, so they are read without it.",
     "summary": "By {name}'s answers, taken as a whole: {list}.",
@@ -192,8 +192,8 @@
         "SD2",
         "SD1"
       ],
-      "higher": "The answers show this Sun on its higher side: purpose is chosen, and the person stands in their own life. The chart's account of self and aim can be read at its best.",
-      "lower": "The answers show this Sun on its lower side: direction is unsure, and the self it describes may lean on approval or on grievance. The chart's account of self and aim is what could be, more than what is.",
+      "higher": "The character answers show this Sun on its higher side: purpose is chosen, and the person stands in their own life. The chart's account of self and aim can be read at its best.",
+      "lower": "The character answers show this Sun on its lower side: direction is unsure, and the self it describes may lean on approval or on grievance. The chart's account of self and aim is what could be, more than what is.",
       "houses": {
         "1": {
           "strain": "Being seen is where the doubt sits: the self is on show here, and it costs.",
@@ -399,8 +399,8 @@
         "SD4",
         "CO2"
       ],
-      "higher": "The answers show this Moon on its higher side: feeling is accepted, and it reaches other people as care. The chart's account of need is one that has been made room for.",
-      "lower": "The answers show this Moon on its lower side: need goes into comparison and self-protection more than into closeness. The chart's account of feeling may describe a want more than a comfort.",
+      "higher": "The character answers show this Moon on its higher side: feeling is accepted, and it reaches other people as care. The chart's account of need is one that has been made room for.",
+      "lower": "The character answers show this Moon on its lower side: need goes into comparison and self-protection more than into closeness. The chart's account of feeling may describe a want more than a comfort.",
       "houses": {
         "1": {
           "strain": "The feeling shows on the face: moods are hard to keep from others, and others respond to them.",
@@ -604,8 +604,8 @@
         "SD3",
         "CO5"
       ],
-      "higher": "The answers show this Mercury on its higher side: the mind goes to the problem, and what is said can be stood behind. Intelligence is being used, and used straight.",
-      "lower": "The answers show this Mercury on its lower side: the mind may stall or go to excuses, and honesty can give way under pressure. The chart's account of thinking is a capacity not yet relied on.",
+      "higher": "The character answers show this Mercury on its higher side: the mind goes to the problem, and what is said can be stood behind. Intelligence is being used, and used straight.",
+      "lower": "The character answers show this Mercury on its lower side: the mind may stall or go to excuses, and honesty can give way under pressure. The chart's account of thinking is a capacity not yet relied on.",
       "houses": {
         "1": {
           "strain": "It shows at once in how this person talks and comes across.",
@@ -870,8 +870,8 @@
         "CO2",
         "CO4"
       ],
-      "higher": "The answers show this Venus on its higher side: love extends to people as they are, and injuries are let go. The chart's account of relating has been lived into.",
-      "lower": "The answers show this Venus on its lower side: affection keeps accounts, and what is owed is remembered. The chart's account of love may be more of a hope than a habit.",
+      "higher": "The character answers show this Venus on its higher side: love extends to people as they are, and injuries are let go. The chart's account of relating has been lived into.",
+      "lower": "The character answers show this Venus on its lower side: affection keeps accounts, and what is owed is remembered. The chart's account of love may be more of a hope than a habit.",
       "houses": {
         "1": {
           "strain": "It shows in how this person looks for welcome: the need to be liked is plain.",
@@ -1077,8 +1077,8 @@
         "SD5",
         "CO4"
       ],
-      "higher": "The answers show this Mars on its higher side: drive is under command, and anger does not linger as revenge. Force can be used when it is wanted, and stopped when it is not.",
-      "lower": "The answers show this Mars on its lower side: impulse gets ahead of intention, and anger stays on after its reason has gone. Effort may turn against the person's own plans.",
+      "higher": "The character answers show this Mars on its higher side: drive is under command, and anger does not linger as revenge. Force can be used when it is wanted, and stopped when it is not.",
+      "lower": "The character answers show this Mars on its lower side: impulse gets ahead of intention, and anger stays on after its reason has gone. Effort may turn against the person's own plans.",
       "houses": {
         "1": {
           "strain": "It shows in the first encounter: people meet the edge of it before anything else.",
@@ -1283,8 +1283,8 @@
         "SD2",
         "ST2"
       ],
-      "higher": "The answers show this Jupiter on its higher side: hope has an aim, and the wider view means something. Good fortune here is more than appetite.",
-      "lower": "The answers show this Jupiter on its lower side: faith in the future is thin, and growth has no clear object. The chart's promise of expansion is waiting for something to expand towards.",
+      "higher": "The character answers show this Jupiter on its higher side: hope has an aim, and the wider view means something. Good fortune here is more than appetite.",
+      "lower": "The character answers show this Jupiter on its lower side: faith in the future is thin, and growth has no clear object. The chart's promise of expansion is waiting for something to expand towards.",
       "houses": {
         "1": {
           "strain": "It shows at once: more of everything, in manner, in promises, in the body.",
@@ -1491,8 +1491,8 @@
         "SD5",
         "SD3"
       ],
-      "higher": "The answers show this Saturn on its higher side: limits are chosen, plans are kept, and problems are met. Discipline has become a form of freedom.",
-      "lower": "The answers show this Saturn on its lower side: limits are felt as defeat, and plans give way. The structure the chart asks for is still to be built.",
+      "higher": "The character answers show this Saturn on its higher side: limits are chosen, plans are kept, and problems are met. Discipline has become a form of freedom.",
+      "lower": "The character answers show this Saturn on its lower side: limits are felt as defeat, and plans give way. The structure the chart asks for is still to be built.",
       "houses": {
         "1": {
           "strain": "It shows at once: a guarded manner, and a hard judgement of oneself.",
@@ -1581,8 +1581,8 @@
         "ST1",
         "SD2"
       ],
-      "higher": "The answers show this Uranus on its higher side: the unusual view has a purpose behind it. Difference is being put to use.",
-      "lower": "The answers show this Uranus on its lower side: restlessness has little to steer by. Breaking away may not yet be going anywhere."
+      "higher": "The character answers show this Uranus on its higher side: the unusual view has a purpose behind it. Difference is being put to use.",
+      "lower": "The character answers show this Uranus on its lower side: restlessness has little to steer by. Breaking away may not yet be going anywhere."
     },
     "Neptune": {
       "stands": "imagination and compassion",
@@ -1662,8 +1662,8 @@
         "ST2",
         "ST1"
       ],
-      "higher": "The answers show this Neptune on its higher side: imagination is alive and finds meaning in things. The dissolving side of this planet has found a use.",
-      "lower": "The answers show this Neptune on its lower side: there is little sense of anything beyond the plain facts, and the planet's longing may go unnamed."
+      "higher": "The character answers show this Neptune on its higher side: imagination is alive and finds meaning in things. The dissolving side of this planet has found a use.",
+      "lower": "The character answers show this Neptune on its lower side: there is little sense of anything beyond the plain facts, and the planet's longing may go unnamed."
     },
     "Pluto": {
       "stands": "power, compulsion and what must change",
@@ -1763,8 +1763,8 @@
         "CO4",
         "SD5"
       ],
-      "higher": "The answers show this Pluto on its higher side: old injuries are let go, and intensity is under command. What this planet buries can be brought up and changed.",
-      "lower": "The answers show this Pluto on its lower side: grudges hold, and compulsion runs its own course. The planet's power may be working underground."
+      "higher": "The character answers show this Pluto on its higher side: old injuries are let go, and intensity is under command. What this planet buries can be brought up and changed.",
+      "lower": "The character answers show this Pluto on its lower side: grudges hold, and compulsion runs its own course. The planet's power may be working underground."
     },
     "North Node": {
       "stands": "direction, and where a life is heading",
@@ -1855,8 +1855,8 @@
         "SD2",
         "ST2"
       ],
-      "higher": "The answers show this Node on its higher side: there is a direction, and it feels worth following. The chart's line of development is one being walked.",
-      "lower": "The answers show this Node on its lower side: the way forward is not clear, and may not seem worth the trouble. The chart's line of development is still to be taken up."
+      "higher": "The character answers show this Node on its higher side: there is a direction, and it feels worth following. The chart's line of development is one being walked.",
+      "lower": "The character answers show this Node on its lower side: the way forward is not clear, and may not seem worth the trouble. The chart's line of development is still to be taken up."
     },
     "Chiron": {
       "stands": "the old hurt, and what it has taught",
@@ -1956,8 +1956,8 @@
         "SD4",
         "CO2"
       ],
-      "higher": "The answers show this Chiron on its higher side: the old hurt is accepted, and has turned into understanding of others. It is the healer's side of this body.",
-      "lower": "The answers show this Chiron on its lower side: the old hurt is still kept out of sight, behind status or a hard front. It is the wounded side of this body."
+      "higher": "The character answers show this Chiron on its higher side: the old hurt is accepted, and has turned into understanding of others. It is the healer's side of this body.",
+      "lower": "The character answers show this Chiron on its lower side: the old hurt is still kept out of sight, behind status or a hard front. It is the wounded side of this body."
     },
     "Lilith": {
       "stands": "what was refused, and what will not be tamed",
@@ -2057,8 +2057,8 @@
         "SD1",
         "SD4"
       ],
-      "higher": "The answers show this Lilith on its higher side: what was refused has been made peace with, and no longer needs to be proved against anyone.",
-      "lower": "The answers show this Lilith on its lower side: a sense of having been wronged is near the surface, and it may be spent on the wrong people."
+      "higher": "The character answers show this Lilith on its higher side: what was refused has been made peace with, and no longer needs to be proved against anyone.",
+      "lower": "The character answers show this Lilith on its lower side: a sense of having been wronged is near the surface, and it may be spent on the wrong people."
     }
   },
   "rising": {

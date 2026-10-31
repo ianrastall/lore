@@ -193,7 +193,7 @@ public sealed class SelfReportTests : IDisposable
         Assert.All(Mirror.Compose(chart, Facets()).Planets, p => Assert.Equal(MirrorReach.Unmarked, p.Reach));
 
         var report = Report.Interpret(chart, null, low).Single(s => s.Heading == "In the Light of the Answers").Paragraphs;
-        Assert.Contains(report, p => p.StartsWith("♂ Mars: The answers show this Mars on its lower side"));
+        Assert.Contains(report, p => p.StartsWith("♂ Mars: The character answers show this Mars on its lower side"));
     }
 
     [Fact]

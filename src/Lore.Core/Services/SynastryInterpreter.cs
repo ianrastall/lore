@@ -246,8 +246,9 @@ public sealed class SynastryInterpreter
             Title = $"{names[p.First]} and {names[p.Second]}",
             Meta = $"{p.Compatibility.Tone.Label()} ({p.Compatibility.Tone.LevelText()})  ·  " +
                    $"{Math.Round(p.Compatibility.Share * 100):0}% easy" +
+                   (p.AsLived is { } asLived ? $"  ·  by the answers, {asLived.Tone.Label()} ({asLived.Tone.LevelText()})" : "") +
                    (ReferenceEquals(p, weakest) ? "  ·  the weakest of the three" : ""),
-            Text = Lookup(_c.Tones, (p.AsLived ?? p.Compatibility).Tone.ToString(), ""),
+            Text = Lookup(_c.Tones, p.Compatibility.Tone.ToString(), ""),
         }).Where(i => i.Text.Length > 0).ToList();
 
         var sections = new List<DailySection>
@@ -329,8 +330,9 @@ public sealed class SynastryInterpreter
         for (int i = 0; i < trio.Charts.Count; i++)
         {
             if (trio.Answers.ElementAtOrDefault(i) is not { } answers) continue;
-            var strained = answers.Planets.Where(p => p.Lived == MirrorLived.Strain && !p.IsOrdinary).Select(p => p.Planet.Name()).ToList();
-            var well = answers.Planets.Where(p => p.Lived == MirrorLived.Well && !p.IsOrdinary).Select(p => p.Planet.Name()).ToList();
+            static string Named(Planet p) => p is Planet.Sun or Planet.Moon or Planet.NorthNode ? "the " + p.Name() : p.Name();
+            var strained = answers.Planets.Where(p => p.Lived == MirrorLived.Strain && !p.IsOrdinary).Select(p => Named(p.Planet)).ToList();
+            var well = answers.Planets.Where(p => p.Lived == MirrorLived.Well && !p.IsOrdinary).Select(p => Named(p.Planet)).ToList();
             if (strained.Count == 0 && well.Count == 0) continue;
             string text = "";
             if (strained.Count > 0) text += Lookup(_c.Notes, "trioStrained", "").Replace("{name}", names[i]).Replace("{list}", JoinList(strained));
