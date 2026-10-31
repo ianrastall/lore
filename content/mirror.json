@@ -3,7 +3,7 @@
   "notes": {
     "intro": "This reading sets two things side by side: what the chart says of each planet, and what the answers to the questionnaire say about the part of life that planet stands for. The chart is not changed. Only the wording here depends on the answers.",
     "invented": "The pairing of planets with parts of the questionnaire is Lore's own, made by matching what each planet traditionally signifies with the facets that measure the nearest thing. No research connects a birth chart with measured personality, so an agreement here confirms nothing and a difference refutes nothing. It is a prompt for reflection.",
-    "covered": "Nine planets are read: the Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus and Neptune, and the Ascendant with them. Pluto, Chiron, the North Node and Lilith have no facet that measures anything near them, and are left out.",
+    "covered": "Nine planets are read from the personality answers: the Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus and Neptune, and the Ascendant with them. Pluto, the North Node, Chiron and Lilith are read from the character answers, when those have been given.",
     "untimed": "This chart has no birth time, so Lore does not score how well each planet is placed, and there is nothing to set the answers against in the second part. Only the first part is given. The planets are placed for noon: the Moon may be seven degrees from where it is shown, so its aspects are left out, and a planet that changed sign on the day is not read by its sign.",
     "signUnsure": "Without a birth time the sign {body} was in is not known{signs}, so the answers are not set against a sign.",
     "asWritten": "The chart gives these an easy place and the answers describe them lived easily. The Report can be read as it stands.",
@@ -16,7 +16,20 @@
     "signs": "For the Sun to Saturn the sign each planet is in leads one to expect more or less of certain things: push from a Mars in Aries, restraint from a Mars in Libra. Those expectations are set against the answers, and the reading says where the answers bear them out and where they go beyond or fall short. Uranus and Neptune stay years in a sign, which says nothing of one person, so they are read without it.",
     "summary": "By {name}'s answers, taken as a whole: {list}.",
     "summaryAll": "near the ordinary on all five of the broad traits",
-    "summaryRest": "near the ordinary on the rest"
+    "summaryRest": "near the ordinary on the rest",
+    "coveredCharacter": "Pluto, the North Node, Chiron and Lilith are read from the character answers, which are also what say how far each planet is being grown into.",
+    "characterIntro": "Personality describes a style. The character scales ask something else: how far a person has taken charge of their life, how they stand towards others, and whether they feel part of something larger. Those three are Cloninger's measures of maturity, and they are the nearest a questionnaire comes to asking how far a chart has been grown into.",
+    "characterScale": "These scores are read off the five-point scale itself, not against other people, because the IPIP publishes no reference figures for these scales. Their statements lean towards what most people would like to be true, so a middling score is not a poor one. The IPIP calls the scales preliminary.",
+    "reportCharacter": "{name} also answered the character scales on {date}. {list}",
+    "reportLifeAreas": "{name} last said how each part of life is going on {date}. Where that bears on a passage here, the Daily, Forecast and Timing readings say so.",
+    "lifeHeading": "Each house of the chart has a part of life that goes with it, and these are the ones marked out. The ratings are the person's own, as of the day they were given, and they change: answer them again whenever they stop being true.",
+    "lifeStale": "These ratings are more than six months old, so the other readings no longer use them. Answer them again to bring them back.",
+    "lifeUntimed": "This chart has no birth time, so it has no houses for the ratings to attach to. They are shown here and used nowhere else.",
+    "changeIntro": "Comparing this sitting with the one on {date}. Only moves of more than about one standard deviation are listed for a facet, or half a point for a scale: anything smaller is within what the mood of the day can do.",
+    "changeNone": "Nothing has moved by more than the mood of the day could account for since the sitting on {date}.",
+    "sectionCharacter": "How far it has been grown into",
+    "reachHigher": "The higher side",
+    "reachLower": "The lower side"
   },
   "comparison": {
     "unlived": "unlived",
@@ -28,13 +41,22 @@
     "Sun": {
       "stands": "confidence, purpose and vitality",
       "dials": {
-        "confidence": ["C1", "C4", "-A5"],
-        "spirits": ["E6"]
+        "confidence": [
+          "C1",
+          "C4",
+          "-A5"
+        ],
+        "spirits": [
+          "E6"
+        ]
       },
       "expressions": [
         {
           "name": "in full light",
-          "when": { "confidence": "high", "spirits": "high" },
+          "when": {
+            "confidence": "high",
+            "spirits": "high"
+          },
           "lived": "well",
           "report": "By {name}'s answers this is lived to the full: confident, ambitious and glad to be seen.",
           "hard": "By your answers you are sure of yourself and glad to be seen, so you are likely to meet this head-on. Check that it is the obstacle you are fighting and not your pride.",
@@ -43,7 +65,9 @@
         },
         {
           "name": "purposeful",
-          "when": { "confidence": "high" },
+          "when": {
+            "confidence": "high"
+          },
           "lived": "well",
           "report": "By {name}'s answers it shows as purpose and confidence more than as enjoyment.",
           "hard": "By your answers you are driven and sure of your aims. A check today is more likely to redirect you than to stop you.",
@@ -52,7 +76,10 @@
         },
         {
           "name": "dimmed",
-          "when": { "confidence": "low", "spirits": "low" },
+          "when": {
+            "confidence": "low",
+            "spirits": "low"
+          },
           "lived": "strain",
           "report": "By {name}'s answers little of this is on show at present: confidence and spirits are both low.",
           "hard": "By your answers your confidence and spirits are both low at present, so a challenge may land harder than it should. Do not take today's measure of yourself for the true one.",
@@ -61,7 +88,9 @@
         },
         {
           "name": "unassuming",
-          "when": { "confidence": "low" },
+          "when": {
+            "confidence": "low"
+          },
           "lived": "plain",
           "report": "By {name}'s answers it is lived modestly, without any need to be noticed.",
           "hard": "By your answers you do not push yourself forward. Today may ask you to; it is all right to say what you want.",
@@ -70,7 +99,9 @@
         },
         {
           "name": "good-humoured",
-          "when": { "spirits": "high" },
+          "when": {
+            "spirits": "high"
+          },
           "lived": "well",
           "report": "By {name}'s answers it shows mostly as cheerfulness.",
           "hard": "By your answers good humour is one of your strengths. Today will test it, and it is the right tool for the day.",
@@ -79,7 +110,9 @@
         },
         {
           "name": "sober",
-          "when": { "spirits": "low" },
+          "when": {
+            "spirits": "low"
+          },
           "lived": "plain",
           "report": "By {name}'s answers it is lived steadily and without much gaiety.",
           "hard": "By your answers you take things seriously. Today is serious enough without your adding to it.",
@@ -106,30 +139,131 @@
         }
       },
       "signs": {
-        "Aries": { "confidence": "high", "spirits": "high" },
-        "Taurus": { "confidence": "mid", "spirits": "mid" },
-        "Gemini": { "confidence": "mid", "spirits": "high" },
-        "Cancer": { "confidence": "low", "spirits": "mid" },
-        "Leo": { "confidence": "high", "spirits": "high" },
-        "Virgo": { "confidence": "low", "spirits": "low" },
-        "Libra": { "confidence": "mid", "spirits": "high" },
-        "Scorpio": { "confidence": "high", "spirits": "low" },
-        "Sagittarius": { "confidence": "high", "spirits": "high" },
-        "Capricorn": { "confidence": "high", "spirits": "low" },
-        "Aquarius": { "confidence": "mid", "spirits": "mid" },
-        "Pisces": { "confidence": "low", "spirits": "mid" }
+        "Aries": {
+          "confidence": "high",
+          "spirits": "high"
+        },
+        "Taurus": {
+          "confidence": "mid",
+          "spirits": "mid"
+        },
+        "Gemini": {
+          "confidence": "mid",
+          "spirits": "high"
+        },
+        "Cancer": {
+          "confidence": "low",
+          "spirits": "mid"
+        },
+        "Leo": {
+          "confidence": "high",
+          "spirits": "high"
+        },
+        "Virgo": {
+          "confidence": "low",
+          "spirits": "low"
+        },
+        "Libra": {
+          "confidence": "mid",
+          "spirits": "high"
+        },
+        "Scorpio": {
+          "confidence": "high",
+          "spirits": "low"
+        },
+        "Sagittarius": {
+          "confidence": "high",
+          "spirits": "high"
+        },
+        "Capricorn": {
+          "confidence": "high",
+          "spirits": "low"
+        },
+        "Aquarius": {
+          "confidence": "mid",
+          "spirits": "mid"
+        },
+        "Pisces": {
+          "confidence": "low",
+          "spirits": "mid"
+        }
+      },
+      "reach": [
+        "SD2",
+        "SD1"
+      ],
+      "higher": "The answers show this Sun on its higher side: purpose is chosen, and the person stands in their own life. The chart's account of self and aim can be read at its best.",
+      "lower": "The answers show this Sun on its lower side: direction is unsure, and the self it describes may lean on approval or on grievance. The chart's account of self and aim is what could be, more than what is.",
+      "houses": {
+        "1": {
+          "strain": "Being seen is where the doubt sits: the self is on show here, and it costs.",
+          "well": "The self is on show here and it can bear the looking."
+        },
+        "2": {
+          "strain": "Worth and money get tangled: earning may be what is being asked to prove the self.",
+          "well": "A settled sense of worth shows up here as steady earning."
+        },
+        "3": {
+          "strain": "It comes out in talk: the need to prove something, or a reluctance to speak at all.",
+          "well": "It comes out in talk and learning: a clear, ready voice in everyday things."
+        },
+        "4": {
+          "strain": "The trouble goes home with it: a sense of self that the family formed, and that still answers to them.",
+          "well": "The home is where this confidence comes from, and it is brought out from there."
+        },
+        "5": {
+          "strain": "Pleasure and creative work are where this is tested: play can feel like a performance to be judged.",
+          "well": "Pleasure and creative work are where this shines without trying."
+        },
+        "6": {
+          "strain": "It goes to work: the self is measured by being useful, and is seldom useful enough.",
+          "well": "It goes to work, and the daily round gets a person fully behind it."
+        },
+        "7": {
+          "strain": "Partners carry the weight of it: the self is looked for in someone else's opinion.",
+          "well": "Partners meet someone who does not need them to feel real."
+        },
+        "8": {
+          "strain": "It runs deep and private: self-regard is at stake in what is shared and what is lost.",
+          "well": "It is at its best in depth: a self that can bear being changed."
+        },
+        "9": {
+          "strain": "Meaning is being asked to supply what confidence does not.",
+          "well": "Meaning and study give this confidence its reach."
+        },
+        "10": {
+          "strain": "Public standing is where this hurts: achievement is asked to settle the question, and does not.",
+          "well": "Public life is where this comes into its own."
+        },
+        "11": {
+          "strain": "It goes into groups: belonging is sought as proof.",
+          "well": "It goes into groups and shared hopes, and others gather round it."
+        },
+        "12": {
+          "strain": "It is hidden: much of this goes on where nobody sees it, the person included.",
+          "well": "It keeps a quiet centre: strength that needs no audience."
+        }
       }
     },
     "Moon": {
       "stands": "feeling, security and need",
       "dials": {
-        "unrest": ["N1", "N3", "N6"],
-        "feeling": ["O3"]
+        "unrest": [
+          "N1",
+          "N3",
+          "N6"
+        ],
+        "feeling": [
+          "O3"
+        ]
       },
       "expressions": [
         {
           "name": "tidal",
-          "when": { "unrest": "high", "feeling": "high" },
+          "when": {
+            "unrest": "high",
+            "feeling": "high"
+          },
           "lived": "strain",
           "report": "By {name}'s answers these feelings run high, are closely watched, and unsettle.",
           "hard": "By your answers you feel things intensely and are easily unsettled, and today may stir that. What you feel is likely to be bigger than its cause; wait before acting on it.",
@@ -138,7 +272,9 @@
         },
         {
           "name": "uneasy",
-          "when": { "unrest": "high" },
+          "when": {
+            "unrest": "high"
+          },
           "lived": "strain",
           "report": "By {name}'s answers there is more worry and strain here than this suggests.",
           "hard": "By your answers worry comes easily to you. Today may feed it; ask how much of it is today's and how much you brought with you.",
@@ -147,7 +283,10 @@
         },
         {
           "name": "deep and calm",
-          "when": { "unrest": "low", "feeling": "high" },
+          "when": {
+            "unrest": "low",
+            "feeling": "high"
+          },
           "lived": "well",
           "report": "By {name}'s answers these feelings are strongly felt and well carried.",
           "hard": "By your answers you feel a great deal and are steady with it. Today asks for exactly that.",
@@ -156,7 +295,9 @@
         },
         {
           "name": "even",
-          "when": { "unrest": "low" },
+          "when": {
+            "unrest": "low"
+          },
           "lived": "well",
           "report": "By {name}'s answers the feeling side is kept on an even keel, with little worry.",
           "hard": "By your answers you are hard to rattle, and likely to ride this out. Notice whether someone near you is taking it harder.",
@@ -165,7 +306,9 @@
         },
         {
           "name": "attentive",
-          "when": { "feeling": "high" },
+          "when": {
+            "feeling": "high"
+          },
           "lived": "plain",
           "report": "By {name}'s answers a good deal of attention goes to these feelings.",
           "hard": "By your answers you watch your feelings closely. Today gives you plenty to watch; you need not act on all of it.",
@@ -174,7 +317,9 @@
         },
         {
           "name": "matter-of-fact",
-          "when": { "feeling": "low" },
+          "when": {
+            "feeling": "low"
+          },
           "lived": "plain",
           "report": "By {name}'s answers little attention is paid to this side of life.",
           "hard": "By your answers you do not make much of feelings. Today one may insist on being noticed.",
@@ -201,30 +346,129 @@
         }
       },
       "signs": {
-        "Aries": { "unrest": "mid", "feeling": "mid" },
-        "Taurus": { "unrest": "low", "feeling": "mid" },
-        "Gemini": { "unrest": "mid", "feeling": "low" },
-        "Cancer": { "unrest": "high", "feeling": "high" },
-        "Leo": { "unrest": "low", "feeling": "high" },
-        "Virgo": { "unrest": "high", "feeling": "low" },
-        "Libra": { "unrest": "mid", "feeling": "mid" },
-        "Scorpio": { "unrest": "high", "feeling": "high" },
-        "Sagittarius": { "unrest": "low", "feeling": "mid" },
-        "Capricorn": { "unrest": "mid", "feeling": "low" },
-        "Aquarius": { "unrest": "low", "feeling": "low" },
-        "Pisces": { "unrest": "high", "feeling": "high" }
+        "Aries": {
+          "unrest": "mid",
+          "feeling": "mid"
+        },
+        "Taurus": {
+          "unrest": "low",
+          "feeling": "mid"
+        },
+        "Gemini": {
+          "unrest": "mid",
+          "feeling": "low"
+        },
+        "Cancer": {
+          "unrest": "high",
+          "feeling": "high"
+        },
+        "Leo": {
+          "unrest": "low",
+          "feeling": "high"
+        },
+        "Virgo": {
+          "unrest": "high",
+          "feeling": "low"
+        },
+        "Libra": {
+          "unrest": "mid",
+          "feeling": "mid"
+        },
+        "Scorpio": {
+          "unrest": "high",
+          "feeling": "high"
+        },
+        "Sagittarius": {
+          "unrest": "low",
+          "feeling": "mid"
+        },
+        "Capricorn": {
+          "unrest": "mid",
+          "feeling": "low"
+        },
+        "Aquarius": {
+          "unrest": "low",
+          "feeling": "low"
+        },
+        "Pisces": {
+          "unrest": "high",
+          "feeling": "high"
+        }
+      },
+      "reach": [
+        "SD4",
+        "CO2"
+      ],
+      "higher": "The answers show this Moon on its higher side: feeling is accepted, and it reaches other people as care. The chart's account of need is one that has been made room for.",
+      "lower": "The answers show this Moon on its lower side: need goes into comparison and self-protection more than into closeness. The chart's account of feeling may describe a want more than a comfort.",
+      "houses": {
+        "1": {
+          "strain": "The feeling shows on the face: moods are hard to keep from others, and others respond to them.",
+          "well": "The feeling shows, and it makes this person easy to reach."
+        },
+        "2": {
+          "strain": "Comfort gets tied to money: security and spending both follow the mood.",
+          "well": "Comfort and security are in steady hands here."
+        },
+        "3": {
+          "strain": "It goes round in the head and comes out in talk: worry looks for words.",
+          "well": "Feeling finds words readily, and a good talk settles things."
+        },
+        "4": {
+          "strain": "It lives at home: the mood of the household is the mood of the person.",
+          "well": "Home works as a real refuge: rest is found there."
+        },
+        "5": {
+          "strain": "Pleasure and romance are asked to soothe, and do so only for a while.",
+          "well": "Play and affection come easily, and restore the spirits."
+        },
+        "6": {
+          "strain": "It reaches the body and the working day: the mood turns up as tiredness or a bad routine.",
+          "well": "Daily routines keep the feelings in good order."
+        },
+        "7": {
+          "strain": "A partner's mood is taken as one's own: closeness is where the unrest lives.",
+          "well": "Close partnership is a real source of comfort."
+        },
+        "8": {
+          "strain": "Feeling runs underground: it is intense, and hard to share with anyone.",
+          "well": "Deep feeling can be borne and shared."
+        },
+        "9": {
+          "strain": "Comfort is looked for far away: in another place, or another belief.",
+          "well": "Faith or travel renews the spirits."
+        },
+        "10": {
+          "strain": "Moods are carried into public: reputation and feeling are not kept apart.",
+          "well": "The public finds this warmth easy to trust."
+        },
+        "11": {
+          "strain": "Friends are asked for what they cannot always give.",
+          "well": "Friends and groups feel like a second home."
+        },
+        "12": {
+          "strain": "It goes where it cannot be seen: solitude both relieves and deepens it.",
+          "well": "Solitude replenishes this Moon."
+        }
       }
     },
     "Mercury": {
       "stands": "thought, speech and dealing",
       "dials": {
-        "ideas": ["O5"],
-        "candour": ["A2"]
+        "ideas": [
+          "O5"
+        ],
+        "candour": [
+          "A2"
+        ]
       },
       "expressions": [
         {
           "name": "frank and inquiring",
-          "when": { "ideas": "high", "candour": "high" },
+          "when": {
+            "ideas": "high",
+            "candour": "high"
+          },
           "lived": "well",
           "report": "By {name}'s answers this mind enjoys ideas and speaks them plainly.",
           "hard": "By your answers you love an idea and say what you think. Today that may start an argument; make it a good one.",
@@ -233,7 +477,10 @@
         },
         {
           "name": "subtle",
-          "when": { "ideas": "high", "candour": "low" },
+          "when": {
+            "ideas": "high",
+            "candour": "low"
+          },
           "lived": "plain",
           "report": "By {name}'s answers this mind enjoys ideas and is careful what it shows.",
           "hard": "By your answers you are quick with ideas and careful what you reveal. Today may press you to show your hand.",
@@ -242,7 +489,9 @@
         },
         {
           "name": "inquiring",
-          "when": { "ideas": "high" },
+          "when": {
+            "ideas": "high"
+          },
           "lived": "well",
           "report": "By {name}'s answers this mind is used for pleasure: ideas are enjoyed for their own sake.",
           "hard": "By your answers you enjoy an argument about ideas. Today may supply one.",
@@ -251,7 +500,9 @@
         },
         {
           "name": "practical",
-          "when": { "ideas": "low" },
+          "when": {
+            "ideas": "low"
+          },
           "lived": "plain",
           "report": "By {name}'s answers the thinking is kept to practical matters.",
           "hard": "By your answers you prefer the concrete. Today's confusion is best met by asking what, exactly, needs doing.",
@@ -260,7 +511,9 @@
         },
         {
           "name": "candid",
-          "when": { "candour": "high" },
+          "when": {
+            "candour": "high"
+          },
           "lived": "well",
           "report": "By {name}'s answers what is thought is said, straight out.",
           "hard": "By your answers you say things straight. Today that may be heard as bluntness; say it kindly.",
@@ -269,7 +522,9 @@
         },
         {
           "name": "politic",
-          "when": { "candour": "low" },
+          "when": {
+            "candour": "low"
+          },
           "lived": "plain",
           "report": "By {name}'s answers words are chosen with an eye to their effect.",
           "hard": "By your answers you choose your words with an eye to their effect. Today someone may want a straight answer.",
@@ -296,31 +551,134 @@
         }
       },
       "signs": {
-        "Aries": { "ideas": "mid", "candour": "high" },
-        "Taurus": { "ideas": "low", "candour": "high" },
-        "Gemini": { "ideas": "high", "candour": "low" },
-        "Cancer": { "ideas": "low", "candour": "mid" },
-        "Leo": { "ideas": "mid", "candour": "high" },
-        "Virgo": { "ideas": "mid", "candour": "high" },
-        "Libra": { "ideas": "high", "candour": "low" },
-        "Scorpio": { "ideas": "high", "candour": "low" },
-        "Sagittarius": { "ideas": "high", "candour": "high" },
-        "Capricorn": { "ideas": "mid", "candour": "mid" },
-        "Aquarius": { "ideas": "high", "candour": "mid" },
-        "Pisces": { "ideas": "mid", "candour": "low" }
+        "Aries": {
+          "ideas": "mid",
+          "candour": "high"
+        },
+        "Taurus": {
+          "ideas": "low",
+          "candour": "high"
+        },
+        "Gemini": {
+          "ideas": "high",
+          "candour": "low"
+        },
+        "Cancer": {
+          "ideas": "low",
+          "candour": "mid"
+        },
+        "Leo": {
+          "ideas": "mid",
+          "candour": "high"
+        },
+        "Virgo": {
+          "ideas": "mid",
+          "candour": "high"
+        },
+        "Libra": {
+          "ideas": "high",
+          "candour": "low"
+        },
+        "Scorpio": {
+          "ideas": "high",
+          "candour": "low"
+        },
+        "Sagittarius": {
+          "ideas": "high",
+          "candour": "high"
+        },
+        "Capricorn": {
+          "ideas": "mid",
+          "candour": "mid"
+        },
+        "Aquarius": {
+          "ideas": "high",
+          "candour": "mid"
+        },
+        "Pisces": {
+          "ideas": "mid",
+          "candour": "low"
+        }
+      },
+      "reach": [
+        "SD3",
+        "CO5"
+      ],
+      "higher": "The answers show this Mercury on its higher side: the mind goes to the problem, and what is said can be stood behind. Intelligence is being used, and used straight.",
+      "lower": "The answers show this Mercury on its lower side: the mind may stall or go to excuses, and honesty can give way under pressure. The chart's account of thinking is a capacity not yet relied on.",
+      "houses": {
+        "1": {
+          "strain": "It shows at once in how this person talks and comes across.",
+          "well": "It shows at once: a quick and interesting talker."
+        },
+        "2": {
+          "strain": "It reaches money and how it is reckoned: figures and promises want checking.",
+          "well": "A good head for what things are worth."
+        },
+        "3": {
+          "strain": "It runs through everyday dealings: errands, messages, neighbours and short trips.",
+          "well": "Everyday dealings go well: this mind is in its own country."
+        },
+        "4": {
+          "strain": "It stays home: what cannot be said elsewhere goes unsaid there too.",
+          "well": "Thinking is done best at home, and home conversations count."
+        },
+        "5": {
+          "strain": "It comes out in play, teasing and creative work.",
+          "well": "Wit and invention make this person good company."
+        },
+        "6": {
+          "strain": "It reaches work: details are where this shows, for better or worse.",
+          "well": "It makes a fine worker's mind: careful, quick and useful."
+        },
+        "7": {
+          "strain": "Partners hear it: agreements and quarrels both rest on how things are said.",
+          "well": "Partners have someone who will really talk things through."
+        },
+        "8": {
+          "strain": "It goes into secrets, money shared and things better not looked at.",
+          "well": "This mind can go into hard subjects and come back with something."
+        },
+        "9": {
+          "strain": "It reaches belief and study: opinions may run ahead of what is known.",
+          "well": "Study and travel suit this mind well."
+        },
+        "10": {
+          "strain": "It shows in public: reputation rests on what is said.",
+          "well": "It makes a voice worth listening to in public."
+        },
+        "11": {
+          "strain": "Friends and groups hear it first.",
+          "well": "Groups value this mind."
+        },
+        "12": {
+          "strain": "Much of it stays unspoken.",
+          "well": "It works quietly and well on its own."
+        }
       }
     },
     "Venus": {
       "stands": "relating, affection, harmony and taste",
       "dials": {
-        "sociable": ["E1", "E2"],
-        "accord": ["A1", "A4"],
-        "taste": ["O2"]
+        "sociable": [
+          "E1",
+          "E2"
+        ],
+        "accord": [
+          "A1",
+          "A4"
+        ],
+        "taste": [
+          "O2"
+        ]
       },
       "expressions": [
         {
           "name": "open-armed",
-          "when": { "sociable": "high", "accord": "high" },
+          "when": {
+            "sociable": "high",
+            "accord": "high"
+          },
           "lived": "well",
           "report": "By {name}'s answers affection is given freely: people are liked, sought out and trusted.",
           "hard": "By your answers you trust easily and like to agree. Today may ask you to hold a line; you can do it warmly.",
@@ -329,7 +687,10 @@
         },
         {
           "name": "charming on its own terms",
-          "when": { "sociable": "high", "accord": "low" },
+          "when": {
+            "sociable": "high",
+            "accord": "low"
+          },
           "lived": "plain",
           "report": "By {name}'s answers company is enjoyed, with the guard kept up.",
           "hard": "By your answers you enjoy people and keep your guard up. Today may show you where the guard is costing you.",
@@ -338,7 +699,10 @@
         },
         {
           "name": "quietly devoted",
-          "when": { "sociable": "low", "accord": "high" },
+          "when": {
+            "sociable": "low",
+            "accord": "high"
+          },
           "lived": "plain",
           "report": "By {name}'s answers this is kept for a few people, who are trusted completely.",
           "hard": "By your answers you keep to a few people and give way to them readily. Today, check that you are not giving way too far.",
@@ -347,7 +711,10 @@
         },
         {
           "name": "guarded",
-          "when": { "sociable": "low", "accord": "low" },
+          "when": {
+            "sociable": "low",
+            "accord": "low"
+          },
           "lived": "strain",
           "report": "By {name}'s answers people are kept at a distance, and little of this is being shared.",
           "hard": "By your answers you keep people at a distance, and today may seem to prove you right. Ask whether it has.",
@@ -356,7 +723,9 @@
         },
         {
           "name": "sociable",
-          "when": { "sociable": "high" },
+          "when": {
+            "sociable": "high"
+          },
           "lived": "well",
           "report": "By {name}'s answers it shows as ease and warmth in company.",
           "hard": "By your answers you are at ease with people. Today that ease is a resource: use it to say the awkward thing.",
@@ -365,7 +734,9 @@
         },
         {
           "name": "reserved",
-          "when": { "sociable": "low" },
+          "when": {
+            "sociable": "low"
+          },
           "lived": "plain",
           "report": "By {name}'s answers it is lived privately, away from crowds.",
           "hard": "By your answers you keep to yourself. Today may push you into company; you may leave when you have had enough.",
@@ -374,7 +745,9 @@
         },
         {
           "name": "accommodating",
-          "when": { "accord": "high" },
+          "when": {
+            "accord": "high"
+          },
           "lived": "well",
           "report": "By {name}'s answers it shows as trust and a readiness to keep the peace.",
           "hard": "By your answers you believe the best of people and meet them halfway. Today, make sure someone is meeting you.",
@@ -383,7 +756,9 @@
         },
         {
           "name": "wary",
-          "when": { "accord": "low" },
+          "when": {
+            "accord": "low"
+          },
           "lived": "strain",
           "report": "By {name}'s answers it comes with little trust and a readiness to argue.",
           "hard": "By your answers you are slow to trust and quick to contest. Today will offer you a quarrel; you need not take it.",
@@ -414,42 +789,159 @@
         }
       },
       "signs": {
-        "Aries": { "sociable": "high", "accord": "low", "taste": "low" },
-        "Taurus": { "sociable": "mid", "accord": "mid", "taste": "high" },
-        "Gemini": { "sociable": "high", "accord": "mid", "taste": "mid" },
-        "Cancer": { "sociable": "low", "accord": "mid", "taste": "mid" },
-        "Leo": { "sociable": "high", "accord": "mid", "taste": "high" },
-        "Virgo": { "sociable": "low", "accord": "mid", "taste": "mid" },
-        "Libra": { "sociable": "high", "accord": "high", "taste": "high" },
-        "Scorpio": { "sociable": "low", "accord": "low", "taste": "mid" },
-        "Sagittarius": { "sociable": "high", "accord": "mid", "taste": "mid" },
-        "Capricorn": { "sociable": "low", "accord": "low", "taste": "low" },
-        "Aquarius": { "sociable": "mid", "accord": "mid", "taste": "mid" },
-        "Pisces": { "sociable": "mid", "accord": "high", "taste": "high" }
+        "Aries": {
+          "sociable": "high",
+          "accord": "low",
+          "taste": "low"
+        },
+        "Taurus": {
+          "sociable": "mid",
+          "accord": "mid",
+          "taste": "high"
+        },
+        "Gemini": {
+          "sociable": "high",
+          "accord": "mid",
+          "taste": "mid"
+        },
+        "Cancer": {
+          "sociable": "low",
+          "accord": "mid",
+          "taste": "mid"
+        },
+        "Leo": {
+          "sociable": "high",
+          "accord": "mid",
+          "taste": "high"
+        },
+        "Virgo": {
+          "sociable": "low",
+          "accord": "mid",
+          "taste": "mid"
+        },
+        "Libra": {
+          "sociable": "high",
+          "accord": "high",
+          "taste": "high"
+        },
+        "Scorpio": {
+          "sociable": "low",
+          "accord": "low",
+          "taste": "mid"
+        },
+        "Sagittarius": {
+          "sociable": "high",
+          "accord": "mid",
+          "taste": "mid"
+        },
+        "Capricorn": {
+          "sociable": "low",
+          "accord": "low",
+          "taste": "low"
+        },
+        "Aquarius": {
+          "sociable": "mid",
+          "accord": "mid",
+          "taste": "mid"
+        },
+        "Pisces": {
+          "sociable": "mid",
+          "accord": "high",
+          "taste": "high"
+        }
       },
       "also": [
         {
-          "when": { "taste": "high" },
+          "when": {
+            "taste": "high"
+          },
           "report": "Art and beauty matter a great deal.",
           "text": "The answers also describe a strong response to art and to natural beauty: they are noticed, sought out and felt."
         },
         {
-          "when": { "taste": "low" },
+          "when": {
+            "taste": "low"
+          },
           "report": "Art and beauty count for little.",
           "text": "The answers also describe little interest in art or beauty for their own sake."
         }
-      ]
+      ],
+      "reach": [
+        "CO2",
+        "CO4"
+      ],
+      "higher": "The answers show this Venus on its higher side: love extends to people as they are, and injuries are let go. The chart's account of relating has been lived into.",
+      "lower": "The answers show this Venus on its lower side: affection keeps accounts, and what is owed is remembered. The chart's account of love may be more of a hope than a habit.",
+      "houses": {
+        "1": {
+          "strain": "It shows in how this person looks for welcome: the need to be liked is plain.",
+          "well": "Charm comes readily, and people warm to it."
+        },
+        "2": {
+          "strain": "Money and affection get mixed: spending is one way of asking for love.",
+          "well": "A good eye for value, and comfort with money."
+        },
+        "3": {
+          "strain": "It runs through everyday contact: small slights count.",
+          "well": "Everyday dealings are pleasant, and other people are made easy."
+        },
+        "4": {
+          "strain": "The home bears it: peace at home may be bought at some cost.",
+          "well": "Home is made comfortable and kind."
+        },
+        "5": {
+          "strain": "Romance and pleasure are the testing ground: they promise much.",
+          "well": "Romance, pleasure and art all come easily here."
+        },
+        "6": {
+          "strain": "It reaches work: colleagues are pleased or resented.",
+          "well": "Working life is eased by goodwill."
+        },
+        "7": {
+          "strain": "It goes straight to partnership: this is the first place it hurts.",
+          "well": "It goes straight to partnership, and blesses it."
+        },
+        "8": {
+          "strain": "Intimacy and shared money both carry it: trust is at stake.",
+          "well": "Intimacy deepens without fear."
+        },
+        "9": {
+          "strain": "Love is looked for in the distant or the ideal.",
+          "well": "Beauty in other places and ideas feeds this Venus."
+        },
+        "10": {
+          "strain": "Public favour is sought, and is a poor substitute.",
+          "well": "Public life goes smoothly on grace and tact."
+        },
+        "11": {
+          "strain": "Friends take the place of something else, or are asked to.",
+          "well": "Friendship is a true gift here."
+        },
+        "12": {
+          "strain": "Love stays secret, or is not quite admitted.",
+          "well": "Quiet affection, given without being seen, comes naturally."
+        }
+      }
     },
     "Mars": {
       "stands": "drive, anger and assertion",
       "dials": {
-        "push": ["E3", "E4", "E5"],
-        "heat": ["N2"]
+        "push": [
+          "E3",
+          "E4",
+          "E5"
+        ],
+        "heat": [
+          "N2"
+        ]
       },
       "expressions": [
         {
           "name": "combative",
-          "when": { "push": "high", "heat": "high" },
+          "when": {
+            "push": "high",
+            "heat": "high"
+          },
           "lived": "strain",
           "report": "By {name}'s answers the drive is strong and so is the temper.",
           "hard": "By your answers you are forceful and quick to anger, and today offers a fight. Decide beforehand whether it is worth having.",
@@ -458,7 +950,9 @@
         },
         {
           "name": "direct",
-          "when": { "push": "high" },
+          "when": {
+            "push": "high"
+          },
           "lived": "well",
           "report": "By {name}'s answers this drive is in full and well-governed use.",
           "hard": "By your answers your drive is strong and well governed. An obstacle today is more likely to be met than resented.",
@@ -467,7 +961,10 @@
         },
         {
           "name": "held in",
-          "when": { "push": "low", "heat": "high" },
+          "when": {
+            "push": "low",
+            "heat": "high"
+          },
           "lived": "strain",
           "report": "By {name}'s answers this drive is felt more than it is used: the anger is there and the assertion is not.",
           "hard": "By your answers you feel anger more than you show it. Today will add to the store; say the thing before it says itself.",
@@ -476,7 +973,9 @@
         },
         {
           "name": "muted",
-          "when": { "push": "low" },
+          "when": {
+            "push": "low"
+          },
           "lived": "plain",
           "report": "By {name}'s answers little of this drive is being called on.",
           "hard": "By your answers you seldom push. Today may push you; it is all right to push back.",
@@ -485,7 +984,9 @@
         },
         {
           "name": "short-fused",
-          "when": { "heat": "high" },
+          "when": {
+            "heat": "high"
+          },
           "lived": "strain",
           "report": "By {name}'s answers the temper is quicker than the drive is strong.",
           "hard": "By your answers your temper is quicker than you might wish. Today will try it; count before you answer.",
@@ -494,7 +995,9 @@
         },
         {
           "name": "even-tempered",
-          "when": { "heat": "low" },
+          "when": {
+            "heat": "low"
+          },
           "lived": "well",
           "report": "By {name}'s answers it is lived coolly, with a temper that is hard to rouse.",
           "hard": "By your answers you are hard to provoke. Today tries, and is likely to fail.",
@@ -521,30 +1024,130 @@
         }
       },
       "signs": {
-        "Aries": { "push": "high", "heat": "high" },
-        "Taurus": { "push": "mid", "heat": "mid" },
-        "Gemini": { "push": "mid", "heat": "mid" },
-        "Cancer": { "push": "low", "heat": "high" },
-        "Leo": { "push": "high", "heat": "high" },
-        "Virgo": { "push": "mid", "heat": "mid" },
-        "Libra": { "push": "low", "heat": "low" },
-        "Scorpio": { "push": "high", "heat": "high" },
-        "Sagittarius": { "push": "high", "heat": "mid" },
-        "Capricorn": { "push": "high", "heat": "low" },
-        "Aquarius": { "push": "mid", "heat": "low" },
-        "Pisces": { "push": "low", "heat": "low" }
+        "Aries": {
+          "push": "high",
+          "heat": "high"
+        },
+        "Taurus": {
+          "push": "mid",
+          "heat": "mid"
+        },
+        "Gemini": {
+          "push": "mid",
+          "heat": "mid"
+        },
+        "Cancer": {
+          "push": "low",
+          "heat": "high"
+        },
+        "Leo": {
+          "push": "high",
+          "heat": "high"
+        },
+        "Virgo": {
+          "push": "mid",
+          "heat": "mid"
+        },
+        "Libra": {
+          "push": "low",
+          "heat": "low"
+        },
+        "Scorpio": {
+          "push": "high",
+          "heat": "high"
+        },
+        "Sagittarius": {
+          "push": "high",
+          "heat": "mid"
+        },
+        "Capricorn": {
+          "push": "high",
+          "heat": "low"
+        },
+        "Aquarius": {
+          "push": "mid",
+          "heat": "low"
+        },
+        "Pisces": {
+          "push": "low",
+          "heat": "low"
+        }
+      },
+      "reach": [
+        "SD5",
+        "CO4"
+      ],
+      "higher": "The answers show this Mars on its higher side: drive is under command, and anger does not linger as revenge. Force can be used when it is wanted, and stopped when it is not.",
+      "lower": "The answers show this Mars on its lower side: impulse gets ahead of intention, and anger stays on after its reason has gone. Effort may turn against the person's own plans.",
+      "houses": {
+        "1": {
+          "strain": "It shows in the first encounter: people meet the edge of it before anything else.",
+          "well": "People meet a person with energy and courage."
+        },
+        "2": {
+          "strain": "Money is where the push goes, and where the fights start.",
+          "well": "Earning gets this drive behind it."
+        },
+        "3": {
+          "strain": "It comes out in words: arguments with neighbours, relatives or the road.",
+          "well": "Quick decisions and direct speech serve well here."
+        },
+        "4": {
+          "strain": "It stays at home, where it is hardest to walk away.",
+          "well": "Energy goes into the home, and repairs and defends it."
+        },
+        "5": {
+          "strain": "It comes out in pleasure: risk, rivalry and heat.",
+          "well": "Sport, love and creative work take up this force gladly."
+        },
+        "6": {
+          "strain": "It goes to work: the job takes it, or colleagues do.",
+          "well": "It works hard, and gets things done."
+        },
+        "7": {
+          "strain": "Partners take it: this is the classic place for the same quarrel to come round again.",
+          "well": "Partnership has a plain, direct energy."
+        },
+        "8": {
+          "strain": "It goes underground: desire and shared money are where it surfaces.",
+          "well": "This force can go through crises and come out the other side."
+        },
+        "9": {
+          "strain": "It is spent on opinions: beliefs become causes.",
+          "well": "A cause or a journey gets the full force of this Mars."
+        },
+        "10": {
+          "strain": "It shows at work and in public: authorities feel it.",
+          "well": "Ambition has plenty of force behind it."
+        },
+        "11": {
+          "strain": "Groups get it: allies and rivals are not always easy to tell apart.",
+          "well": "It works well with others towards a common goal."
+        },
+        "12": {
+          "strain": "It stays out of sight, and turns inward.",
+          "well": "Effort goes quietly, behind the scenes, and pays."
+        }
       }
     },
     "Jupiter": {
       "stands": "expansion, generosity and excess",
       "dials": {
-        "reach": ["O4", "A3"],
-        "excess": ["N5"]
+        "reach": [
+          "O4",
+          "A3"
+        ],
+        "excess": [
+          "N5"
+        ]
       },
       "expressions": [
         {
           "name": "lavish",
-          "when": { "reach": "high", "excess": "high" },
+          "when": {
+            "reach": "high",
+            "excess": "high"
+          },
           "lived": "strain",
           "report": "By {name}'s answers this is lived expansively, and to excess.",
           "hard": "By your answers you reach for everything and find it hard to stop. Today may send the bill.",
@@ -553,7 +1156,9 @@
         },
         {
           "name": "generous",
-          "when": { "reach": "high" },
+          "when": {
+            "reach": "high"
+          },
           "lived": "well",
           "report": "By {name}'s answers this is lived generously and with a sense of proportion.",
           "hard": "By your answers you give freely and keep your sense of proportion. Today asks for the proportion.",
@@ -562,7 +1167,10 @@
         },
         {
           "name": "all appetite",
-          "when": { "reach": "low", "excess": "high" },
+          "when": {
+            "reach": "low",
+            "excess": "high"
+          },
           "lived": "strain",
           "report": "By {name}'s answers the appetite is stronger than the reach.",
           "hard": "By your answers you find it hard to stop at enough. Today may test that.",
@@ -571,7 +1179,9 @@
         },
         {
           "name": "contained",
-          "when": { "reach": "low" },
+          "when": {
+            "reach": "low"
+          },
           "lived": "plain",
           "report": "By {name}'s answers this is lived within narrow, well-kept bounds.",
           "hard": "By your answers you keep within familiar bounds. Today may show you one that is too tight.",
@@ -580,7 +1190,9 @@
         },
         {
           "name": "indulgent",
-          "when": { "excess": "high" },
+          "when": {
+            "excess": "high"
+          },
           "lived": "strain",
           "report": "By {name}'s answers it shows mostly as a taste for pleasure.",
           "hard": "By your answers you give in to temptation readily. Today offers one with a cost.",
@@ -589,7 +1201,9 @@
         },
         {
           "name": "temperate",
-          "when": { "excess": "low" },
+          "when": {
+            "excess": "low"
+          },
           "lived": "well",
           "report": "By {name}'s answers it comes with unusual self-command.",
           "hard": "By your answers you have your appetites in hand, which is what today asks for.",
@@ -616,30 +1230,132 @@
         }
       },
       "signs": {
-        "Aries": { "reach": "high", "excess": "mid" },
-        "Taurus": { "reach": "low", "excess": "high" },
-        "Gemini": { "reach": "high", "excess": "mid" },
-        "Cancer": { "reach": "mid", "excess": "mid" },
-        "Leo": { "reach": "high", "excess": "high" },
-        "Virgo": { "reach": "low", "excess": "low" },
-        "Libra": { "reach": "mid", "excess": "mid" },
-        "Scorpio": { "reach": "mid", "excess": "mid" },
-        "Sagittarius": { "reach": "high", "excess": "high" },
-        "Capricorn": { "reach": "low", "excess": "low" },
-        "Aquarius": { "reach": "high", "excess": "low" },
-        "Pisces": { "reach": "high", "excess": "high" }
+        "Aries": {
+          "reach": "high",
+          "excess": "mid"
+        },
+        "Taurus": {
+          "reach": "low",
+          "excess": "high"
+        },
+        "Gemini": {
+          "reach": "high",
+          "excess": "mid"
+        },
+        "Cancer": {
+          "reach": "mid",
+          "excess": "mid"
+        },
+        "Leo": {
+          "reach": "high",
+          "excess": "high"
+        },
+        "Virgo": {
+          "reach": "low",
+          "excess": "low"
+        },
+        "Libra": {
+          "reach": "mid",
+          "excess": "mid"
+        },
+        "Scorpio": {
+          "reach": "mid",
+          "excess": "mid"
+        },
+        "Sagittarius": {
+          "reach": "high",
+          "excess": "high"
+        },
+        "Capricorn": {
+          "reach": "low",
+          "excess": "low"
+        },
+        "Aquarius": {
+          "reach": "high",
+          "excess": "low"
+        },
+        "Pisces": {
+          "reach": "high",
+          "excess": "high"
+        }
+      },
+      "reach": [
+        "SD2",
+        "ST2"
+      ],
+      "higher": "The answers show this Jupiter on its higher side: hope has an aim, and the wider view means something. Good fortune here is more than appetite.",
+      "lower": "The answers show this Jupiter on its lower side: faith in the future is thin, and growth has no clear object. The chart's promise of expansion is waiting for something to expand towards.",
+      "houses": {
+        "1": {
+          "strain": "It shows at once: more of everything, in manner, in promises, in the body.",
+          "well": "A generous manner and a good presence."
+        },
+        "2": {
+          "strain": "Money and overreach go together here.",
+          "well": "Luck with money, and sense enough to keep it."
+        },
+        "3": {
+          "strain": "It runs through talk: more is said and started than finished.",
+          "well": "A ready, hopeful mind in everyday things."
+        },
+        "4": {
+          "strain": "It reaches home: too much is taken on there.",
+          "well": "Home is ample, and open to others."
+        },
+        "5": {
+          "strain": "Pleasure is overdone here.",
+          "well": "Pleasure and creative work bring real good fortune."
+        },
+        "6": {
+          "strain": "Work suffers from too much being promised.",
+          "well": "Work grows, and pays."
+        },
+        "7": {
+          "strain": "Partners are asked to be everything.",
+          "well": "Partnership brings luck and growth."
+        },
+        "8": {
+          "strain": "Debts and risks gather here.",
+          "well": "Shared resources prosper."
+        },
+        "9": {
+          "strain": "Belief runs ahead of sense.",
+          "well": "Study, travel or faith reward this person fully."
+        },
+        "10": {
+          "strain": "Ambition outruns delivery in public.",
+          "well": "Public life brings recognition."
+        },
+        "11": {
+          "strain": "Too many friends and too many plans.",
+          "well": "Friends and groups open doors."
+        },
+        "12": {
+          "strain": "It lives on hope in private, and little reaches daylight.",
+          "well": "A quiet inner optimism carries this person through."
+        }
       }
     },
     "Saturn": {
       "stands": "discipline, duty, caution and fear",
       "dials": {
-        "discipline": ["C5", "C3", "C2", "C6"],
-        "inhibition": ["N4"]
+        "discipline": [
+          "C5",
+          "C3",
+          "C2",
+          "C6"
+        ],
+        "inhibition": [
+          "N4"
+        ]
       },
       "expressions": [
         {
           "name": "strict with itself",
-          "when": { "discipline": "high", "inhibition": "high" },
+          "when": {
+            "discipline": "high",
+            "inhibition": "high"
+          },
           "lived": "strain",
           "report": "By {name}'s answers the discipline is real, and so is the fear of falling short that goes with it.",
           "hard": "By your answers you hold yourself to a high standard and fear falling short. Today's pressure is likely to feel heavier than it is.",
@@ -648,7 +1364,9 @@
         },
         {
           "name": "structured",
-          "when": { "discipline": "high" },
+          "when": {
+            "discipline": "high"
+          },
           "lived": "well",
           "report": "By {name}'s answers this discipline is in daily use and sits easily.",
           "hard": "By your answers discipline comes naturally to you. A demand today is one you can meet.",
@@ -657,7 +1375,10 @@
         },
         {
           "name": "exposed",
-          "when": { "discipline": "low", "inhibition": "high" },
+          "when": {
+            "discipline": "low",
+            "inhibition": "high"
+          },
           "lived": "strain",
           "report": "By {name}'s answers the discipline is missing and the self-consciousness is not.",
           "hard": "By your answers you feel judged and are short of structure to lean on. Today, do one small thing properly; it helps more than worrying.",
@@ -666,7 +1387,9 @@
         },
         {
           "name": "unbound",
-          "when": { "discipline": "low" },
+          "when": {
+            "discipline": "low"
+          },
           "lived": "plain",
           "report": "By {name}'s answers these limits are, for now, declined.",
           "hard": "By your answers you wear rules lightly. Today one of them may insist.",
@@ -675,7 +1398,9 @@
         },
         {
           "name": "self-conscious",
-          "when": { "inhibition": "high" },
+          "when": {
+            "inhibition": "high"
+          },
           "lived": "strain",
           "report": "By {name}'s answers it shows chiefly as unease about being judged.",
           "hard": "By your answers you are uneasy under other people's eyes. Today may put you there; they are looking less closely than you think.",
@@ -684,7 +1409,9 @@
         },
         {
           "name": "at ease",
-          "when": { "inhibition": "low" },
+          "when": {
+            "inhibition": "low"
+          },
           "lived": "well",
           "report": "By {name}'s answers it is carried without anxiety.",
           "hard": "By your answers you are not afraid of being judged. Today that is an advantage.",
@@ -711,36 +1438,134 @@
         }
       },
       "signs": {
-        "Aries": { "discipline": "low", "inhibition": "low" },
-        "Taurus": { "discipline": "high", "inhibition": "mid" },
-        "Gemini": { "discipline": "low", "inhibition": "mid" },
-        "Cancer": { "discipline": "mid", "inhibition": "high" },
-        "Leo": { "discipline": "mid", "inhibition": "high" },
-        "Virgo": { "discipline": "high", "inhibition": "high" },
-        "Libra": { "discipline": "high", "inhibition": "mid" },
-        "Scorpio": { "discipline": "high", "inhibition": "mid" },
-        "Sagittarius": { "discipline": "mid", "inhibition": "low" },
-        "Capricorn": { "discipline": "high", "inhibition": "mid" },
-        "Aquarius": { "discipline": "high", "inhibition": "low" },
-        "Pisces": { "discipline": "low", "inhibition": "high" }
+        "Aries": {
+          "discipline": "low",
+          "inhibition": "low"
+        },
+        "Taurus": {
+          "discipline": "high",
+          "inhibition": "mid"
+        },
+        "Gemini": {
+          "discipline": "low",
+          "inhibition": "mid"
+        },
+        "Cancer": {
+          "discipline": "mid",
+          "inhibition": "high"
+        },
+        "Leo": {
+          "discipline": "mid",
+          "inhibition": "high"
+        },
+        "Virgo": {
+          "discipline": "high",
+          "inhibition": "high"
+        },
+        "Libra": {
+          "discipline": "high",
+          "inhibition": "mid"
+        },
+        "Scorpio": {
+          "discipline": "high",
+          "inhibition": "mid"
+        },
+        "Sagittarius": {
+          "discipline": "mid",
+          "inhibition": "low"
+        },
+        "Capricorn": {
+          "discipline": "high",
+          "inhibition": "mid"
+        },
+        "Aquarius": {
+          "discipline": "high",
+          "inhibition": "low"
+        },
+        "Pisces": {
+          "discipline": "low",
+          "inhibition": "high"
+        }
+      },
+      "reach": [
+        "SD5",
+        "SD3"
+      ],
+      "higher": "The answers show this Saturn on its higher side: limits are chosen, plans are kept, and problems are met. Discipline has become a form of freedom.",
+      "lower": "The answers show this Saturn on its lower side: limits are felt as defeat, and plans give way. The structure the chart asks for is still to be built.",
+      "houses": {
+        "1": {
+          "strain": "It shows at once: a guarded manner, and a hard judgement of oneself.",
+          "well": "A serious, trustworthy presence."
+        },
+        "2": {
+          "strain": "It reaches money: fear of having too little whatever there is.",
+          "well": "Careful with money, and slowly secure."
+        },
+        "3": {
+          "strain": "It runs through speech and study: caution about saying anything.",
+          "well": "Precise, patient and worth listening to."
+        },
+        "4": {
+          "strain": "It lives at home: old rules still apply there.",
+          "well": "A solid foundation, built with care."
+        },
+        "5": {
+          "strain": "Pleasure feels like something to be earned.",
+          "well": "Creative work given the time it needs."
+        },
+        "6": {
+          "strain": "It reaches work: duty without an end, or duty dropped.",
+          "well": "A workman's discipline, and a good one."
+        },
+        "7": {
+          "strain": "Partners meet the wall.",
+          "well": "A partnership that lasts because it is worked at."
+        },
+        "8": {
+          "strain": "Fear of what is shared, and of what is lost.",
+          "well": "Able to bear the difficult things that others avoid."
+        },
+        "9": {
+          "strain": "Belief becomes doctrine, or disappears.",
+          "well": "Study has weight, and is finished."
+        },
+        "10": {
+          "strain": "Public failure is the fear; it may drive or block the whole career.",
+          "well": "Slow and very real public achievement."
+        },
+        "11": {
+          "strain": "Groups are kept at a distance, and hopes low.",
+          "well": "A reliable friend, and a pillar of any group."
+        },
+        "12": {
+          "strain": "It works in private: self-reproach kept out of sight.",
+          "well": "Strength built in solitude."
+        }
       }
     },
     "Uranus": {
       "stands": "independence and the break with convention",
       "dials": {
-        "unconvention": ["O6"]
+        "unconvention": [
+          "O6"
+        ]
       },
       "expressions": [
         {
           "name": "unconventional",
-          "when": { "unconvention": "high" },
+          "when": {
+            "unconvention": "high"
+          },
           "lived": "plain",
           "report": "By {name}'s answers convention and authority are readily questioned.",
           "text": "The answers describe someone who questions authority, tradition and the established order, and welcomes change in how society is run. The questionnaire's statements here are about politics, so this is one narrow window on Uranus."
         },
         {
           "name": "traditional",
-          "when": { "unconvention": "low" },
+          "when": {
+            "unconvention": "low"
+          },
           "lived": "plain",
           "report": "By {name}'s answers tradition and authority are respected.",
           "text": "The answers describe respect for tradition, authority and the established order. Whatever Uranus does in this chart, it is not showing as a quarrel with convention."
@@ -751,53 +1576,77 @@
           "lived": "plain",
           "text": "The answers describe neither a strong attachment to tradition nor a strong wish to overturn it. Uranus does not stand out."
         }
-      ]
+      ],
+      "reach": [
+        "ST1",
+        "SD2"
+      ],
+      "higher": "The answers show this Uranus on its higher side: the unusual view has a purpose behind it. Difference is being put to use.",
+      "lower": "The answers show this Uranus on its lower side: restlessness has little to steer by. Breaking away may not yet be going anywhere."
     },
     "Neptune": {
       "stands": "imagination and compassion",
       "dials": {
-        "dream": ["O1"],
-        "compassion": ["A6"]
+        "dream": [
+          "O1"
+        ],
+        "compassion": [
+          "A6"
+        ]
       },
       "expressions": [
         {
           "name": "porous",
-          "when": { "dream": "high", "compassion": "high" },
+          "when": {
+            "dream": "high",
+            "compassion": "high"
+          },
           "lived": "plain",
           "report": "By {name}'s answers both the dreaming and the sympathy are strong.",
           "text": "The answers describe a vivid imagination and a tender heart: much time in daydream, and a ready response to other people's troubles. Neptune is fully present. The boundary between self and others, and between what is and what is imagined, is thin."
         },
         {
           "name": "dreaming",
-          "when": { "dream": "high" },
+          "when": {
+            "dream": "high"
+          },
           "lived": "plain",
           "report": "By {name}'s answers the imagination is very active.",
           "text": "The answers describe a rich inner world of fantasy and daydream, with an ordinary or cooler response to others' misfortunes. The imagination is turned inward more than outward."
         },
         {
           "name": "tender",
-          "when": { "compassion": "high" },
+          "when": {
+            "compassion": "high"
+          },
           "lived": "plain",
           "report": "By {name}'s answers it shows as sympathy more than as dreaming.",
           "text": "The answers describe ready sympathy for those worse off, without any unusual taste for fantasy. Neptune shows as compassion more than as dreaming."
         },
         {
           "name": "matter-of-fact",
-          "when": { "dream": "low", "compassion": "low" },
+          "when": {
+            "dream": "low",
+            "compassion": "low"
+          },
           "lived": "plain",
           "report": "By {name}'s answers little of this is in use: facts and fairness come first.",
           "text": "The answers describe someone who keeps to facts and judges by fairness more than by pity. Neptune is the least used planet here: little is dreamed and little is dissolved."
         },
         {
           "name": "literal",
-          "when": { "dream": "low" },
+          "when": {
+            "dream": "low"
+          },
           "lived": "plain",
           "report": "By {name}'s answers the imagination is seldom called on.",
           "text": "The answers describe little daydreaming and an ordinary measure of sympathy. Neptune's imagination is not much called on; attention stays with what is in front of it."
         },
         {
           "name": "unsentimental",
-          "when": { "compassion": "low" },
+          "when": {
+            "compassion": "low"
+          },
           "lived": "plain",
           "report": "By {name}'s answers pity plays little part.",
           "text": "The answers describe an ordinary imagination and little inclination to pity: other people's troubles are judged by what is fair more than felt. Neptune's compassion is not much called on."
@@ -808,11 +1657,414 @@
           "lived": "plain",
           "text": "The answers describe an ordinary measure of imagination and of sympathy. Neptune is neither prominent nor absent."
         }
-      ]
+      ],
+      "reach": [
+        "ST2",
+        "ST1"
+      ],
+      "higher": "The answers show this Neptune on its higher side: imagination is alive and finds meaning in things. The dissolving side of this planet has found a use.",
+      "lower": "The answers show this Neptune on its lower side: there is little sense of anything beyond the plain facts, and the planet's longing may go unnamed."
+    },
+    "Pluto": {
+      "stands": "power, compulsion and what must change",
+      "dials": {
+        "release": [
+          "CO4"
+        ],
+        "restraint": [
+          "SD5"
+        ]
+      },
+      "expressions": [
+        {
+          "name": "consumed",
+          "when": {
+            "release": "low",
+            "restraint": "low"
+          },
+          "lived": "strain",
+          "report": "By {name}'s answers grudges hold and impulses win.",
+          "text": "The answers describe injuries held on to and impulses that get their way. What this planet stands for is running the show: the old score and the urge to settle it. It takes more force to stop than to go on."
+        },
+        {
+          "name": "unforgiving",
+          "when": {
+            "release": "low",
+            "restraint": "high"
+          },
+          "lived": "strain",
+          "report": "By {name}'s answers grudges hold, and are held under strict control.",
+          "text": "The answers describe great self-command together with a long memory for injury. Nothing leaks, and nothing is let go. This is Pluto as a clenched hand: strong, and tiring to keep up."
+        },
+        {
+          "name": "worked through",
+          "when": {
+            "release": "high",
+            "restraint": "high"
+          },
+          "lived": "well",
+          "report": "By {name}'s answers old injuries have been let go, and intensity is under command.",
+          "text": "The answers describe someone who forgives and who keeps their impulses under command. These are the signs of a Pluto that has been faced: the intensity has somewhere useful to go, and the past no longer gives the orders."
+        },
+        {
+          "name": "forgiving and unruly",
+          "when": {
+            "release": "high",
+            "restraint": "low"
+          },
+          "lived": "plain",
+          "report": "By {name}'s answers injuries are let go readily, though impulses are not so easily ruled.",
+          "text": "The answers describe a person who lets injuries go but cannot always rule their own impulses. Resentment is not the problem here. Compulsion may be: the urge is short, and the regret comes afterwards."
+        },
+        {
+          "name": "smouldering",
+          "when": {
+            "release": "low"
+          },
+          "lived": "strain",
+          "report": "By {name}'s answers injuries are not easily let go.",
+          "text": "The answers describe grudges that last and a wish to see things evened up. This is Pluto below the surface: it may not show from day to day, and it does not go away."
+        },
+        {
+          "name": "able to let go",
+          "when": {
+            "release": "high"
+          },
+          "lived": "well",
+          "report": "By {name}'s answers injuries are let go without much struggle.",
+          "text": "The answers describe a person who forgives readily. A planet of endings has found one of its better uses: what is over can be allowed to be over."
+        },
+        {
+          "name": "compulsive",
+          "when": {
+            "restraint": "low"
+          },
+          "lived": "strain",
+          "report": "By {name}'s answers impulses tend to win, and are often regretted.",
+          "text": "The answers describe things done and regretted, and chances thrown away. The pull of this planet is felt as compulsion: something takes over, and the person watches it happen."
+        },
+        {
+          "name": "contained",
+          "when": {
+            "restraint": "high"
+          },
+          "lived": "plain",
+          "report": "By {name}'s answers intensity is kept well in hand.",
+          "text": "The answers describe someone who keeps to their plans and resists what would get in the way. Whatever this planet stirs, it is contained."
+        },
+        {
+          "name": "moderate",
+          "when": {},
+          "lived": "plain",
+          "text": "The answers say nothing out of the ordinary about grudges, compulsion or self-command, so they neither bear out nor contradict what the chart says of this planet."
+        }
+      ],
+      "reach": [
+        "CO4",
+        "SD5"
+      ],
+      "higher": "The answers show this Pluto on its higher side: old injuries are let go, and intensity is under command. What this planet buries can be brought up and changed.",
+      "lower": "The answers show this Pluto on its lower side: grudges hold, and compulsion runs its own course. The planet's power may be working underground."
+    },
+    "North Node": {
+      "stands": "direction, and where a life is heading",
+      "dials": {
+        "direction": [
+          "SD2"
+        ],
+        "meaning": [
+          "ST2"
+        ]
+      },
+      "expressions": [
+        {
+          "name": "on its way",
+          "when": {
+            "direction": "high",
+            "meaning": "high"
+          },
+          "lived": "well",
+          "report": "By {name}'s answers there is a direction, and it means something.",
+          "text": "The answers describe someone who knows what they want and finds their life worth the effort. It is what the Node asks for: an aim that also feels like the right one."
+        },
+        {
+          "name": "purposeful and dry",
+          "when": {
+            "direction": "high",
+            "meaning": "low"
+          },
+          "lived": "plain",
+          "report": "By {name}'s answers there is a clear direction, though little sense of what it is all for.",
+          "text": "The answers describe a clear aim and not much feeling for any larger meaning. The way forward is walked steadily. Whether it is the right road is not a question that troubles this person."
+        },
+        {
+          "name": "searching",
+          "when": {
+            "direction": "low",
+            "meaning": "high"
+          },
+          "lived": "strain",
+          "report": "By {name}'s answers much is felt to matter, and it is not clear where to go.",
+          "text": "The answers describe a strong feeling for what matters and no clear idea of how to get there. Passion is here without a road: the person may go through many causes without settling on one."
+        },
+        {
+          "name": "adrift",
+          "when": {
+            "direction": "low",
+            "meaning": "low"
+          },
+          "lived": "strain",
+          "report": "By {name}'s answers there is no clear direction, and not much feeling that one is needed.",
+          "text": "The answers describe a life without a clear heading, and a sense that it may not much matter. It is the hardest reading of the Node, and the one most worth questioning: this is how things look today, not how they must stay."
+        },
+        {
+          "name": "directed",
+          "when": {
+            "direction": "high"
+          },
+          "lived": "well",
+          "report": "By {name}'s answers there is a working sense of where life is going.",
+          "text": "The answers describe someone who knows what they want and works at it. The Node's direction has been found, or something near it."
+        },
+        {
+          "name": "unsure of the way",
+          "when": {
+            "direction": "low"
+          },
+          "lived": "strain",
+          "report": "By {name}'s answers the way forward is unclear.",
+          "text": "The answers describe uncertainty about where life is going, and a readiness to let others decide. The chart's Node says where growth lies, and the person may be waiting to be told."
+        },
+        {
+          "name": "moved",
+          "when": {
+            "meaning": "high"
+          },
+          "lived": "plain",
+          "report": "By {name}'s answers a sense of meaning is strong here.",
+          "text": "The answers describe a person moved by what they take up. There is feeling behind whatever direction is chosen."
+        },
+        {
+          "name": "moderate",
+          "when": {},
+          "lived": "plain",
+          "text": "The answers say nothing out of the ordinary about direction or meaning, so they neither bear out nor contradict what the chart says of the Node."
+        }
+      ],
+      "reach": [
+        "SD2",
+        "ST2"
+      ],
+      "higher": "The answers show this Node on its higher side: there is a direction, and it feels worth following. The chart's line of development is one being walked.",
+      "lower": "The answers show this Node on its lower side: the way forward is not clear, and may not seem worth the trouble. The chart's line of development is still to be taken up."
+    },
+    "Chiron": {
+      "stands": "the old hurt, and what it has taught",
+      "dials": {
+        "acceptance": [
+          "SD4"
+        ],
+        "care": [
+          "CO2"
+        ]
+      },
+      "expressions": [
+        {
+          "name": "healing",
+          "when": {
+            "acceptance": "high",
+            "care": "high"
+          },
+          "lived": "well",
+          "report": "By {name}'s answers the self is accepted, and that acceptance reaches other people.",
+          "text": "The answers describe someone settled in themselves and alert to what others feel. It is the classic turn of Chiron: a hurt that has become understanding, offered to people who have the same one."
+        },
+        {
+          "name": "wounded healer",
+          "when": {
+            "acceptance": "low",
+            "care": "high"
+          },
+          "lived": "strain",
+          "report": "By {name}'s answers others are looked after better than the self.",
+          "text": "The answers describe care for others alongside a harsh measure of oneself. It is Chiron's commonest form: comfort given freely to everyone but the person giving it."
+        },
+        {
+          "name": "settled",
+          "when": {
+            "acceptance": "high",
+            "care": "low"
+          },
+          "lived": "plain",
+          "report": "By {name}'s answers the self is well accepted, though others' pain is not much attended to.",
+          "text": "The answers describe a person at peace with themselves and not much drawn to others' troubles. Whatever hurt the chart points to, it has been put down. It has not been turned into care."
+        },
+        {
+          "name": "armoured",
+          "when": {
+            "acceptance": "low",
+            "care": "low"
+          },
+          "lived": "strain",
+          "report": "By {name}'s answers the old hurt is kept behind status and distance.",
+          "text": "The answers describe a concern with standing and little attention to what others feel. This may be a hurt kept out of sight: nobody gets close enough to touch it, and it does not get better."
+        },
+        {
+          "name": "at peace with it",
+          "when": {
+            "acceptance": "high"
+          },
+          "lived": "well",
+          "report": "By {name}'s answers the person is on good terms with their own shortcomings.",
+          "text": "The answers describe someone with little need to compete or impress. The sore place this body points to does not appear to be running things."
+        },
+        {
+          "name": "sore",
+          "when": {
+            "acceptance": "low"
+          },
+          "lived": "strain",
+          "report": "By {name}'s answers comparison with others keeps a sore place open.",
+          "text": "The answers describe a person much taken up with status and with not looking weak. The hurt this body points to may lie under that."
+        },
+        {
+          "name": "tender to others",
+          "when": {
+            "care": "high"
+          },
+          "lived": "well",
+          "report": "By {name}'s answers others' pain is noticed and answered.",
+          "text": "The answers describe someone who picks up what others feel and makes time for them. Chiron's lesson is being applied."
+        },
+        {
+          "name": "unmoved",
+          "when": {
+            "care": "low"
+          },
+          "lived": "plain",
+          "report": "By {name}'s answers others' pain is not much attended to.",
+          "text": "The answers describe someone who does not go out of their way for what others feel. This body's lesson, if it has been learned, is not in use."
+        },
+        {
+          "name": "moderate",
+          "when": {},
+          "lived": "plain",
+          "text": "The answers say nothing out of the ordinary about acceptance or care, so they neither bear out nor contradict what the chart says of this body."
+        }
+      ],
+      "reach": [
+        "SD4",
+        "CO2"
+      ],
+      "higher": "The answers show this Chiron on its higher side: the old hurt is accepted, and has turned into understanding of others. It is the healer's side of this body.",
+      "lower": "The answers show this Chiron on its lower side: the old hurt is still kept out of sight, behind status or a hard front. It is the wounded side of this body."
+    },
+    "Lilith": {
+      "stands": "what was refused, and what will not be tamed",
+      "dials": {
+        "content": [
+          "SD1"
+        ],
+        "standing": [
+          "SD3"
+        ]
+      },
+      "expressions": [
+        {
+          "name": "at large",
+          "when": {
+            "content": "high",
+            "standing": "high"
+          },
+          "lived": "well",
+          "report": "By {name}'s answers there is little sense of being wronged, and no trouble standing up.",
+          "text": "The answers describe someone at ease with their life and able to meet what comes. What Lilith holds has no need to rage: it can simply go its own way."
+        },
+        {
+          "name": "embattled",
+          "when": {
+            "content": "low",
+            "standing": "high"
+          },
+          "lived": "strain",
+          "report": "By {name}'s answers a sense of being wronged goes with the strength to fight it.",
+          "text": "The answers describe a person who feels short-changed and is quite able to take that on. This is Lilith with a cause: forceful, and easily set off."
+        },
+        {
+          "name": "swallowed",
+          "when": {
+            "content": "low",
+            "standing": "low"
+          },
+          "lived": "strain",
+          "report": "By {name}'s answers a sense of being wronged goes with little strength to answer it.",
+          "text": "The answers describe a person who feels used and finds it hard to stand up to it. What Lilith holds is turned inward: refusal never quite said, and anger with nowhere to go."
+        },
+        {
+          "name": "easy-going",
+          "when": {
+            "content": "high",
+            "standing": "low"
+          },
+          "lived": "plain",
+          "report": "By {name}'s answers there is little grievance, and little appetite for a fight.",
+          "text": "The answers describe contentment and a readiness to let others lead. Whatever this point stands for, it has not been a battle."
+        },
+        {
+          "name": "unaggrieved",
+          "when": {
+            "content": "high"
+          },
+          "lived": "well",
+          "report": "By {name}'s answers there is little sense of having been wronged.",
+          "text": "The answers describe someone at ease in their life and not looking for slights. What this point holds has been let be."
+        },
+        {
+          "name": "aggrieved",
+          "when": {
+            "content": "low"
+          },
+          "lived": "strain",
+          "report": "By {name}'s answers a sense of having been wronged is near the surface.",
+          "text": "The answers describe feeling short-changed, misunderstood or used. It is Lilith's first form: the refused part that has not forgotten."
+        },
+        {
+          "name": "self-possessed",
+          "when": {
+            "standing": "high"
+          },
+          "lived": "well",
+          "report": "By {name}'s answers the person stands on their own feet.",
+          "text": "The answers describe a person who faces problems directly and does not wait to be led. This point's independence is a working one."
+        },
+        {
+          "name": "held back",
+          "when": {
+            "standing": "low"
+          },
+          "lived": "strain",
+          "report": "By {name}'s answers it is easy to be discouraged or overruled.",
+          "text": "The answers describe someone easily discouraged or intimidated. What Lilith holds may go unused for lack of nerve."
+        },
+        {
+          "name": "moderate",
+          "when": {},
+          "lived": "plain",
+          "text": "The answers say nothing out of the ordinary about grievance or nerve, so they neither bear out nor contradict what the chart says of this point."
+        }
+      ],
+      "reach": [
+        "SD1",
+        "SD4"
+      ],
+      "higher": "The answers show this Lilith on its higher side: what was refused has been made peace with, and no longer needs to be proved against anyone.",
+      "lower": "The answers show this Lilith on its lower side: a sense of having been wronged is near the surface, and it may be spent on the wrong people."
     }
   },
   "rising": {
-    "dial": ["E"],
+    "dial": [
+      "E"
+    ],
     "nouns": {
       "high": "outgoingness",
       "low": "reserve"
@@ -886,28 +2138,45 @@
   },
   "elements": {
     "Fire": {
-      "dial": ["E3", "E4", "E5", "E6"],
+      "dial": [
+        "E3",
+        "E4",
+        "E5",
+        "E6"
+      ],
       "strongHigh": "By {name}'s answers the fire is in evidence: assertive, active and high-spirited.",
       "strongLow": "By {name}'s answers little of this fire is showing: the pace is slow and the spirits quiet.",
       "weakHigh": "By {name}'s answers there is fire all the same: energy, assertion and high spirits that the chart's elements do not account for.",
       "weakLow": "By {name}'s answers the lack of fire shows: little push, a slow pace, quiet spirits."
     },
     "Earth": {
-      "dial": ["C2", "C5", "C6"],
+      "dial": [
+        "C2",
+        "C5",
+        "C6"
+      ],
       "strongHigh": "By {name}'s answers the earth is in evidence: orderly, disciplined and careful.",
       "strongLow": "By {name}'s answers little of this earth is showing: plans, order and caution are worn lightly.",
       "weakHigh": "By {name}'s answers there is earth all the same: order, discipline and care that the chart's elements do not account for.",
       "weakLow": "By {name}'s answers the lack of earth shows: little taste for order, routine or caution."
     },
     "Air": {
-      "dial": ["O5", "E1", "E2"],
+      "dial": [
+        "O5",
+        "E1",
+        "E2"
+      ],
       "strongHigh": "By {name}'s answers the air is in evidence: fond of ideas and of company.",
       "strongLow": "By {name}'s answers little of this air is showing: neither ideas nor company are much sought.",
       "weakHigh": "By {name}'s answers there is air all the same: a liking for ideas and for people that the chart's elements do not account for.",
       "weakLow": "By {name}'s answers the lack of air shows: little appetite for abstract ideas or for much company."
     },
     "Water": {
-      "dial": ["O3", "A6", "N1"],
+      "dial": [
+        "O3",
+        "A6",
+        "N1"
+      ],
       "strongHigh": "By {name}'s answers the water is in evidence: feelings are strong, and other people's troubles are felt.",
       "strongLow": "By {name}'s answers little of this water is showing: feelings are kept cool and sympathy measured.",
       "weakHigh": "By {name}'s answers there is water all the same: strong feeling and ready sympathy that the chart's elements do not account for.",
@@ -916,21 +2185,30 @@
   },
   "modalities": {
     "Cardinal": {
-      "dial": ["E3", "C4"],
+      "dial": [
+        "E3",
+        "C4"
+      ],
       "strongHigh": "By {name}'s answers the initiative is in evidence: quick to take charge and set on achieving.",
       "strongLow": "By {name}'s answers little of this initiative is showing: others are left to lead and ambition is modest.",
       "weakHigh": "By {name}'s answers there is initiative all the same: a readiness to lead and to achieve that the chart's modes do not account for.",
       "weakLow": "By {name}'s answers the lack of cardinal signs shows: little urge to lead or to strive."
     },
     "Fixed": {
-      "dial": ["C5", "-O4"],
+      "dial": [
+        "C5",
+        "-O4"
+      ],
       "strongHigh": "By {name}'s answers the persistence is in evidence: tasks are seen through and the familiar preferred to change.",
       "strongLow": "By {name}'s answers little of this fixity is showing: tasks are easily dropped and change is welcome.",
       "weakHigh": "By {name}'s answers there is staying power all the same: persistence and a liking for the familiar that the chart's modes do not account for.",
       "weakLow": "By {name}'s answers the lack of fixed signs shows: little staying power and a taste for change."
     },
     "Mutable": {
-      "dial": ["O4", "-C2"],
+      "dial": [
+        "O4",
+        "-C2"
+      ],
       "strongHigh": "By {name}'s answers the adaptability is in evidence: variety is welcome and order is not insisted on.",
       "strongLow": "By {name}'s answers little of this adaptability is showing: routine and order are preferred.",
       "weakHigh": "By {name}'s answers there is adaptability all the same: a taste for variety and an easy way with disorder that the chart's modes do not account for.",
@@ -945,6 +2223,166 @@
     "well": {
       "hard": "By your answers your natal {planet} is {expression}. You are well placed to handle this stretch.",
       "easy": "By your answers your natal {planet} is {expression}. This stretch plays to that strength."
+    }
+  },
+  "timing": {
+    "lord": {
+      "strain": "By {name}'s answers {planet} is {expression}, and this year it has the lead. Expect the year to go by way of that, and to ask for the part of it that has been hard to manage.",
+      "well": "By {name}'s answers {planet} is {expression}, and this year it has the lead. That is a good planet to have in charge: the year should find it ready.",
+      "plain": ""
+    },
+    "contacts": "By your answers"
+  },
+  "patterns": {
+    "Stellium": {
+      "strain": "By {name}'s answers {points} are mostly lived with strain. So much gathered in one place means that a difficulty in one of them is soon a difficulty in all.",
+      "well": "By {name}'s answers {points} are mostly lived well. So much gathered in one place, and working, is a real concentration of strength."
+    },
+    "GrandTrine": {
+      "strain": "By {name}'s answers {points} are mostly lived with strain. That is unusual for a figure this easy, and worth asking about: the talent described is not reaching the surface.",
+      "well": "By {name}'s answers {points} are mostly lived well. The circuit runs as the chart describes, and the risk is the usual one of never being stretched."
+    },
+    "TSquare": {
+      "strain": "By {name}'s answers {points} are mostly lived with strain. The pressure in this figure is being felt as pressure, with less of the drive it can turn into.",
+      "well": "By {name}'s answers {points} are mostly lived well. The pressure in this figure seems to be doing its work and turning into achievement."
+    },
+    "GrandCross": {
+      "strain": "By {name}'s answers {points} are mostly lived with strain. Every side of this figure pulls on the others, and the answers suggest that little is being resolved.",
+      "well": "By {name}'s answers {points} are mostly lived well. A hard figure, held steady: the answers describe someone who has learned to work on all four fronts."
+    },
+    "Yod": {
+      "strain": "By {name}'s answers {points} are mostly lived with strain. The adjustment this figure asks for is still under way, and may be felt as something that never quite fits.",
+      "well": "By {name}'s answers {points} are mostly lived well. The adjustment this figure asks for seems largely to have been made."
+    },
+    "Kite": {
+      "strain": "By {name}'s answers {points} are mostly lived with strain. The trine's gift has a direction in this figure, and the answers suggest it is not yet being used.",
+      "well": "By {name}'s answers {points} are mostly lived well. The trine's talent has somewhere to go, and is going there."
+    },
+    "MysticRectangle": {
+      "strain": "By {name}'s answers {points} are mostly lived with strain. The frame of easy aspects is there to be leaned on, and is not being leaned on enough.",
+      "well": "By {name}'s answers {points} are mostly lived well. The two tensions seem to be held in balance, as the figure promises."
+    }
+  },
+  "extremes": {
+    "N1": {
+      "high": "By {name}'s answers anxiety runs very high: worry is close to a constant companion.",
+      "low": "By {name}'s answers anxiety is very low: little frightens or unsettles this person."
+    },
+    "N2": {
+      "high": "By {name}'s answers anger comes very readily, whatever else is going on.",
+      "low": "By {name}'s answers anger is very rare. Annoyance may go unnoticed until something has been lost by it."
+    },
+    "N3": {
+      "high": "By {name}'s answers low mood is very frequent, and it colours much else here.",
+      "low": "By {name}'s answers low moods are very rare: spirits hold up where another person's would not."
+    },
+    "N4": {
+      "high": "By {name}'s answers self-consciousness is very strong: being watched is a real cost.",
+      "low": "By {name}'s answers self-consciousness is very slight: what others think hardly enters into it."
+    },
+    "N5": {
+      "high": "By {name}'s answers appetite is very hard to refuse: wanting and having lie close together.",
+      "low": "By {name}'s answers temptation has very little pull."
+    },
+    "N6": {
+      "high": "By {name}'s answers pressure is very hard to bear: a crisis takes this person apart more quickly than most.",
+      "low": "By {name}'s answers pressure hardly tells: this person stays steady when others do not."
+    },
+    "E1": {
+      "high": "By {name}'s answers warmth towards people is very marked: friends are made at once.",
+      "low": "By {name}'s answers warmth is very sparing: people are kept at a distance."
+    },
+    "E2": {
+      "high": "By {name}'s answers the wish for company is very strong: time alone is hard going.",
+      "low": "By {name}'s answers the wish for company is very slight: crowds are a thing to get away from."
+    },
+    "E3": {
+      "high": "By {name}'s answers the taking of charge is very marked: if nobody leads, this person will.",
+      "low": "By {name}'s answers taking charge is very much avoided: someone else will have to speak."
+    },
+    "E4": {
+      "high": "By {name}'s answers the pace is very fast: there is always another thing to do.",
+      "low": "By {name}'s answers the pace is very slow, and is kept so by choice."
+    },
+    "E5": {
+      "high": "By {name}'s answers the need for excitement is very strong: quiet soon turns to restlessness.",
+      "low": "By {name}'s answers excitement is very much avoided: noise and risk hold no charm."
+    },
+    "E6": {
+      "high": "By {name}'s answers good spirits are very high: joy comes easily and shows.",
+      "low": "By {name}'s answers good spirits are very scarce, even when nothing is wrong."
+    },
+    "O1": {
+      "high": "By {name}'s answers the imagination is very active: daydreams take up a good part of the day.",
+      "low": "By {name}'s answers the imagination is very little used: facts are preferred to fancies."
+    },
+    "O2": {
+      "high": "By {name}'s answers beauty matters very much: art and nature reach this person deeply.",
+      "low": "By {name}'s answers art and beauty matter very little."
+    },
+    "O3": {
+      "high": "By {name}'s answers feeling is very much attended to: each mood is noticed and given its due.",
+      "low": "By {name}'s answers feeling is hardly noticed: what is felt often goes unnamed."
+    },
+    "O4": {
+      "high": "By {name}'s answers the appetite for the new is very strong: routine does not last.",
+      "low": "By {name}'s answers the known is very much preferred: change has to be forced."
+    },
+    "O5": {
+      "high": "By {name}'s answers ideas are very much enjoyed: hard thinking is a pleasure in itself.",
+      "low": "By {name}'s answers abstract ideas hold very little interest."
+    },
+    "O6": {
+      "high": "By {name}'s answers existing arrangements are very much questioned, and the vote goes that way too.",
+      "low": "By {name}'s answers existing arrangements are very much defended, and the vote goes that way too."
+    },
+    "A1": {
+      "high": "By {name}'s answers trust comes very easily, sometimes before it is earned.",
+      "low": "By {name}'s answers trust is very hard to win: most people are suspected of something."
+    },
+    "A2": {
+      "high": "By {name}'s answers straight dealing is very important: bending the truth for gain does not come naturally.",
+      "low": "By {name}'s answers the truth is very much a matter of tactics."
+    },
+    "A3": {
+      "high": "By {name}'s answers giving is very marked: others' needs often come first.",
+      "low": "By {name}'s answers others' troubles get very little time."
+    },
+    "A4": {
+      "high": "By {name}'s answers giving way is very habitual: a fight is avoided even at some cost.",
+      "low": "By {name}'s answers giving way is very rare: nothing is conceded without a fight."
+    },
+    "A5": {
+      "high": "By {name}'s answers modesty is very marked: credit is hard to accept.",
+      "low": "By {name}'s answers a high opinion of oneself is very plain."
+    },
+    "A6": {
+      "high": "By {name}'s answers suffering is felt very keenly, even when it is someone else's.",
+      "low": "By {name}'s answers others' suffering gets a very cool hearing."
+    },
+    "C1": {
+      "high": "By {name}'s answers confidence in one's own ability is very high: whatever comes, it can be handled.",
+      "low": "By {name}'s answers confidence in one's own ability is very low, whatever the record says."
+    },
+    "C2": {
+      "high": "By {name}'s answers the need for order is very strong: things have their places.",
+      "low": "By {name}'s answers order is very little regarded, and disorder does not trouble this person."
+    },
+    "C3": {
+      "high": "By {name}'s answers duty is very binding: a promise is a promise.",
+      "low": "By {name}'s answers obligations sit very lightly."
+    },
+    "C4": {
+      "high": "By {name}'s answers ambition is very strong: there is always a higher mark to reach.",
+      "low": "By {name}'s answers ambition is very slight: enough is enough."
+    },
+    "C5": {
+      "high": "By {name}'s answers self-discipline is very strong: what is begun is finished.",
+      "low": "By {name}'s answers getting started is very hard: tasks are put off and left."
+    },
+    "C6": {
+      "high": "By {name}'s answers caution is very marked: every option is looked at twice.",
+      "low": "By {name}'s answers caution is very slight: decisions come first and thoughts afterwards."
     }
   }
 }

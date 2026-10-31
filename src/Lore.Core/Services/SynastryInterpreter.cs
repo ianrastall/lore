@@ -33,6 +33,13 @@ public sealed class SynastryInterpreter
         // The Trine reading of three charts.
         public Dictionary<string, string> TrioTones { get; init; } = new();
         public Dictionary<string, string> GrandTrines { get; init; } = new();
+        public Dictionary<string, string> TrioFigures { get; init; } = new();
+        public Dictionary<string, string> TrioElements { get; init; } = new();
+        public Dictionary<string, string> TrioLacking { get; init; } = new();
+
+        // Contacts as the answers describe them: tone → "strain|well" and so on → sentence.
+        public Dictionary<string, Dictionary<string, string>> LivedContacts { get; init; } = new();
+        public List<LivedPair> LivedPairs { get; init; } = [];
     }
 
     private static readonly JsonSerializerOptions JsonOpts = new() { PropertyNameCaseInsensitive = true };
@@ -44,6 +51,8 @@ public sealed class SynastryInterpreter
     private const int MaxPerPoint = 2;   // no one point (a Sun, say) gets to fill a list
 
     private const int MaxGrandTrines = 3; // the strongest, in the Trine reading
+    private const int MaxFigures = 4;     // of the other figures
+    private const int MaxPairLines = 5;   // of what the two sets of answers come to
 
     // The planets whose place in the other person's houses is written up.
     private static readonly Planet[] OverlayBodies = [Planet.Sun, Planet.Moon, Planet.Venus, Planet.Mars];
@@ -63,13 +72,18 @@ public sealed class SynastryInterpreter
         }
     }
 
-    public SynastryReading Compose(Synastry s)
+    // `first`, `second`: each person's answers, if they have any. They shape which contacts
+    // the reading spends its slots on, what is said of each, and the balance as lived; the
+    // charts' own balance is unchanged and stays the headline.
+    public SynastryReading Compose(Synastry s, MirrorReading? first = null, MirrorReading? second = null)
     {
         var (a, b) = ShortNames(s);
+        if (first is not null && !first.IsFor(s.First)) first = null;
+        if (second is not null && !second.IsFor(s.Second)) second = null;
 
         foreach (var x in s.Aspects)
         {
-            x.Score = SynastryScoring.Priority(x);
+            x.Score = SynastryScoring.Priority(x) * Lift(x.First, first) * Lift(x.Second, second);
             x.Shown = false;
         }
         var ranked = s.Aspects.OrderByDescending(x => x.Score).ToList();
@@ -85,15 +99,20 @@ public sealed class SynastryInterpreter
 
         var compatibility = SynastryScoring.Assess(ranked);
         SynastryTone tone = compatibility.Tone;
+        var asLived = first is null && second is null ? null : SynastryScoring.Assess(ranked, first, second);
 
-        var sections = new List<DailySection> { Glance(s, a, b, tone) };
-        AddAspects(sections, "Closest bonds", bonds, a, b);
-        AddAspects(sections, "What comes easily", easy, a, b);
-        AddAspects(sections, "What takes work", hard, a, b);
+        var said = new HashSet<string>();
+        var sections = new List<DailySection> { Glance(s, a, b, tone, asLived) };
+        AddAspects(sections, "Closest bonds", bonds, a, b, first, second, said);
+        AddAspects(sections, "What comes easily", easy, a, b, first, second, said);
+        AddAspects(sections, "What takes work", hard, a, b, first, second, said);
 
         var overlays = Overlays(s.FirstInSecondHouses, a, b).Concat(Overlays(s.SecondInFirstHouses, b, a)).ToList();
         if (overlays.Count > 0)
             sections.Add(new DailySection { Heading = "In each other's houses", Items = overlays });
+
+        if (first is not null && second is not null && BothSets(first, second, a, b) is { Items.Count: > 0 } both)
+            sections.Add(both);
 
         if (s.Davison is { } davison)
             sections.Add(DavisonSection(davison));
@@ -104,10 +123,78 @@ public sealed class SynastryInterpreter
             SecondName = s.Second.Celebrity.Name,
             Tone = tone,
             Compatibility = compatibility,
+            AsLived = asLived,
             Sections = sections,
             Aspects = ranked,
             Trace = ranked.Select(x => TraceLine(x, a, b)).ToList(),
         };
+    }
+
+    // How much more a contact counts for the reading when its owner's answers mark out
+    // the planet: as a day's reading does, what is strained is what will be noticed.
+    private static double Lift(NatalPoint p, MirrorReading? answers) =>
+        answers is null || p.Kind != NatalPointKind.Body ? 1 : answers.LivedOf(p.Body) switch
+        {
+            MirrorLived.Strain => MirrorReading.StrainLift,
+            MirrorLived.Well => MirrorReading.WellLift,
+            _ => 1,
+        };
+
+    private string LivedWord(SynastryTone tone) => $"{tone.Label()} ({tone.LevelText()})";
+
+    // "By the answers it reads as Mixed (0), and the charts as Harmonious (+1)."
+    private DailyItem LivedGlance(SynastryTone tone, Compatibility asLived) => new()
+    {
+        Title = "By the answers",
+        Text = Lookup(_c.Notes, asLived.Level == tone.Level() ? "livedSame" : asLived.Level > tone.Level() ? "livedBetter" : "livedWorse", "")
+            .Replace("{lived}", LivedWord(asLived.Tone)).Replace("{charts}", LivedWord(tone)),
+    };
+
+    // A contact's sentence from how its two planets are lived, once for each planet. The
+    // corpus has each unordered pair of strain, well and plain once, the first named first.
+    private string LivedLine(SynastryAspect x, string a, string b, MirrorReading? first, MirrorReading? second, HashSet<string> said)
+    {
+        static string Word(MirrorLived lived) => lived switch { MirrorLived.Strain => "strain", MirrorLived.Well => "well", _ => "plain" };
+        static MirrorPlanet? Read(NatalPoint p, MirrorReading? answers) =>
+            answers is not null && p.Kind == NatalPointKind.Body ? answers.Planets.FirstOrDefault(r => r.Planet == p.Body && !r.IsOrdinary) : null;
+
+        var (pa, pb) = (Read(x.First, first), Read(x.Second, second));
+        if (pa is null && pb is null) return "";
+        var left = (Name: a, Point: x.First, Read: pa);
+        var right = (Name: b, Point: x.Second, Read: pb);
+        MirrorLived Lived(MirrorPlanet? p) => p?.Lived ?? MirrorLived.Plain;
+        static int Rank(MirrorLived lived) => lived switch { MirrorLived.Strain => 0, MirrorLived.Well => 1, _ => 2 };
+        if (Rank(Lived(pb)) < Rank(Lived(pa))) (left, right) = (right, left);
+
+        string key = $"{Word(Lived(left.Read))}|{Word(Lived(right.Read))}";
+        if (key == "plain|plain") return "";
+        if (!said.Add($"{left.Name}|{left.Point.Name}") && !said.Add($"{right.Name}|{right.Point.Name}")) return "";
+        string line = _c.LivedContacts.GetValueOrDefault(x.Tone.ToString())?.GetValueOrDefault(key) ?? "";
+        return line.Length == 0 ? "" : " " + line
+            .Replace("{a}", left.Name).Replace("{pa}", left.Point.Name).Replace("{ea}", left.Read?.Expression ?? "")
+            .Replace("{b}", right.Name).Replace("{pb}", right.Point.Name).Replace("{eb}", right.Read?.Expression ?? "");
+    }
+
+    // The two sets of answers set against each other, whatever the charts say.
+    private DailySection BothSets(MirrorReading first, MirrorReading second, string a, string b)
+    {
+        static bool Fits(MirrorReading answers, string rule)
+        {
+            var parts = rule.Split('=');
+            return answers.Levels.GetValueOrDefault(parts[0]) == parts[1];
+        }
+
+        var items = new List<DailyItem>();
+        foreach (var rule in _c.LivedPairs)
+        {
+            if (items.Count == MaxPairLines || rule.When.Count != 2) break;
+            string? x = null, y = null;
+            if (Fits(first, rule.When[0]) && Fits(second, rule.When[1])) (x, y) = (a, b);
+            else if (Fits(second, rule.When[0]) && Fits(first, rule.When[1])) (x, y) = (b, a);
+            if (x is null) continue;
+            items.Add(new DailyItem { Title = rule.Title, Text = Fill(rule.Text, x, y!) });
+        }
+        return new DailySection { Heading = "The two sets of answers", Items = items };
     }
 
     // ── Three charts ──────────────────────────────────────────────────────────
@@ -144,6 +231,15 @@ public sealed class SynastryInterpreter
             grand.Add(new DailyItem { Text = Lookup(_c.Notes, "trioMoreGrandTrines", "{count} weaker grand trines are not listed.")
                 .Replace("{count}", (trio.GrandTrines.Count - MaxGrandTrines).ToString()) });
 
+        if (trio.LivedTone is { } lived)
+            glance.Add(new DailyItem
+            {
+                Title = "By the answers",
+                Text = Lookup(_c.Notes, lived == trio.Tone ? "trioLivedSame" : lived < trio.Tone ? "trioLivedBetter" : "trioLivedWorse", "")
+                    .Replace("{lived}", lived.Label()).Replace("{charts}", trio.Tone.Label()),
+            });
+        glance.RemoveAll(i => string.IsNullOrWhiteSpace(i.Text));
+
         var weakest = trio.Weakest;
         var pairs = trio.Pairs.Select(p => new DailyItem
         {
@@ -151,21 +247,97 @@ public sealed class SynastryInterpreter
             Meta = $"{p.Compatibility.Tone.Label()} ({p.Compatibility.Tone.LevelText()})  ·  " +
                    $"{Math.Round(p.Compatibility.Share * 100):0}% easy" +
                    (ReferenceEquals(p, weakest) ? "  ·  the weakest of the three" : ""),
-            Text = Lookup(_c.Tones, p.Compatibility.Tone.ToString(), ""),
+            Text = Lookup(_c.Tones, (p.AsLived ?? p.Compatibility).Tone.ToString(), ""),
         }).Where(i => i.Text.Length > 0).ToList();
 
-        return new TrioReading
+        var sections = new List<DailySection>
         {
-            Names = full,
-            Trio = trio,
-            Sections =
+            new() { Heading = "At a glance", Items = glance },
+            new() { Heading = "Grand trines through all three charts", Items = grand },
+        };
+        if (Figures(trio, names) is { Items.Count: > 0 } figures) sections.Add(figures);
+        sections.Add(new DailySection { Heading = "The three pairs", Items = pairs });
+        if (Standing(trio, names) is { Items.Count: > 0 } standing) sections.Add(standing);
+        if (Elements(trio, names) is { Items.Count: > 0 } elements) sections.Add(elements);
+        if (TrioAnswers(trio, names) is { Items.Count: > 0 } answers) sections.Add(answers);
+        sections.Add(new DailySection { Heading = "How this is measured", Items = [new DailyItem { Text = Lookup(_c.Notes, "trioScale", "") }] });
+
+        return new TrioReading { Names = full, Trio = trio, Sections = sections };
+    }
+
+    // The other figures that run through all three, the strongest of each kind first.
+    private DailySection Figures(Trio trio, List<string> names)
+    {
+        var told = new HashSet<TrioFigureKind>();
+        var items = trio.Figures.OrderByDescending(f => f.Weight).Take(MaxFigures).Select(f =>
+        {
+            string line = told.Add(f.Kind) ? Lookup(_c.TrioFigures, f.Kind.ToString(), "") : Lookup(_c.Notes, "trioSameFigure", "Another figure of the same kind.");
+            string focus = f.Focus is { } person ? names[person] : "";
+            return new DailyItem
+            {
+                Title = $"{f.Kind.Label()}: {JoinList(f.Corners.Select(c => $"{names[c.Person]}'s {Label(c.Point)}"))}",
+                Meta = $"widest orb {f.WidestOrb:0.0}°" + (focus.Length > 0 ? $"  ·  the focus is {focus}" : ""),
+                Text = line.Replace("{focus}", focus),
+            };
+        }).ToList();
+        return new DailySection { Heading = "Other figures through all three charts", Items = items };
+    }
+
+    // Who the other two both get on with, and who they do not.
+    private DailySection Standing(Trio trio, List<string> names)
+    {
+        if (trio.Hub is not { } hub || trio.Outsider is not { } outsider) return new DailySection { Heading = "", Items = [] };
+        return new DailySection
+        {
+            Heading = "Who holds it together",
+            Items =
             [
-                new DailySection { Heading = "At a glance", Items = glance },
-                new DailySection { Heading = "Grand trines through all three charts", Items = grand },
-                new DailySection { Heading = "The three pairs", Items = pairs },
-                new DailySection { Heading = "How this is measured", Items = [new DailyItem { Text = Lookup(_c.Notes, "trioScale", "") }] },
+                new DailyItem
+                {
+                    Title = $"{names[hub]} is the easiest of the three",
+                    Text = Lookup(_c.Notes, "trioHub", "").Replace("{name}", names[hub]).Replace("{other}", names[outsider]),
+                },
             ],
         };
+    }
+
+    // What the three bring between them: an element nobody has, and one that rests on one person.
+    private DailySection Elements(Trio trio, List<string> names)
+    {
+        var items = new List<DailyItem>();
+        foreach (var (element, counts) in TrioService.ElementsOf(trio))
+        {
+            int total = counts.Sum(), most = counts.Max();
+            if (total == 0)
+                items.Add(new DailyItem { Title = $"No {element}", Text = Lookup(_c.TrioLacking, element.ToString(), "") });
+            else if (most >= 3 && most * 3 >= total * 2)
+                items.Add(new DailyItem
+                {
+                    Title = $"{names[Array.IndexOf(counts, most)]} brings the {element}",
+                    Text = Lookup(_c.TrioElements, element.ToString(), "").Replace("{name}", names[Array.IndexOf(counts, most)]),
+                });
+        }
+        items.RemoveAll(i => string.IsNullOrWhiteSpace(i.Text));
+        return new DailySection { Heading = "What the three bring between them", Items = items };
+    }
+
+    // Each person's most strained and most easily lived planets among those they bring to
+    // a pair: where the answers put the weight of the trio.
+    private DailySection TrioAnswers(Trio trio, List<string> names)
+    {
+        var items = new List<DailyItem>();
+        for (int i = 0; i < trio.Charts.Count; i++)
+        {
+            if (trio.Answers.ElementAtOrDefault(i) is not { } answers) continue;
+            var strained = answers.Planets.Where(p => p.Lived == MirrorLived.Strain && !p.IsOrdinary).Select(p => p.Planet.Name()).ToList();
+            var well = answers.Planets.Where(p => p.Lived == MirrorLived.Well && !p.IsOrdinary).Select(p => p.Planet.Name()).ToList();
+            if (strained.Count == 0 && well.Count == 0) continue;
+            string text = "";
+            if (strained.Count > 0) text += Lookup(_c.Notes, "trioStrained", "").Replace("{name}", names[i]).Replace("{list}", JoinList(strained));
+            if (well.Count > 0) text += (text.Length > 0 ? " " : "") + Lookup(_c.Notes, "trioWell", "").Replace("{name}", names[i]).Replace("{list}", JoinList(well));
+            items.Add(new DailyItem { Title = names[i], Text = text });
+        }
+        return new DailySection { Heading = "As the three are living it", Items = items };
     }
 
     // ── Ranking ───────────────────────────────────────────────────────────────
@@ -187,12 +359,13 @@ public sealed class SynastryInterpreter
 
     // ── Sections ──────────────────────────────────────────────────────────────
 
-    private DailySection Glance(Synastry s, string a, string b, SynastryTone tone)
+    private DailySection Glance(Synastry s, string a, string b, SynastryTone tone, Compatibility? asLived)
     {
         var items = new List<DailyItem>
         {
             new() { Text = Lookup(_c.Tones, tone.ToString(), "") }
         };
+        if (asLived is not null) items.Add(LivedGlance(tone, asLived));
 
         bool timedA = s.First.Celebrity.BirthTimeKnown, timedB = s.Second.Celebrity.BirthTimeKnown;
 
@@ -232,7 +405,8 @@ public sealed class SynastryInterpreter
         };
     }
 
-    private void AddAspects(List<DailySection> sections, string heading, List<SynastryAspect> aspects, string a, string b)
+    private void AddAspects(List<DailySection> sections, string heading, List<SynastryAspect> aspects, string a, string b,
+        MirrorReading? first, MirrorReading? second, HashSet<string> said)
     {
         if (aspects.Count == 0) return;
         sections.Add(new DailySection
@@ -242,7 +416,7 @@ public sealed class SynastryInterpreter
             {
                 Title = $"{a}'s {Label(x.First)} {x.Type.Verb()} {b}'s {Label(x.Second)}",
                 Meta = $"{x.Type} {x.Type.Symbol()}  ·  orb {x.Orb:0.0}°",
-                Text = AspectText(x, a, b)
+                Text = AspectText(x, a, b) + LivedLine(x, a, b, first, second, said)
             }).ToList()
         });
     }

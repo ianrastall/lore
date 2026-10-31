@@ -162,6 +162,9 @@ public sealed class DailyInterpreter
         double score = MoverWeight(e.Mover) * TargetWeight(e.Target) * AspectWeight(e.Aspect) * closeness;
         if (e.Phase == TransitPhase.Exact)
             score += e.IsBackground ? 0.5 : 0.25;
+        // What the person has marked out counts for more in their day (see MirrorReading).
+        if (_answers is { } answers && _answersChart is { } chart && answers.IsFor(chart))
+            score *= answers.Lift(e.Target, e.TargetHouse);
         return score;
     }
 
@@ -311,7 +314,7 @@ public sealed class DailyInterpreter
             Meta = string.Join("  ·  ", meta),
             Text = TransitText(e) +
                    (!e.IsBackground && (e.Mover == Planet.Moon || e.Phase == TransitPhase.Exact)
-                       ? AnswersLine(e.Mover, e.Target, e.Tone, forecast: false) : "")
+                       ? AnswersLine(e.Mover, e.Target, e.Tone, forecast: false) + LifeLine(e.TargetHouse, e.Tone, forecast: false) : "")
         };
     }
 
@@ -339,6 +342,15 @@ public sealed class DailyInterpreter
             answers.For(chart, target.Body) is not { } planet) return "";
         string line = forecast ? planet.ForecastLine(tone) : planet.DailyLine(tone);
         return line.Length > 0 && (_answersSaid ??= []).Add($"{scope}|{target.Body}") ? " " + line : "";
+    }
+
+    // " You have said …" for a transit to a planet in a house the life-area ratings mark
+    // out, once only for each house within `scope`, as for AnswersLine.
+    private static string LifeLine(int? house, TransitTone tone, bool forecast, string scope = "")
+    {
+        if (house is not { } h || _answers is not { } answers || _answersChart is not { } chart || !answers.IsFor(chart)) return "";
+        string line = forecast ? answers.LifeForecastLine(h, tone) : answers.LifeLine(h, tone);
+        return line.Length > 0 && (_answersSaid ??= []).Add($"{scope}|house{h}") ? " " + line : "";
     }
 
     private string TransitText(Planet moving, TransitTone tone, NatalPoint natalPoint)
@@ -414,7 +426,8 @@ public sealed class DailyInterpreter
                 Title = $"{p.Mover.Symbol()} {p.Mover.Name()} {p.Aspect.Verb()} your natal {target}",
                 Meta = string.Join("  ·  ", meta),
                 Text = TransitText(p.Mover, p.Tone, p.Target) +
-                       AnswersLine(p.Mover, p.Target, p.Tone, forecast: true, Local(p.PeakUtc).ToString("yyyy-MM", null)),
+                       AnswersLine(p.Mover, p.Target, p.Tone, forecast: true, Local(p.PeakUtc).ToString("yyyy-MM", null)) +
+                       LifeLine(p.TargetHouse, p.Tone, forecast: true, Local(p.PeakUtc).ToString("yyyy-MM", null)),
             };
         }
 

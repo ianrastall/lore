@@ -140,6 +140,14 @@ public sealed class InventoryStore
 
     public void Remove(string chartId) => _ = RemoveAsync(chartId);
 
+    // Everything saved for one person: their personality answers, and the character and
+    // life-area answers kept beside them (see SelfReportService.StoreKey).
+    public async Task<bool> RemovePersonAsync(string chartId)
+    {
+        var removed = Enum.GetValues<InventoryPart>().Select(part => RemoveAsync(SelfReportService.StoreKey(chartId, part))).ToList();
+        return (await Task.WhenAll(removed)).All(done => done);
+    }
+
     // Tries again to write whatever a failed save left behind.
     public Task<bool> RetryAsync()
     {

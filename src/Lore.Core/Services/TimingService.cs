@@ -239,9 +239,13 @@ public sealed class TimingService
     // depend on it.
     // `cancel`: looked at between the steps, each of which is a search of its own, so
     // that a reading nobody is waiting for any more is given up part-way.
+    // `answers`: the reading that sets this person's answers beside the chart, if any: the
+    // Lord of the Year, the year's house and each natal planet in contact are then spoken
+    // of as the answers describe them. Ignored unless it was made for this chart.
     public TimingReading Compose(NatalChart natal, DateOnly asOf, DateTimeZone zone, ReturnPlace? place = null,
-        CancellationToken cancel = default)
+        CancellationToken cancel = default, MirrorReading? answers = null)
     {
+        if (answers is not null && !answers.IsFor(natal)) answers = null;
         cancel.ThrowIfCancellationRequested();
         var solar = SolarReturnInForce(natal, asOf, zone, place);
         cancel.ThrowIfCancellationRequested();
@@ -253,9 +257,9 @@ public sealed class TimingService
         cancel.ThrowIfCancellationRequested();
 
         var sections = new List<DailySection> { ReturnSection(natal, solar, zone) };
-        if (ProfectionSection(natal, profection) is { } profected) sections.Add(profected);
-        sections.Add(ProgressionSection(natal, progression));
-        if (solarArc is not null) sections.Add(SolarArcSection(natal, solarArc));
+        if (ProfectionSection(natal, profection, answers) is { } profected) sections.Add(profected);
+        sections.Add(ProgressionSection(natal, progression, answers));
+        if (solarArc is not null) sections.Add(SolarArcSection(natal, solarArc, answers));
         if (relocation is not null) sections.Add(RelocationSection(natal, relocation));
 
         return new TimingReading
@@ -276,7 +280,7 @@ public sealed class TimingService
         _houseTopic?.Invoke(house) is { Length: > 0 } topic ? $" ({topic})" : "";
 
     // Null for a date before the birth, when there is nothing to say.
-    private DailySection? ProfectionSection(NatalChart natal, Profection? p)
+    private DailySection? ProfectionSection(NatalChart natal, Profection? p, MirrorReading? answers)
     {
         if (!natal.Timed)
             return new DailySection
@@ -317,6 +321,10 @@ public sealed class TimingService
                        "chart, its place in the solar return, and the transits to and from it."
             },
         };
+        string lord = answers?.LordLines.GetValueOrDefault(p.Lord) ?? "";
+        string year = answers?.LifeYear(p.House) ?? "";
+        if (lord.Length > 0 || year.Length > 0)
+            items.Add(new DailyItem { Title = "By the answers", Text = $"{lord} {year}".Trim() });
         return new DailySection { Heading = $"Annual profection for age {p.Age}", Items = items };
     }
 
@@ -373,7 +381,21 @@ public sealed class TimingService
         return new DailySection { Heading = $"Solar return for {solar.Utc.Year}–{solar.Utc.Year + 1}", Items = items };
     }
 
-    private static DailySection ProgressionSection(NatalChart natal, Progression p)
+    // What the answers say of each natal planet a progression or direction is touching,
+    // once for each, in the sentence written for something lasting weeks or months.
+    private static DailyItem? ByTheAnswers(NatalChart natal, IEnumerable<ProgressedAspect> contacts, MirrorReading? answers)
+    {
+        if (answers is null) return null;
+        var lines = contacts
+            .Where(a => a.Natal.Kind == NatalPointKind.Body)
+            .GroupBy(a => a.Natal.Body)
+            .Select(g => answers.For(natal, g.Key)?.ForecastLine(g.First().Type.Tone()) ?? "")
+            .Where(line => line.Length > 0)
+            .ToList();
+        return lines.Count == 0 ? null : new DailyItem { Title = "By the answers", Text = string.Join("\n", lines) };
+    }
+
+    private static DailySection ProgressionSection(NatalChart natal, Progression p, MirrorReading? answers)
     {
         string Name(NatalPoint point) => point.IsAngle ? point.Name : $"{point.Symbol} {point.Name}";
 
@@ -419,11 +441,12 @@ public sealed class TimingService
                 : string.Join("\n", p.Aspects.Select(a =>
                     $"Progressed {Name(a.Progressed)} {a.Type.Verb()} natal {Name(a.Natal)} — {FormatOrb(a.Orb)} from exact"))
         });
+        if (ByTheAnswers(natal, p.Aspects, answers) is { } lived) items.Add(lived);
 
         return new DailySection { Heading = $"Secondary progressions for {p.AsOf:d MMMM yyyy}", Items = items };
     }
 
-    private static DailySection SolarArcSection(NatalChart natal, SolarArc s)
+    private static DailySection SolarArcSection(NatalChart natal, SolarArc s, MirrorReading? answers)
     {
         string Name(NatalPoint point) => point.IsAngle ? point.Name : $"{point.Symbol} {point.Name}";
 
@@ -455,6 +478,7 @@ public sealed class TimingService
                         $"Directed {Name(a.Progressed)} {a.Type.Verb()} natal {Name(a.Natal)} — {FormatOrb(a.Orb)} from exact"))
             },
         };
+        if (ByTheAnswers(natal, s.Aspects, answers) is { } lived) items.Add(lived);
         return new DailySection { Heading = "Solar arc directions", Items = items };
     }
 

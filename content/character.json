@@ -1,0 +1,723 @@
+{
+  "instrument": {
+    "name": "IPIP character scales",
+    "author": "International Personality Item Pool (ipip.ori.org): ten of the preliminary IPIP scales measuring constructs similar to those in Cloninger's Temperament and Character Inventory",
+    "source": "https://ipip.ori.org/newTCIKey.htm",
+    "licence": "The IPIP items are in the public domain.",
+    "prompt": "Describe yourself as you generally are now, not as you wish to be in the future. Read each statement and choose how accurately it describes you.",
+    "norms": "There is no reference group. The IPIP publishes no norms for these scales, so a score is read off the five-point scale itself: the average answer, after reversing the statements keyed the other way. Below 3.0 is low and above 4.0 is high."
+  },
+  "choices": [
+    "Very inaccurate",
+    "Moderately inaccurate",
+    "Neither accurate nor inaccurate",
+    "Moderately accurate",
+    "Very accurate"
+  ],
+  "dimensions": [
+    {
+      "key": "SD",
+      "name": "Self-Directedness",
+      "about": "Cloninger's measure of self-mastery: taking charge of your own life, and acting from purposes you have chosen.",
+      "low": "The answers describe less self-mastery than most would want: direction, follow-through or contentment are often out of reach.",
+      "typical": "The answers describe a fair measure of self-mastery, with some areas that give way under pressure.",
+      "high": "The answers describe a person largely in charge of their own life, working from purposes they have chosen."
+    },
+    {
+      "key": "CO",
+      "name": "Cooperativeness",
+      "about": "Cloninger's measure of how far you see yourself as part of humanity: conscience, forgiveness and regard for others.",
+      "low": "The answers describe someone guarded towards others, keeping account of what is owed.",
+      "typical": "The answers describe ordinary decency and goodwill, within limits.",
+      "high": "The answers describe warmth, conscience and an easy readiness to forgive."
+    },
+    {
+      "key": "ST",
+      "name": "Self-Transcendence",
+      "about": "Cloninger's measure of feeling part of something larger: absorption, imagination and a sense of meaning.",
+      "low": "The answers keep to what can be seen and counted.",
+      "typical": "The answers leave room for imagination and meaning without living there.",
+      "high": "The answers describe a person often absorbed, and moved by a sense of something larger."
+    }
+  ],
+  "scales": [
+    {
+      "key": "SD1",
+      "dimension": "SD",
+      "name": "Satisfaction",
+      "alpha": 0.72,
+      "measures": "Being at ease in your own life, against feeling short-changed, attacked or used.",
+      "low": "Often feels hard done by, wary of other people's motives, and short of pleasure.",
+      "typical": "Content enough on the whole, with some sore points.",
+      "high": "Largely at ease with life, and not looking for slights."
+    },
+    {
+      "key": "SD2",
+      "dimension": "SD",
+      "name": "Optimism",
+      "alpha": 0.71,
+      "measures": "Knowing what you want and believing your efforts count, against drifting or feeling fated.",
+      "low": "Unsure where life is going, and apt to let others or fate decide.",
+      "typical": "Has a working sense of direction, which comes and goes.",
+      "high": "Knows what is wanted, keeps improving, and does not give up hope."
+    },
+    {
+      "key": "SD3",
+      "dimension": "SD",
+      "name": "Resourcefulness",
+      "alpha": 0.83,
+      "measures": "Meeting problems directly, against being discouraged or waiting for a lead.",
+      "low": "Easily discouraged or intimidated, and slow to decide.",
+      "typical": "Copes with most problems, and sometimes wants a lead.",
+      "high": "Faces problems directly and expects to deal with them."
+    },
+    {
+      "key": "SD4",
+      "dimension": "SD",
+      "name": "Self-Acceptance",
+      "alpha": 0.69,
+      "measures": "Taking yourself as you are, against needing status, advantage or someone to look down on.",
+      "low": "Much taken up with status and with comparing oneself to others.",
+      "typical": "Mostly settled, with some wish to measure up.",
+      "high": "Has little need to compete or to impress."
+    },
+    {
+      "key": "SD5",
+      "dimension": "SD",
+      "name": "Impulse Control",
+      "alpha": 0.78,
+      "measures": "Doing what you meant to do, against acting in ways you later regret.",
+      "low": "Often does things later regretted, and loses time and chances.",
+      "typical": "Carries out most plans, with lapses.",
+      "high": "Follows through, and resists what would get in the way."
+    },
+    {
+      "key": "CO2",
+      "dimension": "CO",
+      "name": "Empathy",
+      "alpha": 0.79,
+      "measures": "Sensing what others feel and acting on it.",
+      "low": "Other people's feelings and needs are not much attended to.",
+      "typical": "Notices others' feelings and looks after them when it occurs.",
+      "high": "Picks up what others feel and takes time for them."
+    },
+    {
+      "key": "CO4",
+      "dimension": "CO",
+      "name": "Compassion",
+      "alpha": 0.81,
+      "measures": "Forgiving and accepting weakness, against holding grudges and getting even.",
+      "low": "Holds on to injuries, and may want to get even.",
+      "typical": "Forgives most things in time.",
+      "high": "Lets injuries go, and accepts others' weaknesses."
+    },
+    {
+      "key": "CO5",
+      "dimension": "CO",
+      "name": "Morality",
+      "alpha": 0.66,
+      "measures": "Following conscience, against deceit and misuse of power.",
+      "low": "Treats conscience as negotiable when the end seems to justify it.",
+      "typical": "Means to do right, and usually does.",
+      "high": "Goes by conscience, and stands behind what is done."
+    },
+    {
+      "key": "ST1",
+      "dimension": "ST",
+      "name": "Imagination",
+      "alpha": 0.78,
+      "measures": "Absorption, fantasy and being carried away, against keeping to what is literal.",
+      "low": "Keeps to the literal and the by-the-book.",
+      "typical": "Has some inner life and some taste for the strange.",
+      "high": "Easily absorbed, and lives a good deal in imagination."
+    },
+    {
+      "key": "ST2",
+      "dimension": "ST",
+      "name": "Romanticism",
+      "alpha": 0.74,
+      "measures": "Finding beauty, passion and meaning in things, against seeing nothing beyond them.",
+      "low": "Looks for little beyond the plain fact of things.",
+      "typical": "Finds meaning in some things and not in others.",
+      "high": "Moved by beauty and meaning, and passionate about what is taken up."
+    }
+  ],
+  "items": [
+    {
+      "n": 1,
+      "text": "Know how to enjoy myself.",
+      "scale": "SD1",
+      "reversed": false
+    },
+    {
+      "n": 2,
+      "text": "Feel others' emotions.",
+      "scale": "CO2",
+      "reversed": false
+    },
+    {
+      "n": 3,
+      "text": "Get so involved with things that I forget the time.",
+      "scale": "ST1",
+      "reversed": false
+    },
+    {
+      "n": 4,
+      "text": "Never give up hope.",
+      "scale": "SD2",
+      "reversed": false
+    },
+    {
+      "n": 5,
+      "text": "Try to forgive and forget.",
+      "scale": "CO4",
+      "reversed": false
+    },
+    {
+      "n": 6,
+      "text": "Can handle complex problems.",
+      "scale": "SD3",
+      "reversed": false
+    },
+    {
+      "n": 7,
+      "text": "See beauty in things that others might not notice.",
+      "scale": "ST2",
+      "reversed": false
+    },
+    {
+      "n": 8,
+      "text": "Respect the opinions of others.",
+      "scale": "SD4",
+      "reversed": false
+    },
+    {
+      "n": 9,
+      "text": "Listen to my conscience.",
+      "scale": "CO5",
+      "reversed": false
+    },
+    {
+      "n": 10,
+      "text": "Am able to control my cravings.",
+      "scale": "SD5",
+      "reversed": false
+    },
+    {
+      "n": 11,
+      "text": "Feel short-changed in life.",
+      "scale": "SD1",
+      "reversed": true
+    },
+    {
+      "n": 12,
+      "text": "Anticipate the needs of others.",
+      "scale": "CO2",
+      "reversed": false
+    },
+    {
+      "n": 13,
+      "text": "Do things by the book.",
+      "scale": "ST1",
+      "reversed": true
+    },
+    {
+      "n": 14,
+      "text": "Feel that my life lacks direction.",
+      "scale": "SD2",
+      "reversed": true
+    },
+    {
+      "n": 15,
+      "text": "Hold a grudge.",
+      "scale": "CO4",
+      "reversed": true
+    },
+    {
+      "n": 16,
+      "text": "Wait for others to lead the way.",
+      "scale": "SD3",
+      "reversed": true
+    },
+    {
+      "n": 17,
+      "text": "Rarely look for a deeper meaning in things.",
+      "scale": "ST2",
+      "reversed": true
+    },
+    {
+      "n": 18,
+      "text": "Am out for my own personal gain.",
+      "scale": "SD4",
+      "reversed": true
+    },
+    {
+      "n": 19,
+      "text": "Try to fool others.",
+      "scale": "CO5",
+      "reversed": true
+    },
+    {
+      "n": 20,
+      "text": "Don't know why I do some of the things I do.",
+      "scale": "SD5",
+      "reversed": true
+    },
+    {
+      "n": 21,
+      "text": "Feel that people have a hard time understanding me.",
+      "scale": "SD1",
+      "reversed": true
+    },
+    {
+      "n": 22,
+      "text": "Reassure others.",
+      "scale": "CO2",
+      "reversed": false
+    },
+    {
+      "n": 23,
+      "text": "Like to get lost in thought.",
+      "scale": "ST1",
+      "reversed": false
+    },
+    {
+      "n": 24,
+      "text": "Love life.",
+      "scale": "SD2",
+      "reversed": false
+    },
+    {
+      "n": 25,
+      "text": "Accept others' weaknesses.",
+      "scale": "CO4",
+      "reversed": false
+    },
+    {
+      "n": 26,
+      "text": "Face problems directly.",
+      "scale": "SD3",
+      "reversed": false
+    },
+    {
+      "n": 27,
+      "text": "Am passionate about causes.",
+      "scale": "ST2",
+      "reversed": false
+    },
+    {
+      "n": 28,
+      "text": "Take things as they come.",
+      "scale": "SD4",
+      "reversed": false
+    },
+    {
+      "n": 29,
+      "text": "Act according to my conscience.",
+      "scale": "CO5",
+      "reversed": false
+    },
+    {
+      "n": 30,
+      "text": "Easily resist temptations.",
+      "scale": "SD5",
+      "reversed": false
+    },
+    {
+      "n": 31,
+      "text": "Feel attacked by others.",
+      "scale": "SD1",
+      "reversed": true
+    },
+    {
+      "n": 32,
+      "text": "Make others feel good.",
+      "scale": "CO2",
+      "reversed": false
+    },
+    {
+      "n": 33,
+      "text": "Seldom get lost in thought.",
+      "scale": "ST1",
+      "reversed": true
+    },
+    {
+      "n": 34,
+      "text": "Am not sure where my life is going.",
+      "scale": "SD2",
+      "reversed": true
+    },
+    {
+      "n": 35,
+      "text": "Do things out of revenge.",
+      "scale": "CO4",
+      "reversed": true
+    },
+    {
+      "n": 36,
+      "text": "Am easily discouraged.",
+      "scale": "SD3",
+      "reversed": true
+    },
+    {
+      "n": 37,
+      "text": "Do not like poetry.",
+      "scale": "ST2",
+      "reversed": true
+    },
+    {
+      "n": 38,
+      "text": "See other people as my competitors.",
+      "scale": "SD4",
+      "reversed": true
+    },
+    {
+      "n": 39,
+      "text": "Believe that the end justifies the means.",
+      "scale": "CO5",
+      "reversed": true
+    },
+    {
+      "n": 40,
+      "text": "Habitually blow my chances.",
+      "scale": "SD5",
+      "reversed": true
+    },
+    {
+      "n": 41,
+      "text": "Suspect hidden motives in others.",
+      "scale": "SD1",
+      "reversed": true
+    },
+    {
+      "n": 42,
+      "text": "Am concerned about others.",
+      "scale": "CO2",
+      "reversed": false
+    },
+    {
+      "n": 43,
+      "text": "Have a vivid imagination.",
+      "scale": "ST1",
+      "reversed": false
+    },
+    {
+      "n": 44,
+      "text": "Work on improving myself.",
+      "scale": "SD2",
+      "reversed": false
+    },
+    {
+      "n": 45,
+      "text": "Am inclined to forgive others.",
+      "scale": "CO4",
+      "reversed": false
+    },
+    {
+      "n": 46,
+      "text": "Am good at many things.",
+      "scale": "SD3",
+      "reversed": false
+    },
+    {
+      "n": 47,
+      "text": "Am inexplicably happy some of the time.",
+      "scale": "ST2",
+      "reversed": false
+    },
+    {
+      "n": 48,
+      "text": "Seek status.",
+      "scale": "SD4",
+      "reversed": true
+    },
+    {
+      "n": 49,
+      "text": "Like harmony in my life.",
+      "scale": "CO5",
+      "reversed": false
+    },
+    {
+      "n": 50,
+      "text": "Carry out my plans.",
+      "scale": "SD5",
+      "reversed": false
+    },
+    {
+      "n": 51,
+      "text": "Am not in the mood for anything.",
+      "scale": "SD1",
+      "reversed": true
+    },
+    {
+      "n": 52,
+      "text": "Have a good word for everyone.",
+      "scale": "CO2",
+      "reversed": false
+    },
+    {
+      "n": 53,
+      "text": "Am not interested in abstract ideas.",
+      "scale": "ST1",
+      "reversed": true
+    },
+    {
+      "n": 54,
+      "text": "Am resigned to my fate.",
+      "scale": "SD2",
+      "reversed": true
+    },
+    {
+      "n": 55,
+      "text": "Find it hard to forgive others.",
+      "scale": "CO4",
+      "reversed": true
+    },
+    {
+      "n": 56,
+      "text": "Am easily intimidated.",
+      "scale": "SD3",
+      "reversed": true
+    },
+    {
+      "n": 57,
+      "text": "Express childlike joy.",
+      "scale": "ST2",
+      "reversed": false
+    },
+    {
+      "n": 58,
+      "text": "Look down on any weakness.",
+      "scale": "SD4",
+      "reversed": true
+    },
+    {
+      "n": 59,
+      "text": "Misuse power.",
+      "scale": "CO5",
+      "reversed": true
+    },
+    {
+      "n": 60,
+      "text": "Make a mess of things.",
+      "scale": "SD5",
+      "reversed": true
+    },
+    {
+      "n": 61,
+      "text": "Let myself be used.",
+      "scale": "SD1",
+      "reversed": true
+    },
+    {
+      "n": 62,
+      "text": "Make people feel welcome.",
+      "scale": "CO2",
+      "reversed": false
+    },
+    {
+      "n": 63,
+      "text": "Do things that others find strange.",
+      "scale": "ST1",
+      "reversed": false
+    },
+    {
+      "n": 64,
+      "text": "Keep improving myself.",
+      "scale": "SD2",
+      "reversed": false
+    },
+    {
+      "n": 65,
+      "text": "Get back at others.",
+      "scale": "CO4",
+      "reversed": true
+    },
+    {
+      "n": 66,
+      "text": "Formulate ideas clearly.",
+      "scale": "SD3",
+      "reversed": false
+    },
+    {
+      "n": 67,
+      "text": "Enjoy examining myself and my life.",
+      "scale": "ST2",
+      "reversed": false
+    },
+    {
+      "n": 68,
+      "text": "Am preoccupied with myself.",
+      "scale": "SD4",
+      "reversed": true
+    },
+    {
+      "n": 69,
+      "text": "Return extra change when a cashier makes a mistake.",
+      "scale": "CO5",
+      "reversed": false
+    },
+    {
+      "n": 70,
+      "text": "Follow through with my plans.",
+      "scale": "SD5",
+      "reversed": false
+    },
+    {
+      "n": 71,
+      "text": "Am embarrassed to have people see my home.",
+      "scale": "SD1",
+      "reversed": true
+    },
+    {
+      "n": 72,
+      "text": "Take time out for others.",
+      "scale": "CO2",
+      "reversed": false
+    },
+    {
+      "n": 73,
+      "text": "Get lost in my dreams.",
+      "scale": "ST1",
+      "reversed": false
+    },
+    {
+      "n": 74,
+      "text": "Let others determine my choices.",
+      "scale": "SD2",
+      "reversed": true
+    },
+    {
+      "n": 75,
+      "text": "Get even with others.",
+      "scale": "CO4",
+      "reversed": true
+    },
+    {
+      "n": 76,
+      "text": "Can't make up my mind.",
+      "scale": "SD3",
+      "reversed": true
+    },
+    {
+      "n": 77,
+      "text": "Am passionate about anything I'm involved in.",
+      "scale": "ST2",
+      "reversed": false
+    },
+    {
+      "n": 78,
+      "text": "Use flattery to get ahead.",
+      "scale": "SD4",
+      "reversed": true
+    },
+    {
+      "n": 79,
+      "text": "Do the opposite of what is asked.",
+      "scale": "CO5",
+      "reversed": true
+    },
+    {
+      "n": 80,
+      "text": "Waste my time.",
+      "scale": "SD5",
+      "reversed": true
+    },
+    {
+      "n": 81,
+      "text": "Withhold information from others.",
+      "scale": "SD1",
+      "reversed": true
+    },
+    {
+      "n": 82,
+      "text": "Do unexpected things.",
+      "scale": "ST1",
+      "reversed": false
+    },
+    {
+      "n": 83,
+      "text": "Know what I want.",
+      "scale": "SD2",
+      "reversed": false
+    },
+    {
+      "n": 84,
+      "text": "Get angry easily.",
+      "scale": "CO4",
+      "reversed": true
+    },
+    {
+      "n": 85,
+      "text": "Complete tasks successfully.",
+      "scale": "SD3",
+      "reversed": false
+    },
+    {
+      "n": 86,
+      "text": "Love flowers.",
+      "scale": "ST2",
+      "reversed": false
+    },
+    {
+      "n": 87,
+      "text": "Stand behind my actions.",
+      "scale": "CO5",
+      "reversed": false
+    },
+    {
+      "n": 88,
+      "text": "Rarely overindulge.",
+      "scale": "SD5",
+      "reversed": false
+    },
+    {
+      "n": 89,
+      "text": "See events as unavoidable.",
+      "scale": "SD1",
+      "reversed": true
+    },
+    {
+      "n": 90,
+      "text": "Enjoy wild flights of fantasy.",
+      "scale": "ST1",
+      "reversed": false
+    },
+    {
+      "n": 91,
+      "text": "Agree to anything.",
+      "scale": "SD2",
+      "reversed": true
+    },
+    {
+      "n": 92,
+      "text": "Look down on others.",
+      "scale": "CO4",
+      "reversed": true
+    },
+    {
+      "n": 93,
+      "text": "Panic easily.",
+      "scale": "SD3",
+      "reversed": true
+    },
+    {
+      "n": 94,
+      "text": "Care about justice.",
+      "scale": "CO5",
+      "reversed": false
+    },
+    {
+      "n": 95,
+      "text": "Do things I later regret.",
+      "scale": "SD5",
+      "reversed": true
+    },
+    {
+      "n": 96,
+      "text": "Experience my emotions intensely.",
+      "scale": "ST1",
+      "reversed": false
+    }
+  ]
+}

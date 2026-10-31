@@ -76,6 +76,10 @@ public sealed partial class InventoryView : UserControl
         }
     }
 
+    private void PersonalityPart_Checked(object sender, RoutedEventArgs e) => ViewModel.Part = Lore.Models.InventoryPart.Personality;
+    private void CharacterPart_Checked(object sender, RoutedEventArgs e) => ViewModel.Part = Lore.Models.InventoryPart.Character;
+    private void LifeAreasPart_Checked(object sender, RoutedEventArgs e) => ViewModel.Part = Lore.Models.InventoryPart.LifeAreas;
+
     private void ProfileRadio_Checked(object sender, RoutedEventArgs e) => ViewModel.ShowReading = false;
     private void ReadingRadio_Checked(object sender, RoutedEventArgs e) => ViewModel.ShowReading = true;
 

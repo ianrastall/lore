@@ -125,11 +125,23 @@ public sealed partial class TimingViewModel : ObservableObject
         OnPropertyChanged(nameof(WheelCaption));
     }
 
+    // The reading that sets this person's answers beside their chart, if the answers are
+    // to shape the wording here; null if there are none or they are not to.
+    [ObservableProperty]
+    public partial MirrorReading? Answers { get; set; }
+
+    partial void OnAnswersChanged(MirrorReading? oldValue, MirrorReading? newValue)
+    {
+        // Only the chart on screen's own answers change anything it says.
+        if (Chart is { } chart && (oldValue?.IsFor(chart) == true || newValue?.IsFor(chart) == true)) Rebuild();
+    }
+
     private async void Rebuild()
     {
         var chart = Chart;
         var asOf = AsOf;
         var place = Place;
+        var answers = Answers;
         ErrorText = "";
 
         if (chart is null || _timing is null)
@@ -141,7 +153,7 @@ public sealed partial class TimingViewModel : ObservableObject
         }
 
         await _latest.Run(
-            cancel => _timing.Compose(chart, asOf, _zone, place, cancel),
+            cancel => _timing.Compose(chart, asOf, _zone, place, cancel, answers),
             busy => IsBusy = busy,
             reading => Reading = reading,
             ex =>

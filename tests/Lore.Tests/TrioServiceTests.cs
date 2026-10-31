@@ -133,10 +133,11 @@ public class TrioServiceTests
             Figure("albert-einstein"), Figure("marilyn-monroe"), Figure("elvis-presley")));
 
         Assert.Equal("Albert Einstein, Marilyn Monroe and Elvis Presley", reading.Title);
-        Assert.Equal(["At a glance", "Grand trines through all three charts", "The three pairs", "How this is measured"],
-            reading.Sections.Select(s => s.Heading));
-        Assert.Equal(3, reading.Sections[2].Items.Count);
-        Assert.Single(reading.Sections[2].Items, i => i.Meta!.Contains("the weakest of the three"));
+        Assert.Equal("At a glance", reading.Sections[0].Heading);
+        Assert.Equal("How this is measured", reading.Sections[^1].Heading);
+        var pairs = reading.Sections.Single(s => s.Heading == "The three pairs");
+        Assert.Equal(3, pairs.Items.Count);
+        Assert.Single(pairs.Items, i => i.Meta!.Contains("the weakest of the three"));
 
         string text = string.Join("\n", reading.Sections.SelectMany(s => s.Items.Select(i => $"{i.Title}|{i.Meta}|{i.Text}")));
         Assert.DoesNotContain("{", text);
@@ -351,5 +352,114 @@ public class TrioServiceTests
         vm.ClearThirdCommand.Execute(null);
         await Settled();
         Assert.True(vm.ThirdsShown);
+    }
+
+    // ── The other figures ─────────────────────────────────────────────────────
+
+    [Fact]
+    public void Three_points_together_make_a_meeting_point()
+    {
+        var trio = TrioService.Compare(
+            Chart("Anna", (Planet.Sun, 10)), Chart("Ben", (Planet.Venus, 12)), Chart("Cara", (Planet.Mars, 14)));
+        var figure = Assert.Single(trio.Figures);
+        Assert.Equal(TrioFigureKind.Meeting, figure.Kind);
+        Assert.Null(figure.Focus);
+        Assert.Equal(4, figure.WidestOrb, precision: 6);
+    }
+
+    [Fact]
+    public void Two_opposed_and_one_square_to_both_make_a_t_square_with_the_third_at_its_focus()
+    {
+        var trio = TrioService.Compare(
+            Chart("Anna", (Planet.Sun, 10)), Chart("Ben", (Planet.Venus, 100)), Chart("Cara", (Planet.Mars, 190)));
+        var figure = Assert.Single(trio.Figures);
+        Assert.Equal(TrioFigureKind.TSquare, figure.Kind);
+        Assert.Equal(1, figure.Focus);   // Ben, between the other two
+    }
+
+    [Fact]
+    public void Two_in_sextile_and_one_quincunx_both_make_a_yod()
+    {
+        var trio = TrioService.Compare(
+            Chart("Anna", (Planet.Sun, 10)), Chart("Ben", (Planet.Venus, 70)), Chart("Cara", (Planet.Mars, 220)));
+        var figure = Assert.Single(trio.Figures);
+        Assert.Equal(TrioFigureKind.Yod, figure.Kind);
+        Assert.Equal(2, figure.Focus);
+    }
+
+    [Fact]
+    public void Slow_planets_cannot_make_up_a_figure_on_their_own()
+    {
+        var trio = TrioService.Compare(
+            Chart("Anna", (Planet.Pluto, 10)), Chart("Ben", (Planet.Neptune, 12)), Chart("Cara", (Planet.Mars, 14)));
+        Assert.Empty(trio.Figures);
+    }
+
+    [Fact]
+    public void The_figures_are_not_looked_for_in_a_search()
+    {
+        var trio = TrioService.Compare(
+            Chart("Anna", (Planet.Sun, 10)), Chart("Ben", (Planet.Venus, 12)), Chart("Cara", (Planet.Mars, 14)), figures: false);
+        Assert.Empty(trio.Figures);
+    }
+
+    [Fact]
+    public void A_reading_describes_its_figures_and_who_stands_where()
+    {
+        var reading = Interpreter.ComposeTrio(TrioService.Compare(
+            Chart("Anna", (Planet.Sun, 10), (Planet.Moon, 100)),
+            Chart("Ben", (Planet.Venus, 100), (Planet.Saturn, 190)),
+            Chart("Cara", (Planet.Mars, 190))));
+        var figures = reading.Sections.Single(s => s.Heading == "Other figures through all three charts");
+        Assert.Contains(figures.Items, i => i.Title!.StartsWith("T-square") && i.Text.Contains("Ben"));
+        string text = string.Join(" ", reading.Sections.SelectMany(s => s.Items).Select(i => $"{i.Title} {i.Meta} {i.Text}"));
+        Assert.DoesNotContain("{", text);
+    }
+
+    [Fact]
+    public void A_reading_says_what_none_of_the_three_has()
+    {
+        var reading = Interpreter.ComposeTrio(TrioService.Compare(
+            Chart("Anna", (Planet.Sun, 10), (Planet.Mercury, 15), (Planet.Venus, 20), (Planet.Mars, 25)),
+            Chart("Ben", (Planet.Sun, 100)),
+            Chart("Cara", (Planet.Mars, 190))));
+        var brings = reading.Sections.Single(s => s.Heading == "What the three bring between them").Items;
+        Assert.Contains(brings, i => i.Title == "Anna brings the Fire");
+        Assert.Contains(brings, i => i.Title == "No Earth");
+    }
+
+    [Fact]
+    public void The_person_the_others_both_get_on_with_is_named_and_a_close_trio_names_nobody()
+    {
+        var even = TrioService.Compare(
+            Chart("Anna", (Planet.Sun, 10)), Chart("Ben", (Planet.Sun, 130)), Chart("Cara", (Planet.Sun, 250)));
+        Assert.Null(even.Hub);
+        Assert.Null(even.Outsider);
+    }
+
+    // ── As lived ──────────────────────────────────────────────────────────────
+
+    [Fact]
+    public void The_answers_can_move_a_trio_and_its_charts_tone_stays()
+    {
+        var mirror = new MirrorInterpreter(Repo.Data("mirror.json"));
+        var inventory = new InventoryService(Repo.Data("inventory.json"));
+        NatalChart a = Figure("albert-einstein"), b = Figure("marilyn-monroe"), c = Figure("elvis-presley");
+        var plain = TrioService.Compare(a, b, c);
+        Assert.Null(plain.LivedTone);
+        Assert.All(plain.Pairs, p => Assert.Null(p.AsLived));
+
+        // Answering "very accurate" to everything marks most planets one way or the other.
+        var profile = inventory.Score(Enumerable.Repeat(5, 120).ToArray(), "Someone", new DateOnly(2026, 10, 31));
+        var answers = mirror.Compose(a, profile);
+        var lived = TrioService.Compare(a, b, c, [answers, null, null]);
+        Assert.Equal(plain.Tone, lived.Tone);
+        Assert.NotNull(lived.LivedTone);
+        Assert.NotNull(lived.Pairs[0].AsLived);
+        Assert.Null(lived.Pairs[2].AsLived);                  // the pair it has no part in
+        Assert.Equal(answers, lived.Answers[0]);
+
+        // Answers given to the wrong person are left out.
+        Assert.Null(TrioService.Compare(a, b, c, [null, answers, null]).LivedTone);
     }
 }

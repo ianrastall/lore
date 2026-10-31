@@ -48,8 +48,31 @@ public sealed record TrioGrandTrine(IReadOnlyList<TrioPoint> Corners, double Wid
     }
 }
 
-// Two of the three people, compared as any two charts are.
-public sealed record TrioPair(int First, int Second, Synastry Contacts, Compatibility Compatibility);
+// The figures other than a grand trine that a trio can make, each with one point from
+// each person: all three at one place; two opposed with the third square to both; two in
+// sextile with the third quincunx both.
+public enum TrioFigureKind { Meeting, TSquare, Yod }
+
+public static class TrioFigureKindExtensions
+{
+    public static string Label(this TrioFigureKind k) => k switch
+    {
+        TrioFigureKind.Meeting => "Meeting point",
+        TrioFigureKind.TSquare => "T-square",
+        _ => "Yod",
+    };
+}
+
+// One such figure. Focus is the person at its apex, the one the other two press on; null
+// for a meeting point, which has none.
+public sealed record TrioFigure(TrioFigureKind Kind, IReadOnlyList<TrioPoint> Corners, int? Focus, double WidestOrb, double Weight);
+
+// Two of the three people, compared as any two charts are. AsLived is that same balance
+// with their answers taken into account; null if neither of the two has any.
+public sealed record TrioPair(int First, int Second, Synastry Contacts, Compatibility Compatibility)
+{
+    public Compatibility? AsLived { get; init; }
+}
 
 // Three charts set together: each pair, and the grand trines running through all three.
 public sealed class Trio
@@ -58,6 +81,25 @@ public sealed class Trio
     public required IReadOnlyList<TrioPair> Pairs { get; init; }
     public required IReadOnlyList<TrioGrandTrine> GrandTrines { get; init; }  // heaviest first
     public required TrioTone Tone { get; init; }
+
+    // The other figures through all three; empty if they were not looked for.
+    public IReadOnlyList<TrioFigure> Figures { get; init; } = [];
+
+    // Each person's answers, in order, if they have any; and the trio's tone with those
+    // taken into account (null if nobody has). Tone stays the charts' own.
+    public IReadOnlyList<MirrorReading?> Answers { get; init; } = [];
+    public TrioTone? LivedTone { get; init; }
+    public TrioTone RankedTone => LivedTone ?? Tone;
+
+    private double ShareOf(int person) => Pairs.Where(p => p.First == person || p.Second == person)
+        .Average(p => (p.AsLived ?? p.Compatibility).Share);
+
+    // Who the other two both get on with best, and least; null when there is little in it.
+    private const double MarkedSpread = 0.05;
+    private bool Marked => Charts.Count == 3 && Pairs.Count == 3 &&
+        Enumerable.Range(0, 3).Max(ShareOf) - Enumerable.Range(0, 3).Min(ShareOf) >= MarkedSpread;
+    public int? Hub => Marked ? Enumerable.Range(0, 3).MaxBy(ShareOf) : null;
+    public int? Outsider => Marked ? Enumerable.Range(0, 3).MinBy(ShareOf) : null;
 
     public double GoldenWeight => GrandTrines.Count > 0 ? GrandTrines[0].Weight : 0;   // the strongest grand trine
     public double Share => Pairs.Average(p => p.Compatibility.Share);          // the easy share, 0 to 1

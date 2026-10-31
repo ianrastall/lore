@@ -42,7 +42,7 @@ public sealed record ExportRequest
         "png" or "sheetpng" or "dailypng" or "synastrypng" or "davisonpng" or "davisonsheetpng" or "trinepng" => ("PNG image", ".png"),
         "json" => ("JSON data", ".json"),
         "xml" => ("XML data", ".xml"),
-        "worksheettxt" or "dailytxt" or "forecasttxt" or "timingtxt" or "davisontxt" or "inventorytxt" or "mirrortxt" or "trinetxt"
+        "worksheettxt" or "dailytxt" or "forecasttxt" or "timingtxt" or "davisontxt" or "inventorytxt" or "charactertxt" or "mirrortxt" or "trinetxt"
             => ("Text file", ".txt"),
         _ => throw new ArgumentOutOfRangeException(nameof(kind)),
     };
@@ -134,6 +134,16 @@ public sealed record ExportRequest
             }
         }
 
+        if (kind == "charactertxt")
+        {
+            text = vm.InventoryVM.ExportCharacterText(chart);
+            if (text is not { Length: > 0 })
+            {
+                refusal = "There are no character answers for this chart yet: open the Inventory view and answer the character scales first.";
+                return null;
+            }
+        }
+
         string suggested =
             isDaily ? $"{name} - daily {Day(daily!.Date)}" :
             isSynastry ? $"{synastry!.FirstName} and {synastry.SecondName} - synastry" :
@@ -142,6 +152,7 @@ public sealed record ExportRequest
                         (kind == "davisonsheetpng" ? " with tables" : kind == "davisontxt" ? " worksheet" : "") :
             kind == "worksheettxt" ? $"{name} - worksheet" :
             kind == "inventorytxt" ? $"{name} - personality profile" :
+            kind == "charactertxt" ? $"{name} - character" :
             kind == "mirrortxt" ? $"{name} - chart and answers" :
             kind == "sheetpng" ? $"{name} - chart with tables" :
             isTiming ? $"{name} - return and progressions {Day(timing!.AsOf)}" :

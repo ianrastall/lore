@@ -22,9 +22,15 @@ namespace Lore.Services;
 //   • An aspect of the birth chart is read by how each of its two ends is lived, and
 //     the chart's balance of elements and modes against groups of facets of its own.
 //
-// The chart is never altered, and no number is carried from one side to the other. The
-// pairing of chart factors with facets is Lore's own invention, and the reading says so.
-// Deterministic and offline: the rules and every sentence are in the corpus.
+//   • The character scales say how far a planet has been grown into: its higher side, its
+//     lower side, or neither. They alone read Pluto, the North Node, Chiron and Lilith.
+//   • A single facet at the very end of the profile is spoken of even where its dial's
+//     average hides it, and a planet lived well or with strain is read in its house.
+//   • The life-area ratings mark out houses, which the Daily, Forecast and Timing use.
+//
+// The chart is never altered. The pairing of chart factors with facets is Lore's own
+// invention, and the reading says so. Deterministic and offline: the rules and every
+// sentence are in the corpus.
 public sealed class MirrorInterpreter
 {
     private sealed class Corpus
@@ -40,6 +46,17 @@ public sealed class MirrorInterpreter
         public Dictionary<string, BalanceEntry> Modalities { get; init; } = new();
         // How the planet is lived (strain | well) → kind of transit (hard | easy) → sentence.
         public Dictionary<string, Dictionary<string, string>> Forecast { get; init; } = new();
+        // Facet key → its two extremes.
+        public Dictionary<string, Noun> Extremes { get; init; } = new();
+        // Pattern type → strain | well → sentence.
+        public Dictionary<string, Dictionary<string, string>> Patterns { get; init; } = new();
+        public TimingWords Timing { get; init; } = new();
+    }
+
+    private sealed class TimingWords
+    {
+        // How the Lord of the Year is lived (strain | well) → sentence.
+        public Dictionary<string, string> Lord { get; init; } = new();
     }
 
     private sealed class PlanetEntry
@@ -54,6 +71,12 @@ public sealed class MirrorInterpreter
         public List<Expression> Also { get; init; } = [];
         public string? Unlived { get; init; }
         public string? HardWon { get; init; }
+        // Character scales saying how far the planet has been grown into, and the words.
+        public List<string> Reach { get; init; } = [];
+        public string? Higher { get; init; }
+        public string? Lower { get; init; }
+        // House → strain | well → sentence.
+        public Dictionary<string, Dictionary<string, string>> Houses { get; init; } = new();
     }
 
     private sealed class Expression
@@ -109,6 +132,7 @@ public sealed class MirrorInterpreter
     [
         Planet.Sun, Planet.Moon, Planet.Mercury, Planet.Venus, Planet.Mars,
         Planet.Jupiter, Planet.Saturn, Planet.Uranus, Planet.Neptune,
+        Planet.Pluto, Planet.NorthNode, Planet.Chiron, Planet.Lilith,
     ];
 
     // A dial is high or low when its facets average more than this many standard
@@ -123,6 +147,14 @@ public sealed class MirrorInterpreter
 
     // How many aspects of the birth chart are given a sentence: the closest ones.
     private const int MaxAspects = 6;
+
+    // How many planets the Report's closing section speaks of for how far they have been
+    // grown into: those the character answers mark out most.
+    private const int MaxReach = 5;
+
+    // A facet must move by this many standard deviations between sittings, and a
+    // character scale by this much of a point, to be more than the mood of the day.
+    public const double FacetChange = 1.25, ScaleChange = 0.5;
 
     private readonly Corpus _c;
     private readonly ChartInterpreter? _report;
@@ -149,26 +181,40 @@ public sealed class MirrorInterpreter
     // that is not known is not read: the planet is still set against the answers, but
     // not against a sign, and the reading names the signs it may have been in. Without
     // a scan the Moon's sign is taken to be in doubt, never read as the noon guess.
-    public MirrorReading Compose(NatalChart chart, InventoryProfile profile, TimeSensitivity? day = null)
+    public MirrorReading Compose(NatalChart chart, InventoryProfile profile, TimeSensitivity? day = null) =>
+        Compose(chart, new SelfReport { Personality = profile }, day);
+
+    // `today`: for how old the life-area ratings are. Any part of the report may be
+    // missing, and the reading is of whatever there is.
+    public MirrorReading Compose(NatalChart chart, SelfReport report, TimeSensitivity? day = null, DateOnly? today = null)
     {
         IReadOnlyList<ZodiacSign>? Doubt(Planet planet) => TimeSensitivity.SignsInDoubt(chart, day, planet);
+        var profile = report.Personality;
 
-        // Every facet and every trait by its key, as standard deviations from the mean.
-        var scores = profile.Domains.SelectMany(d => d.Facets).ToDictionary(f => f.Facet.Key, f => f.Z);
-        foreach (var d in profile.Domains) scores[d.Domain.Key] = d.Z;
-        var facets = profile.Domains.SelectMany(d => d.Facets).ToDictionary(f => f.Facet.Key);
+        // Every facet and every trait by its key, as standard deviations from the mean,
+        // and every character scale and dimension in the same terms.
+        var facets = profile?.Domains.SelectMany(d => d.Facets).ToDictionary(f => f.Facet.Key) ?? [];
+        var scores = facets.ToDictionary(f => f.Key, f => f.Value.Z);
+        foreach (var d in profile?.Domains ?? []) scores[d.Domain.Key] = d.Z;
+        var character = report.Character;
+        var scales = character?.Dimensions.SelectMany(d => d.Scales).ToDictionary(s => s.Scale.Key) ?? [];
+        foreach (var (key, scale) in scales) scores[key] = scale.Z;
 
         var dignity = DignityService.ComputeIfTimed(chart);
         string name = chart.Celebrity.Name.Split(' ', StringSplitOptions.RemoveEmptyEntries).FirstOrDefault() ?? chart.Celebrity.Name;
 
         var planets = new List<MirrorPlanet>();
         var overview = new Dictionary<string, string>();
+        var allLevels = new Dictionary<string, string>();
         foreach (var planet in Read)
         {
             if (chart.GetPlanet(planet) is not { } position ||
                 !_c.Planets.TryGetValue(planet.Name(), out var entry)) continue;
+            // Nothing has been answered that speaks of this one.
+            if (!entry.Dials.Values.SelectMany(keys => keys).Any(k => scores.ContainsKey(k.TrimStart('-')))) continue;
 
             var levels = entry.Dials.ToDictionary(d => d.Key, d => LevelOf(d.Value, scores));
+            foreach (var (dial, level) in levels) allLevels[$"{planet.Name()}.{dial}"] = level;
             bool Fits(Expression e) => e.When.All(w => levels.TryGetValue(w.Key, out var level) && level == w.Value);
             var expression = entry.Expressions.FirstOrDefault(Fits);
             if (expression is null) continue;
@@ -195,6 +241,29 @@ public sealed class MirrorInterpreter
             var related = marked.FirstOrDefault(c => expression.When.ContainsKey(c.Dial));
             string lived = Fill(expression.Report, name);
             string extra = string.Concat(also.Select(a => Fill(a.Report, name)).Where(s => s.Length > 0).Select(s => " " + s));
+
+            // What it comes to in its house, for a planet the answers mark out.
+            string liveWord = expression.Lived is "strain" or "well" ? expression.Lived : "";
+            string inHouse = chart.Timed && doubt is null && liveWord.Length > 0 && expression.When.Count > 0 &&
+                             entry.Houses.GetValueOrDefault(chart.GetHouseForLongitude(position.Longitude).ToString())
+                                 ?.GetValueOrDefault(liveWord) is { Length: > 0 } there ? there : "";
+
+            // A facet at the end of the profile that this planet's expression says
+            // nothing of: its dial's average has hidden it, or the dial is not in play.
+            var extremes = entry.Dials
+                .Where(d => !expression.When.ContainsKey(d.Key))
+                .SelectMany(d => d.Value)
+                .Select(k => k.TrimStart('-'))
+                .Select(k => (Key: k, Score: facets.GetValueOrDefault(k)))
+                .Where(x => x.Score is { Band: ScoreBand.VeryHigh or ScoreBand.VeryLow } && _c.Extremes.ContainsKey(x.Key))
+                .Select(x => Fill(x.Score!.Band == ScoreBand.VeryHigh ? _c.Extremes[x.Key].High : _c.Extremes[x.Key].Low, name))
+                .ToList();
+
+            // How far it has been grown into, by the character answers.
+            double? reach = entry.Reach.Count == 0 ? null : MeanOf(entry.Reach, scores);
+            var side = reach is null ? MirrorReach.Unmarked
+                : reach > DialThreshold ? MirrorReach.Higher : reach < -DialThreshold ? MirrorReach.Lower : MirrorReach.Unmarked;
+
             string line = "";
             if (lived.Length > 0)
             {
@@ -211,7 +280,9 @@ public sealed class MirrorInterpreter
                         : marked.Count > 0 && marked[0].Gap != 0 ? " " + _c.Compare.Also.Replace("{clause}", marked[0].Clause) : "");
                 }
                 line += extra;
+                if (inHouse.Length > 0) line += " " + inHouse;
             }
+            if (extremes.Count > 0) line = (line + " " + string.Join(" ", extremes)).Trim();
 
             int? score = dignity?.Planets.FirstOrDefault(p => p.Planet == planet)?.Total;
             planets.Add(new MirrorPlanet(planet, position, expression.Name, ParseLived(expression.Lived), score,
@@ -222,6 +293,13 @@ public sealed class MirrorInterpreter
                 Text = expression.Text + string.Concat(also.Select(a => " " + a.Text)),
                 Facets = entry.Dials.Values.SelectMany(keys => keys)
                     .Select(k => facets.GetValueOrDefault(k.TrimStart('-'))).OfType<FacetScore>().ToList(),
+                Scales = entry.Dials.Values.SelectMany(keys => keys)
+                    .Select(k => scales.GetValueOrDefault(k)).OfType<CharacterScore>().ToList(),
+                Reach = side,
+                ReachZ = reach ?? 0,
+                ReachText = (side == MirrorReach.Higher ? entry.Higher : side == MirrorReach.Lower ? entry.Lower : null) ?? "",
+                Extremes = extremes,
+                HouseLine = inHouse,
                 Stands = entry.Stands,
                 DignityNotes = dignity?.Planets.FirstOrDefault(p => p.Planet == planet)?.Notes ?? "",
                 IsOrdinary = expression.When.Count == 0,
@@ -255,26 +333,43 @@ public sealed class MirrorInterpreter
         bool counted = !chart.Planets.Any(p => Doubt(p.Planet) is not null);
         var elements = counted ? Balance(NatalMetricsService.ElementCounts(chart), _c.Elements, scores, name) : [];
         var modalities = counted ? Balance(NatalMetricsService.ModalityCounts(chart), _c.Modalities, scores, name) : [];
-        string summary = Summary(profile, name);
+        string summary = profile is null ? "" : Summary(profile, name);
 
-        var sections = new List<DailySection> { Opening(chart), Lived(chart, planets) };
-        if (chart.Timed) sections.Add(Compared(planets));
+        // The life-area ratings count for as long as they are recent, and only where
+        // there are houses to attach them to.
+        var life = report.LifeAreas;
+        var now = today ?? DateOnly.FromDateTime(DateTime.Now);
+        bool lifeInForce = life is not null && chart.Timed && life.IsFreshOn(now);
+        var houses = lifeInForce ? life!.Ratings.Where(r => r.IsMarked).ToDictionary(r => r.Area.House) : [];
+
+        var sections = new List<DailySection> { Opening(chart, report), Lived(chart, planets) };
+        if (chart.Timed && profile is not null) sections.Add(Compared(planets));
         sections.Add(Between(aspects));
         sections.Add(Whole(overview, elements.Values.Concat(modalities.Values), summary));
+        if (character is not null) sections.Add(Character(character, planets));
+        if (life is not null) sections.Add(LifeSection(chart, life, lifeInForce));
+        if (Moved(report) is { } moved) sections.Add(moved);
         sections.Add(Closing());
         sections.RemoveAll(s => s.Items.Count == 0);
+
+        DateOnly[] dates = [.. new[] { profile?.TakenOn, character?.TakenOn, life?.TakenOn }.OfType<DateOnly>()];
 
         return new MirrorReading
         {
             ChartId = chart.Celebrity.Id,
-            ReportParagraphs = ForReport(chart, planets, name, profile.TakenOn),
+            ReportParagraphs = ForReport(chart, planets, name, report, houses),
             OverviewLines = overview,
             Summary = summary,
             AspectLines = aspects.ToDictionary(a => a.Key, a => a.Line),
             ElementLines = elements,
             ModalityLines = modalities,
+            Levels = allLevels,
+            PatternLines = PatternLines(chart, planets, name),
+            LordLines = LordLines(planets, name),
+            Houses = houses,
+            LifeForecast = life?.Forecast ?? new LifeForecast(),
             Name = chart.Celebrity.Name,
-            TakenOn = profile.TakenOn,
+            TakenOn = dates.Length == 0 ? now : dates.Max(),
             Planets = planets,
             Sections = sections,
         };
@@ -282,10 +377,16 @@ public sealed class MirrorInterpreter
 
     // ── Dials and expectations ────────────────────────────────────────────────
 
+    private static List<double> ValuesOf(List<string> keys, Dictionary<string, double> scores) =>
+        keys.Select(k => scores.TryGetValue(k.TrimStart('-'), out double z)
+            ? (k.StartsWith('-') ? -z : z) : (double?)null).OfType<double>().ToList();
+
+    private static double? MeanOf(List<string> keys, Dictionary<string, double> scores) =>
+        ValuesOf(keys, scores) is { Count: > 0 } values ? values.Average() : null;
+
     private static string LevelOf(List<string> keys, Dictionary<string, double> scores)
     {
-        var values = keys.Select(k => scores.TryGetValue(k.TrimStart('-'), out double z)
-            ? (k.StartsWith('-') ? -z : z) : (double?)null).OfType<double>().ToList();
+        var values = ValuesOf(keys, scores);
         if (values.Count == 0) return "mid";
         // A dial of one facet (or one whole trait) is held to the line the profile itself
         // draws between typical and low or high, so that the two never say different
@@ -437,14 +538,14 @@ public sealed class MirrorInterpreter
 
     // ── Sections of the Chart and answers reading ─────────────────────────────
 
-    private DailySection Opening(NatalChart chart)
+    private DailySection Opening(NatalChart chart, SelfReport report)
     {
         var items = new List<DailyItem>
         {
             new() { Text = Note("intro") },
             new() { Text = Note("invented") },
-            new() { Text = Note("covered") },
-            new() { Text = Note("signs") },
+            new() { Text = report.Personality is null ? Note("coveredCharacter") : Note("covered") },
+            new() { Text = report.Personality is null ? "" : Note("signs") },
         };
         if (!chart.Timed) items.Add(new DailyItem { Text = Note("untimed") });
         items.RemoveAll(i => string.IsNullOrWhiteSpace(i.Text));
@@ -468,10 +569,14 @@ public sealed class MirrorInterpreter
             return new DailyItem
             {
                 Title = $"{p.Planet.Symbol()} {p.Planet.Name()}: {p.Expression}",
-                Meta = string.Join("  ·  ", p.Facets.Select(f => $"{f.Name} {f.BandLabel.ToLowerInvariant()}")),
+                Meta = string.Join("  ·  ", p.Facets.Select(f => $"{f.Name} {f.BandLabel.ToLowerInvariant()}")
+                    .Concat(p.Scales.Select(s => $"{s.Name} {s.BandLabel.ToLowerInvariant()}"))),
                 Text = $"The chart: {where}, the planet of {p.Stands}." + (report.Length > 0 ? $" {report}." : "") +
                        $"\nThe answers: {p.Text}" +
-                       (p.AgainstSign.Length > 0 ? $"\n{p.AgainstSign}" : ""),
+                       (p.AgainstSign.Length > 0 ? $"\n{p.AgainstSign}" : "") +
+                       (p.HouseLine.Length > 0 ? $"\nIn its house: {p.HouseLine}" : "") +
+                       string.Concat(p.Extremes.Select(line => "\n" + line)) +
+                       (p.ReachText.Length > 0 ? $"\n{p.ReachText}" : ""),
             };
         }).ToList(),
     };
@@ -528,15 +633,145 @@ public sealed class MirrorInterpreter
         return new DailySection { Heading = "The chart as a whole", Items = items };
     }
 
-    // What the Report says at its end when the answers have shaped it.
-    private List<string> ForReport(NatalChart chart, List<MirrorPlanet> planets, string name, DateOnly takenOn)
+    // The three dimensions, each with its scales, and the planets they mark out.
+    private DailySection Character(CharacterProfile character, List<MirrorPlanet> planets)
     {
-        var paragraphs = new List<string>
+        var items = new List<DailyItem>
         {
-            Fill(Note("reportIntro"), name)
-                .Replace("{date}", takenOn.ToString("d MMMM yyyy", CultureInfo.InvariantCulture)),
+            new() { Text = Note("characterIntro") },
+            new() { Text = Note("characterScale") },
         };
-        if (chart.Timed)
+        items.AddRange(character.Dimensions.Select(d => new DailyItem
+        {
+            Title = $"{d.Name}: {d.BandLabel.ToLowerInvariant()}",
+            Meta = string.Join("  ·  ", d.Scales.Select(s => $"{s.Name} {s.ScoreText}")),
+            Text = d.Text,
+        }));
+        void Side(MirrorReach reach, string title)
+        {
+            var list = planets.Where(p => p.Reach == reach).ToList();
+            if (list.Count > 0)
+                items.Add(new DailyItem { Title = title, Text = string.Join(", ", list.Select(p => $"{p.Planet.Symbol()} {p.Planet.Name()}")) });
+        }
+        Side(MirrorReach.Higher, Note("reachHigher"));
+        Side(MirrorReach.Lower, Note("reachLower"));
+        items.RemoveAll(i => string.IsNullOrWhiteSpace(i.Text));
+        return new DailySection { Heading = Note("sectionCharacter"), Items = items };
+    }
+
+    private DailySection LifeSection(NatalChart chart, LifeAreasReport life, bool inForce)
+    {
+        var items = new List<DailyItem> { new() { Text = Note("lifeHeading") } };
+        if (!chart.Timed) items.Add(new DailyItem { Text = Note("lifeUntimed") });
+        else if (!inForce) items.Add(new DailyItem { Text = Note("lifeStale") });
+
+        foreach (var r in life.Ratings.Where(r => r.IsMarked).OrderBy(r => r.Rating))
+            items.Add(new DailyItem
+            {
+                Title = $"{r.Area.Name}: {r.Choice.ToLowerInvariant()}",
+                Meta = chart.Timed ? $"{ChartInterpreter.Ordinal(r.Area.House)} house" : null,
+                Text = r.Lines!.Report,
+            });
+        items.RemoveAll(i => string.IsNullOrWhiteSpace(i.Text));
+        return new DailySection
+        {
+            Heading = $"How life is going, as of {life.TakenOn.ToString("d MMMM yyyy", CultureInfo.InvariantCulture)}",
+            Items = items,
+        };
+    }
+
+    // What has moved between the two latest sittings, by more than a day's mood could.
+    private DailySection? Moved(SelfReport report)
+    {
+        var items = new List<DailyItem>();
+
+        if (report is { Personality: { } now, EarlierPersonality: { } then })
+        {
+            var before = then.Domains.SelectMany(d => d.Facets).ToDictionary(f => f.Facet.Key);
+            var moved = now.Domains.SelectMany(d => d.Facets)
+                .Select(f => (Facet: f, By: f.Z - before[f.Facet.Key].Z))
+                .Where(x => Math.Abs(x.By) >= FacetChange)
+                .OrderByDescending(x => Math.Abs(x.By))
+                .ToList();
+            string date = then.TakenOn.ToString("d MMMM yyyy", CultureInfo.InvariantCulture);
+            items.Add(new DailyItem
+            {
+                Title = "Personality",
+                Meta = $"since {date}",
+                Text = moved.Count == 0
+                    ? Note("changeNone").Replace("{date}", date)
+                    : Note("changeIntro").Replace("{date}", date) + "\n" + string.Join("\n", moved.Select(x =>
+                        $"{x.Facet.Name}: {(x.By > 0 ? "up" : "down")}, now {x.Facet.BandLabel.ToLowerInvariant()} (was {before[x.Facet.Facet.Key].BandLabel.ToLowerInvariant()})")),
+            });
+        }
+
+        if (report is { Character: { } current, EarlierCharacter: { } earlier })
+        {
+            var before = earlier.Dimensions.SelectMany(d => d.Scales).ToDictionary(s => s.Scale.Key);
+            var moved = current.Dimensions.SelectMany(d => d.Scales)
+                .Select(s => (Scale: s, By: s.Mean - before[s.Scale.Key].Mean))
+                .Where(x => Math.Abs(x.By) >= ScaleChange)
+                .OrderByDescending(x => Math.Abs(x.By))
+                .ToList();
+            string date = earlier.TakenOn.ToString("d MMMM yyyy", CultureInfo.InvariantCulture);
+            items.Add(new DailyItem
+            {
+                Title = "Character",
+                Meta = $"since {date}",
+                Text = moved.Count == 0
+                    ? Note("changeNone").Replace("{date}", date)
+                    : Note("changeIntro").Replace("{date}", date) + "\n" + string.Join("\n", moved.Select(x =>
+                        $"{x.Scale.Name}: {(x.By > 0 ? "up" : "down")}, now {x.Scale.ScoreText} (was {before[x.Scale.Scale.Key].ScoreText})")),
+            });
+        }
+
+        return items.Count == 0 ? null : new DailySection { Heading = "What has moved", Items = items };
+    }
+
+    // A sentence for each chart pattern most of whose planets the answers mark the same way.
+    private Dictionary<string, string> PatternLines(NatalChart chart, List<MirrorPlanet> planets, string name)
+    {
+        var lines = new Dictionary<string, string>();
+        foreach (var pattern in AspectPatternService.Detect(chart))
+        {
+            var read = pattern.Points.Where(p => p.Kind == NatalPointKind.Body)
+                .Select(p => planets.FirstOrDefault(x => x.Planet == p.Body)).OfType<MirrorPlanet>()
+                .Where(p => !p.IsOrdinary).ToList();
+            int strain = read.Count(p => p.Lived == MirrorLived.Strain), well = read.Count(p => p.Lived == MirrorLived.Well);
+            if (strain == well || Math.Max(strain, well) < 2) continue;
+
+            bool hard = strain > well;
+            var named = read.Where(p => p.Lived == (hard ? MirrorLived.Strain : MirrorLived.Well)).Select(p => Body(p.Planet)).ToList();
+            string list = string.Join(", ", named.Take(named.Count - 1)) + " and " + named[^1];
+            if (_c.Patterns.GetValueOrDefault(pattern.Type.ToString())?.GetValueOrDefault(hard ? "strain" : "well") is { Length: > 0 } line)
+                lines[MirrorReading.PatternKey(pattern)] = Fill(line, name).Replace("{points}", list);
+        }
+        return lines;
+    }
+
+    private Dictionary<Planet, string> LordLines(List<MirrorPlanet> planets, string name) =>
+        planets.Where(p => !p.IsOrdinary && p.Lived != MirrorLived.Plain)
+            .ToDictionary(p => p.Planet, p =>
+                Fill(_c.Timing.Lord.GetValueOrDefault(p.Lived == MirrorLived.Strain ? "strain" : "well", ""), name)
+                    .Replace("{planet}", Body(p.Planet)).Replace("{expression}", p.Expression));
+
+    // What the Report says at its end when the answers have shaped it.
+    private List<string> ForReport(NatalChart chart, List<MirrorPlanet> planets, string name, SelfReport report,
+        Dictionary<int, LifeAreaRating> houses)
+    {
+        static string Day(DateOnly date) => date.ToString("d MMMM yyyy", CultureInfo.InvariantCulture);
+        var paragraphs = new List<string>();
+        if (report.Personality is { } profile)
+            paragraphs.Add(Fill(Note("reportIntro"), name).Replace("{date}", Day(profile.TakenOn)));
+        if (report.Character is { } character)
+        {
+            paragraphs.Add(Fill(Note("reportCharacter"), name).Replace("{date}", Day(character.TakenOn))
+                .Replace("{list}", string.Join(" ", character.Dimensions.Select(d => d.Text))));
+            paragraphs.AddRange(planets.Where(p => p.Reach != MirrorReach.Unmarked)
+                .OrderByDescending(p => Math.Abs(p.ReachZ)).Take(MaxReach)
+                .Select(p => $"{p.Planet.Symbol()} {p.Planet.Name()}: {p.ReachText}"));
+        }
+        if (report.Personality is not null && chart.Timed)
         {
             var differing = planets.Where(p => p.Verdict is MirrorVerdict.Unlived or MirrorVerdict.HardWon).ToList();
             foreach (var p in differing)
@@ -548,6 +783,11 @@ public sealed class MirrorInterpreter
                                    $"{(p.Verdict == MirrorVerdict.Unlived ? _c.Comparison.GetValueOrDefault("unlived", "unlived") : _c.Comparison.GetValueOrDefault("hardWon", "hard-won"))}: {text}");
             }
             if (differing.Count == 0) paragraphs.Add(Note("reportNone"));
+        }
+        if (houses.Count > 0 && report.LifeAreas is { } life)
+        {
+            paragraphs.Add(Fill(Note("reportLifeAreas"), name).Replace("{date}", Day(life.TakenOn)));
+            paragraphs.AddRange(houses.Values.OrderBy(r => r.Area.House).Select(r => r.Lines!.Report));
         }
         paragraphs.RemoveAll(string.IsNullOrWhiteSpace);
         return paragraphs;

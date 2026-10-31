@@ -34,6 +34,8 @@ Data\daily.json
 Data\synastry.json
 Data\davison.json
 Data\inventory.json
+Data\character.json
+Data\lifeareas.json
 Data\mirror.json
 Data\legend.json
 

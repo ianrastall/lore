@@ -69,8 +69,9 @@ public sealed class MirrorTests : IDisposable
     {
         using var doc = JsonDocument.Parse(File.ReadAllText(Repo.Data("mirror.json")));
         var facets = Inventory.Instrument.Facets.Select(f => f.Key).ToHashSet();
+        var scales = new CharacterService(Repo.Data("character.json")).Instrument.Scales.Select(s => s.Key).ToHashSet();
         var planets = doc.RootElement.GetProperty("planets");
-        Assert.Equal(Seven.Concat(["Uranus", "Neptune"]), planets.EnumerateObject().Select(p => p.Name));
+        Assert.Equal(Seven.Concat(["Uranus", "Neptune", "Pluto", "North Node", "Chiron", "Lilith"]), planets.EnumerateObject().Select(p => p.Name));
 
         var used = new List<string>();
         foreach (var planet in planets.EnumerateObject())
@@ -80,7 +81,7 @@ public sealed class MirrorTests : IDisposable
             foreach (var dial in dials)
                 foreach (var key in dial.Value.EnumerateArray().Select(k => k.GetString()!.TrimStart('-')))
                 {
-                    Assert.Contains(key, facets);
+                    Assert.True(facets.Contains(key) || scales.Contains(key), key);
                     used.Add(key);
                 }
 
@@ -123,7 +124,7 @@ public sealed class MirrorTests : IDisposable
 
         // Every one of the thirty facets speaks for a planet, and none for two.
         Assert.Equal(used.Count, used.Distinct().Count());
-        Assert.Equal(facets.Order(), used.Order());
+        Assert.Equal(facets.Order(), used.Where(facets.Contains).Order());
         Assert.True(Mirror.IsAvailable);
     }
 
@@ -383,21 +384,21 @@ public sealed class MirrorTests : IDisposable
 
         // Mars direct, in Libra, which suggests restraint: the comparison follows on the dial it is about.
         var direct = Shaped(("E3", Hi), ("E4", Hi), ("E5", Hi));
-        Assert.Equal(Was("Mars") + " By Elvis's answers this drive is in full and well-governed use. That is far more push than Mars in Libra would suggest.",
+        Assert.StartsWith(Was("Mars") + " By Elvis's answers this drive is in full and well-governed use. That is far more push than Mars in Libra would suggest.",
             Now(direct, "Mars"));
         Assert.Equal(Was("Venus"), Now(direct, "Venus"));   // nothing was answered of Venus
         Assert.Equal(Was("Pluto"), Now(direct, "Pluto"));   // and Pluto is not read
 
         // Where the answers bear the sign out, it says that instead.
         var wary = Shaped(("A1", Lo), ("A4", Lo));
-        Assert.EndsWith("By Elvis's answers it comes with little trust and a readiness to argue. That bears out the wariness that Venus in Capricorn describes.",
+        Assert.Contains("By Elvis's answers it comes with little trust and a readiness to argue. That bears out the wariness that Venus in Capricorn describes.",
             Now(wary, "Venus"));
 
         // A comparison about something the sentence does not mention is added as a thing apart, never as "That is".
         var temper = Shaped(("N2", Hi), ("E3", Hi), ("E4", Hi), ("E5", Hi));
-        Assert.EndsWith("By Elvis's answers the drive is strong and so is the temper. That is far more push than Mars in Libra would suggest.", Now(temper, "Mars"));
+        Assert.Contains("By Elvis's answers the drive is strong and so is the temper. That is far more push than Mars in Libra would suggest.", Now(temper, "Mars"));
         var taste = Shaped(("O2", Hi), ("E1", Hi), ("E2", Hi));
-        Assert.EndsWith("By Elvis's answers it shows as ease and warmth in company. That is far more sociability than Venus in Capricorn would suggest. Art and beauty matter a great deal.",
+        Assert.Contains("By Elvis's answers it shows as ease and warmth in company. That is far more sociability than Venus in Capricorn would suggest. Art and beauty matter a great deal.",
             Now(taste, "Venus"));
 
         // Uranus and Neptune have no sign to be set against.
@@ -422,8 +423,8 @@ public sealed class MirrorTests : IDisposable
 
         // How the two lights are lived is said under The Planets, not twice.
         var planets = Report.Interpret(chart, null, reading);
-        Assert.EndsWith("By Elvis's answers little of this is on show at present: confidence and spirits are both low.", Para(planets, "The Planets", " Sun in "));
-        Assert.EndsWith("By Elvis's answers there is more worry and strain here than this suggests.", Para(planets, "The Planets", " Moon in "));
+        Assert.Contains("By Elvis's answers little of this is on show at present: confidence and spirits are both low.", Para(planets, "The Planets", " Sun in "));
+        Assert.Contains("By Elvis's answers there is more worry and strain here than this suggests.", Para(planets, "The Planets", " Moon in "));
 
         // An outgoing person with Sagittarius rising bears the sign out.
         var outgoing = Mirror.Compose(chart, Profile(("E", Hi)));
@@ -522,13 +523,15 @@ public sealed class MirrorTests : IDisposable
             var after = Daily.Compose(chart, Transits.Scan(chart, date, Utc), Utc, answers);
             var a = before.Sections.SelectMany(s => s.Items).ToList();
             var b = after.Sections.SelectMany(s => s.Items).ToList();
-            // Nothing is added, removed or reordered: some items are a sentence longer.
-            Assert.Equal(a.Select(i => i.Title), b.Select(i => i.Title));
+            // The answers may change which transits the day spends its slots on. Whatever
+            // is in both reads the same, or a sentence longer.
+            Assert.Equal(a.Count, b.Count);
 
             var targets = new List<string>();
-            foreach (var (was, now) in a.Zip(b))
+            foreach (var now in b)
             {
-                if (now.Text == was.Text) continue;
+                // The line with no title is the day's tone, which the answers may shift.
+                if (now.Title is null || a.FirstOrDefault(i => i.Title == now.Title) is not { } was || now.Text == was.Text) continue;
                 Assert.StartsWith(was.Text + " By your answers", now.Text);
                 added++;
                 // Only under a transit by a planet, in the day's highlights, on the day it
@@ -644,6 +647,8 @@ public sealed class MirrorTests : IDisposable
         using var doc = JsonDocument.Parse(File.ReadAllText(Repo.Data("mirror.json")));
         foreach (var planet in doc.RootElement.GetProperty("planets").EnumerateObject())
         {
+            // The last four are read from the character scales, and tested with those.
+            if (planet.Name is "Pluto" or "North Node" or "Chiron" or "Lilith") continue;
             var expressions = planet.Value.GetProperty("expressions").EnumerateArray().ToList();
             int dials = planet.Value.GetProperty("dials").EnumerateObject().Count(d => !planet.Value.TryGetProperty("also", out _) || d.Name != "taste");
             foreach (var e in expressions)
@@ -708,7 +713,8 @@ public sealed class MirrorTests : IDisposable
             var a = Daily.Compose(chart, Transits.Scan(chart, date.AddDays(n), Utc), Utc).Sections.SelectMany(s => s.Items).ToList();
             var b = Daily.Compose(chart, Transits.Scan(chart, date.AddDays(n), Utc), Utc, reading).Sections.SelectMany(s => s.Items).ToList();
             Assert.Equal(a.Count, b.Count);
-            Assert.All(a.Zip(b), pair => Assert.True(pair.Second.Text == pair.First.Text || pair.Second.Text.StartsWith(pair.First.Text + " By your answers")));
+            Assert.All(b, now => Assert.True(now.Title is null || a.FirstOrDefault(i => i.Title == now.Title) is not { } was ||
+                                             now.Text == was.Text || now.Text.StartsWith(was.Text + " By your answers")));
         }
     }
 

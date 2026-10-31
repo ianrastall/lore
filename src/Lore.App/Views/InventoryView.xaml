@@ -18,6 +18,24 @@
             <TextBlock Text="{x:Bind ViewModel.Title, Mode=OneWay}" Style="{StaticResource JupiterPageHeadingTextStyle}" TextWrapping="Wrap" />
             <TextBlock Text="{x:Bind ViewModel.HeaderText, Mode=OneWay}" Style="{StaticResource JupiterCaptionTextStyle}"
                        TextWrapping="Wrap" MaxWidth="900" HorizontalAlignment="Left" />
+            <!-- The three questionnaires -->
+            <StackPanel Orientation="Horizontal" Spacing="12" Visibility="{x:Bind VisIf(ViewModel.IsOwnChart), Mode=OneWay}">
+                <RadioButton Content="Personality" GroupName="InventoryPart" MinWidth="0"
+                             AutomationProperties.Name="The personality inventory"
+                             ToolTipService.ToolTip="120 statements: five traits and thirty facets"
+                             IsChecked="{x:Bind ViewModel.IsPersonality, Mode=OneWay}"
+                             Checked="PersonalityPart_Checked" />
+                <RadioButton Content="Character" GroupName="InventoryPart" MinWidth="0"
+                             AutomationProperties.Name="The character scales"
+                             ToolTipService.ToolTip="96 statements: self-direction, cooperation and self-transcendence"
+                             IsChecked="{x:Bind ViewModel.IsCharacter, Mode=OneWay}"
+                             Checked="CharacterPart_Checked" />
+                <RadioButton Content="Life areas" GroupName="InventoryPart" MinWidth="0"
+                             AutomationProperties.Name="The life areas"
+                             ToolTipService.ToolTip="12 quick ratings, one to a house of the chart"
+                             IsChecked="{x:Bind ViewModel.IsLifeAreas, Mode=OneWay}"
+                             Checked="LifeAreasPart_Checked" />
+            </StackPanel>
             <!-- Answers given here that have not reached the file -->
             <InfoBar Severity="Error" Title="Some answers are not saved" IsClosable="False"
                      Message="{x:Bind ViewModel.SaveProblem, Mode=OneWay}"
@@ -52,9 +70,10 @@
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Visibility="{x:Bind VisIf(ViewModel.IsIntroduction), Mode=OneWay}">
             <StackPanel Spacing="12" Padding="24,8,24,24" MaxWidth="720" HorizontalAlignment="Left">
                 <TextBlock Text="{x:Bind ViewModel.AboutText, Mode=OneWay}" Style="{StaticResource JupiterBodyTextStyle}" TextWrapping="Wrap" />
-                <TextBlock Text="{x:Bind ViewModel.AstrologyText}" Style="{StaticResource JupiterBodyTextStyle}" TextWrapping="Wrap" />
+                <TextBlock Text="{x:Bind ViewModel.AstrologyText}" Style="{StaticResource JupiterBodyTextStyle}" TextWrapping="Wrap"
+                           Visibility="{x:Bind VisIf(ViewModel.IsPersonality), Mode=OneWay}" />
                 <TextBlock Text="{x:Bind ViewModel.PrivacyText}" Style="{StaticResource JupiterBodyTextStyle}" TextWrapping="Wrap" />
-                <TextBlock Text="It should be answered by the person the chart belongs to, alone and without hurrying. There are no right answers."
+                <TextBlock Text="{x:Bind ViewModel.BeginHint, Mode=OneWay}"
                            Style="{StaticResource JupiterBodyTextStyle}" TextWrapping="Wrap" />
                 <Button x:Name="BeginButton" Content="Begin" Style="{StaticResource AccentButtonStyle}"
                         Command="{x:Bind ViewModel.BeginCommand}"
@@ -115,7 +134,7 @@
                             Command="{x:Bind ViewModel.NextCommand}"
                             Visibility="{x:Bind VisIf(ViewModel.CanGoOn), Mode=OneWay}"
                             AutomationProperties.Name="The next ten statements" />
-                    <Button Content="Finish and see the profile" Style="{StaticResource AccentButtonStyle}"
+                    <Button Content="{x:Bind ViewModel.FinishText, Mode=OneWay}" Style="{StaticResource AccentButtonStyle}"
                             Command="{x:Bind ViewModel.FinishCommand}"
                             Visibility="{x:Bind VisIf(ViewModel.IsLastPage), Mode=OneWay}" />
                     <ProgressBar Width="224" Minimum="0" Maximum="100" VerticalAlignment="Center"
@@ -149,15 +168,110 @@
                              IsChecked="{x:Bind ViewModel.ShowReading, Mode=OneWay}"
                              Checked="ReadingRadio_Checked" />
                 <Border Style="{StaticResource JupiterVerticalSeparatorStyle}" Margin="4,8,4,8" />
-                <CheckBox Content="Let the answers shape the Report, Daily and Forecast"
+                <CheckBox Content="Let the answers shape the other readings"
                           IsChecked="{x:Bind ViewModel.ShapeReadings, Mode=TwoWay}"
-                          ToolTipService.ToolTip="Adds sentences to the Report (its Overview, planets, aspects and balance) and to transits in the Daily and Forecast readings, saying how the answers describe what is spoken of. Each begins “By … answers”. The chart itself is never changed." />
+                          ToolTipService.ToolTip="Adds sentences to the Report, Daily, Forecast, Timing, Synastry and Trine, and lets the answers choose what a day's reading and a comparison spend their space on and how a match is scored as lived. The charts' own scores are kept beside them. The chart itself is never changed." />
             </StackPanel>
 
             <!-- The reading: chart and answers side by side -->
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Visibility="{x:Bind VisIf(ViewModel.ReadingShown), Mode=OneWay}">
                 <views:ReadingList Sections="{x:Bind ViewModel.ReadingSections, Mode=OneWay}"
                                    Margin="24,0,24,24" MaxWidth="820" HorizontalAlignment="Left" />
+            </ScrollViewer>
+
+            <!-- The character scales -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Visibility="{x:Bind VisIf(ViewModel.CharacterShown), Mode=OneWay}">
+                <StackPanel Spacing="16" Padding="24,0,24,24" MaxWidth="1040" HorizontalAlignment="Left">
+                    <TextBlock Text="{x:Bind ViewModel.TakenText, Mode=OneWay}" Style="{StaticResource JupiterCaptionTextStyle}" />
+                    <TextBlock Text="{x:Bind ViewModel.CharacterCaution}" Style="{StaticResource JupiterBodyTextStyle}" TextWrapping="Wrap" MaxWidth="820" HorizontalAlignment="Left" />
+                    <ItemsControl ItemsSource="{x:Bind ViewModel.Dimensions, Mode=OneWay}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="models:CharacterDimensionScore">
+                                <StackPanel Spacing="8" Margin="0,8,0,16">
+                                    <Grid ColumnSpacing="12">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{x:Bind Name}" Style="{StaticResource JupiterSectionHeadingTextStyle}" />
+                                        <TextBlock Grid.Column="1" Text="{x:Bind BandLabel}" Style="{StaticResource JupiterBodyStrongTextStyle}" VerticalAlignment="Center" />
+                                        <TextBlock Grid.Column="2" Text="{x:Bind ScoreText}" VerticalAlignment="Center" Style="{StaticResource JupiterCaptionTextStyle}" />
+                                    </Grid>
+                                    <ProgressBar Minimum="0" Maximum="100" Value="{x:Bind Bar}" Width="420" HorizontalAlignment="Left"
+                                                 AutomationProperties.Name="{x:Bind Name}" />
+                                    <TextBlock Text="{x:Bind Text}" Style="{StaticResource JupiterBodyTextStyle}" TextWrapping="Wrap" MaxWidth="820" HorizontalAlignment="Left" />
+                                    <TextBlock Text="{x:Bind About}" Style="{StaticResource JupiterCaptionTextStyle}" TextWrapping="Wrap" MaxWidth="820" HorizontalAlignment="Left" />
+                                    <ItemsControl ItemsSource="{x:Bind Scales}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate x:DataType="models:CharacterScore">
+                                                <Grid ColumnSpacing="12" Padding="0,4,0,4" ToolTipService.ToolTip="{x:Bind Measures}">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="172" />
+                                                        <ColumnDefinition Width="84" />
+                                                        <ColumnDefinition Width="112" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Text="{x:Bind Name}" Style="{StaticResource JupiterBodyStrongTextStyle}" TextWrapping="Wrap" />
+                                                    <TextBlock Grid.Column="1" Text="{x:Bind BandLabel}" Style="{StaticResource JupiterBodyTextStyle}"
+                                                               Foreground="{ThemeResource JupiterSecondaryTextBrush}" />
+                                                    <ProgressBar Grid.Column="2" Minimum="0" Maximum="100" Value="{x:Bind Bar}"
+                                                                 VerticalAlignment="Center" AutomationProperties.Name="{x:Bind Name}" />
+                                                    <TextBlock Grid.Column="3" Text="{x:Bind Text}" Style="{StaticResource JupiterBodyTextStyle}" TextWrapping="Wrap" />
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <TextBlock Text="{x:Bind ViewModel.CharacterNormsText, Mode=OneWay}" Style="{StaticResource JupiterCaptionTextStyle}" TextWrapping="Wrap" MaxWidth="820" HorizontalAlignment="Left" />
+                    <TextBlock Text="{x:Bind ViewModel.SourceText, Mode=OneWay}" Style="{StaticResource JupiterCaptionTextStyle}" TextWrapping="Wrap" MaxWidth="820" HorizontalAlignment="Left" />
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Content="Answer it again" Command="{x:Bind ViewModel.TakeAgainCommand}"
+                                ToolTipService.ToolTip="A new sitting; this one is kept" />
+                        <Button Content="Delete the answers…" Click="Delete_Click"
+                                ToolTipService.ToolTip="Removes every answer saved for this person" />
+                    </StackPanel>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- The life areas -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Visibility="{x:Bind VisIf(ViewModel.LifeAreasShown), Mode=OneWay}">
+                <StackPanel Spacing="16" Padding="24,0,24,24" MaxWidth="1040" HorizontalAlignment="Left">
+                    <TextBlock Text="{x:Bind ViewModel.TakenText, Mode=OneWay}" Style="{StaticResource JupiterCaptionTextStyle}" />
+                    <TextBlock Text="{x:Bind ViewModel.LifeStaleText, Mode=OneWay}" Style="{StaticResource JupiterBodyTextStyle}"
+                               Foreground="{ThemeResource JupiterWarningBrush}" TextWrapping="Wrap" MaxWidth="820" HorizontalAlignment="Left"
+                               Visibility="{x:Bind VisIf(ViewModel.HasLifeStale), Mode=OneWay}" />
+                    <ItemsControl ItemsSource="{x:Bind ViewModel.LifeRatings, Mode=OneWay}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="models:LifeAreaRating">
+                                <Grid ColumnSpacing="12" Padding="0,4,0,4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="72" />
+                                        <ColumnDefinition Width="320" />
+                                        <ColumnDefinition Width="112" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{x:Bind HouseText}" Style="{StaticResource JupiterBodyTextStyle}"
+                                               Foreground="{ThemeResource JupiterSecondaryTextBrush}" />
+                                    <TextBlock Grid.Column="1" Text="{x:Bind Name}" Style="{StaticResource JupiterBodyStrongTextStyle}" TextWrapping="Wrap" />
+                                    <ProgressBar Grid.Column="2" Minimum="0" Maximum="100" Value="{x:Bind Bar}"
+                                                 VerticalAlignment="Center" AutomationProperties.Name="{x:Bind Name}" />
+                                    <TextBlock Grid.Column="3" Text="{x:Bind Choice}" Style="{StaticResource JupiterBodyTextStyle}" TextWrapping="Wrap" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <TextBlock Text="{x:Bind ViewModel.SourceText, Mode=OneWay}" Style="{StaticResource JupiterCaptionTextStyle}" TextWrapping="Wrap" MaxWidth="820" HorizontalAlignment="Left" />
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Button Content="Answer again" Style="{StaticResource AccentButtonStyle}" Command="{x:Bind ViewModel.TakeAgainCommand}"
+                                ToolTipService.ToolTip="A new sitting; the earlier one is kept" />
+                        <Button Content="Delete the answers…" Click="Delete_Click"
+                                ToolTipService.ToolTip="Removes every answer saved for this person" />
+                    </StackPanel>
+                </StackPanel>
             </ScrollViewer>
 
             <!-- The profile -->

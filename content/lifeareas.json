@@ -1,0 +1,223 @@
+{
+  "_comment": "Corpus for the life-areas check-in (Services/LifeAreaService.cs): twelve statements, one for each house of the chart, rated in a minute and answered again whenever they stop being true. Lore's own, with no research behind it. The personality and character answers speak to planets; these speak to houses. `report` goes under In the Light of the Answers, `hard` and `easy` go onto a passage whose natal planet is in that house (Daily and Forecast), `year` onto an annual profection that reaches it. `low` is for a rating of 1 or 2, `high` for a rating of 5. A rating of 3 or 4 adds nothing.",
+  "prompt": "How is each of these going for you at the moment? Answer for how things are now.",
+  "choices": [
+    "In real difficulty",
+    "Under strain",
+    "Getting by",
+    "Going well",
+    "Flourishing"
+  ],
+  "areas": [
+    {
+      "house": 1,
+      "name": "Yourself and how you meet the world",
+      "statement": "How I feel about myself, and how I come across to people.",
+      "low": {
+        "report": "How this person comes across is rated as a difficulty just now, which is first-house ground.",
+        "hard": "You have said that how you come across is a difficulty at the moment. This presses on that, so take it slowly and do not judge yourself by it.",
+        "easy": "You have said that how you come across is a difficulty at the moment. This is some help: it is a good time to show up and be seen.",
+        "year": "This person rates the first house's ground, how they feel in themselves, as a difficulty just now, and it is the ground of the year. The year is likely to be about exactly that."
+      },
+      "high": {
+        "report": "How this person comes across is rated as flourishing, and that is first-house ground.",
+        "hard": "You have said you are in good heart at the moment. That is what this asks you to draw on.",
+        "easy": "You have said you are in good heart at the moment. This adds to it.",
+        "year": "This person rates the first house's ground as flourishing, and it is the ground of the year: a year to build on it."
+      }
+    },
+    {
+      "house": 2,
+      "name": "Money and security",
+      "statement": "My money, what I own, and how secure I feel.",
+      "low": {
+        "report": "Money and security are rated as a difficulty just now, and that is second-house ground.",
+        "hard": "You have said money is a difficulty at the moment. This presses on that, so put off anything you can.",
+        "easy": "You have said money is a difficulty at the moment. This is some help: a good time to sort out one piece of it.",
+        "year": "This person rates money and security as a difficulty just now, and it is the ground of the year. The year is likely to be spent on it."
+      },
+      "high": {
+        "report": "Money and security are rated as flourishing, and that is second-house ground.",
+        "hard": "You have said money is going well at the moment. You have the cushion this asks for.",
+        "easy": "You have said money is going well at the moment. This adds to it.",
+        "year": "This person rates money and security as flourishing, and it is the ground of the year: a year to put it to work."
+      }
+    },
+    {
+      "house": 3,
+      "name": "Everyday contact and learning",
+      "statement": "My day-to-day dealings, siblings and neighbours, and what I am learning.",
+      "low": {
+        "report": "Everyday dealings are rated as a difficulty just now, and that is third-house ground.",
+        "hard": "You have said everyday dealings are a difficulty at the moment. This presses on that, so read things twice before you send them.",
+        "easy": "You have said everyday dealings are a difficulty at the moment. This is some help: a good time for the conversation you have been putting off.",
+        "year": "This person rates everyday dealings as a difficulty just now, and it is the ground of the year. The year is likely to turn on what gets said."
+      },
+      "high": {
+        "report": "Everyday dealings are rated as flourishing, and that is third-house ground.",
+        "hard": "You have said everyday dealings are going well at the moment. You have goodwill to draw on.",
+        "easy": "You have said everyday dealings are going well at the moment. This adds to it.",
+        "year": "This person rates everyday dealings as flourishing, and it is the ground of the year: a year for learning or for making contact."
+      }
+    },
+    {
+      "house": 4,
+      "name": "Home and family",
+      "statement": "My home, my family, and where I feel I belong.",
+      "low": {
+        "report": "Home and family are rated as a difficulty just now, and that is fourth-house ground.",
+        "hard": "You have said home is a difficulty at the moment. This presses on that, so go gently there today.",
+        "easy": "You have said home is a difficulty at the moment. This is some help: a good moment for a small repair.",
+        "year": "This person rates home and family as a difficulty just now, and it is the ground of the year. The year is likely to be taken up with it."
+      },
+      "high": {
+        "report": "Home and family are rated as flourishing, and that is fourth-house ground.",
+        "hard": "You have said home is going well at the moment. It is a good place to come back to.",
+        "easy": "You have said home is going well at the moment. This adds to it.",
+        "year": "This person rates home and family as flourishing, and it is the ground of the year: a year with a secure base."
+      }
+    },
+    {
+      "house": 5,
+      "name": "Pleasure, love affairs and creative work",
+      "statement": "What I enjoy, romance, children, and the things I make.",
+      "low": {
+        "report": "Pleasure and creative work are rated as a difficulty just now, and that is fifth-house ground.",
+        "hard": "You have said pleasure or creative work is a difficulty at the moment. This presses on that, so do not ask too much of either.",
+        "easy": "You have said pleasure or creative work is a difficulty at the moment. This is some help: do one thing purely because you like it.",
+        "year": "This person rates pleasure and creative work as a difficulty just now, and it is the ground of the year. The year is likely to ask what is still enjoyed."
+      },
+      "high": {
+        "report": "Pleasure and creative work are rated as flourishing, and that is fifth-house ground.",
+        "hard": "You have said pleasure and creative work are going well at the moment. They can stand some pressure.",
+        "easy": "You have said pleasure and creative work are going well at the moment. This adds to it.",
+        "year": "This person rates pleasure and creative work as flourishing, and it is the ground of the year: a year to make the most of it."
+      }
+    },
+    {
+      "house": 6,
+      "name": "Work, routine and health",
+      "statement": "My daily work and routine, and my health.",
+      "low": {
+        "report": "Daily work and health are rated as a difficulty just now, and that is sixth-house ground.",
+        "hard": "You have said your work or health is a difficulty at the moment. This presses on that, so do the least you can today and rest.",
+        "easy": "You have said your work or health is a difficulty at the moment. This is some help: a good day to change one habit.",
+        "year": "This person rates daily work and health as a difficulty just now, and it is the ground of the year. The year is likely to insist on it."
+      },
+      "high": {
+        "report": "Daily work and health are rated as flourishing, and that is sixth-house ground.",
+        "hard": "You have said your work and health are going well at the moment. You have the stamina for this.",
+        "easy": "You have said your work and health are going well at the moment. This adds to it.",
+        "year": "This person rates daily work and health as flourishing, and it is the ground of the year: a year to keep what works."
+      }
+    },
+    {
+      "house": 7,
+      "name": "Partnership",
+      "statement": "My partner or closest relationship, or the lack of one.",
+      "low": {
+        "report": "Partnership is rated as a difficulty just now, and that is seventh-house ground.",
+        "hard": "You have said partnership is a difficulty at the moment. This presses on that, so try not to have the big conversation today.",
+        "easy": "You have said partnership is a difficulty at the moment. This is some help: a kind word goes further than usual.",
+        "year": "This person rates partnership as a difficulty just now, and it is the ground of the year. The year is likely to be about what happens there."
+      },
+      "high": {
+        "report": "Partnership is rated as flourishing, and that is seventh-house ground.",
+        "hard": "You have said partnership is going well at the moment. It can take this.",
+        "easy": "You have said partnership is going well at the moment. This adds to it.",
+        "year": "This person rates partnership as flourishing, and it is the ground of the year: a year to do something together."
+      }
+    },
+    {
+      "house": 8,
+      "name": "Intimacy, debts and change",
+      "statement": "Intimacy, money tied up with other people, and anything ending or being lost.",
+      "low": {
+        "report": "Intimacy, shared money or a loss is rated as a difficulty just now, and that is eighth-house ground.",
+        "hard": "You have said something here is hard at the moment: intimacy, a debt or a loss. This presses on that, so go easy on yourself.",
+        "easy": "You have said something here is hard at the moment: intimacy, a debt or a loss. This is some help: you may be able to look at it today.",
+        "year": "This person rates this ground as a difficulty just now, and it is the ground of the year. The year is likely to turn on what is being let go."
+      },
+      "high": {
+        "report": "Intimacy and shared resources are rated as flourishing, and that is eighth-house ground.",
+        "hard": "You have said this side of life is going well at the moment. It should hold.",
+        "easy": "You have said this side of life is going well at the moment. This adds to it.",
+        "year": "This person rates this ground as flourishing, and it is the ground of the year: a year of deeper trust."
+      }
+    },
+    {
+      "house": 9,
+      "name": "Beliefs, study and travel",
+      "statement": "What I believe, what I am studying, and how far my horizons reach.",
+      "low": {
+        "report": "Belief and study are rated as a difficulty just now, and that is ninth-house ground.",
+        "hard": "You have said belief or study is a difficulty at the moment. This presses on that, so leave the big questions for now.",
+        "easy": "You have said belief or study is a difficulty at the moment. This is some help: read something outside your usual run.",
+        "year": "This person rates belief and study as a difficulty just now, and it is the ground of the year. The year is likely to ask what they now think."
+      },
+      "high": {
+        "report": "Belief and study are rated as flourishing, and that is ninth-house ground.",
+        "hard": "You have said belief and study are going well at the moment. You have something to stand on.",
+        "easy": "You have said belief and study are going well at the moment. This adds to it.",
+        "year": "This person rates belief and study as flourishing, and it is the ground of the year: a year to go further."
+      }
+    },
+    {
+      "house": 10,
+      "name": "Career and standing",
+      "statement": "My career, my reputation and what I am doing with my life.",
+      "low": {
+        "report": "Career and standing are rated as a difficulty just now, and that is tenth-house ground.",
+        "hard": "You have said your career is a difficulty at the moment. This presses on that, so keep your head down today.",
+        "easy": "You have said your career is a difficulty at the moment. This is some help: a good day to ask for something.",
+        "year": "This person rates career and standing as a difficulty just now, and it is the ground of the year. The year is likely to bring it to a head."
+      },
+      "high": {
+        "report": "Career and standing are rated as flourishing, and that is tenth-house ground.",
+        "hard": "You have said your career is going well at the moment. You have the standing this asks for.",
+        "easy": "You have said your career is going well at the moment. This adds to it.",
+        "year": "This person rates career and standing as flourishing, and it is the ground of the year: a year to take the next step."
+      }
+    },
+    {
+      "house": 11,
+      "name": "Friends and hopes",
+      "statement": "My friends, the groups I belong to, and what I hope for.",
+      "low": {
+        "report": "Friendships and hopes are rated as a difficulty just now, and that is eleventh-house ground.",
+        "hard": "You have said friends or hopes are a difficulty at the moment. This presses on that, so do not read too much into a slight.",
+        "easy": "You have said friends or hopes are a difficulty at the moment. This is some help: get in touch with one person.",
+        "year": "This person rates friendships and hopes as a difficulty just now, and it is the ground of the year. The year is likely to change who is around them."
+      },
+      "high": {
+        "report": "Friendships and hopes are rated as flourishing, and that is eleventh-house ground.",
+        "hard": "You have said friends and hopes are going well at the moment. You have people to call on.",
+        "easy": "You have said friends and hopes are going well at the moment. This adds to it.",
+        "year": "This person rates friendships and hopes as flourishing, and it is the ground of the year: a year to work with others."
+      }
+    },
+    {
+      "house": 12,
+      "name": "Rest, solitude and the inner life",
+      "statement": "How well I rest, time alone, and whatever goes on underneath.",
+      "low": {
+        "report": "Rest and the inner life are rated as a difficulty just now, and that is twelfth-house ground.",
+        "hard": "You have said rest or your inner life is a difficulty at the moment. This presses on that, so make room for quiet today.",
+        "easy": "You have said rest or your inner life is a difficulty at the moment. This is some help: take the quiet when it comes.",
+        "year": "This person rates rest and the inner life as a difficulty just now, and it is the ground of the year. The year is likely to ask for retreat."
+      },
+      "high": {
+        "report": "Rest and the inner life are rated as flourishing, and that is twelfth-house ground.",
+        "hard": "You have said rest and your inner life are in good order at the moment. You have somewhere to go.",
+        "easy": "You have said rest and your inner life are in good order at the moment. This adds to it.",
+        "year": "This person rates rest and the inner life as flourishing, and it is the ground of the year: a good year for quiet work."
+      }
+    }
+  ],
+  "forecast": {
+    "lowHard": "You have rated this part of life as a difficulty at the moment: {area}. Expect this stretch to press on it.",
+    "lowEasy": "You have rated this part of life as a difficulty at the moment: {area}. This stretch offers some relief there.",
+    "highHard": "You have rated this part of life as flourishing at the moment: {area}. It should stand up to this stretch.",
+    "highEasy": "You have rated this part of life as flourishing at the moment: {area}. This stretch adds to it."
+  }
+}

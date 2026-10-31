@@ -186,6 +186,10 @@ public enum MirrorVerdict { NoContrast, AsWritten, AsWrittenHard, Unlived, HardW
 // Clause is the comparison in words, to be set into a sentence.
 public sealed record MirrorComparison(string Dial, string Expected, string Actual, int Gap, string Clause);
 
+// How far a planet has been grown into, by the character answers: its higher side, its
+// lower side, or nothing marked either way (or no character answers to go by).
+public enum MirrorReach { Unmarked, Higher, Lower }
+
 // One planet as the chart-and-answers reading has it.
 public sealed record MirrorPlanet(
     Planet Planet, PlanetPosition Position, string Expression, MirrorLived Lived, int? Dignity, MirrorExpectation Expectation)
@@ -194,6 +198,18 @@ public sealed record MirrorPlanet(
     public string Stands { get; init; } = "";
     public string DignityNotes { get; init; } = "";
     public IReadOnlyList<FacetScore> Facets { get; init; } = [];
+    public IReadOnlyList<CharacterScore> Scales { get; init; } = [];
+
+    // The character answers on this planet, and how far from the middle they stand.
+    public MirrorReach Reach { get; init; }
+    public string ReachText { get; init; } = "";
+    public double ReachZ { get; init; }
+
+    // Facets at the very ends of the profile that its dials' averages hide.
+    public IReadOnlyList<string> Extremes { get; init; } = [];
+
+    // What the way it is lived comes to in its house, for a chart with a birth time.
+    public string HouseLine { get; init; } = "";
 
     // True when every one of its dials is middling, so that it has only the catch-all
     // expression: the answers say nothing in particular of this planet.
@@ -275,6 +291,64 @@ public sealed class MirrorReading
         chart.Celebrity.Id == ChartId ? Planets.FirstOrDefault(p => p.Planet == planet) : null;
 
     public bool IsFor(NatalChart chart) => chart.Celebrity.Id == ChartId;
+
+    // How the answers describe a planet lived, whoever is asking. Plain where they say
+    // nothing of it.
+    public MirrorLived LivedOf(Planet planet) =>
+        Planets.FirstOrDefault(p => p.Planet == planet) is { IsOrdinary: false } read ? read.Lived : MirrorLived.Plain;
+
+    // A dial's level, "Mars.heat" → low, mid or high; absent where it was not read. Two
+    // people's dials are what the Synastry view sets against each other.
+    public IReadOnlyDictionary<string, string> Levels { get; init; } = new Dictionary<string, string>();
+
+    // A sentence for a chart pattern, by PatternKey, where the answers mark it out.
+    public IReadOnlyDictionary<string, string> PatternLines { get; init; } = new Dictionary<string, string>();
+
+    public static string PatternKey(AspectPattern p) => $"{p.Type}|{string.Join(",", p.Points.Select(x => x.Name))}";
+
+    public string PatternLine(AspectPattern p) => PatternLines.GetValueOrDefault(PatternKey(p)) ?? "";
+
+    // The sentence for this planet as Lord of the Year, in the Timing reading.
+    public IReadOnlyDictionary<Planet, string> LordLines { get; init; } = new Dictionary<Planet, string>();
+
+    // The houses marked out by the life-area ratings; none if those are missing or stale.
+    public IReadOnlyDictionary<int, LifeAreaRating> Houses { get; init; } = new Dictionary<int, LifeAreaRating>();
+
+    // Empty unless a house is marked out. Daily speaks of today; Forecast of a stretch.
+    public LifeAreaRating? House(int house) => Houses.GetValueOrDefault(house);
+
+    public string LifeLine(int house, TransitTone tone) => House(house) is not { Lines: { } lines } ? "" :
+        tone == TransitTone.Flow ? lines.Easy
+        : tone == TransitTone.Tension || House(house)!.IsLow ? lines.Hard : lines.Easy;
+
+    public string LifeYear(int house) => House(house)?.Lines?.Year ?? "";
+
+    public LifeForecast LifeForecast { get; init; } = new();
+
+    public string LifeForecastLine(int house, TransitTone tone)
+    {
+        if (House(house) is not { IsMarked: true } rating) return "";
+        bool hard = tone == TransitTone.Tension || (tone != TransitTone.Flow && rating.IsLow);
+        string line = rating.IsLow ? (hard ? LifeForecast.LowHard : LifeForecast.LowEasy)
+                                   : (hard ? LifeForecast.HighHard : LifeForecast.HighEasy);
+        string area = rating.Area.Name;
+        return line.Replace("{area}", area.Length == 0 ? area : char.ToLowerInvariant(area[0]) + area[1..]);
+    }
+
+    // How much more a passage counts in the day's reading when it touches something the
+    // person has marked out. Lifting these lets the answers choose what a day is about
+    // and tilt its tone, and not only add a sentence: strain is what a day will be felt
+    // through. 1 when there is nothing to say, so that no answers change nothing.
+    public const double StrainLift = 1.25, WellLift = 1.1, HouseLift = 1.15;
+
+    public double Lift(NatalPoint target, int? house)
+    {
+        double lift = 1;
+        if (target.Kind == NatalPointKind.Body)
+            lift *= LivedOf(target.Body) switch { MirrorLived.Strain => StrainLift, MirrorLived.Well => WellLift, _ => 1 };
+        if (house is { } h && House(h) is { IsLow: true }) lift *= HouseLift;
+        return lift;
+    }
 
     public required string Name { get; init; }
     public required DateOnly TakenOn { get; init; }

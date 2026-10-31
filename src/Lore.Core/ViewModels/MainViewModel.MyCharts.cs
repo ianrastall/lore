@@ -48,7 +48,7 @@ public sealed partial class MainViewModel
         // The answers given for this person go with their chart. If the answers file
         // cannot be changed just now they are still in it, and that is said: the store
         // keeps the deletion and tries it again with its next save.
-        bool answersGone = _inventoryStore is null || await _inventoryStore.RemoveAsync(c.Id);
+        bool answersGone = _inventoryStore is null || await _inventoryStore.RemovePersonAsync(c.Id);
         await RebuildPoolAsync();
         StatusMessage = answersGone
             ? $"Deleted {c.Name}."

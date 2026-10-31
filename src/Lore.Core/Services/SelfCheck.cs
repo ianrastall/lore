@@ -52,6 +52,10 @@ public static class SelfCheck
         Try("davison.json", () => _ = new DavisonInterpreter(Data("davison.json")));
         Try("inventory.json", () => Need(new InventoryService(Data("inventory.json")).IsAvailable,
             "inventory.json: the questionnaire is missing or not whole"));
+        Try("character.json", () => Need(new CharacterService(Data("character.json")).IsAvailable,
+            "character.json: the character scales are missing or not whole"));
+        Try("lifeareas.json", () => Need(new LifeAreaService(Data("lifeareas.json")).IsAvailable,
+            "lifeareas.json: the life areas are missing or not whole"));
         Try("mirror.json", () => Need(new MirrorInterpreter(Data("mirror.json"), report).IsAvailable,
             "mirror.json: the chart-and-answers text is missing or empty"));
         Try("legend.json", () => Need(new LegendService(Data("legend.json")).IsAvailable,

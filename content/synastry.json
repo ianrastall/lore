@@ -246,7 +246,17 @@
     "trioNoGrandTrine": "No grand trine runs through all three charts. The contacts between each pair still stand on their own.",
     "trioMoreGrandTrines": "{count} weaker grand trines are not listed.",
     "trioSameCircuit": "Another strand of the same circuit, through different points.",
-    "trioScale": "A grand trine here is one point from each person, each within 6° of a trine with the other two. Golden needs a strong one, made of personal points and close to exact, with no pair in difficulty. Astrology has no agreed score for three people. This one is Lore's own, and it describes the symbolism between three charts, not how three people will get on."
+    "trioScale": "A grand trine here is one point from each person, each within 6° of a trine with the other two. Golden needs a strong one, made of personal points and close to exact, with no pair in difficulty. T-squares, yods and meeting points through all three are described and do not change the tone. Answers to the questionnaires can move the tone of the pairs and of the trio, and the chart's own tone is kept beside it. Astrology has no agreed score for three people. This one is Lore's own, and it describes the symbolism between three charts, not how three people will get on.",
+    "livedSame": "The answers bear out the charts: taking them into account the connection still reads as {lived}.",
+    "livedBetter": "Taking the answers into account the connection reads as {lived}, above the charts' {charts}: the two are living these contacts better than the charts alone would suggest.",
+    "livedWorse": "Taking the answers into account the connection reads as {lived}, below the charts' {charts}: the two are finding these contacts harder than the charts alone would suggest.",
+    "trioLivedSame": "Taking the answers into account the three still read as {lived}.",
+    "trioLivedBetter": "Taking the answers into account the three read as {lived}, above the charts' {charts}.",
+    "trioLivedWorse": "Taking the answers into account the three read as {lived}, below the charts' {charts}.",
+    "trioHub": "Both of the others get on with {name} better than they get on with each other, so {name} may be what keeps the three together. {other} sits furthest from the other two.",
+    "trioSameFigure": "Another of the same figure, through different points.",
+    "trioStrained": "By the answers {name} is finding {list} hard.",
+    "trioWell": "By the answers {name} is living {list} well."
   },
   "_trio_comment": "The Trine reading of three charts. trioTones is keyed by TrioTone; grandTrines by the element all three corners are in, with Mixed for one that runs out of sign.",
   "trioTones": {
@@ -261,5 +271,168 @@
     "Air": "A circuit of air. Ideas and talk move freely between the three: they understand each other quickly and enjoy thinking together. The risk is plenty of conversation and too little follow-through.",
     "Water": "A circuit of water. Feeling passes between the three without much needing to be said: they sense each other's moods and look after one another. The risk is becoming a closed circle.",
     "Mixed": "This one runs out of sign: the three points are in trine by degree, but not all in signs of one element. It still joins all three, more loosely than a trine within one element."
+  },
+  "_lived_comment": "What the Synastry and Trine views say from the two or three people's answers (Services/SynastryInterpreter.cs). `livedContacts`, by tone and by how the two planets are lived: {a} and {pa} are one person and their planet, {ea} its expression; {b}, {pb} and {eb} the other. The strained one comes first, then the one lived well. `livedPairs` are tried in order, and each `when` names a dial of one person and a dial of the other; they are the same whichever person is which.",
+  "livedContacts": {
+    "Conjunction": {
+      "strain|strain": "By the answers {a}'s {pa} is {ea} and {b}'s {pb} is {eb}. Where these two meet there are two sore points in one place, and neither will find it easy to be the calm one.",
+      "strain|well": "By the answers {a}'s {pa} is {ea} and {b}'s {pb} is {eb}. {b} has what {a} finds hard here, which may help, or may be resented.",
+      "well|well": "By the answers {a}'s {pa} is {ea} and {b}'s {pb} is {eb}. Both bring this part of themselves in good order, and the contact should work as the chart describes.",
+      "strain|plain": "By the answers {a}'s {pa} is {ea}, and it is brought straight to {b}'s {pb}. Expect {b} to meet that first.",
+      "well|plain": "By the answers {a}'s {pa} is {ea}, and it is brought straight to {b}'s {pb}. {b} gets the good of that."
+    },
+    "Flow": {
+      "strain|strain": "By the answers {a}'s {pa} is {ea} and {b}'s {pb} is {eb}. The chart calls this easy; the two may find it easy only to fall into each other's habits.",
+      "strain|well": "By the answers {a}'s {pa} is {ea} and {b}'s {pb} is {eb}. An easy contact where one has steadiness to offer: {b} can do {a} some good here.",
+      "well|well": "By the answers {a}'s {pa} is {ea} and {b}'s {pb} is {eb}. This contact has everything going for it.",
+      "strain|plain": "By the answers {a}'s {pa} is {ea}. The ease the chart describes here may reach {b} only partly.",
+      "well|plain": "By the answers {a}'s {pa} is {ea}. The ease the chart describes here is the real thing."
+    },
+    "Tension": {
+      "strain|strain": "By the answers {a}'s {pa} is {ea} and {b}'s {pb} is {eb}. A hard contact between two people who each find this hard: this is the likeliest place for the same quarrel to come round again.",
+      "strain|well": "By the answers {a}'s {pa} is {ea} and {b}'s {pb} is {eb}. The friction is real, and {b} is better placed to keep it from getting worse.",
+      "well|well": "By the answers {a}'s {pa} is {ea} and {b}'s {pb} is {eb}. The friction is real, and both have the means to use it.",
+      "strain|plain": "By the answers {a}'s {pa} is {ea}, which sharpens this contact for both of them.",
+      "well|plain": "By the answers {a}'s {pa} is {ea}, which takes much of the edge off this contact."
+    }
+  },
+  "livedPairs": [
+    {
+      "when": [
+        "Mars.heat=high",
+        "Mars.heat=high"
+      ],
+      "title": "Two tempers",
+      "text": "By the answers both {a} and {b} are quick to anger. Neither will be the one who cools things, so it helps to agree how a quarrel stops before one starts."
+    },
+    {
+      "when": [
+        "Moon.unrest=high",
+        "Moon.unrest=high"
+      ],
+      "title": "Two worriers",
+      "text": "By the answers both {a} and {b} carry a good deal of unrest. Each understands the other's, and each can set the other off."
+    },
+    {
+      "when": [
+        "Mars.heat=high",
+        "Moon.unrest=high"
+      ],
+      "title": "Heat and worry",
+      "text": "By the answers {a} flares and {b} frets. What is a passing storm to {a} may stay with {b} for days."
+    },
+    {
+      "when": [
+        "Venus.accord=low",
+        "Venus.accord=low"
+      ],
+      "title": "Slow to give way",
+      "text": "By the answers neither {a} nor {b} trusts easily or gives way. There will be little papering over, and much depends on what can be said straight out."
+    },
+    {
+      "when": [
+        "Venus.accord=high",
+        "Venus.accord=high"
+      ],
+      "title": "Quick to give way",
+      "text": "By the answers both {a} and {b} trust and give way readily. The peace is easily kept, and things that need saying may not be said."
+    },
+    {
+      "when": [
+        "Mars.push=high",
+        "Mars.push=high"
+      ],
+      "title": "Two who lead",
+      "text": "By the answers both {a} and {b} like to take charge. There is plenty of energy here and only one steering wheel."
+    },
+    {
+      "when": [
+        "Mars.push=low",
+        "Mars.push=low"
+      ],
+      "title": "Nobody leads",
+      "text": "By the answers neither {a} nor {b} likes to push. Decisions may simply not get made."
+    },
+    {
+      "when": [
+        "Mars.push=high",
+        "Mars.push=low"
+      ],
+      "title": "One leads",
+      "text": "By the answers {a} pushes and {b} does not. It works while {b} is content with it, and {a} should check that now and then."
+    },
+    {
+      "when": [
+        "Venus.sociable=high",
+        "Venus.sociable=low"
+      ],
+      "title": "Company and quiet",
+      "text": "By the answers {a} wants people around and {b} wants fewer. How many evenings go which way is worth settling."
+    },
+    {
+      "when": [
+        "Saturn.discipline=high",
+        "Saturn.discipline=low"
+      ],
+      "title": "Order and ease",
+      "text": "By the answers {a} runs on order and {b} does not. {a} may end up keeping things going, and resenting it."
+    },
+    {
+      "when": [
+        "Saturn.discipline=high",
+        "Saturn.discipline=high"
+      ],
+      "title": "Two who keep their word",
+      "text": "By the answers both {a} and {b} are disciplined. What is agreed gets done, and neither will easily take a day off."
+    },
+    {
+      "when": [
+        "Sun.confidence=low",
+        "Sun.confidence=low"
+      ],
+      "title": "Two who doubt themselves",
+      "text": "By the answers both {a} and {b} run short of confidence. Each may be waiting for the other to be sure."
+    },
+    {
+      "when": [
+        "Moon.feeling=high",
+        "Moon.feeling=low"
+      ],
+      "title": "Felt and unsaid",
+      "text": "By the answers {a} attends closely to feeling and {b} hardly at all. {a} may think {b} does not care, and {b} may not know what is being asked."
+    },
+    {
+      "when": [
+        "Mercury.ideas=high",
+        "Mercury.ideas=low"
+      ],
+      "title": "Ideas and facts",
+      "text": "By the answers {a} enjoys ideas that do not interest {b}. It may be as well to have someone else to talk them over with."
+    },
+    {
+      "when": [
+        "Jupiter.reach=high",
+        "Jupiter.reach=low"
+      ],
+      "title": "Going out and staying put",
+      "text": "By the answers {a} wants to go further and {b} is settled. Each has something the other could use."
+    }
+  ],
+  "trioFigures": {
+    "Meeting": "All three have a point in the same place: what one feels the others are already feeling. It is the closest bond three charts can make, and leaves the three little distance from each other.",
+    "TSquare": "Two of the three are set against each other, and {focus} is caught at right angles to both. It may fall to {focus} to settle what the other two cannot, or to bear the brunt of it.",
+    "Yod": "Two of the three work easily together, and each is awkwardly placed with {focus}. {focus} can see what the other two cannot, and may never feel quite in step with them."
+  },
+  "trioElements": {
+    "Fire": "{name} brings most of the fire here: starting things, and the belief that they will work.",
+    "Earth": "{name} brings most of the earth here: the practical sense, and the seeing it through.",
+    "Air": "{name} brings most of the air here: the talk, the ideas and the links to other people.",
+    "Water": "{name} brings most of the water here: the feeling for what is going on underneath."
+  },
+  "trioLacking": {
+    "Fire": "None of the three has any fire. Between them they may wait for someone else to begin.",
+    "Earth": "None of the three has any earth. Between them they may find that practical matters get left.",
+    "Air": "None of the three has any air. Between them they may feel a great deal and say little of it.",
+    "Water": "None of the three has any water. Between them they may be slow to notice what anybody feels."
   }
 }

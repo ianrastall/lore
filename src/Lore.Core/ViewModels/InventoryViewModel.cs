@@ -75,16 +75,20 @@ public enum InventoryStage
     Profile,       // finished: the scored profile
 }
 
-// State for the Inventory view: the questionnaire for the person whose chart is selected,
-// a page of statements at a time, and the profile once every statement is answered.
-// Nothing here reads the chart beyond whose it is.
+// State for the Inventory view: three questionnaires for the person whose chart is
+// selected (the personality inventory, the character scales and the life areas), one on
+// screen at a time, a page of statements at a time, and what each gives once every
+// statement is answered. The chart-and-answers reading is made of all of them.
 public sealed partial class InventoryViewModel : ObservableObject
 {
     public const int PageSize = 10;
 
     private readonly InventoryService? _inventory;
+    private readonly CharacterService? _character;
+    private readonly LifeAreaService? _life;
     private readonly InventoryStore? _store;
     private readonly MirrorInterpreter? _mirror;
+    private readonly SelfReportService _reports;
 
     // The sittings saved for the person on screen, oldest first, and the one under way.
     private List<InventorySitting> _sittings = [];
@@ -102,13 +106,53 @@ public sealed partial class InventoryViewModel : ObservableObject
     private readonly SynchronizationContext? _ui = SynchronizationContext.Current;
 
     public InventoryViewModel(InventoryService? inventory = null, InventoryStore? store = null,
-        MirrorInterpreter? mirror = null)
+        MirrorInterpreter? mirror = null, CharacterService? character = null, LifeAreaService? life = null)
     {
         _inventory = inventory;
+        _character = character;
+        _life = life;
         _store = store;
         _mirror = mirror;
+        _reports = new SelfReportService(inventory, character, life, store);
         if (store is not null) store.StatusChanged += OnStoreChanged;
     }
+
+    // Which of the three is on screen.
+    [ObservableProperty]
+    public partial InventoryPart Part { get; set; }
+
+    partial void OnPartChanged(InventoryPart value) => Load();
+
+    public bool IsPersonality => Part == InventoryPart.Personality;
+    public bool IsCharacter => Part == InventoryPart.Character;
+    public bool IsLifeAreas => Part == InventoryPart.LifeAreas;
+
+    // Whether the part on screen can be offered at all.
+    private bool PartAvailable => Part switch
+    {
+        InventoryPart.Character => _character is { IsAvailable: true },
+        InventoryPart.LifeAreas => _life is { IsAvailable: true },
+        _ => _inventory is { IsAvailable: true },
+    };
+
+    // The statements of the part on screen, in one shape.
+    private IReadOnlyList<InventoryItem> Items => Part switch
+    {
+        InventoryPart.Character => _character?.Instrument.Items
+            .Select(i => new InventoryItem { N = i.N, Text = i.Text, Facet = i.Scale, Reversed = i.Reversed }).ToList() ?? [],
+        InventoryPart.LifeAreas => _life?.Instrument.Areas
+            .Select(a => new InventoryItem { N = a.House, Text = a.Statement }).ToList() ?? [],
+        _ => _inventory?.Instrument.Items ?? [],
+    };
+
+    private IReadOnlyList<string> Choices => Part switch
+    {
+        InventoryPart.Character => _character?.Instrument.Choices ?? [],
+        InventoryPart.LifeAreas => _life?.Instrument.Choices ?? [],
+        _ => _inventory?.Instrument.Choices ?? [],
+    };
+
+    private int PerPage => IsLifeAreas ? LifeAreaService.Areas : PageSize;
 
     // Takes a chart with the scan of its birth day, which says which signs are in doubt
     // when there is no birth time; the chart-and-answers reading does not read those.
@@ -138,6 +182,13 @@ public sealed partial class InventoryViewModel : ObservableObject
     [ObservableProperty]
     public partial InventoryProfile? Profile { get; set; }
 
+    // What the other two parts give, once answered.
+    [ObservableProperty]
+    public partial CharacterProfile? CharacterResult { get; set; }
+
+    [ObservableProperty]
+    public partial LifeAreasReport? LifeAreasResult { get; set; }
+
     [ObservableProperty]
     public partial string Notice { get; set; } = "";
 
@@ -158,15 +209,25 @@ public sealed partial class InventoryViewModel : ObservableObject
 
     public bool HasReading => Reading is not null;
     public bool ReadingShown => IsProfile && ShowReading && Reading is not null;
-    public bool ProfileShown => IsProfile && !ReadingShown;
+    public bool ProfileShown => IsProfile && !ReadingShown && IsPersonality;
+    public bool CharacterShown => IsProfile && !ReadingShown && IsCharacter;
+    public bool LifeAreasShown => IsProfile && !ReadingShown && IsLifeAreas;
     public IReadOnlyList<DailySection> ReadingSections => Reading?.Sections ?? [];
+
+    // A chart of the reader's own, where the three are offered.
+    public bool IsOwnChart => Stage is not (InventoryStage.NoChart or InventoryStage.NotOffered);
 
     // Under the title: what is on screen. The profile takes nothing from the chart; the
     // chart-and-answers reading is made of both, and says so.
     public string HeaderText => ReadingShown
-        ? "The personality profile set beside the birth chart: what the chart says of each planet, and what the answers say " +
+        ? "The answers set beside the birth chart: what the chart says of each planet, and what the answers say " +
           "of the part of life it stands for. The pairing of the two is Lore's own, and the chart is not changed by it."
-        : "A standard personality questionnaire and the profile it gives. It is not astrology: nothing here is taken from the chart.";
+        : Part switch
+        {
+            InventoryPart.Character => "How far a person has taken charge of their life, how they stand towards others, and what they feel part of. It is not astrology: nothing here is taken from the chart.",
+            InventoryPart.LifeAreas => "How each part of life is going at the moment, in twelve quick answers, one to a house of the chart. Answer it again whenever things change.",
+            _ => "A standard personality questionnaire and the profile it gives. It is not astrology: nothing here is taken from the chart.",
+        };
 
     partial void OnReadingChanged(MirrorReading? value) => ReadingModeChanged();
     partial void OnShowReadingChanged(bool value) => ReadingModeChanged();
@@ -177,22 +238,45 @@ public sealed partial class InventoryViewModel : ObservableObject
         OnPropertyChanged(nameof(HasReading));
         OnPropertyChanged(nameof(ReadingShown));
         OnPropertyChanged(nameof(ProfileShown));
+        OnPropertyChanged(nameof(CharacterShown));
+        OnPropertyChanged(nameof(LifeAreasShown));
         OnPropertyChanged(nameof(ReadingSections));
         OnPropertyChanged(nameof(HeaderText));
     }
 
-    // Sets the profile on screen beside the chart on screen; nothing if either is missing.
+    // Everything the person has reported, set beside the chart on screen; nothing if there
+    // is neither. Not while the personality questions are being answered again: most of
+    // the reading rests on those, and it comes back when they are finished or given up.
     private void Compose()
     {
         try
         {
-            Reading = _mirror is { IsAvailable: true } && Chart is { } chart && Profile is { } profile
-                ? _mirror.Compose(chart, profile, Day) : null;
+            bool answering = IsPersonality && _current is not null;
+            Reading = !answering && _mirror is { IsAvailable: true } && Chart is { } chart &&
+                      chart.Celebrity.Category == UserChartService.MyChartsCategory &&
+                      _reports.Read(chart.Celebrity) is { HasAny: true } report
+                ? _mirror.Compose(chart, report, Day) : null;
         }
         catch (Exception ex)
         {
             Diagnostics.Log($"The chart-and-answers reading for chart {Chart?.Celebrity.Id} could not be made: {ex}");
             Reading = null;
+        }
+    }
+
+    // The reading for anyone, on screen or not, for the views that set two or three people
+    // side by side. Only the reader's own charts have answers. Safe on a background thread.
+    public MirrorReading? ReadingFor(NatalChart chart)
+    {
+        if (_mirror is not { IsAvailable: true } || chart.Celebrity.Category != UserChartService.MyChartsCategory) return null;
+        try
+        {
+            return _reports.Read(chart.Celebrity) is { HasAny: true } report ? _mirror.Compose(chart, report) : null;
+        }
+        catch (Exception ex)
+        {
+            Diagnostics.Log($"The answers for chart {chart.Celebrity.Id} could not be read: {ex}");
+            return null;
         }
     }
 
@@ -205,16 +289,30 @@ public sealed partial class InventoryViewModel : ObservableObject
     // this chart's, or there is no profile (or reading) for it.
     public byte[]? ExportText(NatalChart chart, bool reading)
     {
-        if (!ReferenceEquals(Chart, chart) || _inventory is null || Profile is not { } profile) return null;
-        if (profile.Name != chart.Celebrity.Name) return null;
-        if (!reading) return _inventory.ToText(profile);
-        return Reading is { } made && made.IsFor(chart) && made.Name == chart.Celebrity.Name ? MirrorInterpreter.ToText(made) : null;
+        if (!ReferenceEquals(Chart, chart)) return null;
+        if (reading)
+            return Reading is { } made && made.IsFor(chart) && made.Name == chart.Celebrity.Name ? MirrorInterpreter.ToText(made) : null;
+        return _inventory is not null && (Profile ?? _reports.Read(chart.Celebrity).Personality) is { } profile &&
+               profile.Name == chart.Celebrity.Name ? _inventory.ToText(profile) : null;
     }
 
-    private Celebrity? Person => Chart?.Celebrity;
-    private int Count => _inventory?.Count ?? 0;
+    // The same for the character scales.
+    public byte[]? ExportCharacterText(NatalChart chart) =>
+        ReferenceEquals(Chart, chart) && _character is not null &&
+        (CharacterResult ?? _reports.Read(chart.Celebrity).Character) is { } profile && profile.Name == chart.Celebrity.Name
+            ? _character.ToText(profile) : null;
 
-    public string Title => Person is null ? "Personality inventory" : $"{Person.Name} — Personality inventory";
+    private Celebrity? Person => Chart?.Celebrity;
+    private int Count => Items.Count;
+
+    private string PartName => Part switch
+    {
+        InventoryPart.Character => "Character",
+        InventoryPart.LifeAreas => "Life areas",
+        _ => "Personality inventory",
+    };
+
+    public string Title => Person is null ? PartName : $"{Person.Name} — {PartName}";
 
     public bool IsNoChart => Stage == InventoryStage.NoChart;
     public bool IsNotOffered => Stage == InventoryStage.NotOffered;
@@ -228,31 +326,63 @@ public sealed partial class InventoryViewModel : ObservableObject
         "The inventory is for the charts under My Charts: add your own with File > New chart, select it, and come back here.";
 
     // The questionnaire's own instruction, and what it is.
-    public string Prompt => _inventory?.Instrument.Instrument.Prompt ?? "";
-    public string AboutText => _inventory is null ? "" :
-        $"The {_inventory.Instrument.Instrument.Name} is a standard, public-domain personality questionnaire: {Count} short statements, " +
-        "each answered on a five-point scale from very inaccurate to very accurate. It takes fifteen to twenty-five minutes, " +
-        "and can be left and taken up again: every answer is saved as it is given. At the end Lore shows a profile of five broad " +
-        "traits and thirty narrower facets, each set beside the answers of a large group of other people who took it on the internet.";
+    public string Prompt => Part switch
+    {
+        InventoryPart.Character => _character?.Instrument.Instrument.Prompt ?? "",
+        InventoryPart.LifeAreas => _life?.Instrument.Prompt ?? "",
+        _ => _inventory?.Instrument.Instrument.Prompt ?? "",
+    };
+    public string AboutText => Part switch
+    {
+        InventoryPart.Character when _character is not null =>
+            $"The character scales are {Count} short statements from the public-domain International Personality Item Pool, each answered on the " +
+            "same five-point scale. They take ten to twenty minutes and can be left and taken up again. They ask what the personality " +
+            "inventory does not: how far you have taken charge of your own life, how you stand towards other people, and whether you feel " +
+            "part of something larger. These are the character dimensions of Cloninger's Temperament and Character Inventory, and they are " +
+            "what read Pluto, the North Node, Chiron and Lilith, and say how far each planet has been grown into.",
+        InventoryPart.LifeAreas when _life is not null =>
+            $"{Count} statements, one for each house of the chart, on how that part of life is going now. It takes a minute. The Daily, Forecast " +
+            "and Timing readings then speak to the parts of life you have marked as hard or as flourishing, for six months, or until you " +
+            "answer again. It is Lore's own and is not a psychological measure.",
+        _ when _inventory is not null =>
+            $"The {_inventory.Instrument.Instrument.Name} is a standard, public-domain personality questionnaire: {Count} short statements, " +
+            "each answered on a five-point scale from very inaccurate to very accurate. It takes fifteen to twenty-five minutes, " +
+            "and can be left and taken up again: every answer is saved as it is given. At the end Lore shows a profile of five broad " +
+            "traits and thirty narrower facets, each set beside the answers of a large group of other people who took it on the internet.",
+        _ => "",
+    };
     public string PrivacyText =>
         "The answers are kept on this PC only, in a file of their own beside your saved charts. They are not part of a " +
         "My Charts export, and nothing is sent anywhere. They can be deleted at any time.";
     public string AstrologyText =>
         "The questionnaire has nothing to do with astrology and the profile is not drawn from the chart. It is here to be set beside the chart, not to be explained by it.";
     public string Caution => InventoryService.Caution;
+    public string CharacterCaution => CharacterService.Caution;
     public string EstimateText => InventoryService.EstimateNote;
     public string NormsText => _inventory is null ? "" : "Reference figures: " + _inventory.Instrument.Instrument.Norms;
-    public string SourceText => _inventory is null ? "" :
-        $"Questionnaire: {_inventory.Instrument.Instrument.Author}. {_inventory.Instrument.Instrument.Licence}";
+    public string CharacterNormsText => _character?.Instrument.Instrument.Norms ?? "";
+    public string SourceText => Part switch
+    {
+        InventoryPart.Character when _character is not null =>
+            $"Questionnaire: {_character.Instrument.Instrument.Author}. {_character.Instrument.Instrument.Licence}",
+        InventoryPart.LifeAreas => "These statements are Lore's own.",
+        _ when _inventory is not null =>
+            $"Questionnaire: {_inventory.Instrument.Instrument.Author}. {_inventory.Instrument.Instrument.Licence}",
+        _ => "",
+    };
+    public string FinishText => IsLifeAreas ? "Finish" : "Finish and see the profile";
+    public string BeginHint => IsLifeAreas
+        ? "Answer for how things are now."
+        : "It should be answered by the person the chart belongs to, alone and without hurrying. There are no right answers.";
 
     // ── Asking ────────────────────────────────────────────────────────────────
 
-    public int PageCount => Count == 0 ? 0 : (Count + PageSize - 1) / PageSize;
-    public int Answered => _current is null || _inventory is null ? 0 : _inventory.Answered(_current.Answers);
+    public int PageCount => Count == 0 ? 0 : (Count + PerPage - 1) / PerPage;
+    public int Answered => _current is null ? 0 : Answers.Given(_current.Answers, Count);
     public double Progress => Count == 0 ? 0 : 100.0 * Answered / Count;
     public string ProgressText => $"{Answered} of {Count} answered";
     public string PageText => Count == 0 ? "" :
-        $"Statements {Page * PageSize + 1} to {Math.Min(Count, (Page + 1) * PageSize)} of {Count}";
+        $"Statements {Page * PerPage + 1} to {Math.Min(Count, (Page + 1) * PerPage)} of {Count}";
     public bool CanGoBack => Page > 0;
     public bool CanGoOn => Page < PageCount - 1;
     public bool IsLastPage => PageCount > 0 && Page == PageCount - 1;
@@ -261,13 +391,21 @@ public sealed partial class InventoryViewModel : ObservableObject
     // ── Profile ───────────────────────────────────────────────────────────────
 
     public IReadOnlyList<DomainScore> Domains => Profile?.Domains ?? [];
+    public IReadOnlyList<CharacterDimensionScore> Dimensions => CharacterResult?.Dimensions ?? [];
+    public IReadOnlyList<LifeAreaRating> LifeRatings => LifeAreasResult?.Ratings ?? [];
+
+    public string LifeStaleText => LifeAreasResult is { } life && !life.IsFreshOn(DateOnly.FromDateTime(DateTime.Now))
+        ? "These ratings are more than six months old, so the other readings no longer use them. Answer them again to bring them back." : "";
+    public bool HasLifeStale => LifeStaleText.Length > 0;
+
     public string TakenText
     {
         get
         {
-            if (Profile is null) return "";
+            DateOnly? taken = Profile?.TakenOn ?? CharacterResult?.TakenOn ?? LifeAreasResult?.TakenOn;
+            if (taken is not { } day) return "";
             int earlier = _sittings.Count(s => s.IsComplete) - 1;
-            return $"Answered on {Profile.TakenOn.ToString("d MMMM yyyy", CultureInfo.InvariantCulture)}" +
+            return $"Answered on {day.ToString("d MMMM yyyy", CultureInfo.InvariantCulture)}" +
                    (earlier > 0 ? $"  ·  {earlier} earlier {(earlier == 1 ? "sitting is" : "sittings are")} kept" : "");
         }
     }
@@ -285,6 +423,9 @@ public sealed partial class InventoryViewModel : ObservableObject
             if (Profile is { } profile && _shown is { } shown && _inventory is not null &&
                 profile.Name != newValue.Celebrity.Name)
                 Profile = _inventory.Score(shown.Answers, newValue.Celebrity.Name, profile.TakenOn);
+            if (CharacterResult is { } character && _shown is { } scored && _character is not null &&
+                character.Name != newValue.Celebrity.Name)
+                CharacterResult = _character.Score(scored.Answers, newValue.Celebrity.Name, character.TakenOn);
             Refresh();
             Compose(); // the houses or the dignities may have changed with a setting
             return;
@@ -321,12 +462,12 @@ public sealed partial class InventoryViewModel : ObservableObject
         OnPropertyChanged(nameof(SaveProblem));
         OnPropertyChanged(nameof(HasSaveProblem));
         // The answers file could not be read and now can be.
-        if (Stage == InventoryStage.Unavailable && _inventory is { IsAvailable: true } && _store is { IsReadable: true }) Load();
+        if (Stage == InventoryStage.Unavailable && PartAvailable && _store is { IsReadable: true }) Load();
     }
 
     // Why nothing is offered: the questionnaire's own file, or the file of answers.
-    public string UnavailableText => _inventory is not { IsAvailable: true }
-        ? "The questionnaire could not be read (Data\\inventory.json is missing or damaged). Reinstalling Lore will put it back."
+    public string UnavailableText => !PartAvailable
+        ? $"The questionnaire could not be read (Data\\{Part switch { InventoryPart.Character => "character", InventoryPart.LifeAreas => "lifeareas", _ => "inventory" }}.json is missing or damaged). Reinstalling Lore will put it back."
         : (_store?.Problem ?? "The answers already given could not be read.") +
           " Until they can be, the questionnaire is not offered here, so that nothing is saved over them.";
 
@@ -338,7 +479,8 @@ public sealed partial class InventoryViewModel : ObservableObject
         _current = null;
         _shown = null;
         Profile = null;
-        Reading = null;
+        CharacterResult = null;
+        LifeAreasResult = null;
         Questions = [];
         Notice = "";
 
@@ -346,11 +488,11 @@ public sealed partial class InventoryViewModel : ObservableObject
             Stage = InventoryStage.NoChart;
         else if (person.Category != UserChartService.MyChartsCategory)
             Stage = InventoryStage.NotOffered;
-        else if (_inventory is not { IsAvailable: true })
+        else if (!PartAvailable)
             Stage = InventoryStage.Unavailable;
         else
         {
-            _sittings = _store?.Get(person.Id) ?? [];
+            _sittings = _store?.Get(SelfReportService.StoreKey(person.Id, Part)) ?? [];
             // Answers from a file that does not fit this questionnaire are not guessed at.
             _sittings.RemoveAll(s => s.Answers.Length != Count);
             _current = _sittings.LastOrDefault(s => !s.IsComplete);
@@ -369,13 +511,14 @@ public sealed partial class InventoryViewModel : ObservableObject
             else
                 Stage = InventoryStage.Introduction;
         }
+        Compose();
         Refresh();
     }
 
     [RelayCommand]
     private void Begin()
     {
-        if (Person is null || _inventory is not { IsAvailable: true }) return;
+        if (Person is null || !PartAvailable) return;
         // Not while the answers already given cannot be read: a new sitting would be
         // saved in place of whatever is there.
         if (_store is { IsReadable: false }) return;
@@ -387,6 +530,7 @@ public sealed partial class InventoryViewModel : ObservableObject
         _sittings.Add(_current);
         Save();
         Ask(0);
+        Compose();
     }
 
     // The same again, some other day: the finished sittings are kept.
@@ -410,10 +554,10 @@ public sealed partial class InventoryViewModel : ObservableObject
     [RelayCommand]
     private void Finish()
     {
-        if (_current is null || _inventory is null) return;
-        if (_inventory.FirstUnanswered(_current.Answers) is { } missing)
+        if (_current is null) return;
+        if (Answers.FirstUnanswered(_current.Answers, Count) is { } missing)
         {
-            Ask((missing - 1) / PageSize);
+            Ask((missing - 1) / PerPage);
             int left = Count - Answered;
             Notice = $"{left} {(left == 1 ? "statement is" : "statements are")} still to be answered; the first is number {missing}.";
             return;
@@ -423,6 +567,7 @@ public sealed partial class InventoryViewModel : ObservableObject
         var done = _current;
         _current = null;
         Show(done);
+        Compose();
         Refresh();
     }
 
@@ -442,24 +587,25 @@ public sealed partial class InventoryViewModel : ObservableObject
     public async Task<bool> DeleteAnswersAsync()
     {
         if (Person is not { } person) return false;
-        var removed = _store?.RemoveAsync(person.Id);
+        var removed = _store?.RemovePersonAsync(person.Id);
         Load();
         return removed is null || await removed;
     }
 
     private void Ask(int page)
     {
-        if (_current is null || _inventory is null) return;
+        if (_current is null) return;
         Stage = InventoryStage.Asking;
         _shown = null;
         Profile = null;
-        Reading = null;
+        CharacterResult = null;
+        LifeAreasResult = null;
         Notice = "";
         Page = Math.Clamp(page, 0, Math.Max(0, PageCount - 1));
         var answers = _current.Answers;
-        Questions = _inventory.Instrument.Items
-            .Skip(Page * PageSize).Take(PageSize)
-            .Select(i => new InventoryQuestion(i, answers[i.N - 1], _inventory.Instrument.Choices, OnAnswered))
+        Questions = Items
+            .Skip(Page * PerPage).Take(PerPage)
+            .Select(i => new InventoryQuestion(i, answers[i.N - 1], Choices, OnAnswered))
             .ToList();
         Refresh();
     }
@@ -469,7 +615,7 @@ public sealed partial class InventoryViewModel : ObservableObject
         if (_current is null) return;
         _current.Answers[question.Number - 1] = question.Answer;
         Save();
-        if (HasNotice && _inventory?.FirstUnanswered(_current.Answers) is null) Notice = "";
+        if (HasNotice && Answers.FirstUnanswered(_current.Answers, Count) is null) Notice = "";
         OnPropertyChanged(nameof(Answered));
         OnPropertyChanged(nameof(Progress));
         OnPropertyChanged(nameof(ProgressText));
@@ -477,22 +623,31 @@ public sealed partial class InventoryViewModel : ObservableObject
 
     private void Show(InventorySitting done)
     {
-        if (_inventory is null || Person is not { } person) return;
-        var taken = DateOnly.TryParseExact(done.Completed, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var d)
-            ? d : DateOnly.FromDateTime(DateTime.Now);
+        if (Person is not { } person) return;
+        var taken = SelfReportService.TakenOn(done);
         Questions = [];
         _shown = done;
-        Profile = _inventory.Score(done.Answers, person.Name, taken);
+        switch (Part)
+        {
+            case InventoryPart.Character:
+                CharacterResult = _character?.Score(done.Answers, person.Name, taken);
+                break;
+            case InventoryPart.LifeAreas:
+                LifeAreasResult = _life?.Score(done.Answers, taken);
+                break;
+            default:
+                Profile = _inventory?.Score(done.Answers, person.Name, taken);
+                break;
+        }
         Stage = InventoryStage.Profile;
-        Compose();
     }
 
     private int FirstUnansweredPage() =>
-        _current is null || _inventory?.FirstUnanswered(_current.Answers) is not { } n ? 0 : (n - 1) / PageSize;
+        _current is null || Answers.FirstUnanswered(_current.Answers, Count) is not { } n ? 0 : (n - 1) / PerPage;
 
     private void Save()
     {
-        if (Person is { } person) _store?.Save(person.Id, _sittings);
+        if (Person is { } person) _store?.Save(SelfReportService.StoreKey(person.Id, Part), _sittings);
     }
 
     partial void OnNoticeChanged(string value) => OnPropertyChanged(nameof(HasNotice));
@@ -505,7 +660,10 @@ public sealed partial class InventoryViewModel : ObservableObject
                      nameof(IsAsking), nameof(IsProfile), nameof(NotOfferedText), nameof(Answered), nameof(Progress),
                      nameof(ProgressText), nameof(PageText), nameof(CanGoBack), nameof(CanGoOn), nameof(IsLastPage),
                      nameof(Domains), nameof(TakenText), nameof(UnavailableText), nameof(HeaderText),
-                     nameof(SaveProblem), nameof(HasSaveProblem),
+                     nameof(SaveProblem), nameof(HasSaveProblem), nameof(IsOwnChart), nameof(Dimensions), nameof(LifeRatings),
+                     nameof(IsPersonality), nameof(IsCharacter), nameof(IsLifeAreas), nameof(Prompt), nameof(AboutText),
+                     nameof(SourceText), nameof(FinishText), nameof(BeginHint), nameof(ProfileShown), nameof(CharacterShown),
+                     nameof(LifeAreasShown), nameof(ReadingShown), nameof(LifeStaleText), nameof(HasLifeStale),
                  })
             OnPropertyChanged(name);
     }

@@ -43,6 +43,14 @@ public static class SynastryToneExtensions
     };
 }
 
+// One rule of the Synastry view's section on the two sets of answers.
+public sealed class LivedPair
+{
+    public IReadOnlyList<string> When { get; init; } = [];   // "Mars.heat=high", one for each person
+    public string Title { get; init; } = "";
+    public string Text { get; init; } = "";
+}
+
 // How two charts weigh up: the weight of their easy contacts, the weight of their hard
 // ones, and the tone that balance comes to. Lore's own measure (see SynastryScoring), and
 // a description of the symbolism, not a forecast for the two people.
@@ -74,6 +82,11 @@ public sealed class SynastryReading
     public required string SecondName { get; init; }
     public required SynastryTone Tone { get; init; }
     public required Compatibility Compatibility { get; init; }
+
+    // The same balance with the two people's answers taken into account; null if neither
+    // has any. Tone and Compatibility stay the charts' own.
+    public Compatibility? AsLived { get; init; }
+
     public required IReadOnlyList<DailySection> Sections { get; init; }
 
     // Every contact found between the two charts, best first — the "why this reading"

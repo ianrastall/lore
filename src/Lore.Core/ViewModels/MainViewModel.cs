@@ -183,7 +183,9 @@ public sealed partial class MainViewModel : ObservableObject
         DavisonInterpreter? davisonInterpreter = null,
         InventoryService? inventory = null,
         InventoryStore? inventoryStore = null,
-        MirrorInterpreter? mirror = null)
+        MirrorInterpreter? mirror = null,
+        CharacterService? character = null,
+        LifeAreaService? lifeAreas = null)
     {
         _settings = settings;
         _celebrities = celebrities;
@@ -200,7 +202,8 @@ public sealed partial class MainViewModel : ObservableObject
         TimingVM = new TimingViewModel(new TimingService(charts, dailyInterpreter.HouseTopic), cities);
         SynastryVM = new SynastryViewModel(charts, synastryInterpreter, davisonInterpreter) { IsActive = false };
         _inventoryStore = inventoryStore;
-        InventoryVM = new InventoryViewModel(inventory, inventoryStore, mirror);
+        InventoryVM = new InventoryViewModel(inventory, inventoryStore, mirror, character, lifeAreas);
+        SynastryVM.AnswersOf = chart => InventoryVM.ShapeReadings ? InventoryVM.ReadingFor(chart) : null;
         InventoryVM.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(InventoryViewModel.ShapeReadings) &&
@@ -322,15 +325,17 @@ public sealed partial class MainViewModel : ObservableObject
                         $"and {settings.Orbs.PresetName.ToLowerInvariant()} orbs.";
     }
 
-    // Hands the chart-and-answers reading to the readings whose wording it shapes: the
-    // Report, the Daily and the Forecast. Each uses it only for the chart it was made
-    // for, so it does not matter that it arrives a moment before or after that chart.
+    // Hands the chart-and-answers reading to the readings it shapes: the Report, the
+    // Daily, the Forecast, Timing and Synastry. Each uses it only for the chart it was
+    // made for, so it does not matter that it arrives a moment before or after that chart.
     private void PassAnswersOn()
     {
         var answers = InventoryVM.ShapeReadings ? InventoryVM.Reading : null;
         ChartVM.Answers = answers;
         DailyVM.Answers = answers;
         ForecastVM.Answers = answers;
+        TimingVM.Answers = answers;
+        SynastryVM.Answers = answers;
     }
 
     // Empties every view: there is no chart to show.

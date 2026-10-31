@@ -12,6 +12,8 @@ public sealed partial class SynastryViewModel : ObservableObject
     private const int MaxSuggestions = 12;
     private const int MatchesShown = 12;   // how many of the best, and of the worst, are listed
     private const int ConnectionsTried = 100;  // how many of a person's best matches the finder tries in pairs
+    private const int TriosShown = 24;
+    public const string EveryScope = "Everyone";
 
     private readonly ChartService? _charts;
     private readonly SynastryInterpreter? _interpreter;
@@ -36,6 +38,21 @@ public sealed partial class SynastryViewModel : ObservableObject
         _charts = charts;
         _interpreter = interpreter;
         _davison = davison;
+    }
+
+    // Anyone's answers, if they have any and they are to shape what is said; set by the
+    // main view model. Asked on a background thread.
+    public Func<NatalChart, MirrorReading?>? AnswersOf { get; set; }
+
+    // The selected person's own, so that a change in them rebuilds what is on screen.
+    [ObservableProperty]
+    public partial MirrorReading? Answers { get; set; }
+
+    partial void OnAnswersChanged(MirrorReading? oldValue, MirrorReading? newValue)
+    {
+        if (Chart is not { } chart || (oldValue?.IsFor(chart) != true && newValue?.IsFor(chart) != true)) return;
+        Rebuild();
+        RebuildMatches();
     }
 
     // The chart selected in the browse list: the first person, and the inner wheel.
@@ -109,7 +126,19 @@ public sealed partial class SynastryViewModel : ObservableObject
     [ObservableProperty]
     public partial IReadOnlyList<TrioFind> Trios { get; set; } = [];
 
-    public IReadOnlyList<TrioFind> BestTrios => Trios.Take(MatchesShown).ToList();
+    public IReadOnlyList<TrioFind> BestTrios => Trios.Take(TriosShown).ToList();
+
+    // Whom the finder looks among: everyone, or one category of the list.
+    [ObservableProperty]
+    public partial string FinderScope { get; set; } = EveryScope;
+
+    partial void OnFinderScopeChanged(string value) => RebuildFinder();
+
+    public IReadOnlyList<string> FinderScopes =>
+        [EveryScope, .. _people.Select(p => p.Category).Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal)];
+
+    private IEnumerable<SynastryMatch> InScope =>
+        FinderScope == EveryScope ? Matches : Matches.Where(m => m.Person.Category == FinderScope);
 
     public string FinderHeading => Chart is null ? "" : $"Best tri-synastries for {Chart.Celebrity.Name}";
 
@@ -119,7 +148,8 @@ public sealed partial class SynastryViewModel : ObservableObject
         {
             if (Trios.Count == 0) return "";
             int golden = Trios.Count(t => t.Tone == TrioTone.Golden);
-            return $"Tried {Trios.Count:n0} trios from {Chart?.Celebrity.Name}'s top {Math.Min(ConnectionsTried, Matches.Count)} connections: {golden:n0} Golden.";
+            string among = FinderScope == EveryScope ? "" : $" in {FinderScope}";
+            return $"Tried {Trios.Count:n0} trios from {Chart?.Celebrity.Name}'s top {Math.Min(ConnectionsTried, InScope.Count())} connections{among}: {golden:n0} Golden.";
         }
     }
     public bool ReadingShown => Reading is not null && !ThirdsShown;
@@ -202,9 +232,13 @@ public sealed partial class SynastryViewModel : ObservableObject
         TrioShown ? "Rings from the inside: " + string.Join(", ", TrioReading!.Names) :
         $"Inner wheel: {Comparison.First.Celebrity.Name}   ·   Outer wheel: {Comparison.Second.Celebrity.Name}";
 
-    public string ToneText => TrioShown ? $"The three read as {TrioReading!.Trio.Tone.Label()}" : Reading is null ? "" :
-        $"The connection reads as {Reading.Tone.Label()} ({Reading.Tone.LevelText()})";
-    public string ToneColorHex => TrioShown ? TrioReading!.Trio.Tone.ColorHex() : Reading?.Tone.ColorHex() ?? "#9AA0A6";
+    public string ToneText => TrioShown
+        ? $"The three read as {TrioReading!.Trio.Tone.Label()}" +
+          (TrioReading.Trio.LivedTone is { } lived ? $"  ·  by the answers, {lived.Label()}" : "")
+        : Reading is null ? "" :
+        $"The connection reads as {Reading.Tone.Label()} ({Reading.Tone.LevelText()})" +
+        (Reading.AsLived is { } asLived ? $"  ·  by the answers, {asLived.Tone.Label()} ({asLived.Tone.LevelText()})" : "");
+    public string ToneColorHex => TrioShown ? TrioReading!.Trio.RankedTone.ColorHex() : (Reading?.AsLived?.Tone ?? Reading?.Tone)?.ColorHex() ?? "#9AA0A6";
 
     public IReadOnlyList<DailySection> Sections =>
         DavisonShown ? Davison!.Sections : TrioShown ? TrioReading!.Sections : ShowTrine ? [] : Reading?.Sections ?? [];
@@ -217,6 +251,7 @@ public sealed partial class SynastryViewModel : ObservableObject
     public void SetPeople(IReadOnlyList<Celebrity> people)
     {
         _people = people;
+        OnPropertyChanged(nameof(FinderScopes));
         if (Partner is { } current)
         {
             var match = people.FirstOrDefault(p => p.Id == current.Id);
@@ -335,7 +370,8 @@ public sealed partial class SynastryViewModel : ObservableObject
     private async void RebuildFinder()
     {
         var chart = Chart;
-        var connections = Matches.Take(ConnectionsTried).Select(m => m.Person).ToList();
+        var connections = InScope.Take(ConnectionsTried).Select(m => m.Person).ToList();
+        var answersOf = AnswersOf;
         Trios = [];
         if (!ShowTrine || !IsActive || Partner is not null || chart is null || connections.Count < 2 || _charts is null)
         {
@@ -345,7 +381,7 @@ public sealed partial class SynastryViewModel : ObservableObject
 
         var charts = _charts.With(chart.Settings);
         await _latestFinder.Run(
-            cancel => TrioService.FindTrios(charts, chart, connections, cancel),
+            cancel => TrioService.FindTrios(charts, chart, connections, cancel, answersOf),
             busy => IsFindingThird = busy,
             found => Trios = found,
             ex => Diagnostics.Log($"Tri-synastry search for chart {chart.Celebrity.Id} failed: {ex}"));
@@ -357,6 +393,7 @@ public sealed partial class SynastryViewModel : ObservableObject
     {
         var comparison = Comparison;
         var people = _people;
+        var answersOf = AnswersOf;
         ThirdMatches = [];
         if (!ShowTrine || !IsActive || Third is not null || comparison is null || _charts is null)
         {
@@ -367,7 +404,7 @@ public sealed partial class SynastryViewModel : ObservableObject
 
         var charts = _charts.With(comparison.First.Settings);
         await _latestThirds.Run(
-            cancel => TrioService.Rank(charts, comparison.First, comparison.Second, people, cancel),
+            cancel => TrioService.Rank(charts, comparison.First, comparison.Second, people, cancel, answersOf),
             busy => IsFindingThird = busy,
             matches => ThirdMatches = matches,
             ex => Diagnostics.Log($"Search for a third for {comparison.First.Celebrity.Id} failed: {ex}"));
@@ -378,6 +415,7 @@ public sealed partial class SynastryViewModel : ObservableObject
     {
         var comparison = Comparison;
         var third = Third;
+        var answersOf = AnswersOf;
         TrioReading = null;
         RebuildThirds();
 
@@ -394,7 +432,8 @@ public sealed partial class SynastryViewModel : ObservableObject
             {
                 var chart = _charts.With(comparison.First.Settings).Calculate(third);
                 cancel.ThrowIfCancellationRequested();
-                return _interpreter.ComposeTrio(TrioService.Compare(comparison.First, comparison.Second, chart));
+                MirrorReading?[]? answers = answersOf is null ? null : [answersOf(comparison.First), answersOf(comparison.Second), answersOf(chart)];
+                return _interpreter.ComposeTrio(TrioService.Compare(comparison.First, comparison.Second, chart, answers));
             },
             busy => IsFindingThird = busy,
             reading => TrioReading = reading,
@@ -420,6 +459,7 @@ public sealed partial class SynastryViewModel : ObservableObject
     {
         var chart = Chart;
         var people = _people;
+        var answersOf = AnswersOf;
         Matches = [];
 
         // Nobody to search for, or the view is closed (then it is made when next opened).
@@ -436,7 +476,7 @@ public sealed partial class SynastryViewModel : ObservableObject
         // Everyone is cast with the settings the selected chart was cast with.
         var charts = _charts!.With(chart!.Settings);
         await _latestMatches.Run(
-            cancel => SynastryScoring.Rank(charts, chart, people, cancel),
+            cancel => SynastryScoring.Rank(charts, chart, people, cancel, answersOf),
             busy => IsSearching = busy,
             matches => Matches = matches,
             ex => Diagnostics.Log($"Synastry search for chart {chart.Celebrity.Id} failed: {ex}"));
@@ -482,6 +522,7 @@ public sealed partial class SynastryViewModel : ObservableObject
     {
         var chart = Chart;
         var partner = Partner;
+        var answersOf = AnswersOf;
         ErrorText = "";
 
         // Either person has changed, so the comparison on screen is no longer theirs: it
@@ -519,7 +560,7 @@ public sealed partial class SynastryViewModel : ObservableObject
                 }
                 cancel.ThrowIfCancellationRequested();
                 var synastry = SynastryService.Compare(chart, other, between);
-                return (synastry, _interpreter.Compose(synastry), _davison?.Compose(synastry));
+                return (synastry, _interpreter.Compose(synastry, answersOf?.Invoke(chart), answersOf?.Invoke(other)), _davison?.Compose(synastry));
             },
             busy => IsBusy = busy,
             made =>

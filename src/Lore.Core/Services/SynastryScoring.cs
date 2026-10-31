@@ -73,10 +73,31 @@ public static class SynastryScoring
     // timed charts carries about 14.
     private const double WeightForExtremes = 6.0;
 
+    // How far a planet's being lived well or with strain, by its owner's answers, moves
+    // the weight of a contact it is in. A strained planet takes some of the ease from an
+    // easy contact and sharpens a hard one; one lived well does the reverse. Lore's own
+    // figures, chosen so that the answers can move a pair by a band and not across the
+    // scale.
+    public const double StrainOnEase = 0.8, StrainOnFriction = 1.3, WellOnEase = 1.25, WellOnFriction = 0.85;
+
+    private static double Lived(SynastryAspect x, bool easy, MirrorReading? first, MirrorReading? second)
+    {
+        static double Side(NatalPoint p, bool easy, MirrorReading? answers) =>
+            answers is null || p.Kind != NatalPointKind.Body ? 1 : answers.LivedOf(p.Body) switch
+            {
+                MirrorLived.Strain => easy ? StrainOnEase : StrainOnFriction,
+                MirrorLived.Well => easy ? WellOnEase : WellOnFriction,
+                _ => 1,
+            };
+        return Side(x.First, easy, first) * Side(x.Second, easy, second);
+    }
+
     // The balance of easy and hard across every personal contact, each counted by how
     // much it matters. (Not just the ones a reading shows: those are chosen in fixed
     // numbers of each kind, which would make every pair of charts come out Mixed.)
-    public static Compatibility Assess(IEnumerable<SynastryAspect> aspects)
+    // `first`, `second`: each person's answers, if they have any, for the balance as the
+    // two are living it. Without them this is the charts' balance alone.
+    public static Compatibility Assess(IEnumerable<SynastryAspect> aspects, MirrorReading? first = null, MirrorReading? second = null)
     {
         double flow = 0, tension = 0;
         foreach (var x in aspects)
@@ -86,16 +107,18 @@ public static class SynastryScoring
             // The ranking favours hard aspects (they are the more noticeable); take that
             // back out here, or the same bias would tip every pair toward Challenging.
             double weight = Priority(x) / AspectWeight(x.Type);
+            double Easy() => weight * Lived(x, true, first, second);
+            double Hard() => weight * Lived(x, false, first, second);
             switch (x.Tone)
             {
-                case TransitTone.Flow: flow += weight; break;
-                case TransitTone.Tension: tension += weight; break;
+                case TransitTone.Flow: flow += Easy(); break;
+                case TransitTone.Tension: tension += Hard(); break;
                 default:
                     // A conjunction takes its colour from the planets meeting; between
                     // neutral points it binds more than it grates.
-                    if (Involves(x, Planet.Venus, Planet.Jupiter)) flow += weight;
-                    else if (Involves(x, Planet.Mars, Planet.Saturn, Planet.Pluto)) tension += weight;
-                    else flow += weight / 2;
+                    if (Involves(x, Planet.Venus, Planet.Jupiter)) flow += Easy();
+                    else if (Involves(x, Planet.Mars, Planet.Saturn, Planet.Pluto)) tension += Hard();
+                    else flow += Easy() / 2;
                     break;
             }
         }
@@ -121,9 +144,11 @@ public static class SynastryScoring
     // Everyone in `people` compared with one chart, best match first: by level, and
     // within a level by the share of the weight that is on the easy side. The chart's own
     // person is left out, and so is anyone whose chart cannot be calculated.
+    // `answersOf`: each person's answers, if any. The ranking is then of the pairs as lived.
     public static List<SynastryMatch> Rank(ChartService charts, NatalChart chart, IEnumerable<Celebrity> people,
-        CancellationToken cancel = default)
+        CancellationToken cancel = default, Func<NatalChart, MirrorReading?>? answersOf = null)
     {
+        var mine = answersOf?.Invoke(chart);
         var matches = new List<SynastryMatch>();
         foreach (var person in people)
         {
@@ -132,7 +157,8 @@ public static class SynastryScoring
             try
             {
                 var other = charts.Calculate(person);
-                matches.Add(new SynastryMatch(person, Assess(SynastryService.Compare(chart, other).Aspects)));
+                var theirs = person.Category == UserChartService.MyChartsCategory ? answersOf?.Invoke(other) : null;
+                matches.Add(new SynastryMatch(person, Assess(SynastryService.Compare(chart, other).Aspects, mine, theirs)));
             }
             catch (Exception ex) when (ex is not OperationCanceledException)
             {

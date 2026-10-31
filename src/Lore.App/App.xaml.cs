@@ -77,6 +77,8 @@ public partial class App : Application
         string davisonPath   = Path.Combine(baseDir, "Data", "davison.json");
         string inventoryPath = Path.Combine(baseDir, "Data", "inventory.json");
         string mirrorPath    = Path.Combine(baseDir, "Data", "mirror.json");
+        string characterPath = Path.Combine(baseDir, "Data", "character.json");
+        string lifeAreasPath = Path.Combine(baseDir, "Data", "lifeareas.json");
 
         var celebSvc    = new CelebrityService();
         var settings    = new SettingsService();
@@ -93,7 +95,8 @@ public partial class App : Application
                                             transits, daily, synastry, settings,
                                             new DavisonInterpreter(davisonPath),
                                             new InventoryService(inventoryPath), inventoryStore,
-                                            new MirrorInterpreter(mirrorPath, interpreter))
+                                            new MirrorInterpreter(mirrorPath, interpreter),
+                                            new CharacterService(characterPath), new LifeAreaService(lifeAreasPath))
         {
             // Anything Lore is installed with that is not there is said, not left to
             // show as a reading that is empty. (coreclr.dll is beside a published build

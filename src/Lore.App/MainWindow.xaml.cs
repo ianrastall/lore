@@ -496,7 +496,7 @@ public sealed partial class MainWindow : Window
                 "davisontxt" => WorksheetService.ToText(WorksheetService.Build(request.Davison!.Chart)),
                 "trinepdf" => SynastryExportService.TrioToPdf(request.Trio!, wheel!),
                 "trinetxt" => SynastryExportService.TrioToText(request.Trio!),
-                "inventorytxt" or "mirrortxt" => request.Text!,
+                "inventorytxt" or "charactertxt" or "mirrortxt" => request.Text!,
                 _      => throw new ArgumentOutOfRangeException(nameof(kind)),
             });
 

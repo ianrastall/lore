@@ -58,12 +58,15 @@ public class SynastryInterpreterTests
             ["sunElements"] = ["{a}", "{b}"],
             ["moonElements"] = ["{a}", "{b}"],
             ["overlayHouses"] = ["{guest}", "{host}", "{brings}"],
-            ["notes"] = ["{name}", "{count}"],
+            ["notes"] = ["{name}", "{count}", "{lived}", "{charts}", "{other}", "{list}"],
+            ["trioFigures"] = ["{focus}"],
+            ["trioElements"] = ["{name}"],
         };
         var stray =
             from section in doc.RootElement.EnumerateObject()
             where section.Value.ValueKind == JsonValueKind.Object
             from line in section.Value.EnumerateObject()
+            where line.Value.ValueKind == JsonValueKind.String
             from Match m in Regex.Matches(line.Value.GetString() ?? "", @"\{[^}]*\}")
             where !allowed.GetValueOrDefault(section.Name, []).Contains(m.Value)
             select $"{section.Name}/{line.Name}: {m.Value}";

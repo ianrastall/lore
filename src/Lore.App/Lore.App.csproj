@@ -97,6 +97,16 @@
       <TargetPath>Data\inventory.json</TargetPath>
     </Content>
     <!-- Corpus for the reading that sets the inventory profile beside the chart -->
+    <Content Include="$(RepoRoot)content\character.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Data\character.json</TargetPath>
+    </Content>
+
+    <Content Include="$(RepoRoot)content\lifeareas.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Data\lifeareas.json</TargetPath>
+    </Content>
+
     <Content Include="$(RepoRoot)content\mirror.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>Data\mirror.json</TargetPath>

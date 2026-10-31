@@ -68,6 +68,7 @@
                     </MenuFlyoutSubItem>
                     <MenuFlyoutSubItem Text="Inventory">
                         <MenuFlyoutItem Text="Personality profile as text…" Tag="inventorytxt" Click="Export_Click" />
+                        <MenuFlyoutItem Text="Character as text…" Tag="charactertxt" Click="Export_Click" />
                         <MenuFlyoutItem Text="Chart and answers as text…" Tag="mirrortxt" Click="Export_Click" />
                     </MenuFlyoutSubItem>
                 </MenuFlyoutSubItem>
@@ -244,7 +245,7 @@
                     <SelectorBarItem Text="Forecast" Tag="Forecast" ToolTipService.ToolTip="The transits coming up over the next weeks and months (Ctrl+5)" />
                     <SelectorBarItem Text="Timing" Tag="Timing" ToolTipService.ToolTip="The solar return for the year, and the chart progressed to a date (Ctrl+6)" />
                     <SelectorBarItem Text="Synastry" Tag="Synastry" ToolTipService.ToolTip="Compare this chart with another person's (Ctrl+7)" />
-                    <SelectorBarItem Text="Inventory" Tag="Inventory" ToolTipService.ToolTip="A personality questionnaire for one of your own charts, and the profile it gives (Ctrl+8)" />
+                    <SelectorBarItem Text="Inventory" Tag="Inventory" ToolTipService.ToolTip="Personality, character and life-area questionnaires for one of your own charts, and what they do to its readings (Ctrl+8)" />
                     <SelectorBarItem Text="Legend" Tag="Legend" ToolTipService.ToolTip="What every symbol, color and term means (F1)" />
                 </SelectorBar>
 

@@ -115,7 +115,7 @@ public sealed class ChartInterpreter
             Overview(chart, moonSigns, answers, signChanges),
             Planets(chart, answers, signChanges),
             Aspects(chart, answers),
-            Patterns(chart),
+            Patterns(chart, answers),
             Balance(chart, answers),
             ModalBalance(chart, answers),
         };
@@ -277,7 +277,7 @@ public sealed class ChartInterpreter
         _ => (int)p.Body
     };
 
-    private ReportSection Patterns(NatalChart chart)
+    private ReportSection Patterns(NatalChart chart, MirrorReading? answers = null)
     {
         var patterns = AspectPatternService.Detect(chart);
         var paras = new List<string>();
@@ -337,6 +337,8 @@ public sealed class ChartInterpreter
                               More(_c.GrandCrosses, p.Modality?.ToString()));
                     break;
             }
+            // How the answers describe the figure's planets lived.
+            if (answers?.PatternLine(p) is { Length: > 0 } lived) paras[^1] += " " + lived;
         }
         return new ReportSection { Heading = "Chart Patterns", Paragraphs = paras };
     }
