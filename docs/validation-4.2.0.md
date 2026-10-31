@@ -33,12 +33,23 @@ The first measurement used random answers and showed 63% of pairs moving. Random
 
 | Check | Result |
 | --- | --- |
-| Tests | 548 of 548 passed |
+| Tests | 547 of 547 passed |
 | App build | 0 warnings, 0 errors; style check at Error severity with 0 violations |
 | Figure library | 1,327 figures, every date, clock time, rating and UTC instant matches its reference |
 | Release build | `build/build.ps1` built the installer and portable zip with no errors |
 | Personal-data gate | Passed: 1,327 figures, 0 personal charts |
 | `--self-check` on the published build | OK |
+
+## Installed
+
+On Ian's machine, 4.2.0 over 4.1.0 and then 4.2.1 over that, at his word.
+
+| Check on the 4.2.1 install | Result |
+| --- | --- |
+| Both upgrades | Exit 0, Apps entry **Lore** 4.2.1 at `D:\Lore`, uninstaller present, Start entry kept |
+| User data through both upgrades | All 5 files matched their checksums; the daily reading caches were not compared, because the HUD rewrites them |
+| `--self-check` on the installed copy | OK |
+| Launch from the Start shortcut | Window in 0.5 s, responding, closed cleanly, and the charts and answers unchanged afterwards. No screenshot: it shows Ian's own charts |
 
 ## Exercised
 
@@ -50,7 +61,6 @@ On screen, with made-up people: the personality, character and life-area profile
 
 - **Trine figures, Who holds it together and What the three bring on screen**: the made-up trio had none of them. Their text is tested, and was read in a text dump.
 - **A questionnaire answered from start to finish by hand.** One answer was chosen on screen; whole sittings were run through the view model.
-- **The installed upgrade.** Not done. It needs an elevation prompt on Ian's machine, so it waits for him to say when. The installed copy is still 4.1.0 until then.
 - **A person's real answers.** The reading was tested with made-up answers and simulated populations.
 - **Whether the pairing of chart factors with these scales means anything.** No research connects a birth chart with measured personality. The readings say so.
 - **Three figures' details**, listed in `scripts/celebrity-expansion-2026-10-31.md`, were read from a search summary and not from the record.

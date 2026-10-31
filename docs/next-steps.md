@@ -603,8 +603,9 @@ search restricted to astro.com, which is slow, and which reads a summary of the 
 
 Not done, and worth knowing:
 
-- **The Inventory view's new panels have not been seen on screen.** They build and pass the
-  style check. The view-model flows are tested.
+- **Look at new screens before calling them done.** 4.2.0 went out with all tests passing and
+  "Very accurate" unreachable at the usual window size, in a layout older than 4.2. Only
+  seeing it found that. See the validation record.
 - **The answers still do not touch** the Davison chart, or the Daily's Sun and Moon house notes.
 - **Earlier sittings** can be compared two at a time, latest against the one before. There
   is no choosing among them.

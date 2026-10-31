@@ -11,7 +11,7 @@ Version 4.2.1 · 31 October 2026 · Repository `D:/jupiter/lore`, branch `main`,
 | Content | `content/` in the repository, `Data\` in the installed app |
 | Swiss Ephemeris | `third_party/swisseph`, compiled to `Native/sweph.dll` (not committed) |
 | Release | `build/build.ps1`, `build/installer.iss` |
-| Installed app | Ian's machine: `D:\Lore`, all-users install, 4.1.0 (admin needed to upgrade); 4.2.0 is released and not installed there yet |
+| Installed app | Ian's machine: `D:\Lore`, all-users install, 4.2.1 (admin needed to upgrade) |
 | Other apps | Jupiter HUD 0.4.1 runs `Lore.exe --daily-reading`; keep `lore.daily.v1` stable |
 | Reader's data | `%LOCALAPPDATA%\Lore`. Never in the repository. |
 
