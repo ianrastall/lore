@@ -5,8 +5,8 @@ the project and picked apart. Section 9 lists the questions I would most like an
 
 **Since built.** Stages one to three of section 7 are in Lore 3.0.0 (10 October 2026):
 see section 3e of `next-steps.md` for what was built and where it departs from this
-note. The view is called *Inventory*, not *Mirror*. Sections 6.3 and stage four are
-not built, and the questions in section 9 were never put to anyone.
+note. The view is called *Inventory*, not *Mirror*. Section 6.3, the character scales,
+is in Lore 4.2.0: see section 3j. The questions in section 9 were never put to anyone.
 
 ## 1. The idea in one paragraph
 

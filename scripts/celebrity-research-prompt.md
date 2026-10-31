@@ -83,4 +83,6 @@ Earlier research found ratings below A or no recorded time for the following. Ex
 
 The 4 October 2026 batch also excluded Sabrina Carpenter, Harry Styles, Chappell Roan, Selena Gomez, Justin Bieber, Adele, Megan Thee Stallion, Lewis Hamilton, Carlos Alcaraz, Michael Phelps, Katie Ledecky, Ryan Gosling, Daniel Radcliffe, Pedro Pascal, Robert Pattinson, Ryan Reynolds, Anne Hathaway, Cardi B, Lizzo, Shawn Mendes, Pink, Alicia Keys, Usher, Jennifer Lopez, Mariah Carey, Scarlett Johansson, Amanda Seyfried, and Jason Momoa for conflicting, speculative, lower-rated, or missing times. Emma Stone and Becky G were excluded despite A ratings because the listed clock times are inferred or approximate; Céline Dion was excluded pending resolution of conflicting times. See `scripts/celebrity-expansion-2026-10-04.md` for source links and reasons.
 
+The 31 October 2026 batch is in `scripts/celebrity-expansion-2026-10-31.md`: 13 added, and a list of who was looked up and left out. Add those added to the library list above before using this prompt.
+
 The 7 October 2026 batch looked up about 2,500 names. Its much longer list of lower-rated, untimed, conflicting and unlisted figures is in `scripts/celebrity-expansion-2026-10-07.md`; consult it before proposing anyone.

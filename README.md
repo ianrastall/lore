@@ -4,16 +4,16 @@ A Windows desktop application for computing and exploring astrological natal cha
 
 Part of Jupiter. Follows Jupiter style standard 1.1.
 
-**Latest release: v4.1.0** · [Download](../../releases/latest)
+**Latest release: v4.2.0** · [Download](../../releases/latest)
 
 ### Installing
 
 Lore 4 needs **Windows 11 24H2** or later, 64-bit.
 
-1. From the [latest release](../../releases/latest), download **`Lore-4.1.0-win-x64-setup.exe`**. It is a single file with everything inside it; there is nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`Lore-4.2.0-win-x64-setup.exe`**. It is a single file with everything inside it; there is nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user, adds **Lore** to the Start menu, and can be removed from *Settings > Apps* like any other program. An earlier Lore is upgraded in place, and your saved charts, answers and settings stay as they are.
 
-**Prefer not to install?** `Lore-4.1.0-win-x64-portable.zip` is the same program as a folder. Unzip it anywhere and run `Lore.exe` from inside it. Delete the folder to remove it.
+**Prefer not to install?** `Lore-4.2.0-win-x64-portable.zip` is the same program as a folder. Unzip it anywhere and run `Lore.exe` from inside it. Delete the folder to remove it.
 
 > **The installer is not code-signed.** Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"*. Choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -38,7 +38,7 @@ Lore 4 needs **Windows 11 24H2** or later, 64-bit.
 - **Further points and measurements** — the South Node, Descendant, IC, Vertex and the Parts of Fortune and Spirit; the lunar phase at birth; each planet's distance from the Sun; parallels, contra-parallels and out-of-bounds planets by declination; the balance of the chart; chart ruler, house rulers and dispositors.
 
 ### Figure Library
-- **1,314 figures** across **14 categories** — Actors, Musicians, Writers, Artists, Scientists, Philosophers, Directors, Athletes, Political, Historical, and more.
+- **1,327 figures** across **14 categories** — Actors, Musicians, Writers, Artists, Scientists, Philosophers, Directors, Athletes, Political, Historical, and more.
 - **Every figure has a documented, recorded birth time** (Astro-Databank / Rodden-rated). Entries without a reliable birth time were removed, so no chart relies on a noon guess.
 - Each entry stores birth date, time, birth place, geographic coordinates, IANA time zone, and a one-sentence bio.
 - Birth instants are resolved with **historical, DST-aware UTC offsets** via the IANA timezone database (NodaTime), not just fixed offsets — correctly handling anomalies like the UK's 1968–71 year-round BST experiment and 1940s US wartime time. For births before standard time existed, the birthplace's own local mean time (from its longitude) is used, as astrological sources record them.
@@ -113,10 +113,14 @@ Astrology has no agreed compatibility score; the scale is Lore's own, and it des
 ### Trine: three people
 **Trine**, at the top of the Synastry view, sets three charts together: a tri-synastry.
 
-- **Finder.** With one person selected, Lore takes their top 100 connections, tries every pair of them as a trio with that person (4,950 trios), and lists the best twelve. Select a row to read the three together.
+- **Finder.** With one person selected, Lore takes their top 100 connections, tries every pair of them as a trio with that person (4,950 trios), and lists the best two dozen. **Look among** narrows it to one category of the list, or to My Charts. Select a row to read the three together.
 - **Best third.** With two people chosen, Lore tries every other chart in the library, and every chart of your own, as the third, and lists the best twelve.
 - **The three pairs.** Each pair is compared as in Synastry, on the same five-step scale, and the weakest of the three is marked.
 - **Grand trines through all three charts.** One point from each person, every point within 6° of a trine with the other two. Each is named with its element and how close it is, and the strongest three are described.
+- **Other figures through all three.** Strong T-squares and yods, each naming the person at its focus, and meeting points, where all three stand in one place. They are described and do not change the tone.
+- **Who holds it together.** The person both the others get on with best, where there is a clear one, and who sits furthest off.
+- **What the three bring between them.** An element none of the three has, and one that rests on one person.
+- **As lived.** Where any of the three has answered the questionnaires, each pair and the trio also read as lived, the finder ranks that way, and the reading says what each person is finding hard or living well. The charts' own tone stays beside it.
 - **Four steps.** **Golden**, **Harmonious**, **Mixed** or **Strained**. Golden needs no pair in difficulty, more ease than not, and a strong grand trine: personal points close to exact. Having a grand trine is not enough, since nine trios in ten have one. Against random trios from the library about 3% are Golden, 26% Harmonious, 34% Mixed and 37% Strained. The share of Golden thirds runs higher for a pair that is already strong.
 - **A wheel of three rings.** One ring for each person on one zodiac, with the strongest grand trines drawn as triangles, the Golden one in gold.
 - **Text from an editable corpus.** The lines are in `content\synastry.json`, and the reading can be exported as PDF or text, the wheel as PNG.
@@ -128,9 +132,15 @@ Astrology has no agreed compatibility score; the scale is Lore's own, and it des
 Astrology has no agreed score for three people. The scale is Lore's own, and it describes the symbolism between three charts rather than forecasting how three people will get on.
 
 ### Personality Inventory
-The **Inventory** view offers a standard personality questionnaire for any chart under My Charts, and then reads the chart in the light of the answers. A chart is the same for everyone born at that minute and cannot know how a given person is living it; the questionnaire asks them.
+The **Inventory** view offers three questionnaires for any chart under My Charts, and then reads the chart in the light of the answers. A chart is the same for everyone born at that minute and cannot know how a given person is living it; the questionnaires ask them.
 
-- **The questionnaire** is the **IPIP-NEO-120** (Johnson, 2014), from the International Personality Item Pool: 120 short statements, each answered from *very inaccurate* to *very accurate*, measuring the five traits of the Five-Factor Model (Neuroticism, Extraversion, Openness, Agreeableness, Conscientiousness) and thirty narrower facets. It is in the public domain. The statements are given word for word.
+- **Personality**: the 120 statements described below. The planets, by style.
+- **Character**: 96 statements from the IPIP's scales for the character dimensions of Cloninger's Temperament and Character Inventory: Self-Directedness, Cooperativeness and Self-Transcendence. These ask about maturity more than style. They read **Pluto, the North Node, Chiron and Lilith**, which the personality inventory cannot, and they say whether each of the thirteen bodies is on its **higher side** or its **lower side**. The IPIP publishes no reference figures for them, so a score is read off the five-point scale itself and the view says so.
+- **Life areas**: twelve quick ratings, one to a house of the chart, of how that part of life is going now. A house rated hard or flourishing is spoken to in the Daily, Forecast and Timing readings for six months, or until answered again. These are Lore's own, and take a minute.
+
+Any one of the three is enough to begin with, and the reading is of whatever has been answered.
+
+- **The personality questionnaire** is the **IPIP-NEO-120** (Johnson, 2014), from the International Personality Item Pool: 120 short statements, each answered from *very inaccurate* to *very accurate*, measuring the five traits of the Five-Factor Model (Neuroticism, Extraversion, Openness, Agreeableness, Conscientiousness) and thirty narrower facets. It is in the public domain. The statements are given word for word.
 - **Ten statements at a time**, fifteen to twenty-five minutes in all. Every answer is saved as it is given, so a sitting can be left and taken up again.
 - **The profile** gives each trait and facet as low, typical or high against published figures for 320,128 people who took the same questionnaire (Kajonius & Johnson, 2019), with a plain sentence for each. *Typical* is within one standard deviation of that group's average.
 - **The profile itself is not astrology.** No score in it is taken from the chart.
@@ -140,18 +150,22 @@ The **Inventory** view offers a standard personality questionnaire for any chart
   - *Where the chart and the answers part company*: the chart's expectation is the planet's dignity score (well placed, it "works easily"; badly placed, "with strain"). An easy placement lived with strain is called **unlived**; a hard one lived well, **hard-won**.
   - The chart is never altered. The pairing of planets with facets is Lore's own design, and the reading says plainly that no research connects a birth chart with measured personality: it is a prompt for reflection.
   - *Between the planets* and *The chart as a whole*: the closest aspects between planets the answers speak of, read by how each end is lived; the elements and modes the chart leans toward or lacks, set against facets of their own; and the five broad traits in a line.
-  - 61 expressions, an expectation for every dial of seven planets in each of the twelve signs, and 14 comparison paragraphs, in `content\mirror.json`. The rules are tested against a simulated population of 3,000 people, so that every expression is somebody's and no catch-all swallows the rest.
-- **The Report, Daily and Forecast follow.** With the questionnaire answered, the answers also shape the wording of the other readings for that person:
-  - in the **Report**, each planet the answers have something to say about gains a sentence or two beginning *By (name)'s answers…*, on how it is lived and how that sits with its sign; the **Overview** gains the same for the Sun, Moon and Rising signs and a line on the five traits; an **aspect** between two such planets gains a sentence on how its two ends are lived; the **balance** of elements and modes gains one where the answers bear on it; and a closing section, *In the Light of the Answers*, says which sentences those are and names any planet whose placement and answers disagree;
-  - in the **Daily** and **Forecast** readings, a transit to a planet the answers describe as lived with strain, or lived well, gains a line beginning *By your answers…* saying how that is likely to bear on it: a square to a Mars that is *held in* is read differently from one to a Mars that is *direct*. Every expression has lines of its own, and a natal planet gets its line once in a day and once in a month of the Forecast.
-  - Timing and Synastry take nothing from the answers.
-  - Every such sentence is marked as coming from the answers, and nothing the readings said before is removed or reworded. Where the answers are ordinary, the Report says so in one line and nothing else is added. A tick-box in the Inventory view turns it off.
-- **Private.** Answers are kept on the PC only, in a file of their own (`%LOCALAPPDATA%\Lore\inventories.json`), apart from your saved charts: they are never part of a My Charts export. One button deletes them, and deleting a chart deletes its answers.
+  - *In its house*: a planet lived well or with strain is read in its house, a line for each of the seven traditional planets in each of the twelve houses, each way.
+  - *One facet at the end of the scale*: a facet two standard deviations out is spoken of even where its dial's average hides it.
+  - *What has moved*: between the two latest sittings, whatever has moved by more than a day's mood could.
+  - 96 expressions, 168 house lines, 60 lines for extreme facets, 26 paragraphs on the higher and lower sides, an expectation for every dial of seven planets in each of the twelve signs, and 14 comparison paragraphs, in `content\mirror.json`. The rules are tested against a simulated population of 3,000 people, so that every expression is somebody's and no catch-all swallows the rest.
+- **The other readings follow.** With questions answered, the answers also shape the other readings for that person:
+  - in the **Report**, each planet the answers have something to say about gains a sentence or two beginning *By (name)'s answers…*, on how it is lived and how that sits with its sign; the **Overview** gains the same for the Sun, Moon and Rising signs and a line on the five traits; an **aspect** between two such planets gains a sentence on how its two ends are lived; the **balance** of elements and modes gains one where the answers bear on it; a **chart pattern** most of whose planets are marked alike gains one too; and a closing section, *In the Light of the Answers*, says which sentences those are, names any planet whose placement and answers disagree, and gives the character dimensions and the planets they mark out most;
+  - in the **Daily** and **Forecast** readings, a transit to a planet the answers describe as lived with strain, or lived well, gains a line beginning *By your answers…* saying how that is likely to bear on it: a square to a Mars that is *held in* is read differently from one to a Mars that is *direct*. Every expression has lines of its own, and a natal planet gets its line once in a day and once in a month of the Forecast. A marked planet or a troubled house also counts for more when a day's reading chooses its transits, so the answers can change what a day is about and tilt its tone.
+  - in **Timing**, the Lord of the Year, the house the profection reaches, and each natal planet touched by a progression or solar arc are spoken of as the answers describe them;
+  - in **Synastry** and **Trine**, a comparison gives a tone **as lived** beside the charts' own, its contacts are read by how each end is lived, and with two sets of answers it says how they sit together (*two tempers*, *one leads*, *felt and unsaid*). The match search and the finder rank as lived. Over a realistic spread of answers about seven pairs in ten keep their band, and nearly all the others move by one.
+  - Every such sentence is marked as coming from the answers, and nothing the readings said before is removed or reworded. The chart's own scores never change. A tick-box in the Inventory view turns it off.
+- **Private.** Answers to all three are kept on the PC only, in a file of their own (`%LOCALAPPDATA%\Lore\inventories.json`), apart from your saved charts: they are never part of a My Charts export. One button deletes them, and deleting a chart deletes its answers.
 - **Kept safe.** The answers file is saved as the saved charts are: two Lore windows take turns, the version before each save is kept as a backup, and a file that cannot be read is set aside, never written over. If a save fails the view says so and offers **Try again**, and Lore asks before closing with answers unsaved.
 - **Estimates, and against whom.** Each "higher than an estimated 85 in 100" is worked out from the reference group's average and spread, not counted. That group is people in the United States who took the questionnaire on the internet of their own accord, aged 19 to 69, both sexes and all ages together.
 - **Without a birth time**, a planet that changed sign on the day (most often the Moon) is named as the two signs it may be in and is not compared with either.
 - **Not for the bundled figures**, who cannot answer a questionnaire.
-- **Text exports** of the profile and of the chart-and-answers reading.
+- **Text exports** of the profile, the character scales and the chart-and-answers reading.
 
 It is a description of how a person sees their own habits, not a measure of ability, worth or wellbeing.
 
@@ -273,7 +287,7 @@ lore/
 │       │   TimingView, SynastryView, InventoryView, LegendView (.xaml/.cs)
 │       └── AddChartDialog.xaml/.cs # New chart and Edit chart
 ├── content/                   # The figure library, the places and every corpus
-│   ├── celebrities.json       # 1,314 bundled figures (all with recorded birth times)
+│   ├── celebrities.json       # 1,327 bundled figures (all with recorded birth times)
 │   ├── cities.json            # ~50,250 cities (lat/lon + IANA tz)
 │   ├── hospitals.json         # ~235,000 hospitals (lat/lon), New chart birthplace search
 │   ├── hospitals_wikidata.csv # Stage 1 source for hospitals.json
@@ -358,7 +372,7 @@ The 507 tests cover the parts that must stay right: birth-time resolution (dayli
 
 ### `content\celebrities.json`
 
-1,314 figures in 14 categories, each with a documented birth time (Astro-Databank Rodden rating AA or A). Each entry:
+1,327 figures in 14 categories, each with a documented birth time (Astro-Databank Rodden rating AA or A). Each entry:
 
 ```jsonc
 {
@@ -497,11 +511,21 @@ The personality inventory: the 120 statements of the IPIP-NEO-120 with their sco
 
 The descriptions may be edited. **The statements and their keys must not be**: they are given word for word, and a reworded statement is no longer the one the reference figures were gathered with.
 
+### `content\character.json`
+
+The character scales: 96 statements (`items`) from ten of the IPIP's preliminary scales for the character dimensions of Cloninger's Temperament and Character Inventory, the three `dimensions`, and the `scales` with the alpha the IPIP gives for each and Lore's own low, typical and high sentence. **The statements must not be reworded.** The IPIP publishes no norms for them, so a score is the average answer on the five-point scale: below 3.0 is low, above 4.0 high.
+
+### `content\lifeareas.json`
+
+Lore's own twelve statements, one to a house, with what each adds to the readings when rated low or high: `report`, `hard` and `easy` (for a transit to a planet in that house) and `year` (for an annual profection). `forecast` holds the lines for a stretch of days.
+
 ### `content\mirror.json`
 
-The rules and the words for the reading that sets the profile beside the chart, and for the sentences the answers add to the Report, Daily and Forecast.
+The rules and the words for the reading that sets the answers beside the chart, and for the sentences they add to the other readings.
 
-- `planets` — for each of the nine planets read: its `dials` (groups of facets; a minus sign counts a facet the other way up); its `expressions`, tried in order, the first whose `when` fits being used; its `unlived` and `hardWon` paragraphs, for when its dignity and the answers disagree; and, for the Sun to Saturn, `signs`, the level of each dial that each of the twelve signs leads one to expect.
+- `planets` — for each of the thirteen bodies: its `dials` (groups of facets or character scales; a minus sign counts a facet the other way up); its `expressions`, tried in order, the first whose `when` fits being used; `reach`, `higher` and `lower`, the character scales that say how far it has been grown into and the words for that; its `unlived` and `hardWon` paragraphs, for when its dignity and the answers disagree; and, for the Sun to Saturn, `houses`, what a planet lived with strain or lived well comes to in each house, and `signs`, the level of each dial that each of the twelve signs leads one to expect.
+- `extremes` — a sentence for each of the thirty facets at either end of the scale.
+- `patterns`, `timing` — the chart's patterns, and the Lord of the Year.
 - `compare` — the sentence patterns for *Against the sign* ("more {noun} than {body} in {sign} would suggest").
 - `rising`, `aspects`, `elements`, `modalities` — the Ascendant, the aspects between two planets the answers speak of (by how each end is lived), and the balance of the chart.
 - `forecast` — the lines used in the Forecast, which do not speak of "today".
@@ -577,7 +601,15 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 4.1.0 (current)
+### 4.2.0 (current)
+- **Character scales.** A second questionnaire in the Inventory view: 96 public-domain statements on Self-Directedness, Cooperativeness and Self-Transcendence. They read Pluto, the North Node, Chiron and Lilith for the first time, and say whether each body is on its higher or lower side.
+- **Life areas.** Twelve quick ratings, one to a house, which the Daily, Forecast and Timing readings speak to for six months.
+- **The answers now reach further.** Timing, Synastry, Trine, chart patterns, and each planet in its house. A single facet at the end of the scale is spoken of where its dial's average hid it, and the reading says what has moved between sittings. Any one questionnaire is enough to begin.
+- **The answers now change what is chosen and scored**, not only what is said. A marked planet or troubled house counts for more in a day's choice of transits and a comparison's contacts, and a comparison gives a tone as lived beside the charts' own, which ranks the match search and the finder. The charts' own scores never change.
+- **Trine goes further.** Strong T-squares, yods and meeting points through all three charts, who holds the three together, what they bring between them, and a finder that can look among one category.
+- **13 more figures**, mostly from the 1980s to the 2000s: the library is 1,327. Most of the current names people look for still have no reliable time; see `scripts/celebrity-expansion-2026-10-31.md`.
+
+### 4.1.0
 - **Trine: three people.** A new choice in the Synastry view sets three charts together: the three pairs, the grand trines running through all three, and a four-step scale from Golden to Strained, with a wheel of three rings, a finder for a person's best tri-synastries, and a search for the best third person. PDF, text and PNG exports under File > Export > Synastry.
 
 ### 4.0.0

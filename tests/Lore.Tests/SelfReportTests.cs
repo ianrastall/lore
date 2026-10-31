@@ -432,6 +432,35 @@ public sealed class SelfReportTests : IDisposable
         Assert.Null(Synastry.Compose(s).AsLived);
     }
 
+    // The weights are meant to let the answers move a pair by a band and not across the
+    // scale, over a population whose answers look like people's.
+    [Fact]
+    public void The_answers_move_a_pair_by_a_band_and_not_across_the_scale()
+    {
+        var random = new Random(20261031);
+        double Normal() => Math.Sqrt(-2 * Math.Log(1 - random.NextDouble())) * Math.Cos(2 * Math.PI * random.NextDouble());
+        InventoryProfile Someone()
+        {
+            var q = Inventory.Instrument;
+            var trait = q.Domains.ToDictionary(d => d.Key, _ => Normal());
+            return Facets(q.Facets.Select(f => (f.Key, 0.65 * trait[f.Domain] + 0.76 * Normal())).ToArray());
+        }
+
+        var charts = Repo.Figures.Where((_, i) => i % 7 == 0).Take(120).Select(f => Repo.Charts.Calculate(f)).ToList();
+        int[] moved = new int[5];
+        for (int n = 0; n < 800; n++)
+        {
+            int i = random.Next(charts.Count), j = random.Next(charts.Count - 1);
+            if (j >= i) j++;
+            var contacts = SynastryService.Compare(charts[i], charts[j]).Aspects;
+            var lived = SynastryScoring.Assess(contacts, Mirror.Compose(charts[i], Someone()), Mirror.Compose(charts[j], Someone()));
+            moved[Math.Abs(SynastryScoring.Assess(contacts).Level - lived.Level)]++;
+        }
+        Assert.True(moved[0] >= 800 * 0.55, string.Join(",", moved));   // most stay where they are
+        Assert.True(moved[1] >= 800 * 0.10, string.Join(",", moved));   // and the answers do matter
+        Assert.True(moved[2] + moved[3] + moved[4] <= 800 * 0.02, string.Join(",", moved));
+    }
+
     [Fact]
     public void Someone_elses_answers_are_not_read_into_a_pair()
     {

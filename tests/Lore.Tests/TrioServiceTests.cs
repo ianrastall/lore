@@ -360,11 +360,19 @@ public class TrioServiceTests
     public void Three_points_together_make_a_meeting_point()
     {
         var trio = TrioService.Compare(
-            Chart("Anna", (Planet.Sun, 10)), Chart("Ben", (Planet.Venus, 12)), Chart("Cara", (Planet.Mars, 14)));
+            Chart("Anna", (Planet.Sun, 10)), Chart("Ben", (Planet.Venus, 11)), Chart("Cara", (Planet.Mars, 12)));
         var figure = Assert.Single(trio.Figures);
         Assert.Equal(TrioFigureKind.Meeting, figure.Kind);
         Assert.Null(figure.Focus);
-        Assert.Equal(4, figure.WidestOrb, precision: 6);
+        Assert.Equal(2, figure.WidestOrb, precision: 6);
+    }
+
+    [Fact]
+    public void A_figure_too_wide_to_be_strong_is_not_named()
+    {
+        var trio = TrioService.Compare(
+            Chart("Anna", (Planet.Sun, 10)), Chart("Ben", (Planet.Venus, 12)), Chart("Cara", (Planet.Mars, 14)));
+        Assert.Empty(trio.Figures);
     }
 
     [Fact]
@@ -399,7 +407,7 @@ public class TrioServiceTests
     public void The_figures_are_not_looked_for_in_a_search()
     {
         var trio = TrioService.Compare(
-            Chart("Anna", (Planet.Sun, 10)), Chart("Ben", (Planet.Venus, 12)), Chart("Cara", (Planet.Mars, 14)), figures: false);
+            Chart("Anna", (Planet.Sun, 10)), Chart("Ben", (Planet.Venus, 11)), Chart("Cara", (Planet.Mars, 12)), figures: false);
         Assert.Empty(trio.Figures);
     }
 

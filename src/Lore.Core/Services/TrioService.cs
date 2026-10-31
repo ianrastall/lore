@@ -19,6 +19,12 @@ public static class TrioService
     // Harmonious, 34% Mixed and 37% Strained. TrioServiceTests holds those proportions.
     private const double GoldenWeight = 0.5;
 
+    // The weight a figure other than a grand trine needs to be spoken of. At these orbs
+    // nearly every trio has a T-square of some sort, so as with Golden the bar is on the
+    // strongest. Against 4,000 random trios from the library this keeps about one trio in
+    // four with a T-square, one in ten with a yod and one in twenty with a meeting point.
+    private const double FigureWeight = 0.5;
+
     // How far a yod's two quincunxes may be from exact. The figure is a narrow one: minor
     // aspects are held tighter than major ones, here as in a birth chart.
     private const double YodOrb = 2.0;
@@ -129,8 +135,8 @@ public static class TrioService
             TrioPoint[] corners = [a, b, c];
             if (corners.Count(x => !SynastryScoring.IsGenerational(x.Point)) < PersonalCorners) return;
             double closeness = 1 - 0.7 * widest / orb;
-            found.Add(new TrioFigure(kind, corners, focus, widest,
-                corners.Aggregate(closeness, (w, x) => w * SynastryScoring.PointWeight(x.Point))));
+            double weight = corners.Aggregate(closeness, (w, x) => w * SynastryScoring.PointWeight(x.Point));
+            if (weight >= FigureWeight) found.Add(new TrioFigure(kind, corners, focus, widest, weight));
         }
 
         // All three in one place.

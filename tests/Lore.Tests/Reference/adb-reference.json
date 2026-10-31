@@ -14182,6 +14182,154 @@
       "expectedUtc": "1712-01-24T10:36:36",
       "url": "https://www.astro.com/astro-databank/Frederick_II%2C_King_of_Prussia",
       "checkedOn": "2026-10-07"
+    },
+    "louane": {
+      "adbTitle": "Emera, Louane",
+      "date": "1996-11-26",
+      "time": "16:00",
+      "zone": "CET h1e",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1996-11-26T15:00:00",
+      "url": "https://www.astro.com/astro-databank/Emera,_Louane",
+      "checkedOn": "2026-10-31"
+    },
+    "kendji-girac": {
+      "adbTitle": "Girac, Kendji",
+      "date": "1996-07-03",
+      "time": "16:00",
+      "zone": "MEDT h2e",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1996-07-03T14:00:00",
+      "url": "https://www.astro.com/astro-databank/Girac,_Kendji",
+      "checkedOn": "2026-10-31"
+    },
+    "adele-exarchopoulos": {
+      "adbTitle": "Exarchopoulos, Adèle",
+      "date": "1993-11-22",
+      "time": "01:40",
+      "zone": "MET h1e",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1993-11-22T00:40:00",
+      "url": "https://www.astro.com/astro-databank/Exarchopoulos,_Ad%C3%A8le",
+      "checkedOn": "2026-10-31"
+    },
+    "squeezie": {
+      "adbTitle": "Squeezie",
+      "date": "1996-01-27",
+      "time": "11:00",
+      "zone": "CET h1e",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1996-01-27T10:00:00",
+      "url": "https://www.astro.com/astro-databank/Squeezie",
+      "checkedOn": "2026-10-31",
+      "note": "The search result gave the place as Vitry; Vitry-sur-Seine is taken to be it. The coordinates are the town's."
+    },
+    "zohran-mamdani": {
+      "adbTitle": "Mamdani, Zohran",
+      "date": "1991-10-18",
+      "time": "01:15",
+      "zone": "EAT h3e",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1991-10-17T22:15:00",
+      "url": "https://www.astro.com/astro-databank/Mamdani,_Zohran",
+      "checkedOn": "2026-10-31",
+      "note": "Confirmed by his mother, through his media officer. The record's time standard was not shown in the search result; East Africa Time, in force in Uganda in 1991, is taken to be it."
+    },
+    "cyprien-iov": {
+      "adbTitle": "Iov, Cyprien",
+      "date": "1989-05-12",
+      "time": "03:00",
+      "zone": "MEDT h2e",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1989-05-12T01:00:00",
+      "url": "https://www.astro.com/astro-databank/Iov,_Cyprien",
+      "checkedOn": "2026-10-31"
+    },
+    "orelsan": {
+      "adbTitle": "Orelsan",
+      "date": "1982-08-01",
+      "time": "21:10",
+      "zone": "MEDT h2e",
+      "rating": "AA",
+      "source": "BC/BR",
+      "expectedUtc": "1982-08-01T19:10:00",
+      "url": "https://www.astro.com/astro-databank/Orelsan",
+      "checkedOn": "2026-10-31",
+      "note": "The coordinates are the town's."
+    },
+    "aurelien-tchouameni": {
+      "adbTitle": "Tchouaméni, Aurélien",
+      "date": "2000-01-27",
+      "time": "18:22",
+      "zone": "CET h1e",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "2000-01-27T17:22:00",
+      "url": "https://www.astro.com/astro-databank/Tchouam%C3%A9ni,_Aur%C3%A9lien",
+      "checkedOn": "2026-10-31"
+    },
+    "lena-situations": {
+      "adbTitle": "Situations, Lena",
+      "date": "1997-11-19",
+      "time": "07:06",
+      "zone": "CET h1e",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1997-11-19T06:06:00",
+      "url": "https://www.astro.com/astro-databank/Situations,_Lena",
+      "checkedOn": "2026-10-31",
+      "note": "The coordinates are the arrondissement's."
+    },
+    "vianney": {
+      "adbTitle": "Vianney (singer)",
+      "date": "1991-02-13",
+      "time": "16:25",
+      "zone": "MET h1e",
+      "rating": "AA",
+      "source": "BC/BR",
+      "expectedUtc": "1991-02-13T15:25:00",
+      "url": "https://www.astro.com/astro-databank/Vianney_(singer)",
+      "checkedOn": "2026-10-31"
+    },
+    "hailee-steinfeld": {
+      "adbTitle": "Steinfeld, Hailee",
+      "date": "1996-12-11",
+      "time": "17:26",
+      "zone": "PST h8w",
+      "rating": "AA",
+      "source": "BC/BR",
+      "expectedUtc": "1996-12-12T01:26:00",
+      "url": "https://www.astro.com/astro-databank/Steinfeld,_Hailee",
+      "checkedOn": "2026-10-31",
+      "note": "The coordinates are the town's."
+    },
+    "william-saliba": {
+      "adbTitle": "Saliba, William",
+      "date": "2001-03-24",
+      "time": "06:50",
+      "zone": "CET h1e",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "2001-03-24T05:50:00",
+      "url": "https://www.astro.com/astro-databank/Saliba,_William",
+      "checkedOn": "2026-10-31"
+    },
+    "kingsley-coman": {
+      "adbTitle": "Coman, Kingsley",
+      "date": "1996-06-13",
+      "time": "09:30",
+      "zone": "MEDT h2e",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1996-06-13T07:30:00",
+      "url": "https://www.astro.com/astro-databank/Coman,_Kingsley",
+      "checkedOn": "2026-10-31"
     }
   }
 }

@@ -1,6 +1,6 @@
 # Lore handoff
 
-Version 4.1.0 · 31 October 2026 · Repository `D:/jupiter/lore`, branch `main`, remote `ianrastall/lore`
+Version 4.2.0 · 31 October 2026 · Repository `D:/jupiter/lore`, branch `main`, remote `ianrastall/lore`
 
 ## Where things live
 
@@ -41,6 +41,12 @@ See [validation](docs/validation-4.0.0.md) for what was tested, [migration](docs
 1. **Rust core decision.** Open; see the exceptions record.
 2. **Theme setting.** Needs a light wheel palette.
 
+## Self-report (4.2)
+
+The Inventory view has three parts: Personality, Character and Life areas. All three are in `inventories.json`, under `SelfReportService.StoreKey`. `MirrorInterpreter.Compose` reads whatever there is. The answers now choose and score as well as add wording: `MirrorReading.Lift` for what a day and a comparison spend their space on, and the four constants above `SynastryScoring.Assess` for the balance as lived, with the charts' own scores kept beside it. See [next steps](docs/next-steps.md), section 3j, and [validation](docs/validation-4.2.0.md).
+
+Figures: do not script Astro-Databank. It has a browser check, and its robots file names `anthropic-ai`. See `scripts/celebrity-expansion-2026-10-31.md`.
+
 ## Trine (4.1)
 
-Ian's "synastry trines" means a synastry of three people, with a golden metric he could not name precisely, and astrology has no standard one. The measure is Lore's own, in `src/Lore.Core/Services/TrioService.cs`: Golden needs no pair below level 0, a positive sum of pair levels, and a strongest grand trine of weight 0.5 or more. `TrioServiceTests` holds the proportions against the library. If Ian wants it stricter or looser, `GoldenWeight` is the one number to change. The finder (`TrioService.FindTrios`, top 100 connections in pairs) is opened by choosing Trine with one person selected.
+Ian's "synastry trines" means a synastry of three people, with a golden metric he could not name precisely, and astrology has no standard one. The measure is Lore's own, in `src/Lore.Core/Services/TrioService.cs`: Golden needs no pair below level 0, a positive sum of pair levels, and a strongest grand trine of weight 0.5 or more. `TrioServiceTests` holds the proportions against the library. If Ian wants it stricter or looser, `GoldenWeight` is the one number to change. The finder (`TrioService.FindTrios`, top 100 connections in pairs) is opened by choosing Trine with one person selected. 4.2 added strong T-squares, yods and meeting points: `FigureWeight` is their one number.

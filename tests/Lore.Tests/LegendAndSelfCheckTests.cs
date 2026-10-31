@@ -24,7 +24,7 @@ public sealed class LegendAndSelfCheckTests : IDisposable
     {
         var legend = new LegendService(Repo.Data("legend.json"));
         Assert.True(legend.IsAvailable);
-        Assert.Equal(109, legend.Items.Count);
+        Assert.Equal(114, legend.Items.Count);
         Assert.Equal("Reading a chart", legend.Items[0].Name);   // what the Legend opens on
 
         // Everything a reader meets on a chart has an entry.

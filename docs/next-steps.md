@@ -545,6 +545,77 @@ Not done:
   debug build was, with made-up data: Inventory, the chart-and-answers reading and the
   Legend. The release build passed its self-check.
 
+## 3j. 4.2.0: self-report as a modifier
+
+Asked for by Ian on 31 October 2026: above all, expand the self-reporting that acts as a
+modifier, and carry on with tri-relationships and with more recent figures. What he said
+at the start stands behind it: that a chart describes someone self-actualized, that there
+was no way of adjusting a reading for how a person actually is, and (10 October) that the
+reading should be influenced by the numbers and the content expanded to match.
+
+**Two more questionnaires.** Both keep their answers in `inventories.json`, under
+`SelfReportService.StoreKey` (`id#character`, `id#life`), so they have the same lock, backup,
+recovery and release gate, and need no new file. `RemovePersonAsync` takes all three.
+
+- **Character**, section 6.3 of the proposal at last: ten of the IPIP's preliminary TCI
+  scales, 96 statements. Self-Directedness S1 to S5 whole; Cooperativeness C2, C4 and C5;
+  Self-Transcendence ST1 and ST2. C1 and C3 repeat the NEO's Agreeableness, and ST4 and
+  ST5 ("Conservatism", "Femininity") are the wrong things to ask. `character.json` was
+  generated from the IPIP page so that nothing was retyped; the key says SD, CO and ST
+  because C1 to C6 are taken by Conscientiousness. **There are no norms**: a score is the
+  mean answer, with Z set at (mean − 3.5) / 0.5 so the dial rules can read it. Low is below
+  3.0, high above 4.0. These statements lean towards what people would like to be true,
+  so expect scores to run high. If norms are ever wanted, the Eugene-Springfield data are
+  the place to look.
+- **Life areas**, Lore's own: twelve statements, one to a house. Ratings of 1, 2 or 5 mark
+  a house. Six months and they stop being used (`LifeAreasReport.FreshDays`).
+
+**What the answers reach now.**
+
+- `MirrorInterpreter.Compose` takes a `SelfReport` and reads whatever there is. The four
+  bodies come from the character dials. `reach` on each body gives its higher or lower side.
+- `MirrorPlanet.Extremes`: a facet at ±2 that the expression's dials do not rest on.
+- `MirrorPlanet.HouseLine`: 168 lines. In the Report it goes on the planet's paragraph.
+- `MirrorReading.PatternLines`, `LordLines`, `Houses`, `LifeLine`, `LifeForecastLine`, `LifeYear`.
+- **Choosing, not only saying.** `MirrorReading.Lift` multiplies a day's transit score, so
+  the answers can change what a day is about and tilt its tone. `SynastryInterpreter`
+  does the same for a comparison's contacts.
+- **Scoring.** `SynastryScoring.Assess(aspects, first, second)` gives the balance as lived:
+  the four constants above it are the numbers to change. Measured on 4,000 pairs with
+  answers drawn to look like people's: both answered, 72% keep their band, 28% move one,
+  0.3% move two; one answered, 79% and 21%, and none two. `The_answers_move_a_pair_by_a_band`
+  holds this. `Rank`, `TrioService.Rank` and `FindTrios` take `answersOf`.
+- The charts' own `Tone` and `Compatibility` never change. `AsLived`, `LivedTone` and
+  `RankedTone` sit beside them.
+- `InventoryViewModel.ReadingFor` reads anyone's answers, on a background thread.
+
+**Trine.** `TrioService.Figures`: meeting point, T-square and yod. A first version named
+every one, and 99.97% of random trios had some: T-squares in 99.7%. Same lesson as the
+grand trines in 4.1, so `FigureWeight` is 0.5, as for Golden. They are not looked for in a
+search (`figures: false`), which would make the finder three times as slow. `Trio.Hub` and
+`Outsider`, `ElementsOf`, and `FinderScope`. The T-square arithmetic gives a real guarantee
+for the hub line: both of the hub's pairs are at least as easy as the pair without them.
+
+**Figures.** See `scripts/celebrity-expansion-2026-10-31.md`. Astro-Databank now answers
+scripts with a "Checking your browser" page and its robots file names `anthropic-ai`, so the
+browser-driven method of 7 October is not to be used. These came through ordinary web
+search restricted to astro.com, which is slow, and which reads a summary of the page.
+
+Not done, and worth knowing:
+
+- **The Inventory view's new panels have not been seen on screen.** They build and pass the
+  style check. The view-model flows are tested.
+- **The answers still do not touch** the Davison chart, or the Daily's Sun and Moon house notes.
+- **Earlier sittings** can be compared two at a time, latest against the one before. There
+  is no choosing among them.
+- **No PDF** of the profile, the character scales or the chart-and-answers reading.
+- **A chart of three**, a Davison or composite of the trio, would be the next step for Trine.
+- **Informant ratings.** Someone else answering about a bundled figure, or a partner, would
+  need the statements in the third person and is not offered.
+- **CAT-PD.** The IPIP also has this public-domain measure of personality problems, which is
+  the nearest to Ian's word "pathologies". It was left out on purpose: its scales include
+  self-harm, and a horoscope is the wrong place to ask that.
+
 ## 4. Features, in the order I would build them
 
 ### 4.1 ~~A wheel for the Daily view (transit bi-wheel).~~ Done in 2.5.0.
