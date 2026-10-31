@@ -6,10 +6,10 @@
 
 | Check | Result |
 | --- | --- |
-| Tests | RESULT_TESTS |
+| Tests | 549 of 549 passed |
 | App build | 0 warnings, 0 errors; style check at Error severity with 0 violations, the splash's departures declared |
-| Personal-data gate | RESULT_GATE |
-| `--self-check` on the published build | RESULT_SELFCHECK |
+| Personal-data gate | Passed: 1,327 figures, 0 personal charts |
+| `--self-check` on the published build | OK |
 
 ## Seen on screen
 
@@ -24,7 +24,14 @@ In a debug build with made-up people, on a 3840 x 2160 display at 200%:
 
 ## Installed
 
-RESULT_INSTALL
+4.3.0 over 4.2.1 on Ian's machine, at his word.
+
+| Check | Result |
+| --- | --- |
+| Upgrade | Exit 0, Apps entry **Lore** 4.3.0 at `D:\Lore`, uninstaller present, Start entry kept, `Assets\splash.png` installed |
+| User data | All 5 files matched their checksums; the daily reading caches were not compared, because the HUD rewrites them |
+| `--self-check` on the installed copy | OK |
+| Launch from the Start shortcut | Splash at 0.5 s, main window at 2.4 s, responding, closed cleanly, and the charts and answers unchanged afterwards. No screenshot: it shows Ian's own charts |
 
 ## Not verified
 
