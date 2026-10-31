@@ -56,6 +56,9 @@ public sealed partial class MainWindow : Window
         {
             if (e.PropertyName == nameof(MainViewModel.ShowLegend) && !vm.ShowLegend && _view == "Legend")
                 ShowView(_lastChartView);
+            // Adding a chart clears the search so that the new chart is in the list.
+            if (e.PropertyName == nameof(MainViewModel.SearchText) && SearchBox.Text != vm.SearchText)
+                SearchBox.Text = vm.SearchText;
         };
         AppWindow.Closing += OnClosing;
         Closed += (_, _) =>
@@ -78,6 +81,7 @@ public sealed partial class MainWindow : Window
             string hospitalsPath = Path.Combine(AppContext.BaseDirectory, "Data", "hospitals.json");
             await ViewModel.InitializeAsync(dataPath, citiesPath, hospitalsPath);
             ShowView(ViewModel.LastView); // back to the view the last session ended in
+            if (ViewModel.SelectedCelebrity is { } last) CelebrityList.ScrollIntoView(last);
         }
 
         Root.Loaded += (_, _) => InitOnce("Loaded");

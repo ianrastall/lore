@@ -273,9 +273,13 @@ public sealed partial class AddChartDialog : ContentDialog
         {
             ErrorText.Text = error;
             ErrorText.Visibility = Microsoft.UI.Xaml.Visibility.Visible;
+            ErrorText.StartBringIntoView(); // the form scrolls, and this line is at its foot
             args.Cancel = true; // keep the dialog open
             return;
         }
+
+        // A number typed last may not have left its box yet.
+        RefreshResolvedOffset();
 
         var (year, month, day) = RecordedDate();
         bool timeKnown = TimeUnknownCheck.IsChecked != true;
