@@ -12,6 +12,9 @@ public sealed class DailyReadingExportTests : IDisposable
 
     public void Dispose()
     {
+        // The export sets the ephemeris path for the whole process, and the library holds
+        // the staged files open: it has to be the test run's again before they go.
+        _ = new ChartService(Repo.Ephemeris);
         try { Directory.Delete(_dir, recursive: true); } catch (IOException) { }
     }
 
