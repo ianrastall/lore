@@ -111,7 +111,8 @@ Banksy (identity not public), Elena Ferrante (pseudonym, identity not public), W
 ## Taken out of the library
 
 Fourteen figures left the library, which goes from 1,327 to 1,313, in the same spirit as the people
-the 7 October batch left out by choice. Lore is for enjoyment.
+the 7 October batch left out by choice. The test is Ian's: would someone feel bad knowing the
+connection was there?
 
 - **Dictators and their regimes:** Adolf Hitler, Benito Mussolini, Francisco Franco, Augusto Pinochet,
   Nicolae Ceaușescu, Erich Honecker, Philippe Pétain, Leni Riefenstahl.
@@ -122,7 +123,8 @@ Their entries are in git history (`content/celebrities.json`, `adb-reference.jso
 
 ## Considered and kept
 
-Ian looked at these on 31 October 2026 and kept them all, so do not raise them again. Those on
+Ian looked at these on 31 October 2026 and kept them all, so do not raise them again. None meets
+the test above; a scandal or a rough reputation alone does not. Those on
 Gemini's list stay on it. Mainstream politicians still in public life were not considered:
 disliking one is a political view, not infamy.
 
