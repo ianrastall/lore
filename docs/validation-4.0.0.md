@@ -50,7 +50,7 @@ The export drawing and document code was run off screen in a small harness compi
 
 ## Interrupted test run
 
-The first install attempt was stopped at Setup's exit prompt and rolled back with nothing changed. Three test windows also closed early. Ian was playing online chess while they appeared, so these were closed by hand; four later runs each stayed up and exited with code 0 on request, and the event log recorded no crash. The app now has a rule to ask before opening windows on his machine.
+The first install attempt was stopped at Setup's exit prompt and rolled back with nothing changed. Three test windows also closed early. Ian was playing online chess while they appeared, so these were closed by hand; four later runs each stayed up and exited with code 0 on request, and the event log recorded no crash. UI checks on his machine now wait for his go-ahead (see `HANDOFF.md`).
 
 ## Not verified
 
