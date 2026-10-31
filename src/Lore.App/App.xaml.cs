@@ -47,14 +47,19 @@ public partial class App : Application
         System.Globalization.CultureInfo.DefaultThreadCurrentCulture = culture;
     }
 
-    protected override void OnLaunched(LaunchActivatedEventArgs args)
+    protected override async void OnLaunched(LaunchActivatedEventArgs args)
     {
         Preferences = ShellPreferences.Load();
         Accent = new AccentService(Preferences);
 
+        // The splash goes up first and is painted before anything else is built; it then
+        // stays over the main window until the one-time data load has finished.
+        SplashWindow? splash = await SplashWindow.ShowAsync();
+
         // Everything below can fail before there is a main window to report it in: the
         // Swiss Ephemeris DLL missing, a corpus file damaged, the data folder out of
-        // reach. A failure is shown in a window of its own.
+        // reach. Whatever happens the splash comes down, and a failure is shown in a
+        // window of its own instead of leaving the splash up with nothing behind it.
         try
         {
             _mainWindow = BuildMainWindow();
@@ -63,7 +68,15 @@ public partial class App : Application
         catch (Exception ex)
         {
             Diagnostics.Log($"Start-up failed: {ex}");
+            splash?.CloseNow();
             ShowStartupFailure(ex);
+            return;
+        }
+
+        if (splash is not null)
+        {
+            await splash.CloseWhenAsync(_mainWindow.Initialized);
+            _mainWindow.Activate(); // the splash stood in front of it, and took the focus
         }
     }
 

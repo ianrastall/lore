@@ -40,6 +40,7 @@ Data\mirror.json
 Data\legend.json
 
 Assets\AppIcon.ico
+Assets\splash.png
 
 # Swiss Ephemeris data, 1200 to 2400
 Assets\Ephemeris\sepl_12.se1

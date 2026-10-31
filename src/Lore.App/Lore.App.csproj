@@ -51,6 +51,9 @@
     <Content Include="Assets\AppIcon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\splash.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <!-- The one list of the files Lore needs at run time: checked against a published
          build by build\build.ps1, and by Lore itself when it starts. -->
     <Content Include="required-files.txt">

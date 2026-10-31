@@ -4,6 +4,17 @@ using Windows.UI;
 
 namespace Lore.Views;
 
+// For a {Binding} that decides whether something shows: x:Bind turns a bool into a
+// Visibility by itself, and a {Binding} does not.
+public sealed class VisibleIfConverter : IValueConverter
+{
+    public object Convert(object value, System.Type targetType, object parameter, string language) =>
+        value is true ? Microsoft.UI.Xaml.Visibility.Visible : Microsoft.UI.Xaml.Visibility.Collapsed;
+
+    public object ConvertBack(object value, System.Type targetType, object parameter, string language) =>
+        throw new System.NotSupportedException();
+}
+
 // Converts a "#RRGGBB" or "#AARRGGBB" hex string to a SolidColorBrush for x:Bind.
 // Empty/blank → transparent, so an un-scored or Ordinary entry shows no highlight.
 public sealed class HexBrushConverter : IValueConverter

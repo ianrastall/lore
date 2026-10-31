@@ -215,7 +215,7 @@ public sealed partial class SynastryViewModel : ObservableObject
     public string PromptText =>
         Chart is null ? "Select a chart from the list, then choose someone to compare it with." :
         Partner is null && ShowTrine ? "" :
-        Partner is null ? $"Choose someone to compare with {Chart.Celebrity.Name}: type a name in the box above, or pick one of the matches below." :
+        Partner is null ? $"Choose someone to compare with {Chart.Celebrity.Name}: press + beside a name in the Charts list, type a name in the box above, or pick one of the matches below." :
         Partner.Id == Chart.Celebrity.Id ? $"That is {Chart.Celebrity.Name}'s own chart. Choose someone else to compare it with." :
         "";
 
@@ -317,6 +317,34 @@ public sealed partial class SynastryViewModel : ObservableObject
     // Names for the third person: as for the partner, leaving out both people already chosen.
     public IReadOnlyList<Celebrity> SuggestThird(string text) =>
         Suggest(text).Where(p => p.Id != Partner?.Id).ToList();
+
+    // A person taken from the Charts list, in place of typing their name: into the first
+    // place still to fill. In the Trine view that is the third once there is a second, and
+    // someone already among the two is no third. Otherwise it is the person to compare
+    // with, replacing whoever that was. (Offered the selected chart's own person, the
+    // comparison says that it is their own chart, as it does for a name typed.)
+    public void Take(Celebrity person)
+    {
+        if (ShowTrine && Partner is { } partner)
+        {
+            if (person.Id != Chart?.Celebrity.Id && person.Id != partner.Id) Third = person;
+            return;
+        }
+        CompareWith(person);
+    }
+
+    public void CompareWith(Celebrity person)
+    {
+        if (Third?.Id == person.Id) Third = null;
+        Partner = person;
+    }
+
+    // The same as the third person, from the Charts list's menu.
+    public void AddAsThird(Celebrity person)
+    {
+        ShowTrine = true;
+        Take(person);
+    }
 
     [RelayCommand]
     private void ClearPartner() => Partner = null;

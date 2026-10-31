@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="Lore.SplashWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Lore">
+
+    <!-- Lore's signature: the portrait of Lauren, for whom it is named and made. It keeps
+         its own colour and lettering, outside the Jupiter system, and is recorded in
+         docs/jupiter-exceptions.md. Laid out on a fixed 600-unit square and scaled as one
+         piece, so the lettering keeps its place on the artwork at any window size. -->
+    <Viewbox Stretch="Uniform">
+        <!-- Background matches the artwork's own, so nothing flashes while it decodes. -->
+        <!-- jupiter-allow JUP001: the artwork's own background, a content colour -->
+        <Grid Width="600" Height="600" Background="#F5A68B">
+            <Image x:Name="Art" Stretch="UniformToFill" />
+
+            <!-- Name and version, in the clear space under the shoulder line. One TextBlock,
+                 so both runs share a baseline. -->
+            <!-- jupiter-allow JUP001 JUP003 JUP005: the lettering is part of the artwork, placed on its 600-unit square -->
+            <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="34,0,0,12" FontFamily="Georgia" Foreground="#241610" IsHitTestVisible="False">
+                <!-- jupiter-allow JUP002: the lettering is part of the artwork -->
+                <Run Text="Lore" FontSize="84" FontStyle="Italic" /><Run x:Name="VersionRun" FontSize="30" />
+            </TextBlock>
+        </Grid>
+    </Viewbox>
+</Window>

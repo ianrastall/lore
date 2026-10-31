@@ -354,6 +354,62 @@ public class TrioServiceTests
         Assert.True(vm.ThirdsShown);
     }
 
+    // ── Taking people from the Charts list ────────────────────────────────────
+
+    [Fact]
+    public void A_name_from_the_list_fills_the_first_place_still_empty()
+    {
+        var (ann, ben, cara) = (Repo.Figure("elvis-presley"), Repo.Figure("marilyn-monroe"), Repo.Figure("albert-einstein"));
+        var vm = new SynastryViewModel { Chart = Figure("elvis-presley") };
+
+        // In a comparison it is the person to compare with, and the next replaces them.
+        vm.Take(ben);
+        Assert.Equal(ben, vm.Partner);
+        vm.Take(cara);
+        Assert.Equal(cara, vm.Partner);
+        Assert.Null(vm.Third);
+
+        // In Trine the second is kept and the name becomes the third.
+        vm.ShowTrine = true;
+        vm.Take(ben);
+        Assert.Equal(cara, vm.Partner);
+        Assert.Equal(ben, vm.Third);
+
+        // Someone already among the two is not a third, and nothing is lost by trying.
+        vm.Third = null;
+        vm.Take(cara);
+        vm.Take(ann);
+        Assert.Equal(cara, vm.Partner);
+        Assert.Null(vm.Third);
+
+        // With nobody second in Trine, the first name is the second.
+        vm.Partner = null;
+        vm.Take(ben);
+        Assert.Equal(ben, vm.Partner);
+        Assert.Null(vm.Third);
+    }
+
+    [Fact]
+    public void The_lists_menu_says_which_place_and_a_person_cannot_hold_two()
+    {
+        var (ben, cara) = (Repo.Figure("marilyn-monroe"), Repo.Figure("albert-einstein"));
+        var vm = new SynastryViewModel { Chart = Figure("elvis-presley") };
+
+        // Asked for a third with no second yet, they become the second.
+        vm.AddAsThird(ben);
+        Assert.True(vm.ShowTrine);
+        Assert.Equal(ben, vm.Partner);
+        Assert.Null(vm.Third);
+
+        vm.AddAsThird(cara);
+        Assert.Equal(cara, vm.Third);
+
+        // The third made the second leaves the third's place.
+        vm.CompareWith(cara);
+        Assert.Equal(cara, vm.Partner);
+        Assert.Null(vm.Third);
+    }
+
     // ── The other figures ─────────────────────────────────────────────────────
 
     [Fact]

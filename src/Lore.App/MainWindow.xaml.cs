@@ -67,6 +67,9 @@ public sealed partial class MainWindow : Window
             _settingsWindow?.Close();
         };
 
+        // The Charts list's own rows say whether the Synastry view is open by {Binding}.
+        Root.DataContext = ViewModel;
+
         // One-time data load. Window.Activated proved unreliable here (it never fired,
         // so the app started with empty lists), so drive it from the root element's
         // Loaded event, with Activated kept as a fallback. The guard runs it once.
@@ -82,11 +85,17 @@ public sealed partial class MainWindow : Window
             await ViewModel.InitializeAsync(dataPath, citiesPath, hospitalsPath);
             ShowView(ViewModel.LastView); // back to the view the last session ended in
             if (ViewModel.SelectedCelebrity is { } last) CelebrityList.ScrollIntoView(last);
+            _initialized.TrySetResult();
         }
 
         Root.Loaded += (_, _) => InitOnce("Loaded");
         Activated += (_, _) => InitOnce("Activated");
     }
+
+    // Done when the first data load has finished and the list is on show: what the splash
+    // stays up for.
+    private readonly TaskCompletionSource _initialized = new();
+    public Task Initialized => _initialized.Task;
 
     private const VirtualKey CommaKey = (VirtualKey)188, PlusKey = (VirtualKey)187, MinusKey = (VirtualKey)189;
 
@@ -358,6 +367,30 @@ public sealed partial class MainWindow : Window
 
     private void FullScreen_Click(object sender, RoutedEventArgs e) => AppWindow.SetPresenter(
         AppWindow.Presenter.Kind == AppWindowPresenterKind.FullScreen ? AppWindowPresenterKind.Overlapped : AppWindowPresenterKind.FullScreen);
+
+    // ── People from the Charts list into the comparison ─────────────────────
+
+    public static string TakeName(string name) => $"Add {name} to the comparison";
+
+    private void TakePerson_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button { Tag: Celebrity person }) ViewModel.SynastryVM.Take(person);
+    }
+
+    // The menu works from any view, and goes to the Synastry view to show what it did.
+    private void CompareWith_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not MenuFlyoutItem { Tag: Celebrity person }) return;
+        ViewModel.SynastryVM.CompareWith(person);
+        ShowView("Synastry");
+    }
+
+    private void AddAsThird_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not MenuFlyoutItem { Tag: Celebrity person }) return;
+        ViewModel.SynastryVM.AddAsThird(person);
+        ShowView("Synastry");
+    }
 
     private void ViewMenu_Click(object sender, RoutedEventArgs e)
     {

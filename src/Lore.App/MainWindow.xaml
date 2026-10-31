@@ -4,6 +4,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:CommunityToolkit.WinUI.Controls"
+    xmlns:local="using:Lore"
     xmlns:models="using:Lore.Models"
     xmlns:views="using:Lore.Views"
     Title="Lore">
@@ -18,6 +19,7 @@
         </Grid.RowDefinitions>
         <Grid.Resources>
             <views:HexBrushConverter x:Key="HexBrush" />
+            <views:VisibleIfConverter x:Key="VisibleIf" />
         </Grid.Resources>
 
         <MenuBar>
@@ -206,7 +208,14 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
+                                <Grid.ContextFlyout>
+                                    <MenuFlyout>
+                                        <MenuFlyoutItem Text="Compare with this person" Tag="{x:Bind}" Click="CompareWith_Click" />
+                                        <MenuFlyoutItem Text="Add as the third person" Tag="{x:Bind}" Click="AddAsThird_Click" />
+                                    </MenuFlyout>
+                                </Grid.ContextFlyout>
                                 <StackPanel>
                                     <TextBlock Text="{x:Bind Name}" Style="{StaticResource JupiterBodyTextStyle}" TextTrimming="CharacterEllipsis" />
                                     <TextBlock Style="{StaticResource JupiterCaptionTextStyle}" TextTrimming="CharacterEllipsis">
@@ -220,6 +229,13 @@
                                         CornerRadius="{StaticResource ControlCornerRadius}"
                                         Background="{Binding VerdictColorHex, Converter={StaticResource HexBrush}}"
                                         ToolTipService.ToolTip="{x:Bind VerdictLabel}" />
+                                <!-- In the Synastry view: into the comparison, without typing or changing who is selected -->
+                                <Button Grid.Column="2" Style="{StaticResource JupiterSubtleButtonStyle}" Tag="{x:Bind}" Click="TakePerson_Click"
+                                        Visibility="{Binding DataContext.ShowSynastry, ElementName=Root, Converter={StaticResource VisibleIf}}"
+                                        AutomationProperties.Name="{x:Bind local:MainWindow.TakeName(Name)}"
+                                        ToolTipService.ToolTip="Fill the next empty place in the comparison">
+                                    <FontIcon Glyph="&#xE710;" Style="{StaticResource JupiterSmallIconStyle}" />
+                                </Button>
                             </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>

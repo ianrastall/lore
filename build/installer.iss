@@ -50,9 +50,6 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [InstallDelete]
-; 3.x opened with a splash window.
-Type: files; Name: "{app}\SplashWindow.xbf"
-Type: files; Name: "{app}\Assets\splash.png"
 ; 3.x kept its shortcuts in a Lore folder; Start now lists the app by name.
 Type: files; Name: "{autoprograms}\{#AppName}\{#AppName}.lnk"
 Type: files; Name: "{autoprograms}\{#AppName}\Uninstall {#AppName}.lnk"
