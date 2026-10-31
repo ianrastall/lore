@@ -1,26 +1,28 @@
-# Lore — Natal Chart Generator
+# Lore
 
-![Lore](Assets/splash.png)
+A Windows desktop application for computing and exploring astrological natal charts, and reading a daily horoscope from them, powered by the Swiss Ephemeris. Browse a curated library of historical figures, every one with a documented birth time, or add your own.
 
-> A Windows desktop application for computing and exploring astrological natal charts — and reading a daily horoscope from them — powered by the Swiss Ephemeris. Browse a curated library of historical figures — every one with a documented birth time — or add your own.
+Part of Jupiter. Follows Jupiter style standard 1.1.
 
-**Latest release: v3.4.0** · [Download](../../releases/latest)
+**Latest release: v4.0.0** · [Download](../../releases/latest)
 
 ### Installing
 
-1. From the [latest release](../../releases/latest), download **`LoreSetup-3.4.0.exe`**. It is a single file with everything inside it — there is nothing to unzip and nothing else to install (no .NET, no runtimes).
-2. Double-click it. It installs for the current user only (no administrator prompt), adds a Start-menu shortcut, and can be removed from *Settings → Apps* like any other program.
+Lore 4 needs **Windows 11 24H2** or later, 64-bit.
 
-**Prefer not to install?** Download **`Lore-3.4.0-portable.zip`** from the same release instead, unzip it anywhere, and run `Lore.exe` from inside the unzipped folder. (Keep the folder together — `Lore.exe` will not run on its own.) Delete the folder to remove it.
+1. From the [latest release](../../releases/latest), download **`Lore-4.0.0-win-x64-setup.exe`**. It is a single file with everything inside it; there is nothing else to install (no .NET, no runtimes).
+2. Double-click it. It installs for the current user, adds **Lore** to the Start menu, and can be removed from *Settings > Apps* like any other program. An earlier Lore is upgraded in place, and your saved charts, answers and settings stay as they are.
 
-> **The installer is not code-signed.** Lore is a free hobby project and does not carry a paid signing certificate, so Windows cannot verify who published it and will warn you:
-> - Your browser may say the file *"isn't commonly downloaded"* — choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
-> - On first run, Windows SmartScreen shows *"Windows protected your PC"* — click **More info → Run anyway**.
+**Prefer not to install?** `Lore-4.0.0-win-x64-portable.zip` is the same program as a folder. Unzip it anywhere and run `Lore.exe` from inside it. Delete the folder to remove it.
+
+> **The installer is not code-signed.** Windows cannot verify who published it and will warn you:
+> - Your browser may say the file *"isn't commonly downloaded"*. Choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
+> - On first run, Windows SmartScreen shows *"Windows protected your PC"*. Click **More info → Run anyway**.
 >
 > These warnings appear for any unsigned program, and only the first time. If you would rather not run an unsigned installer, you can [build Lore from source](#building-from-source) instead.
 
 
-![Lore 3.2.0 showing the chart wheel for Albert Einstein, with his dignity score, planet list and aspects](Assets/screenshot-einstein-chart.png)
+![Lore 4.0 showing the chart wheel for Albert Einstein, with his dignity score, planet list and aspects](docs/images/screenshot-einstein-chart.png)
 
 ---
 
@@ -42,12 +44,12 @@
 - Birth instants are resolved with **historical, DST-aware UTC offsets** via the IANA timezone database (NodaTime), not just fixed offsets — correctly handling anomalies like the UK's 1968–71 year-round BST experiment and 1940s US wartime time. For births before standard time existed, the birthplace's own local mean time (from its longitude) is used, as astrological sources record them.
 
 ### My Charts (Custom Entry)
-- **Add Chart** button opens a dialog to enter any name, date, time, and place.
+- **File > New chart** (Ctrl+N) opens a dialog to enter any name, date, time, and place.
 - City search autofills latitude, longitude, and IANA timezone from a bundled database of ~50,250 cities. Several words narrow it down: "Springfield Illinois", "Paris France".
 - **Hospital search** autofills more precise coordinates from a bundled database of ~235,000 hospitals worldwide — including former names of renamed hospitals and hospitals that have since closed — because hospitals are where people are born, and precise coordinates sharpen the Ascendant and house cusps. The timezone is derived from the chosen coordinates.
 - Custom charts persist to `%LOCALAPPDATA%\Lore\mycharts.json` and appear under a dedicated **My Charts** category.
-- Custom charts can be **edited** (pencil button) or **deleted** (bin button, which asks first) from the browse list.
-- The **⋯** button beside them saves a copy of all your charts as one file, and brings charts in from such a copy — for a backup, or to move them to another PC. Bringing a copy in adds its charts to the ones already there; a chart that was already there (the same one, edited on either PC) is replaced by the copy's version.
+- Custom charts can be **edited** or **deleted** (which asks first) from the Chart menu or the buttons at the top of the Charts pane.
+- **File > Export My Charts** saves a copy of all your charts as one file, and **File > Import My Charts** brings charts in from such a copy, for a backup or to move them to another PC. Importing adds its charts to the ones already there; a chart that was already there (the same one, edited on either PC) is replaced by the copy's version.
 - Saving is crash-safe: a save is written to a temporary file before it replaces the real one, the previous version is kept as `mycharts.json.bak`, and a file that can't be read is never overwritten — it is set aside under a dated name and the backup restored, with a note in the status bar.
 
 ### Chart Views
@@ -63,11 +65,11 @@
 | **Inventory** | A standard personality questionnaire (the public-domain IPIP-NEO-120) for any chart of your own; the profile it gives, five broad traits and thirty facets, each set beside a reference group; and a reading that sets that profile beside the chart, planet by planet. See below. |
 | **Legend** | Full-page reference — a grouped list of every glyph, colour, angle, house, and term; click any item for a fuller explanation. |
 
-Ctrl+1 to Ctrl+8 switch between the first eight views, F1 opens the Legend, Ctrl+N adds a chart and Ctrl+F jumps to the search box. Lore reopens on the chart and view you last had open.
+Ctrl+1 to Ctrl+8 switch between the first eight views, F1 opens the Legend, Ctrl+N adds a chart, Ctrl+F jumps to the search box, Ctrl+B shows or hides the Charts pane and Ctrl+, opens Settings. Lore reopens on the chart and view you last had open.
 
-![Lore showing the written Report for Albert Einstein](Assets/screenshot-einstein-report.png)
+![Lore showing the written Report for Albert Einstein](docs/images/screenshot-einstein-report.png)
 
-![Lore showing the Worksheet's measurements for Albert Einstein: the Moon's phase, distance from the Sun, and motion and stations](Assets/screenshot-einstein-worksheet.png)
+![Lore showing the Worksheet for Albert Einstein: how the chart was calculated](docs/images/screenshot-einstein-worksheet.png)
 
 ### Daily Horoscope
 The **Daily** view writes a horoscope for the selected chart, for today or any date you step to, from that day's **transits** — the aspects the moving planets make to the fixed points of the birth chart.
@@ -77,7 +79,7 @@ The **Daily** view writes a horoscope for the selected chart, for today or any d
 - **A tight 1° orb** (against 6–8° natally), so a transit marks particular days rather than a whole season.
 - **Foreground and background.** Fast movers (Sun–Mars) make up *Today's highlights*; slow movers (Jupiter outward, and the slow points) make up *Longer-running themes*, each marked as building, exact, or easing with the date it peaks.
 - **The day at a glance.** Moon sign and phase (with sign changes and exact New/Quarter/Full Moons timed), the natal houses the Moon and Sun are passing through, retrogrades and stations, and an overall **day tone** — Flowing, Mixed, Demanding, Focused, or Quiet.
-- **Deterministic and offline.** The same chart and date always give the same reading. Every sentence comes from an editable corpus (`Data\daily.json`, 585 bespoke transit lines); nothing is generated at run time.
+- **Deterministic and offline.** The same chart and date always give the same reading. Every sentence comes from an editable corpus (`content\daily.json`, 585 bespoke transit lines); nothing is generated at run time.
 - **Explainable.** *Why this reading?* lists every transit in effect that day, how close it gets, and which ones the reading used.
 - **Honest about unknowns.** For a chart with no birth time, the houses, angles, and contacts to the natal Moon are left out rather than read from a noon guess.
 - **Void-of-course Moon.** When the Moon has made its last aspect in a sign and not yet entered the next, the reading gives the hours on your clock, the aspect that began the stretch and the sign that ends it.
@@ -89,31 +91,27 @@ It is a prompt for reflection, not a prediction: the ranking of transits is an e
 ### Synastry
 The **Synastry** view compares the selected chart with a second person's — any bundled figure or any of your own charts, chosen in the **Compare with…** box.
 
-![Lore showing the synastry reading and bi-wheel for Albert Einstein and Marie Curie](Assets/screenshot-einstein-curie-synastry.png)
+![Lore showing the synastry reading and bi-wheel for Albert Einstein and Mata Hari](docs/images/screenshot-einstein-hari-synastry.png)
 
 - **Every contact between the two charts.** Each person's thirteen bodies, Ascendant, and Midheaven are tried against the other's, within a **6° orb** (4° for a sextile) — a little tighter than the 8°/6° used inside one chart.
 - **A short, ranked reading.** *Closest bonds* (up to three conjunctions), *What comes easily* (up to four trines and sextiles), and *What takes work* (up to four squares and oppositions), chosen by closeness and by how personal the points are. Contacts between two slow planets, shared by everyone born in the same years, are listed but not written up.
 - **At a glance.** The two Sun signs and Moon signs compared by element, and an overall tone on a five-step scale (see below).
 - **House overlays.** Where each person's Sun, Moon, Venus, and Mars fall in the other's houses.
-- **Davison chart.** Beside the comparison the view has a second reading, chosen with **Davison chart** at the top: the one chart cast for the moment and place halfway between the two births, read as the chart of the relationship itself. It gives the relationship's Sun, Moon and rising sign, its seven planets by house, the closest aspects inside it, and any planet of either person that stands on one of its main points, and it has its own wheel. Its text comes from a corpus of its own (`Data\davison.json`, about 250 lines). With a birth time missing the midpoint may be hours out, so the Ascendant, Midheaven, houses and Moon are left out.
+- **Davison chart.** Beside the comparison the view has a second reading, chosen with **Davison chart** at the top: the one chart cast for the moment and place halfway between the two births, read as the chart of the relationship itself. It gives the relationship's Sun, Moon and rising sign, its seven planets by house, the closest aspects inside it, and any planet of either person that stands on one of its main points, and it has its own wheel. Its text comes from a corpus of its own (`content\davison.json`, about 250 lines). With a birth time missing the midpoint may be hours out, so the Ascendant, Midheaven, houses and Moon are left out.
 - **Bi-wheel.** The selected chart drawn inside, the second person's planets in a band around it on the same zodiac, with the contacts between them as aspect lines (the ones the reading uses drawn heavier).
-- **Deterministic and offline.** Every sentence comes from an editable corpus (`Data\synastry.json`): 144 bespoke lines for the pairs that matter most, and assembled sentences for the rest.
+- **Deterministic and offline.** Every sentence comes from an editable corpus (`content\synastry.json`): 144 bespoke lines for the pairs that matter most, and assembled sentences for the rest.
 - **Explainable.** *Why this reading?* lists every contact found and which ones the reading used.
 - **Honest about unknowns.** A chart with no birth time contributes no Ascendant, Midheaven, houses, or Moon.
 
 - **Best and worst matches.** Before you choose anyone, the view compares the selected chart with every figure in the library and every chart of your own, and lists the twelve best and twelve worst matches. Click one to read the comparison.
 - **A five-step scale.** Each pair is placed at **Soulmates** (+2), **Harmonious** (+1), **Mixed** (0), **Challenging** (−1) or **Adversaries** (−2), by the share of the contacts between the two charts that are easy ones, each counted by how close and how personal it is. The steps are set against every pair in the library, so about half of all pairs are Mixed and about one in fourteen falls at each end.
 
-![Lore showing the best and worst synastry matches for Albert Einstein, each on the five-step scale](Assets/screenshot-einstein-matches.png)
+![Lore showing the best and worst synastry matches for Albert Einstein, each on the five-step scale](docs/images/screenshot-einstein-matches.png)
 
 Astrology has no agreed compatibility score; the scale is Lore's own, and it describes the symbolism between two charts rather than forecasting a relationship.
 
 ### Personality Inventory
 The **Inventory** view offers a standard personality questionnaire for any chart under My Charts, and then reads the chart in the light of the answers. A chart is the same for everyone born at that minute and cannot know how a given person is living it; the questionnaire asks them.
-
-![Lore showing the chart-and-answers reading for a made-up person: the Sun and Moon as the chart gives them, as the answers describe them, and set against the sign](Assets/screenshot-inventory-chart-and-answers.png)
-
-*(The person and the answers in this picture are made up.)*
 
 - **The questionnaire** is the **IPIP-NEO-120** (Johnson, 2014), from the International Personality Item Pool: 120 short statements, each answered from *very inaccurate* to *very accurate*, measuring the five traits of the Five-Factor Model (Neuroticism, Extraversion, Openness, Agreeableness, Conscientiousness) and thirty narrower facets. It is in the public domain. The statements are given word for word.
 - **Ten statements at a time**, fifteen to twenty-five minutes in all. Every answer is saved as it is given, so a sitting can be left and taken up again.
@@ -125,7 +123,7 @@ The **Inventory** view offers a standard personality questionnaire for any chart
   - *Where the chart and the answers part company*: the chart's expectation is the planet's dignity score (well placed, it "works easily"; badly placed, "with strain"). An easy placement lived with strain is called **unlived**; a hard one lived well, **hard-won**.
   - The chart is never altered. The pairing of planets with facets is Lore's own design, and the reading says plainly that no research connects a birth chart with measured personality: it is a prompt for reflection.
   - *Between the planets* and *The chart as a whole*: the closest aspects between planets the answers speak of, read by how each end is lived; the elements and modes the chart leans toward or lacks, set against facets of their own; and the five broad traits in a line.
-  - 61 expressions, an expectation for every dial of seven planets in each of the twelve signs, and 14 comparison paragraphs, in `Data\mirror.json`. The rules are tested against a simulated population of 3,000 people, so that every expression is somebody's and no catch-all swallows the rest.
+  - 61 expressions, an expectation for every dial of seven planets in each of the twelve signs, and 14 comparison paragraphs, in `content\mirror.json`. The rules are tested against a simulated population of 3,000 people, so that every expression is somebody's and no catch-all swallows the rest.
 - **The Report, Daily and Forecast follow.** With the questionnaire answered, the answers also shape the wording of the other readings for that person:
   - in the **Report**, each planet the answers have something to say about gains a sentence or two beginning *By (name)'s answers…*, on how it is lived and how that sits with its sign; the **Overview** gains the same for the Sun, Moon and Rising signs and a line on the five traits; an **aspect** between two such planets gains a sentence on how its two ends are lived; the **balance** of elements and modes gains one where the answers bear on it; and a closing section, *In the Light of the Answers*, says which sentences those are and names any planet whose placement and answers disagree;
   - in the **Daily** and **Forecast** readings, a transit to a planet the answers describe as lived with strain, or lived well, gains a line beginning *By your answers…* saying how that is likely to bear on it: a square to a Mars that is *held in* is read differently from one to a Mars that is *direct*. Every expression has lines of its own, and a natal planet gets its line once in a day and once in a month of the Forecast.
@@ -156,7 +154,7 @@ Applied to the seven classical planets (Sun–Saturn). The aggregate score yield
 The verdict is surfaced everywhere: a coloured pill in the chart header, a **whole-row green / red wash** on notable figures in the browse list, a coloured rim on the chart wheel, and a full per-planet breakdown table in the exported PDF. Bands are calibrated against the bundled corpus so roughly a quarter read Extraordinary, a sixth Alarming, and the rest Ordinary — a fair chance of finding something notable when you look someone up.
 
 ### Export
-Charts and readings can be exported in these formats:
+Charts and readings can be exported from File > Export in these formats:
 
 | Format | Contents |
 |---|---|
@@ -182,11 +180,11 @@ Charts and readings can be exported in these formats:
 
 ## Architecture
 
-The project follows MVVM, targeting **WinUI 3** (unpackaged) on **.NET 10**. It is two projects: **`Lore.Core`** holds the models, the calculation and reading services, the stores, the document exports and the view models, and uses no WinUI; **`Lore`** (the app) holds the window, the views and the Win2D drawing. The tests reference `Lore.Core`, so what is tested is the assembly that ships.
+The project follows MVVM, targeting **WinUI 3** (unpackaged, self-contained) on **.NET 10**, with the shared **Jupiter.UI** library supplying every color, text style and control style. It is two projects: **`Lore.Core`** holds the models, the calculation and reading services, the stores, the document exports and the view models, and uses no WinUI; **`Lore.App`** holds the window, the views and the Win2D drawing, and builds `Lore.exe`. The tests reference `Lore.Core`, so what is tested is the assembly that ships. The domain core stays in C# in this release; [the exceptions record](docs/jupiter-exceptions.md) says why.
 
 ```
-Lore/
-├── Lore.Core/       # Everything that needs no window, as one assembly the app and the tests share
+lore/
+├── src/Lore.Core/   # Everything that needs no window, as one assembly the app and the tests share
 │   ├── Models/          # Plain data types: Celebrity, NatalChart, PlanetPosition,
 │   │                    #   Aspect, HouseCusp, ZodiacSign, DignityScore, …
 │   ├── Services/
@@ -224,8 +222,9 @@ Lore/
 │   │   ├── ChartDataExport.cs     # The chart as JSON / XML data
 │   │   ├── CelebrityService.cs    # Loads celebrities.json
 │   │   ├── UserChartService.cs    # Loads/saves mycharts.json
-│   │   ├── CityService.cs         # City autocomplete for Add-Chart dialog
-│   │   ├── HospitalService.cs     # Hospital autocomplete for Add-Chart dialog
+│   │   ├── CityService.cs         # City search for the New chart dialog
+│   │   ├── HospitalService.cs     # Hospital search for the New chart dialog
+│   │   ├── DailyReadingExport.cs  # "Lore.exe --daily-reading": the lore.daily.v1 file for other apps
 │   │   └── Diagnostics.cs         # The error log (%TEMP%\lore-crash.txt)
 │   └── ViewModels/
 │       ├── MainViewModel*.cs      # Selection and the chart on screen; the list of people; the reader's own charts (three files)
@@ -237,47 +236,44 @@ Lore/
 │       ├── TimingViewModel.cs     # Timing state: chart, date, the place it is cast for
 │       ├── SynastryViewModel.cs   # Synastry state: chart, partner, comparison or Davison chart
 │       └── InventoryViewModel.cs  # Inventory state: the sitting in progress, profile, chart-and-answers reading
-├── Services/
-│   └── ExportService.cs       # Draws the wheels the exports carry (Win2D), as PNG bytes
-├── SplashWindow.xaml/.cs      # Launch splash: artwork + "Lore <version>", up while data loads
-├── Views/
-│   ├── ChartRenderer.cs       # Win2D Direct2D chart wheel drawing (natal, transit and bi-wheel)
-│   ├── ChartSheetRenderer.cs  # The "chart with tables" image
-│   ├── ChartView.xaml/.cs     # Chart wheel + export controls
-│   ├── ReportView.xaml/.cs    # Natural-language report display
-│   ├── WorksheetView.xaml/.cs # The Worksheet's tables
-│   ├── DailyView.xaml/.cs     # Daily horoscope with date navigation
-│   ├── ForecastView.xaml/.cs  # Transits ahead, month by month
-│   ├── TimingView.xaml/.cs    # Solar return wheel and the Timing reading
-│   ├── SynastryView.xaml/.cs  # Synastry reading, partner picker, and bi-wheel
-│   ├── InventoryView.xaml/.cs # The questionnaire, the profile and the chart-and-answers reading
-│   ├── LegendView.xaml/.cs    # Glyph + colour legend
-│   └── AddChartDialog.xaml/.cs# Custom chart entry dialog
-├── Data/
+├── src/Lore.App/              # The window, the views and the Win2D drawing
+│   ├── Program.cs             # Entry point, including the two ways of running with no window
+│   ├── MainWindow.xaml/.cs    # Menu bar, Charts pane, view selector, status bar, export
+│   ├── SettingsWindow.xaml/.cs # Appearance, calculation, orbs, where you are
+│   ├── ShellPreferences.cs    # Accent, window, pane and reading size (shell.json)
+│   ├── required-files.txt     # The one list of the files Lore needs at run time
+│   ├── Services/ExportService.cs # Draws the wheels the exports carry (Win2D), as PNG bytes
+│   ├── Assets/AppIcon.ico     # Indigo/gold "L" icon
+│   └── Views/
+│       ├── ChartRenderer.cs   # Win2D Direct2D chart wheel drawing (natal, transit and bi-wheel)
+│       ├── ChartSheetRenderer.cs # The "chart with tables" image
+│       ├── ReadingList.xaml/.cs  # The body of a written reading, shared by the views
+│       ├── ReadingText.cs     # The reader's chosen size for long-form text
+│       ├── NumberField.xaml/.cs  # A typed number, checked when focus leaves
+│       ├── ChartView, ReportView, WorksheetView, DailyView, ForecastView,
+│       │   TimingView, SynastryView, InventoryView, LegendView (.xaml/.cs)
+│       └── AddChartDialog.xaml/.cs # New chart and Edit chart
+├── content/                   # The figure library, the places and every corpus
 │   ├── celebrities.json       # 1,314 bundled figures (all with recorded birth times)
 │   ├── cities.json            # ~50,250 cities (lat/lon + IANA tz)
-│   ├── hospitals.json         # ~235,000 hospitals (lat/lon), Add-Chart birthplace search
+│   ├── hospitals.json         # ~235,000 hospitals (lat/lon), New chart birthplace search
+│   ├── hospitals_wikidata.csv # Stage 1 source for hospitals.json
 │   ├── interpretations.json   # Corpus for the natural-language report
 │   ├── daily.json             # Corpus for the daily horoscope (transit lines, Moon/Sun/house text)
 │   ├── synastry.json          # Corpus for the synastry reading (aspect lines, element and house text)
 │   ├── davison.json           # Corpus for the Davison reading (signs, houses, aspects of the relationship's chart)
 │   ├── inventory.json         # The personality inventory: IPIP-NEO-120 statements, scoring keys, reference figures, descriptions
 │   ├── mirror.json            # Corpus for the reading that sets the inventory profile beside the chart
-│   ├── legend.json            # The Legend: every glyph, colour and term, explained
-│   └── swisseph-2.10.3bfinal/ # Swiss Ephemeris C source + .se1 ephemeris files
-├── Native/
-│   └── sweph.dll              # Built by Build-SwephDll.ps1 (not in repo)
-├── tests/
-│   └── Lore.Tests/            # 484 xUnit tests: calculations, readings, exports, saved charts and answers, view models, figures vs Astro-Databank
-├── Assets/
-│   ├── AppIcon.ico            # Indigo/gold "L" icon
-│   └── splash.png             # Splash-screen artwork (name + version drawn over it at launch)
-├── required-files.txt         # The one list of the files Lore needs at run time
-├── release.bat                # Tests, portable build and installer in one go
+│   └── legend.json            # The Legend: every glyph, colour and term, explained
+├── third_party/swisseph/      # Swiss Ephemeris C source + .se1 ephemeris files
+├── Native/sweph.dll           # Built by build\build-sweph.ps1 (not in repo)
+├── tests/Lore.Tests/          # 488 xUnit tests: calculations, readings, exports, saved charts and answers, view models, figures vs Astro-Databank
+├── build/
+│   ├── build.ps1              # The release command
+│   ├── build-sweph.ps1        # Compiles sweph.dll from third_party\swisseph
+│   ├── installer.iss          # Inno Setup installer
+│   └── assert-clean-release.ps1 # Refuses a build that contains anyone's own charts or answers
 └── scripts/
-    ├── build-portable.ps1     # Self-contained portable build, checked against required-files.txt and by its own self-check
-    ├── build-installer.ps1    # Inno Setup installer
-    ├── assert-clean-release.ps1 # Refuses a build that contains anyone's own charts or answers
     ├── build-icons.ps1        # Icon generation (requires ImageMagick)
     ├── build-cities.py        # Regenerate cities.json from simplemaps CSV
     ├── build-swetest-reference.py # Regenerate the swetest comparison values for the tests
@@ -290,7 +286,9 @@ Lore/
 
 | Package | Role |
 |---|---|
-| `Microsoft.WindowsAppSDK` 1.8 | WinUI 3 framework (unpackaged) |
+| `Microsoft.WindowsAppSDK` 2.5 | WinUI 3 framework (unpackaged, self-contained) |
+| `Jupiter.UI` | Shared colors, type, spacing, control styling, accent service and style check |
+| `CommunityToolkit.WinUI.Controls.Sizers` 8.2 | The Charts pane splitter |
 | `Microsoft.Graphics.Win2D` 1.4 | Direct2D-backed chart wheel rendering |
 | `CommunityToolkit.Mvvm` 8 | Observable properties, relay commands |
 | `NodaTime` 3 | Historical DST-aware UTC conversion |
@@ -302,84 +300,44 @@ Lore/
 
 ## Prerequisites
 
-- **Windows 10 version 1809** (build 17763) or later, **64-bit**
-- **.NET 10 SDK** (for building from source)
-- **Visual Studio 2019/2022 Build Tools** with the *Desktop development with C++* workload — required once to compile `sweph.dll`
+- **Windows 11 24H2** (build 26100) or later, **64-bit**
+- **.NET SDK 10.0.113** or a later 10.0 feature band (pinned in `global.json`)
+- **Visual Studio Build Tools** with the *Desktop development with C++* workload, to compile `sweph.dll`
+- **Inno Setup 6**, to build the installer
+- The **Jupiter.UI** library beside this repository, at `..\jupiter-ui`
 
 ---
 
 ## Building from Source
 
-### Step 1 — Compile `sweph.dll` (one-time)
-
-The Swiss Ephemeris C source is bundled in `Data\swisseph-2.10.3bfinal\`. Build the DLL from the project root:
+One command runs everything a release needs:
 
 ```powershell
-.\Build-SwephDll.ps1
+pwsh build\build.ps1
 ```
 
-This produces `Native\sweph.dll` (~600 KB). If the script cannot find Visual Studio, install the free **Build Tools for Visual Studio 2022** from https://visualstudio.microsoft.com/downloads/ and re-run.
+It compiles `Native\sweph.dll` if the checkout has none, runs the tests, publishes the self-contained app to `dist\Lore`, runs the published copy's own check (`Lore.exe --self-check`), refuses a build holding anyone's own charts or answers, and produces `dist\Lore-<version>-win-x64-setup.exe` with `dist\Lore-<version>-win-x64-portable.zip` as a supplemental artifact. Use `-SkipTests` to repeat the packaging alone.
 
-### Step 2 — Build the App
-
-```powershell
-dotnet restore
-dotnet build -c Release -r win-x64
-```
-
-Or open the project in **Visual Studio 2022 (17.11+)**.
-
-The `.csproj` automatically copies `sweph.dll` and the required `.se1` ephemeris files to the build output; no manual file placement is needed.
-
-#### Running the tests
+For day-to-day work:
 
 ```powershell
+dotnet build src\Lore.App -c Debug
 dotnet test tests\Lore.Tests
 ```
 
-The 484 tests cover the parts that must stay right: birth-time resolution (daylight saving, local mean time, historical city times), planet and Ascendant positions checked against Astro-Databank's published values, the daily transit scan checked against an independent calculation, the daily-horoscope corpus and wording, synastry (the contacts found between two charts, and the corpus and wording of the reading), the forecast, the Timing techniques, the Davison reading, the personality inventory's scoring and the chart-and-answers rules, the view models, crash-safe saving of My Charts and of the inventory answers (including several windows at once and recovery from a damaged file), what each export says (the PDFs are read back, and the JSON and XML set against the chart), the Legend, and city and hospital search. They run on GitHub on every push. `FigureLibraryTests` checks every bundled figure against its Astro-Databank record in `tests\Lore.Tests\Reference\adb-reference.json`: each well-documented (AA/A) birth time must match, and Lore must turn it into the same instant Astro-Databank does. Run them after editing `Data\celebrities.json`.
+A debug build looks for your data in the folder named by the `LORE_HOME` environment variable, if it is set, so the app can be tried with made-up charts. The Jupiter style check runs on every build of the app and fails it on a violation.
+
+The 488 tests cover the parts that must stay right: birth-time resolution (daylight saving, local mean time, historical city times), planet and Ascendant positions checked against Astro-Databank's published values, the daily transit scan checked against an independent calculation, the daily-horoscope corpus and wording, synastry (the contacts found between two charts, and the corpus and wording of the reading), the forecast, the Timing techniques, the Davison reading, the personality inventory's scoring and the chart-and-answers rules, the view models, crash-safe saving of My Charts and of the inventory answers (including several windows at once and recovery from a damaged file), what each export says (the PDFs are read back, and the JSON and XML set against the chart), the Legend, the reading other apps ask for, and city and hospital search. `FigureLibraryTests` checks every bundled figure against its Astro-Databank record in `tests\Lore.Tests\Reference\adb-reference.json`: each well-documented (AA/A) birth time must match, and Lore must turn it into the same instant Astro-Databank does. Run them after editing `content\celebrities.json`.
 
 `SwetestReferenceTests` checks Lore against **swetest**, the Swiss Ephemeris's own command-line program, for fourteen moments and places chosen to be awkward: both ephemeris files and the seam between them, both hemispheres, the equator, the date line, and both polar circles. Every body's longitude, latitude, speed and declination, the Ascendant and Midheaven, and all twelve cusps under each of the four house systems must agree to a millionth of a degree. Because the two share an engine this checks that Lore asks it the right question, not the astronomy itself (the Astro-Databank comparison does that). The expected values live in `tests\Lore.Tests\Reference\swetest-reference.json`; `python scripts\build-swetest-reference.py` regenerates them (it needs `swetest64.exe` from the full Swiss Ephemeris download).
 
-### Step 3 — Portable Build
-
-Produces a self-contained folder that runs with no installed .NET or VC++ runtime on the target machine:
-
-```powershell
-.\scripts\build-portable.ps1
-```
-
-The script then checks the result three ways before it will pass it: every file in `required-files.txt` is there; each corpus is whole and is the same file as in the repository; and the packaged app is run as `Lore.exe --self-check`, which loads all its data, calculates and reads a chart from the bundled ephemeris, and exits without opening a window or touching anyone's saved charts.
-
-Output: `artifacts\Lore-<version>-portable\` (e.g. `Lore-3.4.0-portable\`) — zip the whole folder and share; the recipient unzips and runs `Lore.exe` directly. (The folder is self-contained: `Lore.exe` alone will not run.)
-
-### Step 4 — Installer
-
-Produces a single `LoreSetup-<version>.exe` that installs Lore per-user (no admin prompt), adds a Start Menu shortcut, and registers a clean uninstall entry.
-
-One-time: install Inno Setup:
-
-```powershell
-winget install --id JRSoftware.InnoSetup -e
-```
-
-Then:
-
-```powershell
-.\scripts\build-installer.ps1
-```
-
-Output: `artifacts\LoreSetup-<version>.exe`.
-
-`release.bat` does all of it in one go: it runs the tests (and stops if one fails), makes the portable build and the installer, and checks that nobody's own charts or answers are in either.
-
-> **Note:** The installer is unsigned, so Windows will warn about it the first time — see [Installing](#installing). The `.exe` is complete on its own; it does not need to be zipped with anything else to be shared.
+> **Note:** The installer is unsigned, so Windows will warn about it the first time; see [Installing](#installing).
 
 ---
 
 ## Data Files
 
-### `Data\celebrities.json`
+### `content\celebrities.json`
 
 1,314 figures in 14 categories, each with a documented birth time (Astro-Databank Rodden rating AA or A). Each entry:
 
@@ -410,9 +368,9 @@ Output: `artifacts\LoreSetup-<version>.exe`.
 
 `utcOffsetFixed: true` (My Charts only) → `utcOffsetHours` is used as given and the time zone is ignored.
 
-### `Data\cities.json`
+### `content\cities.json`
 
-~50,250 cities with `name`, `lat`, `lon`, `tz` (IANA zone), and `utc` (standard non-DST offset). Powers the city autocomplete in the Add Chart dialog. Generated from the [simplemaps World Cities Database](https://simplemaps.com/data/world-cities) (CC BY 4.0) via `scripts\build-cities.py`.
+~50,250 cities with `name`, `lat`, `lon`, `tz` (IANA zone), and `utc` (standard non-DST offset). Powers the city autocomplete in the New chart dialog. Generated from the [simplemaps World Cities Database](https://simplemaps.com/data/world-cities) (CC BY 4.0) via `scripts\build-cities.py`.
 
 To regenerate after updating the simplemaps download:
 
@@ -421,20 +379,20 @@ pip install --user timezonefinder tzdata
 python scripts\build-cities.py
 ```
 
-### `Data\hospitals.json`
+### `content\hospitals.json`
 
-Hospitals with `name`, `city`, `country`, `lat`, and `lon`. Powers the hospital autocomplete in the Add Chart dialog, an alternative to city search that gives more precise birthplace coordinates. Unlike `cities.json` there is no timezone or population field: the app resolves the historical, DST-aware zone from the chosen coordinates (GeoTimeZone + NodaTime), and prefix search ranks by name.
+Hospitals with `name`, `city`, `country`, `lat`, and `lon`. Powers the hospital autocomplete in the New chart dialog, an alternative to city search that gives more precise birthplace coordinates. Unlike `cities.json` there is no timezone or population field: the app resolves the historical, DST-aware zone from the chosen coordinates (GeoTimeZone + NodaTime), and prefix search ranks by name.
 
 Built from several merged sources by a two-stage pipeline:
 
-- **Stage 1 — Wikidata** (`scripts\wikidata_hospitals.py` → `Data\hospitals_wikidata.csv`, columns `Hospital,City,Country,Latitude,Longitude`, CC0 1.0) — ~26,400 curated hospitals. This set is *notability-filtered*: it holds only hospitals with a Wikidata item, so it misses most small or local hospitals. The CSV is committed to the repo, so Stage 1 rarely needs re-running.
+- **Stage 1 — Wikidata** (`scripts\wikidata_hospitals.py` → `content\hospitals_wikidata.csv`, columns `Hospital,City,Country,Latitude,Longitude`, CC0 1.0) — ~26,400 curated hospitals. This set is *notability-filtered*: it holds only hospitals with a Wikidata item, so it misses most small or local hospitals. The CSV is committed to the repo, so Stage 1 rarely needs re-running.
 - **Stage 2 — OpenStreetMap** (`scripts\build-hospitals.py`) via the [Overpass API](https://dev.overpass-api.de/overpass-doc/) (© OpenStreetMap contributors, ODbL) — merges the Wikidata CSV with every `amenity=hospital` / `healthcare=hospital` feature worldwide, fetched one country at a time so each row is labelled with the country whose administrative boundary the query used. Adds the small local hospitals Wikidata lacks.
 - **Older hospitals** (also Stage 2; leave out with `--no-history`). Most users were born decades ago, often in hospitals that have since been renamed or closed, so the build also adds:
   - **Former names** of today's hospitals — OpenStreetMap's `old_name` / `was:name` tags and Wikidata's aliases and dated former official names — each as its own searchable entry at the hospital's location, e.g. *Waterford Regional Hospital (now University Hospital Waterford)*.
   - **Former hospitals** in OpenStreetMap — buildings tagged `disused:`, `abandoned:`, `was:` or `historic:amenity=hospital`, or `historic=hospital` — labelled *(former hospital)*.
   - **[OpenHistoricalMap](https://www.openhistoricalmap.org/)** (CC0), OpenStreetMap's historical sister project, whose hospitals carry opening and closing years, e.g. *Adelaide Hospital (1839–1998)*.
 
-Everything is merged and de-duplicated (same name within ~111 m collapses; Wikidata's curated country label wins ties). Entries with no town get the nearest one from `Data\cities.json` (within 25 km), and entries with no country get that town's country. Both scripts use only the Python standard library — no `pip install`.
+Everything is merged and de-duplicated (same name within ~111 m collapses; Wikidata's curated country label wins ties). Entries with no town get the nearest one from `content\cities.json` (within 25 km), and entries with no country get that town's country. Both scripts use only the Python standard library — no `pip install`.
 
 #### The easy way: double-click `scripts\build-hospitals.bat`
 
@@ -446,7 +404,7 @@ It self-updates (`git pull --ff-only`), then offers three options:
 
 Options 1 and 2 then ask which countries to pull from OpenStreetMap. Leave it **blank for the whole world** (slow; resumes from cache if a busy server interrupts it), or type one or more codes such as `US` or `US,CA,GB` to fetch just those — a single country is one quick, reliable query, the fastest way to add local hospitals for one place.
 
-After it finishes, commit and push `Data\hospitals.json`; the app needs no code changes.
+After it finishes, commit and push `content\hospitals.json`; the app needs no code changes.
 
 #### The manual way
 
@@ -458,15 +416,15 @@ python scripts\build-hospitals.py --no-osm        # Wikidata CSV only, no networ
 python scripts\build-hospitals.py --no-history    # current hospitals only (no former names / closed hospitals)
 
 # Stage 1 (refresh the Wikidata CSV first), then Stage 2:
-python scripts\wikidata_hospitals.py -o Data\hospitals_wikidata.csv --checkpoint Data\.wikidata_progress.json
+python scripts\wikidata_hospitals.py -o content\hospitals_wikidata.csv --checkpoint content\.wikidata_progress.json
 python scripts\build-hospitals.py
 ```
 
-The OSM fetch caches each country's result under `Data\.osm_cache\` (gitignored), so a re-run or an interrupted run resumes instead of refetching; pass `--refresh` to ignore the cache. Public Overpass servers are often busy and answer with `504`/`429`; the script treats those as transient, backs off, and rotates across several mirrors automatically, so just re-running the build picks up any countries that failed. Pin a single server with `--endpoint` or the `OVERPASS_URL` environment variable.
+The OSM fetch caches each country's result under `content\.osm_cache\` (gitignored), so a re-run or an interrupted run resumes instead of refetching; pass `--refresh` to ignore the cache. Public Overpass servers are often busy and answer with `504`/`429`; the script treats those as transient, backs off, and rotates across several mirrors automatically, so just re-running the build picks up any countries that failed. Pin a single server with `--endpoint` or the `OVERPASS_URL` environment variable.
 
 > The **OECD** data API cannot feed this file: it is a *statistics* store (GDP, prices, health aggregates such as beds-per-1,000), with no directory of individual hospitals and coordinates.
 
-### `Data\daily.json`
+### `content\daily.json`
 
 Editable corpus for the daily horoscope. Edit it to change what the Daily view says without touching C# code.
 
@@ -479,7 +437,7 @@ Editable corpus for the daily horoscope. Edit it to change what the Daily view s
 
 Names must match the app's display names (`North Node`, not `NorthNode`). The orb, the number of transits shown, and the ranking weights are constants in `Services\TransitService.cs` and `Services\DailyInterpreter.cs`.
 
-### `Data\synastry.json`
+### `content\synastry.json`
 
 Editable corpus for the synastry reading. Edit it to change what the Synastry view says without touching C# code.
 
@@ -491,7 +449,7 @@ Editable corpus for the synastry reading. Edit it to change what the Synastry vi
 
 The orbs, the number of contacts shown, and the ranking weights are constants in `Services\SynastryService.cs`, `Services\SynastryScoring.cs` and `Services\SynastryInterpreter.cs`.
 
-### `Data\interpretations.json`
+### `content\interpretations.json`
 
 Editable corpus for the natural-language report. Edit it to change what the Report view says without touching C# code.
 
@@ -504,7 +462,7 @@ Editable corpus for the natural-language report. Edit it to change what the Repo
 
 Names must match the app's display names (`North Node`, not `NorthNode`).
 
-### `Data\davison.json`
+### `content\davison.json`
 
 Editable corpus for the Davison chart's reading (about 250 lines).
 
@@ -514,13 +472,13 @@ Editable corpus for the Davison chart's reading (about 250 lines).
 - `contacts`, `personThemes` — one person's own planet standing on a main point of the Davison chart.
 - `notes` — what the chart is, and what is left out when a birth time is missing.
 
-### `Data\inventory.json`
+### `content\inventory.json`
 
 The personality inventory: the 120 statements of the IPIP-NEO-120 with their scoring keys (`items`), the five answers (`choices`), and the five traits and thirty facets (`domains`, `facets`), each with its reference mean and standard deviation and Lore's own low, typical and high sentence.
 
 The descriptions may be edited. **The statements and their keys must not be**: they are given word for word, and a reworded statement is no longer the one the reference figures were gathered with.
 
-### `Data\mirror.json`
+### `content\mirror.json`
 
 The rules and the words for the reading that sets the profile beside the chart, and for the sentences the answers add to the Report, Daily and Forecast.
 
@@ -532,7 +490,7 @@ The rules and the words for the reading that sets the profile beside the chart, 
 
 `MirrorTests` holds the rules to a simulated population of 3,000 people: after changing a `when`, run the tests.
 
-### `Data\legend.json`
+### `content\legend.json`
 
 The Legend's 108 entries, in the order they are listed. Each has a `symbol`, a `name`, the `group` it is listed under, a `short` line for the list and a `detail`; an aspect also has its line `color` (`#RRGGBB`). In `detail`, blocks are separated by a blank line, a block beginning `## ` is a sub-heading, a block whose lines all begin with a bullet is a list, and `**two asterisks**` either side mark bold. The tests check that every entry is whole; a damaged file leaves the Legend saying so and nothing else affected.
 
@@ -573,7 +531,7 @@ The `_12` files are required for historical figures such as Leonardo da Vinci, S
 
 | Symptom | Fix |
 |---|---|
-| *"DLL not found"* at runtime | Run `Build-SwephDll.ps1` first; verify `Native\sweph.dll` exists. |
+| *"DLL not found"* at runtime | Run `build\build-sweph.ps1`; verify `Native\sweph.dll` exists. |
 | *"Ephemeris file not found"* / `SE_ERR` in chart | Rebuild the project; the `.csproj` copies `.se1` files to `Assets\Ephemeris\` automatically. |
 | Calculation error for pre-1800 birthdays | The `_12` ephemeris files are required; check that the build output contains them in `Assets\Ephemeris\`. |
 
@@ -600,7 +558,19 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 3.4.0 (current)
+### 4.0.0 (current)
+The move to Jupiter: Lore keeps its calculations, readings, data and saved charts, in a new window.
+- **A new layout.** A menu bar, a Charts pane with search and categories, a selector for the views and a status bar. Your charts and settings carry over.
+- **Settings is a window of its own** (File > Settings, Ctrl+,), with the shared accent color control. Orbs are typed numbers, checked when you leave the box.
+- **Menus hold every command.** New chart, Import and Export My Charts, all the exports, the views, and About Lore.
+- **Reading text can be resized** from the View menu (Ctrl++, Ctrl+-, Ctrl+0), and the window comes back at its last size and place.
+- **The Worksheet's values line up** with their labels instead of drifting right and running off the edge.
+- **No splash screen.** The window opens at once and the status bar says when the data has loaded.
+- **Windows 11 24H2 or later** is now required, with Windows App SDK 2.5.
+- **Other apps can ask for a reading.** `Lore.exe --daily-reading <name> <file>` writes today's reading for a saved chart as JSON; Jupiter HUD uses it.
+- The source moved to the Jupiter workspace layout (`src`, `content`, `third_party`, `build`). `build\build.ps1` is the one release command.
+
+### 3.4.0
 Work under the surface, finishing what the review behind 3.3.0 began. Nothing about how a chart is calculated or read has changed.
 - **One shared core.** The models, calculations, readings, stores and view models are now a library of their own (`Lore.Core`) that the app and the tests both use, so the tests run against the very code that ships.
 - **Exports are read back.** The tests now open each exported PDF and check what it says, and check the JSON and XML against the chart, number for number.
