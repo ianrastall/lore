@@ -30,6 +30,7 @@ public sealed record ExportRequest
     public Synastry? Comparison { get; init; }
     public SynastryReading? Synastry { get; init; }
     public DavisonReading? Davison { get; init; }
+    public TrioReading? Trio { get; init; }
 
     // The whole file, for the kinds that need no drawing.
     public byte[]? Text { get; init; }
@@ -37,11 +38,11 @@ public sealed record ExportRequest
     // The kinds there are, with what the save dialog calls each and its extension.
     public static (string Label, string Extension) Format(string kind) => kind switch
     {
-        "pdf" or "dailypdf" or "forecastpdf" or "timingpdf" or "synastrypdf" or "davisonpdf" => ("PDF document", ".pdf"),
-        "png" or "sheetpng" or "dailypng" or "synastrypng" or "davisonpng" or "davisonsheetpng" => ("PNG image", ".png"),
+        "pdf" or "dailypdf" or "forecastpdf" or "timingpdf" or "synastrypdf" or "davisonpdf" or "trinepdf" => ("PDF document", ".pdf"),
+        "png" or "sheetpng" or "dailypng" or "synastrypng" or "davisonpng" or "davisonsheetpng" or "trinepng" => ("PNG image", ".png"),
         "json" => ("JSON data", ".json"),
         "xml" => ("XML data", ".xml"),
-        "worksheettxt" or "dailytxt" or "forecasttxt" or "timingtxt" or "davisontxt" or "inventorytxt" or "mirrortxt"
+        "worksheettxt" or "dailytxt" or "forecasttxt" or "timingtxt" or "davisontxt" or "inventorytxt" or "mirrortxt" or "trinetxt"
             => ("Text file", ".txt"),
         _ => throw new ArgumentOutOfRangeException(nameof(kind)),
     };
@@ -111,6 +112,15 @@ public sealed record ExportRequest
             return null;
         }
 
+        // The Trine exports write the three people on screen.
+        var trio = vm.SynastryVM.TrioReading;
+        bool isTrine = kind.StartsWith("trine", StringComparison.Ordinal);
+        if (isTrine && (trio is null || vm.SynastryVM.IsFindingThird || !ReferenceEquals(trio.Trio.Charts[0], chart)))
+        {
+            refusal = "Open the Synastry view, choose Trine and pick a third person first, then export.";
+            return null;
+        }
+
         // The personality profile, or the chart-and-answers reading, as text: written
         // out here and now, so that it is this person's whatever is selected next.
         byte[]? text = null;
@@ -127,6 +137,7 @@ public sealed record ExportRequest
         string suggested =
             isDaily ? $"{name} - daily {Day(daily!.Date)}" :
             isSynastry ? $"{synastry!.FirstName} and {synastry.SecondName} - synastry" :
+            isTrine ? $"{trio!.Title} - trine" :
             isDavison ? $"{davison!.FirstName} and {davison.SecondName} - Davison chart" +
                         (kind == "davisonsheetpng" ? " with tables" : kind == "davisontxt" ? " worksheet" : "") :
             kind == "worksheettxt" ? $"{name} - worksheet" :
@@ -153,6 +164,7 @@ public sealed record ExportRequest
             Comparison = isSynastry || isDavison ? comparison : null,
             Synastry = isSynastry ? synastry : null,
             Davison = isDavison ? davison : null,
+            Trio = isTrine ? trio : null,
             Text = text,
         };
     }

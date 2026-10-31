@@ -471,6 +471,7 @@ public sealed partial class MainWindow : Window
                 "synastrypdf" or "synastrypng" => await ExportService.RenderBiWheelPngAsync(request.Comparison!),
                 "davisonpdf" or "davisonpng" => await ExportService.RenderChartPngAsync(request.Davison!.Chart, showVerdict: false),
                 "davisonsheetpng" => await ExportService.RenderChartSheetPngAsync(request.Davison!.Chart, showVerdict: false),
+                "trinepdf" or "trinepng" => await ExportService.RenderTrioWheelPngAsync(request.Trio!.Trio),
                 _ => null,
             };
 
@@ -479,7 +480,7 @@ public sealed partial class MainWindow : Window
             byte[] bytes = await Task.Run(() => kind switch
             {
                 "pdf"  => ChartPdf.ToPdf(chart, request.Report, wheel!, request.Worksheet, request.Sensitivity),
-                "png" or "sheetpng" or "dailypng" or "synastrypng" or "davisonpng" or "davisonsheetpng" => wheel!,
+                "png" or "sheetpng" or "dailypng" or "synastrypng" or "davisonpng" or "davisonsheetpng" or "trinepng" => wheel!,
                 "json" => ChartDataExport.ToJson(chart),
                 "xml"  => ChartDataExport.ToXml(chart),
                 "worksheettxt" => WorksheetService.ToText(request.Worksheet ?? WorksheetService.Build(chart), request.Sensitivity),
@@ -493,6 +494,8 @@ public sealed partial class MainWindow : Window
                 "davisonpdf" => SynastryExportService.DavisonToPdf(request.Comparison!, request.Davison!, wheel!,
                     WorksheetService.Build(request.Davison!.Chart)),
                 "davisontxt" => WorksheetService.ToText(WorksheetService.Build(request.Davison!.Chart)),
+                "trinepdf" => SynastryExportService.TrioToPdf(request.Trio!, wheel!),
+                "trinetxt" => SynastryExportService.TrioToText(request.Trio!),
                 "inventorytxt" or "mirrortxt" => request.Text!,
                 _      => throw new ArgumentOutOfRangeException(nameof(kind)),
             });

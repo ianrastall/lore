@@ -242,6 +242,24 @@
     "davison": "The Davison chart is cast for the moment halfway between the two births, at the place halfway between the two birthplaces. Unlike the comparison above, which sets one chart against the other, it is a single real chart, and astrologers read it as the chart of the relationship itself.",
     "davisonPointer": "The Davison chart has a reading, a wheel and a worksheet of its own: choose Davison chart at the top of the Synastry view.",
     "unknownBirthTimeOne": "{name} has no recorded birth time, so that chart's Ascendant, Midheaven, houses and Moon are left out of the comparison.",
-    "unknownBirthTimeBoth": "Neither chart has a recorded birth time, so the Ascendants, Midheavens, houses and Moons are left out of the comparison."
+    "unknownBirthTimeBoth": "Neither chart has a recorded birth time, so the Ascendants, Midheavens, houses and Moons are left out of the comparison.",
+    "trioNoGrandTrine": "No grand trine runs through all three charts. The contacts between each pair still stand on their own.",
+    "trioMoreGrandTrines": "{count} weaker grand trines are not listed.",
+    "trioSameCircuit": "Another strand of the same circuit, through different points.",
+    "trioScale": "A grand trine here is one point from each person, each within 6° of a trine with the other two. Golden needs a strong one, made of personal points and close to exact, with no pair in difficulty. Astrology has no agreed score for three people. This one is Lore's own, and it describes the symbolism between three charts, not how three people will get on."
+  },
+  "_trio_comment": "The Trine reading of three charts. trioTones is keyed by TrioTone; grandTrines by the element all three corners are in, with Mixed for one that runs out of sign.",
+  "trioTones": {
+    "Golden": "A rare one. No pair here is in difficulty, the contacts lean easy, and a close grand trine runs through all three charts, so each person holds one corner of the same easy circuit. About one trio in thirty in the library reads this way.",
+    "Harmonious": "All three pairs get along without difficulty, and the contacts lean easy. No strong grand trine ties the three together, but nobody here is left out.",
+    "Mixed": "Ease and friction are about even across the three pairs. Some of the three will find each other easier than the third does, and the balance may shift with who is in the room.",
+    "Strained": "At least one pair here is in real difficulty, and the others do not make up for it. As a group the three are likely to take more effort than any two of them alone."
+  },
+  "grandTrines": {
+    "Fire": "A circuit of fire. Energy, confidence and enthusiasm pass easily between the three: each one's spark catches in the others, and what they start together tends to gather speed. The risk is that nobody stops to check the details.",
+    "Earth": "A circuit of earth. Practical, steady and dependable: the three find it easy to build things, share the load and rely on one another. The risk is settling into a comfortable routine.",
+    "Air": "A circuit of air. Ideas and talk move freely between the three: they understand each other quickly and enjoy thinking together. The risk is plenty of conversation and too little follow-through.",
+    "Water": "A circuit of water. Feeling passes between the three without much needing to be said: they sense each other's moods and look after one another. The risk is becoming a closed circle.",
+    "Mixed": "This one runs out of sign: the three points are in trine by degree, but not all in signs of one element. It still joins all three, more loosely than a trine within one element."
   }
 }

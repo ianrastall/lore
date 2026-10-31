@@ -26,7 +26,7 @@ public sealed partial class SynastryView : UserControl
     private void OnViewModelChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName is nameof(SynastryViewModel.Comparison) or nameof(SynastryViewModel.DavisonShown)
-            or nameof(SynastryViewModel.DavisonChart))
+            or nameof(SynastryViewModel.DavisonChart) or nameof(SynastryViewModel.TrioShown))
             WheelCanvas.Invalidate();
     }
 
@@ -61,13 +61,39 @@ public sealed partial class SynastryView : UserControl
             ViewModel.Partner = match.Person;
     }
 
-    // ── Bi-wheel ──────────────────────────────────────────────────────────────
+    // ── The third person ──────────────────────────────────────────────────────
+
+    private void ThirdBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+    {
+        if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
+            sender.ItemsSource = ViewModel.SuggestThird(sender.Text);
+    }
+
+    private void ThirdBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+    {
+        var person = args.ChosenSuggestion as Celebrity ?? ViewModel.SuggestThird(args.QueryText).FirstOrDefault();
+        if (person is null) return;
+
+        ViewModel.Third = person;
+        sender.Text = "";
+        sender.ItemsSource = null;
+    }
+
+    private void Third_ItemClick(object sender, ItemClickEventArgs e)
+    {
+        if (e.ClickedItem is TrioMatch match)
+            ViewModel.Third = match.Person;
+    }
+
+    // ── The wheel ─────────────────────────────────────────────────────────────
 
     private void WheelCanvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
     {
         // The Davison chart is drawn like any other, without a birth chart's verdict rim.
         if (ViewModel.DavisonShown && ViewModel.DavisonChart is { } davison)
             ChartRenderer.Draw(args.DrawingSession, davison, (float)sender.ActualWidth, (float)sender.ActualHeight, showVerdict: false);
+        else if (ViewModel.TrioShown)
+            ChartRenderer.DrawTrioWheel(args.DrawingSession, ViewModel.TrioReading!.Trio, (float)sender.ActualWidth, (float)sender.ActualHeight);
         else if (ViewModel.Comparison is { } comparison)
             ChartRenderer.DrawBiWheel(args.DrawingSession, comparison, (float)sender.ActualWidth, (float)sender.ActualHeight);
         else
@@ -81,12 +107,18 @@ public sealed partial class SynastryView : UserControl
 
     // (The two buttons show the choice itself, not whether a Davison chart is there to
     // be shown, so being set from the view model never changes it back.)
-    private void ComparisonRadio_Checked(object sender, RoutedEventArgs e) => ViewModel.ShowDavison = false;
+    private void ComparisonRadio_Checked(object sender, RoutedEventArgs e)
+    {
+        ViewModel.ShowDavison = false;
+        ViewModel.ShowTrine = false;
+    }
+
+    private void TrineRadio_Checked(object sender, RoutedEventArgs e) => ViewModel.ShowTrine = true;
     private void DavisonRadio_Checked(object sender, RoutedEventArgs e) => ViewModel.ShowDavison = true;
 
     // x:Bind helpers.
-    public bool Either(bool a, bool b) => a || b;
-    public bool Not(bool b) => !b;
+    public bool AnyOf(bool a, bool b, bool c) => a || b || c;
+    public bool Neither(bool a, bool b) => !a && !b;
 
     // The pill colour of a match or of the reading's tone, from its "#RRGGBB".
     public static Microsoft.UI.Xaml.Media.SolidColorBrush BrushOf(string hex) => HexBrushConverter.ToBrush(hex);

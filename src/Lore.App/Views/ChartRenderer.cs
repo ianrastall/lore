@@ -120,6 +120,55 @@ internal static class ChartRenderer
         DrawBiWheelKey(ds, r, height, $"Inner wheel: {inner.Celebrity.Name}", $"Outer wheel: {outer.Celebrity.Name}");
     }
 
+    // ── Tri-wheel (three people) ─────────────────────────────────────────────
+    // Three charts on one zodiac, a ring each, with the strongest grand trines running
+    // through them as triangles. The first person is innermost, as on the bi-wheel. The
+    // wheel is turned to the first chart's Ascendant, and has no houses: with three
+    // people it would be choosing one person's.
+    private const float TriThird      = 0.755f;
+    private const float TriSecondEdge = 0.68f;
+    private const float TriSecond     = 0.61f;
+    private const float TriFirstEdge  = 0.545f;
+    private const float TriFirst      = 0.475f;
+    private const float TriInnerEdge  = 0.41f;
+    private const float TriTriangles  = 0.385f;
+    private const int   TriTriangleCount = 3;   // as many as the reading describes
+
+    private static readonly Color GoldenColor = Color.FromArgb(255, 230, 180, 34);
+
+    public static void DrawTrioWheel(CanvasDrawingSession ds, Trio trio, float width, float height)
+    {
+        float cx = width / 2f;
+        float cy = height / 2f;
+        float r = Math.Min(cx, cy) * 0.93f;
+        NatalChart first = trio.Charts[0], second = trio.Charts[1], third = trio.Charts[2];
+        double asc = WheelAsc(first);
+
+        ds.Clear(Background);
+
+        DrawZodiacRing(ds, cx, cy, r, asc, BiSignInner, centred: true);
+        ds.DrawEllipse(cx, cy, r * TriSecondEdge, r * TriSecondEdge, RingOuter, 1.5f);
+        ds.DrawEllipse(cx, cy, r * TriFirstEdge, r * TriFirstEdge, RingOuter, 1.5f);
+        ds.DrawEllipse(cx, cy, r * TriInnerEdge, r * TriInnerEdge, RingOuter, 1.5f);
+
+        // Weakest first, so that the strongest is drawn over the others.
+        foreach (var (grand, strongest) in trio.GrandTrines.Take(TriTriangleCount)
+                     .Select((g, i) => (g, i == 0)).Reverse())
+        {
+            var color = strongest && trio.Tone == TrioTone.Golden ? GoldenColor : AspectColors[(int)AspectType.Trine];
+            var corners = grand.Corners.Select(c => ToPoint(cx, cy, r * TriTriangles, c.Longitude, asc)).ToList();
+            for (int i = 0; i < corners.Count; i++)
+                ds.DrawLine(corners[i], corners[(i + 1) % corners.Count], color, strongest ? 2.5f : 1.25f);
+        }
+
+        DrawPlanets(ds, cx, cy, r, first.Planets, asc, TriFirst, TriFirstEdge - 0.015f, 0.05f, centred: true);
+        DrawPlanets(ds, cx, cy, r, second.Planets, asc, TriSecond, TriSecondEdge - 0.015f, 0.05f, centred: true);
+        DrawPlanets(ds, cx, cy, r, third.Planets, asc, TriThird, BiSignInner - 0.015f, 0.05f, centred: true);
+        DrawBiWheelKey(ds, r, height,
+            $"Rings from the inside: {first.Celebrity.Name}, {second.Celebrity.Name}, {third.Celebrity.Name}",
+            "Triangles: the strongest grand trines");
+    }
+
     // ── Bi-wheel (transits) ──────────────────────────────────────────────────
     // The same wheel with the day's sky in place of a second person: the birth chart in
     // the middle, the planets as they stand at the middle of the day in the band around

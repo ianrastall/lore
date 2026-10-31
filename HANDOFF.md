@@ -1,6 +1,6 @@
 # Lore handoff
 
-Version 4.0.0 · 31 October 2026 · Repository `D:/jupiter/lore`, branch `main`, remote `ianrastall/lore`
+Version 4.1.0 · 31 October 2026 · Repository `D:/jupiter/lore`, branch `main`, remote `ianrastall/lore`
 
 ## Where things live
 
@@ -38,6 +38,9 @@ See [validation](docs/validation-4.0.0.md) for what was tested, [migration](docs
 
 ## Next
 
-1. **Synastry trines.** Ian's first improvement after this migration, and a very important part of the app. The existing synastry code is in `src/Lore.Core/Services/SynastryService.cs` (contacts), `SynastryInterpreter.cs` (the reading, with trines and sextiles together under "What comes easily", four at most) and `src/Lore.App/Views/SynastryView.xaml`. Exactly what the section shows still needs Ian's definition.
-2. **Rust core decision.** Open; see the exceptions record.
-3. **Theme setting.** Needs a light wheel palette.
+1. **Rust core decision.** Open; see the exceptions record.
+2. **Theme setting.** Needs a light wheel palette.
+
+## Trine (4.1)
+
+Ian's "synastry trines" means a synastry of three people, with a golden metric he could not name precisely, and astrology has no standard one. The measure is Lore's own, in `src/Lore.Core/Services/TrioService.cs`: Golden needs no pair below level 0, a positive sum of pair levels, and a strongest grand trine of weight 0.5 or more. `TrioServiceTests` holds the proportions against the library. If Ian wants it stricter or looser, `GoldenWeight` is the one number to change.

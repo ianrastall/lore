@@ -29,6 +29,29 @@
                 </StackPanel>
             </Grid>
         </DataTemplate>
+        <DataTemplate x:Key="ThirdTemplate" x:DataType="models:TrioMatch">
+            <Grid ColumnSpacing="12" Padding="0,4,0,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Border Width="12" Height="12" VerticalAlignment="Center" CornerRadius="{StaticResource ControlCornerRadius}"
+                        Background="{x:Bind local:SynastryView.BrushOf(ColorHex)}" />
+                <StackPanel Grid.Column="1">
+                    <TextBlock Text="{x:Bind Name}" Style="{StaticResource JupiterBodyTextStyle}" TextTrimming="CharacterEllipsis" />
+                    <TextBlock Text="{x:Bind Detail}" Style="{StaticResource JupiterCaptionTextStyle}" TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+                <StackPanel Grid.Column="2" HorizontalAlignment="Right">
+                    <TextBlock Text="{x:Bind ToneLabel}" Style="{StaticResource JupiterBodyTextStyle}" HorizontalAlignment="Right" />
+                    <TextBlock Style="{StaticResource JupiterCaptionTextStyle}" HorizontalAlignment="Right">
+                        <Run Text="{x:Bind GrandTrineText}" />
+                        <Run Text="·" />
+                        <Run Text="{x:Bind ShareText}" />
+                    </TextBlock>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
     </UserControl.Resources>
 
     <Grid>
@@ -61,7 +84,7 @@
                         AutomationProperties.Name="Clear the comparison" ToolTipService.ToolTip="Clear the comparison">
                     <FontIcon Glyph="&#xE711;" Style="{StaticResource JupiterSmallIconStyle}" />
                 </Button>
-                <ProgressRing IsActive="{x:Bind Either(ViewModel.IsBusy, ViewModel.IsSearching), Mode=OneWay}" Width="16" Height="16" />
+                <ProgressRing IsActive="{x:Bind AnyOf(ViewModel.IsBusy, ViewModel.IsSearching, ViewModel.IsFindingThird), Mode=OneWay}" Width="16" Height="16" />
             </StackPanel>
 
             <TextBlock Text="{x:Bind ViewModel.PromptText, Mode=OneWay}" Style="{StaticResource JupiterBodyTextStyle}" TextWrapping="Wrap"
@@ -82,13 +105,37 @@
             <StackPanel Orientation="Horizontal" Spacing="12" Visibility="{x:Bind HasText(ViewModel.ToneText), Mode=OneWay}">
                 <RadioButton x:Name="ComparisonRadio" Content="Comparison" GroupName="SynastryMode"
                              AutomationProperties.Name="Show the comparison of the two charts"
-                             IsChecked="{x:Bind Not(ViewModel.ShowDavison), Mode=OneWay}"
+                             IsChecked="{x:Bind Neither(ViewModel.ShowDavison, ViewModel.ShowTrine), Mode=OneWay}"
                              Checked="ComparisonRadio_Checked" />
+                <RadioButton x:Name="TrineRadio" Content="Trine" GroupName="SynastryMode"
+                             AutomationProperties.Name="Add a third person and read the three together"
+                             ToolTipService.ToolTip="Three charts together: each pair, and the grand trines running through all three"
+                             IsChecked="{x:Bind ViewModel.ShowTrine, Mode=OneWay}"
+                             Checked="TrineRadio_Checked" />
                 <RadioButton x:Name="DavisonRadio" Content="Davison chart" GroupName="SynastryMode"
                              AutomationProperties.Name="Show the Davison chart of the two people"
                              ToolTipService.ToolTip="One chart for the two of you, cast for the midpoint of your births"
                              IsChecked="{x:Bind ViewModel.ShowDavison, Mode=OneWay}"
                              Checked="DavisonRadio_Checked" />
+            </StackPanel>
+
+            <!-- The third person, in the Trine view -->
+            <StackPanel Orientation="Horizontal" Spacing="8" Visibility="{x:Bind VisIf(ViewModel.ShowTrine), Mode=OneWay}">
+                <AutoSuggestBox x:Name="ThirdBox" Width="320"
+                                PlaceholderText="Add a third person…"
+                                QueryIcon="Find"
+                                DisplayMemberPath="Name"
+                                TextMemberPath="Name"
+                                TextChanged="ThirdBox_TextChanged"
+                                QuerySubmitted="ThirdBox_QuerySubmitted"
+                                AutomationProperties.Name="Third person" />
+                <TextBlock Text="{x:Bind ViewModel.ThirdText, Mode=OneWay}" Style="{StaticResource JupiterBodyTextStyle}"
+                           Foreground="{ThemeResource JupiterSecondaryTextBrush}" VerticalAlignment="Center" />
+                <Button Style="{StaticResource JupiterSubtleButtonStyle}" Command="{x:Bind ViewModel.ClearThirdCommand}"
+                        Visibility="{x:Bind VisIf(ViewModel.HasThird), Mode=OneWay}"
+                        AutomationProperties.Name="Clear the third person" ToolTipService.ToolTip="Clear the third person">
+                    <FontIcon Glyph="&#xE711;" Style="{StaticResource JupiterSmallIconStyle}" />
+                </Button>
             </StackPanel>
         </StackPanel>
 
@@ -135,8 +182,27 @@
             </Grid>
         </Grid>
 
-        <!-- Reading on the left, bi-wheel on the right -->
-        <Grid Grid.Row="1" Visibility="{x:Bind HasText(ViewModel.ToneText), Mode=OneWay}">
+        <!-- Until a third is chosen: everyone tried as the third of these two -->
+        <Grid Grid.Row="1" Padding="24,8,24,16" RowSpacing="12" Visibility="{x:Bind VisIf(ViewModel.ThirdsShown), Mode=OneWay}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel Spacing="4">
+                <TextBlock Text="{x:Bind ViewModel.ThirdsHeading, Mode=OneWay}" Style="{StaticResource JupiterSectionHeadingTextStyle}" />
+                <TextBlock Text="{x:Bind ViewModel.ThirdsSummary, Mode=OneWay}" Style="{StaticResource JupiterBodyTextStyle}" TextWrapping="Wrap" />
+                <TextBlock Style="{StaticResource JupiterCaptionTextStyle}" TextWrapping="Wrap" MaxWidth="900" HorizontalAlignment="Left"
+                           Text="Every other chart tried as the third of these two, best first. Golden needs no pair in difficulty and a strong grand trine through all three charts. The scale is Lore's own: astrology has no agreed score for three people. Select a name to read the three together." />
+            </StackPanel>
+            <ListView Grid.Row="1" MaxWidth="640" HorizontalAlignment="Left"
+                      ItemsSource="{x:Bind ViewModel.BestThirds, Mode=OneWay}"
+                      ItemTemplate="{StaticResource ThirdTemplate}"
+                      SelectionMode="None" IsItemClickEnabled="True" ItemClick="Third_ItemClick"
+                      AutomationProperties.Name="Best third people" />
+        </Grid>
+
+        <!-- Reading on the left, the wheel on the right -->
+        <Grid Grid.Row="1" Visibility="{x:Bind VisIf(ViewModel.ReadingShown), Mode=OneWay}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" MaxWidth="720" />
                 <ColumnDefinition Width="*" />

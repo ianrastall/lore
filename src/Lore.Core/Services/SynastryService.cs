@@ -53,7 +53,7 @@ public static class SynastryService
     // The points a chart brings to the comparison. Without a birth time the angles are
     // unknown and the noon Moon may be more than 6° off — as wide as the orb itself — so
     // those are left out rather than guessed at (the same rule the daily transits use).
-    private static List<(NatalPoint point, double lon)> Points(NatalChart chart)
+    internal static List<(NatalPoint point, double lon)> Points(NatalChart chart)
     {
         bool timed = chart.Celebrity.BirthTimeKnown;
         var points = new List<(NatalPoint, double)>();

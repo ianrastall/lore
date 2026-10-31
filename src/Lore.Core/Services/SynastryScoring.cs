@@ -18,7 +18,7 @@ public static class SynastryScoring
         return PointWeight(x.First) * PointWeight(x.Second) * AspectWeight(x.Type) * closeness;
     }
 
-    private static double PointWeight(NatalPoint p) => p.Kind switch
+    internal static double PointWeight(NatalPoint p) => p.Kind switch
     {
         NatalPointKind.Ascendant => 0.9,
         NatalPointKind.Midheaven => 0.5,
@@ -48,7 +48,7 @@ public static class SynastryScoring
     // years, so they say nothing about these two people in particular.
     public static bool IsGenerational(SynastryAspect x) => IsGenerational(x.First) && IsGenerational(x.Second);
 
-    private static bool IsGenerational(NatalPoint p) =>
+    internal static bool IsGenerational(NatalPoint p) =>
         !p.IsAngle && p.Body is Planet.Uranus or Planet.Neptune or Planet.Pluto
                                 or Planet.NorthNode or Planet.Chiron or Planet.Lilith;
 

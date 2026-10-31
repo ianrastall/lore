@@ -61,6 +61,10 @@
                         <MenuFlyoutItem Text="Davison wheel as PNG…" Tag="davisonpng" Click="Export_Click" />
                         <MenuFlyoutItem Text="Davison chart with tables as PNG…" Tag="davisonsheetpng" Click="Export_Click" />
                         <MenuFlyoutItem Text="Davison worksheet as text…" Tag="davisontxt" Click="Export_Click" />
+                        <MenuFlyoutSeparator />
+                        <MenuFlyoutItem Text="Trine reading as PDF…" Tag="trinepdf" Click="Export_Click" />
+                        <MenuFlyoutItem Text="Trine reading as text…" Tag="trinetxt" Click="Export_Click" />
+                        <MenuFlyoutItem Text="Trine wheel as PNG…" Tag="trinepng" Click="Export_Click" />
                     </MenuFlyoutSubItem>
                     <MenuFlyoutSubItem Text="Inventory">
                         <MenuFlyoutItem Text="Personality profile as text…" Tag="inventorytxt" Click="Export_Click" />

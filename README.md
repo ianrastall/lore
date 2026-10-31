@@ -4,16 +4,16 @@ A Windows desktop application for computing and exploring astrological natal cha
 
 Part of Jupiter. Follows Jupiter style standard 1.1.
 
-**Latest release: v4.0.0** · [Download](../../releases/latest)
+**Latest release: v4.1.0** · [Download](../../releases/latest)
 
 ### Installing
 
 Lore 4 needs **Windows 11 24H2** or later, 64-bit.
 
-1. From the [latest release](../../releases/latest), download **`Lore-4.0.0-win-x64-setup.exe`**. It is a single file with everything inside it; there is nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`Lore-4.1.0-win-x64-setup.exe`**. It is a single file with everything inside it; there is nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user, adds **Lore** to the Start menu, and can be removed from *Settings > Apps* like any other program. An earlier Lore is upgraded in place, and your saved charts, answers and settings stay as they are.
 
-**Prefer not to install?** `Lore-4.0.0-win-x64-portable.zip` is the same program as a folder. Unzip it anywhere and run `Lore.exe` from inside it. Delete the folder to remove it.
+**Prefer not to install?** `Lore-4.1.0-win-x64-portable.zip` is the same program as a folder. Unzip it anywhere and run `Lore.exe` from inside it. Delete the folder to remove it.
 
 > **The installer is not code-signed.** Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"*. Choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -110,6 +110,18 @@ The **Synastry** view compares the selected chart with a second person's — any
 
 Astrology has no agreed compatibility score; the scale is Lore's own, and it describes the symbolism between two charts rather than forecasting a relationship.
 
+### Trine: three people
+**Trine**, at the top of the Synastry view, sets three charts together. Choose it once two people are being compared, then add a third.
+
+- **Best third.** Before you choose anyone, Lore tries every chart in the library, and every chart of your own, as the third of the two, and lists the best twelve.
+- **The three pairs.** Each pair is compared as in Synastry, on the same five-step scale, and the weakest of the three is marked.
+- **Grand trines through all three charts.** One point from each person, every point within 6° of a trine with the other two. Each is named with its element and how close it is, and the strongest three are described.
+- **Four steps.** **Golden**, **Harmonious**, **Mixed** or **Strained**. Golden needs no pair in difficulty, more ease than not, and a strong grand trine: personal points close to exact. Having a grand trine is not enough, since nine trios in ten have one. Against random trios from the library about 3% are Golden, 26% Harmonious, 34% Mixed and 37% Strained. The share of Golden thirds runs higher for a pair that is already strong.
+- **A wheel of three rings.** One ring for each person on one zodiac, with the strongest grand trines drawn as triangles, the Golden one in gold.
+- **Text from an editable corpus.** The lines are in `content\synastry.json`, and the reading can be exported as PDF or text, the wheel as PNG.
+
+Astrology has no agreed score for three people. The scale is Lore's own, and it describes the symbolism between three charts rather than forecasting how three people will get on.
+
 ### Personality Inventory
 The **Inventory** view offers a standard personality questionnaire for any chart under My Charts, and then reads the chart in the light of the answers. A chart is the same for everyone born at that minute and cannot know how a given person is living it; the questionnaire asks them.
 
@@ -173,6 +185,8 @@ Charts and readings can be exported from File > Export in these formats:
 | **PDF — Davison reading** | The Davison chart's wheel and reading, followed by its full Worksheet |
 | **PNG — Davison wheel / chart with tables** | The Davison chart's wheel alone, or with the Worksheet's tables set out around it |
 | **Text — Davison worksheet** | The Davison chart's Worksheet as plain text |
+| **PDF / Text — Trine reading** | The reading of three charts; the PDF includes the wheel of three rings |
+| **PNG — Trine wheel** | The wheel of three rings alone (1600 × 1600 px) |
 | **Text — personality profile** | The Inventory view's profile: every trait and facet with its band, score and description |
 | **Text — chart and answers** | The reading that sets the profile beside the chart, planet by planet |
 
@@ -267,7 +281,7 @@ lore/
 │   └── legend.json            # The Legend: every glyph, colour and term, explained
 ├── third_party/swisseph/      # Swiss Ephemeris C source + .se1 ephemeris files
 ├── Native/sweph.dll           # Built by build\build-sweph.ps1 (not in repo)
-├── tests/Lore.Tests/          # 488 xUnit tests: calculations, readings, exports, saved charts and answers, view models, figures vs Astro-Databank
+├── tests/Lore.Tests/          # 505 xUnit tests: calculations, readings, exports, saved charts and answers, view models, figures vs Astro-Databank
 ├── build/
 │   ├── build.ps1              # The release command
 │   ├── build-sweph.ps1        # Compiles sweph.dll from third_party\swisseph
@@ -327,7 +341,7 @@ dotnet test tests\Lore.Tests
 
 A debug build looks for your data in the folder named by the `LORE_HOME` environment variable, if it is set, so the app can be tried with made-up charts. The Jupiter style check runs on every build of the app and fails it on a violation.
 
-The 488 tests cover the parts that must stay right: birth-time resolution (daylight saving, local mean time, historical city times), planet and Ascendant positions checked against Astro-Databank's published values, the daily transit scan checked against an independent calculation, the daily-horoscope corpus and wording, synastry (the contacts found between two charts, and the corpus and wording of the reading), the forecast, the Timing techniques, the Davison reading, the personality inventory's scoring and the chart-and-answers rules, the view models, crash-safe saving of My Charts and of the inventory answers (including several windows at once and recovery from a damaged file), what each export says (the PDFs are read back, and the JSON and XML set against the chart), the Legend, the reading other apps ask for, and city and hospital search. `FigureLibraryTests` checks every bundled figure against its Astro-Databank record in `tests\Lore.Tests\Reference\adb-reference.json`: each well-documented (AA/A) birth time must match, and Lore must turn it into the same instant Astro-Databank does. Run them after editing `content\celebrities.json`.
+The 505 tests cover the parts that must stay right: birth-time resolution (daylight saving, local mean time, historical city times), planet and Ascendant positions checked against Astro-Databank's published values, the daily transit scan checked against an independent calculation, the daily-horoscope corpus and wording, synastry (the contacts found between two charts, and the corpus and wording of the reading), the forecast, the Timing techniques, the Davison reading, the personality inventory's scoring and the chart-and-answers rules, the view models, crash-safe saving of My Charts and of the inventory answers (including several windows at once and recovery from a damaged file), what each export says (the PDFs are read back, and the JSON and XML set against the chart), the Legend, the reading other apps ask for, the Trine reading and where Golden falls, and city and hospital search. `FigureLibraryTests` checks every bundled figure against its Astro-Databank record in `tests\Lore.Tests\Reference\adb-reference.json`: each well-documented (AA/A) birth time must match, and Lore must turn it into the same instant Astro-Databank does. Run them after editing `content\celebrities.json`.
 
 `SwetestReferenceTests` checks Lore against **swetest**, the Swiss Ephemeris's own command-line program, for fourteen moments and places chosen to be awkward: both ephemeris files and the seam between them, both hemispheres, the equator, the date line, and both polar circles. Every body's longitude, latitude, speed and declination, the Ascendant and Midheaven, and all twelve cusps under each of the four house systems must agree to a millionth of a degree. Because the two share an engine this checks that Lore asks it the right question, not the astronomy itself (the Astro-Databank comparison does that). The expected values live in `tests\Lore.Tests\Reference\swetest-reference.json`; `python scripts\build-swetest-reference.py` regenerates them (it needs `swetest64.exe` from the full Swiss Ephemeris download).
 
@@ -558,7 +572,10 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 4.0.0 (current)
+### 4.1.0 (current)
+- **Trine: three people.** A new choice in the Synastry view sets three charts together: the three pairs, the grand trines running through all three, and a four-step scale from Golden to Strained, with a wheel of three rings and a search of the library for the best third person. PDF, text and PNG exports under File > Export > Synastry.
+
+### 4.0.0
 The move to Jupiter: Lore keeps its calculations, readings, data and saved charts, in a new window.
 - **A new layout.** A menu bar, a Charts pane with search and categories, a selector for the views and a status bar. Your charts and settings carry over.
 - **Settings is a window of its own** (File > Settings, Ctrl+,), with the shared accent color control. Orbs are typed numbers, checked when you leave the box.

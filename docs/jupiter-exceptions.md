@@ -38,6 +38,8 @@ These keep existing installs and data working, and are not the Jupiter defaults 
 - The aspect grid in `WorksheetView`, which matches the wheel.
 - The chart verdict, day tone and synastry tone colors, from `Lore.Core`. They are shared with the PDF exports and appear as 12-pixel marks beside their text, which always states the meaning. Green and red here are the content's own scale and not the status tokens.
 
+**Tri-wheel.** The Trine view's wheel has no houses, since it would have to choose one person's; it is turned to the first chart's Ascendant. Its grand trine triangles are part of the wheel's content palette, with gold for a Golden trio's strongest.
+
 **Reading text size (section 4).** Long-form text defaults to 16 / 26 and has four steps, set from the View menu and bound through `ReadingText`. `FontSize` and `LineHeight` are therefore bindings and not style values.
 
 **Menu names (section 9).** File has New chart, Import My Charts and Export My Charts, and an Export submenu grouped by view. Help > Legend (F1) stands in for Documentation. Edit holds only Find, which moves focus to the Charts search.

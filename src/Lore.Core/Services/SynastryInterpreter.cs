@@ -29,6 +29,10 @@ public sealed class SynastryInterpreter
         public Dictionary<string, string> Houses { get; init; } = new();
         public Dictionary<string, string> Tones { get; init; } = new();
         public Dictionary<string, string> Notes { get; init; } = new();
+
+        // The Trine reading of three charts.
+        public Dictionary<string, string> TrioTones { get; init; } = new();
+        public Dictionary<string, string> GrandTrines { get; init; } = new();
     }
 
     private static readonly JsonSerializerOptions JsonOpts = new() { PropertyNameCaseInsensitive = true };
@@ -38,6 +42,8 @@ public sealed class SynastryInterpreter
     private const int MaxEasy = 4;       // sextiles and trines
     private const int MaxHard = 4;       // squares and oppositions
     private const int MaxPerPoint = 2;   // no one point (a Sun, say) gets to fill a list
+
+    private const int MaxGrandTrines = 3; // the strongest, in the Trine reading
 
     // The planets whose place in the other person's houses is written up.
     private static readonly Planet[] OverlayBodies = [Planet.Sun, Planet.Moon, Planet.Venus, Planet.Mars];
@@ -101,6 +107,64 @@ public sealed class SynastryInterpreter
             Sections = sections,
             Aspects = ranked,
             Trace = ranked.Select(x => TraceLine(x, a, b)).ToList(),
+        };
+    }
+
+    // ── Three charts ──────────────────────────────────────────────────────────
+
+    public TrioReading ComposeTrio(Trio trio)
+    {
+        var full = trio.Charts.Select(c => c.Celebrity.Name).ToList();
+        var names = ShortNames(full);
+
+        var glance = new List<DailyItem> { new() { Text = Lookup(_c.TrioTones, trio.Tone.ToString(), "") } };
+        foreach (var chart in trio.Charts.Where(c => !c.Celebrity.BirthTimeKnown))
+            glance.Add(new DailyItem { Text = Lookup(_c.Notes, "unknownBirthTimeOne",
+                "{name} has no recorded birth time, so that chart's Ascendant, Midheaven, houses and Moon " +
+                "are left out of the comparison.").Replace("{name}", names[trio.Charts.ToList().IndexOf(chart)]) });
+        glance.RemoveAll(i => string.IsNullOrWhiteSpace(i.Text));
+
+        // Each kind of circuit is described once: two in one element say the same thing.
+        var told = new HashSet<string>();
+        var grand = trio.GrandTrines.Take(MaxGrandTrines).Select(g =>
+        {
+            string kind = g.Element?.ToString() ?? "Mixed";
+            return new DailyItem
+            {
+                Title = JoinList(g.Corners.Select(c => $"{names[c.Person]}'s {Label(c.Point)}")),
+                Meta = $"{g.Element?.ToString() ?? "Out of sign"}  ·  widest orb {g.WidestOrb:0.0}°",
+                Text = told.Add(kind)
+                    ? Lookup(_c.GrandTrines, kind, "")
+                    : Lookup(_c.Notes, "trioSameCircuit", "Another strand of the same circuit."),
+            };
+        }).ToList();
+        if (grand.Count == 0)
+            grand.Add(new DailyItem { Text = Lookup(_c.Notes, "trioNoGrandTrine", "No grand trine runs through all three charts.") });
+        if (trio.GrandTrines.Count > MaxGrandTrines)
+            grand.Add(new DailyItem { Text = Lookup(_c.Notes, "trioMoreGrandTrines", "{count} weaker grand trines are not listed.")
+                .Replace("{count}", (trio.GrandTrines.Count - MaxGrandTrines).ToString()) });
+
+        var weakest = trio.Weakest;
+        var pairs = trio.Pairs.Select(p => new DailyItem
+        {
+            Title = $"{names[p.First]} and {names[p.Second]}",
+            Meta = $"{p.Compatibility.Tone.Label()} ({p.Compatibility.Tone.LevelText()})  ·  " +
+                   $"{Math.Round(p.Compatibility.Share * 100):0}% easy" +
+                   (ReferenceEquals(p, weakest) ? "  ·  the weakest of the three" : ""),
+            Text = Lookup(_c.Tones, p.Compatibility.Tone.ToString(), ""),
+        }).Where(i => i.Text.Length > 0).ToList();
+
+        return new TrioReading
+        {
+            Names = full,
+            Trio = trio,
+            Sections =
+            [
+                new DailySection { Heading = "At a glance", Items = glance },
+                new DailySection { Heading = "Grand trines through all three charts", Items = grand },
+                new DailySection { Heading = "The three pairs", Items = pairs },
+                new DailySection { Heading = "How this is measured", Items = [new DailyItem { Text = Lookup(_c.Notes, "trioScale", "") }] },
+            ],
         };
     }
 
@@ -281,6 +345,14 @@ public sealed class SynastryInterpreter
         string fullA = s.First.Celebrity.Name, fullB = s.Second.Celebrity.Name;
         string a = FirstName(fullA), b = FirstName(fullB);
         return string.Equals(a, b, StringComparison.OrdinalIgnoreCase) ? (fullA, fullB) : (a, b);
+    }
+
+    // First names, unless two of the people share one.
+    private static List<string> ShortNames(IReadOnlyList<string> full)
+    {
+        var first = full.Select(FirstName).ToList();
+        return first.Select((name, i) =>
+            first.Count(n => string.Equals(n, name, StringComparison.OrdinalIgnoreCase)) > 1 ? full[i] : name).ToList();
     }
 
     private static string FirstName(string full)

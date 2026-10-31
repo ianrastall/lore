@@ -21,6 +21,10 @@ public static class ExportService
     public static Task<byte[]> RenderBiWheelPngAsync(Synastry synastry, int size = 1600) =>
         RenderPngAsync(size, ds => ChartRenderer.DrawBiWheel(ds, synastry, size, size));
 
+    // The Trine wheel: three charts in rings, with their strongest grand trines.
+    public static Task<byte[]> RenderTrioWheelPngAsync(Trio trio, int size = 1600) =>
+        RenderPngAsync(size, ds => ChartRenderer.DrawTrioWheel(ds, trio, size, size));
+
     // The Daily view's wheel: the birth chart inside, the day's sky around it.
     public static Task<byte[]> RenderTransitWheelPngAsync(NatalChart natal, DailyReading reading, int size = 1600) =>
         RenderPngAsync(size, ds => ChartRenderer.DrawTransitWheel(ds, natal, reading, size, size));

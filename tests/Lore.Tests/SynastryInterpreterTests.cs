@@ -58,7 +58,7 @@ public class SynastryInterpreterTests
             ["sunElements"] = ["{a}", "{b}"],
             ["moonElements"] = ["{a}", "{b}"],
             ["overlayHouses"] = ["{guest}", "{host}", "{brings}"],
-            ["notes"] = ["{name}"],
+            ["notes"] = ["{name}", "{count}"],
         };
         var stray =
             from section in doc.RootElement.EnumerateObject()
