@@ -35,6 +35,7 @@ Return one JSON object per person with exactly these fields:
   "birthDate": "1867-11-07",
   "birthTime": "12:00",
   "birthTimeKnown": true,
+  "birthTimeUncertaintyMinutes": 15,
   "deathDate": "1934-07-04",
   "birthPlace": "Warsaw, Poland",
   "latitude": 52.2516,
@@ -55,6 +56,7 @@ Field rules:
 - **birthDate** — `YYYY-MM-DD` in the **Gregorian calendar**. If the source gives an Old Style (Julian) date — anyone born before 1582, and later in countries that had not yet switched, such as Britain before 1752 or Russia before 1918 — convert it to the Gregorian date and say so in the verification table.
 - **birthTime** — the local clock time at the birthplace as recorded, in 24-hour `HH:mm`. Do NOT convert it to UTC or to any other zone.
 - **birthTimeKnown** — always `true` (anyone for whom it would be false should not be on the list).
+- **birthTimeUncertaintyMinutes** — how far out the time might be, in minutes either way. `15` when the recorded time falls exactly on the hour or half hour, because such times are usually rounded; `0` only when the record gives another exact minute.
 - **deathDate** — `YYYY-MM-DD` in the Gregorian calendar, or `null` if the person is living. Lore uses it to tell which people were alive at the same time, so check it as carefully as the birth date.
 - **birthPlace** — `City, ST` for the United States using the two-letter state (e.g. `Tupelo, MS`); `City, Country` everywhere else (e.g. `Ulm, Germany`).
 - **latitude / longitude** — decimal degrees of the birthplace to four decimal places. North and east are positive; south and west are negative.
@@ -63,6 +65,10 @@ Field rules:
 - **roddenRating** — the current Astro-Databank rating, exactly `AA` or `A`.
 - **source** — begin with `Astro-Databank`, briefly describe the birth-time evidence, and include the source page URL. Do not describe an A-rated personal account as a birth certificate unless the evidence supports that description.
 - **bio** — one neutral sentence of 65 to 120 characters saying what the person is known for, ending with a full stop.
+
+## Where to stop
+
+Birth-time evidence is the job. Check it first, and if a person fails the rule above, stop there and give them one line in the rejected list, without filling in the other fields. Do not gather relationships, awards or other biography: those come from Wikidata once a person has passed.
 
 ## What to return
 

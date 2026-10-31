@@ -722,6 +722,47 @@ may be preferred.
 - **Open:** whether a brief overlap counts (a newborn and someone of ninety were alive at
   the same time, but could not really know each other). Start with plain overlap.
 
+### 4.6b A fuller record for every figure. Medium. Asked for on 31 October 2026.
+
+Ian's direction: as complete a dataset as can be had, past what Astro-Databank offers. Each
+field below names what will read it. A figure must pass the birth-time rule first, so nothing
+is gathered for the many who will not, and the research LLMs stay on birth-time evidence.
+Everything else comes from Wikidata, which is structured and citable, in one pass by Q-number
+(about 30 calls for the whole library, against thousands for the search in
+`scripts/wikidata_deaths.py`).
+
+- **`wikidataId`.** The key to all of the below, and to refreshing it later. The death-date
+  pass already finds it, so it costs nothing to keep.
+- **Prominence**, from the number of Wikipedia editions a person has (`sitelinks`, also found
+  by that pass). This is the answer to the list getting stuck in the A's: sort by who people
+  have heard of, with A to Z as the alternative. See 4.7.
+- **Real connections**: spouses and partners with their dates, parents, children, siblings,
+  bandmates, kept only where both people are in the library. This goes past "could have known
+  each other" (4.6a) to "did", which the reading can say outright. It also tests the synastry
+  scale against real couples for the first time.
+- **Dated life events**: marriages, divorces, children, major awards. The Timing and Forecast
+  views can then show what the sky was doing at something that really happened.
+- **Birth name and other names**, so a search for Stefani Germanotta or Abel Tesfaye finds them.
+- **Occupations, all of them.** `category` holds one, and many people are more than one thing.
+- **Portrait file name**, not the picture: for the list redesign, if it wants faces. Each
+  picture has its own licence, to be checked before anything is bundled.
+
+**Birth-time quality** matters more than any of these. 646 of the 1,313 times (49%) fall exactly
+on :00 or :30, where an honest spread would give about 3%, so most of those were rounded by
+whoever wrote them down. `birthTimeUncertaintyMinutes` exists to say so and is set on nobody.
+Set it to 15 on those figures. New figures get it from the research prompt.
+
+**A second source for birth times.** Astro-Databank's own bar is what we cannot beat by searching
+harder, only by going round it. Open Gauquelin (opengauquelin.org) is an openly licensed database
+of 25,872 people, 24,542 with a birth time, largely from civil registers. It can confirm or
+correct existing figures and add new ones. It leans to older European names, so it will not
+solve the current English-language gap. Check the licence terms and its error notes first.
+
+**Not gathered:** cause of death (it would bum people out, and nothing reads it), religion and
+politics, and personality types for public figures, which have no reliable source. Hospital-level
+birthplaces make too little difference: a few arcminutes do not move the planets and barely move
+the angles.
+
 ### 4.7 Finding people in the list. Small to medium.
 
 The browse list sorts by name and filters by category and text. Useful additions:
