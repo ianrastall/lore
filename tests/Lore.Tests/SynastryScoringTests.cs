@@ -99,14 +99,19 @@ public class SynastryScoringTests
     {
         var charts = Repo.Figures.Select(f => Repo.Charts.Calculate(f)).ToList();
         var counts = new Dictionary<int, int>();
-        int pairs = 0;
+        var amongContemporaries = new Dictionary<int, int>();
+        int pairs = 0, contemporaries = 0;
         for (int i = 0; i < charts.Count; i++)
             for (int j = i + 1; j < charts.Count; j++, pairs++)
             {
                 int level = SynastryScoring.Assess(SynastryService.Compare(charts[i], charts[j]).Aspects).Level;
                 counts[level] = counts.GetValueOrDefault(level) + 1;
+                if (!Lifetimes.Overlap(charts[i].Celebrity, charts[j].Celebrity)) continue;
+                amongContemporaries[level] = amongContemporaries.GetValueOrDefault(level) + 1;
+                contemporaries++;
             }
         double Share(int level) => counts.GetValueOrDefault(level) / (double)pairs;
+        double ShareAmong(int level) => amongContemporaries.GetValueOrDefault(level) / (double)contemporaries;
 
         // About 7% / 18% / 50% / 18% / 7%. If the library grows and one drifts out of
         // range, reset the shares in SynastryScoring.
@@ -115,6 +120,15 @@ public class SynastryScoringTests
         Assert.InRange(Share(0), 0.44, 0.56);
         Assert.InRange(Share(-1), 0.14, 0.22);
         Assert.InRange(Share(-2), 0.05, 0.10);
+
+        // About two pairs in three overlap, and the bands fall the same among them, so
+        // preferring contemporaries does not tilt what the searches show.
+        Assert.InRange(contemporaries / (double)pairs, 0.62, 0.72);
+        Assert.InRange(ShareAmong(2), 0.05, 0.10);
+        Assert.InRange(ShareAmong(1), 0.14, 0.22);
+        Assert.InRange(ShareAmong(0), 0.44, 0.56);
+        Assert.InRange(ShareAmong(-1), 0.14, 0.22);
+        Assert.InRange(ShareAmong(-2), 0.05, 0.10);
     }
 
     [Fact]

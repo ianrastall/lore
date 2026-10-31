@@ -72,6 +72,9 @@ public sealed record TrioFigure(TrioFigureKind Kind, IReadOnlyList<TrioPoint> Co
 public sealed record TrioPair(int First, int Second, Synastry Contacts, Compatibility Compatibility)
 {
     public Compatibility? AsLived { get; init; }
+
+    // Their lifetimes overlap (see Lifetimes).
+    public bool Contemporaries { get; init; }
 }
 
 // Three charts set together: each pair, and the grand trines running through all three.
@@ -91,6 +94,9 @@ public sealed class Trio
     public TrioTone? LivedTone { get; init; }
     public TrioTone RankedTone => LivedTone ?? Tone;
 
+    // All three lifetimes overlap, so everyone could have known everyone else.
+    public bool Contemporaries => Pairs.All(p => p.Contemporaries);
+
     private double ShareOf(int person) => Pairs.Where(p => p.First == person || p.Second == person)
         .Average(p => (p.AsLived ?? p.Compatibility).Share);
 
@@ -107,11 +113,11 @@ public sealed class Trio
 }
 
 // One person from the search for a third: a trio made with the two already chosen.
-public sealed record TrioMatch(Celebrity Person, TrioTone Tone, double GoldenWeight, double Share, int GrandTrines)
+public sealed record TrioMatch(Celebrity Person, TrioTone Tone, double GoldenWeight, double Share, int GrandTrines, bool Contemporaries)
 {
     // For x:Bind in the list of matches.
     public string Name => Person.Name;
-    public string Detail => $"{Person.Category} · {Person.BirthDate}";
+    public string Detail => $"{Person.Category} · {Person.BirthDate}" + (Contemporaries ? " · contemporaries" : "");
     public string ToneLabel => Tone.Label();
     public string ColorHex => Tone.ColorHex();
     public string ShareText => $"{Math.Round(Share * 100):0}% easy";
@@ -120,11 +126,11 @@ public sealed record TrioMatch(Celebrity Person, TrioTone Tone, double GoldenWei
 
 // Two of a person's connections, tried together as a trio with them: one row of the
 // finder for tri-synastries.
-public sealed record TrioFind(Celebrity Second, Celebrity Third, TrioTone Tone, double GoldenWeight, double Share, int GrandTrines)
+public sealed record TrioFind(Celebrity Second, Celebrity Third, TrioTone Tone, double GoldenWeight, double Share, int GrandTrines, bool Contemporaries)
 {
     // For x:Bind in the list.
     public string Name => $"{Second.Name} and {Third.Name}";
-    public string Detail => $"{Second.Category} · {Third.Category}";
+    public string Detail => $"{Second.Category} · {Third.Category}" + (Contemporaries ? " · contemporaries" : "");
     public string ToneLabel => Tone.Label();
     public string ColorHex => Tone.ColorHex();
     public string ShareText => $"{Math.Round(Share * 100):0}% easy";

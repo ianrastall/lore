@@ -256,7 +256,9 @@
     "trioHub": "Both of the others get on with {name} better than they get on with each other, so {name} may be what keeps the three together. {other} sits furthest from the other two.",
     "trioSameFigure": "Another of the same figure, through different points.",
     "trioStrained": "By the answers {name} is finding {list} hard.",
-    "trioWell": "By the answers {name} is living {list} well."
+    "trioWell": "By the answers {name} is living {list} well.",
+    "contemporaries": "The lifetimes of {a} and {b} overlap, so the two could have known each other.",
+    "trioContemporaries": "The lifetimes of {names} all overlap, so the three could have known one another."
   },
   "_trio_comment": "The Trine reading of three charts. trioTones is keyed by TrioTone; grandTrines by the element all three corners are in, with Mixed for one that runs out of sign.",
   "trioTones": {

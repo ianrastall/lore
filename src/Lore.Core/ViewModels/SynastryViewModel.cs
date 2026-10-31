@@ -11,7 +11,7 @@ public sealed partial class SynastryViewModel : ObservableObject
 {
     private const int MaxSuggestions = 12;
     private const int MatchesShown = 12;   // how many of the best, and of the worst, are listed
-    private const int ConnectionsTried = 100;  // how many of a person's best matches the finder tries in pairs
+    public const int ConnectionsTried = 100;   // how many of a person's best matches the finder tries in pairs
     private const int TriosShown = 24;
     public const string EveryScope = "Everyone";
 
@@ -177,9 +177,10 @@ public sealed partial class SynastryViewModel : ObservableObject
         {
             if (Trios.Count == 0) return "";
             int golden = Trios.Count(t => t.Tone == TrioTone.Golden);
+            int contemporaries = Trios.Count(t => t.Contemporaries);
             string among = FinderScope == EveryScope ? "" : $" in {FinderScope}";
             int connections = Math.Min(ConnectionsTried, InScope.Count());
-            return $"Tried {Trios.Count:n0} {(Trios.Count == 1 ? "trio" : "trios")} from {Chart?.Celebrity.Name}'s top {connections} connections{among}{AsLivedNote}: {golden:n0} Golden.";
+            return $"Tried {Trios.Count:n0} {(Trios.Count == 1 ? "trio" : "trios")} from {Chart?.Celebrity.Name}'s top {connections} connections{among}{AsLivedNote}: {golden:n0} Golden, {contemporaries:n0} contemporaries.";
         }
     }
     public bool ReadingShown => Reading is not null && !ThirdsShown;
@@ -197,7 +198,8 @@ public sealed partial class SynastryViewModel : ObservableObject
         {
             if (ThirdMatches.Count == 0) return "";
             int golden = ThirdMatches.Count(m => m.Tone == TrioTone.Golden);
-            return $"Tried {ThirdMatches.Count} charts as the third{AsLivedNote}: {golden} Golden.";
+            int contemporaries = ThirdMatches.Count(m => m.Contemporaries);
+            return $"Tried {ThirdMatches.Count} charts as the third{AsLivedNote}: {golden} Golden, {contemporaries} contemporaries.";
         }
     }
 
@@ -229,9 +231,13 @@ public sealed partial class SynastryViewModel : ObservableObject
 
     public IReadOnlyList<SynastryMatch> BestMatches => Matches.Take(MatchesShown).ToList();
 
-    // Worst first. Never the same people as the best, however few charts there are.
-    public IReadOnlyList<SynastryMatch> WorstMatches =>
-        Matches.Skip(Math.Max(MatchesShown, Matches.Count - MatchesShown)).Reverse().ToList();
+    // Worst first, with contemporaries ahead within a level as they are in the best.
+    // Never the same people as the best, however few charts there are.
+    public IReadOnlyList<SynastryMatch> WorstMatches => Matches.Skip(MatchesShown)
+        .OrderBy(m => m.Compatibility.Level)
+        .ThenByDescending(m => m.Contemporaries)
+        .ThenBy(m => m.Compatibility.Share)
+        .Take(MatchesShown).ToList();
 
     public bool ShowMatches => Chart is not null && Partner is null && Matches.Count > 0 && !ShowTrine;
 
@@ -250,7 +256,7 @@ public sealed partial class SynastryViewModel : ObservableObject
             ];
             var counts = scale.Select(t =>
                 $"{Matches.Count(m => m.Compatibility.Level == t.Level())} {t.Label()} ({t.LevelText()})");
-            return $"Compared with {Matches.Count} charts{AsLivedNote}:  {string.Join("  ·  ", counts)}";
+            return $"Compared with {Matches.Count} charts{AsLivedNote}:  {string.Join("  ·  ", counts)}  ·  {Matches.Count(m => m.Contemporaries)} contemporaries";
         }
     }
 

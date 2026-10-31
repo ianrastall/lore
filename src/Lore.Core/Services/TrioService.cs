@@ -50,6 +50,7 @@ public static class TrioService
             return new TrioPair(p.Item1, p.Item2, contacts, SynastryScoring.Assess(contacts.Aspects))
             {
                 AsLived = a is null && b is null ? null : SynastryScoring.Assess(contacts.Aspects, a, b),
+                Contemporaries = Lifetimes.Overlap(charts[p.Item1].Celebrity, charts[p.Item2].Celebrity),
             };
         }).ToList();
 
@@ -184,6 +185,9 @@ public static class TrioService
     // Every pair of `connections` tried as a trio with `chart`, best first, in the same
     // order as Rank. The connections are the person's own best matches, so this looks
     // only among people who already suit them, and each still has to suit the other.
+    // They are cut from the head of SynastryScoring.Rank, which already puts the person's
+    // contemporaries ahead within a level, so the preference is in the cast before anyone
+    // is paired here, and again in the sort below.
     // `answersOf`: each person's answers, if any: the trios are then ranked as lived.
     public static List<TrioFind> FindTrios(ChartService charts, NatalChart chart, IReadOnlyList<Celebrity> connections,
         CancellationToken cancel = default, Func<NatalChart, MirrorReading?>? answersOf = null)
@@ -206,12 +210,13 @@ public static class TrioService
             for (int j = i + 1; j < cast.Count; j++)
             {
                 var trio = Compare(chart, cast[i], cast[j], Answers(answersOf, chart, cast[i], cast[j]), figures: false);
-                found.Add(new TrioFind(cast[i].Celebrity, cast[j].Celebrity, trio.RankedTone, trio.GoldenWeight, trio.Share, trio.GrandTrines.Count));
+                found.Add(new TrioFind(cast[i].Celebrity, cast[j].Celebrity, trio.RankedTone, trio.GoldenWeight, trio.Share, trio.GrandTrines.Count, trio.Contemporaries));
             }
         }
 
         return found
             .OrderBy(f => f.Tone)
+            .ThenByDescending(f => f.Contemporaries)
             .ThenByDescending(f => f.GoldenWeight)
             .ThenByDescending(f => f.Share)
             .ThenBy(f => f.Name, StringComparer.Ordinal)
@@ -223,8 +228,9 @@ public static class TrioService
         answersOf is null ? null : charts.Select(c => c.Celebrity.Category == UserChartService.MyChartsCategory ? answersOf(c) : null).ToArray();
 
     // Everyone in `people` as the third of a trio with the two given, best first: Golden
-    // ahead of the rest, then by grand-trine weight and the easy share. The two
-    // themselves are left out, and so is anyone whose chart cannot be calculated.
+    // ahead of the rest, within a tone the trios whose lifetimes all overlap, then by
+    // grand-trine weight and the easy share. The two themselves are left out, and so is
+    // anyone whose chart cannot be calculated.
     public static List<TrioMatch> Rank(ChartService charts, NatalChart first, NatalChart second,
         IEnumerable<Celebrity> people, CancellationToken cancel = default, Func<NatalChart, MirrorReading?>? answersOf = null)
     {
@@ -237,7 +243,7 @@ public static class TrioService
             {
                 var third = charts.Calculate(person);
                 var trio = Compare(first, second, third, Answers(answersOf, first, second, third), figures: false);
-                matches.Add(new TrioMatch(person, trio.RankedTone, trio.GoldenWeight, trio.Share, trio.GrandTrines.Count));
+                matches.Add(new TrioMatch(person, trio.RankedTone, trio.GoldenWeight, trio.Share, trio.GrandTrines.Count, trio.Contemporaries));
             }
             catch (Exception ex) when (ex is not OperationCanceledException)
             {
@@ -247,6 +253,7 @@ public static class TrioService
 
         return matches
             .OrderBy(m => m.Tone)
+            .ThenByDescending(m => m.Contemporaries)
             .ThenByDescending(m => m.GoldenWeight)
             .ThenByDescending(m => m.Share)
             .ThenBy(m => m.Person.Name, StringComparer.Ordinal)

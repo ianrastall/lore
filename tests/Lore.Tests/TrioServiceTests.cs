@@ -110,20 +110,32 @@ public class TrioServiceTests
         var charts = Repo.Figures.Select(Repo.Charts.Calculate).ToList();
         var random = new Random(4101);
         var counts = Enum.GetValues<TrioTone>().ToDictionary(t => t, _ => 0);
+        var amongContemporaries = Enum.GetValues<TrioTone>().ToDictionary(t => t, _ => 0);
         const int samples = 4000;
         for (int n = 0; n < samples;)
         {
             int a = random.Next(charts.Count), b = random.Next(charts.Count), c = random.Next(charts.Count);
             if (a == b || a == c || b == c) continue;
-            counts[TrioService.Compare(charts[a], charts[b], charts[c]).Tone]++;
+            var trio = TrioService.Compare(charts[a], charts[b], charts[c]);
+            counts[trio.Tone]++;
+            if (trio.Contemporaries) amongContemporaries[trio.Tone]++;
             n++;
         }
 
         double Share(TrioTone t) => (double)counts[t] / samples;
+        double ShareAmong(TrioTone t) => (double)amongContemporaries[t] / amongContemporaries.Values.Sum();
         Assert.InRange(Share(TrioTone.Golden), 0.015, 0.06);
         Assert.InRange(Share(TrioTone.Harmonious), 0.18, 0.33);
         Assert.InRange(Share(TrioTone.Mixed), 0.27, 0.41);
         Assert.InRange(Share(TrioTone.Strained), 0.30, 0.45);
+
+        // A little under half of all trios could have known one another, and the tones
+        // fall the same among them.
+        Assert.InRange(amongContemporaries.Values.Sum() / (double)samples, 0.40, 0.50);
+        Assert.InRange(ShareAmong(TrioTone.Golden), 0.015, 0.06);
+        Assert.InRange(ShareAmong(TrioTone.Harmonious), 0.18, 0.33);
+        Assert.InRange(ShareAmong(TrioTone.Mixed), 0.27, 0.41);
+        Assert.InRange(ShareAmong(TrioTone.Strained), 0.30, 0.45);
     }
 
     [Fact]

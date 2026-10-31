@@ -205,6 +205,8 @@ public sealed class SynastryInterpreter
         var names = ShortNames(full);
 
         var glance = new List<DailyItem> { new() { Text = Lookup(_c.TrioTones, trio.Tone.ToString(), "") } };
+        if (trio.Contemporaries)
+            glance.Add(new DailyItem { Text = Lookup(_c.Notes, "trioContemporaries", "").Replace("{names}", JoinList(names)) });
         foreach (var chart in trio.Charts.Where(c => !c.Celebrity.BirthTimeKnown))
             glance.Add(new DailyItem { Text = Lookup(_c.Notes, "unknownBirthTimeOne",
                 "{name} has no recorded birth time, so that chart's Ascendant, Midheaven, houses and Moon " +
@@ -247,6 +249,7 @@ public sealed class SynastryInterpreter
             Meta = $"{p.Compatibility.Tone.Label()} ({p.Compatibility.Tone.LevelText()})  ·  " +
                    $"{Math.Round(p.Compatibility.Share * 100):0}% easy" +
                    (p.AsLived is { } asLived ? $"  ·  by the answers, {asLived.Tone.Label()} ({asLived.Tone.LevelText()})" : "") +
+                   (p.Contemporaries && !trio.Contemporaries ? "  ·  contemporaries" : "") +
                    (ReferenceEquals(p, weakest) ? "  ·  the weakest of the three" : ""),
             Text = Lookup(_c.Tones, p.Compatibility.Tone.ToString(), ""),
         }).Where(i => i.Text.Length > 0).ToList();
@@ -368,6 +371,8 @@ public sealed class SynastryInterpreter
             new() { Text = Lookup(_c.Tones, tone.ToString(), "") }
         };
         if (asLived is not null) items.Add(LivedGlance(tone, asLived));
+        if (Lifetimes.Overlap(s.First.Celebrity, s.Second.Celebrity))
+            items.Add(new DailyItem { Text = Fill(Lookup(_c.Notes, "contemporaries", ""), a, b) });
 
         bool timedA = s.First.Celebrity.BirthTimeKnown, timedB = s.Second.Celebrity.BirthTimeKnown;
 

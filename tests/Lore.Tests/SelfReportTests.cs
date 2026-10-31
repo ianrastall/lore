@@ -688,7 +688,7 @@ public sealed class SelfReportTests : IDisposable
     public void One_trio_is_not_called_trios()
     {
         var vm = new SynastryViewModel { Chart = Repo.Charts.Calculate(Person()) };
-        vm.Trios = [new TrioFind(Person("a", "Ben"), Person("b", "Cara"), TrioTone.Mixed, 0, 0.5, 1)];
+        vm.Trios = [new TrioFind(Person("a", "Ben"), Person("b", "Cara"), TrioTone.Mixed, 0, 0.5, 1, true)];
         Assert.Contains("Tried 1 trio from", vm.FinderSummary);
     }
 }

@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Lore.Models;
 using Lore.Services;
 using NodaTime;
 
@@ -13,6 +14,8 @@ public class FigureLibraryTests
         "Actor", "Musician", "Writer", "Artist", "Political", "Scientist", "Historical", "Philosopher",
         "Director", "Athlete", "Media", "Entrepreneur", "Royalty", "Spiritual",
     ];
+
+    private const int OldestAge = 122;
 
     private sealed record AdbRecord(string AdbTitle, string Date, string? Time, string Zone, string Rating,
                                     string? ExpectedUtc, string? Note);
@@ -52,6 +55,50 @@ public class FigureLibraryTests
             // charts, and once put Jung on German rather than Swiss time.
             Assert.NotNull(DateTimeZoneProviders.Tzdb.GetZoneOrNull(f.TimeZoneId ?? ""));
         });
+    }
+
+    // Dates of death are Gregorian, as the birth dates are, and fall within a lifetime.
+    [Fact]
+    public void Every_death_date_is_a_real_day_within_a_lifetime_of_the_birth()
+    {
+        var today = DateOnly.FromDateTime(DateTime.Today);
+        Assert.All(Repo.Figures.Where(f => f.DeathDate is not null), f =>
+        {
+            Assert.True(Celebrity.TryParseDate(f.DeathDate, julian: false, out int year, out int month, out int day), $"{f.Name}: {f.DeathDate}");
+            var (born, died) = (BirthTimeResolver.GregorianDate(f), new DateOnly(year, month, day));
+            Assert.True(born < died && died <= today, $"{f.Name}: {f.BirthDate} to {f.DeathDate}");
+            Assert.True(died.Year - born.Year <= OldestAge, $"{f.Name}: {f.BirthDate} to {f.DeathDate}");
+        });
+    }
+
+    // Nobody now alive was born this long ago, so anyone without a date has been missed.
+    [Fact]
+    public void Nobody_is_left_living_beyond_the_oldest_age_anyone_has_reached()
+    {
+        int born = DateTime.Today.Year - OldestAge;
+        Assert.All(Repo.Figures.Where(f => f.GetRecordedDate().Year < born), f => Assert.NotNull(f.DeathDate));
+    }
+
+    [Theory]
+    [InlineData("elvis-presley", "1977-08-16")]
+    [InlineData("albert-einstein", "1955-04-18")]
+    [InlineData("marie-curie", "1934-07-04")]
+    [InlineData("queen-elizabeth-ii", "2022-09-08")]
+    [InlineData("johann-wolfgang-von-goethe", "1832-03-22")]
+    [InlineData("paul-mccartney", null)]
+    [InlineData("william-saliba", null)]
+    public void Well_known_lifetimes_are_as_recorded(string id, string? died) =>
+        Assert.Equal(died, Repo.Figure(id).DeathDate);
+
+    [Fact]
+    public void Every_figure_has_a_Wikidata_item_of_its_own()
+    {
+        Assert.All(Repo.Figures, f =>
+        {
+            Assert.Matches("^Q[1-9][0-9]*$", f.WikidataId ?? "");
+            Assert.True(f.Sitelinks > 0, f.Name);
+        });
+        Assert.Equal(Repo.Figures.Count, Repo.Figures.Select(f => f.WikidataId).Distinct().Count());
     }
 
     [Fact]

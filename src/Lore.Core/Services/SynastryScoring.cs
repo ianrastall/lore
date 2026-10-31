@@ -142,8 +142,9 @@ public static class SynastryScoring
     // ── One chart against many ────────────────────────────────────────────────
 
     // Everyone in `people` compared with one chart, best match first: by level, and
-    // within a level by the share of the weight that is on the easy side. The chart's own
-    // person is left out, and so is anyone whose chart cannot be calculated.
+    // within a level those whose lifetimes overlap the chart's person's, then by the share
+    // of the weight that is on the easy side. The chart's own person is left out, and so
+    // is anyone whose chart cannot be calculated.
     // `answersOf`: each person's answers, if any. The ranking is then of the pairs as lived.
     public static List<SynastryMatch> Rank(ChartService charts, NatalChart chart, IEnumerable<Celebrity> people,
         CancellationToken cancel = default, Func<NatalChart, MirrorReading?>? answersOf = null)
@@ -158,7 +159,8 @@ public static class SynastryScoring
             {
                 var other = charts.Calculate(person);
                 var theirs = person.Category == UserChartService.MyChartsCategory ? answersOf?.Invoke(other) : null;
-                matches.Add(new SynastryMatch(person, Assess(SynastryService.Compare(chart, other).Aspects, mine, theirs)));
+                matches.Add(new SynastryMatch(person, Assess(SynastryService.Compare(chart, other).Aspects, mine, theirs),
+                    Lifetimes.Overlap(chart.Celebrity, person)));
             }
             catch (Exception ex) when (ex is not OperationCanceledException)
             {
@@ -168,6 +170,7 @@ public static class SynastryScoring
 
         return matches
             .OrderByDescending(m => m.Compatibility.Level)
+            .ThenByDescending(m => m.Contemporaries)
             .ThenByDescending(m => m.Compatibility.Share)
             .ThenBy(m => m.Person.Name, StringComparer.Ordinal)
             .ToList();

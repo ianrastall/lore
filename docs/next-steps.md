@@ -702,25 +702,33 @@ the note at the end):
 - **A partner who is not saved**: today the second person must be in the library
   or in My Charts.
 
-### 4.6a Contemporaries in synastry and trios. Medium. Asked for on 31 October 2026.
+### 4.6a ~~Contemporaries in synastry and trios.~~ Done on 31 October 2026.
 
 Ian's requirement: a synastry, and above all a trio, in which everyone could conceivably
-have known each other is the more interesting situation. It must at least be noted, and
-may be preferred.
+have known each other is the more interesting situation.
 
-- **Death dates come first.** `Celebrity` and `content/celebrities.json` hold birth dates
-  only, so nothing can tell who was alive when. Add an optional `deathDate`; about 600
-  figures were born before 1930 and most of the library's dead need the date. The research
-  prompt now asks for it on every new figure.
-- **The test** is that lifetimes overlap. For a trio, each pair overlapping is enough: three
+- `Celebrity.DeathDate`, Gregorian, filled for the library's 757 dead; the 556 living carry
+  none. Where each date came from and every one changed by hand is in
+  `scripts/celebrity-death-dates-2026-10-31.md`. Anne Frank's and Alfred Wegener's are the
+  middle of a month, the day not being known.
+- `Lifetimes.Overlap` is the test. For a trio, each pair overlapping is enough: three
   lifetimes that overlap in pairs always share a moment. My Charts people count as living.
-- **Noted:** say so on the pair and the trio, in the result lists and in the reading.
-- **Preferred:** keep the astrological order first, and within a level or tone put
-  contemporaries ahead, in `SynastryScoring.Rank`, `TrioService.Rank` and
-  `TrioService.FindTrios`. `FindTrios` takes its cast of 100 before it pairs anyone, so a
-  preference applied only to the final sort would come too late: it has to reach the cast.
+- **Noted** in the list rows, the lists' summaries, the first section of both readings, and
+  on the pairs of a trio that is only partly contemporary.
+- **Preferred:** the astrological order stays first, and contemporaries go ahead within a
+  level or tone, in `SynastryScoring.Rank`, `TrioService.Rank` and `TrioService.FindTrios`.
+  The worst matches do the same. The finder's 100 are cut from the head of
+  `SynastryScoring.Rank`, so the preference reaches them: Einstein's cast goes from 70
+  contemporaries to 88, Marilyn Monroe's from 62 to 77, Paul McCartney's from 79 to 97. All
+  of their best 24 trios are then contemporaries. The limit is someone with few in the
+  library. Goethe has 87 contemporaries but only 3 in his cast of 100, because his top level
+  alone holds 103 people and it goes in first; Henry VIII has 10 and 2. Those lists stay
+  mostly people who never met, because the astrological order comes first.
+- About two pairs in three overlap, and a little under half of all trios. The five bands and
+  the four trio tones fall the same among them (tests in `SynastryScoringTests` and
+  `TrioServiceTests`).
 - **Open:** whether a brief overlap counts (a newborn and someone of ninety were alive at
-  the same time, but could not really know each other). Start with plain overlap.
+  the same time, but could not really know each other). Any overlap counts for now.
 
 ### 4.6b A fuller record for every figure. Medium. Asked for on 31 October 2026.
 

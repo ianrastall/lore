@@ -115,6 +115,7 @@ Astrology has no agreed compatibility score; the scale is Lore's own, and it des
 
 - **Finder.** With one person selected, Lore takes their top 100 connections, tries every pair of them as a trio with that person (4,950 trios), and lists the best two dozen. **Look among** narrows it to one category of the list, or to My Charts. Select a row to read the three together.
 - **Best third.** With two people chosen, Lore tries every other chart in the library, and every chart of your own, as the third, and lists the best twelve.
+- **Contemporaries.** Where everyone in a pair or a trio was alive at the same time, the list and the reading say so, and within a step of the scale they come first. Your own charts count as living.
 - **The three pairs.** Each pair is compared as in Synastry, on the same five-step scale, and the weakest of the three is marked.
 - **Grand trines through all three charts.** One point from each person, every point within 6° of a trine with the other two. Each is named with its element and how close it is, and the strongest three are described.
 - **Other figures through all three.** Strong T-squares and yods, each naming the person at its focus, and meeting points, where all three stand in one place. They are described and do not change the tone.

@@ -58,7 +58,7 @@ public class SynastryInterpreterTests
             ["sunElements"] = ["{a}", "{b}"],
             ["moonElements"] = ["{a}", "{b}"],
             ["overlayHouses"] = ["{guest}", "{host}", "{brings}"],
-            ["notes"] = ["{name}", "{count}", "{lived}", "{charts}", "{other}", "{list}"],
+            ["notes"] = ["{name}", "{count}", "{lived}", "{charts}", "{other}", "{list}", "{a}", "{b}", "{names}"],
             ["trioFigures"] = ["{focus}"],
             ["trioElements"] = ["{name}"],
         };

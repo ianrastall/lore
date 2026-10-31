@@ -25,6 +25,11 @@ public sealed class Celebrity
     [JsonPropertyName("julianCalendar")]
     public bool JulianCalendar { get; init; }
 
+    // The day the person died, "yyyy-MM-dd" in the Gregorian calendar whatever calendar
+    // BirthDate is in. Null for the living, and on charts that do not record it.
+    [JsonPropertyName("deathDate")]
+    public string? DeathDate { get; init; }
+
     [JsonPropertyName("birthTime")]
     public string? BirthTime { get; init; }
 
@@ -66,6 +71,14 @@ public sealed class Celebrity
 
     [JsonPropertyName("source")]
     public string? Source { get; init; }
+
+    // The person's Wikidata item ("Q7186") and how many Wikipedias and sister projects
+    // have a page on them. Both optional.
+    [JsonPropertyName("wikidataId")]
+    public string? WikidataId { get; init; }
+
+    [JsonPropertyName("sitelinks")]
+    public int? Sitelinks { get; init; }
 
     [JsonPropertyName("bio")]
     public string Bio { get; init => field = value ?? ""; } = "";

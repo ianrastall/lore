@@ -61,12 +61,13 @@ public sealed record Compatibility(SynastryTone Tone, double Flow, double Tensio
     public double Share => Flow + Tension <= 0 ? 0.5 : Flow / (Flow + Tension);   // the easy share, 0 to 1
 }
 
-// One person from a search of everyone against a chart.
-public sealed record SynastryMatch(Celebrity Person, Compatibility Compatibility)
+// One person from a search of everyone against a chart. Contemporaries: their lifetime
+// overlaps the chart's person's (see Lifetimes).
+public sealed record SynastryMatch(Celebrity Person, Compatibility Compatibility, bool Contemporaries)
 {
     // For x:Bind in the list of matches.
     public string Name => Person.Name;
-    public string Detail => $"{Person.Category} · {Person.BirthDate}";
+    public string Detail => $"{Person.Category} · {Person.BirthDate}" + (Contemporaries ? " · contemporaries" : "");
     public string LevelText => Compatibility.Tone.LevelText();
     public string ToneLabel => Compatibility.Tone.Label();
     public string ColorHex => Compatibility.Tone.ColorHex();
