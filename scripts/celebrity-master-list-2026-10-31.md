@@ -120,10 +120,11 @@ the 7 October batch left out by choice. Lore is for enjoyment.
 
 Their entries are in git history (`content/celebrities.json`, `adb-reference.json`) if any should return.
 
-## Not decided: Ian's call
+## Considered and kept
 
-These are matters of judgement, so they stay until Ian decides. Mainstream politicians still in
-public life are on neither list: disliking one is a political view, not infamy.
+Ian looked at these on 31 October 2026 and kept them all, so do not raise them again. Those on
+Gemini's list stay on it. Mainstream politicians still in public life were not considered:
+disliking one is a political view, not infamy.
 
 - **Accused, disgraced or in scandal:** Prince Andrew, Woody Allen, Michael Jackson, Marilyn Manson, Conor McGregor, Dominique Strauss-Kahn, Patrick Poivre d'Arvor, Abbé Pierre, Klaus Kinski, Charlie Sheen, Jimmy Swaggart.
 - **Ideas or associations:** Louis-Ferdinand Céline, Martin Heidegger, James Watson, Marquis de Sade, L. Ron Hubbard, Anton LaVey.
