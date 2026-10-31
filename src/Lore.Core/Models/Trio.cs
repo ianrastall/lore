@@ -76,6 +76,19 @@ public sealed record TrioMatch(Celebrity Person, TrioTone Tone, double GoldenWei
     public string GrandTrineText => GrandTrines == 1 ? "1 grand trine" : $"{GrandTrines} grand trines";
 }
 
+// Two of a person's connections, tried together as a trio with them: one row of the
+// finder for tri-synastries.
+public sealed record TrioFind(Celebrity Second, Celebrity Third, TrioTone Tone, double GoldenWeight, double Share, int GrandTrines)
+{
+    // For x:Bind in the list.
+    public string Name => $"{Second.Name} and {Third.Name}";
+    public string Detail => $"{Second.Category} · {Third.Category}";
+    public string ToneLabel => Tone.Label();
+    public string ColorHex => Tone.ColorHex();
+    public string ShareText => $"{Math.Round(Share * 100):0}% easy";
+    public string GrandTrineText => GrandTrines == 1 ? "1 grand trine" : $"{GrandTrines} grand trines";
+}
+
 // The generated reading for three charts, laid out like the other readings.
 public sealed class TrioReading
 {

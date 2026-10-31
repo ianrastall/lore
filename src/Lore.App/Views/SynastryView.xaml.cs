@@ -85,6 +85,13 @@ public sealed partial class SynastryView : UserControl
             ViewModel.Third = match.Person;
     }
 
+    // A row of the finder: both of the others at once.
+    private void Trio_ItemClick(object sender, ItemClickEventArgs e)
+    {
+        if (e.ClickedItem is TrioFind found)
+            ViewModel.Choose(found);
+    }
+
     // ── The wheel ─────────────────────────────────────────────────────────────
 
     private void WheelCanvas_Draw(CanvasControl sender, CanvasDrawEventArgs args)
@@ -119,6 +126,7 @@ public sealed partial class SynastryView : UserControl
     // x:Bind helpers.
     public bool AnyOf(bool a, bool b, bool c) => a || b || c;
     public bool Neither(bool a, bool b) => !a && !b;
+    public Visibility VisIfBoth(bool a, bool b) => a && b ? Visibility.Visible : Visibility.Collapsed;
 
     // The pill colour of a match or of the reading's tone, from its "#RRGGBB".
     public static Microsoft.UI.Xaml.Media.SolidColorBrush BrushOf(string hex) => HexBrushConverter.ToBrush(hex);

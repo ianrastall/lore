@@ -11,6 +11,7 @@ public sealed partial class SynastryViewModel : ObservableObject
 {
     private const int MaxSuggestions = 12;
     private const int MatchesShown = 12;   // how many of the best, and of the worst, are listed
+    private const int ConnectionsTried = 100;  // how many of a person's best matches the finder tries in pairs
 
     private readonly ChartService? _charts;
     private readonly SynastryInterpreter? _interpreter;
@@ -27,6 +28,7 @@ public sealed partial class SynastryViewModel : ObservableObject
     private readonly LatestOnly _latestMatches = new();
     private readonly LatestOnly _latestTrio = new();
     private readonly LatestOnly _latestThirds = new();
+    private readonly LatestOnly _latestFinder = new();
 
     public SynastryViewModel(ChartService? charts = null, SynastryInterpreter? interpreter = null,
         DavisonInterpreter? davison = null)
@@ -100,6 +102,26 @@ public sealed partial class SynastryViewModel : ObservableObject
 
     public bool TrioShown => ShowTrine && TrioReading is not null;
     public bool ThirdsShown => ShowTrine && Comparison is not null && Third is null;
+    public bool FinderShown => ShowTrine && Chart is not null && Partner is null;
+    public bool HasChart => Chart is not null;
+
+    // The finder: pairs of the selected person's top connections, as trios with them.
+    [ObservableProperty]
+    public partial IReadOnlyList<TrioFind> Trios { get; set; } = [];
+
+    public IReadOnlyList<TrioFind> BestTrios => Trios.Take(MatchesShown).ToList();
+
+    public string FinderHeading => Chart is null ? "" : $"Best tri-synastries for {Chart.Celebrity.Name}";
+
+    public string FinderSummary
+    {
+        get
+        {
+            if (Trios.Count == 0) return "";
+            int golden = Trios.Count(t => t.Tone == TrioTone.Golden);
+            return $"Tried {Trios.Count:n0} trios from {Chart?.Celebrity.Name}'s top {Math.Min(ConnectionsTried, Matches.Count)} connections: {golden:n0} Golden.";
+        }
+    }
     public bool ReadingShown => Reading is not null && !ThirdsShown;
     public bool HasThird => Third is not null;
     public bool GoldenThirds => BestThirds.Any(m => m.Tone == TrioTone.Golden);
@@ -132,6 +154,7 @@ public sealed partial class SynastryViewModel : ObservableObject
     // What to do next, shown in place of a reading until two different people are chosen.
     public string PromptText =>
         Chart is null ? "Select a chart from the list, then choose someone to compare it with." :
+        Partner is null && ShowTrine ? "" :
         Partner is null ? $"Choose someone to compare with {Chart.Celebrity.Name}: type a name in the box above, or pick one of the matches below." :
         Partner.Id == Chart.Celebrity.Id ? $"That is {Chart.Celebrity.Name}'s own chart. Choose someone else to compare it with." :
         "";
@@ -150,7 +173,7 @@ public sealed partial class SynastryViewModel : ObservableObject
     public IReadOnlyList<SynastryMatch> WorstMatches =>
         Matches.Skip(Math.Max(MatchesShown, Matches.Count - MatchesShown)).Reverse().ToList();
 
-    public bool ShowMatches => Chart is not null && Partner is null && Matches.Count > 0;
+    public bool ShowMatches => Chart is not null && Partner is null && Matches.Count > 0 && !ShowTrine;
 
     public string MatchesHeading => Chart is null ? "" : $"Best and worst matches for {Chart.Celebrity.Name}";
 
@@ -176,7 +199,7 @@ public sealed partial class SynastryViewModel : ObservableObject
 
     public string WheelCaption => Comparison is null ? "" :
         DavisonShown ? $"The Davison chart of {Comparison.First.Celebrity.Name} and {Comparison.Second.Celebrity.Name}" :
-        TrioShown ? "Rings from the inside: " + string.Join(", ", TrioReading!.Names) + "   ·   Triangles: the strongest grand trines" :
+        TrioShown ? "Rings from the inside: " + string.Join(", ", TrioReading!.Names) :
         $"Inner wheel: {Comparison.First.Celebrity.Name}   ·   Outer wheel: {Comparison.Second.Celebrity.Name}";
 
     public string ToneText => TrioShown ? $"The three read as {TrioReading!.Trio.Tone.Label()}" : Reading is null ? "" :
@@ -236,9 +259,19 @@ public sealed partial class SynastryViewModel : ObservableObject
     [RelayCommand]
     private void ClearThird() => Third = null;
 
+    // A row of the finder chosen: both people at once.
+    public void Choose(TrioFind found)
+    {
+        Third = found.Third;
+        Partner = found.Second;
+    }
+
     partial void OnChartChanged(NatalChart? value)
     {
         OnPropertyChanged(nameof(MatchesHeading));
+        OnPropertyChanged(nameof(FinderHeading));
+        OnPropertyChanged(nameof(HasChart));
+        OnPropertyChanged(nameof(FinderShown));
         Rebuild();
         RebuildMatches();
     }
@@ -248,7 +281,9 @@ public sealed partial class SynastryViewModel : ObservableObject
         OnPropertyChanged(nameof(PartnerText));
         OnPropertyChanged(nameof(HasPartner));
         OnPropertyChanged(nameof(ShowMatches));
+        if (value is null) Third = null;   // the trio goes with the partner
         Rebuild();
+        RebuildFinder();
     }
 
     partial void OnThirdChanged(Celebrity? value)
@@ -262,8 +297,16 @@ public sealed partial class SynastryViewModel : ObservableObject
     partial void OnShowTrineChanged(bool value)
     {
         if (value) ShowDavison = false;
+        OnPropertyChanged(nameof(ShowMatches));
         TrioChanged();
         RebuildThirds();
+        RebuildFinder();
+    }
+
+    partial void OnTriosChanged(IReadOnlyList<TrioFind> value)
+    {
+        OnPropertyChanged(nameof(BestTrios));
+        OnPropertyChanged(nameof(FinderSummary));
     }
 
     partial void OnTrioReadingChanged(TrioReading? value) => TrioChanged();
@@ -280,10 +323,32 @@ public sealed partial class SynastryViewModel : ObservableObject
     {
         foreach (string name in new[]
                  {
-                     nameof(TrioShown), nameof(ThirdsShown), nameof(ReadingShown), nameof(ComparisonShown),
+                     nameof(TrioShown), nameof(ThirdsShown), nameof(FinderShown), nameof(ReadingShown), nameof(ComparisonShown),
+                     nameof(PromptText),
                      nameof(Title), nameof(ToneText), nameof(ToneColorHex), nameof(Sections), nameof(WheelCaption),
                  })
             OnPropertyChanged(name);
+    }
+
+    // The finder, off the UI thread: every pair of the top connections as a trio with the
+    // selected chart. It runs only while the Trine view is open and nobody has been chosen.
+    private async void RebuildFinder()
+    {
+        var chart = Chart;
+        var connections = Matches.Take(ConnectionsTried).Select(m => m.Person).ToList();
+        Trios = [];
+        if (!ShowTrine || !IsActive || Partner is not null || chart is null || connections.Count < 2 || _charts is null)
+        {
+            _latestFinder.Cancel();
+            return;
+        }
+
+        var charts = _charts.With(chart.Settings);
+        await _latestFinder.Run(
+            cancel => TrioService.FindTrios(charts, chart, connections, cancel),
+            busy => IsFindingThird = busy,
+            found => Trios = found,
+            ex => Diagnostics.Log($"Tri-synastry search for chart {chart.Celebrity.Id} failed: {ex}"));
     }
 
     // The search for a third, off the UI thread, for whichever two are chosen. It runs
@@ -346,6 +411,7 @@ public sealed partial class SynastryViewModel : ObservableObject
         OnPropertyChanged(nameof(WorstMatches));
         OnPropertyChanged(nameof(MatchesSummary));
         OnPropertyChanged(nameof(ShowMatches));
+        RebuildFinder();
     }
 
     // Compares the selected chart with everyone else (off the UI thread: a chart is

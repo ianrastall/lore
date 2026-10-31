@@ -217,6 +217,70 @@ public class TrioServiceTests
     }
 
     [Fact]
+    public void The_finder_tries_every_pair_of_the_connections_once_and_puts_Golden_first()
+    {
+        var chart = Figure("albert-einstein");
+        var connections = Repo.Figures.Where(f => f.Id != chart.Celebrity.Id).Take(30).ToList();
+
+        var found = TrioService.FindTrios(Repo.Charts, chart, connections);
+
+        Assert.Equal(30 * 29 / 2, found.Count);
+        Assert.Equal(found.Count, found.Select(f => f.Name).Distinct().Count());
+        Assert.DoesNotContain(found, f => f.Second.Id == f.Third.Id);
+        Assert.Equal(found.OrderBy(f => f.Tone).Select(f => f.Tone), found.Select(f => f.Tone));
+
+        // What a row says is what the reading of those three says.
+        var row = found[0];
+        var trio = TrioService.Compare(chart, Repo.Charts.Calculate(row.Second), Repo.Charts.Calculate(row.Third));
+        Assert.Equal(trio.Tone, row.Tone);
+        Assert.Equal(trio.GrandTrines.Count, row.GrandTrines);
+    }
+
+    [Fact]
+    public async Task The_finder_opens_with_one_person_and_a_row_chooses_both_of_the_others()
+    {
+        var vm = new SynastryViewModel(Repo.Charts, Interpreter);
+        async Task Settled()
+        {
+            await Task.Delay(50);
+            for (int i = 0; vm.IsBusy || vm.IsSearching || vm.IsFindingThird; i++)
+            {
+                Assert.True(i < 3000, "The synastry view did not settle.");
+                await Task.Delay(10);
+            }
+        }
+
+        vm.SetPeople(Repo.Figures.Take(40).ToList());
+        vm.Chart = Figure("albert-einstein");
+        await Settled();
+        Assert.True(vm.ShowMatches);
+
+        vm.ShowTrine = true;
+        await Settled();
+        Assert.True(vm.FinderShown);
+        Assert.False(vm.ShowMatches);
+        Assert.NotEmpty(vm.BestTrios);
+        Assert.StartsWith("Tried ", vm.FinderSummary);
+        Assert.Equal("", vm.PromptText);
+
+        var row = vm.BestTrios[0];
+        vm.Choose(row);
+        await Settled();
+        Assert.False(vm.FinderShown);
+        Assert.True(vm.TrioShown);
+        Assert.Equal(row.Tone, vm.TrioReading!.Trio.Tone);
+        Assert.Contains(row.Second.Name, vm.Title);
+        Assert.Contains(row.Third.Name, vm.Title);
+
+        // Clearing the second person goes back to the finder, with the third gone too.
+        vm.ClearPartnerCommand.Execute(null);
+        await Settled();
+        Assert.Null(vm.Third);
+        Assert.True(vm.FinderShown);
+        Assert.NotEmpty(vm.BestTrios);
+    }
+
+    [Fact]
     public void The_trine_reading_saves_as_a_PDF_and_as_text()
     {
         var reading = Interpreter.ComposeTrio(TrioService.Compare(

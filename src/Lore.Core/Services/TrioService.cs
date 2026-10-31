@@ -84,6 +84,42 @@ public static class TrioService
         return Math.Abs((diff > 180 ? 360 - diff : diff) - AspectType.Trine.Angle());
     }
 
+    // Every pair of `connections` tried as a trio with `chart`, best first, in the same
+    // order as Rank. The connections are the person's own best matches, so this looks
+    // only among people who already suit them, and each still has to suit the other.
+    public static List<TrioFind> FindTrios(ChartService charts, NatalChart chart, IReadOnlyList<Celebrity> connections,
+        CancellationToken cancel = default)
+    {
+        var cast = new List<NatalChart>();
+        foreach (var person in connections)
+        {
+            cancel.ThrowIfCancellationRequested();
+            try { cast.Add(charts.Calculate(person)); }
+            catch (Exception ex) when (ex is not OperationCanceledException)
+            {
+                Diagnostics.Log($"Trio finder skipped chart {person.Id}: {ex.Message}");
+            }
+        }
+
+        var found = new List<TrioFind>();
+        for (int i = 0; i < cast.Count; i++)
+        {
+            cancel.ThrowIfCancellationRequested();
+            for (int j = i + 1; j < cast.Count; j++)
+            {
+                var trio = Compare(chart, cast[i], cast[j]);
+                found.Add(new TrioFind(cast[i].Celebrity, cast[j].Celebrity, trio.Tone, trio.GoldenWeight, trio.Share, trio.GrandTrines.Count));
+            }
+        }
+
+        return found
+            .OrderBy(f => f.Tone)
+            .ThenByDescending(f => f.GoldenWeight)
+            .ThenByDescending(f => f.Share)
+            .ThenBy(f => f.Name, StringComparer.Ordinal)
+            .ToList();
+    }
+
     // Everyone in `people` as the third of a trio with the two given, best first: Golden
     // ahead of the rest, then by grand-trine weight and the easy share. The two
     // themselves are left out, and so is anyone whose chart cannot be calculated.

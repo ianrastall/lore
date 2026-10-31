@@ -29,6 +29,29 @@
                 </StackPanel>
             </Grid>
         </DataTemplate>
+        <DataTemplate x:Key="TrioTemplate" x:DataType="models:TrioFind">
+            <Grid ColumnSpacing="12" Padding="0,4,0,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Border Width="12" Height="12" VerticalAlignment="Center" CornerRadius="{StaticResource ControlCornerRadius}"
+                        Background="{x:Bind local:SynastryView.BrushOf(ColorHex)}" />
+                <StackPanel Grid.Column="1">
+                    <TextBlock Text="{x:Bind Name}" Style="{StaticResource JupiterBodyTextStyle}" TextTrimming="CharacterEllipsis" />
+                    <TextBlock Text="{x:Bind Detail}" Style="{StaticResource JupiterCaptionTextStyle}" TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+                <StackPanel Grid.Column="2" HorizontalAlignment="Right">
+                    <TextBlock Text="{x:Bind ToneLabel}" Style="{StaticResource JupiterBodyTextStyle}" HorizontalAlignment="Right" />
+                    <TextBlock Style="{StaticResource JupiterCaptionTextStyle}" HorizontalAlignment="Right">
+                        <Run Text="{x:Bind GrandTrineText}" />
+                        <Run Text="·" />
+                        <Run Text="{x:Bind ShareText}" />
+                    </TextBlock>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
         <DataTemplate x:Key="ThirdTemplate" x:DataType="models:TrioMatch">
             <Grid ColumnSpacing="12" Padding="0,4,0,4">
                 <Grid.ColumnDefinitions>
@@ -64,7 +87,7 @@
         <StackPanel Spacing="8" Padding="24,16,24,8">
             <StackPanel Spacing="4">
                 <TextBlock Text="{x:Bind ViewModel.Title, Mode=OneWay}" Style="{StaticResource JupiterPageHeadingTextStyle}" TextWrapping="Wrap" />
-                <TextBlock Text="Generated from the contacts between the two birth charts: a prompt for reflection, not a verdict."
+                <TextBlock Text="Generated from the contacts between the birth charts: a prompt for reflection, not a verdict."
                            Style="{StaticResource JupiterCaptionTextStyle}" TextWrapping="Wrap" />
             </StackPanel>
 
@@ -102,7 +125,7 @@
             </StackPanel>
 
             <!-- The two charts set against each other, or the one chart made from them -->
-            <StackPanel Orientation="Horizontal" Spacing="12" Visibility="{x:Bind HasText(ViewModel.ToneText), Mode=OneWay}">
+            <StackPanel Orientation="Horizontal" Spacing="12" Visibility="{x:Bind VisIf(ViewModel.HasChart), Mode=OneWay}">
                 <RadioButton x:Name="ComparisonRadio" Content="Comparison" GroupName="SynastryMode"
                              AutomationProperties.Name="Show the comparison of the two charts"
                              IsChecked="{x:Bind Neither(ViewModel.ShowDavison, ViewModel.ShowTrine), Mode=OneWay}"
@@ -113,6 +136,7 @@
                              IsChecked="{x:Bind ViewModel.ShowTrine, Mode=OneWay}"
                              Checked="TrineRadio_Checked" />
                 <RadioButton x:Name="DavisonRadio" Content="Davison chart" GroupName="SynastryMode"
+                             IsEnabled="{x:Bind ViewModel.HasPartner, Mode=OneWay}"
                              AutomationProperties.Name="Show the Davison chart of the two people"
                              ToolTipService.ToolTip="One chart for the two of you, cast for the midpoint of your births"
                              IsChecked="{x:Bind ViewModel.ShowDavison, Mode=OneWay}"
@@ -120,7 +144,7 @@
             </StackPanel>
 
             <!-- The third person, in the Trine view -->
-            <StackPanel Orientation="Horizontal" Spacing="8" Visibility="{x:Bind VisIf(ViewModel.ShowTrine), Mode=OneWay}">
+            <StackPanel Orientation="Horizontal" Spacing="8" Visibility="{x:Bind VisIfBoth(ViewModel.ShowTrine, ViewModel.HasPartner), Mode=OneWay}">
                 <AutoSuggestBox x:Name="ThirdBox" Width="320"
                                 PlaceholderText="Add a third person…"
                                 QueryIcon="Find"
@@ -180,6 +204,25 @@
                               AutomationProperties.Name="Worst matches" />
                 </Grid>
             </Grid>
+        </Grid>
+
+        <!-- With nobody else chosen: the finder, pairs of this person's top connections -->
+        <Grid Grid.Row="1" Padding="24,8,24,16" RowSpacing="12" Visibility="{x:Bind VisIf(ViewModel.FinderShown), Mode=OneWay}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackPanel Spacing="4">
+                <TextBlock Text="{x:Bind ViewModel.FinderHeading, Mode=OneWay}" Style="{StaticResource JupiterSectionHeadingTextStyle}" />
+                <TextBlock Text="{x:Bind ViewModel.FinderSummary, Mode=OneWay}" Style="{StaticResource JupiterBodyTextStyle}" TextWrapping="Wrap" />
+                <TextBlock Style="{StaticResource JupiterCaptionTextStyle}" TextWrapping="Wrap" MaxWidth="900" HorizontalAlignment="Left"
+                           Text="This person's best matches, tried two at a time as trios with them, best first. Golden needs no pair in difficulty and a strong grand trine through all three charts. The scale is Lore's own: astrology has no agreed score for three people. Select a row to read the three together." />
+            </StackPanel>
+            <ListView Grid.Row="1" MaxWidth="720" HorizontalAlignment="Left"
+                      ItemsSource="{x:Bind ViewModel.BestTrios, Mode=OneWay}"
+                      ItemTemplate="{StaticResource TrioTemplate}"
+                      SelectionMode="None" IsItemClickEnabled="True" ItemClick="Trio_ItemClick"
+                      AutomationProperties.Name="Best tri-synastries" />
         </Grid>
 
         <!-- Until a third is chosen: everyone tried as the third of these two -->
