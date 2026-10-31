@@ -26,12 +26,12 @@ Golden is more common among people who already suit each other. For Albert Einst
 | Tests | 507 of 507 passed |
 | App build | 0 warnings, 0 errors; style check at Error severity with 0 violations |
 
-The build installed on Ian's machine so far is `baf9822`, which has Trine but not the finder.
+The release build, `6fc921d`, is installed on Ian's machine over the earlier 4.1.0 test build `baf9822`, which had upgraded 4.0.0.
 
 | Check on that install | Result |
 | --- | --- |
-| Upgrade of the installed 4.0.0 | Exit 0, Apps entry **Lore** 4.1.0, Start entry kept |
-| User data through the upgrade | All 5 files matched their checksums; the daily reading caches were not compared, because the HUD rewrites them |
+| Both upgrades | Exit 0, Apps entry **Lore** 4.1.0, Start entry kept |
+| User data through both upgrades | All 5 files matched their checksums; the daily reading caches were not compared, because the HUD rewrites them |
 | `--self-check` on the installed copy | OK |
 
 ## Exercised
@@ -40,11 +40,11 @@ In a debug build with made-up data, driven through UI Automation and inspected f
 
 Off screen, the app's drawing code produced the three-ring wheel PNG and the PDF for that trio, and the text export was read. The wheel was inspected: three rings, with a gold triangle for the strongest grand trine.
 
-That check found two wording faults, both fixed afterwards: "the two birth charts" under the title in the Trine view, and a wheel caption that wrapped badly.
+That check found two wording faults, both fixed and then seen on screen: "the two birth charts" under the title in the Trine view, and a wheel caption that wrapped badly.
+
+The finder was then exercised the same way: Albert Einstein selected with no second person, Trine chosen, the list of best tri-synastries with Golden marks, and Martin Sheen and Lautréamont chosen, which filled in both people and opened the reading and wheel. Davison chart is unavailable until there is a second person.
 
 ## Not verified
 
-- The finder on screen, and the two wording fixes. They are built and tested but not yet seen.
-- Installation of the build with the finder.
 - Trine exports through the save dialog, as for the other exports. Their code ran off screen.
 - Trine with charts of your own, and the search box for a third person.

@@ -121,7 +121,9 @@ Astrology has no agreed compatibility score; the scale is Lore's own, and it des
 - **A wheel of three rings.** One ring for each person on one zodiac, with the strongest grand trines drawn as triangles, the Golden one in gold.
 - **Text from an editable corpus.** The lines are in `content\synastry.json`, and the reading can be exported as PDF or text, the wheel as PNG.
 
-![The wheel of three rings for Albert Einstein, Mata Hari and Bernard Buffet, with the Golden grand trine in gold](docs/images/trine-wheel.png)
+![Lore's finder listing the best tri-synastries for Albert Einstein, with Golden marks](docs/images/screenshot-tri-synastry-finder.png)
+
+![Lore showing the reading and three-ring wheel for Albert Einstein, Martin Sheen and Lautréamont](docs/images/screenshot-tri-synastry-reading.png)
 
 Astrology has no agreed score for three people. The scale is Lore's own, and it describes the symbolism between three charts rather than forecasting how three people will get on.
 
