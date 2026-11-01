@@ -1,6 +1,6 @@
 # Lore handoff
 
-Version 4.3.0 · 31 October 2026 · Repository `D:/jupiter/lore`, branch `main`, remote `ianrastall/lore`
+Version 4.4.0 · 1 November 2026 · Repository `D:/jupiter/lore`, branch `main`, remote `ianrastall/lore`
 
 ## Where things live
 
@@ -11,7 +11,7 @@ Version 4.3.0 · 31 October 2026 · Repository `D:/jupiter/lore`, branch `main`,
 | Content | `content/` in the repository, `Data\` in the installed app |
 | Swiss Ephemeris | `third_party/swisseph`, compiled to `Native/sweph.dll` (not committed) |
 | Release | `build/build.ps1`, `build/installer.iss` |
-| Installed app | Ian's machine: `D:\Lore`, all-users install, 4.3.0 (admin needed to upgrade) |
+| Installed app | Ian's machine: `D:\Lore`, all-users install, 4.4.0 (admin needed to upgrade) |
 | Other apps | Jupiter HUD 0.4.1 runs `Lore.exe --daily-reading`; keep `lore.daily.v1` stable |
 | Reader's data | `%LOCALAPPDATA%\Lore`. Never in the repository. |
 
@@ -34,7 +34,7 @@ When the XAML compiler reports unknown types with `WMC9999` or `WMC1509`, the ca
 
 ## Delivered
 
-See [validation](docs/validation-4.3.0.md) for what was tested in 4.3, and [4.2](docs/validation-4.2.0.md) before it, [migration](docs/jupiter-migration.md) for what moved, and [exceptions](docs/jupiter-exceptions.md) for recorded departures.
+See [validation](docs/validation-4.4.0.md) for what was tested in 4.4, [4.3](docs/validation-4.3.0.md) and [4.2](docs/validation-4.2.0.md) before it, [migration](docs/jupiter-migration.md) for what moved, and [exceptions](docs/jupiter-exceptions.md) for recorded departures.
 
 ## Next
 

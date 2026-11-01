@@ -604,7 +604,12 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 4.3.0 (current)
+### 4.4.0 (current)
+- **11,218 figures.** The library grows from 1,327, chiefly from VedAstro's list of famous people. They need not be household names, and many are not. Anyone a person would feel bad seeing is left out, and fourteen figures left the library for the same reason.
+- **The Charts list shows the best known first,** with your own charts at the top, so it no longer begins with hundreds of names under A.
+- **Contemporaries are noted and preferred.** In Synastry and Trine, people whose lifetimes overlapped come first within a level, and the library now holds dates of death.
+
+### 4.3.0
 - **The splash screen is back.** Lore opens with the portrait of Lauren, for whom it is named and made, as it did until 4.0.
 - **No typing to choose a person.** In the Synastry view each name in the Charts list has a **+** that fills the next empty place in the comparison, without changing who is selected. Right-click a name for the same from any view.
 
