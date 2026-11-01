@@ -791,8 +791,18 @@ its overview says some of it was outdated by 2014) and from searches.
   non-commercial", and "must have been read by human eyes, individual case to individual case, not
   mechanically 'harvested'". The source should be named, the Rodden Rating kept, and a link given
   where the medium allows. Text is copyright, and so are categories and any part of the source
-  notes beyond titles, authors and collectors. Relationships are not in that grant. For apps, the page
-  points to `Help:Licensing`, not yet read. Astrodienst may change these rules at any time.
+  notes beyond titles, authors and collectors. Relationships are not in that grant. Astrodienst may
+  change these rules at any time.
+- **A paid licence for apps, read first-hand on `Help:Licensing`, 31 October 2026.** Since September
+  2026 Astrodienst sells subscriptions to the export data, for use in apps and web services "only for
+  the duration of the paid subscription". SADB requires an HTML back-link, the XML's `<adb_link>`,
+  wherever an item is shown: CHF 200 for a year or 800 for five. SADN needs no links: CHF 500 or 2,000.
+  This would replace the research groups: every candidate could be checked against the export at
+  once, and the library rebuilt from licensed data. Read the sample contract before buying
+  (`astro.com/adbexport/adb_license.pdf`). It has to answer: may the data sit in a public repository
+  and in an installer; what happens to installed copies if the subscription lapses; does a link in a
+  desktop app count as an HTML back-link; may an AI tool process the data; and does it cover what Lore
+  already holds. Lore's public AGPL repository is the likeliest conflict.
 - **Where Lore stands against them.** Non-commercial: yes for now, as a free AGPL program, but the
   AGPL lets others sell it, so the README now says the data is outside that licence. Rating carried:
   all 1,330. Source named: all 1,330, with a link on 1,168 and not always shown in the app. Human
@@ -807,10 +817,10 @@ its overview says some of it was outdated by 2014) and from searches.
   tool, not only the one the robots file names. A person reading a page and pasting it here is within
   the terms for birth data. **Not decided, and Ian's:** what to ask Astrodienst, and what happens to
   the library meanwhile.
-- **Astro-Databank's own export.** `astro.com/adbexport/` held an XML export. As search results
-  reported its readme: the full download and contract are withdrawn for 2026, licences go only to
-  researchers and never for training AI, and a sample of 5,866 records (4,832 rated AA or A) remained.
-  Ian found no readme at that link, so none of this is confirmed. Do not use the sample.
+- **The older export notes.** Search results reported a readme at `astro.com/adbexport/`: the full
+  download withdrawn for 2026, licences for researchers only and never for training AI, and a sample
+  of 5,866 records. Ian found no readme at that link, and `Help:Licensing` is newer, so treat it as out
+  of date, though the bar on training AI may well stand. Do not use the sample.
 - **Open Gauquelin** (`opengauquelin.org/downloads`) has CSV downloads and a database dump. The site
   states GPL, FDL and CC-BY-SA-4.0; the downloads page states no terms of its own. Lore is AGPL, so
   share-alike looks workable, but check it first. The Gauquelin data came from registers in France,
