@@ -26784,5 +26784,23 @@
     "wikidataId": "Q107730",
     "sitelinks": 62,
     "bio": "American actor known for Swingers, Wedding Crashers, and Old School."
+  },
+  {
+    "id": "k-n-rao",
+    "name": "K.N. Rao",
+    "category": "Spiritual",
+    "birthDate": "1931-10-12",
+    "birthTime": "07:54",
+    "birthTimeKnown": true,
+    "birthPlace": "Machilipatnam, India",
+    "latitude": 16.1667,
+    "longitude": 81.1333,
+    "timeZoneId": "Asia/Kolkata",
+    "utcOffsetHours": 5.5,
+    "roddenRating": "A",
+    "source": "Astro-Databank: from memory, his letter given in his book Planets and Children; https://www.astro.com/astro-databank/Rao,_K.N.",
+    "wikidataId": "Q6323663",
+    "sitelinks": 4,
+    "bio": "Indian Vedic astrologer and author based in Delhi, known for his many books on jyotish."
   }
 ]

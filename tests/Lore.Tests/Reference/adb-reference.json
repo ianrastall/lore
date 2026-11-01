@@ -15235,6 +15235,18 @@
       "expectedUtc": "1970-03-29T02:12:00",
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-10-31"
+    },
+    "k-n-rao": {
+      "adbTitle": "Rao, K.N.",
+      "date": "1931-10-12",
+      "time": "07:54",
+      "zone": "IST h5e30",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1931-10-12T02:24:00",
+      "url": "https://www.astro.com/astro-databank/Rao,_K.N.",
+      "checkedOn": "2026-10-31",
+      "note": "Filipe Ferreira quotes a letter from Rao to B.V. Raman, given in Rao's book \"Planets and Children\", p.159, 1993."
     }
   }
 }
