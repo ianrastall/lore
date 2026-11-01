@@ -789,8 +789,9 @@ its overview says some of it was outdated by 2014) and from searches.
   named as allowed, commercially or not: credit AstroHot and link to the dataset's page. Five CSVs:
   retrogrades, Sun ingresses and Moon phases for 1900 to 2050, Chinese New Year for 1924 to 2033, and
   Destiny Matrix counts. None holds people or birth times. Checked on 31 October 2026 against Lore's
-  Swiss Ephemeris: all agree to within the rounding of the files, so Lore gains nothing from them for
-  what it already calculates, except a second source for tests. New to Lore: the Chinese year,
+  Swiss Ephemeris: they agree to within the rounding of the files, apart from 40 of 7,471 Moon phases
+  over two minutes out (the worst six in 2050, up to 21 minutes) and some slow Pluto stations. Lore
+  gains nothing from them for what it already calculates, except a second source for tests. New to Lore: the Chinese year,
   and the Destiny Matrix, whose page gives no formula. Digit-sum arithmetic (reduce while above 22)
   rebuilds all 198 counts exactly: a day, b month, c digits of the year, d = a+b+c, e = a+b+c+d,
   f = a+b, g = b+c, h = d+a, i = c+d. Both need a birth date only.
