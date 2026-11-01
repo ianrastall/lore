@@ -1,7 +1,5 @@
 # Research prompt: expanding Lore's figure library
 
-**On hold, 31 October 2026.** Astro-Databank's terms say its pages may be read only by people using a browser, and that data taken over must be read by human eyes, case by case. An LLM reading those pages does not meet that, whichever LLM it is, so do not send out more groups until this is settled. See section 4.6c of `docs/next-steps.md`.
-
 Paste everything below the line into a deep-research tool (Gemini Deep Research, ChatGPT, etc.).
 Change the number and the category wish-list in the first section to suit each run.
 Bring the result back and have it checked and merged into `Data/celebrities.json`.

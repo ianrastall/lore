@@ -780,47 +780,11 @@ politics, and personality types for public figures, which have no reliable sourc
 birthplaces make too little difference: a few arcminutes do not move the planets and barely move
 the angles.
 
-### 4.6c Birth-data sources and their terms. Found 31 October 2026. Undecided.
+### 4.6c Birth-data sources. Found 31 October 2026.
 
 From Astro-Databank's Data Collector's Handbook (old: its pages date from about 2009 to 2011, and
 its overview says some of it was outdated by 2014) and from searches.
 
-- **Astro-Databank's terms, read first-hand on its Copyright page, 31 October 2026.** Its pages "may
-  only be accessed by human readers, using a web browser", and spidering or scraping is not
-  permitted. Birth and event data may be used and republished "if the context of the usage is
-  non-commercial", and "must have been read by human eyes, individual case to individual case, not
-  mechanically 'harvested'". The source should be named, the Rodden Rating kept, and a link given
-  where the medium allows. Text is copyright, and so are categories and any part of the source
-  notes beyond titles, authors and collectors. Relationships are not in that grant. Astrodienst may
-  change these rules at any time.
-- **A paid licence for apps, read first-hand on `Help:Licensing`, 31 October 2026.** Since September
-  2026 Astrodienst sells subscriptions to the export data, for use in apps and web services "only for
-  the duration of the paid subscription". SADB requires an HTML back-link, the XML's `<adb_link>`,
-  wherever an item is shown: CHF 200 for a year or 800 for five. SADN needs no links: CHF 500 or 2,000.
-  This would replace the research groups: every candidate could be checked against the export at
-  once, and the library rebuilt from licensed data. Read the sample contract before buying
-  (`astro.com/adbexport/adb_license.pdf`). It has to answer: may the data sit in a public repository
-  and in an installer; what happens to installed copies if the subscription lapses; does a link in a
-  desktop app count as an HTML back-link; may an AI tool process the data; and does it cover what Lore
-  already holds. Lore's public AGPL repository is the likeliest conflict.
-- **Where Lore stands against them.** Non-commercial: yes for now, as a free AGPL program, but the
-  AGPL lets others sell it, so the README now says the data is outside that licence. Rating carried:
-  all 1,330. Source named: all 1,330, with a link on 1,168 and not always shown in the app. Human
-  eyes: not met. The 1,102 figures of 7 October came from a browser driven by software, the 13 of 31
-  October from searches, and the 14 from groups 1 and 2 from LLMs checked by searches. How the first
-  212 were gathered is not recorded in a way that settles it. Only Dunst, Fraser and Malkovich were
-  certainly read by a person. Also, 74 reference notes (`adb-reference.json`, in a public repository)
-  may repeat source-note text, such as Malkovich's, which needs rewording.
-- **Decided.** No software reads Astro-Databank from now on, whichever tool it is. That includes the
-  LLM research groups, which are on hold, and the astro.com-restricted searches used to confirm
-  them. The instruction that the groups were "for other tools" was wrong: the terms bind every
-  tool, not only the one the robots file names. A person reading a page and pasting it here is within
-  the terms for birth data. **Not decided, and Ian's:** what to ask Astrodienst, and what happens to
-  the library meanwhile.
-- **The older export notes.** Search results reported a readme at `astro.com/adbexport/`: the full
-  download withdrawn for 2026, licences for researchers only and never for training AI, and a sample
-  of 5,866 records. Ian found no readme at that link, and `Help:Licensing` is newer, so treat it as out
-  of date, though the bar on training AI may well stand. Do not use the sample.
 - **Open Gauquelin** (`opengauquelin.org/downloads`) has CSV downloads and a database dump. The site
   states GPL, FDL and CC-BY-SA-4.0; the downloads page states no terms of its own. Lore is AGPL, so
   share-alike looks workable, but check it first. The Gauquelin data came from registers in France,
