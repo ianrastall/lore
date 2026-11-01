@@ -106,7 +106,7 @@ The **Synastry** view compares the selected chart with a second person's — any
 - **All your matches.** Before you choose anyone, the view compares the selected chart with every figure in the library and every chart of your own, and lists all of them, best first. Search names, places and biographies, narrow the list by level, category or contemporaries, and sort it by best match, hardest first, best or least known, name or age. Click one to read the comparison.
 - **A five-step scale.** Each pair is placed at **Soulmates** (+2), **Harmonious** (+1), **Mixed** (0), **Challenging** (−1) or **Adversaries** (−2), by the share of the contacts between the two charts that are easy ones, each counted by how close and how personal it is. The steps are set against every pair in the library, so about half of all pairs are Mixed and about one in fourteen falls at each end.
 
-![Lore showing the best and worst synastry matches for Albert Einstein, each on the five-step scale](docs/images/screenshot-einstein-matches.png)
+![Lore listing all of Albert Einstein's synastry matches, with search, filters and sorting above them](docs/images/screenshot-einstein-matches.png)
 
 Astrology has no agreed compatibility score; the scale is Lore's own, and it describes the symbolism between two charts rather than forecasting a relationship.
 
