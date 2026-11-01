@@ -2,7 +2,7 @@
 
 1,604 people in 37 groups, by field. Within a field the best-known names come first, so group 1 of a field is the one to start on. Each file is a whole prompt: paste it into a deep-research tool and bring the answer back to be checked and merged.
 
-Astro-Databank's robots file names `anthropic-ai`, so these are for other tools, not for Claude's own research.
+**On hold, 31 October 2026.** Astro-Databank's terms say its pages may be read only by people using a browser, and that data taken over must be read by human eyes, case by case. An LLM reading those pages does not meet that, whichever LLM it is, so do not send out more groups until this is settled. See section 4.6c of `docs/next-steps.md`.
 
 Expect few to pass. Most current English-language names have no reliable birth time, and each failure is one line.
 

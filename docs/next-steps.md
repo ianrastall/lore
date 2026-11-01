@@ -785,17 +785,32 @@ the angles.
 From Astro-Databank's Data Collector's Handbook (old: its pages date from about 2009 to 2011, and
 its overview says some of it was outdated by 2014) and from searches.
 
-- **Astro-Databank's own export.** `astro.com/adbexport/` holds an XML export. As search results
-  report its readme: the full download and its contract are withdrawn for 2026, licences go only
-  to researchers and never for training AI, and a sample of 5,866 records (4,832 rated AA or A) stays
-  up for developing tools. None of this has been read first-hand, and whether the sample may feed a
-  published app is not known. Do not use it until the readme is read. The site blocks this kind of
-  tool, so that reading is Ian's.
-- **Lore's own position.** An October 2026 GitHub issue quotes an archived copy of Astro-Databank's
-  Copyright page: birth data may be used and republished if the use is non-commercial, and text may
-  not be copied. If that still stands it covers the whole library, and Lore could not be sold with
-  it. Read the live page (`Astro-Databank:Copyright`) before any paid release. Lore's bios must stay
-  our own words.
+- **Astro-Databank's terms, read first-hand on its Copyright page, 31 October 2026.** Its pages "may
+  only be accessed by human readers, using a web browser", and spidering or scraping is not
+  permitted. Birth and event data may be used and republished "if the context of the usage is
+  non-commercial", and "must have been read by human eyes, individual case to individual case, not
+  mechanically 'harvested'". The source should be named, the Rodden Rating kept, and a link given
+  where the medium allows. Text is copyright, and so are categories and any part of the source
+  notes beyond titles, authors and collectors. Relationships are not in that grant. For apps, the page
+  points to `Help:Licensing`, not yet read. Astrodienst may change these rules at any time.
+- **Where Lore stands against them.** Non-commercial: yes for now, as a free AGPL program, but the
+  AGPL lets others sell it, so the README now says the data is outside that licence. Rating carried:
+  all 1,330. Source named: all 1,330, with a link on 1,168 and not always shown in the app. Human
+  eyes: not met. The 1,102 figures of 7 October came from a browser driven by software, the 13 of 31
+  October from searches, and the 14 from groups 1 and 2 from LLMs checked by searches. How the first
+  212 were gathered is not recorded in a way that settles it. Only Dunst, Fraser and Malkovich were
+  certainly read by a person. Also, 74 reference notes (`adb-reference.json`, in a public repository)
+  may repeat source-note text, such as Malkovich's, which needs rewording.
+- **Decided.** No software reads Astro-Databank from now on, whichever tool it is. That includes the
+  LLM research groups, which are on hold, and the astro.com-restricted searches used to confirm
+  them. The instruction that the groups were "for other tools" was wrong: the terms bind every
+  tool, not only the one the robots file names. A person reading a page and pasting it here is within
+  the terms for birth data. **Not decided, and Ian's:** what to ask Astrodienst, and what happens to
+  the library meanwhile.
+- **Astro-Databank's own export.** `astro.com/adbexport/` held an XML export. As search results
+  reported its readme: the full download and contract are withdrawn for 2026, licences go only to
+  researchers and never for training AI, and a sample of 5,866 records (4,832 rated AA or A) remained.
+  Ian found no readme at that link, so none of this is confirmed. Do not use the sample.
 - **Open Gauquelin** (`opengauquelin.org/downloads`) has CSV downloads and a database dump. The site
   states GPL, FDL and CC-BY-SA-4.0; the downloads page states no terms of its own. Lore is AGPL, so
   share-alike looks workable, but check it first. The Gauquelin data came from registers in France,

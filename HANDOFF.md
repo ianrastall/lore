@@ -51,7 +51,7 @@ To photograph it on a 200% display, make the script DPI-aware and use `CopyFromS
 
 The Inventory view has three parts: Personality, Character and Life areas. All three are in `inventories.json`, under `SelfReportService.StoreKey`. `MirrorInterpreter.Compose` reads whatever there is. The answers now choose and score as well as add wording: `MirrorReading.Lift` for what a day and a comparison spend their space on, and the four constants above `SynastryScoring.Assess` for the balance as lived, with the charts' own scores kept beside it. See [next steps](docs/next-steps.md), section 3j, and [validation](docs/validation-4.2.0.md).
 
-Figures: do not script Astro-Databank. It has a browser check, and its robots file names `anthropic-ai`. See `scripts/celebrity-expansion-2026-10-31.md`.
+Figures: Astro-Databank's pages may be read only by people, and data taken from it must be read by human eyes one case at a time, so no software reads it, this session included: not a script, a browser driven by a tool, an LLM or a search restricted to astro.com. See section 4.6c of `docs/next-steps.md`. Do not script Astro-Databank. It has a browser check, and its robots file names `anthropic-ai`. See `scripts/celebrity-expansion-2026-10-31.md`.
 
 ## Trine (4.1)
 

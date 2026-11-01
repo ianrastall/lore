@@ -588,6 +588,7 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 | Component | Licence |
 |---|---|
 | [Swiss Ephemeris](https://www.astro.com/swisseph/) | AGPL-3.0 / Astrodienst commercial licence |
+| [Astro-Databank](https://www.astro.com/astro-databank/) | The figures' birth data and Rodden Ratings. Not covered by Lore's AGPL licence: reuse is on Astro-Databank's own terms, which allow non-commercial use only ([Copyright](https://www.astro.com/astro-databank/Astro-Databank:Copyright)) |
 | [simplemaps World Cities Database](https://simplemaps.com/data/world-cities) | CC BY 4.0 |
 | [Wikidata](https://www.wikidata.org/) (hospital coordinates) | CC0 1.0 |
 | [OpenStreetMap](https://www.openstreetmap.org/copyright) (hospital coordinates) | ODbL |
