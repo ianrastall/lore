@@ -785,6 +785,15 @@ the angles.
 From Astro-Databank's Data Collector's Handbook (old: its pages date from about 2009 to 2011, and
 its overview says some of it was outdated by 2014) and from searches.
 
+- **AstroHot's open datasets** (`astrohot.com/datasets/`, build of 10 October 2026). CC BY 4.0, apps
+  named as allowed, commercially or not: credit AstroHot and link to the dataset's page. Five CSVs:
+  retrogrades, Sun ingresses and Moon phases for 1900 to 2050, Chinese New Year for 1924 to 2033, and
+  Destiny Matrix counts. None holds people or birth times. Checked on 31 October 2026 against Lore's
+  Swiss Ephemeris: all agree to within the rounding of the files, so Lore gains nothing from them for
+  what it already calculates, except a second source for tests. New to Lore: the Chinese year,
+  and the Destiny Matrix, whose page gives no formula. Digit-sum arithmetic (reduce while above 22)
+  rebuilds all 198 counts exactly: a day, b month, c digits of the year, d = a+b+c, e = a+b+c+d,
+  f = a+b, g = b+c, h = d+a, i = c+d. Both need a birth date only.
 - **Open Gauquelin** (`opengauquelin.org/downloads`) has CSV downloads and a database dump. The site
   states GPL, FDL and CC-BY-SA-4.0; the downloads page states no terms of its own. Lore is AGPL, so
   share-alike looks workable, but check it first. The Gauquelin data came from registers in France,
