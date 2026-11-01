@@ -38,7 +38,7 @@ Lore 4 needs **Windows 11 24H2** or later, 64-bit.
 - **Further points and measurements** — the South Node, Descendant, IC, Vertex and the Parts of Fortune and Spirit; the lunar phase at birth; each planet's distance from the Sun; parallels, contra-parallels and out-of-bounds planets by declination; the balance of the chart; chart ruler, house rulers and dispositors.
 
 ### Figure Library
-- **1,313 figures** across **14 categories** — Actors, Musicians, Writers, Artists, Scientists, Philosophers, Directors, Athletes, Political, Historical, and more.
+- **1,322 figures** across **14 categories** — Actors, Musicians, Writers, Artists, Scientists, Philosophers, Directors, Athletes, Political, Historical, and more.
 - **Every figure has a documented, recorded birth time** (Astro-Databank / Rodden-rated). Entries without a reliable birth time were removed, so no chart relies on a noon guess.
 - Each entry stores birth date, time, birth place, geographic coordinates, IANA time zone, and a one-sentence bio.
 - Birth instants are resolved with **historical, DST-aware UTC offsets** via the IANA timezone database (NodaTime), not just fixed offsets — correctly handling anomalies like the UK's 1968–71 year-round BST experiment and 1940s US wartime time. For births before standard time existed, the birthplace's own local mean time (from its longitude) is used, as astrological sources record them.
@@ -288,7 +288,7 @@ lore/
 │       │   TimingView, SynastryView, InventoryView, LegendView (.xaml/.cs)
 │       └── AddChartDialog.xaml/.cs # New chart and Edit chart
 ├── content/                   # The figure library, the places and every corpus
-│   ├── celebrities.json       # 1,313 bundled figures (all with recorded birth times)
+│   ├── celebrities.json       # 1,322 bundled figures (all with recorded birth times)
 │   ├── cities.json            # ~50,250 cities (lat/lon + IANA tz)
 │   ├── hospitals.json         # ~235,000 hospitals (lat/lon), New chart birthplace search
 │   ├── hospitals_wikidata.csv # Stage 1 source for hospitals.json
@@ -373,7 +373,7 @@ The 507 tests cover the parts that must stay right: birth-time resolution (dayli
 
 ### `content\celebrities.json`
 
-1,313 figures in 14 categories, each with a documented birth time (Astro-Databank Rodden rating AA or A). Each entry:
+1,322 figures in 14 categories, each with a documented birth time (Astro-Databank Rodden rating AA or A). Each entry:
 
 ```jsonc
 {

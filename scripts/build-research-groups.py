@@ -5,7 +5,7 @@ Reads the report from scripts/wikidata_candidates.py, sorts people by field, and
 field by the number of Wikipedia editions, so the first group of a field holds its best-known
 names. The rules, the record format and what to return come from
 scripts/celebrity-research-prompt.md, so there is one copy of them. A second run rewrites the
-groups and the index, with its Given to and Back columns.
+groups and the index, so it would blank the Given to and Back columns: copy them across.
 
 Usage:
     python scripts/build-research-groups.py candidates.json scripts/research-groups

@@ -14176,6 +14176,114 @@
       "expectedUtc": "1996-06-13T07:30:00",
       "url": "https://www.astro.com/astro-databank/Coman,_Kingsley",
       "checkedOn": "2026-10-31"
+    },
+    "jason-bateman": {
+      "adbTitle": "Bateman, Jason",
+      "date": "1969-01-14",
+      "time": "17:39",
+      "zone": "EST h5w",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1969-01-14T22:39:00",
+      "url": "https://www.astro.com/astro-databank/Bateman,_Jason",
+      "checkedOn": "2026-10-31",
+      "note": "No calendar conversion or source conflict identified."
+    },
+    "julianne-moore": {
+      "adbTitle": "Moore, Julianne",
+      "date": "1960-12-03",
+      "time": "17:53",
+      "zone": "EST h5w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1960-12-03T22:53:00",
+      "url": "https://www.astro.com/astro-databank/Moore,_Julianne",
+      "checkedOn": "2026-10-31",
+      "note": "ADB uses Fayetteville; other biographies specify nearby Fort Bragg."
+    },
+    "peter-dinklage": {
+      "adbTitle": "Dinklage, Peter",
+      "date": "1969-06-11",
+      "time": "01:37",
+      "zone": "EDT h4w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1969-06-11T05:37:00",
+      "url": "https://www.astro.com/astro-databank/Dinklage,_Peter",
+      "checkedOn": "2026-10-31",
+      "note": "ADB's certificate-backed record gives Point Pleasant; other biographies give Morristown. ADB location retained."
+    },
+    "christina-ricci": {
+      "adbTitle": "Ricci, Christina",
+      "date": "1980-02-12",
+      "time": "18:30",
+      "zone": "PST h8w",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1980-02-13T02:30:00",
+      "url": "https://www.astro.com/astro-databank/Ricci,_Christina",
+      "checkedOn": "2026-10-31",
+      "note": "No calendar conversion or source conflict identified."
+    },
+    "jeremy-irons": {
+      "adbTitle": "Irons, Jeremy",
+      "date": "1948-09-19",
+      "time": "02:00",
+      "zone": "GDT h1e",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1948-09-19T01:00:00",
+      "url": "https://www.astro.com/astro-databank/Irons,_Jeremy",
+      "checkedOn": "2026-10-31",
+      "note": "ADB gives Ventnor; other biographies give Cowes. ADB location retained; GDT is UTC+01:00."
+    },
+    "bryan-cranston": {
+      "adbTitle": "Cranston, Bryan",
+      "date": "1956-03-07",
+      "time": "10:52",
+      "zone": "PST h8w",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1956-03-07T18:52:00",
+      "url": "https://www.astro.com/astro-databank/Cranston,_Bryan",
+      "checkedOn": "2026-10-31",
+      "note": "Certificate time 10:52 supersedes Paddy de Jabrun's earlier 14:30 rectification."
+    },
+    "willem-dafoe": {
+      "adbTitle": "Dafoe, Willem",
+      "date": "1955-07-22",
+      "time": "19:30",
+      "zone": "CST h6w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1955-07-23T01:30:00",
+      "url": "https://www.astro.com/astro-databank/Dafoe,_Willem",
+      "checkedOn": "2026-10-31",
+      "note": "ADB explicitly uses CST, not daylight time, despite the July date."
+    },
+    "rami-malek": {
+      "adbTitle": "Malek, Rami",
+      "date": "1981-05-12",
+      "time": "08:41",
+      "zone": "PDT h7w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1981-05-12T15:41:00",
+      "url": "https://www.astro.com/astro-databank/Malek,_Rami",
+      "checkedOn": "2026-10-31",
+      "note": "No calendar conversion or source conflict identified."
+    },
+    "elizabeth-olsen": {
+      "adbTitle": "Olsen, Elizabeth",
+      "date": "1989-02-16",
+      "time": "18:49",
+      "zone": "PST h8w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1989-02-17T02:49:00",
+      "url": "https://www.astro.com/astro-databank/Olsen,_Elizabeth",
+      "checkedOn": "2026-10-31",
+      "note": "ADB gives Van Nuys; other biographies specify Sherman Oaks. ADB certificate-backed location retained."
     }
   }
 }

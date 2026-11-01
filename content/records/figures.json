@@ -52577,5 +52577,338 @@
    "association football player"
   ],
   "portrait": "Kingsley Coman (2019) (cropped).jpg"
+ },
+ "jason-bateman": {
+  "wikidataId": "Q284636",
+  "birthName": "Jason Kent Bateman",
+  "occupations": [
+   "actor",
+   "film actor",
+   "film director",
+   "film producer",
+   "podcaster",
+   "television actor",
+   "television director",
+   "voice actor"
+  ],
+  "portrait": "Jason Bateman.jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "2001",
+    "person": "Amanda Anka"
+   },
+   {
+    "kind": "award",
+    "date": "2005",
+    "award": "Golden Globes"
+   },
+   {
+    "kind": "award",
+    "date": "2019",
+    "award": "Screen Actors Guild Award for Outstanding Performance by a Male Actor in a Drama Series"
+   }
+  ]
+ },
+ "julianne-moore": {
+  "wikidataId": "Q80405",
+  "birthName": "Julie Anne Smith",
+  "otherNames": [
+   "Julianne Anne Smith",
+   "Julie Anne Moore Smith"
+  ],
+  "occupations": [
+   "actor",
+   "author",
+   "children's writer",
+   "film actor",
+   "film producer",
+   "musician",
+   "stage actor",
+   "television actor",
+   "television producer",
+   "voice actor",
+   "writer"
+  ],
+  "portrait": "Julianne Moore 66ème Festival de Venise (Mostra) color crop.JPG",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "1986-05-03"
+   },
+   {
+    "kind": "marriageEnded",
+    "date": "1995-08-25"
+   },
+   {
+    "kind": "award",
+    "date": "2003-02-16",
+    "award": "Silver Bear for Best Actress"
+   },
+   {
+    "kind": "marriage",
+    "date": "2003-08-23",
+    "person": "Bart Freundlich"
+   },
+   {
+    "kind": "award",
+    "date": "2004",
+    "award": "Cannes Film Festival Award for Best Actress"
+   },
+   {
+    "kind": "award",
+    "date": "2015-02-08",
+    "award": "BAFTA Award for Best Actress in a Leading Role"
+   },
+   {
+    "kind": "award",
+    "date": "2015-02-22",
+    "award": "Academy Award for Best Actress"
+   }
+  ]
+ },
+ "peter-dinklage": {
+  "wikidataId": "Q310937",
+  "birthName": "Peter Hayden Dinklage",
+  "occupations": [
+   "actor",
+   "film actor",
+   "film producer",
+   "stage actor",
+   "television actor",
+   "voice actor"
+  ],
+  "portrait": "Peter Dinklage by Gage Skidmore 2.jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "2005",
+    "person": "Erica Schmidt"
+   },
+   {
+    "kind": "award",
+    "date": "2012",
+    "award": "Golden Globe Award for Best Supporting Actor – Series, Miniseries or Television Film"
+   },
+   {
+    "kind": "award",
+    "date": "2018",
+    "award": "Actor Award for Outstanding Performance by a Cast in a Motion Picture"
+   },
+   {
+    "kind": "award",
+    "date": "2020",
+    "award": "Screen Actors Guild Award for Outstanding Performance by a Male Actor in a Drama Series"
+   }
+  ]
+ },
+ "christina-ricci": {
+  "wikidataId": "Q184103",
+  "otherNames": [
+   "Francesca Lopez",
+   "Kurisuti-na",
+   "Squant"
+  ],
+  "occupations": [
+   "actor",
+   "film actor",
+   "film producer",
+   "spokesperson",
+   "television actor",
+   "voice actor"
+  ],
+  "portrait": "Christina Ricci at Los Angeles Comic Con 2024-2.jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "2013"
+   },
+   {
+    "kind": "divorce",
+    "date": "2020"
+   }
+  ]
+ },
+ "jeremy-irons": {
+  "wikidataId": "Q171745",
+  "birthName": "Jeremy John Irons",
+  "occupations": [
+   "actor",
+   "film actor",
+   "singer",
+   "stage actor",
+   "television actor",
+   "voice actor"
+  ],
+  "portrait": "Jeremy Irons.jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "1978",
+    "person": "Sinéad Cusack"
+   },
+   {
+    "kind": "child",
+    "date": "1985-10-17",
+    "person": "Max Irons"
+   },
+   {
+    "kind": "award",
+    "date": "1991-03-25",
+    "award": "Academy Award for Best Actor"
+   }
+  ]
+ },
+ "bryan-cranston": {
+  "wikidataId": "Q23547",
+  "birthName": "Bryan Lee Cranston",
+  "otherNames": [
+   "Brian Cranston",
+   "Lee Stone"
+  ],
+  "occupations": [
+   "actor",
+   "director",
+   "executive producer",
+   "film actor",
+   "film director",
+   "film producer",
+   "screenwriter",
+   "stage actor",
+   "television actor",
+   "television director",
+   "television producer",
+   "voice actor"
+  ],
+  "portrait": "BryanCranston-byPhilipRomano (cropped).jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "1977"
+   },
+   {
+    "kind": "marriageEnded",
+    "date": "1982"
+   },
+   {
+    "kind": "marriage",
+    "date": "1989",
+    "person": "Robin Dearden"
+   },
+   {
+    "kind": "child",
+    "date": "1993-02-12",
+    "person": "Taylor Dearden"
+   },
+   {
+    "kind": "award",
+    "date": "2008",
+    "award": "Primetime Emmy Award for Outstanding Lead Actor in a Drama Series"
+   },
+   {
+    "kind": "award",
+    "date": "2009",
+    "award": "Primetime Emmy Award for Outstanding Lead Actor in a Drama Series"
+   },
+   {
+    "kind": "award",
+    "date": "2010",
+    "award": "Primetime Emmy Award for Outstanding Lead Actor in a Drama Series"
+   },
+   {
+    "kind": "award",
+    "date": "2014",
+    "award": "Primetime Emmy Award for Outstanding Lead Actor in a Drama Series"
+   }
+  ]
+ },
+ "willem-dafoe": {
+  "wikidataId": "Q188772",
+  "birthName": "William James Dafoe",
+  "otherNames": [
+   "Willem J. Dafoe",
+   "Willem James Dafoe",
+   "William Dafoe",
+   "William J. \"Willem\" Dafoe",
+   "William J. Dafoe",
+   "William James \"Willem\" Dafoe"
+  ],
+  "occupations": [
+   "actor",
+   "film actor",
+   "film producer",
+   "model",
+   "performing artist",
+   "screenwriter",
+   "stage actor",
+   "television presenter",
+   "voice actor"
+  ],
+  "portrait": "Willem Dafoe-63667 (cropped).jpg",
+  "events": [
+   {
+    "kind": "award",
+    "date": "2001",
+    "award": "Film Independent Spirit Awards"
+   },
+   {
+    "kind": "marriage",
+    "date": "2005",
+    "person": "Giada Colagrande"
+   }
+  ]
+ },
+ "rami-malek": {
+  "wikidataId": "Q375590",
+  "birthName": "Rami Said Malek",
+  "occupations": [
+   "actor",
+   "film actor",
+   "film producer",
+   "television actor",
+   "voice actor"
+  ],
+  "portrait": "Rami Malek in 2015 (2) (cropped).jpg",
+  "events": [
+   {
+    "kind": "award",
+    "date": "2016",
+    "award": "Primetime Emmy Award for Outstanding Lead Actor in a Drama Series"
+   },
+   {
+    "kind": "award",
+    "date": "2019",
+    "award": "BAFTA Award for Best Actor in a Leading Role"
+   },
+   {
+    "kind": "award",
+    "date": "2019",
+    "award": "Golden Globe Award for Best Actor – Motion Picture Drama"
+   },
+   {
+    "kind": "award",
+    "date": "2019",
+    "award": "Screen Actors Guild Award for Outstanding Performance by a Male Actor in a Leading Role"
+   },
+   {
+    "kind": "award",
+    "date": "2019-02-24",
+    "award": "Academy Award for Best Actor"
+   }
+  ]
+ },
+ "elizabeth-olsen": {
+  "wikidataId": "Q234644",
+  "birthName": "Elizabeth Chase Olsen",
+  "otherNames": [
+   "Elizabeth \"Lizzie\" Olsen",
+   "Lizzie Olsen"
+  ],
+  "occupations": [
+   "actor",
+   "film actor",
+   "television actor"
+  ],
+  "portrait": "ElizabethOlsen-TIFF2025-02.png"
  }
 }

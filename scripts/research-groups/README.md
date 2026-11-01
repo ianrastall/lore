@@ -8,7 +8,7 @@ Expect few to pass. Most current English-language names have no reliable birth t
 
 | Group | Field | People | Starts with | Given to | Back |
 |---:|---|---:|---|---|---|
-| 1 | [Actors 1 of 9](group-01-actors-1-of-9.md) | 45 | Mila Kunis, Tom Holland, Jason Bateman | | |
+| 1 | [Actors 1 of 9](group-01-actors-1-of-9.md) | 45 | Mila Kunis, Tom Holland, Jason Bateman | First tool | [31 Oct](../celebrity-group-01-2026-10-31.md): 9 added, 6 held, 7 out, 23 open |
 | 2 | [Actors 2 of 9](group-02-actors-2-of-9.md) | 45 | David Duchovny, Geoffrey Rush, Adrien Brody | | |
 | 3 | [Actors 3 of 9](group-03-actors-3-of-9.md) | 46 | Matthew Broderick, J.K. Simmons, Kerry Washington | | |
 | 4 | [Actors 4 of 9](group-04-actors-4-of-9.md) | 45 | Rebecca Ferguson, Aaron Paul, Charles Dance | | |
