@@ -80173,18 +80173,6 @@
   ],
   "portrait": "Lucio Dalla 1.JPG"
  },
- "maria-goretti": {
-  "wikidataId": "Q234697",
-  "otherNames": [
-   "Maria Teresa Goretti",
-   "St. Maria Goretti"
-  ],
-  "occupations": [
-   "agricultural worker",
-   "girl"
-  ],
-  "portrait": "Photograph of Saint Maria Goretti, 1902.jpg"
- },
  "maria-anna-mozart": {
   "wikidataId": "Q157928",
   "birthName": "Maria Anna Walburga Ignati",
@@ -89623,17 +89611,6 @@
     "person": "Georg Eisler"
    }
   ]
- },
- "heather-o-rourke": {
-  "wikidataId": "Q230965",
-  "otherNames": [
-   "Heather Michele O'Rourke"
-  ],
-  "occupations": [
-   "film actor",
-   "television actor"
-  ],
-  "portrait": "Heather O'Rourke in Happy Days (1982 ABC Press photo).jpg"
  },
  "jacques-becker": {
   "wikidataId": "Q55381",
@@ -109928,17 +109905,6 @@
   ],
   "portrait": "Don Bragg 1960.jpg"
  },
- "donald-maclean": {
-  "wikidataId": "Q523120",
-  "otherNames": [
-   "Donald Duart Maclean"
-  ],
-  "occupations": [
-   "diplomat",
-   "spy"
-  ],
-  "portrait": "Donald Duart Maclean.jpg"
- },
  "dorothy-stratten": {
   "wikidataId": "Q241081",
   "birthName": "Dorothy Ruth Hoogstraten",
@@ -112034,20 +112000,6 @@
     "date": "1956",
     "person": "Joséphine Fresson"
    }
-  ]
- },
- "bob-denard": {
-  "wikidataId": "Q437248",
-  "birthName": "Robert Denard",
-  "otherNames": [
-   "Gilbert Bourgeaud",
-   "Le corsaire de la République",
-   "Said Mustapha Mhadjou",
-   "Saïd Mustapha Mhadjou"
-  ],
-  "occupations": [
-   "mercenary",
-   "military personnel"
   ]
  },
  "botho-strauss": {
@@ -119696,41 +119648,6 @@
    }
   ]
  },
- "romano-mussolini": {
-  "wikidataId": "Q446421",
-  "otherNames": [
-   "Romano Bruno Mussolini",
-   "Romano Full"
-  ],
-  "occupations": [
-   "film producer",
-   "jazz musician",
-   "pianist"
-  ],
-  "portrait": "Romano Mussolini (1958) (cropped).jpg",
-  "events": [
-   {
-    "kind": "marriage",
-    "date": "1962",
-    "person": "Anna Maria Villani Scicolone"
-   },
-   {
-    "kind": "child",
-    "date": "1962-12-30",
-    "person": "Alessandra Mussolini"
-   },
-   {
-    "kind": "child",
-    "date": "1974-05-25",
-    "person": "Rachele Mussolini"
-   },
-   {
-    "kind": "marriageEnded",
-    "date": "1976",
-    "person": "Anna Maria Villani Scicolone"
-   }
-  ]
- },
  "rudi-altig": {
   "wikidataId": "Q62204",
   "occupations": [
@@ -124801,21 +124718,6 @@
   ],
   "portrait": "Nicolas Slonimsky.JPG"
  },
- "nicole-brown-simpson": {
-  "wikidataId": "Q268018",
-  "birthName": "Nicole Brown",
-  "occupations": [
-   "waiter"
-  ],
-  "portrait": "Nicole Brown Simpson driver's license.jpg",
-  "events": [
-   {
-    "kind": "marriage",
-    "date": "1985-02-02",
-    "person": "O. J. Simpson"
-   }
-  ]
- },
  "norman-lamont": {
   "wikidataId": "Q332546",
   "otherNames": [
@@ -125995,21 +125897,6 @@
    "veterinarian"
   ],
   "portrait": "Guérin, Jean Marie Camille CIPB1912 (cropped).jpg"
- },
- "carl-peters": {
-  "wikidataId": "Q77403",
-  "otherNames": [
-   "Karl Peters"
-  ],
-  "occupations": [
-   "Africanist",
-   "colonialist",
-   "geographer",
-   "opinion journalist",
-   "politician",
-   "writer"
-  ],
-  "portrait": "Bundesarchiv Bild 183-R30019, Dr. Carl Peters.jpg"
  },
  "carla-del-poggio": {
   "wikidataId": "Q458668",
@@ -136078,16 +135965,6 @@
   ],
   "portrait": "Charles van Lerberghe, portrait.gif"
  },
- "christian-brando": {
-  "wikidataId": "Q1797883",
-  "otherNames": [
-   "Christian Devi Brando"
-  ],
-  "occupations": [
-   "welder"
-  ],
-  "portrait": "Christian Brando.jpg"
- },
  "christian-ferras": {
   "wikidataId": "Q582799",
   "birthName": "Christian Georges Pierre Léon Ferras",
@@ -136797,19 +136674,6 @@
     "person": "Cristiana Reali"
    }
   ]
- },
- "francisco-marto": {
-  "wikidataId": "Q1442116",
-  "otherNames": [
-   "Francisco de Jesus Marto",
-   "Saint Francisco Marto",
-   "Saint Francisco de Jesus Marto"
-  ],
-  "occupations": [
-   "religious",
-   "shepherd"
-  ],
-  "portrait": "Retrato de São Francisco Marto – cropped.jpg"
  },
  "franck-dubosc": {
   "wikidataId": "Q2646765",
@@ -146628,14 +146492,6 @@
   ],
   "portrait": "Bruce Millan (1992).jpg"
  },
- "bruno-mussolini": {
-  "wikidataId": "Q2665964",
-  "occupations": [
-   "aircraft pilot",
-   "military officer"
-  ],
-  "portrait": "Bruno Mussolini.jpg"
- },
  "burton-cummings": {
   "wikidataId": "Q783992",
   "otherNames": [
@@ -156098,15 +155954,6 @@
    }
   ]
  },
- "jessica-dubroff": {
-  "wikidataId": "Q769007",
-  "otherNames": [
-   "Jessica Whitney Dubroff"
-  ],
-  "occupations": [
-   "aircraft pilot"
-  ]
- },
  "jessica-savitch": {
   "wikidataId": "Q1260610",
   "otherNames": [
@@ -156857,27 +156704,6 @@
    }
   ]
  },
- "nadya-suleman": {
-  "wikidataId": "Q3040105",
-  "birthName": "Nadya Denise Suleman",
-  "otherNames": [
-   "Nadya Denise Doud-Suleman",
-   "Natalie Denise Suleman",
-   "Natalie Suleman",
-   "Octomom"
-  ],
-  "occupations": [
-   "socialite"
-  ],
-  "portrait": "Nadya Suleman (aka Octomom) at Ha Ha Cafe - 2011.jpg",
-  "events": [
-   {
-    "kind": "child",
-    "date": "2009-01-26",
-    "person": "Suleman octuplets"
-   }
-  ]
- },
  "nicolas-ghesquiere": {
   "wikidataId": "Q911984",
   "otherNames": [
@@ -157274,9 +157100,6 @@
     "person": "Iñigo Pascual"
    }
   ]
- },
- "polly-klaas": {
-  "wikidataId": "Q2089955"
  },
  "paolo-cirino-pomicino": {
   "wikidataId": "Q2246855",
@@ -160203,28 +160026,6 @@
    "professor"
   ]
  },
- "marguerite-steinheil": {
-  "wikidataId": "Q273811",
-  "otherNames": [
-   "Jean Marguerite Japy"
-  ],
-  "occupations": [
-   "salonnière"
-  ],
-  "portrait": "Bonnat Marguerite Steinheil.jpg",
-  "events": [
-   {
-    "kind": "marriage",
-    "date": "1890",
-    "person": "Adolphe Steinheil"
-   },
-   {
-    "kind": "marriage",
-    "date": "1917-06-26",
-    "person": "Robert Scarlett, 6th Baron Abinger"
-   }
-  ]
- },
  "marie-gevers": {
   "wikidataId": "Q973291",
   "birthName": "Maria Theresia Carolina Fanny Gevers",
@@ -161022,16 +160823,6 @@
   ],
   "portrait": "Roberto Citran.jpg"
  },
- "roy-l-dennis": {
-  "wikidataId": "Q7373047",
-  "birthName": "Roy Lee Dennis",
-  "otherNames": [
-   "Rocky Dennis"
-  ],
-  "occupations": [
-   "schoolchild"
-  ]
- },
  "roger-grenier": {
   "wikidataId": "Q1237856",
   "birthName": "Roger Joseph Germain François Grenier",
@@ -161616,18 +161407,6 @@
    "screenwriter",
    "translator",
    "writer"
-  ]
- },
- "alexandre-grimaldi": {
-  "wikidataId": "Q2701854",
-  "birthName": "Éric Alexandre Stéphane Tossoukpé",
-  "otherNames": [
-   "Alexandre Coste",
-   "Alexandre Eric Stephane Grimaldi",
-   "Éric Alexandre Stéphane Coste"
-  ],
-  "occupations": [
-   "socialite"
   ]
  },
  "alexis-de-castillon": {
@@ -166544,15 +166323,6 @@
    "stage actor"
   ]
  },
- "frederic-bourdin": {
-  "wikidataId": "Q433609",
-  "otherNames": [
-   "Frederic Bourdin"
-  ],
-  "occupations": [
-   "identity theft"
-  ]
- },
  "frederik-jacobus-johannes-buytendijk": {
   "wikidataId": "Q1453129",
   "birthName": "Frederik Jacobus Johannes Buytendijk",
@@ -168962,12 +168732,6 @@
    "actor"
   ],
   "portrait": "Romuald joube.png"
- },
- "sabine-dardenne": {
-  "wikidataId": "Q508951",
-  "occupations": [
-   "author"
-  ]
  },
  "serge-hutin": {
   "wikidataId": "Q371154",
@@ -172890,13 +172654,6 @@
    "songwriter"
   ],
   "portrait": "Steve Gibb-Glasto17-195 (34777078713).jpg"
- },
- "steven-stayner": {
-  "wikidataId": "Q501680",
-  "otherNames": [
-   "Steven Gregory Stayner"
-  ],
-  "portrait": "Stayner family reunion, 1980.jpg"
  },
  "stomy-bugsy": {
   "wikidataId": "Q3499698",
@@ -178308,15 +178065,6 @@
    "visual poet"
   ]
  },
- "ennis-cosby": {
-  "wikidataId": "Q1563783",
-  "otherNames": [
-   "Ennis William Cosby"
-  ],
-  "occupations": [
-   "teacher"
-  ]
- },
  "eric-forth": {
   "wikidataId": "Q5386503",
   "occupations": [
@@ -182443,15 +182191,6 @@
   "occupations": [
    "association football coach",
    "association football player"
-  ]
- },
- "chandra-levy": {
-  "wikidataId": "Q4256407",
-  "otherNames": [
-   "Chandra Ann Levy"
-  ],
-  "occupations": [
-   "intern"
   ]
  },
  "andre-weiss": {
@@ -188212,12 +187951,6 @@
    "writer"
   ]
  },
- "jaycee-lee-dugard": {
-  "wikidataId": "Q21553606",
-  "otherNames": [
-   "Jaycee Dugard"
-  ]
- },
  "jean-amado": {
   "wikidataId": "Q2682485",
   "otherNames": [
@@ -189672,14 +189405,6 @@
   ],
   "portrait": "Roberto-sosa.png"
  },
- "robin-bush": {
-  "wikidataId": "Q52159104",
-  "otherNames": [
-   "Pauline Robinson \"Robin\" Bush",
-   "Pauline Robinson Bush"
-  ],
-  "portrait": "Robin Bush (cropped).jpg"
- },
  "robin-williamson": {
   "wikidataId": "Q2696628",
   "otherNames": [
@@ -190105,16 +189830,6 @@
    "American football player"
   ],
   "portrait": "Atlanta Falcons at Los Angeles Rams 1991-12-08 - 01 (Atlanta Falcons crop).jpg"
- },
- "steven-parent": {
-  "wikidataId": "Q710900",
-  "otherNames": [
-   "Steven Earl Parent"
-  ],
-  "occupations": [
-   "courier",
-   "salesperson"
-  ]
  },
  "susan-estrich": {
   "wikidataId": "Q7647808",
@@ -193831,12 +193546,6 @@
    "professeur des universités"
   ],
   "portrait": "Michaël Foessel mars 2014 (cropped).JPG"
- },
- "michaela-garecht": {
-  "wikidataId": "Q6835599",
-  "otherNames": [
-   "Michaela Joy Garecht"
-  ]
  },
  "michel-bon": {
   "wikidataId": "Q3309052",
@@ -198854,9 +198563,6 @@
   ],
   "portrait": "Matthew Black (cropped).jpg"
  },
- "maura-murray": {
-  "wikidataId": "Q51723946"
- },
  "maureen-dor": {
   "wikidataId": "Q1911197",
   "occupations": [
@@ -198951,16 +198657,6 @@
    "singer"
   ],
   "portrait": "Andrews Sisters Billboard.jpg"
- },
- "melissa-harrington-hughes": {
-  "wikidataId": "Q108610463",
-  "birthName": "Melissa Harrington",
-  "otherNames": [
-   "Melissa Marie Harrington"
-  ],
-  "occupations": [
-   "businessperson"
-  ]
  },
  "mike-bartrum": {
   "wikidataId": "Q3313213",
@@ -200796,13 +200492,6 @@
   ],
   "portrait": "Bob Timberlake and Bump Elliott (1964).png"
  },
- "brian-david-sweeney": {
-  "wikidataId": "Q133863273",
-  "occupations": [
-   "United States Naval Aviator",
-   "defense contractor"
-  ]
- },
  "bruce-coslet": {
   "wikidataId": "Q4977301",
   "occupations": [
@@ -202007,9 +201696,6 @@
    "model"
   ]
  },
- "gottlieb-renz": {
-  "wikidataId": "Q5588071"
- },
  "gracieux-lamperti": {
   "wikidataId": "Q84175907",
   "occupations": [
@@ -202227,12 +201913,6 @@
    "boxer"
   ],
   "portrait": "Djidi.jpg"
- },
- "holly-piirainen": {
-  "wikidataId": "Q5882215",
-  "otherNames": [
-   "Holly Kristen Piirainen"
-  ]
  },
  "homer-i-lewis": {
   "wikidataId": "Q18349904",
@@ -202855,25 +202535,6 @@
    "baseball player"
   ]
  },
- "john-bennett-ramsey": {
-  "wikidataId": "Q6221573",
-  "occupations": [
-   "author",
-   "businessperson"
-  ],
-  "events": [
-   {
-    "kind": "marriage",
-    "date": "1980",
-    "person": "Patsy Ramsey"
-   },
-   {
-    "kind": "child",
-    "date": "1990-08-06",
-    "person": "JonBenét Ramsey"
-   }
-  ]
- },
  "j-robert-schaetzel": {
   "wikidataId": "Q63246761",
   "occupations": [
@@ -203182,9 +202843,6 @@
    "opera singer",
    "singer"
   ]
- },
- "lothar-swierzinski": {
-  "wikidataId": "Q6684739"
  },
  "louis-fabien": {
   "wikidataId": "Q6687133",
@@ -204242,15 +203900,6 @@
   ],
   "portrait": "Roger dambron.jpg"
  },
- "roger-knobelspiess": {
-  "wikidataId": "Q3439140",
-  "birthName": "Roger Maurice Knobelpiess",
-  "occupations": [
-   "actor",
-   "comics writer",
-   "writer"
-  ]
- },
  "roger-martine": {
   "wikidataId": "Q3439252",
   "birthName": "Roger Jean Martine-Dupleichs",
@@ -204311,9 +203960,6 @@
    "military officer"
   ],
   "portrait": "Dwyer RossT MajGenUSMC.jpg"
- },
- "rudolf-saumenicht": {
-  "wikidataId": "Q7377343"
  },
  "rudy-hirigoyen": {
   "wikidataId": "Q3446794",
@@ -204652,16 +204298,6 @@
    "middle-distance runner"
   ]
  },
- "travis-alexander": {
-  "wikidataId": "Q20054486",
-  "otherNames": [
-   "Travis Victor Alexander"
-  ],
-  "occupations": [
-   "motivational speaker",
-   "salesperson"
-  ]
- },
  "ugo-pecchioli": {
   "wikidataId": "Q4002863",
   "occupations": [
@@ -204992,12 +204628,6 @@
    "surgeon"
   ]
  },
- "agnes-marin": {
-  "wikidataId": "Q64682486",
-  "occupations": [
-   "schoolchild"
-  ]
- },
  "aissa-wayne": {
   "wikidataId": "Q123039219",
   "occupations": [
@@ -205275,10 +204905,6 @@
    "politician"
   ],
   "portrait": "1987 Augusta Hornblower Massachusetts House of Representatives.png"
- },
- "azaria-chamberlain": {
-  "wikidataId": "Q20200821",
-  "birthName": "Azaria Chantel Loren Chamberlain"
  },
  "bernard-capillon": {
   "wikidataId": "Q17174780",
@@ -205624,15 +205250,6 @@
   ],
   "portrait": "SUTHER11.jpg"
  },
- "david-cox": {
-  "wikidataId": "Q20715526",
-  "otherNames": [
-   "David Vernon Cox"
-  ],
-  "occupations": [
-   "military personnel"
-  ]
- },
  "david-willis-wilson-henderson": {
   "wikidataId": "Q5241172",
   "otherNames": [
@@ -205767,9 +205384,6 @@
    "association football player"
   ]
  },
- "elisa-izquierdo": {
-  "wikidataId": "Q5361365"
- },
  "emil-durr": {
   "wikidataId": "Q5371223"
  },
@@ -205815,9 +205429,6 @@
    "remedial teacher",
    "university teacher"
   ]
- },
- "erich-rossner": {
-  "wikidataId": "Q5388097"
  },
  "erna-kronshage": {
   "wikidataId": "Q21872812",
@@ -206156,19 +205767,6 @@
    "photographer"
   ]
  },
- "gerald-f-deconto": {
-  "wikidataId": "Q114839392",
-  "otherNames": [
-   "DeConto, Gerald",
-   "Gerald DeConto",
-   "Gerald Francis DeConto",
-   "Gerry DeConto"
-  ],
-  "occupations": [
-   "naval officer"
-  ],
-  "portrait": "Capt. DeConto.jpg"
- },
  "gerard-cordonnier": {
   "wikidataId": "Q3123858",
   "birthName": "Gérard Anatole Cordonnier",
@@ -206323,9 +205921,6 @@
    "musician"
   ]
  },
- "gregory-villemin": {
-  "wikidataId": "Q31051166"
- },
  "guido-ferracin": {
   "wikidataId": "Q3779281",
   "occupations": [
@@ -206358,18 +205953,6 @@
    "writer"
   ],
   "portrait": "Gérard Alle.JPG"
- },
- "hanns-heinrich-lohmann": {
-  "wikidataId": "Q5649249"
- },
- "hans-diergarten": {
-  "wikidataId": "Q5649924",
-  "occupations": [
-   "military officer"
-  ]
- },
- "hans-malkomes": {
-  "wikidataId": "Q5650438"
  },
  "hans-meid": {
   "wikidataId": "Q1558798",
@@ -206440,9 +206023,6 @@
    "lawyer",
    "writer"
   ]
- },
- "hermann-lang": {
-  "wikidataId": "Q5740802"
  },
  "hugh-mackenzie": {
   "wikidataId": "Q19326019",
@@ -206926,14 +206506,6 @@
    }
   ]
  },
- "juliana-valentine-mccourt": {
-  "wikidataId": "Q23071509",
-  "otherNames": [
-   "Juliana McCourt",
-   "Juliana V. McCourt",
-   "McCourt, Juliana Valentine"
-  ]
- },
  "julien-lescarret": {
   "wikidataId": "Q3189565",
   "occupations": [
@@ -206951,20 +206523,11 @@
    "university teacher"
   ]
  },
- "karl-rettlinger": {
-  "wikidataId": "Q6372192"
- },
  "ken-brown": {
   "wikidataId": "Q6387386",
   "occupations": [
    "graphic designer",
    "photographer"
-  ]
- },
- "disappearance-of-kevin-andrew-collins": {
-  "wikidataId": "Q6395730",
-  "otherNames": [
-   "Kevin Andrew Collins"
   ]
  },
  "kirt-ojala": {
@@ -206974,16 +206537,6 @@
   ],
   "occupations": [
    "baseball player"
-  ]
- },
- "knox-jolie-pitt": {
-  "wikidataId": "Q107151224",
-  "otherNames": [
-   "Knox Léon Jolie-Pitt"
-  ],
-  "occupations": [
-   "Thai boxer",
-   "voice actor"
   ]
  },
  "leo-knegt": {
@@ -207113,9 +206666,6 @@
    "printmaker",
    "theatre designer"
   ]
- },
- "ludwig-spindler": {
-  "wikidataId": "Q6699338"
  },
  "leon-dony": {
   "wikidataId": "Q16265207",
@@ -207307,13 +206857,6 @@
    "athletics competitor"
   ]
  },
- "marta-russo": {
-  "wikidataId": "Q41810236",
-  "birthName": "Marta Russo",
-  "occupations": [
-   "student"
-  ]
- },
  "maurice-chastanier": {
   "wikidataId": "Q3300559",
   "birthName": "Maurice Henri Élie Chastanier",
@@ -207488,17 +207031,6 @@
     "date": "1991",
     "award": "World Food Prize"
    }
-  ]
- },
- "nicholas-knatchbull": {
-  "wikidataId": "Q75383948",
-  "otherNames": [
-   "Hon. Nicholas Knatchbull",
-   "Hon. Nicholas Timothy Charles Knatchbull",
-   "Nicholas Timothy Charles Knatchbull"
-  ],
-  "occupations": [
-   "aristocrat"
   ]
  },
  "nicole-dahm": {
@@ -208290,19 +207822,6 @@
   ],
   "portrait": "Tom Cottrell (3919777257).jpg"
  },
- "thomas-f-mcguinness-jr": {
-  "wikidataId": "Q114608343",
-  "otherNames": [
-   "McGuinness, Thomas Francis",
-   "Thomas Francis McGuinness Jr.",
-   "Thomas McGuinness",
-   "Tom F. McGuinness",
-   "Tom McGuinness"
-  ],
-  "occupations": [
-   "aircraft pilot"
-  ]
- },
  "urs-kliby": {
   "wikidataId": "Q1276634",
   "occupations": [
@@ -208339,15 +207858,6 @@
   "wikidataId": "Q4015299",
   "occupations": [
    "choreographer"
-  ]
- },
- "vivienne-jolie": {
-  "wikidataId": "Q107151227",
-  "otherNames": [
-   "Vivienne Marcheline Jolie"
-  ],
-  "occupations": [
-   "production assistant"
   ]
  },
  "wally-toscanini-castelbarco": {

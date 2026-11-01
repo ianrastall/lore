@@ -1,6 +1,6 @@
 # Lore handoff
 
-Version 4.4.0 · 1 November 2026 · Repository `D:/jupiter/lore`, branch `main`, remote `ianrastall/lore`
+Version 4.5.0 · 1 November 2026 · Repository `D:/jupiter/lore`, branch `main`, remote `ianrastall/lore`
 
 ## Where things live
 

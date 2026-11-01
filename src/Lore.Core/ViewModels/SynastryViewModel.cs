@@ -209,7 +209,7 @@ public sealed partial class SynastryViewModel : ObservableObject
     // What to do next, shown in place of a reading until two different people are chosen.
     public string PromptText =>
         Chart is null ? "Select a chart from the list, then choose someone to compare it with." :
-        Partner is null && ShowTrine ? "" :
+        Partner is null && (ShowTrine || ShowMatches) ? "" :
         Partner is null ? $"Choose someone to compare with {Chart.Celebrity.Name}: press + beside a name in the Charts list, type a name in the box above, or pick one of the matches below." :
         Partner.Id == Chart.Celebrity.Id ? $"That is {Chart.Celebrity.Name}'s own chart. Choose someone else to compare it with." :
         "";
@@ -503,6 +503,7 @@ public sealed partial class SynastryViewModel : ObservableObject
     {
         OnPropertyChanged(nameof(MatchesSummary));
         OnPropertyChanged(nameof(ShowMatches));
+        OnPropertyChanged(nameof(PromptText));
         RefreshResults();
         ResultsChanged();
         RebuildFinder();

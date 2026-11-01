@@ -1,6 +1,6 @@
-# VedAstro list: 9,810 more figures, 1 November 2026
+# VedAstro list: 9,755 more figures, 1 November 2026
 
-The library goes from 1,408 figures to 11,218, taking everyone from
+The library goes from 1,408 figures to 11,163, taking everyone from
 [VedAstro's list of famous people](https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location)
 who could be identified and had a clock standard that could be stated. It follows the
 [77 added on 31 October](celebrity-vedastro-2026-10-31.md). Each figure is credited to Astro-Databank
@@ -14,10 +14,10 @@ connection was there?
 | Born before 1583 | 21 |
 | Already in the library under another name, or the same item twice | 66 |
 | Matched | 10,994 |
-| Left out by Ian's test | 557 |
+| Left out by Ian's test | 612 |
 | Clock standard uncertain | 553 |
 | Other gaps (see below) | 74 |
-| **Added** | **9,810** |
+| **Added** | **9,755** |
 
 ## Identity
 
@@ -32,8 +32,10 @@ Everyone convicted of a violent, sexual, hate or war crime, or of major fraud; a
 killer, terrorist, gangster or similar; members of Nazi and fascist parties, the SS and the Klan;
 German officers of the Nazi years and those who served Vichy; dictators and their households; adult
 film performers; and everyone removed or left out by choice in earlier batches. The automatic
-screen was read through, and the 1,700 best-known people who passed it were read by name. It will
-still have missed some of the 8,000 less well known. Convictions that say more about the state than
+screen was read through, and the 1,700 best-known people who passed it were read by name. Every
+biography was then searched for military, crime and victim terms, which took out 55 more: SS officers,
+people known only as victims, children who died young, and private relatives. It will still have
+missed some of the 8,000 less well known. Convictions that say more about the state than
 the person (gross indecency, sedition, draft refusal) and tax or similar offences do not count.
 Anyone rated too low when read on Astro-Databank in October also stays out.
 

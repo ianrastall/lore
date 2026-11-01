@@ -32567,7 +32567,7 @@
   {
     "id": "jacques-rogge",
     "name": "Jacques Rogge",
-    "category": "Political",
+    "category": "Athlete",
     "birthDate": "1942-05-02",
     "deathDate": "2021-08-29",
     "birthTime": "16:45",
@@ -44122,7 +44122,7 @@
   {
     "id": "dick-fosbury",
     "name": "Dick Fosbury",
-    "category": "Political",
+    "category": "Athlete",
     "birthDate": "1947-03-06",
     "deathDate": "2023-03-12",
     "birthTime": "12:07",
@@ -44441,25 +44441,6 @@
     "wikidataId": "Q167546",
     "sitelinks": 45,
     "bio": "Italian singer-songwriter, born in Bologna in 1943."
-  },
-  {
-    "id": "maria-goretti",
-    "name": "Maria Goretti",
-    "category": "Spiritual",
-    "birthDate": "1890-10-16",
-    "deathDate": "1902-07-06",
-    "birthTime": "13:15",
-    "birthTimeKnown": true,
-    "birthPlace": "Corinaldo, Italy",
-    "latitude": 43.649,
-    "longitude": 13.048,
-    "timeZoneId": "Europe/Rome",
-    "utcOffsetHours": 0.8322222222222222,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q234697",
-    "sitelinks": 45,
-    "bio": "Italian saint, born in Corinaldo in 1890."
   },
   {
     "id": "maria-anna-mozart",
@@ -52025,25 +52006,6 @@
     "bio": "Austrian and German composer, born in Leipzig in 1898."
   },
   {
-    "id": "heather-o-rourke",
-    "name": "Heather O'Rourke",
-    "category": "Actor",
-    "birthDate": "1975-12-27",
-    "deathDate": "1988-02-01",
-    "birthTime": "00:28",
-    "birthTimeKnown": true,
-    "birthPlace": "San Diego, CA",
-    "latitude": 32.716,
-    "longitude": -117.164,
-    "timeZoneId": "America/Los_Angeles",
-    "utcOffsetHours": -8.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q230965",
-    "sitelinks": 38,
-    "bio": "American actress, born in San Diego in 1975."
-  },
-  {
     "id": "jacques-becker",
     "name": "Jacques Becker",
     "category": "Writer",
@@ -52738,7 +52700,7 @@
   {
     "id": "steve-fossett",
     "name": "Steve Fossett",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1944-04-22",
     "deathDate": "2007-09-03",
     "birthTime": "01:58",
@@ -53200,7 +53162,7 @@
   {
     "id": "heike-drechsler",
     "name": "Heike Drechsler",
-    "category": "Political",
+    "category": "Athlete",
     "birthDate": "1964-12-16",
     "birthTime": "07:50",
     "birthTimeKnown": true,
@@ -56923,7 +56885,7 @@
   {
     "id": "sara-simeoni",
     "name": "Sara Simeoni",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1953-04-19",
     "birthTime": "18:40",
     "birthTimeKnown": true,
@@ -62503,7 +62465,7 @@
   {
     "id": "bob-richards",
     "name": "Bob Richards",
-    "category": "Political",
+    "category": "Athlete",
     "birthDate": "1926-02-20",
     "deathDate": "2023-02-26",
     "birthTime": "20:00",
@@ -67925,7 +67887,7 @@
   {
     "id": "teddy-tamgho",
     "name": "Teddy Tamgho",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1989-06-15",
     "birthTime": "12:55",
     "birthTimeKnown": true,
@@ -69681,7 +69643,7 @@
   {
     "id": "parry-o-brien",
     "name": "Parry O'Brien",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1932-01-28",
     "deathDate": "2007-04-21",
     "birthTime": "18:04",
@@ -70809,26 +70771,6 @@
     "wikidataId": "Q735999",
     "sitelinks": 27,
     "bio": "American athletics competitor, born in Penns Grove in 1935."
-  },
-  {
-    "id": "donald-maclean",
-    "name": "Donald Maclean",
-    "category": "Political",
-    "birthDate": "1913-05-25",
-    "deathDate": "1983-03-06",
-    "birthTime": "14:30",
-    "birthTimeKnown": true,
-    "birthTimeUncertaintyMinutes": 15,
-    "birthPlace": "London, England",
-    "latitude": 51.5,
-    "longitude": -0.126,
-    "timeZoneId": "Europe/London",
-    "utcOffsetHours": 0.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q523120",
-    "sitelinks": 27,
-    "bio": "British diplomat and spy, born in London in 1913."
   },
   {
     "id": "dorothy-stratten",
@@ -72737,7 +72679,7 @@
   {
     "id": "vincenzo-lancia",
     "name": "Vincenzo Lancia",
-    "category": "Entrepreneur",
+    "category": "Athlete",
     "birthDate": "1881-08-24",
     "deathDate": "1937-02-15",
     "birthTime": "22:00",
@@ -72928,7 +72870,7 @@
   {
     "id": "alberto-cova",
     "name": "Alberto Cova",
-    "category": "Political",
+    "category": "Athlete",
     "birthDate": "1958-12-01",
     "birthTime": "06:40",
     "birthTimeKnown": true,
@@ -73041,26 +72983,6 @@
     "wikidataId": "Q327229",
     "sitelinks": 26,
     "bio": "French actor, born in Reims in 1931."
-  },
-  {
-    "id": "bob-denard",
-    "name": "Bob Denard",
-    "category": "Historical",
-    "birthDate": "1929-04-07",
-    "deathDate": "2007-10-13",
-    "birthTime": "13:00",
-    "birthTimeKnown": true,
-    "birthTimeUncertaintyMinutes": 15,
-    "birthPlace": "Bordeaux, France",
-    "latitude": 44.835,
-    "longitude": -0.575,
-    "timeZoneId": "Europe/Paris",
-    "utcOffsetHours": 0.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q437248",
-    "sitelinks": 26,
-    "bio": "French mercenary, born in Bordeaux in 1929."
   },
   {
     "id": "botho-strauss",
@@ -75140,7 +75062,7 @@
   {
     "id": "pierre-vaultier",
     "name": "Pierre Vaultier",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1987-06-24",
     "birthTime": "04:32",
     "birthTimeKnown": true,
@@ -75755,7 +75677,7 @@
   {
     "id": "arnie-robinson",
     "name": "Arnie Robinson",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1948-04-07",
     "deathDate": "2020-12-01",
     "birthTime": "20:55",
@@ -76756,7 +76678,7 @@
   {
     "id": "hannah-teter",
     "name": "Hannah Teter",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1987-01-27",
     "birthTime": "02:46",
     "birthTimeKnown": true,
@@ -78803,7 +78725,7 @@
   {
     "id": "bob-seagren",
     "name": "Bob Seagren",
-    "category": "Actor",
+    "category": "Athlete",
     "birthDate": "1946-10-17",
     "birthTime": "16:04",
     "birthTimeKnown": true,
@@ -81131,7 +81053,7 @@
   {
     "id": "randy-williams",
     "name": "Randy Williams",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1953-08-23",
     "birthTime": "03:29",
     "birthTimeKnown": true,
@@ -81338,25 +81260,6 @@
     "wikidataId": "Q547525",
     "sitelinks": 24,
     "bio": "French lawyer and politician, born in Limoges in 1922."
-  },
-  {
-    "id": "romano-mussolini",
-    "name": "Romano Mussolini",
-    "category": "Musician",
-    "birthDate": "1927-09-26",
-    "deathDate": "2006-02-03",
-    "birthTime": "23:05",
-    "birthTimeKnown": true,
-    "birthPlace": "Forlì, Italy",
-    "latitude": 44.221,
-    "longitude": 12.043,
-    "timeZoneId": "Europe/Rome",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q446421",
-    "sitelinks": 24,
-    "bio": "Italian jazz pianist, painter, film producer, and the fourth child and youngest son of Benito Mussolini, born in Forlì in 1927."
   },
   {
     "id": "rudi-altig",
@@ -81822,7 +81725,7 @@
   {
     "id": "alicia-sacramone",
     "name": "Alicia Sacramone",
-    "category": "Artist",
+    "category": "Athlete",
     "birthDate": "1987-12-03",
     "birthTime": "18:39",
     "birthTimeKnown": true,
@@ -82681,7 +82584,7 @@
   {
     "id": "franco-menichelli",
     "name": "Franco Menichelli",
-    "category": "Artist",
+    "category": "Athlete",
     "birthDate": "1941-08-03",
     "deathDate": "2026-01-28",
     "birthTime": "01:00",
@@ -83768,7 +83671,7 @@
   {
     "id": "martin-lauer",
     "name": "Martin Lauer",
-    "category": "Musician",
+    "category": "Athlete",
     "birthDate": "1937-01-02",
     "deathDate": "2019-10-06",
     "birthTime": "07:30",
@@ -85003,7 +84906,7 @@
   {
     "id": "cornelius-johnson",
     "name": "Cornelius Johnson",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1913-08-21",
     "deathDate": "1946-02-15",
     "birthTime": "02:20",
@@ -86582,7 +86485,7 @@
   {
     "id": "lee-barnes",
     "name": "Lee Barnes",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1906-07-16",
     "deathDate": "1970-12-28",
     "birthTime": "15:00",
@@ -87041,26 +86944,6 @@
     "bio": "Russian composer, born in Saint Petersburg in 1894."
   },
   {
-    "id": "nicole-brown-simpson",
-    "name": "Nicole Brown Simpson",
-    "category": "Athlete",
-    "birthDate": "1959-05-19",
-    "deathDate": "1994-06-12",
-    "birthTime": "02:00",
-    "birthTimeKnown": true,
-    "birthTimeUncertaintyMinutes": 15,
-    "birthPlace": "Frankfurt am Main, Germany",
-    "latitude": 50.111,
-    "longitude": 8.679,
-    "timeZoneId": "Europe/Berlin",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q268018",
-    "sitelinks": 22,
-    "bio": "Wife of American football player O. J. Simpson, born in Frankfurt am Main in 1959."
-  },
-  {
     "id": "norman-lamont",
     "name": "Norman Lamont",
     "category": "Political",
@@ -87313,7 +87196,7 @@
   {
     "id": "raimondo-d-inzeo",
     "name": "Raimondo D'Inzeo",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1925-02-08",
     "deathDate": "2013-11-15",
     "birthTime": "01:00",
@@ -87932,7 +87815,7 @@
   {
     "id": "willie-davenport",
     "name": "Willie Davenport",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1943-06-08",
     "deathDate": "2002-06-17",
     "birthTime": "23:00",
@@ -87952,7 +87835,7 @@
   {
     "id": "wink-martindale",
     "name": "Wink Martindale",
-    "category": "Musician",
+    "category": "Athlete",
     "birthDate": "1933-12-04",
     "deathDate": "2025-04-15",
     "birthTime": "03:00",
@@ -88507,26 +88390,6 @@
     "wikidataId": "Q1029190",
     "sitelinks": 21,
     "bio": "French veterinarian and scientist, born in Poitiers in 1872."
-  },
-  {
-    "id": "carl-peters",
-    "name": "Carl Peters",
-    "category": "Political",
-    "birthDate": "1856-09-27",
-    "deathDate": "1918-09-10",
-    "birthTime": "05:00",
-    "birthTimeKnown": true,
-    "birthTimeUncertaintyMinutes": 15,
-    "birthPlace": "Amt Neuhaus, Germany",
-    "latitude": 53.287,
-    "longitude": 10.93,
-    "timeZoneId": "Europe/Berlin",
-    "utcOffsetHours": 0.8911111111111111,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q77403",
-    "sitelinks": 21,
-    "bio": "German colonialist, politician, and author, born in Amt Neuhaus in 1856."
   },
   {
     "id": "carla-del-poggio",
@@ -90572,7 +90435,7 @@
   {
     "id": "ludger-beerbaum",
     "name": "Ludger Beerbaum",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1963-08-26",
     "birthTime": "21:36",
     "birthTimeKnown": true,
@@ -92718,7 +92581,7 @@
   {
     "id": "dwight-stones",
     "name": "Dwight Stones",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1953-12-06",
     "birthTime": "12:01",
     "birthTimeKnown": true,
@@ -93923,7 +93786,7 @@
   {
     "id": "jerome-biffle",
     "name": "Jerome Biffle",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1928-03-20",
     "deathDate": "2002-09-04",
     "birthTime": "09:45",
@@ -95499,7 +95362,7 @@
   {
     "id": "romain-mesnil",
     "name": "Romain Mesnil",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1977-06-13",
     "birthTime": "22:50",
     "birthTimeKnown": true,
@@ -95841,7 +95704,7 @@
   {
     "id": "thierry-vigneron",
     "name": "Thierry Vigneron",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1960-03-09",
     "birthTime": "11:20",
     "birthTimeKnown": true,
@@ -96439,7 +96302,7 @@
   {
     "id": "andre-jousseaume",
     "name": "André Jousseaume",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1894-07-27",
     "deathDate": "1960-05-26",
     "birthTime": "08:01",
@@ -98485,7 +98348,7 @@
   {
     "id": "john-thomas",
     "name": "John Thomas",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1941-03-03",
     "deathDate": "2013-01-15",
     "birthTime": "21:55",
@@ -99624,7 +99487,7 @@
   {
     "id": "savino-guglielmetti",
     "name": "Savino Guglielmetti",
-    "category": "Artist",
+    "category": "Athlete",
     "birthDate": "1911-11-26",
     "deathDate": "2006-01-23",
     "birthTime": "22:30",
@@ -100756,25 +100619,6 @@
     "bio": "Belgian poet, born in Ghent in 1861."
   },
   {
-    "id": "christian-brando",
-    "name": "Christian Brando",
-    "category": "Actor",
-    "birthDate": "1958-05-11",
-    "deathDate": "2008-01-26",
-    "birthTime": "19:36",
-    "birthTimeKnown": true,
-    "birthPlace": "Los Angeles, CA",
-    "latitude": 34.052,
-    "longitude": -118.243,
-    "timeZoneId": "America/Los_Angeles",
-    "utcOffsetHours": -8.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q1797883",
-    "sitelinks": 18,
-    "bio": "Son of actor Marlon Brando, born in Los Angeles in 1958."
-  },
-  {
     "id": "christian-ferras",
     "name": "Christian Ferras",
     "category": "Musician",
@@ -101590,26 +101434,6 @@
     "bio": "French actor, film director, theatre director and screenwriter, born in Neuilly-sur-Seine in 1947."
   },
   {
-    "id": "francisco-marto",
-    "name": "Francisco Marto",
-    "category": "Spiritual",
-    "birthDate": "1908-06-11",
-    "deathDate": "1919-04-04",
-    "birthTime": "03:00",
-    "birthTimeKnown": true,
-    "birthTimeUncertaintyMinutes": 15,
-    "birthPlace": "Fátima, Portugal",
-    "latitude": 39.6256,
-    "longitude": -8.6658,
-    "timeZoneId": "Europe/Lisbon",
-    "utcOffsetHours": -0.6125,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q1442116",
-    "sitelinks": 18,
-    "bio": "Portuguese visionary and Roman Catholic saint, born in Fátima in 1908."
-  },
-  {
     "id": "franck-dubosc",
     "name": "Franck Dubosc",
     "category": "Actor",
@@ -101959,7 +101783,7 @@
   {
     "id": "graziano-mancinelli",
     "name": "Graziano Mancinelli",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1937-02-18",
     "deathDate": "1992-12-08",
     "birthTime": "02:30",
@@ -102291,7 +102115,7 @@
   {
     "id": "jay-silvester",
     "name": "Jay Silvester",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1937-08-27",
     "birthTime": "07:30",
     "birthTimeKnown": true,
@@ -106893,7 +106717,7 @@
   {
     "id": "jules-ladoumegue",
     "name": "Jules Ladoumègue",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1906-12-10",
     "deathDate": "1973-03-02",
     "birthTime": "04:51",
@@ -110364,7 +110188,7 @@
   {
     "id": "fabrizio-mori",
     "name": "Fabrizio Mori",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1969-06-28",
     "birthTime": "16:00",
     "birthTimeKnown": true,
@@ -111660,7 +111484,7 @@
   {
     "id": "kevin-staut",
     "name": "Kevin Staut",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1980-11-15",
     "birthTime": "03:40",
     "birthTimeKnown": true,
@@ -113432,7 +113256,7 @@
   {
     "id": "stefano-mei",
     "name": "Stefano Mei",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1963-02-03",
     "birthTime": "08:40",
     "birthTimeKnown": true,
@@ -114042,7 +113866,7 @@
   {
     "id": "antonio-tartaglia",
     "name": "Antonio Tartaglia",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1968-01-13",
     "birthTime": "15:30",
     "birthTimeKnown": true,
@@ -114232,25 +114056,6 @@
     "wikidataId": "Q333293",
     "sitelinks": 15,
     "bio": "British politician, born in Dundee in 1927."
-  },
-  {
-    "id": "bruno-mussolini",
-    "name": "Bruno Mussolini",
-    "category": "Historical",
-    "birthDate": "1918-04-22",
-    "deathDate": "1941-08-07",
-    "birthTime": "17:20",
-    "birthTimeKnown": true,
-    "birthPlace": "Milan, Italy",
-    "latitude": 45.464,
-    "longitude": 9.188,
-    "timeZoneId": "Europe/Rome",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q2665964",
-    "sitelinks": 15,
-    "bio": "Son of Benito Mussolini, born in Milan in 1918."
   },
   {
     "id": "burton-cummings",
@@ -117281,7 +117086,7 @@
   {
     "id": "neville-bulwer-lytton-3rd-earl-of-lytton",
     "name": "Neville Bulwer-Lytton, 3rd Earl of Lytton",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1879-02-06",
     "deathDate": "1951-02-09",
     "birthTime": "02:00",
@@ -118176,7 +117981,7 @@
   {
     "id": "steven-langton",
     "name": "Steven Langton",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1983-04-15",
     "birthTime": "10:57",
     "birthTimeKnown": true,
@@ -119245,7 +119050,7 @@
   {
     "id": "bernard-chevallier",
     "name": "Bernard Chevallier",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1912-10-04",
     "deathDate": "1997-04-06",
     "birthTime": "20:20",
@@ -120290,7 +120095,7 @@
   {
     "id": "federico-roman",
     "name": "Federico Roman",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1952-07-29",
     "birthTime": "12:45",
     "birthTimeKnown": true,
@@ -121717,7 +121522,7 @@
   {
     "id": "kathy-mcmillan",
     "name": "Kathy McMillan",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1957-11-07",
     "birthTime": "05:30",
     "birthTimeKnown": true,
@@ -122193,7 +121998,7 @@
   {
     "id": "maurice-buret",
     "name": "Maurice Buret",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1909-05-21",
     "deathDate": "2003-08-23",
     "birthTime": "16:00",
@@ -122310,7 +122115,7 @@
   {
     "id": "mauro-checcoli",
     "name": "Mauro Checcoli",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1943-03-01",
     "birthTime": "18:30",
     "birthTimeKnown": true,
@@ -123327,7 +123132,7 @@
   {
     "id": "sam-hall",
     "name": "Sam Hall",
-    "category": "Political",
+    "category": "Athlete",
     "birthDate": "1937-03-10",
     "deathDate": "2014-08-11",
     "birthTime": "18:17",
@@ -124194,7 +123999,7 @@
   {
     "id": "andreas-ostler",
     "name": "Andreas Ostler",
-    "category": "Entrepreneur",
+    "category": "Athlete",
     "birthDate": "1921-01-21",
     "deathDate": "1988-11-24",
     "birthTime": "16:45",
@@ -124909,7 +124714,7 @@
   {
     "id": "david-hallyday",
     "name": "David Hallyday",
-    "category": "Musician",
+    "category": "Athlete",
     "birthDate": "1966-08-14",
     "birthTime": "21:40",
     "birthTimeKnown": true,
@@ -126179,7 +125984,7 @@
   {
     "id": "hansjorg-raffl",
     "name": "Hansjörg Raffl",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1958-01-29",
     "birthTime": "09:15",
     "birthTimeKnown": true,
@@ -126915,25 +126720,6 @@
     "wikidataId": "Q1093191",
     "sitelinks": 13,
     "bio": "Opera singer, born in Los Angeles in 1921."
-  },
-  {
-    "id": "jessica-dubroff",
-    "name": "Jessica Dubroff",
-    "category": "Historical",
-    "birthDate": "1988-05-05",
-    "deathDate": "1996-04-11",
-    "birthTime": "08:29",
-    "birthTimeKnown": true,
-    "birthPlace": "Falmouth, MA",
-    "latitude": 41.5514,
-    "longitude": -70.6153,
-    "timeZoneId": "America/New_York",
-    "utcOffsetHours": -5.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q769007",
-    "sitelinks": 13,
-    "bio": "American child pilot trainee, born in Falmouth in 1988."
   },
   {
     "id": "jessica-savitch",
@@ -128017,24 +127803,6 @@
     "bio": "French singer, born in Paris in 1906."
   },
   {
-    "id": "nadya-suleman",
-    "name": "Nadya Suleman",
-    "category": "Historical",
-    "birthDate": "1975-07-11",
-    "birthTime": "21:59",
-    "birthTimeKnown": true,
-    "birthPlace": "Fullerton, CA",
-    "latitude": 33.87,
-    "longitude": -117.924,
-    "timeZoneId": "America/Los_Angeles",
-    "utcOffsetHours": -8.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q3040105",
-    "sitelinks": 13,
-    "bio": "Mother of octuplets, born in Fullerton in 1975."
-  },
-  {
     "id": "nicolas-ghesquiere",
     "name": "Nicolas Ghesquière",
     "category": "Artist",
@@ -128056,7 +127824,7 @@
   {
     "id": "norbert-huber",
     "name": "Norbert Huber",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1964-09-03",
     "birthTime": "07:15",
     "birthTimeKnown": true,
@@ -128550,25 +128318,6 @@
     "wikidataId": "Q1956929",
     "sitelinks": 13,
     "bio": "Filipino actor and singer, born in Manila in 1977."
-  },
-  {
-    "id": "polly-klaas",
-    "name": "Polly Klaas",
-    "category": "Historical",
-    "birthDate": "1981-01-03",
-    "deathDate": "1993-10-01",
-    "birthTime": "10:41",
-    "birthTimeKnown": true,
-    "birthPlace": "San Francisco, CA",
-    "latitude": 37.78,
-    "longitude": -122.42,
-    "timeZoneId": "America/Los_Angeles",
-    "utcOffsetHours": -8.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q2089955",
-    "sitelinks": 13,
-    "bio": "American murder victim, born in San Francisco in 1981."
   },
   {
     "id": "paolo-cirino-pomicino",
@@ -129191,7 +128940,7 @@
   {
     "id": "tom-gompf",
     "name": "Tom Gompf",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1939-03-17",
     "birthTime": "07:57",
     "birthTimeKnown": true,
@@ -130059,7 +129808,7 @@
   {
     "id": "bob-gutowski",
     "name": "Bob Gutowski",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1935-04-25",
     "deathDate": "1960-08-02",
     "birthTime": "00:40",
@@ -132736,26 +132485,6 @@
     "bio": "Italian jurist, born in Bologna in 1950."
   },
   {
-    "id": "marguerite-steinheil",
-    "name": "Marguerite Steinheil",
-    "category": "Historical",
-    "birthDate": "1869-04-16",
-    "deathDate": "1954-07-17",
-    "birthTime": "03:00",
-    "birthTimeKnown": true,
-    "birthTimeUncertaintyMinutes": 15,
-    "birthPlace": "Beaucourt, France",
-    "latitude": 47.484,
-    "longitude": 6.926,
-    "timeZoneId": "Europe/Paris",
-    "utcOffsetHours": 0.15583333333333332,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q273811",
-    "sitelinks": 12,
-    "bio": "French murder suspect, born in Beaucourt in 1869."
-  },
-  {
     "id": "marie-gevers",
     "name": "Marie Gevers",
     "category": "Writer",
@@ -133841,25 +133570,6 @@
     "bio": "Italian actor, born in Padua in 1955."
   },
   {
-    "id": "roy-l-dennis",
-    "name": "Roy L. Dennis",
-    "category": "Historical",
-    "birthDate": "1961-12-04",
-    "deathDate": "1978-10-04",
-    "birthTime": "10:03",
-    "birthTimeKnown": true,
-    "birthPlace": "Downey, CA",
-    "latitude": 33.941,
-    "longitude": -118.127,
-    "timeZoneId": "America/Los_Angeles",
-    "utcOffsetHours": -8.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q7373047",
-    "sitelinks": 12,
-    "bio": "American boy with a rare disorder, born in Downey in 1961."
-  },
-  {
     "id": "roger-grenier",
     "name": "Roger Grenier",
     "category": "Writer",
@@ -134132,7 +133842,7 @@
   {
     "id": "thomas-prugger",
     "name": "Thomas Prugger",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1971-10-23",
     "birthTime": "07:35",
     "birthTimeKnown": true,
@@ -134757,24 +134467,6 @@
     "wikidataId": "Q507746",
     "sitelinks": 11,
     "bio": "French writer, born in Digne-Les-Bains in 1884."
-  },
-  {
-    "id": "alexandre-grimaldi",
-    "name": "Alexandre Grimaldi",
-    "category": "Royalty",
-    "birthDate": "2003-08-24",
-    "birthTime": "18:45",
-    "birthTimeKnown": true,
-    "birthPlace": "Paris, France",
-    "latitude": 48.857,
-    "longitude": 2.351,
-    "timeZoneId": "Europe/Paris",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q2701854",
-    "sitelinks": 11,
-    "bio": "1st son of Albert II, Prince of Monaco, born in Paris in 2003."
   },
   {
     "id": "alexis-de-castillon",
@@ -137850,7 +137542,7 @@
   {
     "id": "loic-leferme",
     "name": "Loïc Leferme",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1970-08-28",
     "deathDate": "2007-04-11",
     "birthTime": "18:50",
@@ -138541,7 +138233,7 @@
   {
     "id": "mick-fanning",
     "name": "Mick Fanning",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1981-06-13",
     "birthTime": "04:21",
     "birthTimeKnown": true,
@@ -141522,7 +141214,7 @@
   {
     "id": "eric-wauters",
     "name": "Eric Wauters",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1951-05-12",
     "deathDate": "1999-10-21",
     "birthTime": "13:00",
@@ -141886,25 +141578,6 @@
     "wikidataId": "Q568490",
     "sitelinks": 10,
     "bio": "French actress, born in Paris in 1928."
-  },
-  {
-    "id": "frederic-bourdin",
-    "name": "Frédéric Bourdin",
-    "category": "Historical",
-    "birthDate": "1974-06-13",
-    "birthTime": "01:30",
-    "birthTimeKnown": true,
-    "birthTimeUncertaintyMinutes": 15,
-    "birthPlace": "Nanterre, France",
-    "latitude": 48.89,
-    "longitude": 2.197,
-    "timeZoneId": "Europe/Paris",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q433609",
-    "sitelinks": 10,
-    "bio": "French serial impostor, born in Nanterre in 1974."
   },
   {
     "id": "frederik-jacobus-johannes-buytendijk",
@@ -144589,7 +144262,7 @@
   {
     "id": "paul-vermeiren",
     "name": "Paul Vermeiren",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1963-08-27",
     "birthTime": "11:50",
     "birthTimeKnown": true,
@@ -145247,7 +144920,7 @@
   {
     "id": "robert-cogniaux",
     "name": "Robert Cogniaux",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1934-05-29",
     "birthTime": "01:00",
     "birthTimeKnown": true,
@@ -145342,24 +145015,6 @@
     "wikidataId": "Q3441276",
     "sitelinks": 10,
     "bio": "French actor, born in Mazères in 1876."
-  },
-  {
-    "id": "sabine-dardenne",
-    "name": "Sabine Dardenne",
-    "category": "Writer",
-    "birthDate": "1983-10-28",
-    "birthTime": "09:20",
-    "birthTimeKnown": true,
-    "birthPlace": "Tournai, Belgium",
-    "latitude": 50.606,
-    "longitude": 3.388,
-    "timeZoneId": "Europe/Brussels",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q508951",
-    "sitelinks": 10,
-    "bio": "Kidnapped Belgian child, born in Tournai in 1983."
   },
   {
     "id": "serge-hutin",
@@ -146246,7 +145901,7 @@
   {
     "id": "antonella-bevilacqua",
     "name": "Antonella Bevilacqua",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1971-10-15",
     "birthTime": "13:00",
     "birthTimeKnown": true,
@@ -150932,7 +150587,7 @@
   {
     "id": "stanny-van-paesschen",
     "name": "Stanny Van Paesschen",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1957-04-24",
     "birthTime": "17:30",
     "birthTimeKnown": true,
@@ -150965,25 +150620,6 @@
     "wikidataId": "Q208882",
     "sitelinks": 9,
     "bio": "British-American guitarist, born in London in 1973."
-  },
-  {
-    "id": "steven-stayner",
-    "name": "Steven Stayner",
-    "category": "Historical",
-    "birthDate": "1965-04-18",
-    "deathDate": "1989-09-16",
-    "birthTime": "02:29",
-    "birthTimeKnown": true,
-    "birthPlace": "University of California Merced, CA",
-    "latitude": 37.367,
-    "longitude": -120.42,
-    "timeZoneId": "America/Los_Angeles",
-    "utcOffsetHours": -8.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q501680",
-    "sitelinks": 9,
-    "bio": "American child kidnapping victim, born in University of California Merced in 1965."
   },
   {
     "id": "stomy-bugsy",
@@ -152565,7 +152201,7 @@
   {
     "id": "christophe-impens",
     "name": "Christophe Impens",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1969-12-09",
     "birthTime": "21:20",
     "birthTimeKnown": true,
@@ -157340,7 +156976,7 @@
   {
     "id": "umberto-pelizzari",
     "name": "Umberto Pelizzari",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1965-08-28",
     "birthTime": "14:00",
     "birthTimeKnown": true,
@@ -159511,25 +159147,6 @@
     "wikidataId": "Q719185",
     "sitelinks": 7,
     "bio": "American artist, born in Greenville in 1925."
-  },
-  {
-    "id": "ennis-cosby",
-    "name": "Ennis Cosby",
-    "category": "Historical",
-    "birthDate": "1969-04-15",
-    "deathDate": "1997-01-16",
-    "birthTime": "00:28",
-    "birthTimeKnown": true,
-    "birthPlace": "Los Angeles, CA",
-    "latitude": 34.052,
-    "longitude": -118.243,
-    "timeZoneId": "America/Los_Angeles",
-    "utcOffsetHours": -8.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q1563783",
-    "sitelinks": 7,
-    "bio": "Son of Bill Cosby, born in Los Angeles in 1969."
   },
   {
     "id": "eric-forth",
@@ -164269,7 +163886,7 @@
   {
     "id": "robert-peter-gale",
     "name": "Robert Peter Gale",
-    "category": "Scientist",
+    "category": "Athlete",
     "birthDate": "1945-10-11",
     "birthTime": "20:50",
     "birthTimeKnown": true,
@@ -164783,7 +164400,7 @@
   {
     "id": "sven-pieters",
     "name": "Sven Pieters",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1976-06-05",
     "birthTime": "10:00",
     "birthTimeKnown": true,
@@ -166239,25 +165856,6 @@
     "bio": "Italian footballer, born in Turin in 1925."
   },
   {
-    "id": "chandra-levy",
-    "name": "Chandra Levy",
-    "category": "Historical",
-    "birthDate": "1977-04-14",
-    "deathDate": "2002-05-22",
-    "birthTime": "13:46",
-    "birthTimeKnown": true,
-    "birthPlace": "Cleveland, OH",
-    "latitude": 41.505,
-    "longitude": -81.691,
-    "timeZoneId": "America/New_York",
-    "utcOffsetHours": -5.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q4256407",
-    "sitelinks": 6,
-    "bio": "American murder victim, born in Cleveland in 1977."
-  },
-  {
     "id": "andre-weiss",
     "name": "André Weiss",
     "category": "Political",
@@ -167561,7 +167159,7 @@
   {
     "id": "georges-damitio",
     "name": "Georges Damitio",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1924-05-20",
     "deathDate": "1994-09-07",
     "birthTime": "06:00",
@@ -175986,24 +175584,6 @@
     "bio": "American writer, born in New York in 1941."
   },
   {
-    "id": "jaycee-lee-dugard",
-    "name": "Jaycee Lee Dugard",
-    "category": "Historical",
-    "birthDate": "1980-05-03",
-    "birthTime": "22:42",
-    "birthTimeKnown": true,
-    "birthPlace": "Anaheim, CA",
-    "latitude": 33.834,
-    "longitude": -117.916,
-    "timeZoneId": "America/Los_Angeles",
-    "utcOffsetHours": -8.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q21553606",
-    "sitelinks": 5,
-    "bio": "American kidnapping victim, born in Anaheim in 1980."
-  },
-  {
     "id": "jean-amado",
     "name": "Jean Amado",
     "category": "Artist",
@@ -176774,7 +176354,7 @@
   {
     "id": "lester-steers",
     "name": "Lester Steers",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1917-06-16",
     "deathDate": "2003-01-23",
     "birthTime": "10:30",
@@ -178233,7 +177813,7 @@
   {
     "id": "raymond-dot",
     "name": "Raymond Dot",
-    "category": "Artist",
+    "category": "Athlete",
     "birthDate": "1926-12-20",
     "deathDate": "2015-06-30",
     "birthTime": "08:00",
@@ -178713,25 +178293,6 @@
     "bio": "Mexican actor, born in Mexico City in 1970."
   },
   {
-    "id": "robin-bush",
-    "name": "Robin Bush",
-    "category": "Political",
-    "birthDate": "1949-12-20",
-    "deathDate": "1953-10-11",
-    "birthTime": "07:25",
-    "birthTimeKnown": true,
-    "birthPlace": "Los Angeles, CA",
-    "latitude": 34.052,
-    "longitude": -118.243,
-    "timeZoneId": "America/Los_Angeles",
-    "utcOffsetHours": -8.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q52159104",
-    "sitelinks": 5,
-    "bio": "Second child of President George H.W. Bush and First Lady Barbara Bush, born in Los Angeles in 1949."
-  },
-  {
     "id": "robin-williamson",
     "name": "Robin Williamson",
     "category": "Musician",
@@ -178965,7 +178526,7 @@
   {
     "id": "regis-charlet",
     "name": "Régis Charlet",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1920-05-04",
     "deathDate": "1998-10-31",
     "birthTime": "05:00",
@@ -179438,26 +178999,6 @@
     "bio": "American football player and coach, born in Los Angeles in 1967."
   },
   {
-    "id": "steven-parent",
-    "name": "Steven Parent",
-    "category": "Historical",
-    "birthDate": "1951-02-12",
-    "deathDate": "1969-08-09",
-    "birthTime": "02:00",
-    "birthTimeKnown": true,
-    "birthTimeUncertaintyMinutes": 15,
-    "birthPlace": "California, CA",
-    "latitude": 37,
-    "longitude": -120,
-    "timeZoneId": "America/Los_Angeles",
-    "utcOffsetHours": -8.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q710900",
-    "sitelinks": 5,
-    "bio": "American delivery boy and salesman, victim of the Charles Manson murders, born in California in 1951."
-  },
-  {
     "id": "susan-estrich",
     "name": "Susan Estrich",
     "category": "Political",
@@ -179918,7 +179459,7 @@
   {
     "id": "bill-sefton",
     "name": "Bill Sefton",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1915-01-21",
     "deathDate": "1982-05-02",
     "birthTime": "02:20",
@@ -180633,7 +180174,7 @@
   {
     "id": "armand-solbach",
     "name": "Armand Solbach",
-    "category": "Artist",
+    "category": "Athlete",
     "birthDate": "1904-05-10",
     "deathDate": "1967-12-17",
     "birthTime": "20:51",
@@ -181784,7 +181325,7 @@
   {
     "id": "colette-duval",
     "name": "Colette Duval",
-    "category": "Actor",
+    "category": "Athlete",
     "birthDate": "1930-07-28",
     "deathDate": "1988-05-22",
     "birthTime": "03:00",
@@ -183305,7 +182846,7 @@
   {
     "id": "guillaume-nery",
     "name": "Guillaume Néry",
-    "category": "Director",
+    "category": "Athlete",
     "birthDate": "1982-07-11",
     "birthTime": "18:00",
     "birthTimeKnown": true,
@@ -185877,24 +185418,6 @@
     "bio": "French philosopher, born in Thionville in 1974."
   },
   {
-    "id": "michaela-garecht",
-    "name": "Michaela Garecht",
-    "category": "Historical",
-    "birthDate": "1979-01-24",
-    "birthTime": "20:13",
-    "birthTimeKnown": true,
-    "birthPlace": "Hayward, CA",
-    "latitude": 37.672,
-    "longitude": -122.084,
-    "timeZoneId": "America/Los_Angeles",
-    "utcOffsetHours": -8.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q6835599",
-    "sitelinks": 4,
-    "bio": "Kidnapped American child, born in Hayward in 1979."
-  },
-  {
     "id": "michel-bon",
     "name": "Michel Bon",
     "category": "Entrepreneur",
@@ -187604,7 +187127,7 @@
   {
     "id": "roger-heinkele",
     "name": "Roger Heinkelé",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1913-01-06",
     "deathDate": "2001-04-24",
     "birthTime": "11:45",
@@ -187924,7 +187447,7 @@
   {
     "id": "sonia-landy-sheridan",
     "name": "Sonia Landy Sheridan",
-    "category": "Artist",
+    "category": "Athlete",
     "birthDate": "1925-04-10",
     "deathDate": "2021-10-30",
     "birthTime": "03:40",
@@ -188380,7 +187903,7 @@
   {
     "id": "virgilio-tommasi",
     "name": "Virgilio Tommasi",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1905-05-10",
     "deathDate": "1998-02-20",
     "birthTime": "01:00",
@@ -190294,7 +189817,7 @@
   {
     "id": "chet-forte",
     "name": "Chet Forte",
-    "category": "Director",
+    "category": "Athlete",
     "birthDate": "1935-08-07",
     "deathDate": "1996-05-18",
     "birthTime": "03:30",
@@ -190653,7 +190176,7 @@
   {
     "id": "constantin-van-rijckevorsel",
     "name": "Constantin Van Rijckevorsel",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1976-06-24",
     "birthTime": "22:12",
     "birthTimeKnown": true,
@@ -192406,7 +191929,7 @@
   {
     "id": "gianluca-genoni",
     "name": "Gianluca Genoni",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1968-07-05",
     "birthTime": "11:20",
     "birthTimeKnown": true,
@@ -195429,24 +194952,6 @@
     "bio": "Scottish minister and biblical scholar, born in Kilmarnock in 1908."
   },
   {
-    "id": "maura-murray",
-    "name": "Maura Murray",
-    "category": "Historical",
-    "birthDate": "1982-05-04",
-    "birthTime": "03:40",
-    "birthTimeKnown": true,
-    "birthPlace": "Brockton, MA",
-    "latitude": 42.083,
-    "longitude": -71.02,
-    "timeZoneId": "America/New_York",
-    "utcOffsetHours": -5.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q51723946",
-    "sitelinks": 3,
-    "bio": "American woman who went missing, born in Brockton in 1982."
-  },
-  {
     "id": "maureen-dor",
     "name": "Maureen Dor",
     "category": "Actor",
@@ -195621,25 +195126,6 @@
     "wikidataId": "Q17427572",
     "sitelinks": 3,
     "bio": "American singer, born in Minneapolis in 1916."
-  },
-  {
-    "id": "melissa-harrington-hughes",
-    "name": "Melissa Harrington-Hughes",
-    "category": "Entrepreneur",
-    "birthDate": "1970-05-29",
-    "deathDate": "2001-09-11",
-    "birthTime": "15:38",
-    "birthTimeKnown": true,
-    "birthPlace": "Springfield, MA",
-    "latitude": 42.102,
-    "longitude": -72.586,
-    "timeZoneId": "America/New_York",
-    "utcOffsetHours": -5.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q108610463",
-    "sitelinks": 3,
-    "bio": "American businessperson, victim of the World Trade Center attack, born in Springfield in 1970."
   },
   {
     "id": "mike-bartrum",
@@ -197553,7 +197039,7 @@
   {
     "id": "stephane-peyron",
     "name": "Stéphane Peyron",
-    "category": "Director",
+    "category": "Athlete",
     "birthDate": "1960-12-01",
     "birthTime": "10:00",
     "birthTimeKnown": true,
@@ -199196,25 +198682,6 @@
     "bio": "American football player, born in Middletown in 1943."
   },
   {
-    "id": "brian-david-sweeney",
-    "name": "Brian David Sweeney",
-    "category": "Actor",
-    "birthDate": "1963-08-10",
-    "deathDate": "2001-09-11",
-    "birthTime": "20:20",
-    "birthTimeKnown": true,
-    "birthPlace": "Worcester, MA",
-    "latitude": 42.262,
-    "longitude": -71.802,
-    "timeZoneId": "America/New_York",
-    "utcOffsetHours": -5.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q133863273",
-    "sitelinks": 2,
-    "bio": "American defense contractor and former Navy fighter pilot; victim of United Airlines Flight 175 during the September 11 attacks, born in Worcester in 1963."
-  },
-  {
     "id": "bruce-coslet",
     "name": "Bruce Coslet",
     "category": "Athlete",
@@ -199466,7 +198933,7 @@
   {
     "id": "charlotte-consorti",
     "name": "Charlotte Consorti",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1978-10-24",
     "birthTime": "16:35",
     "birthTimeKnown": true,
@@ -199879,7 +199346,7 @@
   {
     "id": "dave-pallone",
     "name": "Dave Pallone",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1951-10-05",
     "birthTime": "06:51",
     "birthTimeKnown": true,
@@ -200087,7 +199554,7 @@
   {
     "id": "didie-schackman",
     "name": "Didie Schackman",
-    "category": "Scientist",
+    "category": "Athlete",
     "birthDate": "1977-12-31",
     "birthTime": "09:40",
     "birthTimeKnown": true,
@@ -201650,26 +201117,6 @@
     "bio": "Italian model and actor, born in Parma in 1979."
   },
   {
-    "id": "gottlieb-renz",
-    "name": "Gottlieb Renz",
-    "category": "Historical",
-    "birthDate": "1911-09-12",
-    "deathDate": "1945-01-03",
-    "birthTime": "08:30",
-    "birthTimeKnown": true,
-    "birthTimeUncertaintyMinutes": 15,
-    "birthPlace": "Pfullingen, Germany",
-    "latitude": 48.469,
-    "longitude": 9.226,
-    "timeZoneId": "Europe/Berlin",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q5588071",
-    "sitelinks": 2,
-    "bio": "SS officer, born in Pfullingen in 1911."
-  },
-  {
     "id": "gracieux-lamperti",
     "name": "Gracieux Lamperti",
     "category": "Athlete",
@@ -202177,25 +201624,6 @@
     "wikidataId": "Q5875487",
     "sitelinks": 2,
     "bio": "Professional boxer, born in Oran in 1928."
-  },
-  {
-    "id": "holly-piirainen",
-    "name": "Holly Piirainen",
-    "category": "Historical",
-    "birthDate": "1983-01-19",
-    "deathDate": "1993-08-05",
-    "birthTime": "10:45",
-    "birthTimeKnown": true,
-    "birthPlace": "Worcester, MA",
-    "latitude": 42.262,
-    "longitude": -71.802,
-    "timeZoneId": "America/New_York",
-    "utcOffsetHours": -5.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q5882215",
-    "sitelinks": 2,
-    "bio": "Murdered American child, born in Worcester in 1983."
   },
   {
     "id": "homer-i-lewis",
@@ -203457,24 +202885,6 @@
     "bio": "Major League Baseball pitcher, born in Dayton in 1942."
   },
   {
-    "id": "john-bennett-ramsey",
-    "name": "John Bennett Ramsey",
-    "category": "Writer",
-    "birthDate": "1943-12-07",
-    "birthTime": "00:45",
-    "birthTimeKnown": true,
-    "birthPlace": "Omaha, NE",
-    "latitude": 41.259,
-    "longitude": -95.937,
-    "timeZoneId": "America/Chicago",
-    "utcOffsetHours": -5.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q6221573",
-    "sitelinks": 2,
-    "bio": "American businessman, author and father of JonBenét Ramsey, born in Omaha in 1943."
-  },
-  {
     "id": "j-robert-schaetzel",
     "name": "J. Robert Schaetzel",
     "category": "Political",
@@ -203782,7 +203192,7 @@
   {
     "id": "kenneth-calman",
     "name": "Kenneth Calman",
-    "category": "Scientist",
+    "category": "Athlete",
     "birthDate": "1941-12-25",
     "deathDate": "2025-07-21",
     "birthTime": "19:00",
@@ -204026,26 +203436,6 @@
     "wikidataId": "Q6551557",
     "sitelinks": 2,
     "bio": "Singer, born in Paisley in 1952."
-  },
-  {
-    "id": "lothar-swierzinski",
-    "name": "Lothar Swierzinski",
-    "category": "Historical",
-    "birthDate": "1922-07-18",
-    "deathDate": "1944-10-29",
-    "birthTime": "13:00",
-    "birthTimeKnown": true,
-    "birthTimeUncertaintyMinutes": 15,
-    "birthPlace": "Gelsenkirchen, Germany",
-    "latitude": 51.512,
-    "longitude": 7.093,
-    "timeZoneId": "Europe/Berlin",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q6684739",
-    "sitelinks": 2,
-    "bio": "SS Officer, born in Gelsenkirchen in 1922."
   },
   {
     "id": "louis-fabien",
@@ -206231,26 +205621,6 @@
     "bio": "French composer, born in Étaples in 1921."
   },
   {
-    "id": "roger-knobelspiess",
-    "name": "Roger Knobelspiess",
-    "category": "Actor",
-    "birthDate": "1947-09-15",
-    "deathDate": "2017-02-19",
-    "birthTime": "00:30",
-    "birthTimeKnown": true,
-    "birthTimeUncertaintyMinutes": 15,
-    "birthPlace": "Elbeuf, France",
-    "latitude": 49.287,
-    "longitude": 1.009,
-    "timeZoneId": "Europe/Paris",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q3439140",
-    "sitelinks": 2,
-    "bio": "Former French robber turned actor and writer, born in Elbeuf in 1947."
-  },
-  {
     "id": "roger-martine",
     "name": "Roger Martine",
     "category": "Athlete",
@@ -206405,25 +205775,6 @@
     "wikidataId": "Q7369652",
     "sitelinks": 2,
     "bio": "American Marine Corps general, born in Honolulu in 1919."
-  },
-  {
-    "id": "rudolf-saumenicht",
-    "name": "Rudolf Säumenicht",
-    "category": "Historical",
-    "birthDate": "1916-02-13",
-    "deathDate": "1944-08-26",
-    "birthTime": "05:15",
-    "birthTimeKnown": true,
-    "birthPlace": "Hamburg, Germany",
-    "latitude": 53.557,
-    "longitude": 9.996,
-    "timeZoneId": "Europe/Berlin",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q7377343",
-    "sitelinks": 2,
-    "bio": "German SS officer, born in Hamburg in 1916."
   },
   {
     "id": "rudy-hirigoyen",
@@ -207082,25 +206433,6 @@
     "bio": "American distance runner, born in Chicago in 1942."
   },
   {
-    "id": "travis-alexander",
-    "name": "Travis Alexander",
-    "category": "Historical",
-    "birthDate": "1977-07-28",
-    "deathDate": "2008-06-04",
-    "birthTime": "00:01",
-    "birthTimeKnown": true,
-    "birthPlace": "Riverside, CA",
-    "latitude": 33.981,
-    "longitude": -117.377,
-    "timeZoneId": "America/Los_Angeles",
-    "utcOffsetHours": -8.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q20054486",
-    "sitelinks": 2,
-    "bio": "American salesman and murder victim, born in Riverside in 1977."
-  },
-  {
     "id": "ugo-pecchioli",
     "name": "Ugo Pecchioli",
     "category": "Political",
@@ -207725,25 +207057,6 @@
     "bio": "American politician and physician, born in Saugus in 1760."
   },
   {
-    "id": "agnes-marin",
-    "name": "Agnès Marin",
-    "category": "Historical",
-    "birthDate": "1997-11-26",
-    "deathDate": "2011-11-16",
-    "birthTime": "09:40",
-    "birthTimeKnown": true,
-    "birthPlace": "Paris, France",
-    "latitude": 48.857,
-    "longitude": 2.351,
-    "timeZoneId": "Europe/Paris",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q64682486",
-    "sitelinks": 1,
-    "bio": "French schoolchild, born in Paris in 1997."
-  },
-  {
     "id": "aissa-wayne",
     "name": "Aissa Wayne",
     "category": "Actor",
@@ -208111,7 +207424,7 @@
   {
     "id": "andre-allemand",
     "name": "André Allemand",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1916-07-25",
     "deathDate": "1983-11-10",
     "birthTime": "06:00",
@@ -208282,7 +207595,7 @@
   {
     "id": "arlette-holsters",
     "name": "Arlette Holsters",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1961-06-21",
     "birthTime": "10:15",
     "birthTimeKnown": true,
@@ -208373,25 +207686,6 @@
     "wikidataId": "Q103830834",
     "sitelinks": 1,
     "bio": "Politician in Massachusetts, US, born in Boston in 1948."
-  },
-  {
-    "id": "azaria-chamberlain",
-    "name": "Azaria Chamberlain",
-    "category": "Historical",
-    "birthDate": "1980-06-11",
-    "deathDate": "1980-08-17",
-    "birthTime": "13:16",
-    "birthTimeKnown": true,
-    "birthPlace": "Mount Isa City, Australia",
-    "latitude": -20.728,
-    "longitude": 139.49,
-    "timeZoneId": "Australia/Brisbane",
-    "utcOffsetHours": 10.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q20200821",
-    "sitelinks": 1,
-    "bio": "Australian infant who disappeared during a camping trip, born in Mount Isa City in 1980."
   },
   {
     "id": "bernard-capillon",
@@ -209137,25 +208431,6 @@
     "bio": "US documentary filmmaker, born in Boston in 1945."
   },
   {
-    "id": "david-cox",
-    "name": "David Cox",
-    "category": "Historical",
-    "birthDate": "1966-11-27",
-    "deathDate": "1994-01-05",
-    "birthTime": "17:41",
-    "birthTimeKnown": true,
-    "birthPlace": "Boston, MA",
-    "latitude": 42.359,
-    "longitude": -71.059,
-    "timeZoneId": "America/New_York",
-    "utcOffsetHours": -5.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q20715526",
-    "sitelinks": 1,
-    "bio": "Former U.S. marine found killed by an unknown assailant, born in Boston in 1966."
-  },
-  {
     "id": "david-willis-wilson-henderson",
     "name": "David Willis Wilson Henderson",
     "category": "Scientist",
@@ -209273,7 +208548,7 @@
   {
     "id": "edith-demaertelaere",
     "name": "Edith Demaertelaere",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1964-12-08",
     "birthTime": "12:55",
     "birthTimeKnown": true,
@@ -209381,25 +208656,6 @@
     "wikidataId": "Q3723050",
     "sitelinks": 1,
     "bio": "Italian footballer, born in Udine in 1909."
-  },
-  {
-    "id": "elisa-izquierdo",
-    "name": "Elisa Izquierdo",
-    "category": "Historical",
-    "birthDate": "1989-02-11",
-    "deathDate": "1995-11-22",
-    "birthTime": "14:21",
-    "birthTimeKnown": true,
-    "birthPlace": "New York, NY",
-    "latitude": 40.713,
-    "longitude": -74.007,
-    "timeZoneId": "America/New_York",
-    "utcOffsetHours": -5.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q5361365",
-    "sitelinks": 1,
-    "bio": "American murder victim, born in New York in 1989."
   },
   {
     "id": "emil-durr",
@@ -209516,26 +208772,6 @@
     "wikidataId": "Q1351943",
     "sitelinks": 1,
     "bio": "German pediatrician, born in Berlin in 1880."
-  },
-  {
-    "id": "erich-rossner",
-    "name": "Erich Rossner",
-    "category": "Historical",
-    "birthDate": "1918-05-26",
-    "deathDate": "1941-09-12",
-    "birthTime": "13:30",
-    "birthTimeKnown": true,
-    "birthTimeUncertaintyMinutes": 15,
-    "birthPlace": "Helmbrechts, Germany",
-    "latitude": 50.239,
-    "longitude": 11.717,
-    "timeZoneId": "Europe/Berlin",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q5388097",
-    "sitelinks": 1,
-    "bio": "SS officer, born in Helmbrechts in 1918."
   },
   {
     "id": "erna-kronshage",
@@ -210312,25 +209548,6 @@
     "bio": "Brazilian model and photographer, born in Rio de Janeiro in 1970."
   },
   {
-    "id": "gerald-f-deconto",
-    "name": "Gerald F. DeConto",
-    "category": "Historical",
-    "birthDate": "1957-08-17",
-    "deathDate": "2001-09-11",
-    "birthTime": "09:25",
-    "birthTimeKnown": true,
-    "birthPlace": "Plymouth, MA",
-    "latitude": 41.956,
-    "longitude": -70.664,
-    "timeZoneId": "America/New_York",
-    "utcOffsetHours": -5.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q114839392",
-    "sitelinks": 1,
-    "bio": "United States Navy officer, victim of the September 11 attacks at the Pentagon, born in Plymouth in 1957."
-  },
-  {
     "id": "gerard-cordonnier",
     "name": "Gérard Cordonnier",
     "category": "Scientist",
@@ -210710,25 +209927,6 @@
     "bio": "British musician, born in Paisley in 1957."
   },
   {
-    "id": "gregory-villemin",
-    "name": "Grégory Villemin",
-    "category": "Historical",
-    "birthDate": "1980-08-24",
-    "deathDate": "1984-10-16",
-    "birthTime": "22:50",
-    "birthTimeKnown": true,
-    "birthPlace": "Saint-Dié-des-Vosges, France",
-    "latitude": 48.284,
-    "longitude": 6.949,
-    "timeZoneId": "Europe/Paris",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q31051166",
-    "sitelinks": 1,
-    "bio": "French, born in Saint-Dié-des-Vosges in 1980."
-  },
-  {
     "id": "guido-ferracin",
     "name": "Guido Ferracin",
     "category": "Athlete",
@@ -210804,66 +210002,6 @@
     "wikidataId": "Q3123718",
     "sitelinks": 1,
     "bio": "French writer, born in Bègles in 1953."
-  },
-  {
-    "id": "hanns-heinrich-lohmann",
-    "name": "Hanns-Heinrich Lohmann",
-    "category": "Historical",
-    "birthDate": "1911-04-24",
-    "deathDate": "1995-05-25",
-    "birthTime": "02:00",
-    "birthTimeKnown": true,
-    "birthTimeUncertaintyMinutes": 15,
-    "birthPlace": "Gütersloh, Germany",
-    "latitude": 51.905,
-    "longitude": 8.393,
-    "timeZoneId": "Europe/Berlin",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q5649249",
-    "sitelinks": 1,
-    "bio": "SS officer, born in Gütersloh in 1911."
-  },
-  {
-    "id": "hans-diergarten",
-    "name": "Hans Diergarten",
-    "category": "Historical",
-    "birthDate": "1913-04-05",
-    "deathDate": "1944-08-02",
-    "birthTime": "12:00",
-    "birthTimeKnown": true,
-    "birthTimeUncertaintyMinutes": 15,
-    "birthPlace": "Schalksmühle, Germany",
-    "latitude": 51.241,
-    "longitude": 7.529,
-    "timeZoneId": "Europe/Berlin",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q5649924",
-    "sitelinks": 1,
-    "bio": "SS officer, born in Schalksmühle in 1913."
-  },
-  {
-    "id": "hans-malkomes",
-    "name": "Hans Malkomes",
-    "category": "Historical",
-    "birthDate": "1913-11-15",
-    "deathDate": "1945-03-21",
-    "birthTime": "07:30",
-    "birthTimeKnown": true,
-    "birthTimeUncertaintyMinutes": 15,
-    "birthPlace": "Bremen, Germany",
-    "latitude": 53.075,
-    "longitude": 8.807,
-    "timeZoneId": "Europe/Berlin",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q5650438",
-    "sitelinks": 1,
-    "bio": "SS officer, born in Bremen in 1913."
   },
   {
     "id": "hans-meid",
@@ -211041,26 +210179,6 @@
     "wikidataId": "Q19631170",
     "sitelinks": 1,
     "bio": "American writer, born in New York City in 1916."
-  },
-  {
-    "id": "hermann-lang",
-    "name": "Hermann Lang",
-    "category": "Historical",
-    "birthDate": "1922-03-24",
-    "deathDate": "1975-03-12",
-    "birthTime": "12:30",
-    "birthTimeKnown": true,
-    "birthTimeUncertaintyMinutes": 15,
-    "birthPlace": "Fussen, Germany",
-    "latitude": 47.57,
-    "longitude": 10.7,
-    "timeZoneId": "Europe/Berlin",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q5740802",
-    "sitelinks": 1,
-    "bio": "SS officer, born in Fussen in 1922."
   },
   {
     "id": "hugh-mackenzie",
@@ -212111,25 +211229,6 @@
     "bio": "American writer, born in Spring Grove in 1917."
   },
   {
-    "id": "juliana-valentine-mccourt",
-    "name": "Juliana Valentine McCourt",
-    "category": "Historical",
-    "birthDate": "1997-05-04",
-    "deathDate": "2001-09-11",
-    "birthTime": "19:24",
-    "birthTimeKnown": true,
-    "birthPlace": "Newton, MA",
-    "latitude": 42.338,
-    "longitude": -71.212,
-    "timeZoneId": "America/New_York",
-    "utcOffsetHours": -5.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q23071509",
-    "sitelinks": 1,
-    "bio": "American victim of United Airlines Flight 175 during the September 11 attacks, born in Newton in 1997."
-  },
-  {
     "id": "julien-lescarret",
     "name": "Julien Lescarret",
     "category": "Historical",
@@ -212169,26 +211268,6 @@
     "bio": "Belgian politician and university professor, born in Charleroi in 1852."
   },
   {
-    "id": "karl-rettlinger",
-    "name": "Karl Rettlinger",
-    "category": "Historical",
-    "birthDate": "1913-02-08",
-    "deathDate": "1990-06-14",
-    "birthTime": "13:30",
-    "birthTimeKnown": true,
-    "birthTimeUncertaintyMinutes": 15,
-    "birthPlace": "Gunzenhausen, Germany",
-    "latitude": 49.116,
-    "longitude": 10.753,
-    "timeZoneId": "Europe/Berlin",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q6372192",
-    "sitelinks": 1,
-    "bio": "SS officer, born in Gunzenhausen in 1913."
-  },
-  {
     "id": "ken-brown",
     "name": "Ken Brown",
     "category": "Artist",
@@ -212207,24 +211286,6 @@
     "bio": "American artist and filmmaker, born in Dayton in 1944."
   },
   {
-    "id": "disappearance-of-kevin-andrew-collins",
-    "name": "disappearance of Kevin Andrew Collins",
-    "category": "Historical",
-    "birthDate": "1974-01-24",
-    "birthTime": "06:57",
-    "birthTimeKnown": true,
-    "birthPlace": "Sacramento, CA",
-    "latitude": 38.577,
-    "longitude": -121.495,
-    "timeZoneId": "America/Los_Angeles",
-    "utcOffsetHours": -7.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q6395730",
-    "sitelinks": 1,
-    "bio": "One of the first missing children to appear on milk cartons and the cover of national publications, born in Sacramento in 1974."
-  },
-  {
     "id": "kirt-ojala",
     "name": "Kirt Ojala",
     "category": "Athlete",
@@ -212241,24 +211302,6 @@
     "wikidataId": "Q6416196",
     "sitelinks": 1,
     "bio": "American baseball player, born in Kalamazoo in 1968."
-  },
-  {
-    "id": "knox-jolie-pitt",
-    "name": "Knox Jolie-Pitt",
-    "category": "Actor",
-    "birthDate": "2008-07-12",
-    "birthTime": "18:27",
-    "birthTimeKnown": true,
-    "birthPlace": "Nice, France",
-    "latitude": 43.703,
-    "longitude": 7.266,
-    "timeZoneId": "Europe/Paris",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q107151224",
-    "sitelinks": 1,
-    "bio": "Son of Angelina Jolie and Brad Pitt, born in Nice in 2008."
   },
   {
     "id": "leo-knegt",
@@ -212553,26 +211596,6 @@
     "wikidataId": "Q3265442",
     "sitelinks": 1,
     "bio": "French painter, born in Meynes in 1904."
-  },
-  {
-    "id": "ludwig-spindler",
-    "name": "Ludwig Spindler",
-    "category": "Historical",
-    "birthDate": "1910-11-15",
-    "deathDate": "1944-12-27",
-    "birthTime": "22:30",
-    "birthTimeKnown": true,
-    "birthTimeUncertaintyMinutes": 15,
-    "birthPlace": "Munich, Germany",
-    "latitude": 48.139,
-    "longitude": 11.58,
-    "timeZoneId": "Europe/Berlin",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q6699338",
-    "sitelinks": 1,
-    "bio": "SS officer, born in Munich in 1910."
   },
   {
     "id": "leon-dony",
@@ -212923,25 +211946,6 @@
     "bio": "American javelin thrower, born in Newark in 1949."
   },
   {
-    "id": "marta-russo",
-    "name": "Marta Russo",
-    "category": "Historical",
-    "birthDate": "1975-04-13",
-    "deathDate": "1997-05-14",
-    "birthTime": "17:40",
-    "birthTimeKnown": true,
-    "birthPlace": "Rome, Italy",
-    "latitude": 41.891,
-    "longitude": 12.494,
-    "timeZoneId": "Europe/Rome",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q41810236",
-    "sitelinks": 1,
-    "bio": "Italian student, murdered in, born in Rome in 1975."
-  },
-  {
     "id": "maurice-chastanier",
     "name": "Maurice Chastanier",
     "category": "Athlete",
@@ -212964,7 +211968,7 @@
   {
     "id": "maurice-gudin-de-vallerin",
     "name": "Maurice Gudin de Vallerin",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1897-03-15",
     "deathDate": "1981-07-18",
     "birthTime": "15:21",
@@ -213310,25 +212314,6 @@
     "wikidataId": "Q7004911",
     "sitelinks": 1,
     "bio": "American food scientist, born in Milwaukee in 1918."
-  },
-  {
-    "id": "nicholas-knatchbull",
-    "name": "Nicholas Knatchbull",
-    "category": "Royalty",
-    "birthDate": "1964-11-18",
-    "deathDate": "1979-08-27",
-    "birthTime": "15:40",
-    "birthTimeKnown": true,
-    "birthPlace": "London, England",
-    "latitude": 51.5,
-    "longitude": -0.126,
-    "timeZoneId": "Europe/London",
-    "utcOffsetHours": 0.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q75383948",
-    "sitelinks": 1,
-    "bio": "British aristocrat, born in London in 1964."
   },
   {
     "id": "nicole-dahm",
@@ -215091,25 +214076,6 @@
     "bio": "Scottish chemist, born in Edinburgh in 1923."
   },
   {
-    "id": "thomas-f-mcguinness-jr",
-    "name": "Thomas F. McGuinness, Jr.",
-    "category": "Historical",
-    "birthDate": "1959-09-08",
-    "deathDate": "2001-09-11",
-    "birthTime": "04:38",
-    "birthTimeKnown": true,
-    "birthPlace": "Boston, MA",
-    "latitude": 42.359,
-    "longitude": -71.059,
-    "timeZoneId": "America/New_York",
-    "utcOffsetHours": -5.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q114608343",
-    "sitelinks": 1,
-    "bio": "American pilot, first officer and victim of American Airlines Flight 11 during the September 11 attacks, born in Boston in 1959."
-  },
-  {
     "id": "urs-kliby",
     "name": "Urs Kliby",
     "category": "Musician",
@@ -215223,24 +214189,6 @@
     "wikidataId": "Q4015299",
     "sitelinks": 1,
     "bio": "Italian choreographer, born in Viareggio in 1941."
-  },
-  {
-    "id": "vivienne-jolie",
-    "name": "Vivienne Jolie",
-    "category": "Historical",
-    "birthDate": "2008-07-12",
-    "birthTime": "18:27",
-    "birthTimeKnown": true,
-    "birthPlace": "Nice, France",
-    "latitude": 43.703,
-    "longitude": 7.266,
-    "timeZoneId": "Europe/Paris",
-    "utcOffsetHours": 1.0,
-    "roddenRating": "AA",
-    "source": "Astro-Databank, by way of VedAstro's list of famous people; https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-    "wikidataId": "Q107151227",
-    "sitelinks": 1,
-    "bio": "Daughter of Angelina Jolie and Brad Pitt, born in Nice in 2008."
   },
   {
     "id": "wally-toscanini-castelbarco",
@@ -215498,7 +214446,7 @@
   {
     "id": "xavier-bizard",
     "name": "Xavier Bizard",
-    "category": "Historical",
+    "category": "Athlete",
     "birthDate": "1899-01-01",
     "deathDate": "1956-08-20",
     "birthTime": "20:21",

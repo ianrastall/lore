@@ -230,11 +230,6 @@
  },
  {
   "first": "albert-ii-of-monaco",
-  "second": "alexandre-grimaldi",
-  "relation": "parent"
- },
- {
-  "first": "albert-ii-of-monaco",
   "second": "caroline-of-monaco",
   "relation": "sibling"
  },
@@ -346,11 +341,6 @@
   "second": "gerard-bauer",
   "relation": "relative",
   "kinship": "nephew"
- },
- {
-  "first": "alexandre-grimaldi",
-  "second": "jazmin-grace-grimaldi",
-  "relation": "sibling"
  },
  {
   "first": "alexandrine-meley",
@@ -638,16 +628,6 @@
   "relation": "sibling"
  },
  {
-  "first": "angelina-jolie",
-  "second": "knox-jolie-pitt",
-  "relation": "parent"
- },
- {
-  "first": "angelina-jolie",
-  "second": "vivienne-jolie",
-  "relation": "parent"
- },
- {
   "first": "angie-dickinson",
   "second": "burt-bacharach",
   "relation": "spouse",
@@ -717,25 +697,8 @@
  },
  {
   "first": "anna-maria-mussolini",
-  "second": "bruno-mussolini",
-  "relation": "sibling"
- },
- {
-  "first": "anna-maria-mussolini",
-  "second": "romano-mussolini",
-  "relation": "sibling"
- },
- {
-  "first": "anna-maria-mussolini",
   "second": "vittorio-mussolini",
   "relation": "sibling"
- },
- {
-  "first": "anna-maria-villani-scicolone",
-  "second": "romano-mussolini",
-  "relation": "spouse",
-  "from": "1962",
-  "to": "1976"
  },
  {
   "first": "anna-maria-villani-scicolone",
@@ -1524,16 +1487,6 @@
   "to": "1993"
  },
  {
-  "first": "brad-pitt",
-  "second": "knox-jolie-pitt",
-  "relation": "parent"
- },
- {
-  "first": "brad-pitt",
-  "second": "vivienne-jolie",
-  "relation": "parent"
- },
- {
   "first": "brad-whitford",
   "second": "joe-perry",
   "relation": "groupmate",
@@ -1679,16 +1632,6 @@
   "relation": "spouse",
   "from": "1987-11-21",
   "to": "2000-10-18"
- },
- {
-  "first": "bruno-mussolini",
-  "second": "romano-mussolini",
-  "relation": "sibling"
- },
- {
-  "first": "bruno-mussolini",
-  "second": "vittorio-mussolini",
-  "relation": "sibling"
  },
  {
   "first": "bruno-peyron",
@@ -3389,11 +3332,6 @@
   "relation": "parent"
  },
  {
-  "first": "ennis-cosby",
-  "second": "erika-ranee",
-  "relation": "sibling"
- },
- {
   "first": "enrique-iglesias",
   "second": "chad-mcqueen",
   "relation": "relative",
@@ -3589,11 +3527,6 @@
   "from": "2004-05-22"
  },
  {
-  "first": "felix-faure",
-  "second": "marguerite-steinheil",
-  "relation": "partner"
- },
- {
   "first": "ferdinand-schubert",
   "second": "franz-schubert",
   "relation": "sibling"
@@ -3686,12 +3619,6 @@
   "first": "francis-lalanne",
   "second": "rene-manzor",
   "relation": "sibling"
- },
- {
-  "first": "francisco-marto",
-  "second": "sister-lucia",
-  "relation": "groupmate",
-  "group": "Children of Fátima"
  },
  {
   "first": "franck-bauer",
@@ -4100,11 +4027,6 @@
   "first": "george-vi",
   "second": "queen-elizabeth-ii",
   "relation": "parent"
- },
- {
-  "first": "george-w-bush",
-  "second": "robin-bush",
-  "relation": "sibling"
  },
  {
   "first": "george-washington-adams",
@@ -5737,11 +5659,6 @@
   "relation": "parent"
  },
  {
-  "first": "knox-jolie-pitt",
-  "second": "vivienne-jolie",
-  "relation": "sibling"
- },
- {
   "first": "kourtney-kardashian",
   "second": "kylie-jenner",
   "relation": "sibling"
@@ -6423,11 +6340,6 @@
   "relation": "parent"
  },
  {
-  "first": "marlon-brando",
-  "second": "christian-brando",
-  "relation": "parent"
- },
- {
   "first": "martin-scorsese",
   "second": "robert-de-niro",
   "relation": "groupmate",
@@ -6783,11 +6695,6 @@
  {
   "first": "nathaniel-crosby",
   "second": "phillip-crosby",
-  "relation": "sibling"
- },
- {
-  "first": "nicholas-knatchbull",
-  "second": "timothy-knatchbull",
   "relation": "sibling"
  },
  {
@@ -7323,11 +7230,6 @@
   "to": "2011"
  },
  {
-  "first": "romano-mussolini",
-  "second": "vittorio-mussolini",
-  "relation": "sibling"
- },
- {
   "first": "romina-power",
   "second": "taryn-power",
   "relation": "sibling"
@@ -7527,14 +7429,6 @@
   "first": "sonia-gandhi",
   "second": "rahul-gandhi",
   "relation": "parent"
- },
- {
-  "first": "sophia-loren",
-  "second": "romano-mussolini",
-  "relation": "relative",
-  "kinship": "brother-in-law",
-  "from": "1962",
-  "to": "1976"
  },
  {
   "first": "sophie-agacinski",

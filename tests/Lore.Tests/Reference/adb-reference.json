@@ -25380,17 +25380,6 @@
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
-    "maria-goretti": {
-      "adbTitle": "Maria Teresa Goretti",
-      "date": "1890-10-16",
-      "time": "13:15",
-      "zone": "+00:50",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1890-10-16T12:25:04",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
     "maria-anna-mozart": {
       "adbTitle": "Nannerl Mozart",
       "date": "1751-07-30",
@@ -29743,17 +29732,6 @@
       "rating": "AA",
       "source": "VedAstro list",
       "expectedUtc": "1898-07-06T09:00:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
-    "heather-o-rourke": {
-      "adbTitle": "Heather O'Rourke",
-      "date": "1975-12-27",
-      "time": "00:28",
-      "zone": "-08:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1975-12-27T08:28:00",
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
@@ -40555,17 +40533,6 @@
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
-    "donald-maclean": {
-      "adbTitle": "Donald D. MacLean",
-      "date": "1913-05-25",
-      "time": "14:30",
-      "zone": "+00:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1913-05-25T14:30:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
     "dorothy-stratten": {
       "adbTitle": "Dorothy Stratten",
       "date": "1960-02-28",
@@ -41833,17 +41800,6 @@
       "rating": "AA",
       "source": "VedAstro list",
       "expectedUtc": "1931-05-27T19:00:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
-    "bob-denard": {
-      "adbTitle": "Bob Denard",
-      "date": "1929-04-07",
-      "time": "13:00",
-      "zone": "+00:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1929-04-07T13:00:00",
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
@@ -46598,17 +46554,6 @@
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
-    "romano-mussolini": {
-      "adbTitle": "Romano Mussolini",
-      "date": "1927-09-26",
-      "time": "23:05",
-      "zone": "+01:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1927-09-26T22:05:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
     "rudi-altig": {
       "adbTitle": "Rudi Altig",
       "date": "1937-03-18",
@@ -49875,17 +49820,6 @@
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
-    "nicole-brown-simpson": {
-      "adbTitle": "Nicole Brown Simpson",
-      "date": "1959-05-19",
-      "time": "02:00",
-      "zone": "+01:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1959-05-19T01:00:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
     "norman-lamont": {
       "adbTitle": "Norman Lamont",
       "date": "1942-05-08",
@@ -50710,17 +50644,6 @@
       "rating": "AA",
       "source": "VedAstro list",
       "expectedUtc": "1872-12-22T21:58:39",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
-    "carl-peters": {
-      "adbTitle": "Carl Peters",
-      "date": "1856-09-27",
-      "time": "05:00",
-      "zone": "LMT",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1856-09-27T04:16:17",
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
@@ -57739,17 +57662,6 @@
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
-    "christian-brando": {
-      "adbTitle": "Christian Brando",
-      "date": "1958-05-11",
-      "time": "19:36",
-      "zone": "-07:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1958-05-12T02:36:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
     "christian-ferras": {
       "adbTitle": "Christian Ferras",
       "date": "1933-06-17",
@@ -58224,18 +58136,6 @@
       "expectedUtc": "1947-12-08T11:45:00",
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
-    },
-    "francisco-marto": {
-      "adbTitle": "Francisco Marto",
-      "date": "1908-06-11",
-      "time": "03:00",
-      "zone": "LMT",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1908-06-11T03:34:40",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01",
-      "note": "VedAstro has Aljustrel, Portugal; birthplace from Wikidata."
     },
     "franck-dubosc": {
       "adbTitle": "Franck Dubosc",
@@ -65458,17 +65358,6 @@
       "rating": "AA",
       "source": "VedAstro list",
       "expectedUtc": "1927-10-05T23:40:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
-    "bruno-mussolini": {
-      "adbTitle": "Bruno Mussolini",
-      "date": "1918-04-22",
-      "time": "17:20",
-      "zone": "+02:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1918-04-22T15:20:00",
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
@@ -72706,18 +72595,6 @@
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
-    "jessica-dubroff": {
-      "adbTitle": "Jessica Dubroff",
-      "date": "1988-05-05",
-      "time": "08:29",
-      "zone": "-04:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1988-05-05T12:29:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01",
-      "note": "VedAstro has Hercules, CA, United States; birthplace from Wikidata."
-    },
     "jessica-savitch": {
       "adbTitle": "Jessica Savitch",
       "date": "1947-02-01",
@@ -73336,17 +73213,6 @@
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
-    "nadya-suleman": {
-      "adbTitle": "Nadya Suleman",
-      "date": "1975-07-11",
-      "time": "21:59",
-      "zone": "-07:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1975-07-12T04:59:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
     "nicolas-ghesquiere": {
       "adbTitle": "Nicholas Ghesquière",
       "date": "1971-05-09",
@@ -73641,17 +73507,6 @@
       "rating": "AA",
       "source": "VedAstro list",
       "expectedUtc": "1977-01-12T12:46:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
-    "polly-klaas": {
-      "adbTitle": "Polly Klaas",
-      "date": "1981-01-03",
-      "time": "10:41",
-      "zone": "-08:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1981-01-03T18:41:00",
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
@@ -76036,17 +75891,6 @@
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
-    "marguerite-steinheil": {
-      "adbTitle": "Marguerite Steinheil",
-      "date": "1869-04-16",
-      "time": "03:00",
-      "zone": "LMT",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1869-04-16T02:32:18",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
     "marie-gevers": {
       "adbTitle": "Marie Gevers",
       "date": "1883-12-30",
@@ -76665,17 +76509,6 @@
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
-    "roy-l-dennis": {
-      "adbTitle": "Rocky Dennis",
-      "date": "1961-12-04",
-      "time": "10:03",
-      "zone": "-08:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1961-12-04T18:03:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
     "roger-grenier": {
       "adbTitle": "Roger Grenier",
       "date": "1919-09-19",
@@ -77191,17 +77024,6 @@
       "rating": "AA",
       "source": "VedAstro list",
       "expectedUtc": "1884-02-27T04:05:04",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
-    "alexandre-grimaldi": {
-      "adbTitle": "Alexandre Coste",
-      "date": "2003-08-24",
-      "time": "18:45",
-      "zone": "+02:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "2003-08-24T16:45:00",
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
@@ -81263,17 +81085,6 @@
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
-    "frederic-bourdin": {
-      "adbTitle": "Frederic Bourdin",
-      "date": "1974-06-13",
-      "time": "01:30",
-      "zone": "+01:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1974-06-13T00:30:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
     "frederik-jacobus-johannes-buytendijk": {
       "adbTitle": "Frederik Jacobus Johannes Buytendijk",
       "date": "1887-04-29",
@@ -83232,17 +83043,6 @@
       "rating": "AA",
       "source": "VedAstro list",
       "expectedUtc": "1876-06-20T00:53:17",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
-    "sabine-dardenne": {
-      "adbTitle": "Sabine Dardenne",
-      "date": "1983-10-28",
-      "time": "09:20",
-      "zone": "+01:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1983-10-28T08:20:00",
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
@@ -86454,17 +86254,6 @@
       "rating": "AA",
       "source": "VedAstro list",
       "expectedUtc": "1973-12-01T23:56:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
-    "steven-stayner": {
-      "adbTitle": "Steven Stayner",
-      "date": "1965-04-18",
-      "time": "02:29",
-      "zone": "-08:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1965-04-18T10:29:00",
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
@@ -91377,17 +91166,6 @@
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
-    "ennis-cosby": {
-      "adbTitle": "Ennis Cosby",
-      "date": "1969-04-15",
-      "time": "00:28",
-      "zone": "-08:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1969-04-15T08:28:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
     "eric-forth": {
       "adbTitle": "Eric Forth",
       "date": "1944-09-09",
@@ -95214,17 +94992,6 @@
       "rating": "AA",
       "source": "VedAstro list",
       "expectedUtc": "1925-10-22T01:00:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
-    "chandra-levy": {
-      "adbTitle": "Chandra Levy",
-      "date": "1977-04-14",
-      "time": "13:46",
-      "zone": "-05:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1977-04-14T18:46:00",
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
@@ -100806,17 +100573,6 @@
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
-    "jaycee-lee-dugard": {
-      "adbTitle": "Jaycee Dugard",
-      "date": "1980-05-03",
-      "time": "22:42",
-      "zone": "-07:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1980-05-04T05:42:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
     "jean-amado": {
       "adbTitle": "Jean Amado",
       "date": "1922-01-27",
@@ -102369,17 +102125,6 @@
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
-    "robin-bush": {
-      "adbTitle": "Robin Bush",
-      "date": "1949-12-20",
-      "time": "07:25",
-      "zone": "-08:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1949-12-20T15:25:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
     "robin-williamson": {
       "adbTitle": "Robin Williamson",
       "date": "1943-11-24",
@@ -102787,18 +102532,6 @@
       "expectedUtc": "1967-02-22T22:47:00",
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
-    },
-    "steven-parent": {
-      "adbTitle": "Steven Earl Parent",
-      "date": "1951-02-12",
-      "time": "02:00",
-      "zone": "-08:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1951-02-12T10:00:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01",
-      "note": "VedAstro has Pasadena, CA, United States; birthplace from Wikidata."
     },
     "susan-estrich": {
       "adbTitle": "Susan Estrich",
@@ -106467,17 +106200,6 @@
       "rating": "AA",
       "source": "VedAstro list",
       "expectedUtc": "1974-10-24T22:40:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
-    "michaela-garecht": {
-      "adbTitle": "Michaela Garecht",
-      "date": "1979-01-24",
-      "time": "20:13",
-      "zone": "-08:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1979-01-25T04:13:00",
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
@@ -111957,17 +111679,6 @@
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
-    "maura-murray": {
-      "adbTitle": "Maura Murray",
-      "date": "1982-05-04",
-      "time": "03:40",
-      "zone": "-04:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1982-05-04T07:40:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
     "maureen-dor": {
       "adbTitle": "Maureen Dor",
       "date": "1970-11-17",
@@ -112064,17 +111775,6 @@
       "rating": "AA",
       "source": "VedAstro list",
       "expectedUtc": "1916-01-03T11:10:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
-    "melissa-harrington-hughes": {
-      "adbTitle": "Melissa Harrington",
-      "date": "1970-05-29",
-      "time": "15:38",
-      "zone": "-04:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1970-05-29T19:38:00",
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
@@ -114133,17 +113833,6 @@
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
-    "brian-david-sweeney": {
-      "adbTitle": "Brian Sweeney",
-      "date": "1963-08-10",
-      "time": "20:20",
-      "zone": "-04:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1963-08-11T00:20:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
     "bruce-coslet": {
       "adbTitle": "Bruce Coslet",
       "date": "1946-08-05",
@@ -115543,17 +115232,6 @@
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
-    "gottlieb-renz": {
-      "adbTitle": "Gottlieb Renz",
-      "date": "1911-09-12",
-      "time": "08:30",
-      "zone": "+01:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1911-09-12T07:30:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
     "gracieux-lamperti": {
       "adbTitle": "Gracieux Lamperti",
       "date": "1933-05-09",
@@ -115839,17 +115517,6 @@
       "rating": "AA",
       "source": "VedAstro list",
       "expectedUtc": "1928-01-07T21:00:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
-    "holly-piirainen": {
-      "adbTitle": "Holly Piirainen",
-      "date": "1983-01-19",
-      "time": "10:45",
-      "zone": "-05:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1983-01-19T15:45:00",
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
@@ -116571,17 +116238,6 @@
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
-    "john-bennett-ramsey": {
-      "adbTitle": "John Ramsey",
-      "date": "1943-12-07",
-      "time": "00:45",
-      "zone": "-05:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1943-12-07T05:45:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
     "j-robert-schaetzel": {
       "adbTitle": "John Robert Schaetzel",
       "date": "1917-01-28",
@@ -116898,17 +116554,6 @@
       "rating": "AA",
       "source": "VedAstro list",
       "expectedUtc": "1952-05-09T16:45:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
-    "lothar-swierzinski": {
-      "adbTitle": "Lothar Swierzinski",
-      "date": "1922-07-18",
-      "time": "13:00",
-      "zone": "+01:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1922-07-18T12:00:00",
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
@@ -118158,17 +117803,6 @@
       "checkedOn": "2026-11-01",
       "note": "VedAstro has Étables, France; birthplace from Wikidata."
     },
-    "roger-knobelspiess": {
-      "adbTitle": "Roger Knobelspiess",
-      "date": "1947-09-15",
-      "time": "00:30",
-      "zone": "+01:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1947-09-14T23:30:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
     "roger-martine": {
       "adbTitle": "Roger Martine",
       "date": "1930-01-03",
@@ -118254,17 +117888,6 @@
       "rating": "AA",
       "source": "VedAstro list",
       "expectedUtc": "1919-07-20T17:05:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
-    "rudolf-saumenicht": {
-      "adbTitle": "Rudolf Säumenicht",
-      "date": "1916-02-13",
-      "time": "05:15",
-      "zone": "+01:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1916-02-13T04:15:00",
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
@@ -118642,17 +118265,6 @@
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
-    "travis-alexander": {
-      "adbTitle": "Travis Alexander",
-      "date": "1977-07-28",
-      "time": "00:01",
-      "zone": "-07:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1977-07-28T07:01:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
     "ugo-pecchioli": {
       "adbTitle": "Ugo Pecchioli",
       "date": "1925-01-14",
@@ -119004,17 +118616,6 @@
       "rating": "AA",
       "source": "VedAstro list",
       "expectedUtc": "1760-05-23T20:44:04",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
-    "agnes-marin": {
-      "adbTitle": "Agnès Marin",
-      "date": "1997-11-26",
-      "time": "09:40",
-      "zone": "+01:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1997-11-26T08:40:00",
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
@@ -119379,17 +118980,6 @@
       "rating": "AA",
       "source": "VedAstro list",
       "expectedUtc": "1948-06-06T15:40:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
-    "azaria-chamberlain": {
-      "adbTitle": "Azaria Chamberlain",
-      "date": "1980-06-11",
-      "time": "13:16",
-      "zone": "+10:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1980-06-11T03:16:00",
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
@@ -119825,17 +119415,6 @@
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
-    "david-cox": {
-      "adbTitle": "David Vernon Cox",
-      "date": "1966-11-27",
-      "time": "17:41",
-      "zone": "-05:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1966-11-27T22:41:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
     "david-willis-wilson-henderson": {
       "adbTitle": "David W. Henderson",
       "date": "1903-07-23",
@@ -119968,17 +119547,6 @@
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
-    "elisa-izquierdo": {
-      "adbTitle": "Elisa Gee Izquierdo",
-      "date": "1989-02-11",
-      "time": "14:21",
-      "zone": "-05:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1989-02-11T19:21:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
     "emil-durr": {
       "adbTitle": "Emil Dürr",
       "date": "1920-06-11",
@@ -120042,17 +119610,6 @@
       "rating": "AA",
       "source": "VedAstro list",
       "expectedUtc": "1880-03-22T23:36:21",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
-    "erich-rossner": {
-      "adbTitle": "Erich Rossner",
-      "date": "1918-05-26",
-      "time": "13:30",
-      "zone": "+02:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1918-05-26T11:30:00",
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
@@ -120498,17 +120055,6 @@
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
-    "gerald-f-deconto": {
-      "adbTitle": "Gerald DeConto",
-      "date": "1957-08-17",
-      "time": "09:25",
-      "zone": "-04:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1957-08-17T13:25:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
     "gerard-cordonnier": {
       "adbTitle": "Gerard Cordonnier",
       "date": "1907-04-19",
@@ -120729,17 +120275,6 @@
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
-    "gregory-villemin": {
-      "adbTitle": "Gregory Villemin",
-      "date": "1980-08-24",
-      "time": "22:50",
-      "zone": "+02:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1980-08-24T20:50:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
     "guido-ferracin": {
       "adbTitle": "Guido Ferracin",
       "date": "1926-01-18",
@@ -120781,39 +120316,6 @@
       "rating": "AA",
       "source": "VedAstro list",
       "expectedUtc": "1953-12-27T02:00:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
-    "hanns-heinrich-lohmann": {
-      "adbTitle": "Hanns Heinrich Lohmann",
-      "date": "1911-04-24",
-      "time": "02:00",
-      "zone": "+01:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1911-04-24T01:00:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
-    "hans-diergarten": {
-      "adbTitle": "Hans Diergarten",
-      "date": "1913-04-05",
-      "time": "12:00",
-      "zone": "+01:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1913-04-05T11:00:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
-    "hans-malkomes": {
-      "adbTitle": "Hans Malkomes",
-      "date": "1913-11-15",
-      "time": "07:30",
-      "zone": "+01:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1913-11-15T06:30:00",
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
@@ -120916,17 +120418,6 @@
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01",
       "note": "VedAstro has Fort Lauderdale, FL, United States; birthplace from Wikidata."
-    },
-    "hermann-lang": {
-      "adbTitle": "Hermann Lang",
-      "date": "1922-03-24",
-      "time": "12:30",
-      "zone": "+01:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1922-03-24T11:30:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
     },
     "hugh-mackenzie": {
       "adbTitle": "Hugh Stirling Mackenzie",
@@ -121523,17 +121014,6 @@
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
-    "juliana-valentine-mccourt": {
-      "adbTitle": "Juliana McCourt",
-      "date": "1997-05-04",
-      "time": "19:24",
-      "zone": "-04:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1997-05-04T23:24:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
     "julien-lescarret": {
       "adbTitle": "Julien Lescarret",
       "date": "1980-08-18",
@@ -121556,17 +121036,6 @@
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
-    "karl-rettlinger": {
-      "adbTitle": "Karl Rettlinger",
-      "date": "1913-02-08",
-      "time": "13:30",
-      "zone": "+01:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1913-02-08T12:30:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
     "ken-brown": {
       "adbTitle": "Ken Brown",
       "date": "1944-03-12",
@@ -121578,17 +121047,6 @@
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
-    "disappearance-of-kevin-andrew-collins": {
-      "adbTitle": "Kevin Andrew Collins",
-      "date": "1974-01-24",
-      "time": "06:57",
-      "zone": "-07:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1974-01-24T13:57:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
     "kirt-ojala": {
       "adbTitle": "Kirt Ojala",
       "date": "1968-12-24",
@@ -121597,17 +121055,6 @@
       "rating": "AA",
       "source": "VedAstro list",
       "expectedUtc": "1968-12-24T15:48:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
-    "knox-jolie-pitt": {
-      "adbTitle": "Knox Leon Jolie",
-      "date": "2008-07-12",
-      "time": "18:27",
-      "zone": "+02:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "2008-07-12T16:27:00",
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
@@ -121773,17 +121220,6 @@
       "rating": "AA",
       "source": "VedAstro list",
       "expectedUtc": "1904-12-13T15:50:39",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
-    "ludwig-spindler": {
-      "adbTitle": "Ludwig Spindler",
-      "date": "1910-11-15",
-      "time": "22:30",
-      "zone": "+01:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1910-11-15T21:30:00",
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
@@ -121983,17 +121419,6 @@
       "rating": "AA",
       "source": "VedAstro list",
       "expectedUtc": "1949-06-04T09:10:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
-    "marta-russo": {
-      "adbTitle": "Marta Russo",
-      "date": "1975-04-13",
-      "time": "17:40",
-      "zone": "+01:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1975-04-13T16:40:00",
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
@@ -122203,17 +121628,6 @@
       "rating": "AA",
       "source": "VedAstro list",
       "expectedUtc": "1918-01-21T00:00:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
-    "nicholas-knatchbull": {
-      "adbTitle": "Nicholas Knatchbull",
-      "date": "1964-11-18",
-      "time": "15:40",
-      "zone": "+00:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1964-11-18T15:40:00",
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
@@ -123220,17 +122634,6 @@
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },
-    "thomas-f-mcguinness-jr": {
-      "adbTitle": "Tom McGuinness",
-      "date": "1959-09-08",
-      "time": "04:38",
-      "zone": "-04:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "1959-09-08T08:38:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
     "urs-kliby": {
       "adbTitle": "Urs Kliby",
       "date": "1950-12-24",
@@ -123294,17 +122697,6 @@
       "rating": "AA",
       "source": "VedAstro list",
       "expectedUtc": "1941-05-24T05:30:00",
-      "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
-      "checkedOn": "2026-11-01"
-    },
-    "vivienne-jolie": {
-      "adbTitle": "Vivienne Marcheline Jolie",
-      "date": "2008-07-12",
-      "time": "18:27",
-      "zone": "+02:00",
-      "rating": "AA",
-      "source": "VedAstro list",
-      "expectedUtc": "2008-07-12T16:27:00",
       "url": "https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location",
       "checkedOn": "2026-11-01"
     },

@@ -38,7 +38,7 @@ Lore 4 needs **Windows 11 24H2** or later, 64-bit.
 - **Further points and measurements** — the South Node, Descendant, IC, Vertex and the Parts of Fortune and Spirit; the lunar phase at birth; each planet's distance from the Sun; parallels, contra-parallels and out-of-bounds planets by declination; the balance of the chart; chart ruler, house rulers and dispositors.
 
 ### Figure Library
-- **11,218 figures** across **14 categories** — Actors, Musicians, Writers, Artists, Scientists, Philosophers, Directors, Athletes, Political, Historical, and more.
+- **11,163 figures** across **14 categories** — Actors, Musicians, Writers, Artists, Scientists, Philosophers, Directors, Athletes, Political, Historical, and more.
 - **Every figure has a documented, recorded birth time** (Astro-Databank / Rodden-rated). Entries without a reliable birth time were removed, so no chart relies on a noon guess.
 - Each entry stores birth date, time, birth place, geographic coordinates, IANA time zone, and a one-sentence bio.
 - Birth instants are resolved with **historical, DST-aware UTC offsets** via the IANA timezone database (NodaTime), not just fixed offsets — correctly handling anomalies like the UK's 1968–71 year-round BST experiment and 1940s US wartime time. For births before standard time existed, the birthplace's own local mean time (from its longitude) is used, as astrological sources record them.
@@ -288,7 +288,7 @@ lore/
 │       │   TimingView, SynastryView, InventoryView, LegendView (.xaml/.cs)
 │       └── AddChartDialog.xaml/.cs # New chart and Edit chart
 ├── content/                   # The figure library, the places and every corpus
-│   ├── celebrities.json       # 11,218 bundled figures (all with recorded birth times)
+│   ├── celebrities.json       # 11,163 bundled figures (all with recorded birth times)
 │   ├── cities.json            # ~50,250 cities (lat/lon + IANA tz)
 │   ├── hospitals.json         # ~235,000 hospitals (lat/lon), New chart birthplace search
 │   ├── hospitals_wikidata.csv # Stage 1 source for hospitals.json
@@ -373,7 +373,7 @@ The 507 tests cover the parts that must stay right: birth-time resolution (dayli
 
 ### `content\celebrities.json`
 
-11,218 figures in 14 categories, each with a documented birth time (Astro-Databank Rodden rating AA or A). Each entry:
+11,163 figures in 14 categories, each with a documented birth time (Astro-Databank Rodden rating AA or A). Each entry:
 
 ```jsonc
 {
@@ -589,7 +589,7 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 |---|---|
 | [Swiss Ephemeris](https://www.astro.com/swisseph/) | AGPL-3.0 / Astrodienst commercial licence |
 | [Astro-Databank](https://www.astro.com/astro-databank/) | The figures' birth data and Rodden Ratings. Not covered by Lore's AGPL licence: reuse is on Astro-Databank's own terms, which allow non-commercial use only ([Copyright](https://www.astro.com/astro-databank/Astro-Databank:Copyright)) |
-| [VedAstro](https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location) | Birth data for 9,887 figures, from its list of famous people. The list's records appear to come from Astro-Databank, so those figures are credited to both. Their clock standards and many birthplaces were set here ([record](scripts/celebrity-vedastro-2026-11-01.md)) |
+| [VedAstro](https://huggingface.co/datasets/vedastro-org/15000-Famous-People-Birth-Date-Location) | Birth data for 9,832 figures, from its list of famous people. The list's records appear to come from Astro-Databank, so those figures are credited to both. Their clock standards and many birthplaces were set here ([record](scripts/celebrity-vedastro-2026-11-01.md)) |
 | [simplemaps World Cities Database](https://simplemaps.com/data/world-cities) | CC BY 4.0 |
 | [Wikidata](https://www.wikidata.org/) (hospital coordinates) | CC0 1.0 |
 | [OpenStreetMap](https://www.openstreetmap.org/copyright) (hospital coordinates) | ODbL |
@@ -604,7 +604,12 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 4.4.0 (current)
+### 4.5.0 (current)
+- **All your matches, not a dozen.** Synastry lists everyone, to search by name, place, year or anything in the biography, narrow by level, category or contemporaries, and sort by best match, hardest first, best or least known, name or age. Each row says who the person is.
+- **Trios to explore.** The list of thirds and the finder work the same way, the finder pairs only the people your search allows, and right-clicking a name starts a trio with them.
+- **A closer look at the library.** 55 more people came out under the same test as before, leaving 11,163, and some athletes moved to the right category.
+
+### 4.4.0
 - **11,218 figures.** The library grows from 1,327, chiefly from VedAstro's list of famous people. They need not be household names, and many are not. Anyone a person would feel bad seeing is left out, and fourteen figures left the library for the same reason.
 - **The Charts list shows the best known first,** with your own charts at the top, so it no longer begins with hundreds of names under A.
 - **Contemporaries are noted and preferred.** In Synastry and Trine, people whose lifetimes overlapped come first within a level, and the library now holds dates of death.
