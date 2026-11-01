@@ -21,12 +21,17 @@ public sealed partial class SplashWindow : Window
     private const double ScreenFraction = 0.55;
 
     private readonly Task _minimum = Task.Delay(MinimumDuration);
+    private readonly TaskCompletionSource _dismissed = new(TaskCreationOptions.RunContinuationsAsynchronously);
     private bool _closed;
 
     private SplashWindow()
     {
         InitializeComponent();
-        Closed += (_, _) => _closed = true;
+        Closed += (_, _) =>
+        {
+            _closed = true;
+            _dismissed.TrySetResult();
+        };
 
         // En space: the gap between the name and the smaller version figure.
         VersionRun.Text = " " + VersionLabel();
@@ -59,11 +64,12 @@ public sealed partial class SplashWindow : Window
 
     /// <summary>
     /// Closes the splash once <paramref name="ready"/> completes — but no sooner than
-    /// MinimumDuration after it appeared, and no later than MaximumDuration.
+    /// MinimumDuration after it appeared, and no later than MaximumDuration. Returns
+    /// immediately if the splash is dismissed while waiting (including at shutdown).
     /// </summary>
     public async Task CloseWhenAsync(Task ready)
     {
-        await Task.WhenAny(Task.WhenAll(ready, _minimum), Task.Delay(MaximumDuration));
+        await Task.WhenAny(Task.WhenAll(ready, _minimum), Task.Delay(MaximumDuration), _dismissed.Task);
         if (!_closed) Close();
     }
 

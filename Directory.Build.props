@@ -4,7 +4,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <!-- The one place the version is written; the release script reads it from here. -->
-    <Version>4.5.0</Version>
+    <Version>4.5.1</Version>
     <Authors>Ian Rastall</Authors>
     <Product>Lore</Product>
     <Platforms>x64</Platforms>

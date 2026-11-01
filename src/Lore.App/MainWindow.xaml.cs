@@ -19,6 +19,7 @@ namespace Lore;
 public sealed partial class MainWindow : Window
 {
     public MainViewModel ViewModel { get; }
+    public bool IsClosed { get; private set; }
 
     private readonly ShellPreferences _preferences = App.Current.Preferences;
 
@@ -63,6 +64,7 @@ public sealed partial class MainWindow : Window
         AppWindow.Closing += OnClosing;
         Closed += (_, _) =>
         {
+            IsClosed = true;
             SavePlacement();
             _settingsWindow?.Close();
         };
@@ -76,13 +78,14 @@ public sealed partial class MainWindow : Window
         bool initialized = false;
         async void InitOnce(string via)
         {
-            if (initialized) return;
+            if (initialized || IsClosed) return;
             initialized = true;
             Diagnostics.Log($"InitOnce via {via}");
             string dataPath      = Path.Combine(AppContext.BaseDirectory, "Data", "celebrities.json");
             string citiesPath    = Path.Combine(AppContext.BaseDirectory, "Data", "cities.json");
             string hospitalsPath = Path.Combine(AppContext.BaseDirectory, "Data", "hospitals.json");
             await ViewModel.InitializeAsync(dataPath, citiesPath, hospitalsPath);
+            if (IsClosed) return;
             ShowView(ViewModel.LastView); // back to the view the last session ended in
             if (ViewModel.SelectedCelebrity is { } last) CelebrityList.ScrollIntoView(last);
             _initialized.TrySetResult();

@@ -604,6 +604,9 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
+### 4.5.1 (prepared; desktop verification pending)
+- **Closing during startup.** Closing the main window dismisses the splash immediately. Startup no longer tries to activate that closed window or restore its view after loading finishes.
+
 ### 4.5.0 (current)
 - **All your matches, not a dozen.** Synastry lists everyone, to search by name, place, year or anything in the biography, narrow by level, category or contemporaries, and sort by best match, hardest first, best or least known, name or age. Each row says who the person is.
 - **Trios to explore.** The list of thirds and the finder work the same way, the finder pairs only the people your search allows, and right-clicking a name starts a trio with them.

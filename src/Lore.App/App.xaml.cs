@@ -63,6 +63,9 @@ public partial class App : Application
         try
         {
             _mainWindow = BuildMainWindow();
+            // A close during loading ends the launch, including its splash. The await
+            // below must not bring a window the reader has closed back into focus.
+            _mainWindow.Closed += (_, _) => splash?.CloseNow();
             _mainWindow.Activate();
         }
         catch (Exception ex)
@@ -76,7 +79,8 @@ public partial class App : Application
         if (splash is not null)
         {
             await splash.CloseWhenAsync(_mainWindow.Initialized);
-            _mainWindow.Activate(); // the splash stood in front of it, and took the focus
+            if (!_mainWindow.IsClosed)
+                _mainWindow.Activate(); // the splash stood in front of it, and took the focus
         }
     }
 

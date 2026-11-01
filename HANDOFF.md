@@ -1,6 +1,6 @@
 # Lore handoff
 
-Version 4.5.0 · 1 November 2026 · Repository `D:/jupiter/lore`, branch `main`, remote `ianrastall/lore`
+Version 4.5.1 prepared · 1 November 2026 · Repository `D:/jupiter/lore`, branch `main`, remote `ianrastall/lore`
 
 ## Where things live
 
@@ -38,6 +38,7 @@ See [validation](docs/validation-4.5.0.md) for what was tested in 4.5, [4.4](doc
 
 ## Next
 
+0. **4.5.1 startup close fix.** Prepared to address the known 4.4/4.5 exception when the main window closes during the splash. Closing now dismisses the splash, and the launch and data-load continuations check that the main window is still open before touching it. Desktop regression checks and installation need Ian's permission to open windows; see [validation](docs/validation-4.5.1.md). The installed release remains 4.5.0.
 1. **Rust core decision.** Open; see the exceptions record.
 2. **Theme setting.** Needs a light wheel palette.
 
