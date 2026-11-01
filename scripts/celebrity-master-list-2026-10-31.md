@@ -30,6 +30,23 @@ because that is an open question and not a rejection.
   the actor, and the rejected John Adams was the president.
 - Brian Cox appears twice, marked actor and physicist.
 
+## Research groups
+
+The 1,604 names are split into 37 groups in `scripts/research-groups/`, by field, with the
+best-known names of each field first. Each file is a whole prompt, and the README tracks which
+group went where.
+
+Every name was identified on Wikidata first (`scripts/wikidata_candidates.py`), so the table in
+each prompt says who the person is and when they were born, and a researcher can tell them from a
+namesake. That check found no missed duplicates and nobody under 18. Taking the person with the
+most Wikipedia editions was not enough: it returned Pope Alexander VI for Rodri and an English
+footballer for the sprinter Michael Johnson. Exact names came first after that, 17 people are
+settled in `PICKS`, and 11 whom Wikidata could not give correctly are in `KNOWN` in
+`scripts/build-research-groups.py`.
+
+Two of the names are readings, not certainties: Andy Bell is taken as Erasure's and Warren Ellis
+as the comics writer, and each has a well-known namesake.
+
 ## Corrections made to Gemini's entries
 
 | Gemini wrote | Now |
@@ -69,6 +86,7 @@ because that is an open question and not a rejection.
 | Uमा Thurman (Uma Thurman) | Uma Thurman |
 | V (Kim Tae-hyung) | V |
 | Zoe Saldaña | Zoe Saldana |
+| Brianna Stewart | Breanna Stewart |
 
 `Brian Zinner` became Nick Zinner of the Yeah Yeah Yeahs, and `John Stewart` was taken as Jon Stewart.
 Both are readings of a likely slip, not certainties.
