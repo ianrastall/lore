@@ -52910,5 +52910,234 @@
    "television actor"
   ],
   "portrait": "ElizabethOlsen-TIFF2025-02.png"
+ },
+ "adrien-brody": {
+  "wikidataId": "Q104514",
+  "birthName": "Adrien Nicholas Brody",
+  "occupations": [
+   "actor",
+   "film actor",
+   "film producer",
+   "television actor",
+   "voice actor"
+  ],
+  "portrait": "AdrienBrody-byPhilipRomano2.jpg",
+  "events": [
+   {
+    "kind": "award",
+    "date": "2003",
+    "award": "César Award for Best Actor"
+   },
+   {
+    "kind": "award",
+    "date": "2003-03-23",
+    "award": "Academy Award for Best Actor"
+   },
+   {
+    "kind": "award",
+    "date": "2024",
+    "award": "Golden Globe Award for Best Actor – Motion Picture Drama"
+   },
+   {
+    "kind": "award",
+    "date": "2025",
+    "award": "Time 100"
+   },
+   {
+    "kind": "award",
+    "date": "2025-03-02",
+    "award": "Academy Award for Best Actor"
+   }
+  ]
+ },
+ "laura-dern": {
+  "wikidataId": "Q220901",
+  "birthName": "Laura Elizabeth Dern",
+  "otherNames": [
+   "Dern",
+   "Dern, Laura Elizabeth",
+   "Dern-Harper",
+   "Dern-Harper, Laura Elizabeth",
+   "Dr. Ellie Sattler",
+   "L. Dern",
+   "L. Dern-Harper",
+   "L. E. Dern",
+   "L. E. Dern-Harper",
+   "Laura E. Dern",
+   "Laura E. Dern-Harper",
+   "Laura Elizabeth Dern-Harper"
+  ],
+  "occupations": [
+   "actor",
+   "film actor",
+   "film director",
+   "film producer",
+   "screenwriter",
+   "television actor",
+   "voice actor"
+  ],
+  "portrait": "Laura Dern 2025 (facecrop).jpg",
+  "events": [
+   {
+    "kind": "award",
+    "date": "1993-01-23",
+    "award": "Golden Globe Award for Best Actress – Miniseries or Television Film"
+   },
+   {
+    "kind": "marriage",
+    "date": "2005",
+    "person": "Ben Harper"
+   },
+   {
+    "kind": "award",
+    "date": "2009-01-11",
+    "award": "Golden Globe Award for Best Supporting Actress – Series, Miniseries or Television Film"
+   },
+   {
+    "kind": "award",
+    "date": "2012-01-15",
+    "award": "Golden Globe Award for Best Actress – Television Series Musical or Comedy"
+   },
+   {
+    "kind": "marriageEnded",
+    "date": "2013",
+    "person": "Ben Harper"
+   },
+   {
+    "kind": "award",
+    "date": "2018-01-07",
+    "award": "Golden Globe Award for Best Supporting Actress – Series, Miniseries or Television Film"
+   },
+   {
+    "kind": "award",
+    "date": "2020-01-05",
+    "award": "Golden Globe Award for Best Supporting Actress – Motion Picture"
+   },
+   {
+    "kind": "award",
+    "date": "2020-02-02",
+    "award": "BAFTA Award for Best Actress in a Supporting Role"
+   },
+   {
+    "kind": "award",
+    "date": "2020-02-09",
+    "award": "Academy Award for Best Supporting Actress"
+   }
+  ]
+ },
+ "vera-farmiga": {
+  "wikidataId": "Q264840",
+  "birthName": "Vera Ann Farmiga",
+  "occupations": [
+   "actor",
+   "film actor",
+   "stage actor",
+   "television actor"
+  ],
+  "portrait": "Vera Farmiga (43676389342).jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "1997",
+    "person": "Sebastian Roché"
+   },
+   {
+    "kind": "marriageEnded",
+    "date": "2005",
+    "person": "Sebastian Roché"
+   },
+   {
+    "kind": "marriage",
+    "date": "2008",
+    "person": "Renn Hawkey"
+   }
+  ]
+ },
+ "james-mcavoy": {
+  "wikidataId": "Q193659",
+  "otherNames": [
+   "James Andrew McAvoy"
+  ],
+  "occupations": [
+   "actor",
+   "film actor",
+   "film director",
+   "stage actor",
+   "television actor",
+   "television presenter",
+   "voice actor"
+  ],
+  "portrait": "James McAvoy by Gage Skidmore 2.jpg",
+  "events": [
+   {
+    "kind": "award",
+    "date": "2006",
+    "award": "BAFTA Rising Star Award"
+   },
+   {
+    "kind": "marriage",
+    "date": "2006-10-18",
+    "person": "Anne-Marie Duff"
+   },
+   {
+    "kind": "divorce",
+    "date": "2016-05-13",
+    "person": "Anne-Marie Duff"
+   }
+  ]
+ },
+ "sissy-spacek": {
+  "wikidataId": "Q190994",
+  "birthName": "Mary Elizabeth Spacek",
+  "otherNames": [
+   "Rainbo"
+  ],
+  "occupations": [
+   "actor",
+   "character actor",
+   "film actor",
+   "musician",
+   "singer",
+   "songwriter",
+   "television actor"
+  ],
+  "portrait": "Sissy Spacek by David Shankbone (cropped).jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "1974",
+    "person": "Jack Fisk"
+   },
+   {
+    "kind": "award",
+    "date": "1980",
+    "award": "Golden Globe Award for Best Actress in a Motion Picture – Musical or Comedy"
+   },
+   {
+    "kind": "award",
+    "date": "1981-03-31",
+    "award": "Academy Award for Best Actress"
+   },
+   {
+    "kind": "child",
+    "date": "1982-07-08",
+    "person": "Schuyler Fisk"
+   },
+   {
+    "kind": "award",
+    "date": "1986",
+    "award": "Golden Globe Award for Best Actress in a Motion Picture – Musical or Comedy"
+   },
+   {
+    "kind": "award",
+    "date": "2001",
+    "award": "Golden Globe Award for Best Actress – Motion Picture Drama"
+   },
+   {
+    "kind": "award",
+    "date": "2011",
+    "award": "Actor Award for Outstanding Performance by a Cast in a Motion Picture"
+   }
+  ]
  }
 }

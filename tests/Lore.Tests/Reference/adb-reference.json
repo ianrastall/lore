@@ -14284,6 +14284,66 @@
       "url": "https://www.astro.com/astro-databank/Olsen,_Elizabeth",
       "checkedOn": "2026-10-31",
       "note": "ADB gives Van Nuys; other biographies specify Sherman Oaks. ADB certificate-backed location retained."
+    },
+    "adrien-brody": {
+      "adbTitle": "Brody, Adrien",
+      "date": "1973-04-14",
+      "time": "15:30",
+      "zone": "EST h5w",
+      "rating": "A",
+      "source": "From memory",
+      "expectedUtc": "1973-04-14T20:30:00",
+      "url": "https://www.astro.com/astro-databank/Brody,_Adrien",
+      "checkedOn": "2026-10-31",
+      "note": "Shelley Ackerman quotes his mother Sylvia Plachy."
+    },
+    "laura-dern": {
+      "adbTitle": "Dern, Laura",
+      "date": "1967-02-10",
+      "time": "07:48",
+      "zone": "PST h8w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1967-02-10T15:48:00",
+      "url": "https://www.astro.com/astro-databank/Dern,_Laura",
+      "checkedOn": "2026-10-31",
+      "note": "B.C. in hand from Frank C. Clifford."
+    },
+    "vera-farmiga": {
+      "adbTitle": "Farmiga, Vera",
+      "date": "1973-08-06",
+      "time": "17:07",
+      "zone": "EDT h4w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1973-08-06T21:07:00",
+      "url": "https://www.astro.com/astro-databank/Farmiga,_Vera",
+      "checkedOn": "2026-10-31",
+      "note": "Birth certificate in hand from Viktor E."
+    },
+    "james-mcavoy": {
+      "adbTitle": "McAvoy, James",
+      "date": "1979-04-21",
+      "time": "17:25",
+      "zone": "GDT h1e",
+      "rating": "AA",
+      "source": "Quoted BC/BR",
+      "expectedUtc": "1979-04-21T16:25:00",
+      "url": "https://www.astro.com/astro-databank/McAvoy,_James",
+      "checkedOn": "2026-10-31",
+      "note": "Caroline Gerard quotes birth certificate."
+    },
+    "sissy-spacek": {
+      "adbTitle": "Spacek, Sissy",
+      "date": "1949-12-25",
+      "time": "00:03",
+      "zone": "CST h6w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1949-12-25T06:03:00",
+      "url": "https://www.astro.com/astro-databank/Spacek,_Sissy",
+      "checkedOn": "2026-10-31",
+      "note": "B.R. in hand from Steinbrecher supersedes 00:02 AM quoted from her by LMR in 1977."
     }
   }
 }
