@@ -23,7 +23,7 @@
 
 ## Not verified
 
-- **A full session.** The window closed within seconds on both launches, with no crash in the log or in Windows' event log and the window's placement saved, so it was closed from outside Lore. The Charts list, its order and match ranking at this size have not been used on screen.
+- **A full session.** Ian closed the window within seconds on both launches, as it had opened over his game. The Charts list, its order and match ranking at this size have not been used on screen.
 - **Ranking at this size.** Timed at about 0.4 s for 1,408 figures, so about 4 s is expected.
 
 ## Known
