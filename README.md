@@ -113,7 +113,7 @@ Astrology has no agreed compatibility score; the scale is Lore's own, and it des
 ### Trine: three people
 **Trine**, at the top of the Synastry view, sets three charts together: a tri-synastry.
 
-- **Finder.** With one person selected, Lore takes their top 100 connections, tries every pair of them as a trio with that person (4,950 trios), and lists the best two dozen. **Look among** narrows it to one category of the list, or to My Charts. Select a row to read the three together.
+- **Finder.** With one person selected, Lore takes their top 100 connections, tries every pair of them as a trio with that person (4,950 trios), and lists them all. The search, **Look among** and **Contemporaries only** narrow whom it pairs: type a word such as *poet* and the trios are among poets. Select a row to read the three together.
 - **Find a third.** With two people chosen, Lore tries every other chart in the library, and every chart of your own, as the third, and lists them all, to search and filter the same way. Right-click a name among the matches to start a trio with them.
 - **Contemporaries.** Where everyone in a pair or a trio was alive at the same time, the list and the reading say so, and within a step of the scale they come first. Your own charts count as living.
 - **The three pairs.** Each pair is compared as in Synastry, on the same five-step scale, and the weakest of the three is marked.
