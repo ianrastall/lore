@@ -1,6 +1,6 @@
 # Lore handoff
 
-Version 4.5.1 prepared · 1 November 2026 · Repository `D:/jupiter/lore`, branch `main`, remote `ianrastall/lore`
+Version 4.5.1 · 1 November 2026 · Repository `D:/jupiter/lore`, branch `main`, remote `ianrastall/lore`
 
 ## Where things live
 
@@ -11,7 +11,7 @@ Version 4.5.1 prepared · 1 November 2026 · Repository `D:/jupiter/lore`, branc
 | Content | `content/` in the repository, `Data\` in the installed app |
 | Swiss Ephemeris | `third_party/swisseph`, compiled to `Native/sweph.dll` (not committed) |
 | Release | `build/build.ps1`, `build/installer.iss` |
-| Installed app | Ian's machine: `D:\Lore`, all-users install, 4.5.0 (admin needed to upgrade) |
+| Installed app | Ian's machine: `D:\Lore`, all-users install, 4.5.1 (admin needed to upgrade) |
 | Other apps | Jupiter HUD 0.4.1 runs `Lore.exe --daily-reading`; keep `lore.daily.v1` stable |
 | Reader's data | `%LOCALAPPDATA%\Lore`. Never in the repository. |
 
@@ -34,11 +34,10 @@ When the XAML compiler reports unknown types with `WMC9999` or `WMC1509`, the ca
 
 ## Delivered
 
-See [validation](docs/validation-4.5.0.md) for what was tested in 4.5, [4.4](docs/validation-4.4.0.md), [4.3](docs/validation-4.3.0.md) and [4.2](docs/validation-4.2.0.md) before it, [migration](docs/jupiter-migration.md) for what moved, and [exceptions](docs/jupiter-exceptions.md) for recorded departures.
+See [validation](docs/validation-4.5.1.md) for the startup-close fix, [4.5](docs/validation-4.5.0.md), [4.4](docs/validation-4.4.0.md), [4.3](docs/validation-4.3.0.md) and [4.2](docs/validation-4.2.0.md) before it, [migration](docs/jupiter-migration.md) for what moved, and [exceptions](docs/jupiter-exceptions.md) for recorded departures.
 
 ## Next
 
-0. **4.5.1 startup close fix.** Prepared to address the known 4.4/4.5 exception when the main window closes during the splash. Closing now dismisses the splash, and the launch and data-load continuations check that the main window is still open before touching it. Desktop regression checks and installation need Ian's permission to open windows; see [validation](docs/validation-4.5.1.md). The installed release remains 4.5.0.
 1. **Rust core decision.** Open; see the exceptions record.
 2. **Theme setting.** Needs a light wheel palette.
 

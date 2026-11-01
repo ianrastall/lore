@@ -4,16 +4,16 @@ A Windows desktop application for computing and exploring astrological natal cha
 
 Part of Jupiter. Follows Jupiter style standard 1.1.
 
-**Latest release: v4.5.0** · [Download](../../releases/latest)
+**Latest release: v4.5.1** · [Download](../../releases/latest)
 
 ### Installing
 
 Lore 4 needs **Windows 11 24H2** or later, 64-bit.
 
-1. From the [latest release](../../releases/latest), download **`Lore-4.5.0-win-x64-setup.exe`**. It is a single file with everything inside it; there is nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`Lore-4.5.1-win-x64-setup.exe`**. It is a single file with everything inside it; there is nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user, adds **Lore** to the Start menu, and can be removed from *Settings > Apps* like any other program. An earlier Lore is upgraded in place, and your saved charts, answers and settings stay as they are.
 
-**Prefer not to install?** `Lore-4.5.0-win-x64-portable.zip` is the same program as a folder. Unzip it anywhere and run `Lore.exe` from inside it. Delete the folder to remove it.
+**Prefer not to install?** `Lore-4.5.1-win-x64-portable.zip` is the same program as a folder. Unzip it anywhere and run `Lore.exe` from inside it. Delete the folder to remove it.
 
 > **The installer is not code-signed.** Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"*. Choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -604,10 +604,10 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 4.5.1 (prepared; desktop verification pending)
+### 4.5.1 (current)
 - **Closing during startup.** Closing the main window dismisses the splash immediately. Startup no longer tries to activate that closed window or restore its view after loading finishes.
 
-### 4.5.0 (current)
+### 4.5.0
 - **All your matches, not a dozen.** Synastry lists everyone, to search by name, place, year or anything in the biography, narrow by level, category or contemporaries, and sort by best match, hardest first, best or least known, name or age. Each row says who the person is.
 - **Trios to explore.** The list of thirds and the finder work the same way, the finder pairs only the people your search allows, and right-clicking a name starts a trio with them.
 - **A closer look at the library.** 55 more people came out under the same test as before, leaving 11,163, and some athletes moved to the right category.
