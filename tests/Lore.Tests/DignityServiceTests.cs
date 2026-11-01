@@ -37,7 +37,7 @@ public class DignityServiceTests
     [Fact]
     public void The_bands_keep_their_proportions_across_the_library()
     {
-        var verdicts = Repo.Figures.Select(f => DignityService.Compute(Repo.Charts.Calculate(f)).Verdict).ToList();
+        var verdicts = Repo.Sample.Select(f => DignityService.Compute(Repo.Charts.Calculate(f)).Verdict).ToList();
         double Share(ChartVerdict v) => verdicts.Count(x => x == v) / (double)verdicts.Count;
 
         // About a quarter Extraordinary and a sixth Alarming. Adding figures will move

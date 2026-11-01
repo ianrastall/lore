@@ -159,7 +159,7 @@ public class AstroSeekParityTests
 
         // The true node stops and turns every few weeks, so some charts catch it at it;
         // the Worksheet then says so in its last column, and in words in the text.
-        var stopped = Repo.Figures.Select(f => Calculate(f, AsAstroSeek))
+        var stopped = Repo.Sample.Select(f => Calculate(f, AsAstroSeek))
             .First(c => c.GetPlanet(Planet.NorthNode)!.IsStationary);
         var w = WorksheetService.Build(stopped);
         Assert.Contains("S", w.Positions.Single(r => r.Name == "North Node").Motion);

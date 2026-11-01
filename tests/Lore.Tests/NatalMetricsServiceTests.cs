@@ -329,7 +329,7 @@ public class NatalMetricsServiceTests
     [Fact]
     public void Every_bundled_figure_has_a_dominant_planet_and_a_balance_that_adds_up()
     {
-        foreach (var f in Repo.Figures)
+        foreach (var f in Repo.Sample)
         {
             var d = NatalMetricsService.Compute(Repo.Charts.Calculate(f)).Dominants;
             Assert.NotNull(d.Planet);

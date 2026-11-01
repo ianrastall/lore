@@ -259,7 +259,7 @@ public sealed class MirrorTests : IDisposable
         Assert.Equal("more push than Mars in Libra would suggest", ordinary.Comparisons[0].Clause);
 
         // The same answers against another sign read differently: a Mars in Aries expects both.
-        var aries = Repo.Figures.Where(f => f.BirthTimeKnown).Select(f => Repo.Charts.Calculate(f))
+        var aries = Repo.Sample.Where(f => f.BirthTimeKnown).Select(f => Repo.Charts.Calculate(f))
             .First(c => c.GetPlanet(Models.Planet.Mars)!.Sign == ZodiacSign.Aries);
         var bornOut = Planet(Mirror.Compose(aries, Profile(("E3", Hi), ("E4", Hi), ("E5", Hi), ("N2", Hi))), Models.Planet.Mars);
         Assert.Equal(new[] { "the push that Mars in Aries describes", "the temper that Mars in Aries describes" },
@@ -329,7 +329,7 @@ public sealed class MirrorTests : IDisposable
             i => i.Title == "As the chart has it" && i.Meta!.Contains("♄ Saturn"));
 
         // A badly placed Mars, answered as someone whose drive is direct.
-        var hard = Repo.Figures.Where(f => f.BirthTimeKnown).Select(f => Repo.Charts.Calculate(f))
+        var hard = Repo.Sample.Where(f => f.BirthTimeKnown).Select(f => Repo.Charts.Calculate(f))
             .First(c => DignityService.Compute(c).Planets.Single(p => p.Planet == Models.Planet.Mars).Total <= MirrorInterpreter.StrainedAt);
         var won = Mirror.Compose(hard, Profile(("E3", Hi), ("E4", Hi), ("E5", Hi)));
         Assert.Equal(MirrorVerdict.HardWon, Planet(won, Models.Planet.Mars).Verdict);
@@ -475,7 +475,7 @@ public sealed class MirrorTests : IDisposable
         Assert.Empty(Mirror.Compose(chart, Profile()).ModalityLines);   // ordinary answers: nothing
 
         // A chart with no water at all, answered by someone of strong feeling.
-        var dry = Repo.Figures.Select(f => Repo.Charts.Calculate(f))
+        var dry = Repo.Sample.Select(f => Repo.Charts.Calculate(f))
             .First(c => NatalMetricsService.ElementCounts(c)[Element.Water] == 0);
         var feeling = Mirror.Compose(dry, Profile(("O3", Hi), ("A6", Hi), ("N1", Hi)));
         Assert.Contains("there is water all the same", feeling.ElementLines[Element.Water]);
@@ -670,7 +670,7 @@ public sealed class MirrorTests : IDisposable
     [Fact]
     public void For_any_person_and_any_chart_what_is_added_is_whole_marked_and_only_added()
     {
-        var charts = Repo.Figures.Where((_, i) => i % 26 == 0).Select(f => Repo.Charts.Calculate(f)).ToList();
+        var charts = Repo.Sample.Where((_, i) => i % 26 == 0).Select(f => Repo.Charts.Calculate(f)).ToList();
         var plain = charts.Select(c => Report.Interpret(c)).ToList();
         var people = Population(400);
         var date = new DateOnly(2026, 10, 1);

@@ -1,5 +1,57 @@
 [
  {
+  "first": "aaron-spelling",
+  "second": "carolyn-jones",
+  "relation": "spouse",
+  "from": "1953",
+  "to": "1964"
+ },
+ {
+  "first": "aaron-spelling",
+  "second": "tori-spelling",
+  "relation": "parent"
+ },
+ {
+  "first": "abigail-may-alcott-nieriker",
+  "second": "anna-alcott-pratt",
+  "relation": "sibling"
+ },
+ {
+  "first": "abigail-may-alcott-nieriker",
+  "second": "louisa-may-alcott",
+  "relation": "sibling"
+ },
+ {
+  "first": "adeline-blondieau",
+  "second": "johnny-hallyday",
+  "relation": "spouse",
+  "from": "1990-07-09",
+  "to": "1992-06-11"
+ },
+ {
+  "first": "adolf-michael-hartl",
+  "second": "marianne-hartl",
+  "relation": "groupmate",
+  "group": "Marianne und Michael"
+ },
+ {
+  "first": "adolf-michael-hartl",
+  "second": "marianne-hartl",
+  "relation": "spouse",
+  "from": "1979"
+ },
+ {
+  "first": "adriano-buzzati-traverso",
+  "second": "dino-buzzati",
+  "relation": "sibling"
+ },
+ {
+  "first": "adriano-celentano",
+  "second": "mina",
+  "relation": "groupmate",
+  "group": "MinaCelentano"
+ },
+ {
   "first": "agnes-varda",
   "second": "jacques-demy",
   "relation": "spouse",
@@ -12,11 +64,104 @@
   "relation": "parent"
  },
  {
+  "first": "al-jardine",
+  "second": "brian-wilson",
+  "relation": "groupmate",
+  "group": "The Beach Boys"
+ },
+ {
+  "first": "al-jardine",
+  "second": "carl-wilson",
+  "relation": "groupmate",
+  "group": "The Beach Boys"
+ },
+ {
+  "first": "al-jardine",
+  "second": "dennis-wilson",
+  "relation": "groupmate",
+  "group": "The Beach Boys"
+ },
+ {
+  "first": "al-jardine",
+  "second": "mike-love",
+  "relation": "groupmate",
+  "group": "The Beach Boys"
+ },
+ {
+  "first": "al-pacino",
+  "second": "beverly-d-angelo",
+  "relation": "partner",
+  "from": "1997",
+  "to": "2003"
+ },
+ {
   "first": "al-pacino",
   "second": "diane-keaton",
   "relation": "partner",
   "from": "1974",
   "to": "1990"
+ },
+ {
+  "first": "al-unser",
+  "second": "bobby-unser",
+  "relation": "sibling"
+ },
+ {
+  "first": "alain-bernardin",
+  "second": "lova-moor",
+  "relation": "spouse"
+ },
+ {
+  "first": "alain-blondel",
+  "second": "heike-drechsler",
+  "relation": "partner",
+  "from": "1995",
+  "to": "2007"
+ },
+ {
+  "first": "alain-corneau",
+  "second": "nadine-trintignant",
+  "relation": "partner"
+ },
+ {
+  "first": "alain-corneau",
+  "second": "nadine-trintignant",
+  "relation": "spouse",
+  "from": "1998",
+  "to": "2010"
+ },
+ {
+  "first": "alain-delon",
+  "second": "anne-parillaud",
+  "relation": "partner",
+  "from": "1981",
+  "to": "1986"
+ },
+ {
+  "first": "alain-delon",
+  "second": "anthony-delon",
+  "relation": "parent"
+ },
+ {
+  "first": "alain-delon",
+  "second": "mireille-darc",
+  "relation": "partner",
+  "from": "1968",
+  "to": "1982"
+ },
+ {
+  "first": "alain-delon",
+  "second": "nathalie-delon",
+  "relation": "partner",
+  "from": "1962-08",
+  "to": "1964-08-13"
+ },
+ {
+  "first": "alain-delon",
+  "second": "nathalie-delon",
+  "relation": "spouse",
+  "from": "1964-08-13",
+  "to": "1969-02-14"
  },
  {
   "first": "alain-delon",
@@ -26,10 +171,47 @@
   "to": "1963-08"
  },
  {
+  "first": "alain-resnais",
+  "second": "sabine-azema",
+  "relation": "spouse",
+  "from": "1998",
+  "to": "2014-03-01"
+ },
+ {
   "first": "alain-souchon",
   "second": "francis-cabrel",
   "relation": "groupmate",
   "group": "Sol En Si"
+ },
+ {
+  "first": "alain-souchon",
+  "second": "maxime-le-forestier",
+  "relation": "groupmate",
+  "group": "Sol En Si"
+ },
+ {
+  "first": "alan-longmuir",
+  "second": "les-mckeown",
+  "relation": "groupmate",
+  "group": "Bay City Rollers"
+ },
+ {
+  "first": "albano-carrisi",
+  "second": "romina-power",
+  "relation": "groupmate",
+  "group": "Al Bano & Romina Power"
+ },
+ {
+  "first": "albano-carrisi",
+  "second": "romina-power",
+  "relation": "spouse",
+  "from": "1970-07-26",
+  "to": "2012"
+ },
+ {
+  "first": "albert-calmette",
+  "second": "gaston-calmette",
+  "relation": "sibling"
  },
  {
   "first": "albert-ii-of-belgium",
@@ -42,13 +224,33 @@
   "relation": "parent"
  },
  {
+  "first": "albert-ii-of-belgium",
+  "second": "princess-delphine-of-belgium",
+  "relation": "parent"
+ },
+ {
+  "first": "albert-ii-of-monaco",
+  "second": "alexandre-grimaldi",
+  "relation": "parent"
+ },
+ {
   "first": "albert-ii-of-monaco",
   "second": "caroline-of-monaco",
   "relation": "sibling"
  },
  {
   "first": "albert-ii-of-monaco",
+  "second": "jazmin-grace-grimaldi",
+  "relation": "parent"
+ },
+ {
+  "first": "albert-ii-of-monaco",
   "second": "stephanie-of-monaco",
+  "relation": "sibling"
+ },
+ {
+  "first": "albert-neuhuys",
+  "second": "jozef-neuhuys",
   "relation": "sibling"
  },
  {
@@ -58,11 +260,143 @@
   "group": "Uderzo & Goscinny"
  },
  {
+  "first": "alberto-lattuada",
+  "second": "carla-del-poggio",
+  "relation": "spouse",
+  "from": "1945-04-02",
+  "to": "2005-07-03"
+ },
+ {
+  "first": "alberto-lupo",
+  "second": "lyla-rocco",
+  "relation": "spouse"
+ },
+ {
+  "first": "alberto-moravia",
+  "second": "dacia-maraini",
+  "relation": "partner",
+  "from": "1962",
+  "to": "1978"
+ },
+ {
+  "first": "alberto-moravia",
+  "second": "elsa-morante",
+  "relation": "spouse",
+  "from": "1941-04-14",
+  "to": "1961"
+ },
+ {
+  "first": "aldo-moro",
+  "second": "maria-fida-moro",
+  "relation": "parent"
+ },
+ {
+  "first": "alessandro-benetton",
+  "second": "deborah-compagnoni",
+  "relation": "spouse",
+  "from": "2000"
+ },
+ {
+  "first": "alessandro-benvenuti",
+  "second": "francesco-nuti",
+  "relation": "groupmate",
+  "group": "Giancattivi"
+ },
+ {
+  "first": "alessandro-momo",
+  "second": "eleonora-giorgi",
+  "relation": "partner"
+ },
+ {
+  "first": "alessandro-nannini",
+  "second": "gianna-nannini",
+  "relation": "sibling"
+ },
+ {
+  "first": "alex-baroni",
+  "second": "giorgia",
+  "relation": "partner",
+  "from": "1997",
+  "to": "2001"
+ },
+ {
+  "first": "alex-jany",
+  "second": "ginette-jany-sendral",
+  "relation": "sibling"
+ },
+ {
+  "first": "alexandra-kerry",
+  "second": "vanessa-kerry",
+  "relation": "sibling"
+ },
+ {
+  "first": "alexandra-lamy",
+  "second": "jean-dujardin",
+  "relation": "spouse",
+  "from": "2009-07-25",
+  "to": "2013"
+ },
+ {
+  "first": "alexandre-dumas",
+  "second": "alexandre-dumas-fils",
+  "relation": "parent"
+ },
+ {
+  "first": "alexandre-dumas-fils",
+  "second": "gerard-bauer",
+  "relation": "relative",
+  "kinship": "nephew"
+ },
+ {
+  "first": "alexandre-grimaldi",
+  "second": "jazmin-grace-grimaldi",
+  "relation": "sibling"
+ },
+ {
+  "first": "alexandrine-meley",
+  "second": "emile-zola",
+  "relation": "spouse",
+  "from": "1870-05-31"
+ },
+ {
+  "first": "alfred-coste-floret",
+  "second": "paul-coste-floret",
+  "relation": "sibling"
+ },
+ {
   "first": "alfred-de-musset",
   "second": "george-sand",
   "relation": "partner",
   "from": "1833",
   "to": "1835-03"
+ },
+ {
+  "first": "alfred-krupp",
+  "second": "friedrich-alfred-krupp",
+  "relation": "parent"
+ },
+ {
+  "first": "alfred-richet",
+  "second": "charles-richet",
+  "relation": "parent"
+ },
+ {
+  "first": "alfred-weber",
+  "second": "max-weber",
+  "relation": "sibling"
+ },
+ {
+  "first": "alfredo-bini",
+  "second": "rosanna-schiaffino",
+  "relation": "spouse",
+  "from": "1966",
+  "to": "1976"
+ },
+ {
+  "first": "alfredo-casella",
+  "second": "daria-nicolodi",
+  "relation": "relative",
+  "kinship": "daughter's daughter"
  },
  {
   "first": "alice-cooper",
@@ -72,9 +406,217 @@
  },
  {
   "first": "alice-cooper",
+  "second": "glen-buxton",
+  "relation": "groupmate",
+  "group": "Alice Cooper"
+ },
+ {
+  "first": "alice-cooper",
+  "second": "joe-perry",
+  "relation": "groupmate",
+  "group": "Hollywood Vampires"
+ },
+ {
+  "first": "alice-cooper",
   "second": "johnny-depp",
   "relation": "groupmate",
   "group": "Hollywood Vampires"
+ },
+ {
+  "first": "alice-taglioni",
+  "second": "jocelyn-quivrin",
+  "relation": "spouse",
+  "from": "2003",
+  "to": "2009-11-15"
+ },
+ {
+  "first": "alice-taglioni",
+  "second": "laurent-delahousse",
+  "relation": "partner",
+  "from": "2014"
+ },
+ {
+  "first": "alida-chelli",
+  "second": "simone-annicchiarico",
+  "relation": "parent"
+ },
+ {
+  "first": "allain-bougrain-dubourg",
+  "second": "brigitte-bardot",
+  "relation": "partner"
+ },
+ {
+  "first": "allen-ludden",
+  "second": "betty-white",
+  "relation": "spouse",
+  "from": "1963-06-14",
+  "to": "1981-06-09"
+ },
+ {
+  "first": "alphonse-daudet",
+  "second": "ernest-daudet",
+  "relation": "sibling"
+ },
+ {
+  "first": "alphonse-daudet",
+  "second": "leon-daudet",
+  "relation": "parent"
+ },
+ {
+  "first": "althea-flynt",
+  "second": "larry-flynt",
+  "relation": "spouse",
+  "from": "1976-08-21",
+  "to": "1987-06-27"
+ },
+ {
+  "first": "amanda-lear",
+  "second": "salvador-dali",
+  "relation": "partner"
+ },
+ {
+  "first": "amanda-sthers",
+  "second": "patrick-bruel",
+  "relation": "spouse",
+  "from": "2004",
+  "to": "2008"
+ },
+ {
+  "first": "amanda-sthers",
+  "second": "sinclair",
+  "relation": "partner"
+ },
+ {
+  "first": "amedeo-modigliani",
+  "second": "jeanne-hebuterne",
+  "relation": "partner",
+  "from": "1917",
+  "to": "1920-01-24"
+ },
+ {
+  "first": "amedeo-nazzari",
+  "second": "evelina-nazzari",
+  "relation": "parent"
+ },
+ {
+  "first": "amelie-nothomb",
+  "second": "charles-ferdinand-nothomb",
+  "relation": "relative",
+  "kinship": "granduncle"
+ },
+ {
+  "first": "amintore-fanfani",
+  "second": "maria-pia-tavazzani",
+  "relation": "spouse",
+  "from": "1975",
+  "to": "1999"
+ },
+ {
+  "first": "amos-bronson-alcott",
+  "second": "abigail-may-alcott-nieriker",
+  "relation": "parent"
+ },
+ {
+  "first": "amos-bronson-alcott",
+  "second": "anna-alcott-pratt",
+  "relation": "parent"
+ },
+ {
+  "first": "amos-bronson-alcott",
+  "second": "louisa-may-alcott",
+  "relation": "parent"
+ },
+ {
+  "first": "amy-irving",
+  "second": "steven-spielberg",
+  "relation": "spouse",
+  "from": "1985",
+  "to": "1989"
+ },
+ {
+  "first": "andre-bellec",
+  "second": "georges-bellec",
+  "relation": "sibling"
+ },
+ {
+  "first": "andre-bettencourt",
+  "second": "francoise-bettencourt-meyers",
+  "relation": "parent"
+ },
+ {
+  "first": "andre-bettencourt",
+  "second": "liliane-bettencourt",
+  "relation": "spouse",
+  "from": "1950-06-08",
+  "to": "2007-11-19"
+ },
+ {
+  "first": "andre-boniface",
+  "second": "guy-boniface",
+  "relation": "sibling"
+ },
+ {
+  "first": "andre-bourguignon",
+  "second": "anemone",
+  "relation": "parent"
+ },
+ {
+  "first": "andre-claveau",
+  "second": "odette-laure",
+  "relation": "spouse",
+  "from": "1937"
+ },
+ {
+  "first": "andre-herrero",
+  "second": "daniel-herrero",
+  "relation": "sibling"
+ },
+ {
+  "first": "andre-malraux",
+  "second": "louise-leveque-de-vilmorin",
+  "relation": "partner"
+ },
+ {
+  "first": "andrew-wyeth",
+  "second": "betsy-james-wyeth",
+  "relation": "spouse"
+ },
+ {
+  "first": "andy-gibb",
+  "second": "barry-gibb",
+  "relation": "sibling"
+ },
+ {
+  "first": "andy-gibb",
+  "second": "maurice-gibb",
+  "relation": "sibling"
+ },
+ {
+  "first": "andy-gibb",
+  "second": "robin-gibb",
+  "relation": "sibling"
+ },
+ {
+  "first": "andy-gibb",
+  "second": "steve-gibb",
+  "relation": "relative",
+  "kinship": "nephew"
+ },
+ {
+  "first": "andy-murray",
+  "second": "jamie-murray",
+  "relation": "sibling"
+ },
+ {
+  "first": "angela-brambati",
+  "second": "franco-gatti",
+  "relation": "groupmate",
+  "group": "Ricchi e Poveri"
+ },
+ {
+  "first": "angela-eagle",
+  "second": "maria-eagle",
+  "relation": "sibling"
  },
  {
   "first": "angelina-jolie",
@@ -91,11 +633,288 @@
   "to": "2019-04-12"
  },
  {
+  "first": "angelina-jolie",
+  "second": "james-haven",
+  "relation": "sibling"
+ },
+ {
+  "first": "angelina-jolie",
+  "second": "knox-jolie-pitt",
+  "relation": "parent"
+ },
+ {
+  "first": "angelina-jolie",
+  "second": "vivienne-jolie",
+  "relation": "parent"
+ },
+ {
+  "first": "angie-dickinson",
+  "second": "burt-bacharach",
+  "relation": "spouse",
+  "from": "1965",
+  "to": "1981"
+ },
+ {
+  "first": "angie-dickinson",
+  "second": "frank-sinatra",
+  "relation": "partner"
+ },
+ {
+  "first": "angie-dickinson",
+  "second": "john-f-kennedy",
+  "relation": "partner"
+ },
+ {
+  "first": "angus-young",
+  "second": "bon-scott",
+  "relation": "groupmate",
+  "group": "AC/DC"
+ },
+ {
+  "first": "angus-young",
+  "second": "malcolm-young",
+  "relation": "groupmate",
+  "group": "AC/DC"
+ },
+ {
+  "first": "angus-young",
+  "second": "malcolm-young",
+  "relation": "sibling"
+ },
+ {
+  "first": "anjelica-huston",
+  "second": "jack-nicholson",
+  "relation": "partner",
+  "from": "1973",
+  "to": "1990"
+ },
+ {
+  "first": "ann-gloag",
+  "second": "brian-souter",
+  "relation": "sibling"
+ },
+ {
+  "first": "ann-sothern",
+  "second": "tisha-sterling",
+  "relation": "parent"
+ },
+ {
+  "first": "ann-wedgeworth",
+  "second": "rip-torn",
+  "relation": "spouse",
+  "from": "1955",
+  "to": "1961"
+ },
+ {
+  "first": "anna-alcott-pratt",
+  "second": "louisa-may-alcott",
+  "relation": "sibling"
+ },
+ {
+  "first": "anna-carlucci",
+  "second": "milly-carlucci",
+  "relation": "sibling"
+ },
+ {
+  "first": "anna-maria-mussolini",
+  "second": "bruno-mussolini",
+  "relation": "sibling"
+ },
+ {
+  "first": "anna-maria-mussolini",
+  "second": "romano-mussolini",
+  "relation": "sibling"
+ },
+ {
+  "first": "anna-maria-mussolini",
+  "second": "vittorio-mussolini",
+  "relation": "sibling"
+ },
+ {
+  "first": "anna-maria-villani-scicolone",
+  "second": "romano-mussolini",
+  "relation": "spouse",
+  "from": "1962",
+  "to": "1976"
+ },
+ {
+  "first": "anna-maria-villani-scicolone",
+  "second": "sophia-loren",
+  "relation": "sibling"
+ },
+ {
+  "first": "anna-salvatore",
+  "second": "pasquale-festa-campanile",
+  "relation": "spouse"
+ },
+ {
+  "first": "annabella",
+  "second": "jean-murat",
+  "relation": "spouse",
+  "from": "1934",
+  "to": "1938"
+ },
+ {
+  "first": "anne-desclos",
+  "second": "jean-paulhan",
+  "relation": "spouse"
+ },
+ {
+  "first": "anne-desclos",
+  "second": "thierry-maulnier",
+  "relation": "spouse",
+  "from": "1933",
+  "to": "1941"
+ },
+ {
+  "first": "anne-doat",
+  "second": "jean-vautrin",
+  "relation": "spouse"
+ },
+ {
+  "first": "anne-heche",
+  "second": "ellen-degeneres",
+  "relation": "partner",
+  "from": "1997",
+  "to": "2000-08"
+ },
+ {
+  "first": "anne-jeffreys",
+  "second": "tisha-sterling",
+  "relation": "relative",
+  "kinship": "stepdaughter"
+ },
+ {
+  "first": "anne-parillaud",
+  "second": "jean-michel-jarre",
+  "relation": "spouse",
+  "from": "2005-05-12",
+  "to": "2010-11"
+ },
+ {
+  "first": "anne-parillaud",
+  "second": "luc-besson",
+  "relation": "spouse",
+  "from": "1986",
+  "to": "1991"
+ },
+ {
+  "first": "anne-queffelec",
+  "second": "yann-queffelec",
+  "relation": "sibling"
+ },
+ {
   "first": "anne-sinclair",
   "second": "dominique-strauss-kahn",
   "relation": "spouse",
   "from": "1991",
   "to": "2013"
+ },
+ {
+  "first": "anne-sinclair",
+  "second": "jacques-attali",
+  "relation": "partner"
+ },
+ {
+  "first": "anne-sinclair",
+  "second": "pierre-nora",
+  "relation": "partner",
+  "from": "2012-10"
+ },
+ {
+  "first": "anne-sinclair",
+  "second": "pierre-nora",
+  "relation": "spouse",
+  "from": "2022"
+ },
+ {
+  "first": "annie-fratellini",
+  "second": "pierre-etaix",
+  "relation": "spouse",
+  "from": "1969",
+  "to": "1997-06-30"
+ },
+ {
+  "first": "annie-fratellini",
+  "second": "pierre-granier-deferre",
+  "relation": "spouse",
+  "from": "1954"
+ },
+ {
+  "first": "annie-girardot",
+  "second": "claude-lelouch",
+  "relation": "partner",
+  "from": "1966",
+  "to": "1968"
+ },
+ {
+  "first": "annie-girardot",
+  "second": "renato-salvatori",
+  "relation": "spouse",
+  "from": "1962-01-06",
+  "to": "1988-03-27"
+ },
+ {
+  "first": "anny-duperey",
+  "second": "bernard-giraudeau",
+  "relation": "spouse",
+  "from": "1974",
+  "to": "1992"
+ },
+ {
+  "first": "anouk-grinberg",
+  "second": "bertrand-blier",
+  "relation": "spouse"
+ },
+ {
+  "first": "anthony-shaffer",
+  "second": "diane-cilento",
+  "relation": "spouse",
+  "from": "1985",
+  "to": "2001"
+ },
+ {
+  "first": "anthony-shaffer",
+  "second": "peter-shaffer",
+  "relation": "sibling"
+ },
+ {
+  "first": "anthony-shriver",
+  "second": "maria-shriver",
+  "relation": "sibling"
+ },
+ {
+  "first": "anthony-shriver",
+  "second": "timothy-shriver",
+  "relation": "sibling"
+ },
+ {
+  "first": "antoine-bourseiller",
+  "second": "christophe-bourseiller",
+  "relation": "relative",
+  "kinship": "stepson"
+ },
+ {
+  "first": "antoine-de-caunes",
+  "second": "elsa-zylberstein",
+  "relation": "spouse",
+  "from": "1997",
+  "to": "2005"
+ },
+ {
+  "first": "antoine-henri-becquerel",
+  "second": "jean-becquerel",
+  "relation": "parent"
+ },
+ {
+  "first": "antoine-lumiere",
+  "second": "auguste-lumiere",
+  "relation": "parent"
+ },
+ {
+  "first": "antoine-lumiere",
+  "second": "louis-lumiere",
+  "relation": "parent"
  },
  {
   "first": "antonio-banderas",
@@ -105,11 +924,63 @@
   "to": "2015"
  },
  {
+  "first": "antonio-d-amico",
+  "second": "gianni-versace",
+  "relation": "partner",
+  "from": "1982",
+  "to": "1997"
+ },
+ {
+  "first": "antonio-giolitti",
+  "second": "giovanni-giolitti",
+  "relation": "relative",
+  "kinship": "paternal grandfather"
+ },
+ {
+  "first": "anwar-hadid",
+  "second": "bella-hadid",
+  "relation": "sibling"
+ },
+ {
+  "first": "anwar-hadid",
+  "second": "dua-lipa",
+  "relation": "partner",
+  "from": "2019-06-14",
+  "to": "2021-11"
+ },
+ {
+  "first": "anwar-hadid",
+  "second": "gigi-hadid",
+  "relation": "sibling"
+ },
+ {
+  "first": "aretha-franklin",
+  "second": "carolyn-franklin",
+  "relation": "sibling"
+ },
+ {
   "first": "ariana-grande",
   "second": "mac-miller",
   "relation": "partner",
   "from": "2016-08",
   "to": "2018-05"
+ },
+ {
+  "first": "ariane-ascaride",
+  "second": "robert-guediguian",
+  "relation": "spouse",
+  "from": "1975"
+ },
+ {
+  "first": "arnaud-clement",
+  "second": "nolwenn-leroy",
+  "relation": "partner",
+  "from": "2008"
+ },
+ {
+  "first": "arnaud-de-rosnay",
+  "second": "joel-de-rosnay",
+  "relation": "sibling"
  },
  {
   "first": "arnold-schwarzenegger",
@@ -118,9 +989,50 @@
   "kinship": "son-in-law"
  },
  {
+  "first": "arnold-schwarzenegger",
+  "second": "maria-shriver",
+  "relation": "spouse",
+  "from": "1986-04-26",
+  "to": "2021"
+ },
+ {
+  "first": "arthur",
+  "second": "estelle-lefebure",
+  "relation": "spouse",
+  "from": "2004",
+  "to": "2008"
+ },
+ {
   "first": "arthur-rimbaud",
   "second": "paul-verlaine",
   "relation": "partner"
+ },
+ {
+  "first": "ashley-olsen",
+  "second": "elizabeth-olsen",
+  "relation": "sibling"
+ },
+ {
+  "first": "audrey-tautou",
+  "second": "matthieu-chedid",
+  "relation": "partner",
+  "to": "2008"
+ },
+ {
+  "first": "auguste-lumiere",
+  "second": "louis-lumiere",
+  "relation": "groupmate",
+  "group": "Auguste and Louis Lumière"
+ },
+ {
+  "first": "auguste-lumiere",
+  "second": "louis-lumiere",
+  "relation": "sibling"
+ },
+ {
+  "first": "auguste-piccard",
+  "second": "jean-piccard",
+  "relation": "sibling"
  },
  {
   "first": "auguste-rodin",
@@ -144,6 +1056,119 @@
   "to": "1957-07-05"
  },
  {
+  "first": "ava-gardner",
+  "second": "frank-sinatra-jr",
+  "relation": "relative",
+  "kinship": "stepson"
+ },
+ {
+  "first": "ava-gardner",
+  "second": "nancy-sinatra",
+  "relation": "relative",
+  "kinship": "stepdaughter"
+ },
+ {
+  "first": "barbara-hutton",
+  "second": "gottfried-von-cramm",
+  "relation": "spouse",
+  "from": "1955-11-08",
+  "to": "1959"
+ },
+ {
+  "first": "barbara-richardson",
+  "second": "bill-richardson",
+  "relation": "spouse"
+ },
+ {
+  "first": "barbara-washburn",
+  "second": "bradford-washburn",
+  "relation": "spouse"
+ },
+ {
+  "first": "barbra-streisand",
+  "second": "elliott-gould",
+  "relation": "spouse",
+  "from": "1963",
+  "to": "1971"
+ },
+ {
+  "first": "barbra-streisand",
+  "second": "james-brolin",
+  "relation": "spouse",
+  "from": "1998"
+ },
+ {
+  "first": "barbra-streisand",
+  "second": "jason-gould",
+  "relation": "parent"
+ },
+ {
+  "first": "barron-hilton",
+  "second": "conrad-hilton-jr",
+  "relation": "sibling"
+ },
+ {
+  "first": "barry-gibb",
+  "second": "maurice-gibb",
+  "relation": "groupmate",
+  "group": "Bee Gees"
+ },
+ {
+  "first": "barry-gibb",
+  "second": "maurice-gibb",
+  "relation": "sibling"
+ },
+ {
+  "first": "barry-gibb",
+  "second": "robin-gibb",
+  "relation": "groupmate",
+  "group": "Bee Gees"
+ },
+ {
+  "first": "barry-gibb",
+  "second": "robin-gibb",
+  "relation": "sibling"
+ },
+ {
+  "first": "barry-gibb",
+  "second": "steve-gibb",
+  "relation": "parent"
+ },
+ {
+  "first": "barry-livingston",
+  "second": "stanley-livingston",
+  "relation": "sibling"
+ },
+ {
+  "first": "bartolomeo-vanzetti",
+  "second": "nicola-sacco",
+  "relation": "groupmate",
+  "group": "Sacco and Vanzetti"
+ },
+ {
+  "first": "battista-farina",
+  "second": "sergio-pininfarina",
+  "relation": "parent"
+ },
+ {
+  "first": "beatrice-dalle",
+  "second": "joeystarr",
+  "relation": "spouse",
+  "from": "1999",
+  "to": "2005"
+ },
+ {
+  "first": "beau-bridges",
+  "second": "jeff-bridges",
+  "relation": "sibling"
+ },
+ {
+  "first": "belinda-carlisle",
+  "second": "charlotte-caffey",
+  "relation": "groupmate",
+  "group": "The Go-Go's"
+ },
+ {
   "first": "bella-hadid",
   "second": "gigi-hadid",
   "relation": "sibling"
@@ -157,16 +1182,165 @@
  },
  {
   "first": "ben-affleck",
+  "second": "casey-affleck",
+  "relation": "sibling"
+ },
+ {
+  "first": "ben-affleck",
   "second": "gwyneth-paltrow",
   "relation": "partner",
   "from": "1997",
   "to": "2000"
  },
  {
+  "first": "benjamin-biolay",
+  "second": "chiara-mastroianni",
+  "relation": "spouse",
+  "from": "2002-05-11",
+  "to": "2005"
+ },
+ {
+  "first": "benjamin-biolay",
+  "second": "vanessa-paradis",
+  "relation": "partner",
+  "from": "2012",
+  "to": "2015"
+ },
+ {
+  "first": "benjamin-bratt",
+  "second": "julia-roberts",
+  "relation": "partner",
+  "from": "1998",
+  "to": "2001"
+ },
+ {
+  "first": "benoit-jacquot",
+  "second": "judith-godreche",
+  "relation": "partner",
+  "from": "1990"
+ },
+ {
+  "first": "benoit-magimel",
+  "second": "juliette-binoche",
+  "relation": "partner",
+  "from": "1999",
+  "to": "2003"
+ },
+ {
+  "first": "benoit-poelvoorde",
+  "second": "chiara-mastroianni",
+  "relation": "partner"
+ },
+ {
+  "first": "benoite-groult",
+  "second": "georges-de-caunes",
+  "relation": "spouse"
+ },
+ {
+  "first": "benoite-groult",
+  "second": "paul-guimard",
+  "relation": "spouse",
+  "from": "1952",
+  "to": "2004"
+ },
+ {
+  "first": "berenice-bejo",
+  "second": "michel-hazanavicius",
+  "relation": "spouse"
+ },
+ {
+  "first": "bernadette-chirac",
+  "second": "claude-chirac",
+  "relation": "parent"
+ },
+ {
+  "first": "bernadette-chirac",
+  "second": "jacques-chirac",
+  "relation": "spouse",
+  "from": "1956-03-16",
+  "to": "2019-09-26"
+ },
+ {
+  "first": "bernadette-chirac",
+  "second": "laurence-chirac",
+  "relation": "parent"
+ },
+ {
+  "first": "bernadette-lafont",
+  "second": "gerard-blain",
+  "relation": "spouse",
+  "from": "1957",
+  "to": "1959"
+ },
+ {
+  "first": "bernadette-lafont",
+  "second": "pauline-lafont",
+  "relation": "parent"
+ },
+ {
   "first": "bernard-arnault",
   "second": "xavier-niel",
   "relation": "relative",
   "kinship": "son-in-law"
+ },
+ {
+  "first": "bernard-attali",
+  "second": "jacques-attali",
+  "relation": "sibling"
+ },
+ {
+  "first": "bernard-blier",
+  "second": "bertrand-blier",
+  "relation": "parent"
+ },
+ {
+  "first": "bernard-campan",
+  "second": "pascal-legitimus",
+  "relation": "groupmate",
+  "group": "Les Inconnus"
+ },
+ {
+  "first": "bernard-campan",
+  "second": "smain",
+  "relation": "groupmate",
+  "group": "Les Inconnus"
+ },
+ {
+  "first": "bernard-kouchner",
+  "second": "christine-ockrent",
+  "relation": "partner"
+ },
+ {
+  "first": "bernard-kouchner",
+  "second": "christine-ockrent",
+  "relation": "spouse"
+ },
+ {
+  "first": "berniece-baker-miracle",
+  "second": "marilyn-monroe",
+  "relation": "sibling"
+ },
+ {
+  "first": "berthe-de-courriere",
+  "second": "georges-ernest-boulanger",
+  "relation": "partner"
+ },
+ {
+  "first": "berthe-de-courriere",
+  "second": "remy-de-gourmont",
+  "relation": "partner"
+ },
+ {
+  "first": "betsy-van-vloten",
+  "second": "willem-witsen",
+  "relation": "spouse"
+ },
+ {
+  "first": "betty-grable",
+  "second": "jackie-coogan",
+  "relation": "spouse",
+  "from": "1937",
+  "to": "1939"
  },
  {
   "first": "bill-berry",
@@ -204,6 +1378,35 @@
   "relation": "sibling"
  },
  {
+  "first": "billy-carter",
+  "second": "jimmy-carter",
+  "relation": "sibling"
+ },
+ {
+  "first": "billy-connolly",
+  "second": "gerry-rafferty",
+  "relation": "groupmate",
+  "group": "The Humblebums"
+ },
+ {
+  "first": "bixente-lizarazu",
+  "second": "claire-keim",
+  "relation": "partner",
+  "from": "2006"
+ },
+ {
+  "first": "bixente-lizarazu",
+  "second": "claire-keim",
+  "relation": "spouse",
+  "from": "2006-07"
+ },
+ {
+  "first": "black-francis",
+  "second": "david-lovering",
+  "relation": "groupmate",
+  "group": "Pixies"
+ },
+ {
   "first": "blake-lively",
   "second": "leonardo-dicaprio",
   "relation": "partner",
@@ -228,6 +1431,71 @@
   "group": "Traveling Wilburys"
  },
  {
+  "first": "bob-welch",
+  "second": "lindsey-buckingham",
+  "relation": "groupmate",
+  "group": "Fleetwood Mac"
+ },
+ {
+  "first": "bob-welch",
+  "second": "stevie-nicks",
+  "relation": "groupmate",
+  "group": "Fleetwood Mac"
+ },
+ {
+  "first": "bobby-bonds",
+  "second": "barry-bonds",
+  "relation": "parent"
+ },
+ {
+  "first": "bobby-brown",
+  "second": "whitney-houston",
+  "relation": "spouse",
+  "from": "1992-07-18",
+  "to": "2007-04-24"
+ },
+ {
+  "first": "bobby-darin",
+  "second": "sandra-dee",
+  "relation": "spouse",
+  "from": "1960",
+  "to": "1967"
+ },
+ {
+  "first": "bobby-osborne",
+  "second": "sonny-osborne",
+  "relation": "groupmate",
+  "group": "Osborne Brothers"
+ },
+ {
+  "first": "bobby-osborne",
+  "second": "sonny-osborne",
+  "relation": "sibling"
+ },
+ {
+  "first": "bon-scott",
+  "second": "malcolm-young",
+  "relation": "groupmate",
+  "group": "AC/DC"
+ },
+ {
+  "first": "boris-vian",
+  "second": "hildegard-knef",
+  "relation": "partner"
+ },
+ {
+  "first": "boz-scaggs",
+  "second": "steve-miller",
+  "relation": "groupmate",
+  "group": "Steve Miller Band"
+ },
+ {
+  "first": "brad-delp",
+  "second": "tom-scholz",
+  "relation": "groupmate",
+  "group": "Boston"
+ },
+ {
   "first": "brad-pitt",
   "second": "gwyneth-paltrow",
   "relation": "partner",
@@ -249,11 +1517,121 @@
   "to": "2005-10-02"
  },
  {
+  "first": "brad-pitt",
+  "second": "juliette-lewis",
+  "relation": "partner",
+  "from": "1990",
+  "to": "1993"
+ },
+ {
+  "first": "brad-pitt",
+  "second": "knox-jolie-pitt",
+  "relation": "parent"
+ },
+ {
+  "first": "brad-pitt",
+  "second": "vivienne-jolie",
+  "relation": "parent"
+ },
+ {
+  "first": "brad-whitford",
+  "second": "joe-perry",
+  "relation": "groupmate",
+  "group": "Aerosmith"
+ },
+ {
+  "first": "brian-austin-green",
+  "second": "megan-fox",
+  "relation": "partner",
+  "from": "2004",
+  "to": "2015-08-19"
+ },
+ {
+  "first": "brian-austin-green",
+  "second": "megan-fox",
+  "relation": "spouse",
+  "from": "2010-06-24",
+  "to": "2021-10-15"
+ },
+ {
+  "first": "brian-austin-green",
+  "second": "tori-spelling",
+  "relation": "partner",
+  "from": "1990",
+  "to": "1990"
+ },
+ {
+  "first": "brian-de-palma",
+  "second": "gale-anne-hurd",
+  "relation": "spouse",
+  "from": "1991",
+  "to": "1993"
+ },
+ {
+  "first": "brian-wilson",
+  "second": "carl-wilson",
+  "relation": "groupmate",
+  "group": "The Beach Boys"
+ },
+ {
+  "first": "brian-wilson",
+  "second": "carl-wilson",
+  "relation": "sibling"
+ },
+ {
+  "first": "brian-wilson",
+  "second": "dennis-wilson",
+  "relation": "groupmate",
+  "group": "The Beach Boys"
+ },
+ {
+  "first": "brian-wilson",
+  "second": "dennis-wilson",
+  "relation": "sibling"
+ },
+ {
+  "first": "brian-wilson",
+  "second": "mike-love",
+  "relation": "groupmate",
+  "group": "The Beach Boys"
+ },
+ {
+  "first": "brian-wilson",
+  "second": "mike-love",
+  "relation": "relative",
+  "kinship": "male first cousin"
+ },
+ {
+  "first": "bridget-fonda",
+  "second": "jane-fonda",
+  "relation": "relative",
+  "kinship": "father's sister"
+ },
+ {
   "first": "brigitte-bardot",
   "second": "gilbert-becaud",
   "relation": "partner",
   "from": "1958",
   "to": "1958"
+ },
+ {
+  "first": "brigitte-bardot",
+  "second": "jacques-charrier",
+  "relation": "spouse",
+  "from": "1959-06-18",
+  "to": "1962-11-20"
+ },
+ {
+  "first": "brigitte-bardot",
+  "second": "mijanou-bardot",
+  "relation": "sibling"
+ },
+ {
+  "first": "brigitte-bardot",
+  "second": "roger-vadim",
+  "relation": "spouse",
+  "from": "1952-12-20",
+  "to": "1957-12-06"
  },
  {
   "first": "brigitte-bardot",
@@ -276,11 +1654,76 @@
   "to": "2002-03"
  },
  {
+  "first": "brooks-adams",
+  "second": "john-quincy-adams-ii",
+  "relation": "sibling"
+ },
+ {
+  "first": "bruce-dern",
+  "second": "laura-dern",
+  "relation": "parent"
+ },
+ {
+  "first": "bruce-lansbury",
+  "second": "edgar-lansbury",
+  "relation": "sibling"
+ },
+ {
+  "first": "bruce-lee",
+  "second": "brandon-lee",
+  "relation": "parent"
+ },
+ {
   "first": "bruce-willis",
   "second": "demi-moore",
   "relation": "spouse",
   "from": "1987-11-21",
   "to": "2000-10-18"
+ },
+ {
+  "first": "bruno-mussolini",
+  "second": "romano-mussolini",
+  "relation": "sibling"
+ },
+ {
+  "first": "bruno-mussolini",
+  "second": "vittorio-mussolini",
+  "relation": "sibling"
+ },
+ {
+  "first": "bruno-peyron",
+  "second": "loick-peyron",
+  "relation": "sibling"
+ },
+ {
+  "first": "bruno-peyron",
+  "second": "stephane-peyron",
+  "relation": "sibling"
+ },
+ {
+  "first": "bruno-salomone",
+  "second": "jean-dujardin",
+  "relation": "groupmate"
+ },
+ {
+  "first": "bruno-salomone",
+  "second": "julie-gayet",
+  "relation": "partner",
+  "from": "2010",
+  "to": "2012"
+ },
+ {
+  "first": "bud-spencer",
+  "second": "terence-hill",
+  "relation": "groupmate",
+  "group": "Bud Spencer and Terence Hill"
+ },
+ {
+  "first": "burt-reynolds",
+  "second": "loni-anderson",
+  "relation": "spouse",
+  "from": "1988",
+  "to": "1994"
  },
  {
   "first": "burt-reynolds",
@@ -344,6 +1787,54 @@
   "relation": "sibling"
  },
  {
+  "first": "camillo-olivetti",
+  "second": "adriano-olivetti",
+  "relation": "parent"
+ },
+ {
+  "first": "candice-bergen",
+  "second": "louis-malle",
+  "relation": "spouse",
+  "from": "1980-09-27",
+  "to": "1995-11-23"
+ },
+ {
+  "first": "cantinflas",
+  "second": "julio-iglesias",
+  "relation": "groupmate",
+  "group": "Hermanos"
+ },
+ {
+  "first": "cantinflas",
+  "second": "placido-domingo",
+  "relation": "groupmate",
+  "group": "Hermanos"
+ },
+ {
+  "first": "carl-sternheim",
+  "second": "thea-sternheim",
+  "relation": "spouse",
+  "from": "1907",
+  "to": "1927"
+ },
+ {
+  "first": "carl-wilson",
+  "second": "dennis-wilson",
+  "relation": "groupmate",
+  "group": "The Beach Boys"
+ },
+ {
+  "first": "carl-wilson",
+  "second": "dennis-wilson",
+  "relation": "sibling"
+ },
+ {
+  "first": "carl-wilson",
+  "second": "mike-love",
+  "relation": "groupmate",
+  "group": "The Beach Boys"
+ },
+ {
   "first": "carl-xvi-gustaf",
   "second": "queen-silvia",
   "relation": "spouse",
@@ -353,6 +1844,11 @@
   "first": "carl-xvi-gustaf",
   "second": "victoria-crown-princess-of-sweden",
   "relation": "parent"
+ },
+ {
+  "first": "carla-anderson-hills",
+  "second": "roderick-m-hills",
+  "relation": "spouse"
  },
  {
   "first": "carla-bruni",
@@ -368,6 +1864,70 @@
   "from": "2008-02-02"
  },
  {
+  "first": "carla-bruni",
+  "second": "valeria-bruni-tedeschi",
+  "relation": "sibling"
+ },
+ {
+  "first": "carla-bruni",
+  "second": "vincent-perez",
+  "relation": "partner"
+ },
+ {
+  "first": "carlo-benetton",
+  "second": "luciano-benetton",
+  "relation": "sibling"
+ },
+ {
+  "first": "carlo-di-palma",
+  "second": "monica-vitti",
+  "relation": "partner",
+  "from": "1964"
+ },
+ {
+  "first": "carlo-fruttero",
+  "second": "franco-lucentini",
+  "relation": "groupmate",
+  "group": "Fruttero & Lucentini"
+ },
+ {
+  "first": "carlo-lombardi",
+  "second": "nella-maria-bonora",
+  "relation": "spouse"
+ },
+ {
+  "first": "carlo-ponti",
+  "second": "sophia-loren",
+  "relation": "spouse",
+  "from": "1957-09-17",
+  "to": "1962-08-31"
+ },
+ {
+  "first": "carlos",
+  "second": "catherine-dolto",
+  "relation": "sibling"
+ },
+ {
+  "first": "carmen-electra",
+  "second": "dave-navarro",
+  "relation": "spouse",
+  "from": "2003",
+  "to": "2007"
+ },
+ {
+  "first": "carmen-electra",
+  "second": "dennis-rodman",
+  "relation": "spouse",
+  "from": "1998-11-14",
+  "to": "1999-04-06"
+ },
+ {
+  "first": "carole-fredericks",
+  "second": "jean-jacques-goldman",
+  "relation": "groupmate",
+  "group": "Fredericks Goldman Jones"
+ },
+ {
   "first": "carole-lombard",
   "second": "clark-gable",
   "relation": "spouse",
@@ -381,8 +1941,27 @@
  },
  {
   "first": "caroline-of-monaco",
+  "second": "philippe-junot",
+  "relation": "spouse",
+  "from": "1978-06-28",
+  "to": "1980-10-09"
+ },
+ {
+  "first": "caroline-of-monaco",
+  "second": "stefano-casiraghi",
+  "relation": "spouse",
+  "from": "1983-12-29",
+  "to": "1990-10-03"
+ },
+ {
+  "first": "caroline-of-monaco",
   "second": "stephanie-of-monaco",
   "relation": "sibling"
+ },
+ {
+  "first": "caroline-of-monaco",
+  "second": "vincent-lindon",
+  "relation": "partner"
  },
  {
   "first": "carrie-fisher",
@@ -399,10 +1978,131 @@
   "to": "1984-07"
  },
  {
+  "first": "carrie-fisher",
+  "second": "todd-fisher",
+  "relation": "sibling"
+ },
+ {
+  "first": "carrie-fisher",
+  "second": "tricia-leigh-fisher",
+  "relation": "sibling"
+ },
+ {
+  "first": "caterina-guzzanti",
+  "second": "corrado-guzzanti",
+  "relation": "sibling"
+ },
+ {
+  "first": "catherine-deneuve",
+  "second": "chiara-mastroianni",
+  "relation": "parent"
+ },
+ {
+  "first": "catherine-deneuve",
+  "second": "christian-vadim",
+  "relation": "parent"
+ },
+ {
+  "first": "catherine-deneuve",
+  "second": "roger-vadim",
+  "relation": "partner",
+  "from": "1961",
+  "to": "1964"
+ },
+ {
+  "first": "catherine-dolto",
+  "second": "jacques-marette",
+  "relation": "relative",
+  "kinship": "uncle"
+ },
+ {
   "first": "catherine-zeta-jones",
   "second": "michael-douglas",
   "relation": "spouse",
   "from": "2000-11-18"
+ },
+ {
+  "first": "cecile-aubry",
+  "second": "mehdi-el-glaoui",
+  "relation": "parent"
+ },
+ {
+  "first": "cecile-cassel",
+  "second": "gaspard-ulliel",
+  "relation": "partner",
+  "from": "2005",
+  "to": "2007"
+ },
+ {
+  "first": "cecile-cassel",
+  "second": "vincent-cassel",
+  "relation": "sibling"
+ },
+ {
+  "first": "cecilia-attias",
+  "second": "jacques-martin",
+  "relation": "spouse",
+  "from": "1984",
+  "to": "1989"
+ },
+ {
+  "first": "cecilia-attias",
+  "second": "nicolas-sarkozy",
+  "relation": "spouse",
+  "from": "1996-10-23",
+  "to": "2007-10-15"
+ },
+ {
+  "first": "cecilia-chailly",
+  "second": "riccardo-chailly",
+  "relation": "sibling"
+ },
+ {
+  "first": "cesare-maldini",
+  "second": "paolo-maldini",
+  "relation": "parent"
+ },
+ {
+  "first": "charles-allston-collins",
+  "second": "wilkie-collins",
+  "relation": "sibling"
+ },
+ {
+  "first": "charles-de-gaulle",
+  "second": "philippe-de-gaulle",
+  "relation": "parent"
+ },
+ {
+  "first": "charles-de-gaulle",
+  "second": "yvonne-de-gaulle",
+  "relation": "spouse",
+  "from": "1921",
+  "to": "1970"
+ },
+ {
+  "first": "charles-francis-adams-sr",
+  "second": "brooks-adams",
+  "relation": "parent"
+ },
+ {
+  "first": "charles-francis-adams-sr",
+  "second": "george-washington-adams",
+  "relation": "sibling"
+ },
+ {
+  "first": "charles-francis-adams-sr",
+  "second": "john-adams-ii",
+  "relation": "sibling"
+ },
+ {
+  "first": "charles-francis-adams-sr",
+  "second": "john-quincy-adams-ii",
+  "relation": "parent"
+ },
+ {
+  "first": "charles-i-of-austria",
+  "second": "otto-von-habsburg",
+  "relation": "parent"
  },
  {
   "first": "charles-iii",
@@ -432,9 +2132,228 @@
   "relation": "sibling"
  },
  {
+  "first": "charles-lapicque",
+  "second": "jean-perrin",
+  "relation": "relative",
+  "kinship": "father-in-law"
+ },
+ {
+  "first": "charles-le-bargy",
+  "second": "jean-debucourt",
+  "relation": "parent"
+ },
+ {
+  "first": "charles-mingus",
+  "second": "max-roach",
+  "relation": "groupmate",
+  "group": "Jazz Artists Guild"
+ },
+ {
+  "first": "charlie-burchill",
+  "second": "derek-forbes",
+  "relation": "groupmate",
+  "group": "Simple Minds"
+ },
+ {
+  "first": "charlie-burchill",
+  "second": "jim-kerr",
+  "relation": "groupmate",
+  "group": "Simple Minds"
+ },
+ {
+  "first": "charlie-burchill",
+  "second": "mick-macneil",
+  "relation": "groupmate",
+  "group": "Simple Minds"
+ },
+ {
+  "first": "charlie-reid",
+  "second": "craig-reid",
+  "relation": "groupmate",
+  "group": "The Proclaimers"
+ },
+ {
+  "first": "charlie-reid",
+  "second": "craig-reid",
+  "relation": "sibling"
+ },
+ {
+  "first": "charlton-heston",
+  "second": "fraser-clarke-heston",
+  "relation": "parent"
+ },
+ {
+  "first": "cher",
+  "second": "elijah-blue-allman",
+  "relation": "parent"
+ },
+ {
+  "first": "cher",
+  "second": "sonny-bono",
+  "relation": "groupmate",
+  "group": "Sonny & Cher"
+ },
+ {
+  "first": "cher",
+  "second": "sonny-bono",
+  "relation": "spouse",
+  "from": "1969",
+  "to": "1975"
+ },
+ {
+  "first": "cherry-boone",
+  "second": "debby-boone",
+  "relation": "sibling"
+ },
+ {
+  "first": "chiara-iezzi",
+  "second": "paola-iezzi",
+  "relation": "groupmate",
+  "group": "Paola e Chiara"
+ },
+ {
+  "first": "chiara-iezzi",
+  "second": "paola-iezzi",
+  "relation": "sibling"
+ },
+ {
+  "first": "chiara-mastroianni",
+  "second": "christian-vadim",
+  "relation": "sibling"
+ },
+ {
+  "first": "christiaan-eijkman",
+  "second": "johan-frederik-eijkman",
+  "relation": "sibling"
+ },
+ {
+  "first": "christian-marquand",
+  "second": "nadine-trintignant",
+  "relation": "sibling"
+ },
+ {
+  "first": "christian-marquand",
+  "second": "serge-marquand",
+  "relation": "sibling"
+ },
+ {
+  "first": "christian-sarron",
+  "second": "dominique-sarron",
+  "relation": "sibling"
+ },
+ {
+  "first": "christiane-legrand",
+  "second": "michel-legrand",
+  "relation": "sibling"
+ },
+ {
+  "first": "christiane-vulpius",
+  "second": "johann-wolfgang-von-goethe",
+  "relation": "spouse"
+ },
+ {
+  "first": "christina-onassis",
+  "second": "athina-onassis-roussel",
+  "relation": "parent"
+ },
+ {
+  "first": "christina-onassis",
+  "second": "caroline-kennedy",
+  "relation": "relative",
+  "kinship": "stepsister"
+ },
+ {
+  "first": "christina-onassis",
+  "second": "thierry-roussel",
+  "relation": "spouse",
+  "from": "1984",
+  "to": "1987"
+ },
+ {
+  "first": "christine-carere",
+  "second": "philippe-nicaud",
+  "relation": "spouse"
+ },
+ {
+  "first": "christine-gouze-renal",
+  "second": "roger-hanin",
+  "relation": "spouse",
+  "from": "1958",
+  "to": "2002-10-25"
+ },
+ {
+  "first": "christophe-tiozzo",
+  "second": "fabrice-tiozzo",
+  "relation": "sibling"
+ },
+ {
+  "first": "christopher-mitchum",
+  "second": "james-mitchum",
+  "relation": "sibling"
+ },
+ {
+  "first": "chuck-mangione",
+  "second": "tony-levin",
+  "relation": "groupmate",
+  "group": "Chuck Mangione Quartet"
+ },
+ {
+  "first": "ciccio-ingrassia",
+  "second": "franco-franchi",
+  "relation": "groupmate",
+  "group": "Franco & Ciccio"
+ },
+ {
   "first": "cindy-crawford",
   "second": "kaia-gerber",
   "relation": "parent"
+ },
+ {
+  "first": "claire-borotra",
+  "second": "jean-borotra",
+  "relation": "relative",
+  "kinship": "granduncle"
+ },
+ {
+  "first": "claire-chazal",
+  "second": "philippe-torreton",
+  "relation": "partner",
+  "from": "2003",
+  "to": "2007"
+ },
+ {
+  "first": "clark-gable",
+  "second": "john-clark-gable",
+  "relation": "parent"
+ },
+ {
+  "first": "claude-chabrol",
+  "second": "stephane-audran",
+  "relation": "spouse",
+  "from": "1964-12-04",
+  "to": "1980"
+ },
+ {
+  "first": "claude-chirac",
+  "second": "laurence-chirac",
+  "relation": "sibling"
+ },
+ {
+  "first": "claude-chirac",
+  "second": "philippe-habert",
+  "relation": "spouse",
+  "from": "1992-09-12",
+  "to": "1993-04-05"
+ },
+ {
+  "first": "claude-chirac",
+  "second": "thierry-rey",
+  "relation": "spouse"
+ },
+ {
+  "first": "claude-dauphin",
+  "second": "maria-mauban",
+  "relation": "spouse"
  },
  {
   "first": "claude-francois",
@@ -444,11 +2363,175 @@
   "to": "1967"
  },
  {
+  "first": "claude-gensac",
+  "second": "pierre-mondy",
+  "relation": "spouse",
+  "from": "1951",
+  "to": "1955"
+ },
+ {
+  "first": "claude-lelouch",
+  "second": "evelyne-bouix",
+  "relation": "partner",
+  "from": "1980",
+  "to": "1985"
+ },
+ {
+  "first": "claude-roy",
+  "second": "loleh-bellon",
+  "relation": "spouse",
+  "from": "1958",
+  "to": "1997-10-13"
+ },
+ {
+  "first": "claude-spanghero",
+  "second": "laurent-spanghero",
+  "relation": "sibling"
+ },
+ {
+  "first": "claude-spanghero",
+  "second": "walter-spanghero",
+  "relation": "sibling"
+ },
+ {
+  "first": "claudia-schiffer",
+  "second": "david-copperfield",
+  "relation": "partner",
+  "from": "1993",
+  "to": "1999"
+ },
+ {
+  "first": "claudio-abbado",
+  "second": "marcello-abbado",
+  "relation": "sibling"
+ },
+ {
+  "first": "claudio-gora",
+  "second": "andrea-giordana",
+  "relation": "parent"
+ },
+ {
+  "first": "clay-felker",
+  "second": "pamela-tiffin",
+  "relation": "spouse",
+  "from": "1962",
+  "to": "1969"
+ },
+ {
+  "first": "cliff-burton",
+  "second": "dave-mustaine",
+  "relation": "groupmate",
+  "group": "Metallica"
+ },
+ {
+  "first": "cliff-burton",
+  "second": "james-hetfield",
+  "relation": "groupmate",
+  "group": "Metallica"
+ },
+ {
+  "first": "cliff-burton",
+  "second": "james-hetfield",
+  "relation": "groupmate",
+  "group": "Spastik Children"
+ },
+ {
+  "first": "cliff-burton",
+  "second": "kirk-hammett",
+  "relation": "groupmate",
+  "group": "Metallica"
+ },
+ {
+  "first": "cliff-burton",
+  "second": "kirk-hammett",
+  "relation": "groupmate",
+  "group": "Spastik Children"
+ },
+ {
+  "first": "colette-audry",
+  "second": "jacqueline-audry",
+  "relation": "sibling"
+ },
+ {
+  "first": "colette-brosset",
+  "second": "robert-dhery",
+  "relation": "spouse",
+  "from": "1942",
+  "to": "2004-12-03"
+ },
+ {
+  "first": "colette-duval",
+  "second": "gil-delamare",
+  "relation": "spouse"
+ },
+ {
+  "first": "conrad-hilton-jr",
+  "second": "elizabeth-taylor",
+  "relation": "spouse",
+  "from": "1950-05-06",
+  "to": "1951-01-29"
+ },
+ {
+  "first": "coretta-scott-king",
+  "second": "martin-luther-king-jr",
+  "relation": "spouse",
+  "from": "1953-06-18",
+  "to": "1968-04-04"
+ },
+ {
+  "first": "corrado-guzzanti",
+  "second": "pier-francesco-loche",
+  "relation": "groupmate",
+  "group": "Rokko e i suoi fratelli"
+ },
+ {
+  "first": "courtney-love",
+  "second": "frances-bean-cobain",
+  "relation": "parent"
+ },
+ {
   "first": "courtney-love",
   "second": "kurt-cobain",
   "relation": "spouse",
   "from": "1992-02-24",
   "to": "1994-04-05"
+ },
+ {
+  "first": "courtney-love",
+  "second": "mike-patton",
+  "relation": "groupmate",
+  "group": "Faith No More"
+ },
+ {
+  "first": "cybill-shepherd",
+  "second": "peter-bogdanovich",
+  "relation": "partner",
+  "from": "1971",
+  "to": "1978"
+ },
+ {
+  "first": "cyd-charisse",
+  "second": "tony-martin",
+  "relation": "spouse",
+  "from": "1948",
+  "to": "2008"
+ },
+ {
+  "first": "d-boon",
+  "second": "george-hurley",
+  "relation": "groupmate",
+  "group": "Minutemen"
+ },
+ {
+  "first": "dakota-johnson",
+  "second": "tippi-hedren",
+  "relation": "relative",
+  "kinship": "maternal grandmother"
+ },
+ {
+  "first": "dale-earnhardt",
+  "second": "dale-earnhardt-jr",
+  "relation": "parent"
  },
  {
   "first": "daniel-auteuil",
@@ -463,6 +2546,148 @@
   "relation": "spouse",
   "from": "1993-09-10",
   "to": "1995-09-21"
+ },
+ {
+  "first": "daniel-ducruet",
+  "second": "stephanie-of-monaco",
+  "relation": "spouse",
+  "from": "1995-07-01",
+  "to": "1996-10-04"
+ },
+ {
+  "first": "daniel-gelin",
+  "second": "daniele-delorme",
+  "relation": "spouse",
+  "from": "1946-05-25",
+  "to": "1954"
+ },
+ {
+  "first": "daniel-gelin",
+  "second": "xavier-gelin",
+  "relation": "parent"
+ },
+ {
+  "first": "daniela-dessi",
+  "second": "fabio-armiliato",
+  "relation": "spouse",
+  "from": "2000"
+ },
+ {
+  "first": "daniele-delorme",
+  "second": "xavier-gelin",
+  "relation": "parent"
+ },
+ {
+  "first": "daniele-delorme",
+  "second": "yves-robert",
+  "relation": "spouse",
+  "from": "1956",
+  "to": "2002-05-10"
+ },
+ {
+  "first": "daniele-evenou",
+  "second": "jacques-martin",
+  "relation": "partner"
+ },
+ {
+  "first": "danielle-darrieux",
+  "second": "henri-decoin",
+  "relation": "spouse",
+  "from": "1935",
+  "to": "1941"
+ },
+ {
+  "first": "danilo-nannini",
+  "second": "alessandro-nannini",
+  "relation": "parent"
+ },
+ {
+  "first": "danilo-nannini",
+  "second": "gianna-nannini",
+  "relation": "parent"
+ },
+ {
+  "first": "danny-wood",
+  "second": "donnie-wahlberg",
+  "relation": "groupmate",
+  "group": "New Kids on the Block"
+ },
+ {
+  "first": "danny-wood",
+  "second": "joey-mcintyre",
+  "relation": "groupmate",
+  "group": "New Kids on the Block"
+ },
+ {
+  "first": "danny-wood",
+  "second": "jonathan-knight",
+  "relation": "groupmate",
+  "group": "New Kids on the Block"
+ },
+ {
+  "first": "danny-wood",
+  "second": "jordan-knight",
+  "relation": "groupmate",
+  "group": "New Kids on the Block"
+ },
+ {
+  "first": "dany-boon",
+  "second": "judith-godreche",
+  "relation": "spouse",
+  "from": "1998",
+  "to": "2002"
+ },
+ {
+  "first": "dany-dauberson",
+  "second": "nicole-berger",
+  "relation": "partner"
+ },
+ {
+  "first": "dany-robin",
+  "second": "georges-marchal",
+  "relation": "spouse",
+  "from": "1951",
+  "to": "1969"
+ },
+ {
+  "first": "daria-nicolodi",
+  "second": "asia-argento",
+  "relation": "parent"
+ },
+ {
+  "first": "daria-nicolodi",
+  "second": "dario-argento",
+  "relation": "partner",
+  "from": "1974",
+  "to": "1985"
+ },
+ {
+  "first": "dario-argento",
+  "second": "asia-argento",
+  "relation": "parent"
+ },
+ {
+  "first": "darius-paul-dassault",
+  "second": "marcel-dassault",
+  "relation": "sibling"
+ },
+ {
+  "first": "darryl-hickman",
+  "second": "dwayne-hickman",
+  "relation": "sibling"
+ },
+ {
+  "first": "daryl-dragon",
+  "second": "toni-tennille",
+  "relation": "groupmate",
+  "group": "Captain & Tennille"
+ },
+ {
+  "first": "daryl-dragon",
+  "second": "toni-tennille",
+  "relation": "spouse",
+  "from": "1975-11-11",
+  "to": "2014-07"
  },
  {
   "first": "dave-grohl",
@@ -501,10 +2726,77 @@
   "group": "Metallica"
  },
  {
+  "first": "david-barclay",
+  "second": "frederick-barclay",
+  "relation": "sibling"
+ },
+ {
+  "first": "david-charvet",
+  "second": "pamela-anderson",
+  "relation": "partner",
+  "from": "1992",
+  "to": "1994"
+ },
+ {
+  "first": "david-hallyday",
+  "second": "estelle-lefebure",
+  "relation": "spouse",
+  "from": "1989",
+  "to": "2001"
+ },
+ {
+  "first": "david-lynch",
+  "second": "isabella-rossellini",
+  "relation": "partner",
+  "from": "1986",
+  "to": "1991"
+ },
+ {
+  "first": "david-o-selznick",
+  "second": "jennifer-jones",
+  "relation": "spouse",
+  "from": "1949",
+  "to": "1965"
+ },
+ {
+  "first": "david-zucker",
+  "second": "jerry-zucker",
+  "relation": "groupmate",
+  "group": "Zucker, Abrahams and Zucker"
+ },
+ {
+  "first": "david-zucker",
+  "second": "jerry-zucker",
+  "relation": "sibling"
+ },
+ {
+  "first": "david-zucker",
+  "second": "jim-abrahams",
+  "relation": "groupmate",
+  "group": "Zucker, Abrahams and Zucker"
+ },
+ {
+  "first": "dean-martin",
+  "second": "dean-paul-martin",
+  "relation": "parent"
+ },
+ {
   "first": "dean-martin",
   "second": "frank-sinatra",
   "relation": "groupmate",
   "group": "Rat Pack"
+ },
+ {
+  "first": "dean-martin",
+  "second": "jerry-lewis",
+  "relation": "groupmate",
+  "group": "Martin and Lewis"
+ },
+ {
+  "first": "dean-paul-martin",
+  "second": "desi-arnaz-jr",
+  "relation": "groupmate",
+  "group": "Dino, Desi & Billy"
  },
  {
   "first": "debbie-reynolds",
@@ -512,11 +2804,106 @@
   "relation": "parent"
  },
  {
+  "first": "debbie-reynolds",
+  "second": "todd-fisher",
+  "relation": "parent"
+ },
+ {
+  "first": "debora-caprioglio",
+  "second": "klaus-kinski",
+  "relation": "partner",
+  "from": "1987",
+  "to": "1989"
+ },
+ {
+  "first": "debora-caprioglio",
+  "second": "tinto-brass",
+  "relation": "partner"
+ },
+ {
+  "first": "del-martin",
+  "second": "phyllis-lyon",
+  "relation": "spouse",
+  "from": "2008-06-16",
+  "to": "2008-08-27"
+ },
+ {
+  "first": "dennis-crosby",
+  "second": "gary-crosby",
+  "relation": "sibling"
+ },
+ {
+  "first": "dennis-crosby",
+  "second": "harry-crosby",
+  "relation": "sibling"
+ },
+ {
+  "first": "dennis-crosby",
+  "second": "lindsay-crosby",
+  "relation": "sibling"
+ },
+ {
+  "first": "dennis-crosby",
+  "second": "mary-crosby",
+  "relation": "sibling"
+ },
+ {
+  "first": "dennis-crosby",
+  "second": "nathaniel-crosby",
+  "relation": "sibling"
+ },
+ {
+  "first": "dennis-crosby",
+  "second": "phillip-crosby",
+  "relation": "sibling"
+ },
+ {
   "first": "dennis-rodman",
   "second": "madonna",
   "relation": "partner",
   "from": "1990",
   "to": "1990"
+ },
+ {
+  "first": "dennis-wilson",
+  "second": "mike-love",
+  "relation": "groupmate",
+  "group": "The Beach Boys"
+ },
+ {
+  "first": "dennis-wilson",
+  "second": "mike-love",
+  "relation": "relative",
+  "kinship": "male first cousin"
+ },
+ {
+  "first": "denys-de-la-patelliere",
+  "second": "alexandre-de-la-patelliere",
+  "relation": "parent"
+ },
+ {
+  "first": "derek-forbes",
+  "second": "jim-kerr",
+  "relation": "groupmate",
+  "group": "Simple Minds"
+ },
+ {
+  "first": "derek-forbes",
+  "second": "mick-macneil",
+  "relation": "groupmate",
+  "group": "Simple Minds"
+ },
+ {
+  "first": "desi-arnaz-jr",
+  "second": "lucie-arnaz",
+  "relation": "sibling"
+ },
+ {
+  "first": "diahann-carroll",
+  "second": "sidney-poitier",
+  "relation": "partner",
+  "from": "1959",
+  "to": "1968"
  },
  {
   "first": "diana-princess",
@@ -536,6 +2923,31 @@
   "to": "1983"
  },
  {
+  "first": "diana-ross",
+  "second": "mary-wilson",
+  "relation": "groupmate",
+  "group": "The Supremes"
+ },
+ {
+  "first": "diane-barriere-desseigne",
+  "second": "dominique-desseigne",
+  "relation": "spouse",
+  "from": "1984-04-07",
+  "to": "2001-05-18"
+ },
+ {
+  "first": "diane-cilento",
+  "second": "jason-connery",
+  "relation": "parent"
+ },
+ {
+  "first": "diane-cilento",
+  "second": "sean-connery",
+  "relation": "spouse",
+  "from": "1962",
+  "to": "1973"
+ },
+ {
   "first": "diane-keaton",
   "second": "warren-beatty",
   "relation": "partner",
@@ -550,11 +2962,116 @@
   "to": "1971"
  },
  {
+  "first": "didier-deschamps",
+  "second": "nathalie-tauziat",
+  "relation": "relative",
+  "kinship": "cousin"
+ },
+ {
+  "first": "didier-lockwood",
+  "second": "patricia-petibon",
+  "relation": "spouse",
+  "from": "2015",
+  "to": "2018"
+ },
+ {
+  "first": "dino-de-laurentiis",
+  "second": "silvana-mangano",
+  "relation": "spouse",
+  "from": "1949",
+  "to": "1988"
+ },
+ {
+  "first": "dino-de-laurentiis",
+  "second": "veronica-de-laurentiis",
+  "relation": "parent"
+ },
+ {
+  "first": "dino-risi",
+  "second": "claudio-risi",
+  "relation": "parent"
+ },
+ {
+  "first": "dino-risi",
+  "second": "marco-risi",
+  "relation": "parent"
+ },
+ {
+  "first": "django-reinhardt",
+  "second": "stephane-grappelli",
+  "relation": "groupmate",
+  "group": "Quintette du Hot Club de France"
+ },
+ {
+  "first": "dolly-sinatra",
+  "second": "frank-sinatra",
+  "relation": "parent"
+ },
+ {
+  "first": "dolores-del-rio",
+  "second": "orson-welles",
+  "relation": "partner",
+  "from": "1938",
+  "to": "1941"
+ },
+ {
+  "first": "domenico-dolce",
+  "second": "stefano-gabbana",
+  "relation": "partner",
+  "from": "1982",
+  "to": "2000"
+ },
+ {
+  "first": "domenico-modugno",
+  "second": "franca-gandolfi",
+  "relation": "spouse"
+ },
+ {
+  "first": "dominique-de-villepin",
+  "second": "marie-de-villepin",
+  "relation": "parent"
+ },
+ {
+  "first": "dominique-fillon",
+  "second": "francois-fillon",
+  "relation": "sibling"
+ },
+ {
+  "first": "dominique-rolin",
+  "second": "philippe-sollers",
+  "relation": "partner"
+ },
+ {
+  "first": "don-henley",
+  "second": "randy-meisner",
+  "relation": "groupmate",
+  "group": "Eagles"
+ },
+ {
   "first": "don-henley",
   "second": "stevie-nicks",
   "relation": "partner",
   "from": "1977",
   "to": "1978"
+ },
+ {
+  "first": "don-johnson",
+  "second": "dakota-johnson",
+  "relation": "parent"
+ },
+ {
+  "first": "don-johnson",
+  "second": "melanie-griffith",
+  "relation": "spouse",
+  "from": "1976",
+  "to": "1976"
+ },
+ {
+  "first": "don-murray",
+  "second": "hope-lange",
+  "relation": "spouse",
+  "from": "1956",
+  "to": "1961"
  },
  {
   "first": "donald-sutherland",
@@ -565,6 +3082,48 @@
   "first": "donatella-versace",
   "second": "gianni-versace",
   "relation": "sibling"
+ },
+ {
+  "first": "donnie-wahlberg",
+  "second": "joey-mcintyre",
+  "relation": "groupmate",
+  "group": "New Kids on the Block"
+ },
+ {
+  "first": "donnie-wahlberg",
+  "second": "jonathan-knight",
+  "relation": "groupmate",
+  "group": "New Kids on the Block"
+ },
+ {
+  "first": "donnie-wahlberg",
+  "second": "jordan-knight",
+  "relation": "groupmate",
+  "group": "New Kids on the Block"
+ },
+ {
+  "first": "donnie-wahlberg",
+  "second": "mark-wahlberg",
+  "relation": "sibling"
+ },
+ {
+  "first": "donovan",
+  "second": "ione-skye",
+  "relation": "parent"
+ },
+ {
+  "first": "dora-maar",
+  "second": "pablo-picasso",
+  "relation": "partner",
+  "from": "1936",
+  "to": "1943"
+ },
+ {
+  "first": "dorothy-stratten",
+  "second": "peter-bogdanovich",
+  "relation": "partner",
+  "from": "1980",
+  "to": "1980"
  },
  {
   "first": "dr-dre",
@@ -578,6 +3137,23 @@
   "relation": "partner",
   "from": "2011",
   "to": "2015"
+ },
+ {
+  "first": "duccio-tessari",
+  "second": "lorella-de-luca",
+  "relation": "spouse",
+  "from": "1971",
+  "to": "1994"
+ },
+ {
+  "first": "duncan-grant",
+  "second": "john-maynard-keynes",
+  "relation": "partner"
+ },
+ {
+  "first": "edith-demaertelaere",
+  "second": "kevin-borlee",
+  "relation": "parent"
  },
  {
   "first": "edith-piaf",
@@ -595,6 +3171,41 @@
   "first": "edith-piaf",
   "second": "yves-montand",
   "relation": "partner"
+ },
+ {
+  "first": "edmond-adolphe-de-rothschild",
+  "second": "nadine-de-rothschild",
+  "relation": "spouse",
+  "from": "1963-06-26",
+  "to": "1997"
+ },
+ {
+  "first": "edmond-becquerel",
+  "second": "antoine-henri-becquerel",
+  "relation": "parent"
+ },
+ {
+  "first": "edmond-rostand",
+  "second": "maurice-rostand",
+  "relation": "parent"
+ },
+ {
+  "first": "edmonde-charles-roux",
+  "second": "gaston-defferre",
+  "relation": "spouse",
+  "from": "1973",
+  "to": "1986-05-07"
+ },
+ {
+  "first": "edoardo-agnelli",
+  "second": "gianni-agnelli",
+  "relation": "parent"
+ },
+ {
+  "first": "edoardo-agnelli",
+  "second": "giovanni-alberto-agnelli",
+  "relation": "relative",
+  "kinship": "grandson"
  },
  {
   "first": "edouard-manet",
@@ -618,11 +3229,66 @@
   "relation": "sibling"
  },
  {
+  "first": "edy-campagnoli",
+  "second": "lorenzo-buffon",
+  "relation": "spouse"
+ },
+ {
   "first": "eleanor-roosevelt",
   "second": "franklin-d-roosevelt",
   "relation": "spouse",
   "from": "1903-03-17",
   "to": "1945-04-12"
+ },
+ {
+  "first": "eleonora-duse",
+  "second": "gabriele-d-annunzio",
+  "relation": "partner",
+  "from": "1898",
+  "to": "1901"
+ },
+ {
+  "first": "eleonora-giorgi",
+  "second": "massimo-ciavarro",
+  "relation": "spouse",
+  "from": "1992",
+  "to": "1995"
+ },
+ {
+  "first": "elisabeth-badinter",
+  "second": "robert-badinter",
+  "relation": "spouse",
+  "from": "1966",
+  "to": "2024-02-09"
+ },
+ {
+  "first": "elisee-reclus",
+  "second": "paul-broca",
+  "relation": "relative",
+  "kinship": "cousin"
+ },
+ {
+  "first": "elisee-reclus",
+  "second": "paul-reclus",
+  "relation": "sibling"
+ },
+ {
+  "first": "eliza-dushku",
+  "second": "peter-palandjian",
+  "relation": "spouse",
+  "from": "2018-08-18"
+ },
+ {
+  "first": "elizabeth-garouste",
+  "second": "gerard-garouste",
+  "relation": "spouse"
+ },
+ {
+  "first": "elizabeth-montgomery",
+  "second": "robert-foxworth",
+  "relation": "spouse",
+  "from": "1993-01-28",
+  "to": "1995-05-18"
  },
  {
   "first": "elizabeth-taylor",
@@ -631,10 +3297,39 @@
   "kinship": "stepdaughter"
  },
  {
+  "first": "elizabeth-taylor",
+  "second": "john-warner",
+  "relation": "spouse",
+  "from": "1976-12-04",
+  "to": "1982-11-07"
+ },
+ {
+  "first": "elizabeth-taylor",
+  "second": "todd-fisher",
+  "relation": "relative",
+  "kinship": "stepson"
+ },
+ {
   "first": "ella-fitzgerald",
   "second": "louis-armstrong",
   "relation": "groupmate",
   "group": "Ella Fitzgerald & Louis Armstrong"
+ },
+ {
+  "first": "elliott-gould",
+  "second": "jason-gould",
+  "relation": "parent"
+ },
+ {
+  "first": "elodie-bouchez",
+  "second": "thomas-bangalter",
+  "relation": "spouse",
+  "from": "1996"
+ },
+ {
+  "first": "else-lasker-schuler",
+  "second": "gottfried-benn",
+  "relation": "partner"
  },
  {
   "first": "elvis-presley",
@@ -649,9 +3344,87 @@
   "group": "Million Dollar Quartet"
  },
  {
+  "first": "emanuel-lasker",
+  "second": "else-lasker-schuler",
+  "relation": "relative",
+  "kinship": "sister-in-law"
+ },
+ {
+  "first": "emile-bergerat",
+  "second": "theophile-gautier",
+  "relation": "relative",
+  "kinship": "father-in-law"
+ },
+ {
+  "first": "emily-deschanel",
+  "second": "paul-deschanel",
+  "relation": "relative",
+  "kinship": "great-grandfather"
+ },
+ {
+  "first": "emily-deschanel",
+  "second": "zooey-deschanel",
+  "relation": "sibling"
+ },
+ {
+  "first": "emmanuel-berl",
+  "second": "mireille-hartuch",
+  "relation": "spouse",
+  "from": "1937-10-26",
+  "to": "1976-09-22"
+ },
+ {
+  "first": "emmanuelle-seigner",
+  "second": "mathilde-seigner",
+  "relation": "sibling"
+ },
+ {
+  "first": "emmy-hennings",
+  "second": "hugo-ball",
+  "relation": "spouse"
+ },
+ {
   "first": "empress-elisabeth-of-austria",
   "second": "rudolf-crown-prince-of-austria",
   "relation": "parent"
+ },
+ {
+  "first": "ennis-cosby",
+  "second": "erika-ranee",
+  "relation": "sibling"
+ },
+ {
+  "first": "enrique-iglesias",
+  "second": "chad-mcqueen",
+  "relation": "relative",
+  "kinship": "second uncle"
+ },
+ {
+  "first": "eric-cantona",
+  "second": "joel-cantona",
+  "relation": "sibling"
+ },
+ {
+  "first": "eric-cantona",
+  "second": "rachida-brakni",
+  "relation": "spouse",
+  "from": "2007"
+ },
+ {
+  "first": "eric-douglas",
+  "second": "michael-douglas",
+  "relation": "sibling"
+ },
+ {
+  "first": "eric-douglas",
+  "second": "peter-douglas",
+  "relation": "sibling"
+ },
+ {
+  "first": "eric-toledano",
+  "second": "olivier-nakache",
+  "relation": "groupmate",
+  "group": "Éric Toledano and Olivier Nakache"
  },
  {
   "first": "erich-maria-remarque",
@@ -660,10 +3433,65 @@
   "from": "1937"
  },
  {
+  "first": "erik-de-vlaeminck",
+  "second": "roger-de-vlaeminck",
+  "relation": "sibling"
+ },
+ {
+  "first": "erik-orsenna",
+  "second": "sophie-davant",
+  "relation": "partner",
+  "from": "2012-03",
+  "to": "2013-09"
+ },
+ {
   "first": "erik-satie",
   "second": "suzanne-valadon",
   "relation": "partner",
   "from": "1893"
+ },
+ {
+  "first": "ernest-chausson",
+  "second": "gabriel-faure",
+  "relation": "groupmate",
+  "group": "Le Petit Bayreuth"
+ },
+ {
+  "first": "ernest-chausson",
+  "second": "gaston-julia",
+  "relation": "relative",
+  "kinship": "son-in-law"
+ },
+ {
+  "first": "ernest-chausson",
+  "second": "henri-duparc",
+  "relation": "groupmate",
+  "group": "Le Petit Bayreuth"
+ },
+ {
+  "first": "ernest-chausson",
+  "second": "vincent-d-indy",
+  "relation": "groupmate",
+  "group": "Le Petit Bayreuth"
+ },
+ {
+  "first": "ernst-junger",
+  "second": "friedrich-georg-junger",
+  "relation": "sibling"
+ },
+ {
+  "first": "errol-flynn",
+  "second": "patrice-wymore",
+  "relation": "spouse",
+  "from": "1950",
+  "to": "1959"
+ },
+ {
+  "first": "estella-blain",
+  "second": "gerard-blain",
+  "relation": "spouse",
+  "from": "1953",
+  "to": "1956"
  },
  {
   "first": "ethan-coen",
@@ -677,6 +3505,17 @@
   "relation": "sibling"
  },
  {
+  "first": "ethel-kennedy",
+  "second": "christopher-g-kennedy",
+  "relation": "parent"
+ },
+ {
+  "first": "eva-green",
+  "second": "elsa-lunghini",
+  "relation": "relative",
+  "kinship": "cousin"
+ },
+ {
   "first": "eva-peron",
   "second": "juan-peron",
   "relation": "spouse",
@@ -684,11 +3523,58 @@
   "to": "1952"
  },
  {
+  "first": "evan-rachel-wood",
+  "second": "marilyn-manson",
+  "relation": "partner"
+ },
+ {
+  "first": "eve-curie",
+  "second": "irene-joliot-curie",
+  "relation": "sibling"
+ },
+ {
+  "first": "evelyne-bouix",
+  "second": "pierre-arditi",
+  "relation": "spouse",
+  "from": "2010-05-31"
+ },
+ {
+  "first": "ewan-mcgregor",
+  "second": "denis-lawson",
+  "relation": "relative",
+  "kinship": "uncle"
+ },
+ {
+  "first": "fabien-galthie",
+  "second": "helena-noguerra",
+  "relation": "spouse",
+  "from": "2021"
+ },
+ {
   "first": "fanny-ardant",
   "second": "francois-truffaut",
   "relation": "partner",
   "from": "1981",
   "to": "1984"
+ },
+ {
+  "first": "farrah-fawcett",
+  "second": "lee-majors",
+  "relation": "spouse",
+  "from": "1973-07-28",
+  "to": "1982-02-16"
+ },
+ {
+  "first": "farrah-fawcett",
+  "second": "ryan-o-neal",
+  "relation": "partner",
+  "from": "1979",
+  "to": "2009"
+ },
+ {
+  "first": "federico-allasio",
+  "second": "marisa-allasio",
+  "relation": "parent"
  },
  {
   "first": "felipe-vi",
@@ -703,6 +3589,22 @@
   "from": "2004-05-22"
  },
  {
+  "first": "felix-faure",
+  "second": "marguerite-steinheil",
+  "relation": "partner"
+ },
+ {
+  "first": "ferdinand-schubert",
+  "second": "franz-schubert",
+  "relation": "sibling"
+ },
+ {
+  "first": "fergie",
+  "second": "will-i-am",
+  "relation": "groupmate",
+  "group": "Black Eyed Peas"
+ },
+ {
   "first": "florent-manaudou",
   "second": "laure-manaudou",
   "relation": "sibling"
@@ -715,11 +3617,184 @@
   "to": "1991"
  },
  {
+  "first": "franca-bettoia",
+  "second": "gianmarco-tognazzi",
+  "relation": "parent"
+ },
+ {
+  "first": "franca-bettoia",
+  "second": "maria-sole-tognazzi",
+  "relation": "parent"
+ },
+ {
+  "first": "franca-bettoia",
+  "second": "ugo-tognazzi",
+  "relation": "spouse",
+  "from": "1972",
+  "to": "1990"
+ },
+ {
+  "first": "franca-faldini",
+  "second": "toto",
+  "relation": "partner",
+  "from": "1952",
+  "to": "1967"
+ },
+ {
+  "first": "france-gall",
+  "second": "julien-clerc",
+  "relation": "partner",
+  "from": "1970",
+  "to": "1974"
+ },
+ {
   "first": "france-gall",
   "second": "michel-berger",
   "relation": "spouse",
   "from": "1976-06-22",
   "to": "1992-08-02"
+ },
+ {
+  "first": "france-nuyen",
+  "second": "robert-culp",
+  "relation": "spouse",
+  "from": "1967",
+  "to": "1970"
+ },
+ {
+  "first": "france-roche",
+  "second": "francois-chalais",
+  "relation": "spouse"
+ },
+ {
+  "first": "francesco-pasinetti",
+  "second": "p-m-pasinetti",
+  "relation": "sibling"
+ },
+ {
+  "first": "francesco-rosi",
+  "second": "nora-ricci",
+  "relation": "partner"
+ },
+ {
+  "first": "francis-cabrel",
+  "second": "maxime-le-forestier",
+  "relation": "groupmate",
+  "group": "Sol En Si"
+ },
+ {
+  "first": "francis-lalanne",
+  "second": "rene-manzor",
+  "relation": "sibling"
+ },
+ {
+  "first": "francisco-marto",
+  "second": "sister-lucia",
+  "relation": "groupmate",
+  "group": "Children of Fátima"
+ },
+ {
+  "first": "franck-bauer",
+  "second": "axel-bauer",
+  "relation": "parent"
+ },
+ {
+  "first": "franco-amurri",
+  "second": "susan-sarandon",
+  "relation": "partner"
+ },
+ {
+  "first": "francois-cluzet",
+  "second": "marie-trintignant",
+  "relation": "partner"
+ },
+ {
+  "first": "francois-cluzet",
+  "second": "valerie-bonneton",
+  "relation": "partner"
+ },
+ {
+  "first": "francois-hollande",
+  "second": "julie-gayet",
+  "relation": "partner",
+  "from": "2014",
+  "to": "2022-06-04"
+ },
+ {
+  "first": "francois-hollande",
+  "second": "julie-gayet",
+  "relation": "spouse",
+  "from": "2022-06-04"
+ },
+ {
+  "first": "francois-hollande",
+  "second": "valerie-trierweiler",
+  "relation": "partner",
+  "from": "2007",
+  "to": "2014"
+ },
+ {
+  "first": "francois-mauriac",
+  "second": "claude-mauriac",
+  "relation": "parent"
+ },
+ {
+  "first": "francois-mitterrand",
+  "second": "gilbert-mitterrand",
+  "relation": "parent"
+ },
+ {
+  "first": "francois-mitterrand",
+  "second": "jacques-mitterrand",
+  "relation": "sibling"
+ },
+ {
+  "first": "francois-mitterrand",
+  "second": "mazarine-pingeot",
+  "relation": "parent"
+ },
+ {
+  "first": "francoise-dolto",
+  "second": "carlos",
+  "relation": "parent"
+ },
+ {
+  "first": "francoise-dolto",
+  "second": "catherine-dolto",
+  "relation": "parent"
+ },
+ {
+  "first": "francoise-dolto",
+  "second": "jacques-marette",
+  "relation": "sibling"
+ },
+ {
+  "first": "francoise-dorin",
+  "second": "jean-piat",
+  "relation": "partner",
+  "from": "1975",
+  "to": "2018"
+ },
+ {
+  "first": "francoise-dorin",
+  "second": "jean-poiret",
+  "relation": "spouse",
+  "from": "1958",
+  "to": "1965"
+ },
+ {
+  "first": "francoise-gilot",
+  "second": "jonas-salk",
+  "relation": "spouse",
+  "from": "1970",
+  "to": "1995-06-23"
+ },
+ {
+  "first": "francoise-gilot",
+  "second": "pablo-picasso",
+  "relation": "partner",
+  "from": "1943",
+  "to": "1953"
  },
  {
   "first": "francoise-hardy",
@@ -729,10 +3804,57 @@
   "to": "2024"
  },
  {
+  "first": "francoise-hardy",
+  "second": "thomas-dutronc",
+  "relation": "parent"
+ },
+ {
+  "first": "francoise-mallet-joris",
+  "second": "robert-amadou",
+  "relation": "spouse",
+  "from": "1948"
+ },
+ {
+  "first": "frank-capra",
+  "second": "frank-capra-jr",
+  "relation": "parent"
+ },
+ {
+  "first": "frank-gifford",
+  "second": "kathie-lee-gifford",
+  "relation": "spouse",
+  "from": "1986-10-18",
+  "to": "2015"
+ },
+ {
+  "first": "frank-langella",
+  "second": "whoopi-goldberg",
+  "relation": "partner",
+  "from": "1995",
+  "to": "2000"
+ },
+ {
   "first": "frank-ocean",
   "second": "tyler-the-creator",
   "relation": "groupmate",
   "group": "Odd Future"
+ },
+ {
+  "first": "frank-sinatra",
+  "second": "frank-sinatra-jr",
+  "relation": "parent"
+ },
+ {
+  "first": "frank-sinatra",
+  "second": "mia-farrow",
+  "relation": "spouse",
+  "from": "1966-07-19",
+  "to": "1968-08-16"
+ },
+ {
+  "first": "frank-sinatra",
+  "second": "nancy-sinatra",
+  "relation": "parent"
  },
  {
   "first": "frank-sinatra",
@@ -741,10 +3863,37 @@
   "kinship": "goddaughter"
  },
  {
+  "first": "frank-sinatra-jr",
+  "second": "nancy-sinatra",
+  "relation": "sibling"
+ },
+ {
+  "first": "frans-de-cort",
+  "second": "philippe-dautzenberg",
+  "relation": "relative",
+  "kinship": "brother-in-law"
+ },
+ {
   "first": "fred-astaire",
   "second": "ginger-rogers",
   "relation": "groupmate",
   "group": "Fred Astaire and Ginger Rogers"
+ },
+ {
+  "first": "fred-mella",
+  "second": "paul-buissonneau",
+  "relation": "groupmate",
+  "group": "Les Compagnons de la chanson"
+ },
+ {
+  "first": "freddie-prinze",
+  "second": "freddie-prinze-jr",
+  "relation": "parent"
+ },
+ {
+  "first": "frederic-dard",
+  "second": "patrice-dard",
+  "relation": "parent"
  },
  {
   "first": "frederic-joliot-curie",
@@ -759,10 +3908,120 @@
   "kinship": "wife's mother"
  },
  {
+  "first": "frederic-mitterrand",
+  "second": "francois-mitterrand",
+  "relation": "relative",
+  "kinship": "father's brother"
+ },
+ {
+  "first": "frederic-mitterrand",
+  "second": "jacques-mitterrand",
+  "relation": "relative",
+  "kinship": "father's brother"
+ },
+ {
+  "first": "frederick-bousquet",
+  "second": "laure-manaudou",
+  "relation": "partner",
+  "from": "2008",
+  "to": "2013"
+ },
+ {
+  "first": "frederik-van-eeden",
+  "second": "betsy-van-vloten",
+  "relation": "relative",
+  "kinship": "sister-in-law"
+ },
+ {
   "first": "friedrich-engels",
   "second": "karl-marx",
   "relation": "groupmate",
   "group": "Karl Marx and Friedrich Engels"
+ },
+ {
+  "first": "fulvia-franco",
+  "second": "tiberio-mitri",
+  "relation": "spouse",
+  "from": "1950",
+  "to": "1954"
+ },
+ {
+  "first": "gabriel-faure",
+  "second": "henri-duparc",
+  "relation": "groupmate",
+  "group": "Le Petit Bayreuth"
+ },
+ {
+  "first": "gabriel-faure",
+  "second": "vincent-d-indy",
+  "relation": "groupmate",
+  "group": "Le Petit Bayreuth"
+ },
+ {
+  "first": "gaby-basset",
+  "second": "jean-gabin",
+  "relation": "spouse",
+  "from": "1925-02-26",
+  "to": "1930"
+ },
+ {
+  "first": "gaetano-marzotto",
+  "second": "umberto-marzotto",
+  "relation": "parent"
+ },
+ {
+  "first": "garry-marshall",
+  "second": "penny-marshall",
+  "relation": "sibling"
+ },
+ {
+  "first": "gary-crosby",
+  "second": "harry-crosby",
+  "relation": "sibling"
+ },
+ {
+  "first": "gary-crosby",
+  "second": "lindsay-crosby",
+  "relation": "sibling"
+ },
+ {
+  "first": "gary-crosby",
+  "second": "mary-crosby",
+  "relation": "sibling"
+ },
+ {
+  "first": "gary-crosby",
+  "second": "nathaniel-crosby",
+  "relation": "sibling"
+ },
+ {
+  "first": "gary-crosby",
+  "second": "phillip-crosby",
+  "relation": "sibling"
+ },
+ {
+  "first": "gavin-newsom",
+  "second": "kimberly-guilfoyle",
+  "relation": "spouse",
+  "from": "2001-12",
+  "to": "2006-02-28"
+ },
+ {
+  "first": "gene-simmons",
+  "second": "nick-simmons",
+  "relation": "parent"
+ },
+ {
+  "first": "genevieve-fontanel",
+  "second": "jacques-destoop",
+  "relation": "spouse",
+  "from": "1965",
+  "to": "2018-03-27"
+ },
+ {
+  "first": "georg-buchner",
+  "second": "luise-buchner",
+  "relation": "sibling"
  },
  {
   "first": "george-harrison",
@@ -796,9 +4055,26 @@
  },
  {
   "first": "george-harrison",
+  "second": "stuart-sutcliffe",
+  "relation": "groupmate",
+  "group": "The Beat Brothers"
+ },
+ {
+  "first": "george-harrison",
+  "second": "stuart-sutcliffe",
+  "relation": "groupmate",
+  "group": "The Beatles"
+ },
+ {
+  "first": "george-harrison",
   "second": "yoko-ono",
   "relation": "groupmate",
   "group": "Plastic Ono Band"
+ },
+ {
+  "first": "george-sand",
+  "second": "jules-sandeau",
+  "relation": "partner"
  },
  {
   "first": "george-sand",
@@ -826,9 +4102,139 @@
   "relation": "parent"
  },
  {
+  "first": "george-w-bush",
+  "second": "robin-bush",
+  "relation": "sibling"
+ },
+ {
+  "first": "george-washington-adams",
+  "second": "john-adams-ii",
+  "relation": "sibling"
+ },
+ {
+  "first": "georges-arditi",
+  "second": "pierre-arditi",
+  "relation": "parent"
+ },
+ {
+  "first": "georges-bataille",
+  "second": "sylvia-bataille",
+  "relation": "spouse",
+  "from": "1928",
+  "to": "1934"
+ },
+ {
+  "first": "georges-de-caunes",
+  "second": "antoine-de-caunes",
+  "relation": "parent"
+ },
+ {
+  "first": "georges-duhamel",
+  "second": "antoine-duhamel",
+  "relation": "parent"
+ },
+ {
+  "first": "georges-simenon",
+  "second": "marc-simenon",
+  "relation": "parent"
+ },
+ {
+  "first": "georges-vallerey-jr",
+  "second": "gisele-vallerey",
+  "relation": "sibling"
+ },
+ {
+  "first": "georges-wilson",
+  "second": "lambert-wilson",
+  "relation": "parent"
+ },
+ {
+  "first": "geraldine-chaplin",
+  "second": "sydney-chaplin",
+  "relation": "sibling"
+ },
+ {
+  "first": "geraldine-nakache",
+  "second": "olivier-nakache",
+  "relation": "sibling"
+ },
+ {
+  "first": "gerard-darmon",
+  "second": "mathilda-may",
+  "relation": "spouse",
+  "from": "1994",
+  "to": "1999"
+ },
+ {
+  "first": "gian-carlo-menotti",
+  "second": "samuel-barber",
+  "relation": "partner"
+ },
+ {
+  "first": "gian-vittorio-baldi",
+  "second": "macha-meril",
+  "relation": "spouse"
+ },
+ {
+  "first": "giancarlo-giannini",
+  "second": "adriano-giannini",
+  "relation": "parent"
+ },
+ {
+  "first": "giancarlo-giannini",
+  "second": "monica-guerritore",
+  "relation": "partner"
+ },
+ {
+  "first": "giani-esposito",
+  "second": "michele-mercier",
+  "relation": "partner"
+ },
+ {
+  "first": "gianluigi-buffon",
+  "second": "lorenzo-buffon",
+  "relation": "relative",
+  "kinship": "paternal cousin"
+ },
+ {
+  "first": "gianmarco-tognazzi",
+  "second": "maria-sole-tognazzi",
+  "relation": "sibling"
+ },
+ {
+  "first": "gianmarco-tognazzi",
+  "second": "ricky-tognazzi",
+  "relation": "sibling"
+ },
+ {
+  "first": "gianni-agnelli",
+  "second": "giovanni-alberto-agnelli",
+  "relation": "relative",
+  "kinship": "nephew"
+ },
+ {
   "first": "gianni-agnelli",
   "second": "jackie-kennedy",
   "relation": "partner"
+ },
+ {
+  "first": "gianni-agnelli",
+  "second": "marella-agnelli",
+  "relation": "spouse",
+  "from": "1953",
+  "to": "2003"
+ },
+ {
+  "first": "gianni-agnelli",
+  "second": "margherita-agnelli",
+  "relation": "parent"
+ },
+ {
+  "first": "gianni-morandi",
+  "second": "laura-efrikian",
+  "relation": "spouse",
+  "from": "1966",
+  "to": "1979"
  },
  {
   "first": "gigi-hadid",
@@ -836,6 +4242,31 @@
   "relation": "partner",
   "from": "2022-09",
   "to": "2023"
+ },
+ {
+  "first": "gilbert-mitterrand",
+  "second": "mazarine-pingeot",
+  "relation": "sibling"
+ },
+ {
+  "first": "gino-paoli",
+  "second": "stefania-sandrelli",
+  "relation": "partner"
+ },
+ {
+  "first": "giorgio-cagnotto",
+  "second": "tania-cagnotto",
+  "relation": "parent"
+ },
+ {
+  "first": "giovanna-fontana",
+  "second": "micol-fontana",
+  "relation": "sibling"
+ },
+ {
+  "first": "giovanna-fontana",
+  "second": "zoe-fontana",
+  "relation": "sibling"
  },
  {
   "first": "gisele-bundchen",
@@ -859,6 +4290,33 @@
   "to": "2022"
  },
  {
+  "first": "gisele-galante",
+  "second": "johnny-hallyday",
+  "relation": "partner",
+  "from": "1987",
+  "to": "1988"
+ },
+ {
+  "first": "glenn-davis",
+  "second": "terry-moore",
+  "relation": "spouse",
+  "from": "1951",
+  "to": "1952"
+ },
+ {
+  "first": "gloria-grahame",
+  "second": "nicholas-ray",
+  "relation": "spouse",
+  "from": "1948",
+  "to": "1952"
+ },
+ {
+  "first": "gloria-guida",
+  "second": "johnny-dorelli",
+  "relation": "spouse",
+  "from": "1991"
+ },
+ {
   "first": "goldie-hawn",
   "second": "kate-hudson",
   "relation": "parent"
@@ -868,6 +4326,11 @@
   "second": "kurt-russell",
   "relation": "partner",
   "from": "1983"
+ },
+ {
+  "first": "goldie-hawn",
+  "second": "wyatt-russell",
+  "relation": "parent"
  },
  {
   "first": "grace-kelly",
@@ -885,11 +4348,211 @@
   "relation": "parent"
  },
  {
+  "first": "grace-slick",
+  "second": "john-barbata",
+  "relation": "groupmate",
+  "group": "Jefferson Airplane"
+ },
+ {
+  "first": "grace-slick",
+  "second": "john-barbata",
+  "relation": "groupmate",
+  "group": "Jefferson Starship"
+ },
+ {
+  "first": "grand-duchess-anastasia-nikolaevna-of-russia",
+  "second": "grand-duchess-maria-nikolaevna-of-russia",
+  "relation": "sibling"
+ },
+ {
+  "first": "grand-duchess-anastasia-nikolaevna-of-russia",
+  "second": "grand-duchess-tatiana-nikolaevna-of-russia",
+  "relation": "sibling"
+ },
+ {
+  "first": "grand-duchess-maria-nikolaevna-of-russia",
+  "second": "grand-duchess-tatiana-nikolaevna-of-russia",
+  "relation": "sibling"
+ },
+ {
+  "first": "gregory-peck",
+  "second": "cecilia-peck",
+  "relation": "parent"
+ },
+ {
+  "first": "griffin-o-neal",
+  "second": "patrick-o-neal",
+  "relation": "sibling"
+ },
+ {
+  "first": "griffin-o-neal",
+  "second": "tatum-o-neal",
+  "relation": "sibling"
+ },
+ {
+  "first": "guglielmo-zucconi",
+  "second": "vittorio-zucconi",
+  "relation": "parent"
+ },
+ {
+  "first": "guido-brignone",
+  "second": "lilla-brignone",
+  "relation": "parent"
+ },
+ {
+  "first": "guido-gezelle",
+  "second": "stijn-streuvels",
+  "relation": "relative",
+  "kinship": "nephew"
+ },
+ {
+  "first": "guillaume-apollinaire",
+  "second": "marie-laurencin",
+  "relation": "partner",
+  "from": "1908"
+ },
+ {
+  "first": "guillaume-bigourdan",
+  "second": "ernest-amedee-barthelemy-mouchez",
+  "relation": "relative",
+  "kinship": "father-in-law"
+ },
+ {
+  "first": "guillaume-canet",
+  "second": "marion-cotillard",
+  "relation": "partner",
+  "from": "2007",
+  "to": "2025"
+ },
+ {
+  "first": "guillaume-depardieu",
+  "second": "julie-depardieu",
+  "relation": "sibling"
+ },
+ {
+  "first": "guy-bedos",
+  "second": "sophie-daumier",
+  "relation": "spouse",
+  "from": "1965-02-19",
+  "to": "1977"
+ },
+ {
+  "first": "guy-camberabero",
+  "second": "lilian-camberabero",
+  "relation": "sibling"
+ },
+ {
+  "first": "gwyneth-paltrow",
+  "second": "robert-sean-leonard",
+  "relation": "partner",
+  "from": "1991",
+  "to": "1992"
+ },
+ {
+  "first": "halle-berry",
+  "second": "olivier-martinez",
+  "relation": "spouse",
+  "from": "2013-07-13",
+  "to": "2016-12"
+ },
+ {
+  "first": "hans-geiger",
+  "second": "rudolf-geiger",
+  "relation": "sibling"
+ },
+ {
+  "first": "harald-v",
+  "second": "queen-sonja-of-norway",
+  "relation": "spouse",
+  "from": "1968-08-29",
+  "to": "2026-08-28"
+ },
+ {
+  "first": "harry-crosby",
+  "second": "lindsay-crosby",
+  "relation": "sibling"
+ },
+ {
+  "first": "harry-crosby",
+  "second": "mary-crosby",
+  "relation": "sibling"
+ },
+ {
+  "first": "harry-crosby",
+  "second": "nathaniel-crosby",
+  "relation": "sibling"
+ },
+ {
+  "first": "harry-crosby",
+  "second": "phillip-crosby",
+  "relation": "sibling"
+ },
+ {
+  "first": "harry-meyen",
+  "second": "romy-schneider",
+  "relation": "spouse",
+  "from": "1966-07-15",
+  "to": "1975-07-05"
+ },
+ {
+  "first": "heather-locklear",
+  "second": "richie-sambora",
+  "relation": "spouse",
+  "from": "1994-12-17",
+  "to": "2007-04-11"
+ },
+ {
+  "first": "heinrich-hertz",
+  "second": "gustav-ludwig-hertz",
+  "relation": "relative",
+  "kinship": "nephew"
+ },
+ {
+  "first": "heinrich-mann",
+  "second": "thomas-mann",
+  "relation": "sibling"
+ },
+ {
+  "first": "helena-noguerra",
+  "second": "philippe-katerine",
+  "relation": "spouse",
+  "from": "1999",
+  "to": "2008"
+ },
+ {
+  "first": "helene-carrere-d-encausse",
+  "second": "emmanuel-carrere",
+  "relation": "parent"
+ },
+ {
+  "first": "helene-rytmann",
+  "second": "louis-althusser",
+  "relation": "spouse",
+  "to": "1980-11",
+  "from": "1946"
+ },
+ {
+  "first": "hendrik-albertus-brouwer",
+  "second": "luitzen-egbertus-jan-brouwer",
+  "relation": "sibling"
+ },
+ {
   "first": "henri-de-toulouse-lautrec",
   "second": "suzanne-valadon",
   "relation": "partner",
   "from": "1884",
   "to": "1888"
+ },
+ {
+  "first": "henri-decoin",
+  "second": "didier-decoin",
+  "relation": "parent"
+ },
+ {
+  "first": "henri-duparc",
+  "second": "vincent-d-indy",
+  "relation": "groupmate",
+  "group": "Le Petit Bayreuth"
  },
  {
   "first": "henri-iv",
@@ -910,6 +4573,38 @@
   "kinship": "son of father's brother"
  },
  {
+  "first": "henri-queffelec",
+  "second": "anne-queffelec",
+  "relation": "parent"
+ },
+ {
+  "first": "henri-queffelec",
+  "second": "yann-queffelec",
+  "relation": "parent"
+ },
+ {
+  "first": "henri-vidal",
+  "second": "michele-morgan",
+  "relation": "spouse",
+  "from": "1950",
+  "to": "1959-12-10"
+ },
+ {
+  "first": "henry-bataille",
+  "second": "yvonne-de-bray",
+  "relation": "spouse"
+ },
+ {
+  "first": "henry-bauchau",
+  "second": "patrick-bauchau",
+  "relation": "parent"
+ },
+ {
+  "first": "henry-lewis",
+  "second": "marilyn-horne",
+  "relation": "spouse"
+ },
+ {
   "first": "henry-viii",
   "second": "edward-vi",
   "relation": "parent"
@@ -925,10 +4620,73 @@
   "relation": "parent"
  },
  {
+  "first": "howard-hewett",
+  "second": "nia-peeples",
+  "relation": "spouse",
+  "from": "1989",
+  "to": "1993"
+ },
+ {
+  "first": "howard-kaylan",
+  "second": "john-barbata",
+  "relation": "groupmate",
+  "group": "The Turtles"
+ },
+ {
+  "first": "howard-kaylan",
+  "second": "terry-bozzio",
+  "relation": "groupmate",
+  "group": "The Mothers of Invention"
+ },
+ {
+  "first": "hugh-hefner",
+  "second": "christie-hefner",
+  "relation": "parent"
+ },
+ {
+  "first": "hugues-aufray",
+  "second": "pascale-audret",
+  "relation": "sibling"
+ },
+ {
+  "first": "ian-stewart",
+  "second": "keith-richards",
+  "relation": "groupmate",
+  "group": "The Rolling Stones"
+ },
+ {
+  "first": "ian-stewart",
+  "second": "mick-jagger",
+  "relation": "groupmate",
+  "group": "All-Stars"
+ },
+ {
+  "first": "ian-stewart",
+  "second": "mick-jagger",
+  "relation": "groupmate",
+  "group": "The Rolling Stones"
+ },
+ {
+  "first": "ian-tough",
+  "second": "janette-tough",
+  "relation": "groupmate",
+  "group": "The Krankies"
+ },
+ {
+  "first": "ian-tough",
+  "second": "janette-tough",
+  "relation": "spouse"
+ },
+ {
   "first": "ice-cube",
   "second": "snoop-dogg",
   "relation": "groupmate",
   "group": "Mount Westmore"
+ },
+ {
+  "first": "ingrid-bergman",
+  "second": "isabella-rossellini",
+  "relation": "parent"
  },
  {
   "first": "ingrid-bergman",
@@ -938,9 +4696,102 @@
   "to": "1957-11-07"
  },
  {
+  "first": "isaac-israels",
+  "second": "johanna-van-gogh-bonger",
+  "relation": "partner"
+ },
+ {
+  "first": "isabella-rossellini",
+  "second": "martin-scorsese",
+  "relation": "spouse",
+  "from": "1979",
+  "to": "1982"
+ },
+ {
   "first": "isabelle-adjani",
   "second": "warren-beatty",
   "relation": "partner"
+ },
+ {
+  "first": "isabelle-duchesnay",
+  "second": "paul-duchesnay",
+  "relation": "groupmate",
+  "group": "The Duchesnays"
+ },
+ {
+  "first": "isabelle-duchesnay",
+  "second": "paul-duchesnay",
+  "relation": "sibling"
+ },
+ {
+  "first": "isabelle-fournier-riviere",
+  "second": "jacques-riviere",
+  "relation": "spouse"
+ },
+ {
+  "first": "isolde-wagner",
+  "second": "siegfried-wagner",
+  "relation": "sibling"
+ },
+ {
+  "first": "ivano-fossati",
+  "second": "mia-martini",
+  "relation": "partner",
+  "from": "1977",
+  "to": "1979"
+ },
+ {
+  "first": "ivano-fossati",
+  "second": "nancy-brilli",
+  "relation": "partner",
+  "from": "1991",
+  "to": "1994"
+ },
+ {
+  "first": "j-h-rosny-aine",
+  "second": "j-h-rosny-jeune",
+  "relation": "groupmate",
+  "group": "J.-H. Rosny"
+ },
+ {
+  "first": "j-h-rosny-aine",
+  "second": "j-h-rosny-jeune",
+  "relation": "sibling"
+ },
+ {
+  "first": "jack-haley-jr",
+  "second": "liza-minnelli",
+  "relation": "spouse",
+  "from": "1974-09-15",
+  "to": "1979-04"
+ },
+ {
+  "first": "jack-jones",
+  "second": "jill-st-john",
+  "relation": "spouse",
+  "from": "1967",
+  "to": "1969"
+ },
+ {
+  "first": "jack-lang",
+  "second": "valerie-lang",
+  "relation": "parent"
+ },
+ {
+  "first": "jack-schwartzman",
+  "second": "jason-schwartzman",
+  "relation": "parent"
+ },
+ {
+  "first": "jackie-kennedy",
+  "second": "caroline-kennedy",
+  "relation": "parent"
+ },
+ {
+  "first": "jackie-kennedy",
+  "second": "christina-onassis",
+  "relation": "relative",
+  "kinship": "stepdaughter"
  },
  {
   "first": "jackie-kennedy",
@@ -948,6 +4799,23 @@
   "relation": "spouse",
   "from": "1953-09-12",
   "to": "1963-11-22"
+ },
+ {
+  "first": "jackie-kennedy",
+  "second": "lee-radziwill",
+  "relation": "sibling"
+ },
+ {
+  "first": "jackie-kennedy",
+  "second": "maurice-tempelsman",
+  "relation": "partner",
+  "from": "1980",
+  "to": "1994-05-19"
+ },
+ {
+  "first": "jaclyn-dahm",
+  "second": "nicole-dahm",
+  "relation": "sibling"
  },
  {
   "first": "jacob-grimm",
@@ -961,11 +4829,104 @@
   "relation": "sibling"
  },
  {
+  "first": "jacob-maris",
+  "second": "matthijs-maris",
+  "relation": "sibling"
+ },
+ {
+  "first": "jacob-maris",
+  "second": "willem-maris",
+  "relation": "sibling"
+ },
+ {
+  "first": "jacques-becker",
+  "second": "jean-becker",
+  "relation": "parent"
+ },
+ {
+  "first": "jacques-bens",
+  "second": "celestin-freinet",
+  "relation": "relative",
+  "kinship": "father-in-law"
+ },
+ {
+  "first": "jacques-brel",
+  "second": "bruno-brel",
+  "relation": "relative",
+  "kinship": "nephew"
+ },
+ {
+  "first": "jacques-brel",
+  "second": "therese-michielsen",
+  "relation": "spouse",
+  "from": "1950-06"
+ },
+ {
+  "first": "jacques-carlu",
+  "second": "jean-carlu",
+  "relation": "sibling"
+ },
+ {
+  "first": "jacques-chirac",
+  "second": "claude-chirac",
+  "relation": "parent"
+ },
+ {
+  "first": "jacques-chirac",
+  "second": "laurence-chirac",
+  "relation": "parent"
+ },
+ {
+  "first": "jacques-dacqmine",
+  "second": "odile-versois",
+  "relation": "spouse"
+ },
+ {
+  "first": "jacques-delors",
+  "second": "martine-aubry",
+  "relation": "parent"
+ },
+ {
+  "first": "jacques-dutronc",
+  "second": "thomas-dutronc",
+  "relation": "parent"
+ },
+ {
+  "first": "jacques-lacan",
+  "second": "sylvia-bataille",
+  "relation": "spouse",
+  "from": "1953-07-17",
+  "to": "1981-09-09"
+ },
+ {
+  "first": "jacques-verges",
+  "second": "francoise-verges",
+  "relation": "relative",
+  "kinship": "fraternal niece"
+ },
+ {
+  "first": "jacques-verges",
+  "second": "paul-verges",
+  "relation": "sibling"
+ },
+ {
   "first": "jake-gyllenhaal",
   "second": "kirsten-dunst",
   "relation": "partner",
   "from": "2002",
   "to": "2004"
+ },
+ {
+  "first": "james-brolin",
+  "second": "jason-gould",
+  "relation": "relative",
+  "kinship": "stepson",
+  "from": "1998"
+ },
+ {
+  "first": "james-brolin",
+  "second": "josh-brolin",
+  "relation": "parent"
  },
  {
   "first": "james-hetfield",
@@ -986,6 +4947,39 @@
   "group": "The Gak"
  },
  {
+  "first": "james-joyce",
+  "second": "lucia-joyce",
+  "relation": "parent"
+ },
+ {
+  "first": "james-prime",
+  "second": "ricky-ross",
+  "relation": "groupmate",
+  "group": "Deacon Blue"
+ },
+ {
+  "first": "james-taylor",
+  "second": "livingston-taylor",
+  "relation": "sibling"
+ },
+ {
+  "first": "jamie-lee-curtis",
+  "second": "kelly-curtis",
+  "relation": "sibling"
+ },
+ {
+  "first": "jane-fonda",
+  "second": "peter-fonda",
+  "relation": "sibling"
+ },
+ {
+  "first": "jane-fonda",
+  "second": "roger-vadim",
+  "relation": "spouse",
+  "from": "1965-08-14",
+  "to": "1973"
+ },
+ {
   "first": "jane-fonda",
   "second": "ted-turner",
   "relation": "spouse",
@@ -993,10 +4987,37 @@
   "to": "2001"
  },
  {
+  "first": "jane-fonda",
+  "second": "troy-garity",
+  "relation": "parent"
+ },
+ {
   "first": "javier-bardem",
   "second": "penelope-cruz",
   "relation": "spouse",
   "from": "2010-07"
+ },
+ {
+  "first": "jay-leno",
+  "second": "mavis-leno",
+  "relation": "spouse",
+  "from": "1980-11-30"
+ },
+ {
+  "first": "jayne-mansfield",
+  "second": "mariska-hargitay",
+  "relation": "parent"
+ },
+ {
+  "first": "jean-arp",
+  "second": "udo-jurgens",
+  "relation": "relative",
+  "kinship": "nephew"
+ },
+ {
+  "first": "jean-chevrier",
+  "second": "marie-bell",
+  "relation": "spouse"
  },
  {
   "first": "jean-cocteau",
@@ -1006,9 +5027,53 @@
   "to": "1963"
  },
  {
+  "first": "jean-cocteau",
+  "second": "raymond-radiguet",
+  "relation": "partner",
+  "from": "1919",
+  "to": "1924"
+ },
+ {
+  "first": "jean-d-ormesson",
+  "second": "louis-malle",
+  "relation": "relative",
+  "kinship": "cousin"
+ },
+ {
+  "first": "jean-desailly",
+  "second": "simone-valere",
+  "relation": "spouse",
+  "from": "1950",
+  "to": "2008"
+ },
+ {
   "first": "jean-gabin",
   "second": "marlene-dietrich",
   "relation": "partner"
+ },
+ {
+  "first": "jean-hamburger",
+  "second": "michel-berger",
+  "relation": "parent"
+ },
+ {
+  "first": "jean-harlow",
+  "second": "paul-bern",
+  "relation": "spouse",
+  "from": "1932-06",
+  "to": "1932-09-05"
+ },
+ {
+  "first": "jean-lhermitte",
+  "second": "thierry-lhermitte",
+  "relation": "parent"
+ },
+ {
+  "first": "jean-paul-belmondo",
+  "second": "natty-tardivel",
+  "relation": "spouse",
+  "from": "2002-12-29",
+  "to": "2008-09-05"
  },
  {
   "first": "jean-paul-sartre",
@@ -1016,11 +5081,77 @@
   "relation": "partner"
  },
  {
+  "first": "jean-prevost",
+  "second": "francoise-prevost",
+  "relation": "parent"
+ },
+ {
+  "first": "jean-prevost",
+  "second": "marcelle-auclair",
+  "relation": "spouse"
+ },
+ {
+  "first": "jean-rochefort",
+  "second": "nicole-garcia",
+  "relation": "partner"
+ },
+ {
+  "first": "jean-tinguely",
+  "second": "niki-de-saint-phalle",
+  "relation": "spouse",
+  "from": "1971-07-13",
+  "to": "1991-08-30"
+ },
+ {
+  "first": "jean-vilar",
+  "second": "dominique-vilar",
+  "relation": "parent"
+ },
+ {
+  "first": "jean-yanne",
+  "second": "nicole-calfan",
+  "relation": "partner"
+ },
+ {
+  "first": "jean-yanne",
+  "second": "nicole-calfan",
+  "relation": "spouse"
+ },
+ {
   "first": "jennifer-aniston",
   "second": "vince-vaughn",
   "relation": "partner",
   "from": "2005",
   "to": "2006"
+ },
+ {
+  "first": "jennifer-carpenter",
+  "second": "michael-c-hall",
+  "relation": "spouse",
+  "from": "2008",
+  "to": "2011"
+ },
+ {
+  "first": "jennifer-jones",
+  "second": "robert-walker-jr",
+  "relation": "parent"
+ },
+ {
+  "first": "jerome-seydoux",
+  "second": "lea-seydoux",
+  "relation": "relative",
+  "kinship": "granddaughter"
+ },
+ {
+  "first": "jerry-brown",
+  "second": "kathleen-brown",
+  "relation": "sibling"
+ },
+ {
+  "first": "jerry-garcia",
+  "second": "skip-battin",
+  "relation": "groupmate",
+  "group": "New Riders of the Purple Sage"
  },
  {
   "first": "jerry-lee-lewis",
@@ -1035,11 +5166,132 @@
   "group": "Million Dollar Quartet"
  },
  {
+  "first": "jerry-zucker",
+  "second": "jim-abrahams",
+  "relation": "groupmate",
+  "group": "Zucker, Abrahams and Zucker"
+ },
+ {
+  "first": "jessica-biel",
+  "second": "justin-timberlake",
+  "relation": "spouse",
+  "from": "2012-10-19"
+ },
+ {
+  "first": "jessica-lange",
+  "second": "sam-shepard",
+  "relation": "partner",
+  "from": "1982",
+  "to": "2010"
+ },
+ {
+  "first": "jill-st-john",
+  "second": "robert-wagner",
+  "relation": "spouse",
+  "from": "1990"
+ },
+ {
   "first": "jim-carrey",
   "second": "renee-zellweger",
   "relation": "partner",
   "from": "1999",
   "to": "2000"
+ },
+ {
+  "first": "jim-kerr",
+  "second": "mick-macneil",
+  "relation": "groupmate",
+  "group": "Simple Minds"
+ },
+ {
+  "first": "jim-morrison",
+  "second": "john-densmore",
+  "relation": "groupmate",
+  "group": "The Doors"
+ },
+ {
+  "first": "jim-morrison",
+  "second": "pamela-courson",
+  "relation": "partner",
+  "from": "1965",
+  "to": "1967-09-30"
+ },
+ {
+  "first": "jim-morrison",
+  "second": "pamela-courson",
+  "relation": "spouse",
+  "from": "1967-09-30",
+  "to": "1971-07-03"
+ },
+ {
+  "first": "jim-sillars",
+  "second": "margo-macdonald",
+  "relation": "spouse"
+ },
+ {
+  "first": "joan-baez",
+  "second": "mimi-farina",
+  "relation": "sibling"
+ },
+ {
+  "first": "joanne-woodward",
+  "second": "paul-newman",
+  "relation": "spouse",
+  "from": "1958-01-29",
+  "to": "2008-09-26"
+ },
+ {
+  "first": "joe-niekro",
+  "second": "phil-niekro",
+  "relation": "sibling"
+ },
+ {
+  "first": "joe-perry",
+  "second": "johnny-depp",
+  "relation": "groupmate",
+  "group": "Hollywood Vampires"
+ },
+ {
+  "first": "joey-luft",
+  "second": "liza-minnelli",
+  "relation": "sibling"
+ },
+ {
+  "first": "joey-luft",
+  "second": "lorna-luft",
+  "relation": "sibling"
+ },
+ {
+  "first": "joey-mcintyre",
+  "second": "jonathan-knight",
+  "relation": "groupmate",
+  "group": "New Kids on the Block"
+ },
+ {
+  "first": "joey-mcintyre",
+  "second": "jordan-knight",
+  "relation": "groupmate",
+  "group": "New Kids on the Block"
+ },
+ {
+  "first": "joeystarr",
+  "second": "kool-shen",
+  "relation": "groupmate",
+  "group": "Suprême NTM"
+ },
+ {
+  "first": "joeystarr",
+  "second": "maiwenn",
+  "relation": "spouse",
+  "from": "2008",
+  "to": "2012"
+ },
+ {
+  "first": "john-agar",
+  "second": "shirley-temple",
+  "relation": "spouse",
+  "from": "1945",
+  "to": "1950"
  },
  {
   "first": "john-cleese",
@@ -1066,6 +5318,16 @@
   "group": "Thelonious Monk Septet"
  },
  {
+  "first": "john-drew-barrymore",
+  "second": "drew-barrymore",
+  "relation": "parent"
+ },
+ {
+  "first": "john-f-kennedy",
+  "second": "caroline-kennedy",
+  "relation": "parent"
+ },
+ {
   "first": "john-f-kennedy",
   "second": "marilyn-monroe",
   "relation": "partner"
@@ -1079,6 +5341,18 @@
   "first": "john-f-kennedy",
   "second": "ted-kennedy",
   "relation": "sibling"
+ },
+ {
+  "first": "johnny-cash",
+  "second": "kris-kristofferson",
+  "relation": "groupmate",
+  "group": "The Highwaymen"
+ },
+ {
+  "first": "johnny-cash",
+  "second": "waylon-jennings",
+  "relation": "groupmate",
+  "group": "The Highwaymen"
  },
  {
   "first": "johnny-cash",
@@ -1102,6 +5376,18 @@
  },
  {
   "first": "johnny-hallyday",
+  "second": "david-hallyday",
+  "relation": "parent"
+ },
+ {
+  "first": "johnny-hallyday",
+  "second": "nathalie-baye",
+  "relation": "partner",
+  "from": "1982",
+  "to": "1986-03"
+ },
+ {
+  "first": "johnny-hallyday",
   "second": "sylvie-vartan",
   "relation": "groupmate",
   "group": "Sylvie Vartan and Johnny Hallyday"
@@ -1112,6 +5398,34 @@
   "relation": "spouse",
   "from": "1965-04-12",
   "to": "1980-11-05"
+ },
+ {
+  "first": "johnny-mcelhone",
+  "second": "sharleen-spiteri",
+  "relation": "groupmate",
+  "group": "Texas"
+ },
+ {
+  "first": "jon-bon-jovi",
+  "second": "richie-sambora",
+  "relation": "groupmate",
+  "group": "Bon Jovi"
+ },
+ {
+  "first": "jonathan-knight",
+  "second": "jordan-knight",
+  "relation": "groupmate",
+  "group": "New Kids on the Block"
+ },
+ {
+  "first": "jonathan-knight",
+  "second": "jordan-knight",
+  "relation": "sibling"
+ },
+ {
+  "first": "jose-carreras",
+  "second": "katia-ricciarelli",
+  "relation": "spouse"
  },
  {
   "first": "jose-carreras",
@@ -1126,8 +5440,31 @@
   "group": "The Three Tenors"
  },
  {
+  "first": "josette-day",
+  "second": "marcel-pagnol",
+  "relation": "spouse",
+  "from": "1939",
+  "to": "1944"
+ },
+ {
+  "first": "josiane-balasko",
+  "second": "marilou-berry",
+  "relation": "parent"
+ },
+ {
   "first": "juan-carlos-i",
   "second": "felipe-vi",
+  "relation": "parent"
+ },
+ {
+  "first": "judith-godreche",
+  "second": "maurice-barthelemy",
+  "relation": "partner",
+  "from": "2004"
+ },
+ {
+  "first": "judy-garland",
+  "second": "joey-luft",
   "relation": "parent"
  },
  {
@@ -1136,9 +5473,71 @@
   "relation": "parent"
  },
  {
+  "first": "judy-garland",
+  "second": "lorna-luft",
+  "relation": "parent"
+ },
+ {
+  "first": "jules-berry",
+  "second": "suzy-prim",
+  "relation": "partner"
+ },
+ {
+  "first": "jules-lemaitre",
+  "second": "marie-anne-detourbay",
+  "relation": "partner"
+ },
+ {
   "first": "julia-roberts",
   "second": "kiefer-sutherland",
   "relation": "partner"
+ },
+ {
+  "first": "julie-depardieu",
+  "second": "philippe-katerine",
+  "relation": "partner"
+ },
+ {
+  "first": "juliette-binoche",
+  "second": "leos-carax",
+  "relation": "partner",
+  "from": "1986",
+  "to": "1991"
+ },
+ {
+  "first": "juliette-binoche",
+  "second": "olivier-martinez",
+  "relation": "partner",
+  "from": "1994",
+  "to": "1998"
+ },
+ {
+  "first": "juliette-drouet",
+  "second": "victor-hugo",
+  "relation": "partner",
+  "from": "1833",
+  "to": "1883"
+ },
+ {
+  "first": "juliette-greco",
+  "second": "michel-piccoli",
+  "relation": "spouse",
+  "from": "1966",
+  "to": "1977"
+ },
+ {
+  "first": "juliette-greco",
+  "second": "philippe-lemaire",
+  "relation": "spouse",
+  "from": "1953-06-25",
+  "to": "1956"
+ },
+ {
+  "first": "juliette-mayniel",
+  "second": "vittorio-gassman",
+  "relation": "partner",
+  "from": "1964",
+  "to": "1968"
  },
  {
   "first": "julio-iglesias",
@@ -1152,10 +5551,73 @@
   "group": "Hermanos"
  },
  {
+  "first": "june-pointer",
+  "second": "ruth-pointer",
+  "relation": "groupmate",
+  "group": "The Pointer Sisters"
+ },
+ {
+  "first": "june-pointer",
+  "second": "ruth-pointer",
+  "relation": "sibling"
+ },
+ {
+  "first": "justin-timberlake",
+  "second": "will-i-am",
+  "relation": "groupmate",
+  "group": "Jawbreakers"
+ },
+ {
   "first": "justin-trudeau",
   "second": "katy-perry",
   "relation": "partner",
   "from": "2025"
+ },
+ {
+  "first": "karen-carpenter",
+  "second": "richard-carpenter",
+  "relation": "groupmate",
+  "group": "The Carpenters"
+ },
+ {
+  "first": "karen-carpenter",
+  "second": "richard-carpenter",
+  "relation": "sibling"
+ },
+ {
+  "first": "karl-walser",
+  "second": "robert-walser",
+  "relation": "sibling"
+ },
+ {
+  "first": "karl-zero",
+  "second": "frigide-barjot",
+  "relation": "relative",
+  "kinship": "brother's wife"
+ },
+ {
+  "first": "kate-bosworth",
+  "second": "orlando-bloom",
+  "relation": "partner",
+  "from": "2003",
+  "to": "2006"
+ },
+ {
+  "first": "kate-hudson",
+  "second": "wyatt-russell",
+  "relation": "relative",
+  "kinship": "maternal half-brother"
+ },
+ {
+  "first": "katia-labeque",
+  "second": "marielle-labeque",
+  "relation": "groupmate",
+  "group": "Katia and Marielle Labèque"
+ },
+ {
+  "first": "katia-labeque",
+  "second": "marielle-labeque",
+  "relation": "sibling"
  },
  {
   "first": "katy-perry",
@@ -1203,6 +5665,28 @@
   "relation": "sibling"
  },
  {
+  "first": "kenny-chesney",
+  "second": "renee-zellweger",
+  "relation": "spouse",
+  "from": "2005",
+  "to": "2005"
+ },
+ {
+  "first": "kevin-dillon",
+  "second": "matt-dillon",
+  "relation": "sibling"
+ },
+ {
+  "first": "kevin-mccarthy",
+  "second": "mary-mccarthy",
+  "relation": "sibling"
+ },
+ {
+  "first": "kevin-tillman",
+  "second": "pat-tillman",
+  "relation": "sibling"
+ },
+ {
   "first": "khloe-kardashian",
   "second": "kim-kardashian",
   "relation": "sibling"
@@ -1218,6 +5702,11 @@
   "relation": "sibling"
  },
  {
+  "first": "kim-chapiron",
+  "second": "ludivine-sagnier",
+  "relation": "spouse"
+ },
+ {
   "first": "kim-kardashian",
   "second": "kourtney-kardashian",
   "relation": "sibling"
@@ -1229,13 +5718,28 @@
  },
  {
   "first": "kirk-douglas",
+  "second": "eric-douglas",
+  "relation": "parent"
+ },
+ {
+  "first": "kirk-douglas",
   "second": "michael-douglas",
+  "relation": "parent"
+ },
+ {
+  "first": "kirk-douglas",
+  "second": "peter-douglas",
   "relation": "parent"
  },
  {
   "first": "klaus-kinski",
   "second": "nastassja-kinski",
   "relation": "parent"
+ },
+ {
+  "first": "knox-jolie-pitt",
+  "second": "vivienne-jolie",
+  "relation": "sibling"
  },
  {
   "first": "kourtney-kardashian",
@@ -1268,10 +5772,69 @@
   "relation": "parent"
  },
  {
+  "first": "kris-kristofferson",
+  "second": "rita-coolidge",
+  "relation": "spouse",
+  "from": "1973",
+  "to": "1980"
+ },
+ {
+  "first": "kris-kristofferson",
+  "second": "waylon-jennings",
+  "relation": "groupmate",
+  "group": "The Highwaymen"
+ },
+ {
+  "first": "kris-kristofferson",
+  "second": "willie-nelson",
+  "relation": "groupmate",
+  "group": "The Highwaymen"
+ },
+ {
+  "first": "kristen-stewart",
+  "second": "soko",
+  "relation": "partner",
+  "from": "2016-03",
+  "to": "2016-05"
+ },
+ {
+  "first": "kurt-cobain",
+  "second": "frances-bean-cobain",
+  "relation": "parent"
+ },
+ {
+  "first": "kurt-russell",
+  "second": "wyatt-russell",
+  "relation": "parent"
+ },
+ {
+  "first": "kyle-petty",
+  "second": "adam-petty",
+  "relation": "parent"
+ },
+ {
   "first": "kylie-jenner",
   "second": "timothee-chalamet",
   "relation": "partner",
   "from": "2023"
+ },
+ {
+  "first": "laetitia-casta",
+  "second": "louis-garrel",
+  "relation": "spouse",
+  "from": "2017-06-10"
+ },
+ {
+  "first": "laetitia-casta",
+  "second": "stefano-accorsi",
+  "relation": "partner",
+  "from": "2003",
+  "to": "2013"
+ },
+ {
+  "first": "lana-turner",
+  "second": "cheryl-crane",
+  "relation": "parent"
  },
  {
   "first": "laura-dern",
@@ -1279,10 +5842,92 @@
   "relation": "partner"
  },
  {
+  "first": "laura-ling",
+  "second": "lisa-ling",
+  "relation": "sibling"
+ },
+ {
+  "first": "laurent-naouri",
+  "second": "natalie-dessay",
+  "relation": "spouse"
+ },
+ {
+  "first": "laurent-spanghero",
+  "second": "walter-spanghero",
+  "relation": "sibling"
+ },
+ {
+  "first": "lee-petty",
+  "second": "richard-petty",
+  "relation": "parent"
+ },
+ {
+  "first": "leila-bekhti",
+  "second": "tahar-rahim",
+  "relation": "spouse",
+  "from": "2010"
+ },
+ {
+  "first": "leon-augustin-lhermitte",
+  "second": "jean-lhermitte",
+  "relation": "parent"
+ },
+ {
+  "first": "leon-smet",
+  "second": "johnny-hallyday",
+  "relation": "parent"
+ },
+ {
   "first": "leonardo-dicaprio",
   "second": "martin-scorsese",
   "relation": "groupmate",
   "group": "Martin Scorsese and Leonardo DiCaprio"
+ },
+ {
+  "first": "leslie-caron",
+  "second": "warren-beatty",
+  "relation": "partner"
+ },
+ {
+  "first": "liev-schreiber",
+  "second": "naomi-watts",
+  "relation": "partner",
+  "from": "2005",
+  "to": "2016"
+ },
+ {
+  "first": "liliane-bettencourt",
+  "second": "francoise-bettencourt-meyers",
+  "relation": "parent"
+ },
+ {
+  "first": "linda-kaye-henning",
+  "second": "mike-minor",
+  "relation": "spouse",
+  "from": "1968",
+  "to": "1973"
+ },
+ {
+  "first": "linda-perry",
+  "second": "sara-gilbert",
+  "relation": "spouse",
+  "from": "2014",
+  "to": "2019"
+ },
+ {
+  "first": "lindsay-crosby",
+  "second": "mary-crosby",
+  "relation": "sibling"
+ },
+ {
+  "first": "lindsay-crosby",
+  "second": "nathaniel-crosby",
+  "relation": "sibling"
+ },
+ {
+  "first": "lindsay-crosby",
+  "second": "phillip-crosby",
+  "relation": "sibling"
  },
  {
   "first": "lindsey-buckingham",
@@ -1305,9 +5950,112 @@
   "to": "2015"
  },
  {
+  "first": "lino-banfi",
+  "second": "rosanna-banfi",
+  "relation": "parent"
+ },
+ {
+  "first": "lionel-jospin",
+  "second": "noelle-chatelet",
+  "relation": "sibling"
+ },
+ {
+  "first": "lionel-jospin",
+  "second": "sylviane-agacinski",
+  "relation": "spouse",
+  "from": "1994",
+  "to": "2026"
+ },
+ {
+  "first": "liza-minnelli",
+  "second": "lorna-luft",
+  "relation": "sibling"
+ },
+ {
+  "first": "lizzy-caplan",
+  "second": "matthew-perry",
+  "relation": "partner",
+  "from": "2006",
+  "to": "2012"
+ },
+ {
+  "first": "lloyd-bridges",
+  "second": "beau-bridges",
+  "relation": "parent"
+ },
+ {
+  "first": "lloyd-bridges",
+  "second": "jeff-bridges",
+  "relation": "parent"
+ },
+ {
+  "first": "loick-peyron",
+  "second": "stephane-peyron",
+  "relation": "sibling"
+ },
+ {
+  "first": "loleh-bellon",
+  "second": "yannick-bellon",
+  "relation": "sibling"
+ },
+ {
+  "first": "loredana-berte",
+  "second": "mia-martini",
+  "relation": "groupmate",
+  "group": "Hermanas Bertè"
+ },
+ {
+  "first": "loredana-berte",
+  "second": "mia-martini",
+  "relation": "sibling"
+ },
+ {
+  "first": "loris-stecca",
+  "second": "maurizio-stecca",
+  "relation": "sibling"
+ },
+ {
+  "first": "louis-de-broglie",
+  "second": "maurice-de-broglie",
+  "relation": "sibling"
+ },
+ {
+  "first": "louis-garrel",
+  "second": "maurice-garrel",
+  "relation": "relative",
+  "kinship": "paternal grandfather"
+ },
+ {
+  "first": "louis-garrel",
+  "second": "valeria-bruni-tedeschi",
+  "relation": "partner",
+  "from": "2007",
+  "to": "2012"
+ },
+ {
+  "first": "louis-schweitzer",
+  "second": "jean-paul-sartre",
+  "relation": "relative",
+  "kinship": "male first cousin"
+ },
+ {
   "first": "louis-xiii",
   "second": "louis-xiv",
   "relation": "parent"
+ },
+ {
+  "first": "lourdes-leon",
+  "second": "timothee-chalamet",
+  "relation": "partner",
+  "from": "2013",
+  "to": "2014"
+ },
+ {
+  "first": "luc-besson",
+  "second": "maiwenn",
+  "relation": "spouse",
+  "from": "1992",
+  "to": "1997"
  },
  {
   "first": "luc-ferry",
@@ -1316,10 +6064,120 @@
   "kinship": "ancestor"
  },
  {
+  "first": "luca-barbareschi",
+  "second": "lucrezia-lante-della-rovere",
+  "relation": "partner"
+ },
+ {
+  "first": "luca-manfredi",
+  "second": "nancy-brilli",
+  "relation": "spouse",
+  "from": "1997",
+  "to": "2012"
+ },
+ {
+  "first": "luca-manfredi",
+  "second": "roberta-manfredi",
+  "relation": "sibling"
+ },
+ {
+  "first": "luciano-benetton",
+  "second": "alessandro-benetton",
+  "relation": "parent"
+ },
+ {
+  "first": "luciano-chailly",
+  "second": "riccardo-chailly",
+  "relation": "parent"
+ },
+ {
   "first": "luciano-pavarotti",
   "second": "placido-domingo",
   "relation": "groupmate",
   "group": "The Three Tenors"
+ },
+ {
+  "first": "lucien-barriere",
+  "second": "diane-barriere-desseigne",
+  "relation": "relative",
+  "kinship": "adopted daughter"
+ },
+ {
+  "first": "lucille-ball",
+  "second": "desi-arnaz-jr",
+  "relation": "parent"
+ },
+ {
+  "first": "lucille-ball",
+  "second": "lucie-arnaz",
+  "relation": "parent"
+ },
+ {
+  "first": "lucio-battisti",
+  "second": "taryn-power",
+  "relation": "partner"
+ },
+ {
+  "first": "ludivine-sagnier",
+  "second": "nicolas-duvauchelle",
+  "relation": "partner"
+ },
+ {
+  "first": "ludmila-mikael",
+  "second": "marina-hands",
+  "relation": "parent"
+ },
+ {
+  "first": "ludovic-kennedy",
+  "second": "moira-shearer",
+  "relation": "spouse",
+  "from": "1950-02-25",
+  "to": "2006-01-31"
+ },
+ {
+  "first": "ludwig-tieck",
+  "second": "sophie-tieck",
+  "relation": "sibling"
+ },
+ {
+  "first": "luka-karabatic",
+  "second": "nikola-karabatic",
+  "relation": "sibling"
+ },
+ {
+  "first": "luke-goss",
+  "second": "matt-goss",
+  "relation": "groupmate",
+  "group": "Bros"
+ },
+ {
+  "first": "lulu",
+  "second": "maurice-gibb",
+  "relation": "spouse",
+  "from": "1969",
+  "to": "1973"
+ },
+ {
+  "first": "macha-meril",
+  "second": "michel-legrand",
+  "relation": "spouse",
+  "from": "2014-09-18",
+  "to": "2019-01-26"
+ },
+ {
+  "first": "mackenzie-astin",
+  "second": "sean-astin",
+  "relation": "sibling"
+ },
+ {
+  "first": "madeleine-robinson",
+  "second": "robert-dalban",
+  "relation": "spouse"
+ },
+ {
+  "first": "madonna",
+  "second": "lourdes-leon",
+  "relation": "parent"
  },
  {
   "first": "madonna",
@@ -1334,6 +6192,83 @@
   "relation": "partner",
   "from": "1989",
   "to": "1990"
+ },
+ {
+  "first": "magda-schneider",
+  "second": "romy-schneider",
+  "relation": "parent"
+ },
+ {
+  "first": "magda-schneider",
+  "second": "sarah-biasini",
+  "relation": "relative"
+ },
+ {
+  "first": "marc-allegret",
+  "second": "yves-allegret",
+  "relation": "sibling"
+ },
+ {
+  "first": "marc-jolivet",
+  "second": "pierre-jolivet",
+  "relation": "sibling"
+ },
+ {
+  "first": "marc-lavoine",
+  "second": "nolwenn-leroy",
+  "relation": "groupmate",
+  "group": "Les Enfoirés"
+ },
+ {
+  "first": "marc-lavoine",
+  "second": "zaz",
+  "relation": "groupmate",
+  "group": "Les Enfoirés"
+ },
+ {
+  "first": "marc-simenon",
+  "second": "mylene-demongeot",
+  "relation": "spouse",
+  "from": "1968",
+  "to": "1999"
+ },
+ {
+  "first": "marcel-carne",
+  "second": "roland-lesaffre",
+  "relation": "spouse"
+ },
+ {
+  "first": "marcel-dassault",
+  "second": "serge-dassault",
+  "relation": "parent"
+ },
+ {
+  "first": "marcel-mauss",
+  "second": "emile-durkheim",
+  "relation": "relative",
+  "kinship": "mother's brother"
+ },
+ {
+  "first": "marcelle-auclair",
+  "second": "francoise-prevost",
+  "relation": "parent"
+ },
+ {
+  "first": "marcelle-tassencourt",
+  "second": "thierry-maulnier",
+  "relation": "spouse",
+  "from": "1944",
+  "to": "1988"
+ },
+ {
+  "first": "marella-agnelli",
+  "second": "margherita-agnelli",
+  "relation": "parent"
+ },
+ {
+  "first": "margherita-buy",
+  "second": "sergio-rubini",
+  "relation": "spouse"
  },
  {
   "first": "margrethe-ii",
@@ -1371,6 +6306,57 @@
   "kinship": "godson"
  },
  {
+  "first": "marguerite-duras",
+  "second": "robert-antelme",
+  "relation": "spouse",
+  "from": "1939-09-23",
+  "to": "1947-04-24"
+ },
+ {
+  "first": "maria-anna-mozart",
+  "second": "mozart",
+  "relation": "sibling"
+ },
+ {
+  "first": "maria-pacome",
+  "second": "maurice-ronet",
+  "relation": "spouse",
+  "from": "1950",
+  "to": "1956"
+ },
+ {
+  "first": "maria-shriver",
+  "second": "john-f-kennedy",
+  "relation": "relative",
+  "kinship": "uncle"
+ },
+ {
+  "first": "maria-shriver",
+  "second": "ted-kennedy",
+  "relation": "relative",
+  "kinship": "uncle"
+ },
+ {
+  "first": "maria-shriver",
+  "second": "timothy-shriver",
+  "relation": "sibling"
+ },
+ {
+  "first": "maria-sole-tognazzi",
+  "second": "ricky-tognazzi",
+  "relation": "sibling"
+ },
+ {
+  "first": "marie-cardinal",
+  "second": "pierre-cardinal",
+  "relation": "sibling"
+ },
+ {
+  "first": "marie-curie",
+  "second": "eve-curie",
+  "relation": "parent"
+ },
+ {
   "first": "marie-curie",
   "second": "irene-joliot-curie",
   "relation": "parent"
@@ -1378,6 +6364,67 @@
  {
   "first": "marie-de-medici",
   "second": "louis-xiii",
+  "relation": "parent"
+ },
+ {
+  "first": "marie-gevers",
+  "second": "paul-willems",
+  "relation": "parent"
+ },
+ {
+  "first": "marie-marchand-arvier",
+  "second": "vincent-jay",
+  "relation": "spouse"
+ },
+ {
+  "first": "marie-trintignant",
+  "second": "samuel-benchetrit",
+  "relation": "spouse",
+  "from": "1998",
+  "to": "2002"
+ },
+ {
+  "first": "marina-berlusconi",
+  "second": "pier-silvio-berlusconi",
+  "relation": "sibling"
+ },
+ {
+  "first": "marina-fois",
+  "second": "maurice-barthelemy",
+  "relation": "spouse"
+ },
+ {
+  "first": "marina-vlady",
+  "second": "odile-versois",
+  "relation": "sibling"
+ },
+ {
+  "first": "marina-vlady",
+  "second": "robert-hossein",
+  "relation": "spouse",
+  "from": "1955-12-23",
+  "to": "1960-02-19"
+ },
+ {
+  "first": "mario-monicelli",
+  "second": "arnoldo-mondadori",
+  "relation": "relative",
+  "kinship": "spouse's uncle"
+ },
+ {
+  "first": "marlene-jobert",
+  "second": "elsa-lunghini",
+  "relation": "relative",
+  "kinship": "niece"
+ },
+ {
+  "first": "marlene-jobert",
+  "second": "eva-green",
+  "relation": "parent"
+ },
+ {
+  "first": "marlon-brando",
+  "second": "christian-brando",
   "relation": "parent"
  },
  {
@@ -1392,11 +6439,135 @@
   "relation": "parent"
  },
  {
+  "first": "martina-stella",
+  "second": "valentino-rossi",
+  "relation": "partner"
+ },
+ {
+  "first": "mary-crosby",
+  "second": "nathaniel-crosby",
+  "relation": "sibling"
+ },
+ {
+  "first": "mary-crosby",
+  "second": "phillip-crosby",
+  "relation": "sibling"
+ },
+ {
   "first": "mary-shelley",
   "second": "percy-bysshe-shelley",
   "relation": "spouse",
   "from": "1816-12-30",
   "to": "1822-07-08"
+ },
+ {
+  "first": "matthijs-maris",
+  "second": "willem-maris",
+  "relation": "sibling"
+ },
+ {
+  "first": "maura-west",
+  "second": "scott-defreitas",
+  "relation": "spouse",
+  "from": "2000"
+ },
+ {
+  "first": "maureen-reagan",
+  "second": "patti-davis",
+  "relation": "sibling"
+ },
+ {
+  "first": "maureen-reagan",
+  "second": "ron-reagan",
+  "relation": "sibling"
+ },
+ {
+  "first": "maurice-blondel",
+  "second": "andre-blondel",
+  "relation": "relative",
+  "kinship": "male first cousin"
+ },
+ {
+  "first": "maurice-clavel",
+  "second": "silvia-monfort",
+  "relation": "spouse"
+ },
+ {
+  "first": "maurice-garrel",
+  "second": "philippe-garrel",
+  "relation": "parent"
+ },
+ {
+  "first": "maurice-gibb",
+  "second": "robin-gibb",
+  "relation": "groupmate",
+  "group": "Bee Gees"
+ },
+ {
+  "first": "maurice-gibb",
+  "second": "robin-gibb",
+  "relation": "sibling"
+ },
+ {
+  "first": "maurice-gibb",
+  "second": "steve-gibb",
+  "relation": "relative",
+  "kinship": "nephew"
+ },
+ {
+  "first": "maurice-jarre",
+  "second": "jean-michel-jarre",
+  "relation": "parent"
+ },
+ {
+  "first": "maurice-nadeau",
+  "second": "claire-nadeau",
+  "relation": "parent"
+ },
+ {
+  "first": "maurizio-corgnati",
+  "second": "milva",
+  "relation": "spouse",
+  "from": "1960",
+  "to": "1969"
+ },
+ {
+  "first": "maurizio-d-ancora",
+  "second": "maurizio-gucci",
+  "relation": "parent"
+ },
+ {
+  "first": "maurizio-d-ancora",
+  "second": "paolo-gucci",
+  "relation": "relative",
+  "kinship": "fraternal nephew"
+ },
+ {
+  "first": "maurizio-gucci",
+  "second": "paolo-gucci",
+  "relation": "relative",
+  "kinship": "male first cousin"
+ },
+ {
+  "first": "maurizio-mosca",
+  "second": "paolo-mosca",
+  "relation": "sibling"
+ },
+ {
+  "first": "max-ophuls",
+  "second": "marcel-ophuls",
+  "relation": "parent"
+ },
+ {
+  "first": "maxene-andrews",
+  "second": "patty-andrews",
+  "relation": "groupmate",
+  "group": "The Andrews Sisters"
+ },
+ {
+  "first": "maxene-andrews",
+  "second": "patty-andrews",
+  "relation": "sibling"
  },
  {
   "first": "meghan-markle",
@@ -1410,10 +6581,108 @@
   "relation": "parent"
  },
  {
+  "first": "mia-farrow",
+  "second": "frank-sinatra-jr",
+  "relation": "relative",
+  "kinship": "stepson"
+ },
+ {
+  "first": "mia-farrow",
+  "second": "nancy-sinatra",
+  "relation": "relative",
+  "kinship": "stepdaughter"
+ },
+ {
+  "first": "mia-farrow",
+  "second": "woody-allen",
+  "relation": "partner",
+  "from": "1980",
+  "to": "1992"
+ },
+ {
+  "first": "michael-douglas",
+  "second": "peter-douglas",
+  "relation": "sibling"
+ },
+ {
+  "first": "michael-dukakis",
+  "second": "john-dukakis",
+  "relation": "relative",
+  "kinship": "stepchild"
+ },
+ {
+  "first": "michael-jackson",
+  "second": "paris-katherine-jackson",
+  "relation": "parent"
+ },
+ {
+  "first": "michael-landon",
+  "second": "jennifer-landon",
+  "relation": "parent"
+ },
+ {
   "first": "michael-palin",
   "second": "terry-gilliam",
   "relation": "groupmate",
   "group": "Monty Python"
+ },
+ {
+  "first": "michel-audiard",
+  "second": "jacques-audiard",
+  "relation": "parent"
+ },
+ {
+  "first": "michel-berger",
+  "second": "veronique-sanson",
+  "relation": "partner",
+  "from": "1967",
+  "to": "1972"
+ },
+ {
+  "first": "michel-debre",
+  "second": "olivier-debre",
+  "relation": "sibling"
+ },
+ {
+  "first": "michel-drucker",
+  "second": "lea-drucker",
+  "relation": "relative",
+  "kinship": "niece"
+ },
+ {
+  "first": "michel-sardou",
+  "second": "romain-sardou",
+  "relation": "parent"
+ },
+ {
+  "first": "michelle-auriol",
+  "second": "vincent-auriol",
+  "relation": "spouse",
+  "from": "1912-06-01",
+  "to": "1966-01-01"
+ },
+ {
+  "first": "micol-fontana",
+  "second": "zoe-fontana",
+  "relation": "sibling"
+ },
+ {
+  "first": "mijanou-bardot",
+  "second": "patrick-bauchau",
+  "relation": "spouse",
+  "from": "1962-07-26"
+ },
+ {
+  "first": "mike-farrell",
+  "second": "shelley-fabares",
+  "relation": "spouse",
+  "from": "1984-12-31"
+ },
+ {
+  "first": "mike-love",
+  "second": "carl-wilson",
+  "relation": "relative",
+  "kinship": "male first cousin"
  },
  {
   "first": "mike-mills",
@@ -1434,6 +6703,11 @@
   "group": "The Baseball Project"
  },
  {
+  "first": "moina-mathers",
+  "second": "samuel-liddell-macgregor-mathers",
+  "relation": "spouse"
+ },
+ {
   "first": "monica-bellucci",
   "second": "tim-burton",
   "relation": "partner",
@@ -1448,6 +6722,26 @@
   "to": "2013-08-26"
  },
  {
+  "first": "myriam-boyer",
+  "second": "clovis-cornillac",
+  "relation": "parent"
+ },
+ {
+  "first": "nadine-trintignant",
+  "second": "marie-trintignant",
+  "relation": "parent"
+ },
+ {
+  "first": "nadine-trintignant",
+  "second": "serge-marquand",
+  "relation": "sibling"
+ },
+ {
+  "first": "naomi-judd",
+  "second": "ashley-judd",
+  "relation": "parent"
+ },
+ {
   "first": "nastassja-kinski",
   "second": "quincy-jones",
   "relation": "partner",
@@ -1455,10 +6749,255 @@
   "to": "1995"
  },
  {
+  "first": "nat-king-cole",
+  "second": "natalie-cole",
+  "relation": "parent"
+ },
+ {
+  "first": "natacha-regnier",
+  "second": "yann-tiersen",
+  "relation": "spouse"
+ },
+ {
+  "first": "natalie-wood",
+  "second": "natasha-gregson-wagner",
+  "relation": "parent"
+ },
+ {
+  "first": "natalie-wood",
+  "second": "robert-wagner",
+  "relation": "spouse",
+  "from": "1957",
+  "to": "1962"
+ },
+ {
+  "first": "nate-corddry",
+  "second": "rob-corddry",
+  "relation": "sibling"
+ },
+ {
+  "first": "nathalie-delon",
+  "second": "anthony-delon",
+  "relation": "parent"
+ },
+ {
+  "first": "nathaniel-crosby",
+  "second": "phillip-crosby",
+  "relation": "sibling"
+ },
+ {
+  "first": "nicholas-knatchbull",
+  "second": "timothy-knatchbull",
+  "relation": "sibling"
+ },
+ {
+  "first": "nicolas-sarkozy",
+  "second": "olivier-sarkozy",
+  "relation": "sibling"
+ },
+ {
+  "first": "nicolas-sarkozy",
+  "second": "valeria-bruni-tedeschi",
+  "relation": "relative",
+  "kinship": "wife's sister",
+  "from": "2008-02-02"
+ },
+ {
+  "first": "nicole-berger",
+  "second": "pierre-braunberger",
+  "relation": "relative",
+  "kinship": "husband's father"
+ },
+ {
+  "first": "nicoletta-braschi",
+  "second": "roberto-benigni",
+  "relation": "spouse",
+  "from": "1991-12-26"
+ },
+ {
+  "first": "niki-tsongas",
+  "second": "paul-tsongas",
+  "relation": "spouse"
+ },
+ {
+  "first": "nino-manfredi",
+  "second": "luca-manfredi",
+  "relation": "parent"
+ },
+ {
+  "first": "nino-manfredi",
+  "second": "roberta-manfredi",
+  "relation": "parent"
+ },
+ {
+  "first": "nolwenn-leroy",
+  "second": "zaz",
+  "relation": "groupmate",
+  "group": "Les Enfoirés"
+ },
+ {
+  "first": "nora-arnezeder",
+  "second": "orlando-bloom",
+  "relation": "partner",
+  "from": "2014"
+ },
+ {
+  "first": "nora-ricci",
+  "second": "vittorio-gassman",
+  "relation": "spouse",
+  "from": "1944-04-12",
+  "to": "1952"
+ },
+ {
+  "first": "norris-mcwhirter",
+  "second": "ross-mcwhirter",
+  "relation": "sibling"
+ },
+ {
+  "first": "o-kelly-isley-jr",
+  "second": "rudolph-isley",
+  "relation": "groupmate",
+  "group": "The Isley Brothers"
+ },
+ {
+  "first": "o-kelly-isley-jr",
+  "second": "rudolph-isley",
+  "relation": "sibling"
+ },
+ {
+  "first": "odette-joyeux",
+  "second": "claude-brasseur",
+  "relation": "parent"
+ },
+ {
+  "first": "odette-joyeux",
+  "second": "philippe-agostini",
+  "relation": "spouse",
+  "from": "1958-08-19",
+  "to": "2000-08-26"
+ },
+ {
+  "first": "odette-joyeux",
+  "second": "pierre-brasseur",
+  "relation": "spouse",
+  "from": "1935",
+  "to": "1945"
+ },
+ {
+  "first": "olav-v-of-norway",
+  "second": "harald-v",
+  "relation": "parent"
+ },
+ {
+  "first": "olivia-newton-john",
+  "second": "jeff-conaway",
+  "relation": "relative",
+  "kinship": "brother-in-law"
+ },
+ {
   "first": "olivia-newton-john",
   "second": "max-born",
   "relation": "relative",
   "kinship": "grandfather"
+ },
+ {
+  "first": "olivier-poivre-d-arvor",
+  "second": "patrick-poivre-d-arvor",
+  "relation": "sibling"
+ },
+ {
+  "first": "oprah-winfrey",
+  "second": "stedman-graham",
+  "relation": "partner",
+  "from": "1986"
+ },
+ {
+  "first": "oscar-hertwig",
+  "second": "richard-hertwig",
+  "relation": "sibling"
+ },
+ {
+  "first": "paolo-prodi",
+  "second": "romano-prodi",
+  "relation": "sibling"
+ },
+ {
+  "first": "paolo-villaggio",
+  "second": "piero-villaggio",
+  "relation": "sibling"
+ },
+ {
+  "first": "pascal-jardin",
+  "second": "alexandre-jardin",
+  "relation": "parent"
+ },
+ {
+  "first": "pascal-legitimus",
+  "second": "pauline-ester",
+  "relation": "spouse",
+  "from": "1996",
+  "to": "2003"
+ },
+ {
+  "first": "pascal-legitimus",
+  "second": "smain",
+  "relation": "groupmate",
+  "group": "Les Inconnus"
+ },
+ {
+  "first": "pascale-audret",
+  "second": "roger-coggio",
+  "relation": "spouse"
+ },
+ {
+  "first": "pascale-audret",
+  "second": "sami-frey",
+  "relation": "partner"
+ },
+ {
+  "first": "patrice-estanguet",
+  "second": "tony-estanguet",
+  "relation": "sibling"
+ },
+ {
+  "first": "patrick-cassidy",
+  "second": "shaun-cassidy",
+  "relation": "sibling"
+ },
+ {
+  "first": "patrick-juvet",
+  "second": "pierre-palmade",
+  "relation": "partner"
+ },
+ {
+  "first": "patrick-o-neal",
+  "second": "tatum-o-neal",
+  "relation": "sibling"
+ },
+ {
+  "first": "patrick-poivre-d-arvor",
+  "second": "solenn-poivre-d-arvor",
+  "relation": "parent"
+ },
+ {
+  "first": "patti-davis",
+  "second": "ron-reagan",
+  "relation": "sibling"
+ },
+ {
+  "first": "patty-duke",
+  "second": "mackenzie-astin",
+  "relation": "parent"
+ },
+ {
+  "first": "patty-duke",
+  "second": "sean-astin",
+  "relation": "parent"
+ },
+ {
+  "first": "paul-belmondo",
+  "second": "jean-paul-belmondo",
+  "relation": "parent"
  },
  {
   "first": "paul-mccartney",
@@ -1473,16 +7012,70 @@
   "group": "The Beatles"
  },
  {
+  "first": "paul-mccartney",
+  "second": "stuart-sutcliffe",
+  "relation": "groupmate",
+  "group": "The Beat Brothers"
+ },
+ {
+  "first": "paul-mccartney",
+  "second": "stuart-sutcliffe",
+  "relation": "groupmate",
+  "group": "The Beatles"
+ },
+ {
+  "first": "paul-ricard",
+  "second": "patrick-ricard",
+  "relation": "parent"
+ },
+ {
+  "first": "paul-verges",
+  "second": "francoise-verges",
+  "relation": "parent"
+ },
+ {
+  "first": "peggy-lipton",
+  "second": "quincy-jones",
+  "relation": "spouse",
+  "from": "1974",
+  "to": "1990"
+ },
+ {
   "first": "pete-townshend",
   "second": "roger-daltrey",
   "relation": "groupmate",
   "group": "The Who"
  },
  {
+  "first": "peter-fonda",
+  "second": "bridget-fonda",
+  "relation": "parent"
+ },
+ {
+  "first": "philippe-delerm",
+  "second": "vincent-delerm",
+  "relation": "parent"
+ },
+ {
+  "first": "philippe-garrel",
+  "second": "louis-garrel",
+  "relation": "parent"
+ },
+ {
+  "first": "philippe-of-belgium",
+  "second": "princess-delphine-of-belgium",
+  "relation": "sibling"
+ },
+ {
   "first": "philippe-of-belgium",
   "second": "queen-mathilde",
   "relation": "spouse",
   "from": "1999-12-04"
+ },
+ {
+  "first": "pierre-auguste-renoir",
+  "second": "pierre-renoir",
+  "relation": "parent"
  },
  {
   "first": "pierre-berge",
@@ -1494,6 +7087,33 @@
   "first": "pierre-berge",
   "second": "yves-saint-laurent",
   "relation": "spouse"
+ },
+ {
+  "first": "pierre-brasseur",
+  "second": "claude-brasseur",
+  "relation": "parent"
+ },
+ {
+  "first": "pierre-granier-deferre",
+  "second": "denys-granier-deferre",
+  "relation": "parent"
+ },
+ {
+  "first": "pierre-nora",
+  "second": "simon-nora",
+  "relation": "sibling"
+ },
+ {
+  "first": "pierre-palmade",
+  "second": "veronique-sanson",
+  "relation": "spouse",
+  "from": "1995-06-27",
+  "to": "2004-05-27"
+ },
+ {
+  "first": "pippo-barzizza",
+  "second": "isa-barzizza",
+  "relation": "parent"
  },
  {
   "first": "prince-andrew",
@@ -1512,7 +7132,17 @@
  },
  {
   "first": "princess-margaret",
+  "second": "david-armstrong-jones-2nd-earl-of-snowdon",
+  "relation": "parent"
+ },
+ {
+  "first": "princess-margaret",
   "second": "queen-elizabeth-ii",
+  "relation": "sibling"
+ },
+ {
+  "first": "priyanka-vadra",
+  "second": "rahul-gandhi",
   "relation": "sibling"
  },
  {
@@ -1537,6 +7167,12 @@
   "kinship": "father-in-law"
  },
  {
+  "first": "queen-maxima-of-the-netherlands",
+  "second": "willem-alexander",
+  "relation": "spouse",
+  "from": "2002-02-02"
+ },
+ {
   "first": "queen-silvia",
   "second": "victoria-crown-princess-of-sweden",
   "relation": "parent"
@@ -1553,10 +7189,214 @@
   "kinship": "grandson"
  },
  {
+  "first": "rajiv-gandhi",
+  "second": "priyanka-vadra",
+  "relation": "parent"
+ },
+ {
+  "first": "rajiv-gandhi",
+  "second": "rahul-gandhi",
+  "relation": "parent"
+ },
+ {
+  "first": "rajiv-gandhi",
+  "second": "sanjay-gandhi",
+  "relation": "sibling"
+ },
+ {
+  "first": "rajiv-gandhi",
+  "second": "sonia-gandhi",
+  "relation": "spouse",
+  "from": "1969",
+  "to": "1991"
+ },
+ {
+  "first": "ralph-earnhardt",
+  "second": "dale-earnhardt",
+  "relation": "parent"
+ },
+ {
+  "first": "randy-meisner",
+  "second": "richie-furay",
+  "relation": "groupmate",
+  "group": "Poco"
+ },
+ {
+  "first": "randy-meisner",
+  "second": "ricky-nelson",
+  "relation": "groupmate",
+  "group": "Rick Nelson & The Stone Canyon Band"
+ },
+ {
+  "first": "raymond-legrand",
+  "second": "christiane-legrand",
+  "relation": "parent"
+ },
+ {
+  "first": "raymond-legrand",
+  "second": "michel-legrand",
+  "relation": "parent"
+ },
+ {
+  "first": "renee-saint-cyr",
+  "second": "georges-lautner",
+  "relation": "parent"
+ },
+ {
+  "first": "renzo-rossellini",
+  "second": "roberto-rossellini",
+  "relation": "sibling"
+ },
+ {
+  "first": "richard-chamberlain",
+  "second": "taryn-power",
+  "relation": "partner"
+ },
+ {
+  "first": "richard-nixon",
+  "second": "tricia-nixon-cox",
+  "relation": "parent"
+ },
+ {
+  "first": "richard-petty",
+  "second": "kyle-petty",
+  "relation": "parent"
+ },
+ {
+  "first": "ringo-starr",
+  "second": "stuart-sutcliffe",
+  "relation": "groupmate",
+  "group": "The Beatles"
+ },
+ {
+  "first": "rita-wilson",
+  "second": "tom-hanks",
+  "relation": "spouse",
+  "from": "1988-04-30"
+ },
+ {
+  "first": "robert-bell",
+  "second": "ronald-bell",
+  "relation": "sibling"
+ },
+ {
+  "first": "robert-de-niro",
+  "second": "raphael-de-niro",
+  "relation": "parent"
+ },
+ {
+  "first": "robert-laffont",
+  "second": "patrice-laffont",
+  "relation": "parent"
+ },
+ {
+  "first": "roberto-rossellini",
+  "second": "isabella-rossellini",
+  "relation": "parent"
+ },
+ {
+  "first": "robin-gibb",
+  "second": "steve-gibb",
+  "relation": "relative",
+  "kinship": "nephew"
+ },
+ {
+  "first": "roger-nimier",
+  "second": "marie-nimier",
+  "relation": "parent"
+ },
+ {
+  "first": "roger-vadim",
+  "second": "christian-vadim",
+  "relation": "parent"
+ },
+ {
+  "first": "roland-giraud",
+  "second": "geraldine-gassler",
+  "relation": "parent"
+ },
+ {
+  "first": "roland-petit",
+  "second": "zizi-jeanmaire",
+  "relation": "spouse",
+  "from": "1954",
+  "to": "2011"
+ },
+ {
+  "first": "romano-mussolini",
+  "second": "vittorio-mussolini",
+  "relation": "sibling"
+ },
+ {
+  "first": "romina-power",
+  "second": "taryn-power",
+  "relation": "sibling"
+ },
+ {
+  "first": "romy-schneider",
+  "second": "sarah-biasini",
+  "relation": "parent"
+ },
+ {
+  "first": "rudolf-christoph-eucken",
+  "second": "walter-eucken",
+  "relation": "parent"
+ },
+ {
+  "first": "russ-tamblyn",
+  "second": "amber-tamblyn",
+  "relation": "parent"
+ },
+ {
+  "first": "ryan-o-neal",
+  "second": "griffin-o-neal",
+  "relation": "parent"
+ },
+ {
+  "first": "ryan-o-neal",
+  "second": "patrick-o-neal",
+  "relation": "parent"
+ },
+ {
+  "first": "ryan-o-neal",
+  "second": "tatum-o-neal",
+  "relation": "parent"
+ },
+ {
+  "first": "sacha-distel",
+  "second": "ray-ventura",
+  "relation": "relative",
+  "kinship": "uncle"
+ },
+ {
   "first": "salma-hayek",
   "second": "francois-pinault",
   "relation": "relative",
   "kinship": "husband's father"
+ },
+ {
+  "first": "samuel-benchetrit",
+  "second": "vanessa-paradis",
+  "relation": "spouse",
+  "from": "2018-06-30",
+  "to": "2026"
+ },
+ {
+  "first": "samuel-taylor-coleridge",
+  "second": "sara-coleridge",
+  "relation": "parent"
+ },
+ {
+  "first": "sandrine-kiberlain",
+  "second": "vincent-lindon",
+  "relation": "spouse",
+  "from": "1993",
+  "to": "2003"
+ },
+ {
+  "first": "sean-connery",
+  "second": "jason-connery",
+  "relation": "parent"
  },
  {
   "first": "sean-penn",
@@ -1575,9 +7415,46 @@
   "relation": "sibling"
  },
  {
+  "first": "serge-dassault",
+  "second": "darius-paul-dassault",
+  "relation": "relative",
+  "kinship": "father's brother"
+ },
+ {
+  "first": "serge-dassault",
+  "second": "olivier-dassault",
+  "relation": "parent"
+ },
+ {
+  "first": "shelley-fabares",
+  "second": "nanette-fabray",
+  "relation": "relative",
+  "kinship": "father's sister"
+ },
+ {
+  "first": "shirley-jones",
+  "second": "patrick-cassidy",
+  "relation": "parent"
+ },
+ {
+  "first": "shirley-jones",
+  "second": "shaun-cassidy",
+  "relation": "parent"
+ },
+ {
   "first": "shirley-maclaine",
   "second": "warren-beatty",
   "relation": "sibling"
+ },
+ {
+  "first": "shirley-temple",
+  "second": "lori-black",
+  "relation": "parent"
+ },
+ {
+  "first": "sidney-poitier",
+  "second": "sydney-tamiia-poitier",
+  "relation": "parent"
  },
  {
   "first": "sigmund-freud",
@@ -1585,11 +7462,99 @@
   "relation": "parent"
  },
  {
+  "first": "silvana-mangano",
+  "second": "veronica-de-laurentiis",
+  "relation": "parent"
+ },
+ {
+  "first": "silvio-berlusconi",
+  "second": "marina-berlusconi",
+  "relation": "parent"
+ },
+ {
+  "first": "silvio-berlusconi",
+  "second": "pier-silvio-berlusconi",
+  "relation": "parent"
+ },
+ {
+  "first": "silvio-berlusconi",
+  "second": "veronica-lario",
+  "relation": "spouse",
+  "from": "1990",
+  "to": "2014-02"
+ },
+ {
+  "first": "simon-nora",
+  "second": "olivier-nora",
+  "relation": "parent"
+ },
+ {
+  "first": "simone-berriau",
+  "second": "helena-bossis",
+  "relation": "parent"
+ },
+ {
+  "first": "simone-signoret",
+  "second": "catherine-allegret",
+  "relation": "parent"
+ },
+ {
+  "first": "simone-signoret",
+  "second": "yves-allegret",
+  "relation": "spouse",
+  "from": "1944",
+  "to": "1949"
+ },
+ {
   "first": "simone-signoret",
   "second": "yves-montand",
   "relation": "spouse",
   "from": "1951-12-22",
   "to": "1985-09-30"
+ },
+ {
+  "first": "sissy-spacek",
+  "second": "rip-torn",
+  "relation": "relative",
+  "kinship": "cousin"
+ },
+ {
+  "first": "sonia-gandhi",
+  "second": "priyanka-vadra",
+  "relation": "parent"
+ },
+ {
+  "first": "sonia-gandhi",
+  "second": "rahul-gandhi",
+  "relation": "parent"
+ },
+ {
+  "first": "sophia-loren",
+  "second": "romano-mussolini",
+  "relation": "relative",
+  "kinship": "brother-in-law",
+  "from": "1962",
+  "to": "1976"
+ },
+ {
+  "first": "sophie-agacinski",
+  "second": "sylviane-agacinski",
+  "relation": "sibling"
+ },
+ {
+  "first": "stanley-ann-dunham",
+  "second": "barack-obama",
+  "relation": "parent"
+ },
+ {
+  "first": "stefano-casiraghi",
+  "second": "charlotte-casiraghi",
+  "relation": "parent"
+ },
+ {
+  "first": "steve-mcqueen",
+  "second": "chad-mcqueen",
+  "relation": "parent"
  },
  {
   "first": "stevie-wonder",
@@ -1610,8 +7575,101 @@
   "relation": "parent"
  },
  {
+  "first": "sylvia-plath",
+  "second": "frieda-hughes",
+  "relation": "parent"
+ },
+ {
+  "first": "sylvie-vartan",
+  "second": "david-hallyday",
+  "relation": "parent"
+ },
+ {
+  "first": "sylvie-vartan",
+  "second": "michael-vartan",
+  "relation": "relative",
+  "kinship": "nephew"
+ },
+ {
+  "first": "ted-kennedy",
+  "second": "patrick-j-kennedy",
+  "relation": "parent"
+ },
+ {
+  "first": "theodore-monod",
+  "second": "jean-luc-godard",
+  "relation": "relative",
+  "kinship": "distant relative"
+ },
+ {
+  "first": "thierry-roussel",
+  "second": "athina-onassis-roussel",
+  "relation": "parent"
+ },
+ {
+  "first": "thomas-mann",
+  "second": "golo-mann",
+  "relation": "parent"
+ },
+ {
+  "first": "tippi-hedren",
+  "second": "melanie-griffith",
+  "relation": "parent"
+ },
+ {
+  "first": "todd-fisher",
+  "second": "carrie-fisher",
+  "relation": "relative"
+ },
+ {
+  "first": "todd-fisher",
+  "second": "tricia-leigh-fisher",
+  "relation": "sibling"
+ },
+ {
   "first": "tony-curtis",
   "second": "jamie-lee-curtis",
+  "relation": "parent"
+ },
+ {
+  "first": "tony-curtis",
+  "second": "kelly-curtis",
+  "relation": "parent"
+ },
+ {
+  "first": "tony-hawk",
+  "second": "frances-bean-cobain",
+  "relation": "relative",
+  "kinship": "daughter-in-law"
+ },
+ {
+  "first": "ugo-tognazzi",
+  "second": "gianmarco-tognazzi",
+  "relation": "parent"
+ },
+ {
+  "first": "ugo-tognazzi",
+  "second": "maria-sole-tognazzi",
+  "relation": "parent"
+ },
+ {
+  "first": "ugo-tognazzi",
+  "second": "ricky-tognazzi",
+  "relation": "parent"
+ },
+ {
+  "first": "valentino-mazzola",
+  "second": "sandro-mazzola",
+  "relation": "parent"
+ },
+ {
+  "first": "valeria-marini",
+  "second": "vittorio-cecchi-gori",
+  "relation": "partner"
+ },
+ {
+  "first": "victor-puiseux",
+  "second": "pierre-puiseux",
   "relation": "parent"
  },
  {
@@ -1621,15 +7679,87 @@
   "kinship": "godfather"
  },
  {
+  "first": "vincent-auriol",
+  "second": "jacqueline-auriol",
+  "relation": "relative",
+  "kinship": "daughter-in-law"
+ },
+ {
+  "first": "vincent-bollore",
+  "second": "gerard-longuet",
+  "relation": "relative",
+  "kinship": "husband of sister of wife"
+ },
+ {
+  "first": "virginia-e-johnson",
+  "second": "william-h-masters",
+  "relation": "groupmate",
+  "group": "Masters and Johnson"
+ },
+ {
+  "first": "virginia-e-johnson",
+  "second": "william-h-masters",
+  "relation": "spouse",
+  "from": "1971",
+  "to": "1992"
+ },
+ {
+  "first": "vittorio-de-sica",
+  "second": "manuel-de-sica",
+  "relation": "parent"
+ },
+ {
+  "first": "vittorio-mezzogiorno",
+  "second": "giovanna-mezzogiorno",
+  "relation": "parent"
+ },
+ {
   "first": "walter-benjamin",
   "second": "hannah-arendt",
   "relation": "relative",
   "kinship": "cousin"
  },
  {
+  "first": "walter-benjamin",
+  "second": "william-stern",
+  "relation": "relative",
+  "kinship": "uncle"
+ },
+ {
+  "first": "waylon-jennings",
+  "second": "willie-nelson",
+  "relation": "groupmate",
+  "group": "The Highwaymen"
+ },
+ {
   "first": "whitney-houston",
   "second": "dionne-warwick",
   "relation": "relative",
   "kinship": "female first cousin"
+ },
+ {
+  "first": "will-smith",
+  "second": "willow-smith",
+  "relation": "parent"
+ },
+ {
+  "first": "yoko-ono",
+  "second": "sean-lennon",
+  "relation": "parent"
+ },
+ {
+  "first": "yves-allegret",
+  "second": "catherine-allegret",
+  "relation": "parent"
+ },
+ {
+  "first": "yves-montand",
+  "second": "catherine-allegret",
+  "relation": "parent"
+ },
+ {
+  "first": "yvonne-de-gaulle",
+  "second": "philippe-de-gaulle",
+  "relation": "parent"
  }
 ]

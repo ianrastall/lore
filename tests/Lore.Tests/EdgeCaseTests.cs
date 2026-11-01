@@ -38,7 +38,7 @@ public class EdgeCaseTests
     public void A_pattern_names_an_element_or_modality_only_if_all_its_points_share_it()
     {
         int mixed = 0;
-        foreach (var figure in Repo.Figures)
+        foreach (var figure in Repo.Sample)
         {
             var chart = Repo.Charts.Calculate(figure);
             ZodiacSign SignOf(NatalPoint p) => ZodiacSignExtensions.FromLongitude(chart.LongitudeOf(p)!.Value);

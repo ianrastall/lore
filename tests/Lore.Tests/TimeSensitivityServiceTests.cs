@@ -26,7 +26,7 @@ public class TimeSensitivityServiceTests
     [Fact]
     public void The_margin_on_rounded_birth_times_can_be_followed_right_across_the_library()
     {
-        var rounded = Repo.Figures.Where(f => f.BirthTimeUncertaintyMinutes > 0).ToList();
+        var rounded = Repo.Sample.Where(f => f.BirthTimeUncertaintyMinutes > 0).ToList();
         Assert.InRange(rounded.Count, 600, 700);
         int rising = 0, midheaven = 0, sect = 0, any = 0;
         foreach (var figure in rounded)

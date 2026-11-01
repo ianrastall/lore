@@ -145,7 +145,9 @@ public sealed partial class MainViewModel
                 c.BirthPlace.Contains(s, StringComparison.OrdinalIgnoreCase));
         }
 
-        DisplayedCelebrities = new ObservableCollection<Celebrity>(q.OrderBy(c => c.Name));
+        // The reader's own charts first (they have no sitelinks), then the best known.
+        DisplayedCelebrities = new ObservableCollection<Celebrity>(
+            q.OrderByDescending(c => c.Sitelinks ?? int.MaxValue).ThenBy(c => c.Name));
     }
 
     [RelayCommand]

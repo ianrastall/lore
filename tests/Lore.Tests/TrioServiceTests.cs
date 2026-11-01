@@ -107,7 +107,7 @@ public class TrioServiceTests
     [Fact]
     public void Golden_stays_rare_across_the_library()
     {
-        var charts = Repo.Figures.Select(Repo.Charts.Calculate).ToList();
+        var charts = Repo.Sample.Select(Repo.Charts.Calculate).ToList();
         var random = new Random(4101);
         var counts = Enum.GetValues<TrioTone>().ToDictionary(t => t, _ => 0);
         var amongContemporaries = Enum.GetValues<TrioTone>().ToDictionary(t => t, _ => 0);

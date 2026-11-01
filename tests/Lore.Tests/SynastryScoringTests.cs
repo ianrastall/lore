@@ -67,9 +67,9 @@ public class SynastryScoringTests
     public void The_search_leaves_out_the_chart_itself_and_runs_best_to_worst()
     {
         var einstein = Repo.Charts.Calculate(Repo.Figure("albert-einstein"));
-        var ranked = SynastryScoring.Rank(Repo.Charts, einstein, Repo.Figures);
+        var ranked = SynastryScoring.Rank(Repo.Charts, einstein, Repo.Sample);
 
-        Assert.Equal(Repo.Figures.Count - 1, ranked.Count);
+        Assert.Equal(Repo.Sample.Count - 1, ranked.Count);
         Assert.DoesNotContain(ranked, m => m.Person.Id == "albert-einstein");
         Assert.Equal(ranked.OrderByDescending(m => m.Compatibility.Level).Select(m => m.Compatibility.Level),
                      ranked.Select(m => m.Compatibility.Level));
@@ -97,7 +97,7 @@ public class SynastryScoringTests
     [Fact]
     public void The_bands_keep_their_proportions_across_the_library()
     {
-        var charts = Repo.Figures.Select(f => Repo.Charts.Calculate(f)).ToList();
+        var charts = Repo.Sample.Select(f => Repo.Charts.Calculate(f)).ToList();
         var counts = new Dictionary<int, int>();
         var amongContemporaries = new Dictionary<int, int>();
         int pairs = 0, contemporaries = 0;

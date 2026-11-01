@@ -43,6 +43,14 @@ public sealed class ViewModelTests : IDisposable
 
     private static Celebrity Row(MainViewModel vm, string id) => vm.DisplayedCelebrities.Single(c => c.Id == id);
 
+    [Fact]
+    public async Task The_list_puts_the_best_known_first()
+    {
+        var vm = await Start();
+        var shown = vm.DisplayedCelebrities.Select(c => c.Sitelinks).ToList();
+        Assert.Equal(shown.OrderByDescending(s => s), shown);
+    }
+
     private static async Task Settled(MainViewModel vm)
     {
         for (int i = 0; vm.IsLoading; i++)

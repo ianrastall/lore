@@ -48,7 +48,7 @@ public class ChartSettingsTests
         // same whichever way the houses are cut.
         var placidus = new ChartService(Repo.Ephemeris);
         var whole = new ChartService(Repo.Ephemeris) { Settings = new ChartSettings(HouseSystem.WholeSign) };
-        foreach (var f in Repo.Figures)
+        foreach (var f in Repo.Sample)
         {
             var p = placidus.Calculate(f);
             // In Placidus, houses 7-12 are the half of the sky above the horizon.

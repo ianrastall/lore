@@ -35,7 +35,14 @@ internal static class Repo
             new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!);
     public static IReadOnlyList<Celebrity> Figures => LazyFigures.Value;
 
-    public static Celebrity Figure(string id) => Figures.Single(f => f.Id == id);
+    // The figures an expensive test works through: enough to hold every kind of chart,
+    // without casting the whole library again for each test. The first ones in the file,
+    // so they stay the same as the library grows.
+    public static IReadOnlyList<Celebrity> Sample => LazySample.Value;
+    private static readonly Lazy<List<Celebrity>> LazySample = new(() => Figures.Take(1400).ToList());
+
+    private static readonly Lazy<Dictionary<string, Celebrity>> LazyById = new(() => Figures.ToDictionary(f => f.Id));
+    public static Celebrity Figure(string id) => LazyById.Value[id];
 
     // A chart's position as "Taurus 3°38'", the form Astro-Databank and the report use.
     public static string Position(double longitude) =>

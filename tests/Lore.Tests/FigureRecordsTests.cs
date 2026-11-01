@@ -64,13 +64,22 @@ public class FigureRecordsTests
     }
 
     // Anyone who married or grew up with or played beside someone was alive when they were.
-    // (A relative need not have been: some are a great-grandfather.)
+    // (A relative need not have been: some are a great-grandfather. Nor need a parent, by
+    // a few months: John Clark Gable was born after his father died.)
     [Fact]
     public void People_joined_in_life_have_overlapping_lifetimes()
     {
         var together = Connections.Where(l => Text(l, "relation") is not "relative");
-        Assert.All(together, l => Assert.True(Lifetimes.Overlap(ById[Text(l, "first")!], ById[Text(l, "second")!]), Key(l)));
+        Assert.All(together, l =>
+        {
+            var (first, second) = (ById[Text(l, "first")!], ById[Text(l, "second")!]);
+            Assert.True(Lifetimes.Overlap(first, second) || Posthumous(l, first, second), Key(l));
+        });
     }
+
+    private static bool Posthumous(JsonElement link, Celebrity parent, Celebrity child) =>
+        Text(link, "relation") == "parent" && parent.DeathDate is not null &&
+        DateOnly.Parse(parent.DeathDate).AddMonths(10) >= child.GetBirthDate();
 
     [Fact]
     public void A_parent_is_old_enough_to_be_one()

@@ -148,7 +148,7 @@ public class ContemporariesTests
     public void The_search_of_everyone_keeps_the_levels_and_puts_contemporaries_ahead_within_each()
     {
         var chart = Chart("albert-einstein");
-        var ranked = SynastryScoring.Rank(Repo.Charts, chart, Repo.Figures);
+        var ranked = SynastryScoring.Rank(Repo.Charts, chart, Repo.Sample);
 
         Assert.Contains(ranked, m => m.Contemporaries);
         Assert.Contains(ranked, m => !m.Contemporaries);

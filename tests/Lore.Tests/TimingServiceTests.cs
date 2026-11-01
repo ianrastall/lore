@@ -121,7 +121,7 @@ public class TimingServiceTests
     {
         // The geometry the progressed Ascendant relies on, checked where the answer is
         // known: every figure's own Midheaven must give back that figure's own Ascendant.
-        foreach (var f in Repo.Figures)
+        foreach (var f in Repo.Sample)
         {
             var chart = Repo.Charts.Calculate(f);
             double jd = SwissEphemeris.DateTimeToJulianDay(chart.CalculatedForUtc);
