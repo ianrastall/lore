@@ -38,8 +38,10 @@ See [validation](docs/validation-4.5.1.md) for the startup-close fix, [4.5](docs
 
 ## Next
 
-1. **Rust core decision.** Open; see the exceptions record.
-2. **Theme setting.** Needs a light wheel palette.
+1. **Writers tab, next major iteration.** Create fictional characters from notable sky events and local chart features; discover famous pairs and trios without a starting person, with writer-oriented character and interaction readings. Ian requires nearby birthplaces and an oldest-to-youngest age gap of at most ten years. See [the plan](docs/writers-workspace-plan.md), including the proposed adjustable 100 km distance default and the global-search approach.
+2. **Broader written-reading expansion, following iteration.** Expand authored range and composition to reduce repetition across Lore; recorded separately in the Writers plan.
+3. **Rust core decision.** Open; see the exceptions record.
+4. **Theme setting.** Needs a light wheel palette.
 
 ## The splash
 

@@ -1,5 +1,13 @@
 # Lore: where it stands and what to do next
 
+**Current direction, 1 November 2026:** after 4.5.1, the next major iteration is a
+Writers tab for character creation and global discovery of famous pairs/trios.
+Both sky events and local chart features can anchor a fictional character.
+Famous groups require nearby birthplaces and at most ten years between their
+oldest and youngest members. The following iteration expands the range of written
+readings to address repetition. See [the current plan](writers-workspace-plan.md)
+and [handoff](../HANDOFF.md); the older items below remain historical notes.
+
 Written 6 October 2026 against commit `4b6bc7f` (2.3.0 plus two rounds of fixes that
 have not been released). This is a working note to come back to, not a promise. Each
 item says what it is, why it is worth doing, where in the code it lives, and roughly
