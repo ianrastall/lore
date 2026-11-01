@@ -780,6 +780,37 @@ politics, and personality types for public figures, which have no reliable sourc
 birthplaces make too little difference: a few arcminutes do not move the planets and barely move
 the angles.
 
+### 4.6c Birth-data sources and their terms. Found 31 October 2026. Undecided.
+
+From Astro-Databank's Data Collector's Handbook (old: its pages date from about 2009 to 2011, and
+its overview says some of it was outdated by 2014) and from searches.
+
+- **Astro-Databank's own export.** `astro.com/adbexport/` holds an XML export. As search results
+  report its readme: the full download and its contract are withdrawn for 2026, licences go only
+  to researchers and never for training AI, and a sample of 5,866 records (4,832 rated AA or A) stays
+  up for developing tools. None of this has been read first-hand, and whether the sample may feed a
+  published app is not known. Do not use it until the readme is read. The site blocks this kind of
+  tool, so that reading is Ian's.
+- **Lore's own position.** An October 2026 GitHub issue quotes an archived copy of Astro-Databank's
+  Copyright page: birth data may be used and republished if the use is non-commercial, and text may
+  not be copied. If that still stands it covers the whole library, and Lore could not be sold with
+  it. Read the live page (`Astro-Databank:Copyright`) before any paid release. Lore's bios must stay
+  our own words.
+- **Open Gauquelin** (`opengauquelin.org/downloads`) has CSV downloads and a database dump. The site
+  states GPL, FDL and CC-BY-SA-4.0; the downloads page states no terms of its own. Lore is AGPL, so
+  share-alike looks workable, but check it first. The Gauquelin data came from registers in France,
+  Italy, Belgium and the Netherlands, published 1949 to 1971, with times rounded to the quarter hour.
+- **Where times are recorded at all** (chapter 13). England, Wales, Ireland, Australia, Canada and
+  British India record no birth time, except for twins. Scotland has since 1855, and France and Germany
+  since 1792. So an AA from those places is close to impossible, and only an A from memory can pass.
+  The results agree: of the 14 AA figures added from groups 1 and 2, 13 are American and one Scottish.
+  About 445 of the 1,604 candidates have a nationality from those places, a rough count that also
+  catches Americans with a dual label. The US put times on certificates by federal rule in 1968
+  (chapter 7.1), so people born since then should do better.
+- **Rounding** (chapter 1). Some authorities rounded times to the nearest 15 minutes, which supports
+  the plus or minus 15 in `birthTimeUncertaintyMinutes`. A Rodden rating is never a substitute for
+  the source notes, the reason for reading them.
+
 ### 4.7 Finding people in the list. Small to medium.
 
 The browse list sorts by name and filters by category and text. Useful additions:
