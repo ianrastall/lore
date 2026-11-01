@@ -14344,6 +14344,42 @@
       "url": "https://www.astro.com/astro-databank/Spacek,_Sissy",
       "checkedOn": "2026-10-31",
       "note": "B.R. in hand from Steinbrecher supersedes 00:02 AM quoted from her by LMR in 1977."
+    },
+    "kirsten-dunst": {
+      "adbTitle": "Dunst, Kirsten",
+      "date": "1982-04-30",
+      "time": "13:00",
+      "zone": "EDT h4w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1982-04-30T17:00:00",
+      "url": "https://www.astro.com/astro-databank/Dunst,_Kirsten",
+      "checkedOn": "2026-10-31",
+      "note": "No calendar conversion or source conflict identified."
+    },
+    "brendan-fraser": {
+      "adbTitle": "Fraser, Brendan",
+      "date": "1968-12-03",
+      "time": "15:28",
+      "zone": "EST h5w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1968-12-03T20:28:00",
+      "url": "https://www.astro.com/astro-databank/Fraser,_Brendan",
+      "checkedOn": "2026-10-31",
+      "note": "No calendar conversion or source conflict identified."
+    },
+    "john-malkovich": {
+      "adbTitle": "Malkovich, John",
+      "date": "1953-12-09",
+      "time": "23:39",
+      "zone": "CST h6w",
+      "rating": "AA",
+      "source": "BC/BR in hand",
+      "expectedUtc": "1953-12-10T05:39:00",
+      "url": "https://www.astro.com/astro-databank/Malkovich,_John",
+      "checkedOn": "2026-10-31",
+      "note": "Mark Penfield quotes letter from the state bureau, stamped with their seal, copy in hand in July 2001."
     }
   }
 }

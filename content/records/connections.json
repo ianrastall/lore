@@ -889,6 +889,13 @@
   "relation": "sibling"
  },
  {
+  "first": "jake-gyllenhaal",
+  "second": "kirsten-dunst",
+  "relation": "partner",
+  "from": "2002",
+  "to": "2004"
+ },
+ {
   "first": "jane-fonda",
   "second": "ted-turner",
   "relation": "spouse",

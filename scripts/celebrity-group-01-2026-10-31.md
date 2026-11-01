@@ -1,8 +1,9 @@
 # Research group 1 (Actors 1 of 9): results, 31 October 2026
 
 The first group back from an LLM. Of 45 people it accepted 15 and left out 30, and the answer
-accounted for all 45. Nine went into the library, which goes from 1,313 to 1,322. Six are held
-until someone reads their record.
+accounted for all 45. Nine went into the library at first, taking it from 1,313 to 1,322, and six
+were held until someone read their record. Ian read two of those pages the same day, and both
+matched, so 11 are added and 4 held.
 
 ## How the answer was checked
 
@@ -25,6 +26,8 @@ to astro.com, one name at a time.
 | Willem Dafoe | 1955-07-22 19:30 | Appleton, WI | CST h6w | AA, BC/BR in hand |
 | Rami Malek | 1981-05-12 08:41 | Torrance, CA | PDT h7w | AA, BC/BR in hand |
 | Elizabeth Olsen | 1989-02-16 18:49 | Van Nuys, CA | PST h8w | AA, BC/BR in hand |
+| Kirsten Dunst | 1982-04-30 13:00 | Point Pleasant, NJ | EDT h4w | AA, BC/BR in hand; page read by Ian |
+| Brendan Fraser | 1968-12-03 15:28 | Indianapolis, IN | EST h5w | AA, BC/BR in hand; page read by Ian |
 
 Willem Dafoe carries `utcOffsetFixed`, because Astro-Databank gives CST for Appleton in July 1955
 and the time-zone database gives daylight time. 39 figures now do so.
@@ -42,8 +45,6 @@ leave out anyone in doubt, so they wait until someone opens the link. The record
 
 | Person | The LLM's reading | Rating | Note |
 |---|---|---|---|
-| [Kirsten Dunst](https://www.astro.com/astro-databank/Dunst,_Kirsten) | 1982-04-30 13:00, Point Pleasant, NJ, EDT | AA | |
-| [Brendan Fraser](https://www.astro.com/astro-databank/Fraser,_Brendan) | 1968-12-03 15:28, Indianapolis, EST | AA | |
 | [John Goodman](https://www.astro.com/astro-databank/Goodman,_John) | 1952-06-20 10:32, Affton, MO, CST | A | Would need `utcOffsetFixed` |
 | [Forest Whitaker](https://www.astro.com/astro-databank/Whitaker,_Forest) | 1961-07-15 10:30, Longview, TX, CST | A | Would need `utcOffsetFixed` |
 | [Aamir Khan](https://www.astro.com/astro-databank/Khan,_Aamir) | 1965-03-14 10:05, Mumbai, IST | A | |

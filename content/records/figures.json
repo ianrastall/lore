@@ -53139,5 +53139,114 @@
     "award": "Actor Award for Outstanding Performance by a Cast in a Motion Picture"
    }
   ]
+ },
+ "kirsten-dunst": {
+  "wikidataId": "Q76478",
+  "birthName": "Kirsten Caroline Dunst",
+  "otherNames": [
+   "Kiki"
+  ],
+  "occupations": [
+   "actor",
+   "film actor",
+   "television actor",
+   "voice actor"
+  ],
+  "portrait": "Kirsten Dunst Cannes 2016.jpg",
+  "events": [
+   {
+    "kind": "award",
+    "date": "2011",
+    "award": "Cannes Film Festival Award for Best Actress"
+   },
+   {
+    "kind": "award",
+    "date": "2012",
+    "award": "Saturn Award for Best Actress"
+   },
+   {
+    "kind": "award",
+    "date": "2017",
+    "award": "Actor Award for Outstanding Performance by a Cast in a Motion Picture"
+   },
+   {
+    "kind": "marriage",
+    "date": "2022-07",
+    "person": "Jesse Plemons"
+   }
+  ]
+ },
+ "brendan-fraser": {
+  "wikidataId": "Q193555",
+  "birthName": "Brendan James Frasier",
+  "otherNames": [
+   "Brendan James Fraser"
+  ],
+  "occupations": [
+   "actor",
+   "film actor",
+   "film producer",
+   "television actor",
+   "voice actor"
+  ],
+  "portrait": "Brendan Fraser October 2022.jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "1998",
+    "person": "Afton Smith"
+   },
+   {
+    "kind": "award",
+    "date": "2006-01-29",
+    "award": "Actor Award for Outstanding Performance by a Cast in a Motion Picture"
+   },
+   {
+    "kind": "marriageEnded",
+    "date": "2007",
+    "person": "Afton Smith"
+   },
+   {
+    "kind": "award",
+    "date": "2022",
+    "award": "Screen Actors Guild Award for Outstanding Performance by a Male Actor in a Leading Role"
+   },
+   {
+    "kind": "award",
+    "date": "2023-03-12",
+    "award": "Academy Award for Best Actor"
+   }
+  ]
+ },
+ "john-malkovich": {
+  "wikidataId": "Q172261",
+  "otherNames": [
+   "John Gavin Malkovich",
+   "John Horatio Malkovich"
+  ],
+  "occupations": [
+   "actor",
+   "director",
+   "film actor",
+   "film producer",
+   "musician",
+   "stage actor",
+   "television actor",
+   "theatre director",
+   "voice actor"
+  ],
+  "portrait": "John Malkovich, Berlinale 2023 cropped.jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "1982",
+    "person": "Glenne Headly"
+   },
+   {
+    "kind": "marriageEnded",
+    "date": "1988",
+    "person": "Glenne Headly"
+   }
+  ]
  }
 }
