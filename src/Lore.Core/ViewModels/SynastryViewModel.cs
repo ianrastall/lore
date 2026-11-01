@@ -10,9 +10,7 @@ namespace Lore.ViewModels;
 public sealed partial class SynastryViewModel : ObservableObject
 {
     private const int MaxSuggestions = 12;
-    private const int MatchesShown = 12;   // how many of the best, and of the worst, are listed
     public const int ConnectionsTried = 100;   // how many of a person's best matches the finder tries in pairs
-    private const int TriosShown = 24;
     public const string EveryScope = "Everyone";
 
     private readonly ChartService? _charts;
@@ -126,16 +124,14 @@ public sealed partial class SynastryViewModel : ObservableObject
     [ObservableProperty]
     public partial IReadOnlyList<TrioFind> Trios { get; set; } = [];
 
-    public IReadOnlyList<TrioFind> BestTrios => Trios.Take(TriosShown).ToList();
-
-    // Whom the finder looks among: everyone, or one category of the list.
+    // Whom the lists hold, and the finder looks among: everyone, or one category.
     [ObservableProperty]
     public partial string FinderScope { get; set; } = EveryScope;
 
     partial void OnFinderScopeChanged(string value)
     {
         OnPropertyChanged(nameof(SelectedScope));
-        RebuildFinder();
+        WhoChanged();
     }
 
     // The list the box offers, kept as it is unless the categories themselves change, since
@@ -167,7 +163,7 @@ public sealed partial class SynastryViewModel : ObservableObject
     private string AsLivedNote => ScoredAsLived ? ", taking the answers into account" : "";
 
     private IEnumerable<SynastryMatch> InScope =>
-        FinderScope == EveryScope ? Matches : Matches.Where(m => m.Person.Category == FinderScope);
+        Matches.Where(m => Allowed(m.Person) && (!ContemporariesOnly || m.Contemporaries));
 
     public string FinderHeading => Chart is null ? "" : $"Best tri-synastries for {Chart.Celebrity.Name}";
 
@@ -185,9 +181,6 @@ public sealed partial class SynastryViewModel : ObservableObject
     }
     public bool ReadingShown => Reading is not null && !ThirdsShown;
     public bool HasThird => Third is not null;
-    public bool GoldenThirds => BestThirds.Any(m => m.Tone == TrioTone.Golden);
-
-    public IReadOnlyList<TrioMatch> BestThirds => ThirdMatches.Take(MatchesShown).ToList();
 
     public string ThirdsHeading => Comparison is null ? "" :
         $"Best third for {Comparison.First.Celebrity.Name} and {Comparison.Second.Celebrity.Name}";
@@ -199,7 +192,7 @@ public sealed partial class SynastryViewModel : ObservableObject
             if (ThirdMatches.Count == 0) return "";
             int golden = ThirdMatches.Count(m => m.Tone == TrioTone.Golden);
             int contemporaries = ThirdMatches.Count(m => m.Contemporaries);
-            return $"Tried {ThirdMatches.Count} charts as the third{AsLivedNote}: {golden} Golden, {contemporaries} contemporaries.";
+            return $"Tried {ThirdMatches.Count:n0} charts as the third{AsLivedNote}: {golden:n0} Golden, {contemporaries:n0} contemporaries.";
         }
     }
 
@@ -222,26 +215,16 @@ public sealed partial class SynastryViewModel : ObservableObject
         "";
 
     // The search: everyone else compared with the selected chart, best match first.
-    // Shown, as its best and worst few, until someone is chosen to compare with.
+    // Shown, all of it, until someone is chosen to compare with.
     [ObservableProperty]
     public partial IReadOnlyList<SynastryMatch> Matches { get; set; } = [];
 
     [ObservableProperty]
     public partial bool IsSearching { get; set; }
 
-    public IReadOnlyList<SynastryMatch> BestMatches => Matches.Take(MatchesShown).ToList();
-
-    // Worst first, with contemporaries ahead within a level as they are in the best.
-    // Never the same people as the best, however few charts there are.
-    public IReadOnlyList<SynastryMatch> WorstMatches => Matches.Skip(MatchesShown)
-        .OrderBy(m => m.Compatibility.Level)
-        .ThenByDescending(m => m.Contemporaries)
-        .ThenBy(m => m.Compatibility.Share)
-        .Take(MatchesShown).ToList();
-
     public bool ShowMatches => Chart is not null && Partner is null && Matches.Count > 0 && !ShowTrine;
 
-    public string MatchesHeading => Chart is null ? "" : $"Best and worst matches for {Chart.Celebrity.Name}";
+    public string MatchesHeading => Chart is null ? "" : $"Matches for {Chart.Celebrity.Name}";
 
     // "Compared with 211 charts: 14 Soulmates (+2) · 39 Harmonious (+1) · …"
     public string MatchesSummary
@@ -255,8 +238,8 @@ public sealed partial class SynastryViewModel : ObservableObject
                 SynastryTone.Challenging, SynastryTone.Adversaries,
             ];
             var counts = scale.Select(t =>
-                $"{Matches.Count(m => m.Compatibility.Level == t.Level())} {t.Label()} ({t.LevelText()})");
-            return $"Compared with {Matches.Count} charts{AsLivedNote}:  {string.Join("  ·  ", counts)}  ·  {Matches.Count(m => m.Contemporaries)} contemporaries";
+                $"{Matches.Count(m => m.Compatibility.Level == t.Level()):n0} {t.Label()} ({t.LevelText()})");
+            return $"Compared with {Matches.Count:n0} charts{AsLivedNote}:  {string.Join("  ·  ", counts)}  ·  {Matches.Count(m => m.Contemporaries):n0} contemporaries";
         }
     }
 
@@ -371,6 +354,7 @@ public sealed partial class SynastryViewModel : ObservableObject
         OnPropertyChanged(nameof(FinderHeading));
         OnPropertyChanged(nameof(HasChart));
         OnPropertyChanged(nameof(FinderShown));
+        ResultsChanged();
         Rebuild();
         RebuildMatches();
     }
@@ -383,6 +367,7 @@ public sealed partial class SynastryViewModel : ObservableObject
         if (value is null) Third = null;   // the trio goes with the partner
         Rebuild();
         RebuildFinder();
+        ResultsChanged();
     }
 
     partial void OnThirdChanged(Celebrity? value)
@@ -397,6 +382,10 @@ public sealed partial class SynastryViewModel : ObservableObject
     {
         if (value) ShowDavison = false;
         OnPropertyChanged(nameof(ShowMatches));
+        // The levels of two people and of three are different scales.
+        ResultLevel = null;
+        OnPropertyChanged(nameof(LevelChoices));
+        OnPropertyChanged(nameof(SelectedLevel));
         TrioChanged();
         RebuildThirds();
         RebuildFinder();
@@ -404,17 +393,18 @@ public sealed partial class SynastryViewModel : ObservableObject
 
     partial void OnTriosChanged(IReadOnlyList<TrioFind> value)
     {
-        OnPropertyChanged(nameof(BestTrios));
         OnPropertyChanged(nameof(FinderSummary));
+        RefreshResults();
+        ResultsChanged();
     }
 
     partial void OnTrioReadingChanged(TrioReading? value) => TrioChanged();
 
     partial void OnThirdMatchesChanged(IReadOnlyList<TrioMatch> value)
     {
-        OnPropertyChanged(nameof(BestThirds));
         OnPropertyChanged(nameof(ThirdsSummary));
-        OnPropertyChanged(nameof(GoldenThirds));
+        RefreshResults();
+        ResultsChanged();
     }
 
     // Everything on screen that depends on whether the three are being shown.
@@ -427,6 +417,7 @@ public sealed partial class SynastryViewModel : ObservableObject
                      nameof(Title), nameof(ToneText), nameof(ToneColorHex), nameof(Sections), nameof(WheelCaption),
                  })
             OnPropertyChanged(name);
+        ResultsChanged();
     }
 
     // The finder, off the UI thread: every pair of the top connections as a trio with the
@@ -510,10 +501,10 @@ public sealed partial class SynastryViewModel : ObservableObject
 
     partial void OnMatchesChanged(IReadOnlyList<SynastryMatch> value)
     {
-        OnPropertyChanged(nameof(BestMatches));
-        OnPropertyChanged(nameof(WorstMatches));
         OnPropertyChanged(nameof(MatchesSummary));
         OnPropertyChanged(nameof(ShowMatches));
+        RefreshResults();
+        ResultsChanged();
         RebuildFinder();
     }
 

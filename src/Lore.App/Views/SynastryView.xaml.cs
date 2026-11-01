@@ -54,11 +54,24 @@ public sealed partial class SynastryView : UserControl
         sender.ItemsSource = null;
     }
 
-    // A name clicked in the best or worst matches: compare with that person.
+    // A name clicked in the matches: compare with that person.
     private void Match_ItemClick(object sender, ItemClickEventArgs e)
     {
         if (e.ClickedItem is SynastryMatch match)
             ViewModel.Partner = match.Person;
+    }
+
+    private void CompareWith_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is FrameworkElement { Tag: Celebrity person })
+            ViewModel.CompareWith(person);
+    }
+
+    // On to the Trine view with this person as the second, to look for a third.
+    private void StartTrio_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is FrameworkElement { Tag: Celebrity person })
+            ViewModel.AddAsThird(person);
     }
 
     // ── The third person ──────────────────────────────────────────────────────
@@ -124,6 +137,7 @@ public sealed partial class SynastryView : UserControl
     private void DavisonRadio_Checked(object sender, RoutedEventArgs e) => ViewModel.ShowDavison = true;
 
     // x:Bind helpers.
+    public static IReadOnlyList<string> Sorts => SynastryViewModel.ResultSorts;
     public bool AnyOf(bool a, bool b, bool c) => a || b || c;
     public bool Neither(bool a, bool b) => !a && !b;
     public Visibility VisIfBoth(bool a, bool b) => a && b ? Visibility.Visible : Visibility.Collapsed;

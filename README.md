@@ -103,7 +103,7 @@ The **Synastry** view compares the selected chart with a second person's — any
 - **Explainable.** *Why this reading?* lists every contact found and which ones the reading used.
 - **Honest about unknowns.** A chart with no birth time contributes no Ascendant, Midheaven, houses, or Moon.
 
-- **Best and worst matches.** Before you choose anyone, the view compares the selected chart with every figure in the library and every chart of your own, and lists the twelve best and twelve worst matches. Click one to read the comparison.
+- **All your matches.** Before you choose anyone, the view compares the selected chart with every figure in the library and every chart of your own, and lists all of them, best first. Search names, places and biographies, narrow the list by level, category or contemporaries, and sort it by best match, hardest first, best or least known, name or age. Click one to read the comparison.
 - **A five-step scale.** Each pair is placed at **Soulmates** (+2), **Harmonious** (+1), **Mixed** (0), **Challenging** (−1) or **Adversaries** (−2), by the share of the contacts between the two charts that are easy ones, each counted by how close and how personal it is. The steps are set against every pair in the library, so about half of all pairs are Mixed and about one in fourteen falls at each end.
 
 ![Lore showing the best and worst synastry matches for Albert Einstein, each on the five-step scale](docs/images/screenshot-einstein-matches.png)
@@ -114,7 +114,7 @@ Astrology has no agreed compatibility score; the scale is Lore's own, and it des
 **Trine**, at the top of the Synastry view, sets three charts together: a tri-synastry.
 
 - **Finder.** With one person selected, Lore takes their top 100 connections, tries every pair of them as a trio with that person (4,950 trios), and lists the best two dozen. **Look among** narrows it to one category of the list, or to My Charts. Select a row to read the three together.
-- **Best third.** With two people chosen, Lore tries every other chart in the library, and every chart of your own, as the third, and lists the best twelve.
+- **Find a third.** With two people chosen, Lore tries every other chart in the library, and every chart of your own, as the third, and lists them all, to search and filter the same way. Right-click a name among the matches to start a trio with them.
 - **Contemporaries.** Where everyone in a pair or a trio was alive at the same time, the list and the reading say so, and within a step of the scale they come first. Your own charts count as living.
 - **The three pairs.** Each pair is compared as in Synastry, on the same five-step scale, and the weakest of the three is marked.
 - **Grand trines through all three charts.** One point from each person, every point within 6° of a trine with the other two. Each is named with its element and how close it is, and the strongest three are described.

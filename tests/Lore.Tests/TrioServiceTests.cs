@@ -272,11 +272,11 @@ public class TrioServiceTests
         await Settled();
         Assert.True(vm.FinderShown);
         Assert.False(vm.ShowMatches);
-        Assert.NotEmpty(vm.BestTrios);
+        Assert.NotEmpty(vm.ShownTrios);
         Assert.StartsWith("Tried ", vm.FinderSummary);
         Assert.Equal("", vm.PromptText);
 
-        var row = vm.BestTrios[0];
+        var row = vm.ShownTrios[0];
         vm.Choose(row);
         await Settled();
         Assert.False(vm.FinderShown);
@@ -290,7 +290,7 @@ public class TrioServiceTests
         await Settled();
         Assert.Null(vm.Third);
         Assert.True(vm.FinderShown);
-        Assert.NotEmpty(vm.BestTrios);
+        Assert.NotEmpty(vm.ShownTrios);
     }
 
     [Fact]
@@ -337,10 +337,10 @@ public class TrioServiceTests
         Assert.True(vm.ThirdsShown);
         Assert.False(vm.ReadingShown);
         Assert.False(vm.ComparisonShown);
-        Assert.NotEmpty(vm.BestThirds);
+        Assert.NotEmpty(vm.ShownThirds);
         Assert.Empty(vm.Sections);
 
-        vm.Third = vm.BestThirds[0].Person;
+        vm.Third = vm.ShownThirds[0].Person;
         await Settled();
         Assert.True(vm.TrioShown);
         Assert.False(vm.ThirdsShown);

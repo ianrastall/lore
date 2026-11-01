@@ -247,17 +247,11 @@ public class ContemporariesTests
         vm.Chart = Chart("albert-einstein");
         await Settled(vm);
 
-        var worst = vm.WorstMatches;
-        Assert.Equal(12, worst.Count);
-        Assert.Empty(worst.Select(m => m.Person.Id).Intersect(vm.BestMatches.Select(m => m.Person.Id)));
+        vm.SelectedSort = SynastryViewModel.HardestFirst;
+        var worst = vm.ShownMatches;
+        Assert.Equal(vm.Matches.Count, worst.Count);
         Assert.Equal(worst.OrderBy(m => m.Compatibility.Level).Select(m => m.Compatibility.Level), worst.Select(m => m.Compatibility.Level));
         AssertAheadWithin(worst, m => m.Compatibility.Level, m => m.Contemporaries);
-
-        // The bottom level's contemporaries are not pushed off the list by the people the
-        // ranking puts after them.
-        int bottom = worst[0].Compatibility.Level;
-        int there = vm.Matches.Count(m => m.Compatibility.Level == bottom && m.Contemporaries);
-        Assert.Equal(Math.Min(there, 12), worst.Count(m => m.Compatibility.Level == bottom && m.Contemporaries));
         Assert.Contains("contemporaries", vm.MatchesSummary);
     }
 }

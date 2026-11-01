@@ -68,6 +68,7 @@ public sealed record SynastryMatch(Celebrity Person, Compatibility Compatibility
     // For x:Bind in the list of matches.
     public string Name => Person.Name;
     public string Detail => $"{Person.Category} · {Person.BirthDate}" + (Contemporaries ? " · contemporaries" : "");
+    public string Bio => Person.Bio;
     public string LevelText => Compatibility.Tone.LevelText();
     public string ToneLabel => Compatibility.Tone.Label();
     public string ColorHex => Compatibility.Tone.ColorHex();
