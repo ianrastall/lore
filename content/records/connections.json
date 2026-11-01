@@ -66,6 +66,12 @@
  },
  {
   "first": "alice-cooper",
+  "second": "dave-mustaine",
+  "relation": "relative",
+  "kinship": "godson"
+ },
+ {
+  "first": "alice-cooper",
   "second": "johnny-depp",
   "relation": "groupmate",
   "group": "Hollywood Vampires"
@@ -161,6 +167,30 @@
   "second": "xavier-niel",
   "relation": "relative",
   "kinship": "son-in-law"
+ },
+ {
+  "first": "bill-berry",
+  "second": "mike-mills",
+  "relation": "groupmate",
+  "group": "Hindu Love Gods"
+ },
+ {
+  "first": "bill-berry",
+  "second": "mike-mills",
+  "relation": "groupmate",
+  "group": "R.E.M."
+ },
+ {
+  "first": "bill-berry",
+  "second": "peter-buck",
+  "relation": "groupmate",
+  "group": "Hindu Love Gods"
+ },
+ {
+  "first": "bill-berry",
+  "second": "peter-buck",
+  "relation": "groupmate",
+  "group": "R.E.M."
  },
  {
   "first": "bill-clinton",
@@ -302,6 +332,13 @@
   "to": "2007-01"
  },
  {
+  "first": "cameron-diaz",
+  "second": "matt-dillon",
+  "relation": "partner",
+  "from": "1995",
+  "to": "1998"
+ },
+ {
   "first": "camille-claudel",
   "second": "paul-claudel",
   "relation": "sibling"
@@ -429,9 +466,39 @@
  },
  {
   "first": "dave-grohl",
+  "second": "josh-homme",
+  "relation": "groupmate",
+  "group": "Queens of the Stone Age"
+ },
+ {
+  "first": "dave-grohl",
+  "second": "josh-homme",
+  "relation": "groupmate",
+  "group": "Them Crooked Vultures"
+ },
+ {
+  "first": "dave-grohl",
   "second": "kurt-cobain",
   "relation": "groupmate",
   "group": "Nirvana"
+ },
+ {
+  "first": "dave-grohl",
+  "second": "mike-mills",
+  "relation": "groupmate",
+  "group": "The Backbeat Band"
+ },
+ {
+  "first": "dave-mustaine",
+  "second": "james-hetfield",
+  "relation": "groupmate",
+  "group": "Metallica"
+ },
+ {
+  "first": "dave-mustaine",
+  "second": "kirk-hammett",
+  "relation": "groupmate",
+  "group": "Metallica"
  },
  {
   "first": "dean-martin",
@@ -493,6 +560,11 @@
   "first": "donald-sutherland",
   "second": "kiefer-sutherland",
   "relation": "parent"
+ },
+ {
+  "first": "donatella-versace",
+  "second": "gianni-versace",
+  "relation": "sibling"
  },
  {
   "first": "dr-dre",
@@ -896,6 +968,24 @@
   "to": "2004"
  },
  {
+  "first": "james-hetfield",
+  "second": "kirk-hammett",
+  "relation": "groupmate",
+  "group": "Metallica"
+ },
+ {
+  "first": "james-hetfield",
+  "second": "kirk-hammett",
+  "relation": "groupmate",
+  "group": "Spastik Children"
+ },
+ {
+  "first": "james-hetfield",
+  "second": "kirk-hammett",
+  "relation": "groupmate",
+  "group": "The Gak"
+ },
+ {
   "first": "jane-fonda",
   "second": "ted-turner",
   "relation": "spouse",
@@ -924,6 +1014,13 @@
   "first": "jean-paul-sartre",
   "second": "simone-de-beauvoir",
   "relation": "partner"
+ },
+ {
+  "first": "jennifer-aniston",
+  "second": "vince-vaughn",
+  "relation": "partner",
+  "from": "2005",
+  "to": "2006"
  },
  {
   "first": "jerry-lee-lewis",
@@ -1188,6 +1285,19 @@
   "group": "Martin Scorsese and Leonardo DiCaprio"
  },
  {
+  "first": "lindsey-buckingham",
+  "second": "stevie-nicks",
+  "relation": "groupmate",
+  "group": "Fleetwood Mac"
+ },
+ {
+  "first": "lindsey-buckingham",
+  "second": "stevie-nicks",
+  "relation": "partner",
+  "from": "1972",
+  "to": "1976"
+ },
+ {
   "first": "lindsey-vonn",
   "second": "tiger-woods",
   "relation": "partner",
@@ -1304,6 +1414,24 @@
   "second": "terry-gilliam",
   "relation": "groupmate",
   "group": "Monty Python"
+ },
+ {
+  "first": "mike-mills",
+  "second": "peter-buck",
+  "relation": "groupmate",
+  "group": "Hindu Love Gods"
+ },
+ {
+  "first": "mike-mills",
+  "second": "peter-buck",
+  "relation": "groupmate",
+  "group": "R.E.M."
+ },
+ {
+  "first": "mike-mills",
+  "second": "peter-buck",
+  "relation": "groupmate",
+  "group": "The Baseball Project"
  },
  {
   "first": "monica-bellucci",
@@ -1497,5 +1625,11 @@
   "second": "hannah-arendt",
   "relation": "relative",
   "kinship": "cousin"
+ },
+ {
+  "first": "whitney-houston",
+  "second": "dionne-warwick",
+  "relation": "relative",
+  "kinship": "female first cousin"
  }
 ]

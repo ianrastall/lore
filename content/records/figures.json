@@ -53248,5 +53248,2031 @@
     "person": "Glenne Headly"
    }
   ]
+ },
+ "alan-cumming": {
+  "wikidataId": "Q316629",
+  "occupations": [
+   "LGBTQ rights activist",
+   "actor",
+   "character actor",
+   "comedian",
+   "composer",
+   "film actor",
+   "film director",
+   "film producer",
+   "screenwriter",
+   "stage actor",
+   "television actor",
+   "translator",
+   "voice actor"
+  ],
+  "portrait": "FM and Alan Cumming in NY-4 (cropped).jpg"
+ },
+ "alexandre-desplat": {
+  "wikidataId": "Q313362",
+  "birthName": "Alexandre Michel Gérard Desplat",
+  "occupations": [
+   "actor",
+   "bandleader",
+   "composer",
+   "film score composer",
+   "librettist",
+   "music educator",
+   "musician",
+   "recording artist"
+  ],
+  "portrait": "AlexandreDesplat-gros-plan.jpg",
+  "events": [
+   {
+    "kind": "child",
+    "date": "1994-09-28",
+    "person": "Antonia Desplat"
+   },
+   {
+    "kind": "award",
+    "date": "2015-02-22",
+    "award": "Academy Award for Best Original Score"
+   },
+   {
+    "kind": "award",
+    "date": "2018-03-04",
+    "award": "Academy Award for Best Original Score"
+   }
+  ]
+ },
+ "alison-krauss": {
+  "wikidataId": "Q371782",
+  "otherNames": [
+   "Alison Maria Krauss",
+   "Allison Krauss"
+  ],
+  "occupations": [
+   "fiddler",
+   "mandolinist",
+   "musician",
+   "singer",
+   "violinist"
+  ],
+  "portrait": "Alison Krauss Crop.png"
+ },
+ "bernadette-peters": {
+  "wikidataId": "Q231391",
+  "birthName": "Bernadette Lazzara",
+  "occupations": [
+   "actor",
+   "child actor",
+   "film actor",
+   "musician",
+   "singer",
+   "stage actor",
+   "voice actor",
+   "writer"
+  ],
+  "portrait": "BernadettePeters-byPhilipRomano.jpg",
+  "events": [
+   {
+    "kind": "award",
+    "date": "1981",
+    "award": "Golden Globe Award for Best Actress in a Motion Picture – Musical or Comedy"
+   }
+  ]
+ },
+ "bill-berry": {
+  "wikidataId": "Q364873",
+  "birthName": "William Thomas Berry",
+  "otherNames": [
+   "13111",
+   "The Doc"
+  ],
+  "occupations": [
+   "composer",
+   "drummer",
+   "farmer",
+   "film actor",
+   "musician",
+   "record producer",
+   "songwriter",
+   "television actor"
+  ],
+  "portrait": "Billberry.jpg"
+ },
+ "brian-cox": {
+  "wikidataId": "Q34975",
+  "birthName": "Brian Denis Cox",
+  "occupations": [
+   "actor",
+   "film actor",
+   "film director",
+   "stage actor",
+   "television actor"
+  ],
+  "portrait": "Brian Cox Edinburgh 2025.jpg",
+  "events": [
+   {
+    "kind": "child",
+    "date": "1970-08-06",
+    "person": "Alan Cox"
+   },
+   {
+    "kind": "marriage",
+    "date": "2002",
+    "person": "Nicole Ansari"
+   },
+   {
+    "kind": "award",
+    "date": "2020",
+    "award": "Golden Globes"
+   }
+  ]
+ },
+ "chaka-khan": {
+  "wikidataId": "Q229498",
+  "birthName": "Yvette Marie Stevens",
+  "otherNames": [
+   "Rufus & Chaka Khan"
+  ],
+  "occupations": [
+   "composer",
+   "jazz musician",
+   "musician",
+   "recording artist",
+   "singer",
+   "singer-songwriter"
+  ],
+  "portrait": "Chaka Khan in Chris March 01 (cropped).jpg",
+  "events": [
+   {
+    "kind": "award",
+    "date": "2023",
+    "award": "Rock and Roll Hall of Fame"
+   }
+  ]
+ },
+ "cindy-sherman": {
+  "wikidataId": "Q229455",
+  "birthName": "Cynthia Morris Sherman",
+  "occupations": [
+   "artist",
+   "cinematographer",
+   "director",
+   "film director",
+   "filmmaker",
+   "photographer",
+   "women's rights activist"
+  ],
+  "portrait": "Cindy Sherman (cropped).jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "1984",
+    "person": "Michel Auder"
+   },
+   {
+    "kind": "award",
+    "date": "1995",
+    "award": "MacArthur Fellows Program"
+   },
+   {
+    "kind": "award",
+    "date": "1999",
+    "award": "Hasselblad Award"
+   },
+   {
+    "kind": "marriageEnded",
+    "date": "1999",
+    "person": "Michel Auder"
+   },
+   {
+    "kind": "award",
+    "date": "2016",
+    "award": "Praemium Imperiale"
+   },
+   {
+    "kind": "award",
+    "date": "2020",
+    "award": "Wolf Prize in Arts"
+   },
+   {
+    "kind": "award",
+    "date": "2022",
+    "award": "Time 100"
+   }
+  ]
+ },
+ "cedric-villani": {
+  "wikidataId": "Q334065",
+  "otherNames": [
+   "Marsu"
+  ],
+  "occupations": [
+   "mathematician",
+   "politician",
+   "professors, scientific professions",
+   "university teacher"
+  ],
+  "portrait": "Cedric Villani at his office 2015 n3.jpg",
+  "events": [
+   {
+    "kind": "award",
+    "date": "2010",
+    "award": "Fields medal"
+   },
+   {
+    "kind": "marriageEnded",
+    "date": "2019"
+   }
+  ]
+ },
+ "danny-devito": {
+  "wikidataId": "Q26806",
+  "birthName": "Daniel Michael DeVito Jr.",
+  "otherNames": [
+   "Daniel Michael DeVito",
+   "Danny De Vito",
+   "Danny Michael De Vito",
+   "Danny Michael DeVito Jr.",
+   "Danny Michael DeVito, Jr.",
+   "Danny de Vito"
+  ],
+  "occupations": [
+   "actor",
+   "comedian",
+   "director",
+   "dub actor",
+   "film actor",
+   "film director",
+   "film producer",
+   "film screenwriter",
+   "musician",
+   "producer",
+   "screenwriter",
+   "stage actor",
+   "television actor",
+   "television producer",
+   "voice actor",
+   "writer"
+  ],
+  "portrait": "Danny DeVito cropped and edited for brightness.jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "1982",
+    "person": "Rhea Perlman"
+   },
+   {
+    "kind": "child",
+    "date": "1983-03-11",
+    "person": "Lucy DeVito"
+   },
+   {
+    "kind": "marriageEnded",
+    "date": "2016",
+    "person": "Rhea Perlman"
+   }
+  ]
+ },
+ "dave-mustaine": {
+  "wikidataId": "Q187165",
+  "otherNames": [
+   "Dave",
+   "David Mustaine",
+   "David S. Mustaine",
+   "David Scott Mustaine"
+  ],
+  "occupations": [
+   "composer",
+   "guitarist",
+   "singer",
+   "songwriter"
+  ],
+  "portrait": "HF2022Megadeth 2.jpg",
+  "events": [
+   {
+    "kind": "child",
+    "date": "1998-01-28",
+    "person": "Electra Mustaine"
+   }
+  ]
+ },
+ "david-lovering": {
+  "wikidataId": "Q739636",
+  "occupations": [
+   "drummer",
+   "magician",
+   "musician"
+  ],
+  "portrait": "David Lovering edited.jpg"
+ },
+ "dionne-warwick": {
+  "wikidataId": "Q234695",
+  "birthName": "Marie Dionne Warrick",
+  "otherNames": [
+   "Dionne Warwicke"
+  ],
+  "occupations": [
+   "actor",
+   "musician",
+   "pop musician",
+   "presenter",
+   "singer",
+   "television presenter"
+  ],
+  "portrait": "Dionne Warwick 2021.jpg",
+  "events": [
+   {
+    "kind": "child",
+    "date": "1973-03-21",
+    "person": "Damon Elliott"
+   },
+   {
+    "kind": "award",
+    "date": "2023",
+    "award": "Kennedy Center Honors"
+   }
+  ]
+ },
+ "donatella-versace": {
+  "wikidataId": "Q229437",
+  "otherNames": [
+   "Donatella Francesca Versace"
+  ],
+  "occupations": [
+   "businessperson",
+   "designer",
+   "fashion designer"
+  ],
+  "portrait": "Donatella Versace Time Shankbone 2010 (cropped).jpg",
+  "events": [
+   {
+    "kind": "child",
+    "date": "1986-06-30",
+    "person": "Allegra Versace"
+   }
+  ]
+ },
+ "edwin-moses": {
+  "wikidataId": "Q52620",
+  "otherNames": [
+   "Edwin Corley Moses"
+  ],
+  "occupations": [
+   "athletics competitor",
+   "bobsledder"
+  ],
+  "portrait": "2017-BG Ed Moses 02.jpg"
+ },
+ "emmylou-harris": {
+  "wikidataId": "Q231286",
+  "otherNames": [
+   "Emmy Lou Harris"
+  ],
+  "occupations": [
+   "country singer",
+   "guitarist",
+   "musician",
+   "recording artist",
+   "singer",
+   "singer-songwriter",
+   "songwriter"
+  ],
+  "portrait": "Emmylou Harris July 31, 2011 (cropped).jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "1977-01-09",
+    "person": "Brian Ahern"
+   },
+   {
+    "kind": "marriageEnded",
+    "date": "1984",
+    "person": "Brian Ahern"
+   },
+   {
+    "kind": "marriage",
+    "date": "1985",
+    "person": "Paul Kennerley"
+   },
+   {
+    "kind": "marriageEnded",
+    "date": "1993",
+    "person": "Paul Kennerley"
+   },
+   {
+    "kind": "award",
+    "date": "2015",
+    "award": "Polar Music Prize"
+   }
+  ]
+ },
+ "francois-englert": {
+  "wikidataId": "Q151746",
+  "otherNames": [
+   "Francois Englert"
+  ],
+  "occupations": [
+   "physicist",
+   "theoretical physicist",
+   "university teacher"
+  ],
+  "portrait": "Francois Englert (3x4 cropped).jpg",
+  "events": [
+   {
+    "kind": "award",
+    "date": "2004",
+    "award": "Wolf Prize in Physics"
+   },
+   {
+    "kind": "award",
+    "date": "2013",
+    "award": "Nobel Prize in Physics"
+   }
+  ]
+ },
+ "gladys-knight": {
+  "wikidataId": "Q235952",
+  "otherNames": [
+   "Gladys M. Knight",
+   "Gladys Maria Knight"
+  ],
+  "occupations": [
+   "actor",
+   "composer",
+   "film actor",
+   "musician",
+   "singer",
+   "soul musician",
+   "television actor"
+  ],
+  "portrait": "Gladys Knight - 2016.jpg",
+  "events": [
+   {
+    "kind": "award",
+    "date": "2022",
+    "award": "Kennedy Center Honors"
+   },
+   {
+    "kind": "award",
+    "date": "2023",
+    "award": "National Medal of Arts"
+   }
+  ]
+ },
+ "grant-morrison": {
+  "wikidataId": "Q943047",
+  "occupations": [
+   "comics writer",
+   "executive producer",
+   "playwright",
+   "science fiction writer",
+   "screenwriter",
+   "writer"
+  ],
+  "portrait": "Grant morrison2.jpg"
+ },
+ "greg-maddux": {
+  "wikidataId": "Q709138",
+  "otherNames": [
+   "Gregory Alan Maddux"
+  ],
+  "occupations": [
+   "baseball player"
+  ],
+  "portrait": "Greg Maddux 2008.jpg",
+  "events": [
+   {
+    "kind": "award",
+    "date": "2014",
+    "award": "National Baseball Hall of Fame and Museum"
+   }
+  ]
+ },
+ "j-mascis": {
+  "wikidataId": "Q739681",
+  "otherNames": [
+   "J. Mascis",
+   "Joseph Donald Mascis Jr",
+   "Joseph Donald Mascis, Jr.",
+   "MASS"
+  ],
+  "occupations": [
+   "actor",
+   "composer",
+   "film actor",
+   "film producer",
+   "guitarist",
+   "musician",
+   "singer",
+   "singer-songwriter",
+   "television actor"
+  ],
+  "portrait": "J-mascis.jpg"
+ },
+ "jenny-slate": {
+  "wikidataId": "Q744166",
+  "birthName": "Jenny Sarah Slate",
+  "otherNames": [
+   "Jennifer Sarah \"Jenny\" Slate",
+   "Jennifer Sarah Slate",
+   "Jenny S. Slate"
+  ],
+  "occupations": [
+   "actor",
+   "children's writer",
+   "comedian",
+   "film producer",
+   "screenwriter",
+   "singer",
+   "stand-up comedian",
+   "voice actor",
+   "writer"
+  ],
+  "portrait": "Jenny Slate (cropped).jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "2021-12-31",
+    "person": "Ben Shattuck"
+   }
+  ]
+ },
+ "joe-pesci": {
+  "wikidataId": "Q20178",
+  "birthName": "Joseph Frank Pesci",
+  "otherNames": [
+   "Joseph Frank \"Joe\" Pesci",
+   "Joseph Pesci"
+  ],
+  "occupations": [
+   "actor",
+   "character actor",
+   "comedian",
+   "film actor",
+   "musician",
+   "singer",
+   "television actor"
+  ],
+  "portrait": "JoePesci-2009.jpg",
+  "events": [
+   {
+    "kind": "award",
+    "date": "1991-03-25",
+    "award": "Academy Award for Best Supporting Actor"
+   }
+  ]
+ },
+ "john-cena": {
+  "wikidataId": "Q44437",
+  "birthName": "John Felix Anthony Cena",
+  "otherNames": [
+   "Cena",
+   "John Félix Anthony Cena",
+   "Juan Cena",
+   "Mr. P",
+   "The Prototype"
+  ],
+  "occupations": [
+   "actor",
+   "executive producer",
+   "musician",
+   "professional wrestler",
+   "rapper"
+  ],
+  "portrait": "John Cena by Gage Skidmore.jpg"
+ },
+ "john-krasinski": {
+  "wikidataId": "Q313039",
+  "birthName": "John Burke Krasinski",
+  "occupations": [
+   "actor",
+   "audio engineer",
+   "film actor",
+   "film director",
+   "film producer",
+   "screenwriter",
+   "stage actor",
+   "television actor",
+   "television producer",
+   "voice actor"
+  ],
+  "portrait": "John Krasinski at TIFF 2025 02 (cropped).jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "2010-07-10",
+    "person": "Emily Blunt"
+   },
+   {
+    "kind": "award",
+    "date": "2018",
+    "award": "Time 100"
+   }
+  ]
+ },
+ "josh-brolin": {
+  "wikidataId": "Q41396",
+  "birthName": "Josh James Brolin",
+  "occupations": [
+   "actor",
+   "character actor",
+   "film actor",
+   "film producer",
+   "producer",
+   "stage actor",
+   "television actor",
+   "voice actor"
+  ],
+  "portrait": "Josh Brolin TIFF 2025 (cropped).jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "1988",
+    "person": "Alice Adair"
+   },
+   {
+    "kind": "marriageEnded",
+    "date": "1994",
+    "person": "Alice Adair"
+   },
+   {
+    "kind": "child",
+    "date": "1994-11-30",
+    "person": "Eden Brolin"
+   },
+   {
+    "kind": "marriage",
+    "date": "2004-08-15",
+    "person": "Diane Lane"
+   },
+   {
+    "kind": "marriageEnded",
+    "date": "2013-11-27",
+    "person": "Diane Lane"
+   }
+  ]
+ },
+ "josh-homme": {
+  "wikidataId": "Q1708504",
+  "birthName": "Joshua Michael Homme",
+  "otherNames": [
+   "Joshua Homme"
+  ],
+  "occupations": [
+   "composer",
+   "film director",
+   "guitarist",
+   "musician",
+   "record producer",
+   "singer",
+   "singer-songwriter"
+  ],
+  "portrait": "Josh Homme 2025.jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "2007",
+    "person": "Brody Dalle"
+   }
+  ]
+ },
+ "joyce-carol-oates": {
+  "wikidataId": "Q217557",
+  "otherNames": [
+   "Lauren Kelly",
+   "Rosamond Smith"
+  ],
+  "occupations": [
+   "autobiographer",
+   "diarist",
+   "docent",
+   "essayist",
+   "novelist",
+   "playwright",
+   "poet",
+   "professor",
+   "screenwriter",
+   "writer"
+  ],
+  "portrait": "Joyce Carol Oates, Bokmässan 2024, P1270511.jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "1961",
+    "person": "Raymond J. Smith"
+   },
+   {
+    "kind": "award",
+    "date": "1967",
+    "award": "Guggenheim Fellowship"
+   },
+   {
+    "kind": "award",
+    "date": "1967",
+    "award": "O. Henry Award"
+   },
+   {
+    "kind": "award",
+    "date": "1970",
+    "award": "National Book Award"
+   },
+   {
+    "kind": "marriage",
+    "date": "2009",
+    "person": "Charles G. Gross"
+   }
+  ]
+ },
+ "julie-delpy": {
+  "wikidataId": "Q110462",
+  "otherNames": [
+   "Julie Delphy"
+  ],
+  "occupations": [
+   "actor",
+   "composer",
+   "director",
+   "film actor",
+   "film director",
+   "film editor",
+   "film producer",
+   "musician",
+   "screenwriter",
+   "singer",
+   "singer-songwriter",
+   "television actor"
+  ],
+  "portrait": "Julie Delpy (2019).jpg"
+ },
+ "kaley-cuoco": {
+  "wikidataId": "Q16759",
+  "birthName": "Kaley Christine Cuoco",
+  "otherNames": [
+   "Kaley Christina Cuoco",
+   "Kaley Christina Cuoco-Sweeting",
+   "Kaley Christine Cuoco-Sweeting",
+   "Kaley Cuoco Sweeting",
+   "Kaley Cuoco-Sweeting"
+  ],
+  "occupations": [
+   "actor",
+   "executive producer",
+   "film actor",
+   "film producer",
+   "model",
+   "television actor",
+   "television producer",
+   "voice actor"
+  ],
+  "portrait": "Kaley Cuoco by Gage Skidmore.jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "2013-12-31",
+    "person": "Ryan Sweeting"
+   },
+   {
+    "kind": "divorce",
+    "date": "2016-05-09",
+    "person": "Ryan Sweeting"
+   },
+   {
+    "kind": "marriage",
+    "date": "2018-06-30",
+    "person": "Karl Cook"
+   },
+   {
+    "kind": "divorce",
+    "date": "2022-06-15",
+    "person": "Karl Cook"
+   }
+  ]
+ },
+ "kevin-kline": {
+  "wikidataId": "Q105817",
+  "birthName": "Kevin Delaney Kline",
+  "otherNames": [
+   "K. D. Kline",
+   "K. Kline",
+   "Kevin D. Kline",
+   "Kline"
+  ],
+  "occupations": [
+   "actor",
+   "film actor",
+   "film director",
+   "musician",
+   "stage actor",
+   "television actor",
+   "theatre director",
+   "voice actor"
+  ],
+  "portrait": "Kevin Kline, No Strings Attached Premiere.jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "1989-03-05",
+    "person": "Phoebe Cates"
+   },
+   {
+    "kind": "award",
+    "date": "1989-03-29",
+    "award": "Academy Award for Best Supporting Actor"
+   },
+   {
+    "kind": "child",
+    "date": "1991-10-14",
+    "person": "Owen Kline"
+   },
+   {
+    "kind": "child",
+    "date": "1994-03-21",
+    "person": "Greta Kline"
+   }
+  ]
+ },
+ "kim-novak": {
+  "wikidataId": "Q212879",
+  "birthName": "Marilyn Pauline Novak",
+  "occupations": [
+   "actor",
+   "film actor",
+   "television actor"
+  ],
+  "portrait": "Kim Novak 01.jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "1965",
+    "person": "Richard Johnson"
+   },
+   {
+    "kind": "marriageEnded",
+    "date": "1966",
+    "person": "Richard Johnson"
+   }
+  ]
+ },
+ "kirk-hammett": {
+  "wikidataId": "Q484030",
+  "otherNames": [
+   "Kirk L. Hammett",
+   "Kirk Lee Hammett"
+  ],
+  "occupations": [
+   "composer",
+   "guitarist",
+   "rock musician",
+   "songwriter"
+  ],
+  "portrait": "Kirk Hammett 2017.jpg"
+ },
+ "lindsey-buckingham": {
+  "wikidataId": "Q435306",
+  "birthName": "Lindsey Adams Buckingham",
+  "occupations": [
+   "composer",
+   "guitarist",
+   "musician",
+   "record producer",
+   "singer"
+  ],
+  "portrait": "LindseyBuckingham.JPG"
+ },
+ "marina-abramovic": {
+  "wikidataId": "Q47496",
+  "otherNames": [
+   "Abramović, Marina",
+   "M. Abramovic",
+   "Marina Abramovic",
+   "Marina Abramovicz",
+   "Marina Abramoviæ"
+  ],
+  "occupations": [
+   "artist",
+   "director",
+   "film director",
+   "film producer",
+   "performance artist",
+   "photographer",
+   "scenographer",
+   "screenwriter",
+   "sculptor",
+   "sound artist",
+   "university teacher",
+   "video artist",
+   "visual artist"
+  ],
+  "portrait": "Marina Abramović. The Cleaner (45524492341).jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "1971",
+    "person": "tonne"
+   },
+   {
+    "kind": "marriageEnded",
+    "date": "1976",
+    "person": "tonne"
+   },
+   {
+    "kind": "marriage",
+    "date": "2005",
+    "person": "Paolo Canevari"
+   },
+   {
+    "kind": "marriageEnded",
+    "date": "2009",
+    "person": "Paolo Canevari"
+   },
+   {
+    "kind": "award",
+    "date": "2023",
+    "award": "Sonning Prize"
+   },
+   {
+    "kind": "award",
+    "date": "2025",
+    "award": "Praemium Imperiale"
+   }
+  ]
+ },
+ "mark-hamill": {
+  "wikidataId": "Q210447",
+  "birthName": "Mark Richard Hamill",
+  "otherNames": [
+   "Mark R. Hamill",
+   "Patrick Williams",
+   "William M. Patrick"
+  ],
+  "occupations": [
+   "actor",
+   "dub actor",
+   "film actor",
+   "film director",
+   "film producer",
+   "stage actor",
+   "television actor",
+   "voice actor",
+   "writer"
+  ],
+  "portrait": "Mark Hamill at the 2024 Toronto International Film Festival (cropped).jpg",
+  "events": [
+   {
+    "kind": "award",
+    "date": "2017",
+    "award": "Disney Legends"
+   }
+  ]
+ },
+ "matt-cameron": {
+  "wikidataId": "Q318587",
+  "otherNames": [
+   "Matthew David Cameron"
+  ],
+  "occupations": [
+   "drummer"
+  ],
+  "portrait": "OK Hotel Reunion - Matt Cameron 01 - B&W.jpg"
+ },
+ "matt-dillon": {
+  "wikidataId": "Q193070",
+  "birthName": "Matthew Raymond Dillon",
+  "occupations": [
+   "actor",
+   "film actor",
+   "film director",
+   "screenwriter",
+   "television actor"
+  ],
+  "portrait": "Matt Dillon 2010.jpg"
+ },
+ "maura-tierney": {
+  "wikidataId": "Q233027",
+  "otherNames": [
+   "Maura Therese Tierney"
+  ],
+  "occupations": [
+   "actor",
+   "film actor",
+   "stage actor",
+   "television actor"
+  ],
+  "portrait": "2019.12.06 Fire Drill Fridays, Washington, DC USA 340 60058 (49179852746).jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "1993",
+    "person": "Billy Morrissette"
+   },
+   {
+    "kind": "divorce",
+    "date": "2006",
+    "person": "Billy Morrissette"
+   }
+  ]
+ },
+ "michel-gondry": {
+  "wikidataId": "Q126098",
+  "occupations": [
+   "actor",
+   "comics artist",
+   "director",
+   "film director",
+   "music video director",
+   "screenwriter",
+   "video artist"
+  ],
+  "portrait": "Michel Gondry Deauville 2012.jpg",
+  "events": [
+   {
+    "kind": "award",
+    "date": "2005-02-27",
+    "award": "Academy Award for Best Writing, Original Screenplay"
+   }
+  ]
+ },
+ "midge-ure": {
+  "wikidataId": "Q355382",
+  "otherNames": [
+   "James Ure"
+  ],
+  "occupations": [
+   "composer",
+   "film actor",
+   "guitarist",
+   "keyboardist",
+   "musician",
+   "record producer",
+   "singer",
+   "singer-songwriter",
+   "television actor"
+  ],
+  "portrait": "Midge Ure Night of the Proms 2025 (cropped).jpg",
+  "events": [
+   {
+    "kind": "child",
+    "date": "1987-03-07",
+    "person": "Molly McQueen"
+   },
+   {
+    "kind": "marriageEnded",
+    "date": "1989",
+    "person": "Annabel Giles"
+   }
+  ]
+ },
+ "mike-birbiglia": {
+  "wikidataId": "Q5576465",
+  "occupations": [
+   "actor",
+   "comedian",
+   "executive producer",
+   "film director",
+   "screenwriter",
+   "stand-up comedian"
+  ],
+  "portrait": "Mike Birbiglia.jpg"
+ },
+ "mike-mills": {
+  "wikidataId": "Q364864",
+  "otherNames": [
+   "Michael Edward Mills",
+   "Michael Mills",
+   "Ophelia"
+  ],
+  "occupations": [
+   "bassist",
+   "composer",
+   "film actor",
+   "guitarist",
+   "keyboardist",
+   "musician",
+   "pianist",
+   "record producer",
+   "songwriter",
+   "television actor",
+   "voice actor"
+  ],
+  "portrait": "MikeMills.jpg"
+ },
+ "mindy-kaling": {
+  "wikidataId": "Q539917",
+  "birthName": "Vera Mindy Chokalingam",
+  "occupations": [
+   "actor",
+   "comedian",
+   "film actor",
+   "film director",
+   "screenwriter",
+   "showrunner",
+   "television actor",
+   "television producer",
+   "voice actor"
+  ],
+  "portrait": "Mindy Kaling at WWD Style Awards 2026.jpg"
+ },
+ "miranda-july": {
+  "wikidataId": "Q256671",
+  "otherNames": [
+   "Miranda J. Grossinger"
+  ],
+  "occupations": [
+   "actor",
+   "artist",
+   "author",
+   "cinematographer",
+   "film actor",
+   "film director",
+   "filmmaker",
+   "musician",
+   "performance artist",
+   "screenwriter",
+   "video artist",
+   "writer"
+  ],
+  "portrait": "Miranda July, author, at the 2024 National Book Awards finalist reading 3 (cropped).jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "2009",
+    "person": "Mike Mills"
+   },
+   {
+    "kind": "award",
+    "date": "2025",
+    "award": "Guggenheim Fellowship"
+   },
+   {
+    "kind": "award",
+    "date": "2025",
+    "award": "Time 100"
+   }
+  ]
+ },
+ "molly-ringwald": {
+  "wikidataId": "Q231460",
+  "birthName": "Molly Kathleen Ringwald",
+  "occupations": [
+   "dancer",
+   "film actor",
+   "novelist",
+   "singer",
+   "translator",
+   "writer"
+  ],
+  "portrait": "Molly Ringwald at Sundance Film Festival 2026-4 (cropped).jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "1999"
+   },
+   {
+    "kind": "marriageEnded",
+    "date": "2002"
+   },
+   {
+    "kind": "marriage",
+    "date": "2007",
+    "person": "Panio Gianopoulos"
+   }
+  ]
+ },
+ "nathan-lane": {
+  "wikidataId": "Q491264",
+  "occupations": [
+   "actor",
+   "film actor",
+   "musician",
+   "singer",
+   "stage actor",
+   "television actor",
+   "voice actor",
+   "writer"
+  ],
+  "portrait": "NathanLane2018 (cropped).jpg"
+ },
+ "noah-wyle": {
+  "wikidataId": "Q315208",
+  "otherNames": [
+   "Noah Strausser Speer Wyle"
+  ],
+  "occupations": [
+   "actor",
+   "executive producer",
+   "film actor",
+   "film director",
+   "film producer",
+   "television actor",
+   "television director",
+   "television producer",
+   "video game actor"
+  ],
+  "portrait": "Noah Wyle - Walk of Fame-01.jpg",
+  "events": [
+   {
+    "kind": "award",
+    "date": "2025-09-14",
+    "award": "Primetime Emmy Award for Outstanding Lead Actor in a Drama Series"
+   },
+   {
+    "kind": "award",
+    "date": "2026-01-11",
+    "award": "Golden Globe Award for Best Actor – Television Series Drama"
+   },
+   {
+    "kind": "award",
+    "date": "2026-03-01",
+    "award": "Screen Actors Guild Award for Outstanding Performance by a Male Actor in a Drama Series"
+   },
+   {
+    "kind": "award",
+    "date": "2026-09-14",
+    "award": "Primetime Emmy Award for Outstanding Lead Actor in a Drama Series"
+   }
+  ]
+ },
+ "olivier-assayas": {
+  "wikidataId": "Q550717",
+  "occupations": [
+   "film critic",
+   "film director",
+   "screenwriter"
+  ],
+  "portrait": "Viennale 2010.10.30 Olivier Assayas.jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "1998",
+    "person": "Maggie Cheung"
+   },
+   {
+    "kind": "marriageEnded",
+    "date": "2001",
+    "person": "Maggie Cheung"
+   },
+   {
+    "kind": "marriage",
+    "date": "2009",
+    "person": "Mia Hansen-Løve"
+   },
+   {
+    "kind": "award",
+    "date": "2014",
+    "award": "Louis Delluc Prize"
+   },
+   {
+    "kind": "award",
+    "date": "2016",
+    "award": "Cannes Best Director Award"
+   }
+  ]
+ },
+ "paul-westerberg": {
+  "wikidataId": "Q1386311",
+  "otherNames": [
+   "Bill Expectorate",
+   "Dry Wood Garage",
+   "Elrod Puce",
+   "Grandpa Boy",
+   "Grandpaboy",
+   "Pablo Louseorama",
+   "Paul Harold Westerberg",
+   "Reverend Backwash",
+   "Senator Jim Dracula",
+   "User 964848511",
+   "Winthrope Marion Percival V."
+  ],
+  "occupations": [
+   "composer",
+   "guitarist",
+   "musician",
+   "singer",
+   "singer-songwriter"
+  ],
+  "portrait": "PaulWesteberg2014 (cropped).jpg"
+ },
+ "peter-buck": {
+  "wikidataId": "Q346801",
+  "birthName": "Peter Lawrence Buck",
+  "otherNames": [
+   "Raoul"
+  ],
+  "occupations": [
+   "banjoist",
+   "composer",
+   "guitarist",
+   "mandolinist",
+   "musician",
+   "musicologist",
+   "record producer",
+   "songwriter"
+  ],
+  "portrait": "Peter Buck of REM in looking over shoulder.jpg"
+ },
+ "peter-capaldi": {
+  "wikidataId": "Q732661",
+  "birthName": "Peter Dougan Capaldi",
+  "occupations": [
+   "actor",
+   "executive producer",
+   "film actor",
+   "film director",
+   "music artist",
+   "screenwriter",
+   "television actor",
+   "television director",
+   "voice actor"
+  ],
+  "portrait": "Peter Capaldi by Gage Skidmore.jpg",
+  "events": [
+   {
+    "kind": "award",
+    "date": "1995-03-27",
+    "award": "Academy Award for Best Live Action Short Film"
+   }
+  ]
+ },
+ "peter-handke": {
+  "wikidataId": "Q44107",
+  "occupations": [
+   "artist",
+   "director",
+   "draftsperson",
+   "essayist",
+   "film director",
+   "librettist",
+   "novelist",
+   "playwright",
+   "poet",
+   "prose writer",
+   "screenwriter",
+   "short story writer",
+   "translator",
+   "writer"
+  ],
+  "portrait": "Peter-handke.jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "1967",
+    "person": "Libgart Schwarz"
+   },
+   {
+    "kind": "child",
+    "date": "1969-04-20",
+    "person": "Amina Handke"
+   },
+   {
+    "kind": "award",
+    "date": "1973",
+    "award": "Georg Büchner Prize"
+   },
+   {
+    "kind": "marriageEnded",
+    "date": "1994",
+    "person": "Libgart Schwarz"
+   },
+   {
+    "kind": "marriage",
+    "date": "1995"
+   },
+   {
+    "kind": "award",
+    "date": "2009",
+    "award": "Franz Kafka Prize"
+   },
+   {
+    "kind": "award",
+    "date": "2019",
+    "award": "Nobel Prize in Literature"
+   }
+  ]
+ },
+ "phil-mickelson": {
+  "wikidataId": "Q325374",
+  "birthName": "Philip Alfred Mickelson",
+  "otherNames": [
+   "Lefty"
+  ],
+  "occupations": [
+   "athlete",
+   "golfer",
+   "professional golfer"
+  ],
+  "portrait": "Phil Mickelson 14.jpg"
+ },
+ "pierre-gagnaire": {
+  "wikidataId": "Q2244569",
+  "birthName": "Pierre Galmier Gagnaire",
+  "otherNames": [
+   "Pierre-Galmier Gagnaire"
+  ],
+  "occupations": [
+   "chef",
+   "cook"
+  ],
+  "portrait": "L'équipe Côté Chic aux côtés de Pierre Gagnaire.jpg"
+ },
+ "reggie-miller": {
+  "wikidataId": "Q270966",
+  "otherNames": [
+   "Reggie",
+   "Reginald Miller",
+   "Reginald Wayne \"Reggie\" Miller",
+   "Reginald Wayne Miller"
+  ],
+  "occupations": [
+   "actor",
+   "basketball player",
+   "pundit"
+  ],
+  "portrait": "Reggie Miller crop.png",
+  "events": [
+   {
+    "kind": "award",
+    "date": "2004",
+    "award": "J. Walter Kennedy Citizenship Award"
+   }
+  ]
+ },
+ "regina-king": {
+  "wikidataId": "Q234544",
+  "otherNames": [
+   "Regina Rene King"
+  ],
+  "occupations": [
+   "actor",
+   "director",
+   "film actor",
+   "film director",
+   "television actor",
+   "television director",
+   "voice actor"
+  ],
+  "portrait": "Regina King by Gage Skidmore.jpg",
+  "events": [
+   {
+    "kind": "award",
+    "date": "2017",
+    "award": "Critics' Choice Television Award"
+   },
+   {
+    "kind": "award",
+    "date": "2019",
+    "award": "Golden Globe Award for Best Supporting Actress – Motion Picture"
+   },
+   {
+    "kind": "award",
+    "date": "2019-02-24",
+    "award": "Academy Award for Best Supporting Actress"
+   }
+  ]
+ },
+ "renzo-piano": {
+  "wikidataId": "Q190148",
+  "otherNames": [
+   "R. Piano"
+  ],
+  "occupations": [
+   "architect",
+   "politician"
+  ],
+  "portrait": "Renzo Piano, portrait.jpg",
+  "events": [
+   {
+    "kind": "award",
+    "date": "1989",
+    "award": "Royal Gold Medal"
+   },
+   {
+    "kind": "award",
+    "date": "1995",
+    "award": "Erasmus Prize"
+   },
+   {
+    "kind": "award",
+    "date": "1995",
+    "award": "Praemium Imperiale"
+   },
+   {
+    "kind": "award",
+    "date": "1998",
+    "award": "Pritzker Architecture Prize"
+   },
+   {
+    "kind": "award",
+    "date": "2008",
+    "award": "AIA Gold Medal"
+   }
+  ]
+ },
+ "renee-fleming": {
+  "wikidataId": "Q165637",
+  "otherNames": [
+   "Renee Fleming"
+  ],
+  "occupations": [
+   "musician",
+   "opera singer"
+  ],
+  "portrait": "Renée Fleming became a 46th Kennedy Center honoree on December 3, 2023 in the White House Oval Office (cropped).jpg",
+  "events": [
+   {
+    "kind": "award",
+    "date": "2012",
+    "award": "National Medal of Arts"
+   }
+  ]
+ },
+ "rob-corddry": {
+  "wikidataId": "Q1378118",
+  "birthName": "Robert William Corddry",
+  "otherNames": [
+   "Robert Corddry",
+   "Robert William \"Rob\" Corddry"
+  ],
+  "occupations": [
+   "actor",
+   "comedian",
+   "executive producer",
+   "film actor",
+   "screenwriter",
+   "television actor",
+   "television director",
+   "television producer",
+   "voice actor"
+  ],
+  "portrait": "Rob Corddry by Gage Skidmore.jpg"
+ },
+ "robert-carlyle": {
+  "wikidataId": "Q207307",
+  "occupations": [
+   "actor",
+   "film actor",
+   "film director",
+   "stage actor",
+   "television actor"
+  ],
+  "portrait": "Robert Carlyle in 2017.jpg"
+ },
+ "robert-duvall": {
+  "wikidataId": "Q171736",
+  "birthName": "Robert Selden Duvall",
+  "occupations": [
+   "actor",
+   "character actor",
+   "director",
+   "film actor",
+   "film director",
+   "film producer",
+   "film screenwriter",
+   "screenwriter",
+   "soldier",
+   "stage actor",
+   "television actor",
+   "writer"
+  ],
+  "portrait": "Robert Duvall (actor, at home, New York City apartment, 1984) (cropped).jpg",
+  "events": [
+   {
+    "kind": "award",
+    "date": "1980",
+    "award": "Golden Globes"
+   },
+   {
+    "kind": "award",
+    "date": "1980-03-20",
+    "award": "BAFTA Award for Best Actor in a Supporting Role"
+   },
+   {
+    "kind": "award",
+    "date": "1984-04-09",
+    "award": "Academy Award for Best Actor"
+   },
+   {
+    "kind": "marriage",
+    "date": "2005",
+    "person": "Luciana Pedraza"
+   }
+  ]
+ },
+ "roberto-benigni": {
+  "wikidataId": "Q23301",
+  "birthName": "Roberto Remigio Benigni",
+  "otherNames": [
+   "Benigni",
+   "Benigni, Roberto Remigio",
+   "R. Benigni",
+   "R. R. Benigni",
+   "Roberto R. Benigni"
+  ],
+  "occupations": [
+   "actor",
+   "comedian",
+   "composer",
+   "director",
+   "film actor",
+   "film director",
+   "filmmaker",
+   "musician",
+   "screenwriter",
+   "singer-songwriter",
+   "stage actor",
+   "street artist"
+  ],
+  "portrait": "Roberto Benigni-5274.jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "1991-12-26",
+    "person": "Nicoletta Braschi"
+   },
+   {
+    "kind": "award",
+    "date": "1998",
+    "award": "European Film Award for Best Film"
+   },
+   {
+    "kind": "award",
+    "date": "1999",
+    "award": "BAFTA Award for Best Actor in a Leading Role"
+   },
+   {
+    "kind": "award",
+    "date": "1999-03-21",
+    "award": "Academy Award for Best Actor"
+   }
+  ]
+ },
+ "robin-guthrie": {
+  "wikidataId": "Q3939268",
+  "otherNames": [
+   "Robin Andrew Guthrie"
+  ],
+  "occupations": [
+   "audio engineer",
+   "composer",
+   "drummer",
+   "guitarist",
+   "musician",
+   "percussionist",
+   "pianist",
+   "record producer",
+   "songwriter"
+  ],
+  "portrait": "Robin Guthrie at Art Parade 2008.jpg"
+ },
+ "rupaul": {
+  "wikidataId": "Q705715",
+  "birthName": "RuPaul Andre Charles",
+  "otherNames": [
+   "RuPaul Charles"
+  ],
+  "occupations": [
+   "actor",
+   "director",
+   "drag queen",
+   "fashion model",
+   "film actor",
+   "model",
+   "musician",
+   "presenter",
+   "radio personality",
+   "singer",
+   "singer-songwriter",
+   "television actor",
+   "television producer"
+  ],
+  "portrait": "DragCon 2023 @ DVSROSS Photgraphy -5 (RuPaul).jpg",
+  "events": [
+   {
+    "kind": "award",
+    "date": "2016",
+    "award": "Emmy Award"
+   },
+   {
+    "kind": "marriage",
+    "date": "2017"
+   }
+  ]
+ },
+ "sam-rockwell": {
+  "wikidataId": "Q316446",
+  "birthName": "Samuel Rockwell",
+  "occupations": [
+   "actor",
+   "film actor",
+   "film producer",
+   "manufacturer",
+   "stage actor",
+   "television actor",
+   "voice actor"
+  ],
+  "portrait": "Sam Rockwell Talk Easy (cropped).jpg",
+  "events": [
+   {
+    "kind": "award",
+    "date": "2018",
+    "award": "Golden Globe Award for Best Supporting Actor – Motion Picture"
+   },
+   {
+    "kind": "award",
+    "date": "2018-02-18",
+    "award": "BAFTA Award for Best Actor in a Supporting Role"
+   },
+   {
+    "kind": "award",
+    "date": "2018-03-04",
+    "award": "Academy Award for Best Supporting Actor"
+   }
+  ]
+ },
+ "sean-astin": {
+  "wikidataId": "Q189351",
+  "birthName": "Sean Patrick Duke",
+  "otherNames": [
+   "Sean Patrick Astin"
+  ],
+  "occupations": [
+   "actor",
+   "film actor",
+   "film director",
+   "film producer",
+   "model",
+   "television actor",
+   "voice actor"
+  ],
+  "portrait": "Sean Astin Dragon Con September 4 2026 2386.jpg",
+  "events": [
+   {
+    "kind": "award",
+    "date": "2003",
+    "award": "Saturn Award for Best Supporting Actor"
+   }
+  ]
+ },
+ "shaun-white": {
+  "wikidataId": "Q288656",
+  "birthName": "Shaun Roger White",
+  "occupations": [
+   "actor",
+   "skateboarder",
+   "snowboarder"
+  ],
+  "portrait": "Shaun White in 2018 181222-D-PB383-014 (46423162561) (cropped).jpg"
+ },
+ "steve-reich": {
+  "wikidataId": "Q262791",
+  "birthName": "Stephen Michael Reich",
+  "otherNames": [
+   "Stephen Reich"
+  ],
+  "occupations": [
+   "composer",
+   "musician",
+   "videographer"
+  ],
+  "portrait": "Steve Reich, composer, cropped.jpg",
+  "events": [
+   {
+    "kind": "award",
+    "date": "2006",
+    "award": "Praemium Imperiale"
+   }
+  ]
+ },
+ "ted-danson": {
+  "wikidataId": "Q381203",
+  "birthName": "Edward Bridge Danson III",
+  "occupations": [
+   "actor",
+   "film actor",
+   "film producer",
+   "television actor",
+   "television producer"
+  ],
+  "portrait": "Ted Danson 2008 number 2.jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "1970"
+   },
+   {
+    "kind": "divorce",
+    "date": "1975"
+   },
+   {
+    "kind": "marriage",
+    "date": "1995-10-07",
+    "person": "Mary Steenburgen"
+   }
+  ]
+ },
+ "todd-haynes": {
+  "wikidataId": "Q446580",
+  "occupations": [
+   "actor",
+   "director",
+   "film director",
+   "film producer",
+   "screenwriter",
+   "television director"
+  ],
+  "portrait": "Todd Haynes MFF 2023.jpg",
+  "events": [
+   {
+    "kind": "award",
+    "date": "2003",
+    "award": "Independent Spirit Award for Best Director"
+   },
+   {
+    "kind": "award",
+    "date": "2007",
+    "award": "Grand Jury Prize of the Venice Film Festival"
+   }
+  ]
+ },
+ "tommy-lee-jones": {
+  "wikidataId": "Q170587",
+  "otherNames": [
+   "Thomas Lee Jones",
+   "Tom Lee Jones"
+  ],
+  "occupations": [
+   "American football player",
+   "actor",
+   "film actor",
+   "film director",
+   "film producer",
+   "polo player",
+   "screenwriter",
+   "stage actor",
+   "television actor",
+   "theatre director",
+   "voice actor"
+  ],
+  "portrait": "Tommy Lee Jones 2017.jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "1971"
+   },
+   {
+    "kind": "divorce",
+    "date": "1978"
+   },
+   {
+    "kind": "marriage",
+    "date": "1981"
+   },
+   {
+    "kind": "child",
+    "date": "1991-09-03",
+    "person": "Victoria Jones"
+   },
+   {
+    "kind": "award",
+    "date": "1994",
+    "award": "Golden Globe Award for Best Supporting Actor – Motion Picture"
+   },
+   {
+    "kind": "award",
+    "date": "1994-03-21",
+    "award": "Academy Award for Best Supporting Actor"
+   },
+   {
+    "kind": "divorce",
+    "date": "1996"
+   },
+   {
+    "kind": "marriage",
+    "date": "2001"
+   },
+   {
+    "kind": "award",
+    "date": "2005",
+    "award": "Cannes Best Director Award"
+   }
+  ]
+ },
+ "toni-kroos": {
+  "wikidataId": "Q131234",
+  "occupations": [
+   "association football player"
+  ],
+  "portrait": "Toni Kroos Real Madrid 2021.jpg",
+  "events": [
+   {
+    "kind": "award",
+    "date": "2018",
+    "award": "German Footballer of the Year"
+   },
+   {
+    "kind": "award",
+    "date": "2024",
+    "award": "Bambi Award"
+   },
+   {
+    "kind": "award",
+    "date": "2024",
+    "award": "German Footballer of the Year"
+   }
+  ]
+ },
+ "toni-servillo": {
+  "wikidataId": "Q603089",
+  "otherNames": [
+   "Marco Antonio Servillo"
+  ],
+  "occupations": [
+   "actor",
+   "director",
+   "film actor",
+   "screenwriter",
+   "theatre director"
+  ],
+  "portrait": "Cast La Grande Bellezza Servillo.jpg"
+ },
+ "tony-shalhoub": {
+  "wikidataId": "Q107249",
+  "birthName": "Anthony Marcus Shalhoub",
+  "otherNames": [
+   "Anthony Marc Shalhoub"
+  ],
+  "occupations": [
+   "actor",
+   "dub actor",
+   "film actor",
+   "film director",
+   "film producer",
+   "stage actor",
+   "television actor",
+   "television producer",
+   "voice actor"
+  ],
+  "portrait": "Tony Shalhoub 2017 (cropped).jpg",
+  "events": [
+   {
+    "kind": "marriage",
+    "date": "1992",
+    "person": "Brooke Adams"
+   },
+   {
+    "kind": "award",
+    "date": "2004",
+    "award": "Screen Actors Guild Award for Outstanding Performance by a Male Actor in a Comedy Series"
+   },
+   {
+    "kind": "award",
+    "date": "2005",
+    "award": "Screen Actors Guild Award for Outstanding Performance by a Male Actor in a Comedy Series"
+   }
+  ]
+ },
+ "tracey-emin": {
+  "wikidataId": "Q241185",
+  "otherNames": [
+   "Tracey Karima Emin"
+  ],
+  "occupations": [
+   "architectural drafter",
+   "artist",
+   "conceptual artist",
+   "draftsperson",
+   "film director",
+   "installation artist",
+   "painter",
+   "performance artist",
+   "photographer",
+   "printmaker",
+   "salesperson",
+   "sculptor",
+   "textile artist",
+   "video artist"
+  ],
+  "portrait": "Tracey Emin 1-cropped.jpg",
+  "events": [
+   {
+    "kind": "award",
+    "date": "2024",
+    "award": "BBC 100 Women"
+   }
+  ]
+ },
+ "vince-vaughn": {
+  "wikidataId": "Q107730",
+  "otherNames": [
+   "Vincent Anthony Vaughn",
+   "Vincent Vaughn"
+  ],
+  "occupations": [
+   "actor",
+   "character actor",
+   "film actor",
+   "film producer",
+   "screenwriter",
+   "television actor",
+   "television producer"
+  ],
+  "portrait": "Actor Vince Vaughn 2025 (cropped).jpg"
  }
 }
