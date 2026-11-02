@@ -1,6 +1,6 @@
 # Lore handoff
 
-Version 4.5.1 · 1 November 2026 · Repository `D:/jupiter/lore`, branch `main`, remote `ianrastall/lore`
+Version 5.0.0 · 1 November 2026 · Repository `D:/jupiter/lore`, branch `main`, remote `ianrastall/lore`
 
 ## Where things live
 
@@ -11,7 +11,7 @@ Version 4.5.1 · 1 November 2026 · Repository `D:/jupiter/lore`, branch `main`,
 | Content | `content/` in the repository, `Data\` in the installed app |
 | Swiss Ephemeris | `third_party/swisseph`, compiled to `Native/sweph.dll` (not committed) |
 | Release | `build/build.ps1`, `build/installer.iss` |
-| Installed app | Ian's machine: `D:\Lore`, all-users install, 4.5.1 (admin needed to upgrade) |
+| Installed app | Ian's machine: `D:\Lore`, all-users install, 5.0.0 (admin needed to upgrade) |
 | Other apps | Jupiter HUD 0.4.1 runs `Lore.exe --daily-reading`; keep `lore.daily.v1` stable |
 | Reader's data | `%LOCALAPPDATA%\Lore`. Never in the repository. |
 
@@ -34,14 +34,21 @@ When the XAML compiler reports unknown types with `WMC9999` or `WMC1509`, the ca
 
 ## Delivered
 
-See [validation](docs/validation-4.5.1.md) for the startup-close fix, [4.5](docs/validation-4.5.0.md), [4.4](docs/validation-4.4.0.md), [4.3](docs/validation-4.3.0.md) and [4.2](docs/validation-4.2.0.md) before it, [migration](docs/jupiter-migration.md) for what moved, and [exceptions](docs/jupiter-exceptions.md) for recorded departures.
+See [Writers validation](docs/validation-5.0.0.md), [4.5.1](docs/validation-4.5.1.md) for the startup-close fix, [4.5](docs/validation-4.5.0.md), [4.4](docs/validation-4.4.0.md), [4.3](docs/validation-4.3.0.md) and [4.2](docs/validation-4.2.0.md) before it, [migration](docs/jupiter-migration.md) for what moved, and [exceptions](docs/jupiter-exceptions.md) for recorded departures.
 
 ## Next
 
-1. **Writers tab, 5.0 in progress.** Discover character birth anchors and famous pairs/trios without a starting person. **No writing prompts or writer-specific interpretation/scoring layer:** Ian rejected that prototype direction. Use the existing natal, synastry and Trine readings/measures. Famous groups require nearby birthplaces, at most ten years between oldest and youngest, **the same field (library category)** and **every member deceased for at least fifty years** (not merely born fifty years ago). See [the current plan](docs/writers-workspace-plan.md). Ian authorized autonomous development, necessary desktop checks, installation and delivery of Writers and the following corpus work; do not stop to ask him to supervise.
-2. **Broader written-reading expansion, following iteration.** Expand authored range and composition to reduce repetition across Lore; recorded separately in the Writers plan.
-3. **Rust core decision.** Open; see the exceptions record.
-4. **Theme setting.** Needs a light wheel palette.
+Writers is delivered in 5.0. `WriterInterpreter` delegates to the existing natal,
+synastry and Trine readers. **No writing prompts or invented interaction types.**
+Historical groups require the same field (library category), nearby birthplaces,
+a ten-year age span and every member deceased for fifty years. Private snapshots
+are in `writer-briefs.json`, never in the release. Ian authorized autonomous work,
+necessary desktop checks, installation and delivery of Writers and the following
+corpus work; do not stop to ask him to supervise this work.
+
+1. **Broader reading corpus, 5.1 in progress in this autonomous task.** Writers 5.0 is installed. Expand the existing authored readings and composition to reduce repetition, without writing prompts or invented interaction categories. A reproducible 126-chart baseline is in ignored artifacts/corpus-audit/before.json; the audit runner is artifacts/writer-bench. Current corpora are unchanged in 5.0.
+2. **Rust core decision.** Open; see the exceptions record.
+3. **Theme setting.** Needs a light wheel palette.
 
 ## The splash
 

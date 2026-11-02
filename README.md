@@ -4,16 +4,16 @@ A Windows desktop application for computing and exploring astrological natal cha
 
 Part of Jupiter. Follows Jupiter style standard 1.1.
 
-**Latest release: v4.5.1** · [Download](../../releases/latest)
+**Latest release: v5.0.0** · [Download](../../releases/latest)
 
 ### Installing
 
 Lore 4 needs **Windows 11 24H2** or later, 64-bit.
 
-1. From the [latest release](../../releases/latest), download **`Lore-4.5.1-win-x64-setup.exe`**. It is a single file with everything inside it; there is nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`Lore-5.0.0-win-x64-setup.exe`**. It is a single file with everything inside it; there is nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user, adds **Lore** to the Start menu, and can be removed from *Settings > Apps* like any other program. An earlier Lore is upgraded in place, and your saved charts, answers and settings stay as they are.
 
-**Prefer not to install?** `Lore-4.5.1-win-x64-portable.zip` is the same program as a folder. Unzip it anywhere and run `Lore.exe` from inside it. Delete the folder to remove it.
+**Prefer not to install?** `Lore-5.0.0-win-x64-portable.zip` is the same program as a folder. Unzip it anywhere and run `Lore.exe` from inside it. Delete the folder to remove it.
 
 > **The installer is not code-signed.** Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"*. Choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -615,7 +615,12 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 4.5.1 (current)
+### 5.0.0 (current)
+- **Writers.** Discover notable birth moments for fictional characters, or historical pairs and trios without choosing a starting person. Uses the existing natal, synastry and Trine readings and measures, with no writing prompts.
+- **Historical groups.** Same field, nearby birthplaces, a ten-year age span, and everyone deceased for at least fifty years. At 100 km the current library offers 3,068 pairs and 5,193 trios, including 148 Golden trios.
+- **Saved readings.** Name, save and reopen character and group readings separately from My Charts, view underlying charts and export text or PDF. Exact UTC instants are retained for character birth anchors.
+
+### 4.5.1
 - **Closing during startup.** Closing the main window dismisses the splash immediately. Startup no longer tries to activate that closed window or restore its view after loading finishes.
 
 ### 4.5.0

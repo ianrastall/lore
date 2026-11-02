@@ -26,6 +26,12 @@ These keep existing installs and data working, and are not the Jupiter defaults 
 
 ## Interface
 
+**Writers workspace (5.0).** Writers shares the main view selector but starts
+without a selected natal chart. It conceals the Charts pane while open and uses
+the full workspace, retaining the chart selection and pane preference. Narrow
+windows show a result list or its reading with Back to results. Its chart previews
+are separate windows, sized in effective pixels and attached to the shared accent.
+
 **Document workspace with a view selector.** The open chart is the document (standard section 7), with the Charts pane as its left pane on `JupiterSurfaceBrush`. The eight views of a chart and the Legend are switched with a `SelectorBar` under the menu bar. They are views of one document, so `TabView` (documents only) does not apply, and `NavigationView` would add a second left rail beside the Charts pane. Chess.com Crawler and Lichess Puzzles use `SelectorBar` in the same way.
 
 **View headings.** Each view opens with `JupiterPageHeadingTextStyle` naming whose chart it is. It is the view's single heading, not an app title. Sections below it use `JupiterSectionHeadingTextStyle`.

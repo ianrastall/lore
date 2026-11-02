@@ -2,7 +2,7 @@
 
 Current direction: 1 November 2026. Ian authorized autonomous implementation,
 testing and delivery of this work and the following corpus expansion. Version
-5.0.0 is in development; the installed release remains 4.5.1 until verified.
+5.0.0 is installed and verified; see [validation](validation-5.0.0.md).
 
 ## Binding direction
 
