@@ -1,6 +1,6 @@
 # Lore handoff
 
-Version 5.0.0 · 1 November 2026 · Repository `D:/jupiter/lore`, branch `main`, remote `ianrastall/lore`
+Version 5.1.0 · 1 November 2026 · Repository `D:/jupiter/lore`, branch `main`, remote `ianrastall/lore`
 
 ## Where things live
 
@@ -11,7 +11,7 @@ Version 5.0.0 · 1 November 2026 · Repository `D:/jupiter/lore`, branch `main`,
 | Content | `content/` in the repository, `Data\` in the installed app |
 | Swiss Ephemeris | `third_party/swisseph`, compiled to `Native/sweph.dll` (not committed) |
 | Release | `build/build.ps1`, `build/installer.iss` |
-| Installed app | Ian's machine: `D:\Lore`, all-users install, 5.0.0 (admin needed to upgrade) |
+| Installed app | Ian's machine: `D:\Lore`, all-users install, 5.1.0 (admin needed to upgrade) |
 | Other apps | Jupiter HUD 0.4.1 runs `Lore.exe --daily-reading`; keep `lore.daily.v1` stable |
 | Reader's data | `%LOCALAPPDATA%\Lore`. Never in the repository. |
 
@@ -34,7 +34,7 @@ When the XAML compiler reports unknown types with `WMC9999` or `WMC1509`, the ca
 
 ## Delivered
 
-See [Writers validation](docs/validation-5.0.0.md), [4.5.1](docs/validation-4.5.1.md) for the startup-close fix, [4.5](docs/validation-4.5.0.md), [4.4](docs/validation-4.4.0.md), [4.3](docs/validation-4.3.0.md) and [4.2](docs/validation-4.2.0.md) before it, [migration](docs/jupiter-migration.md) for what moved, and [exceptions](docs/jupiter-exceptions.md) for recorded departures.
+See [reading expansion validation](docs/validation-5.1.0.md), [Writers validation](docs/validation-5.0.0.md), [4.5.1](docs/validation-4.5.1.md) for the startup-close fix, [4.5](docs/validation-4.5.0.md), [4.4](docs/validation-4.4.0.md), [4.3](docs/validation-4.3.0.md) and [4.2](docs/validation-4.2.0.md) before it, [migration](docs/jupiter-migration.md) for what moved, and [exceptions](docs/jupiter-exceptions.md) for recorded departures.
 
 ## Next
 
@@ -46,7 +46,7 @@ are in `writer-briefs.json`, never in the release. Ian authorized autonomous wor
 necessary desktop checks, installation and delivery of Writers and the following
 corpus work; do not stop to ask him to supervise this work.
 
-1. **Broader reading corpus, 5.1 in progress in this autonomous task.** Writers 5.0 is installed. Expand the existing authored readings and composition to reduce repetition, without writing prompts or invented interaction categories. A reproducible 126-chart baseline is in ignored artifacts/corpus-audit/before.json; the audit runner is artifacts/writer-bench. Current corpora are unchanged in 5.0.
+1. **Broader reading corpus delivered in 5.1.** 431 authored alternatives across 325 existing prose entries in all five shared readers; see [composition](docs/reading-alternatives.md). The ordinary scores, geometry and relationship categories are unchanged. All 650 tests pass. An upgrade and a headless self-check through the Start Menu shortcut passed with all five saved-data checksums preserved. Ian stopped Computer Use with Escape during the attempted isolated desktop check; no further UI input was sent in that turn. Fresh visual QA is incomplete. Audit outputs are in ignored artifacts/corpus-audit; no private data belongs in a release.
 2. **Rust core decision.** Open; see the exceptions record.
 3. **Theme setting.** Needs a light wheel palette.
 

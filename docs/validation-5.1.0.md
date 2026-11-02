@@ -4,8 +4,8 @@
 
 ## Automated verification
 
-- Full core suite: 644 passed, 0 failed. Six additional parameterized integration
-  cases then passed for distinct trio pair summaries in every relationship category.
+- Full core suite: 650 passed, 0 failed, including distinct trio pair summaries in
+  every relationship category.
 - Alternative paths and person/value placeholders validated against all five real
   corpora and typed readers. Invalid paths, non-prose values, missing placeholders,
   duplicate choices and empty text are rejected.
@@ -48,4 +48,16 @@ There is no new visual QA claim for 5.1. The earlier Writers UI checks are recor
 in [5.0 validation](validation-5.0.0.md). Local audit outputs and made-up profiles
 are retained only under ignored `artifacts/`, outside release assets.
 
-Packaging, upgrade and installed checks are recorded below after execution.
+| Delivery check | Result |
+| --- | --- |
+| Release publish / packaged self-check | Passed, OK |
+| Personal-data gate | Passed: 11,163 public figures, 0 personal charts |
+| Installer and portable zip | Produced, 91.1 MB and 136.6 MB |
+| Upgrade | 5.0 to 5.1 at `D:\Lore`, all-users; installer exit 0; no restart |
+| Start Menu | Existing Lore shortcut targets `D:\Lore\Lore.exe`; launched it with `--self-check`, exit 0, OK |
+| Saved data | All five existing files retain their SHA-256 checksums; HUD daily caches excluded |
+
+The installed shortcut check was headless. No screenshot or accessibility capture
+of private charts was taken, and the full 5.1 main-window visual check remains
+incomplete after Computer Use was stopped. Private upgrade logs, checksum records
+and self-check output remain under ignored `artifacts/qa-5.1.0`.
