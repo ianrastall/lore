@@ -59,6 +59,16 @@ public sealed class ChartService
     // with the mean Lilith and the rest with the true one, tens of degrees away.
     public ChartService With(ChartSettings settings) => new(settings);
 
+    // Angle searches do not need to recalculate thirteen bodies at every sample.
+    public (double Ascendant, double Midheaven) AnglesAt(double jd, double latitude, double longitude)
+    {
+        lock (SweLock)
+        {
+            var (_, asc, mc, _, _, _) = CalculateHouses(jd, latitude, longitude, Settings.Houses);
+            return (asc, mc);
+        }
+    }
+
     public NatalChart Calculate(Celebrity celebrity) =>
         CalculateAt(celebrity, BirthTimeResolver.ToUtc(celebrity));
 

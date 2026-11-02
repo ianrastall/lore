@@ -115,6 +115,18 @@ public static class BirthTimeResolver
         return utc => ClockIn(zone, utc);
     }
 
+    // Exact local date and time for a generated birth. The UTC instant is retained
+    // separately by Writers, so a repeated DST clock hour cannot change its identity.
+    public static DateTime LocalTimeAt(Celebrity place, DateTime utc)
+    {
+        var zone = place.UtcOffsetFixed ? null : ResolveZone(place.TimeZoneId, place.Latitude, place.Longitude);
+        var instant = Instant.FromDateTimeUtc(DateTime.SpecifyKind(utc, DateTimeKind.Utc));
+        if (zone is null) return DateTime.SpecifyKind(utc.AddHours(place.UtcOffsetHours), DateTimeKind.Unspecified);
+        if (IsLocalMeanTime(zone, instant))
+            return DateTime.SpecifyKind(utc.AddSeconds(LocalMeanTimeSeconds(place.Longitude)), DateTimeKind.Unspecified);
+        return instant.InZone(zone).LocalDateTime.ToDateTimeUnspecified();
+    }
+
     private static string ClockIn(DateTimeZone zone, DateTime utc) =>
         Instant.FromDateTimeUtc(DateTime.SpecifyKind(utc, DateTimeKind.Utc))
             .InZone(zone).ToString("HH:mm", System.Globalization.CultureInfo.InvariantCulture);

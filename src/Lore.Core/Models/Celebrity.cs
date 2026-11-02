@@ -44,10 +44,13 @@ public sealed class Celebrity
     public string BirthPlace { get; init => field = value ?? ""; } = "";
 
     [JsonPropertyName("latitude")]
-    public double Latitude { get; init; }
+    public double Latitude { get; init { field = value; _latitudeProvided = true; } }
 
     [JsonPropertyName("longitude")]
-    public double Longitude { get; init; }
+    public double Longitude { get; init { field = value; _longitudeProvided = true; } }
+
+    private readonly bool _latitudeProvided, _longitudeProvided;
+    [JsonIgnore] public bool HasBirthCoordinates => _latitudeProvided && _longitudeProvided;
 
     [JsonPropertyName("utcOffsetHours")]
     public double UtcOffsetHours { get; init; }

@@ -36,6 +36,7 @@ public sealed partial class MainViewModel
         var cancel = _poolCancel = new CancellationTokenSource();
         var all = _all = [.. _celebrities.All, .. _userCharts.Charts];
         SynastryVM.SetPeople(all);
+        WritersVM.SetPeople(_celebrities.All);
         // Scoring runs the native Swiss Ephemeris calculation for every chart in the
         // library (over 1,300), so it is kept off the UI thread, and it is done with
         // the settings in force now even if they are changed before it finishes.

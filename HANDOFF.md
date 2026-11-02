@@ -38,7 +38,7 @@ See [validation](docs/validation-4.5.1.md) for the startup-close fix, [4.5](docs
 
 ## Next
 
-1. **Writers tab, next major iteration.** Create fictional characters from notable sky events and local chart features; discover famous pairs and trios without a starting person, with writer-oriented character and interaction readings. Ian requires nearby birthplaces and an oldest-to-youngest age gap of at most ten years. See [the plan](docs/writers-workspace-plan.md), including the proposed adjustable 100 km distance default and the global-search approach.
+1. **Writers tab, 5.0 in progress.** Discover character birth anchors and famous pairs/trios without a starting person. **No writing prompts or writer-specific interpretation/scoring layer:** Ian rejected that prototype direction. Use the existing natal, synastry and Trine readings/measures. Famous groups require nearby birthplaces, at most ten years between oldest and youngest, **the same field (library category)** and **every member deceased for at least fifty years** (not merely born fifty years ago). See [the current plan](docs/writers-workspace-plan.md). Ian authorized autonomous development, necessary desktop checks, installation and delivery of Writers and the following corpus work; do not stop to ask him to supervise.
 2. **Broader written-reading expansion, following iteration.** Expand authored range and composition to reduce repetition across Lore; recorded separately in the Writers plan.
 3. **Rust core decision.** Open; see the exceptions record.
 4. **Theme setting.** Needs a light wheel palette.

@@ -113,7 +113,9 @@ public partial class App : Application
                                             new DavisonInterpreter(davisonPath),
                                             new InventoryService(inventoryPath), inventoryStore,
                                             new MirrorInterpreter(mirrorPath, interpreter),
-                                            new CharacterService(characterPath), new LifeAreaService(lifeAreasPath))
+                                            new CharacterService(characterPath), new LifeAreaService(lifeAreasPath),
+                                            new WritersViewModel(chartSvc, new WriterInterpreter(chartSvc, interpreter, synastry),
+                                                cities, new WriterStore()))
         {
             // Anything Lore is installed with that is not there is said, not left to
             // show as a reading that is empty. (coreclr.dll is beside a published build

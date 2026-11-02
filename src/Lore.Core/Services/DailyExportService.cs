@@ -76,6 +76,9 @@ public static class DailyExportService
         $"{timing.Name} — Solar return, profection and progressions", $"As of {timing.AsOf:d MMMM yyyy}",
         timing.Sections, returnWheelPng, closing: null);
 
+    public static byte[] WritersToPdf(WriterBrief brief) => SectionsPdf(brief.Title,
+        $"{brief.Kind} · {brief.Anchor} · corpus {brief.CorpusVersion}", brief.Sections, null, null);
+
     private static byte[] SectionsPdf(string title, string subtitle, IReadOnlyList<DailySection> sections,
         byte[]? wheelPng, string? closing)
     {

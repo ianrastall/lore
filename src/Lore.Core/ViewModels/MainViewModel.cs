@@ -51,6 +51,7 @@ public sealed partial class MainViewModel : ObservableObject
     // The Inventory view's state: the personality questionnaire for whoever ChartVM's
     // chart belongs to. It reads nothing from the chart but whose it is.
     public InventoryViewModel InventoryVM { get; }
+    public WritersViewModel WritersVM { get; }
 
     // Bumped per chart load; a calculation that finishes after a newer selection has
     // started is dropped instead of overwriting the newer chart.
@@ -185,7 +186,8 @@ public sealed partial class MainViewModel : ObservableObject
         InventoryStore? inventoryStore = null,
         MirrorInterpreter? mirror = null,
         CharacterService? character = null,
-        LifeAreaService? lifeAreas = null)
+        LifeAreaService? lifeAreas = null,
+        WritersViewModel? writers = null)
     {
         _settings = settings;
         _celebrities = celebrities;
@@ -193,6 +195,7 @@ public sealed partial class MainViewModel : ObservableObject
         _userCharts = userCharts;
         Cities = cities;
         Hospitals = hospitals;
+        WritersVM = writers ?? new WritersViewModel();
         ChartVM = new ChartViewModel(interpreter, charts);
         DailyVM = new DailyViewModel(transits, dailyInterpreter) { Home = settings?.LoadHome() };
         // The forecast and the search for matches are the two costly readings, so each
@@ -312,6 +315,7 @@ public sealed partial class MainViewModel : ObservableObject
         if (settings == _charts.Settings) return;
         int request = ++_settingsGeneration;
         _charts.Settings = settings;
+        WritersVM.Invalidate();
         _settings?.Save(settings);
 
         await RebuildPoolAsync();

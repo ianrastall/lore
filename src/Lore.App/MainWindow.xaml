@@ -73,6 +73,10 @@
                         <MenuFlyoutItem Text="Character as text…" Tag="charactertxt" Click="Export_Click" />
                         <MenuFlyoutItem Text="Chart and answers as text…" Tag="mirrortxt" Click="Export_Click" />
                     </MenuFlyoutSubItem>
+                    <MenuFlyoutSubItem Text="Writers">
+                        <MenuFlyoutItem Text="Brief as PDF…" Tag="pdf" Click="WriterExport_Click" />
+                        <MenuFlyoutItem Text="Brief as text…" Tag="txt" Click="WriterExport_Click" />
+                    </MenuFlyoutSubItem>
                 </MenuFlyoutSubItem>
                 <MenuFlyoutSeparator />
                 <MenuFlyoutItem Text="Settings" Click="Settings_Click" KeyboardAcceleratorTextOverride="Ctrl+," />
@@ -116,6 +120,9 @@
                 </MenuFlyoutItem>
                 <MenuFlyoutItem Text="Inventory" Tag="Inventory" Click="ViewMenu_Click">
                     <MenuFlyoutItem.KeyboardAccelerators><KeyboardAccelerator Modifiers="Control" Key="Number8" /></MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem Text="Writers" Tag="Writers" Click="ViewMenu_Click">
+                    <MenuFlyoutItem.KeyboardAccelerators><KeyboardAccelerator Modifiers="Control" Key="Number9" /></MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
                 <MenuFlyoutSeparator />
                 <MenuFlyoutItem Text="Larger reading text" Click="ReadingLarger_Click" KeyboardAcceleratorTextOverride="Ctrl++" />
@@ -246,7 +253,7 @@
                                    Background="{ThemeResource JupiterWindowBrush}" AutomationProperties.Name="Resize Charts pane" />
 
             <!-- The open chart: its views, and the one on show -->
-            <Grid Grid.Column="2">
+            <Grid x:Name="ViewWorkspace" Grid.Column="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -262,6 +269,7 @@
                     <SelectorBarItem Text="Timing" Tag="Timing" ToolTipService.ToolTip="The solar return for the year, and the chart progressed to a date (Ctrl+6)" />
                     <SelectorBarItem Text="Synastry" Tag="Synastry" ToolTipService.ToolTip="Compare this chart with another person's (Ctrl+7)" />
                     <SelectorBarItem Text="Inventory" Tag="Inventory" ToolTipService.ToolTip="Personality, character and life-area questionnaires for one of your own charts, and what they do to its readings (Ctrl+8)" />
+                    <SelectorBarItem Text="Writers" Tag="Writers" ToolTipService.ToolTip="Create fictional characters and discover famous pairs or trios (Ctrl+9)" />
                     <SelectorBarItem Text="Legend" Tag="Legend" ToolTipService.ToolTip="What every symbol, color and term means (F1)" />
                 </SelectorBar>
 
@@ -280,6 +288,7 @@
                     <views:TimingView x:Name="TimingViewControl" ViewModel="{x:Bind ViewModel.TimingVM}" Visibility="Collapsed" />
                     <views:SynastryView x:Name="SynastryViewControl" ViewModel="{x:Bind ViewModel.SynastryVM}" Visibility="Collapsed" />
                     <views:InventoryView x:Name="InventoryViewControl" ViewModel="{x:Bind ViewModel.InventoryVM}" Visibility="Collapsed" />
+                    <views:WritersView x:Name="WritersViewControl" ViewModel="{x:Bind ViewModel.WritersVM}" Visibility="Collapsed" />
                     <views:LegendView x:Name="LegendViewControl" Visibility="Collapsed" />
                 </Grid>
             </Grid>

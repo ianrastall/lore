@@ -123,6 +123,11 @@ public static class SynastryScoring
             }
         }
 
+        return AssessWeights(flow, tension);
+    }
+
+    internal static Compatibility AssessWeights(double flow, double tension)
+    {
         double total = flow + tension;
         if (total <= 0) return new Compatibility(SynastryTone.Light, 0, 0);
 

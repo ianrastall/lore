@@ -17,7 +17,7 @@ public static class TrioService
     // bar asks for personal points close to exact (a Sun, Moon and Venus within about 3°).
     // Set against 20,000 random trios from the library: about 3% read as Golden, 26%
     // Harmonious, 34% Mixed and 37% Strained. TrioServiceTests holds those proportions.
-    private const double GoldenWeight = 0.5;
+    public const double GoldenWeight = 0.5;
 
     // The weight a figure other than a grand trine needs to be spoken of. At these orbs
     // nearly every trio has a T-square of some sort, so as with Golden the bar is on the
@@ -81,10 +81,12 @@ public static class TrioService
     // grand trine through all three makes that Golden. A pair in difficulty rules both
     // out, however easy the other two; they can only keep the trio Mixed.
     private static TrioTone Assess(IReadOnlyList<Compatibility> pairs, double goldenWeight)
+        => Assess(pairs[0], pairs[1], pairs[2], goldenWeight);
+
+    internal static TrioTone Assess(Compatibility a, Compatibility b, Compatibility c, double goldenWeight)
     {
-        var levels = pairs.Select(p => p.Level).ToList();
-        int total = levels.Sum();
-        if (levels.Min() < 0) return total < 0 ? TrioTone.Strained : TrioTone.Mixed;
+        int total = a.Level + b.Level + c.Level;
+        if (Math.Min(a.Level, Math.Min(b.Level, c.Level)) < 0) return total < 0 ? TrioTone.Strained : TrioTone.Mixed;
         if (total < 1) return TrioTone.Mixed;
         return goldenWeight >= GoldenWeight ? TrioTone.Golden : TrioTone.Harmonious;
     }

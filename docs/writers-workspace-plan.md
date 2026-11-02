@@ -1,189 +1,120 @@
 # Writers workspace
 
-Direction recorded 1 November 2026, after Lore 4.5.1. This is the plan for the next
-major iteration, followed by a separate expansion of the written readings. No
-Writers implementation or new release version is claimed here.
+Current direction: 1 November 2026. Ian authorized autonomous implementation,
+testing and delivery of this work and the following corpus expansion. Version
+5.0.0 is in development; the installed release remains 4.5.1 until verified.
 
-## Confirmed direction
+## Binding direction
 
-Ian wants a new **Writers** tab with two uses:
+The new Writers tab has two uses:
 
-1. Create fictional characters from a notable birth date, time and place. The
-   notable anchor can be either a sky event or a distinctive feature of the local
-   chart; offer both.
-2. Discover pairs and trios of famous people without first choosing a person.
-   Their readings describe character and group interaction for writing.
+1. Discover notable birth moments for fictional characters, using both sky events
+   and distinctive local chart features. Read them through Lore's existing natal
+   interpreter.
+2. Find famous pairs and trios without selecting a starting person. Use the same
+   synastry and Trine readings, measures, levels and ordering as elsewhere in Lore.
 
-Famous-group eligibility has two hard requirements, clarified by Ian:
+**No writing prompts of any kind.** Ian rejected the first prototype's scene
+suggestions, character arcs, writer-directed advice and invented interaction
+categories. Those were removed. Do not reintroduce them in the corpus expansion.
 
-- Geographic closeness means **nearby birthplaces**.
-- The age gap is **at most ten years**, measured between the oldest and youngest
-  member. In a trio, all three members must satisfy the geographic requirement.
+## Famous groups: all requirements are hard filters
 
-After this iteration, expand the range of the assigned written blurbs throughout
-Lore to address repetition. The Writers feature needs an initial corpus of its
-own, but that does not replace or pull forward the broader editorial work.
+- Every member must have died at least **fifty calendar years ago**. Ian explicitly
+  chose time since death, not time since birth. On 1 November 2026 the inclusive
+  cutoff is 1 November 1976. The application takes a local-date snapshot for each
+  search and advances the cutoff with the date.
+- Every member must be in the **same field**. Lore's current consistent field
+  classification is the library category. Even when searching all categories,
+  members within a group must have the same one. The interface states this basis.
+- Birthplaces must be nearby: default **100 km**, adjustable from 1 to 1,000 km.
+  Geographic proximity means birthplaces, as Ian confirmed, not inferred residence
+  history. A trio must meet the distance limit on all three pairwise distances.
+- The oldest and youngest must have been born within **ten calendar years**.
+  Normalize Julian dates before comparing; a 29 February anniversary falls on
+  28 February in a non-leap year. Do not average pairwise age differences.
 
-## Character creation
+Missing or partial death dates cannot establish the fifty-year floor and are
+excluded. Missing field, birthplace coordinates or usable birth dates cannot pass
+their requirements. Zero latitude/longitude are valid when explicitly recorded.
+Birthplace proximity is never described as evidence that people actually met.
 
-Start with a time period and a place, then find meaningful candidate birth
-moments. The writer can browse the anchors before choosing a character; they do
-not have to invent a precise birth time in order to get started.
+Field, biography/name/place search, birth-year range and minimum prominence can
+narrow discovery. None can relax the requirements. Pair-level and trio-tone
+filters use the existing labels.
 
-Two anchor families belong in the first design:
+## Character anchors
 
-| Anchor | What makes a candidate notable | Work needed |
-| --- | --- | --- |
-| Sky event | New or Full Moon, eclipse, a planet turning retrograde or direct, a sign ingress | Separate the existing sky-event calculation from its natal-house overlay and expose it without a selected chart |
-| Local chart | A personal planet close to an angle, a strong chart pattern, a distinctive concentration or imbalance | Search actual charts within the chosen bounds and refine qualifying times; define explicit significance thresholds |
+Choose a city, start date and a range of 7, 30, 90 or 366 days, within the
+ephemeris-supported 1200–2400 period. Available anchors:
 
-A sky event supplies a moment shared across the world. The chosen place supplies
-the local angles and houses. The reading must use both. A Full Moon alone must not
-produce the same character at every location.
+- New/Full Moons, eclipse lunations, stations and slow-planet sign ingresses.
+- A selected planet from Sun to Saturn on the Ascendant or Midheaven, refined to
+  an ecliptic-longitude residual below 0.001°.
+- Chart patterns found at hourly samples, explicitly labelled as samples rather
+  than exact formation times.
+- A sky event and the selected planet within 3° of the Ascendant or Midheaven at
+  that same place and moment. If the intersection is empty, show no matches.
 
-The result starts with a plain explanation of the anchor and its actual computed
-details, followed by a character brief:
+Global events supply a moment; the chosen place supplies angles and houses. Keep
+the exact UTC instant, including sub-minute precision, separately from display
+clock time. Historical local mean time and DST use the existing resolver.
+Eclipse results identify the exact lunation, distinguish it from greatest eclipse
+and do not claim local visibility. Angle contacts do not claim physical horizon
+visibility.
 
-- Public manner and private need.
-- Principal desire, strength and vulnerability.
-- A contradiction that creates pressure.
-- Behavior under pressure and in close relationships.
-- Productive directions for a character arc.
+The brief is the existing natal reading plus the computed anchor and birth
+details. A fictional character's choices and biography belong to the writer;
+Lore supplies no scene, plot or character-development instructions.
 
-Each interpretation should be traceable to its chart factors. Keep the computed
-anchor distinct from the fictional interpretation. The writer owns the
-character's choices, biography and eventual story.
+## Search and standard readings
 
-Choosing several features at once must search their intersection. If no moment
-meets all the constraints, report that and let the writer change them. Do not move
-the chosen location or invent an astronomical arrangement to satisfy a trait.
+Build an eligibility graph in birth-date order, applying the field, death, age and
+distance filters before chart comparison. Its edges are pairs and its triangles
+are trios. Enumerate every eligible group, calculate each person's chart once per
+settings snapshot, and cache pair assessments and trine-contact masks.
 
-Candidate lists need variety: group nearby moments from one event, show their
-local differences, and prevent one frequent pattern or decade from filling every
-result. Initially browse by anchor and resulting traits; reverse searching from
-an arbitrary free-text personality description is a separate extension.
+Pair order is the existing compatibility level, contemporaneity, easy share and
+name order. Trio order is the existing Golden/Harmonious/Mixed/Strained tone,
+contemporaneity, strongest grand-trine weight, easy share and name order. The
+global pass is checked against the existing synastry and trio calculations.
+Count every eligible group and retain up to 10,000 results, enough to show all
+groups at the default distance with the current library and historical cutoff.
+State both the result count and retained count for broader searches. No sampling
+or hidden shortlist of people is used.
 
-## Famous pairs and trios
+`WriterInterpreter` delegates to `ChartInterpreter` and `SynastryInterpreter`,
+including `ComposeTrio`. It adds only anchor/provenance/eligibility data. New
+writer-specific prose and compatibility scores are out of scope.
 
-The entry point is a fresh search over the library, independent of the selected
-natal chart. Choose **Pair** or **Trio**, then the desired interaction and filters.
+## Interface, persistence and delivery
 
-The proposed initial geographic limit is **100 km**, adjustable by the writer.
-This distance is a design default, not an additional value confirmed by Ian. Use
-great-circle distances between birth coordinates, including across the date line.
-For a trio, the greatest of the three pairwise distances must be within the limit;
-a chain of two nearby pairs is insufficient.
+Writers works without a selected chart and retains the main chart selection.
+Ctrl+9 opens it. Its modes are Create a character, Find famous groups and Saved
+briefs. Search controls collapse after a search. On a narrow window the selected
+reading has its own detail view with a return to the results.
 
-Apply the ten-year age limit as an actual calendar-date boundary, with a stated
-leap-day rule, rather than subtracting birth years or averaging pairwise ages.
-Normalize historical calendars through Lore's existing birth-date handling first.
-All hard filters run before interaction ranking. Missing required dates or
-coordinates cannot be treated as zero distance or as satisfying a filter.
+Named snapshots live in `%LOCALAPPDATA%\Lore\writer-briefs.json`, separately from
+My Charts, including exact birth instants, settings, corpus version and composed
+text. Saves merge under a cross-process lock and replace atomically with a backup.
+A damaged store is left untouched. A pending/failed save is handled during close.
+Reopen snapshots exactly as saved, preview their underlying charts and export
+their actual reading as text or PDF. Private Writer stores are forbidden by the
+release gate.
 
-Every result gives the birth-year span, maximum birthplace distance and the
-interaction that earned its place. Label the geography as birthplace proximity;
-do not describe it as evidence that these people met or lived nearby as adults.
-Any claim of a documented relationship needs its own source.
+Use isolated debug profiles for all screenshots and UI checks. Run core tests,
+app/style builds, packaged self-check and personal-data gate; build an installer,
+upgrade the installed copy with data checksums, verify registration/uninstaller
+and launch through the Start Menu shortcut. Ian authorized windows and installers
+for this autonomous Writers/corpus work; no further supervision is required.
 
-Suggested interaction choices for the first design are cooperation, rivalry,
-attraction with friction, and an unstable alliance. These are proposed editorial
-categories. They need explicit mappings to chart evidence, rather than simply
-renaming Lore's compatibility levels.
+## Following iteration: broader reading corpus
 
-Pair readings explain what joins the two, where their aims clash, and how those
-forces might play out in a story. Trio readings explain all three relationships,
-who mediates, who feels excluded, possible coalitions, and what changes under
-pressure. A strong grand trine can matter without making it the only interesting
-kind of trio. Keep Lore's existing compatibility measures available alongside
-these readings.
+Expand the authored range of the normal natal, Daily, synastry, Davison, Trine and
+self-report readings. Keep their meaning, scoring, evidence, names and offline
+determinism. Measure repetition over reproducible batches, author substantively
+different treatments, improve coverage and reduce repeated claims within a
+reading. Do not change questionnaire statements, scoring or reference groups.
 
-Default to the public figure library. Personal inventories do not become invented
-answers for famous people, and fictional characters do not enter the historical
-figure library. Category, era and prominence can narrow or order a search; none
-may bypass the age or distance requirements.
-
-## Search and existing code
-
-The current 11,163 figures make 62,300,703 possible pairs and 231,779,382,061
-possible trios before filtering. The existing finder chooses the best 100
-connections to a selected person, then tries their 4,950 pairs. Repeating that
-operation for every figure is not a suitable global search.
-
-Build an eligibility graph from age and birthplace distance. Eligible pairs are
-edges; eligible trios are triangles. This enforces the requirements on every
-member without enumerating all possible triples. Cache each person's chart once
-per calculation-settings snapshot and reuse pair assessments.
-
-Measure filtered graph size and timings against the actual library before
-choosing result retention or ranking shortcuts. If a future search uses sampling
-or a shortlist, state its coverage; do not present its results as an exhaustive
-global best. Support cancellation, progress, and rejection of stale results.
-
-| Existing source | Reuse |
-| --- | --- |
-| `ChartService`, `BirthTimeResolver`, `CityService` | Actual birth charts, historical time conversion, place selection |
-| `TransitService.SkyCalendar` | Sky-event finding, after separating the natal overlay |
-| `AspectPatternService`, `NatalMetricsService`, `NatalEventsService` | Chart features and significance evidence |
-| `SynastryService`, `SynastryScoring`, `TrioService` | Contacts, current compatibility, three-person figures and relationships |
-| `LatestOnly` and existing results view models | Cancellation and stale-result behavior |
-| `content/records` | Possible future sourced relationship evidence; currently incomplete and not installed, with no residence history |
-
-`CharacterService` already means the self-report character inventory. Give the
-new fictional-character models and services distinct names, such as
-`WriterCharacter` and `WritersService`.
-
-## Interface and saved work
-
-Add Writers to the main view selector with **Create character** and **Find groups**
-as its two modes, and Pair/Trio within the latter. It must work when no chart is
-selected. Keep the current chart selection intact when moving in and out of it.
-Existing keyboard shortcuts and export readiness must continue to work.
-
-Use Jupiter's native controls, one main result area and an adjacent detail/reading
-area where space permits. At smaller sizes, open a selected result's detail view
-instead of squeezing both into unreadable columns. Empty, searching, cancelled,
-failed and no-match states need explicit behavior.
-
-Save a writer's named characters and chosen casts separately from My Charts,
-including their actual birth details, anchor, settings and corpus version. Store
-public casts by stable figure IDs. Allow the writer to reopen the underlying
-charts and export the brief. Do not insert fictional identities into the bundled
-library or silently overwrite personal charts.
-
-## Following iteration: range of written readings
-
-Treat repetition as an editorial and composition problem. Adding interchangeable
-synonyms alone will not give different characters or relationships substance.
-
-1. Inventory the corpus keys and fallback paths across natal, Daily, synastry,
-   Davison, Trine, self-report and Writers readings. Render representative batches
-   to measure repeated paragraphs, phrases and structures.
-2. Expand distinct meanings and contexts: strengths, costs, contradictions,
-   constructive and destructive expressions, asymmetric relationships and how a
-   configuration behaves under pressure. Keep the chart evidence attached.
-3. Add authored alternatives to heavily reused entries, especially generic
-   fallbacks. Select coherently across the whole reading and suppress repeated
-   claims within it.
-4. Keep offline, deterministic composition: the same inputs, settings and corpus
-   version produce the same text. If alternate readings are offered, make the
-   selected alternative explicit and reproducible.
-5. Verify coverage, placeholders, attribution of each person's factors and
-   repetition metrics. Review samples editorially; a larger line count is not
-   sufficient evidence of better writing.
-
-The initial Writers corpus should accommodate multiple authored treatments so
-that the following iteration can expand it without replacing the composition
-model. No runtime text-generation service is implied.
-
-## Implementation checkpoints
-
-1. Confirm the Writers layout and the meaning of each proposed interaction type.
-2. Benchmark the age-and-place eligibility graph and exact pair/trio search.
-3. Deliver character anchor discovery and a traceable fictional-character brief.
-4. Deliver global pair/trio discovery, their readings and named saved casts.
-5. Verify cancellation, all-member constraints, historical date handling,
-   meaningful location sensitivity, missing data and persistence. Check the tab
-   without a selected chart and at smaller window sizes.
-6. Run the full release checks, build the installer, then install and verify Start
-   Menu delivery under the existing desktop-window permission convention.
-7. Begin the broader corpus expansion as the following iteration.
+Writers inherits those improvements through the shared interpreters. Do not add
+writing advice, prompts, scene suggestions or invented relationship categories.

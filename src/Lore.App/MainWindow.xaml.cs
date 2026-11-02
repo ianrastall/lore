@@ -24,6 +24,7 @@ public sealed partial class MainWindow : Window
     private readonly ShellPreferences _preferences = App.Current.Preferences;
 
     private SettingsWindow? _settingsWindow;
+    private readonly List<Window> _writerWindows = [];
 
     public MainWindow(MainViewModel vm)
     {
@@ -31,6 +32,8 @@ public sealed partial class MainWindow : Window
         InitializeComponent();
         AppWindow.SetIcon(Path.Combine(AppContext.BaseDirectory, "Assets", "AppIcon.ico"));
         App.Current.Accent.Attach(Root);
+        WritersViewControl.ExportRequested += ExportWriterBrief;
+        WritersViewControl.ChartRequested += OpenWriterChart;
 
         RestorePlacement();
         ReadingText.Current.Step = _preferences.ReadingSize;
@@ -67,6 +70,8 @@ public sealed partial class MainWindow : Window
             IsClosed = true;
             SavePlacement();
             _settingsWindow?.Close();
+            ViewModel.WritersVM.Cancel();
+            foreach (var window in _writerWindows.ToArray()) window.Close();
         };
 
         // The Charts list's own rows say whether the Synastry view is open by {Binding}.
@@ -169,10 +174,27 @@ public sealed partial class MainWindow : Window
     // rather than letting them go without a word.
     private async void OnClosing(AppWindow sender, AppWindowClosingEventArgs args)
     {
-        if (_closeNow || !ViewModel.HasUnsavedAnswers) return;
+        if (_closeNow || (!ViewModel.HasUnsavedAnswers && !ViewModel.WritersVM.IsSaving && ViewModel.WritersVM.SaveProblem.Length == 0)) return;
         args.Cancel = true;
         try
         {
+            while (!await ViewModel.WritersVM.FinishSaveAsync())
+            {
+                if (_dialogOpen) return;
+                _dialogOpen = true;
+                ContentDialogResult choice;
+                try
+                {
+                    var dialog = NewDialog("Close without saving this Writers brief?", ViewModel.WritersVM.SaveProblem);
+                    dialog.PrimaryButtonText = "Try again"; dialog.SecondaryButtonText = "Close without saving"; dialog.CloseButtonText = "Keep Lore open";
+                    dialog.DefaultButton = ContentDialogButton.Close;
+                    choice = await dialog.ShowAsync();
+                }
+                finally { _dialogOpen = false; }
+                if (choice == ContentDialogResult.None) return;
+                if (choice == ContentDialogResult.Secondary) break;
+                await ViewModel.WritersVM.RetrySaveAsync();
+            }
             while (!await ViewModel.SaveOutstandingAnswersAsync())
             {
                 if (_dialogOpen) return; // another dialog is up: stay open, and ask on the next close
@@ -434,13 +456,73 @@ public sealed partial class MainWindow : Window
         TimingViewControl.Visibility = Shown(view == "Timing");
         SynastryViewControl.Visibility = Shown(view == "Synastry");
         InventoryViewControl.Visibility = Shown(view == "Inventory");
+        WritersViewControl.Visibility = Shown(view == "Writers");
         LegendViewControl.Visibility = Shown(legend);
+
+        // Writers starts without a natal-chart anchor and uses the whole workspace.
+        // Its library search is inside the view; the Charts pane preference is retained.
+        bool writers = view == "Writers";
+        Grid.SetColumn(ViewWorkspace, writers ? 0 : 2);
+        Grid.SetColumnSpan(ViewWorkspace, writers ? 3 : 1);
+        ChartsPane.Visibility = ChartsSplitter.Visibility = Shown(!writers && _preferences.ChartsPaneVisible);
+        if (!writers) ShowChartsPane(_preferences.ChartsPaneVisible);
 
         ViewBar.SelectedItem = item;
         if (!legend) ViewModel.RememberView(view);
     }
 
     private static Visibility Shown(bool show) => show ? Visibility.Visible : Visibility.Collapsed;
+
+    private void OpenWriterChart(NatalChart chart)
+    {
+        var vm = new ChartViewModel(); vm.Show(chart, null);
+        var root = new Grid { RequestedTheme = ElementTheme.Dark,
+            Background = (Microsoft.UI.Xaml.Media.Brush)Application.Current.Resources["JupiterWindowBrush"] };
+        root.Children.Add(new ChartView { ViewModel = vm });
+        var window = new Window { Title = $"{chart.Celebrity.Name} — Writers — Lore", Content = root };
+        window.AppWindow.SetIcon(Path.Combine(AppContext.BaseDirectory, "Assets", "AppIcon.ico"));
+        window.AppWindow.TitleBar.PreferredTheme = TitleBarTheme.Dark;
+        double scale = GetDpiForWindow(WindowNative.GetWindowHandle(this)) / 96.0;
+        var workArea = DisplayArea.GetFromWindowId(AppWindow.Id, DisplayAreaFallback.Primary).WorkArea;
+        int width = Math.Min(workArea.Width, (int)(1100 * scale)), height = Math.Min(workArea.Height, (int)(800 * scale));
+        window.AppWindow.MoveAndResize(new RectInt32(workArea.X + (workArea.Width - width) / 2,
+            workArea.Y + (workArea.Height - height) / 2, width, height));
+        if (window.AppWindow.Presenter is OverlappedPresenter presenter)
+        {
+            presenter.PreferredMinimumWidth = (int)(800 * scale);
+            presenter.PreferredMinimumHeight = (int)(560 * scale);
+        }
+        App.Current.Accent.Attach(root);
+        _writerWindows.Add(window); window.Closed += (_, _) => _writerWindows.Remove(window);
+        window.Activate();
+    }
+
+    private async void ExportWriterBrief(WriterBrief brief, bool pdf)
+    {
+        if (_exporting) return;
+        _exporting = true;
+        try
+        {
+            var picker = new FileSavePicker { SuggestedStartLocation = PickerLocationId.DocumentsLibrary,
+                SuggestedFileName = string.Concat(brief.Title.Select(c => Path.GetInvalidFileNameChars().Contains(c) ? '_' : c)) };
+            picker.FileTypeChoices.Add(pdf ? "PDF document" : "Text document", [pdf ? ".pdf" : ".txt"]);
+            InitializeWithWindow.Initialize(picker, WindowNative.GetWindowHandle(this));
+            if (await picker.PickSaveFileAsync() is not { } file) return;
+            byte[] bytes = await Task.Run(() => pdf ? DailyExportService.WritersToPdf(brief) : System.Text.Encoding.UTF8.GetBytes(WriterInterpreter.ToText(brief)));
+            await FileIO.WriteBytesAsync(file, bytes);
+            ViewModel.StatusMessage = $"Saved {file.Name}.";
+        }
+        catch (Exception ex) { ViewModel.StatusMessage = $"The Writers brief could not be exported: {ex.Message}"; }
+        finally { _exporting = false; }
+    }
+
+    private void WriterExport_Click(object sender, RoutedEventArgs e)
+    {
+        if (ViewModel.WritersVM.Brief is not { } brief)
+        { ViewModel.StatusMessage = "Open a Writers reading before exporting it."; return; }
+        string name = ViewModel.WritersVM.BriefName.Trim();
+        ExportWriterBrief(brief with { Title = name.Length > 0 ? name : brief.Title }, (sender as MenuFlyoutItem)?.Tag as string == "pdf");
+    }
 
     // ── Export ────────────────────────────────────────────────────────────────
 

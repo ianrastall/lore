@@ -63,9 +63,10 @@ Lore 4 needs **Windows 11 24H2** or later, 64-bit.
 | **Timing** | The solar return in force on a date, with its wheel, cast for the birthplace or for any city you choose; the annual profection (the house, sign and Lord of the Year); the chart progressed to that date a day for a year; the chart directed by solar arc; and, when another city is chosen, the birth chart relocated there. |
 | **Synastry** | The selected chart compared with a second person's: a written reading and a bi-wheel of the two charts. See below. |
 | **Inventory** | A standard personality questionnaire (the public-domain IPIP-NEO-120) for any chart of your own; the profile it gives, five broad traits and thirty facets, each set beside a reference group; and a reading that sets that profile beside the chart, planet by planet. See below. |
+| **Writers** | Discover notable birth moments for fictional characters, and historical pairs or trios without a starting person. Uses the existing natal, Synastry and Trine readings. Every historical group shares a field, has nearby birthplaces and an oldest-to-youngest gap of at most ten years, and every member must have died at least fifty years ago. |
 | **Legend** | Full-page reference — a grouped list of every glyph, colour, angle, house, and term; click any item for a fuller explanation. |
 
-Ctrl+1 to Ctrl+8 switch between the first eight views, F1 opens the Legend, Ctrl+N adds a chart, Ctrl+F jumps to the search box, Ctrl+B shows or hides the Charts pane and Ctrl+, opens Settings. Lore reopens on the chart and view you last had open.
+Ctrl+1 to Ctrl+9 switch between the nine views, F1 opens the Legend, Ctrl+N adds a chart, Ctrl+F jumps to the search box, Ctrl+B shows or hides the Charts pane and Ctrl+, opens Settings. Lore reopens on the chart and view you last had open.
 
 ![Lore showing the written Report for Albert Einstein](docs/images/screenshot-einstein-report.png)
 
@@ -131,6 +132,16 @@ Astrology has no agreed compatibility score; the scale is Lore's own, and it des
 ![Lore showing the reading and three-ring wheel for Albert Einstein, Martin Sheen and Lautréamont](docs/images/screenshot-tri-synastry-reading.png)
 
 Astrology has no agreed score for three people. The scale is Lore's own, and it describes the symbolism between three charts rather than forecasting how three people will get on.
+
+### Writers
+
+**Writers** works without selecting a natal chart. **Create a character** finds sky events, a selected planet on the Ascendant or Midheaven, hourly examples of chart patterns, or a sky event with an angular planet, at a city and during a period you choose. Each result has the ordinary natal reading and the calculated birth anchor. Exact UTC instants, including seconds, are retained.
+
+**Find famous groups** searches every qualifying pair or trio. Every member must be in the same field (the library category), have died at least fifty calendar years ago, and have been born within ten calendar years of the oldest member. Every pair of birthplaces must be within the distance limit, 100 km by default. Missing or partial death dates are excluded. The cutoff advances with the date: on 1 November 2026, everyone must have died on or before 1 November 1976.
+
+Results use the same Synastry and Trine levels, order and readings as the rest of Lore. Field, birth period, biography search and prominence can narrow the search. All qualifying groups are assessed; up to 10,000 results are retained, with both counts shown. Birthplace proximity does not assert that the figures met.
+
+Named character and group readings can be saved separately from My Charts, reopened exactly as written, exported as text or PDF, and opened as their underlying charts. Writers provides no writing prompts, scene suggestions or invented interaction categories.
 
 ### Personality Inventory
 The **Inventory** view offers three questionnaires for any chart under My Charts, and then reads the chart in the light of the answers. A chart is the same for everyone born at that minute and cannot know how a given person is living it; the questionnaires ask them.

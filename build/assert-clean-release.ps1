@@ -48,6 +48,9 @@ foreach ($f in $stray) { $problems.Add("personal chart store bundled: $($f.FullN
 #    (inventories.json; Data\inventory.json, the questionnaire itself, is meant to ship).
 $stray = Get-ChildItem -LiteralPath $StageDir -Recurse -File -Filter 'inventories*' -ErrorAction SilentlyContinue
 foreach ($f in $stray) { $problems.Add("personality inventory answers bundled: $($f.FullName)") }
+#    Writers briefs are private project data, never interpreter content.
+$stray = Get-ChildItem -LiteralPath $StageDir -Recurse -File -Filter 'writer-briefs*' -ErrorAction SilentlyContinue
+foreach ($f in $stray) { $problems.Add("saved Writers briefs bundled: $($f.FullName)") }
 
 # 2. The shipped figure library must contain no user-entered ("My Charts") charts.
 $celebPath = Join-Path $StageDir 'Data\celebrities.json'

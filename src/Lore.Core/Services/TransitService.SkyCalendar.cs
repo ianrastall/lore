@@ -32,14 +32,42 @@ public sealed partial class TransitService
     {
         if (!_pinned) return For(natal).SkyCalendar(natal, start, days, zone, cancel);
 
+        return SkyCalendarCore(natal, start, days, zone, cancel);
+    }
+
+    // Sky events without a natal-chart anchor, used by the Writers workspace.
+    public IReadOnlyList<SkyEvent> SkyCalendar(DateOnly start, int days, DateTimeZone zone,
+        CancellationToken cancel = default) =>
+        new TransitService(_charts.With(_charts.Settings), pinned: true).SkyCalendarCore(null, start, days, zone, cancel);
+
+    public IReadOnlyList<SkyEvent> SkyCalendar(DateTime startUtc, DateTime endUtc,
+        CancellationToken cancel = default)
+    {
+        if (startUtc.Year < 1200 || endUtc.Year > 2400 || endUtc <= startUtc || (endUtc - startUtc).TotalDays > 367)
+            throw new ArgumentException("Choose a positive sky-calendar range of at most 366 local days within 1200–2400.");
+        var pinned = new TransitService(_charts.With(_charts.Settings), pinned: true);
+        return pinned.SkyCalendarUtc(null, SwissEphemeris.DateTimeToJulianDay(startUtc),
+            SwissEphemeris.DateTimeToJulianDay(endUtc), cancel);
+    }
+
+    private IReadOnlyList<SkyEvent> SkyCalendarCore(NatalChart? natal, DateOnly start, int days,
+        DateTimeZone zone, CancellationToken cancel)
+    {
+        if (days is < 1 or > 366 || start.Year < 1200 || start.AddDays(days).Year > 2400)
+            throw new ArgumentException("Choose a range of 1–366 days within 1200–2400.");
+
         var first = new LocalDate(start.Year, start.Month, start.Day);
         double jd0 = SwissEphemeris.DateTimeToJulianDay(BirthTimeResolver.StartOfDay(zone, first).ToDateTimeUtc());
         double jd1 = SwissEphemeris.DateTimeToJulianDay(BirthTimeResolver.StartOfDay(zone, first.PlusDays(days)).ToDateTimeUtc());
+        return SkyCalendarUtc(natal, jd0, jd1, cancel);
+    }
+
+    private IReadOnlyList<SkyEvent> SkyCalendarUtc(NatalChart? natal, double jd0, double jd1, CancellationToken cancel)
+    {
         int n = Math.Max(1, (int)Math.Ceiling(jd1 - jd0));
         double At(int i) => Math.Min(jd0 + i, jd1);
 
-        bool timed = natal.Celebrity.BirthTimeKnown;
-        int? House(double lon) => timed ? natal.GetHouseForLongitude(lon) : null;
+        int? House(double lon) => natal is { Timed: true } ? natal.GetHouseForLongitude(lon) : null;
         var events = new List<SkyEvent>();
 
         // New and Full Moons: the Moon's lead over the Sun passing 0° and 180°. It gains

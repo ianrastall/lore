@@ -3,8 +3,10 @@
 **Current direction, 1 November 2026:** after 4.5.1, the next major iteration is a
 Writers tab for character creation and global discovery of famous pairs/trios.
 Both sky events and local chart features can anchor a fictional character.
-Famous groups require nearby birthplaces and at most ten years between their
-oldest and youngest members. The following iteration expands the range of written
+Famous groups require nearby birthplaces, at most ten years between their oldest
+and youngest members, the same field (library category), and all members deceased
+for at least fifty years. Use the existing readings and measures, with no writing
+prompts or invented writer-specific relationship categories. The following iteration expands the range of written
 readings to address repetition. See [the current plan](writers-workspace-plan.md)
 and [handoff](../HANDOFF.md); the older items below remain historical notes.
 
