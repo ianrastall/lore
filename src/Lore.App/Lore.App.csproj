@@ -100,6 +100,10 @@
       <TargetPath>Data\inventory.json</TargetPath>
     </Content>
     <!-- Corpus for the reading that sets the inventory profile beside the chart -->
+    <Content Include="$(RepoRoot)content\reading-variants.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Data\reading-variants.json</TargetPath>
+    </Content>
     <Content Include="$(RepoRoot)content\character.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>Data\character.json</TargetPath>

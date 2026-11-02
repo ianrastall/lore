@@ -54,6 +54,11 @@ public sealed class ChartInterpreter
     private static readonly JsonSerializerOptions JsonOpts = new() { PropertyNameCaseInsensitive = true };
 
     private readonly Corpus _c;
+    private readonly ReadingAlternatives<Corpus>? _alternatives;
+    private readonly bool _materialized;
+
+    private ChartInterpreter(Corpus corpus, ReadingAlternatives<Corpus> alternatives)
+    { _c = corpus; _alternatives = alternatives; _materialized = true; }
 
     // False when the corpus is missing or has nothing in it. No Report is written then:
     // the sentences that would be left are the bare fallbacks, which read as a Report
@@ -86,6 +91,7 @@ public sealed class ChartInterpreter
         {
             _c = new Corpus();
         }
+        if (IsAvailable) _alternatives = ReadingAlternatives<Corpus>.Load(interpretationsJsonPath, _c, JsonOpts);
     }
 
     // `moonSigns`: for a chart with no birth time, the signs the Moon passed through
@@ -107,6 +113,8 @@ public sealed class ChartInterpreter
     public IReadOnlyList<ReportSection> Interpret(NatalChart chart, IReadOnlyList<ZodiacSign>? moonSigns = null,
         MirrorReading? answers = null, IReadOnlyDictionary<Planet, IReadOnlyList<ZodiacSign>>? signChanges = null)
     {
+        if (!_materialized && _alternatives is { } text)
+            return new ChartInterpreter(text.For(ReadingAlternatives.Seed(chart)), text).Interpret(chart, moonSigns, answers, signChanges);
         if (!IsAvailable) return Unavailable;
         if (answers is not null && !answers.IsFor(chart)) answers = null;
         if (chart.Timed) signChanges = null;

@@ -58,6 +58,10 @@ public sealed class SynastryInterpreter
     private static readonly Planet[] OverlayBodies = [Planet.Sun, Planet.Moon, Planet.Venus, Planet.Mars];
 
     private readonly Corpus _c;
+    private readonly ReadingAlternatives<Corpus>? _alternatives;
+    private readonly bool _materialized;
+    private SynastryInterpreter(Corpus corpus, ReadingAlternatives<Corpus> alternatives)
+    { _c = corpus; _alternatives = alternatives; _materialized = true; }
 
     public SynastryInterpreter(string synastryJsonPath)
     {
@@ -70,6 +74,7 @@ public sealed class SynastryInterpreter
         {
             _c = new Corpus();
         }
+        _alternatives = ReadingAlternatives<Corpus>.Load(synastryJsonPath, _c, JsonOpts);
     }
 
     // `first`, `second`: each person's answers, if they have any. They shape which contacts
@@ -77,6 +82,8 @@ public sealed class SynastryInterpreter
     // charts' own balance is unchanged and stays the headline.
     public SynastryReading Compose(Synastry s, MirrorReading? first = null, MirrorReading? second = null)
     {
+        if (!_materialized && _alternatives is { } text)
+            return new SynastryInterpreter(text.For(ReadingAlternatives.GroupSeed(s.First, s.Second)), text).Compose(s, first, second);
         var (a, b) = ShortNames(s);
         if (first is not null && !first.IsFor(s.First)) first = null;
         if (second is not null && !second.IsFor(s.Second)) second = null;
@@ -201,6 +208,8 @@ public sealed class SynastryInterpreter
 
     public TrioReading ComposeTrio(Trio trio)
     {
+        if (!_materialized && _alternatives is { } text)
+            return new SynastryInterpreter(text.For(ReadingAlternatives.GroupSeed(trio.Charts.ToArray())), text).ComposeTrio(trio);
         var full = trio.Charts.Select(c => c.Celebrity.Name).ToList();
         var names = ShortNames(full);
 
@@ -243,6 +252,7 @@ public sealed class SynastryInterpreter
         glance.RemoveAll(i => string.IsNullOrWhiteSpace(i.Text));
 
         var weakest = trio.Weakest;
+        var pairTexts = new HashSet<string>(StringComparer.Ordinal);
         var pairs = trio.Pairs.Select(p => new DailyItem
         {
             Title = $"{names[p.First]} and {names[p.Second]}",
@@ -251,7 +261,9 @@ public sealed class SynastryInterpreter
                    (p.AsLived is { } asLived ? $"  ·  by the answers, {asLived.Tone.Label()} ({asLived.Tone.LevelText()})" : "") +
                    (p.Contemporaries && !trio.Contemporaries ? "  ·  contemporaries" : "") +
                    (ReferenceEquals(p, weakest) ? "  ·  the weakest of the three" : ""),
-            Text = Lookup(_c.Tones, p.Compatibility.Tone.ToString(), ""),
+            Text = _alternatives?.Pick("tones/" + p.Compatibility.Tone,
+                ReadingAlternatives.GroupSeed(trio.Charts[p.First], trio.Charts[p.Second]), pairTexts)
+                ?? Lookup(_c.Tones, p.Compatibility.Tone.ToString(), ""),
         }).Where(i => i.Text.Length > 0).ToList();
 
         var sections = new List<DailySection>

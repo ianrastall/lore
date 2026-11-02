@@ -30,6 +30,7 @@ Data\celebrities.json
 Data\cities.json
 Data\hospitals.json
 Data\interpretations.json
+Data\reading-variants.json
 Data\daily.json
 Data\synastry.json
 Data\davison.json

@@ -40,6 +40,7 @@ public static class SelfCheck
             problems.Add($"missing or empty: {missing}");
 
         // The corpora: each loads, and those that can say so are whole.
+        Try("reading-variants.json", () => _ = ReadingAlternatives.Read(Data(ReadingAlternatives.FileName)));
         ChartInterpreter? report = null;
         Try("interpretations.json", () =>
         {

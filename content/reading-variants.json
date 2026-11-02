@@ -1,0 +1,1096 @@
+{
+  "version": "5.1.0",
+  "readings": {
+    "mirror": {
+      "planets/Sun/higher": [
+        "The character answers describe a constructive expression of the Sun: a sense of purpose that belongs to the person, with enough independence to act without making approval the deciding factor."
+      ],
+      "planets/Sun/lower": [
+        "The character answers suggest that the Sun's direction is harder to sustain. A sense of self may depend heavily on other people's responses, leaving purpose more vulnerable to disappointment."
+      ],
+      "planets/Moon/higher": [
+        "The character answers describe room for feeling and an ability to respond with care. The Moon's account of emotional need is being expressed in ways that can support connection."
+      ],
+      "planets/Moon/lower": [
+        "The character answers suggest that emotional need is more often protected than shared. Comparison or defensiveness may make the Moon's search for closeness harder to satisfy."
+      ],
+      "planets/Mercury/higher": [
+        "The character answers describe thought used with purpose and honesty. Mercury's capacity for understanding is being joined to a willingness to face the problem as it is."
+      ],
+      "planets/Mercury/lower": [
+        "The character answers suggest difficulty keeping thought and speech accountable. Mercury's resourcefulness may be spent on avoiding a problem or explaining away a response."
+      ],
+      "planets/Venus/higher": [
+        "The character answers describe affection with room for other people's limitations. Venus's wish to relate is supported by acceptance and a capacity to release an injury."
+      ],
+      "planets/Venus/lower": [
+        "The character answers suggest that hurt and obligation remain close to affection. Venus's account of relationship may be complicated by a persistent sense of what another person owes."
+      ],
+      "planets/Mars/higher": [
+        "The character answers describe drive that can be directed and restrained. Mars's force is available without needing to turn every frustration into a lasting contest."
+      ],
+      "planets/Mars/lower": [
+        "The character answers show this Mars on its lower side: impulse and resentment can take over from intention. Energy may be active, but harder to bring back under a chosen purpose."
+      ],
+      "planets/Jupiter/higher": [
+        "The character answers describe hope connected to a meaningful aim. Jupiter's widening impulse has a direction, allowing possibility to serve more than immediate appetite."
+      ],
+      "planets/Jupiter/lower": [
+        "The character answers suggest that confidence in a worthwhile future is difficult to find. Jupiter's promise of growth has less to attach itself to in the present account."
+      ],
+      "planets/Saturn/higher": [
+        "The character answers describe limits that can be accepted and used. Saturn's structure appears as dependable choices and sustained effort, rather than constraint alone."
+      ],
+      "planets/Saturn/lower": [
+        "The character answers suggest that limits are more readily experienced as discouragement. Saturn's need for structure may be recognised without yet becoming a reliable way to act."
+      ],
+      "planets/Uranus/higher": [
+        "The character answers give independence a considered purpose. Uranus's difference can become a useful perspective rather than a need to oppose whatever is familiar."
+      ],
+      "planets/Uranus/lower": [
+        "The character answers suggest restlessness without a settled aim. Uranus's impulse to break away may be clearer than any account of what that freedom is for."
+      ],
+      "planets/Neptune/higher": [
+        "The character answers describe imagination connected with meaning. Neptune's openness to what is less tangible has an expression the person can recognise and value."
+      ],
+      "planets/Neptune/lower": [
+        "The character answers give little place to imagination or a wider sense of meaning. Neptune's symbolic concerns may remain difficult to recognise in this account of daily life."
+      ],
+      "planets/Pluto/higher": [
+        "The character answers describe intensity that can be governed and old grievances that can be released. Pluto's account of change has room to become conscious rather than compulsive."
+      ],
+      "planets/Pluto/lower": [
+        "The character answers suggest that old injuries retain their hold. Pluto's intensity may continue through resentment or compulsion without a clear sense of choice."
+      ],
+      "planets/North Node/higher": [
+        "The character answers describe a direction that feels meaningful enough to pursue. The Node's account of development has a corresponding sense of movement in the person's life."
+      ],
+      "planets/North Node/lower": [
+        "The character answers suggest uncertainty about direction and its value. The Node's account of development remains more of a possibility than a course the person feels able to follow."
+      ],
+      "planets/Chiron/higher": [
+        "The character answers describe an old hurt that can be acknowledged without defining the whole person. Chiron's sensitivity has become a source of understanding for other people's difficulties."
+      ],
+      "planets/Chiron/lower": [
+        "The character answers suggest that vulnerability remains guarded behind position or self-protection. Chiron's hurt may still be difficult to acknowledge directly."
+      ],
+      "planets/Lilith/higher": [
+        "The character answers describe greater peace with an experience of rejection or refusal. Lilith's independence has less need to prove itself through a continuing argument."
+      ],
+      "planets/Lilith/lower": [
+        "The character answers suggest that a sense of injustice remains active. Lilith's defiance may be directed at present relationships even when its source lies elsewhere."
+      ]
+    },
+    "davison": {
+      "sun/Aries": [
+        "The relationship establishes itself through initiative. Shared action can give it a clear identity, with less natural patience for compromise or for a period when neither person knows what comes next."
+      ],
+      "sun/Taurus": [
+        "Continuity gives this relationship its sense of purpose. It can build trust through what is maintained together, though security may become confused with keeping every arrangement unchanged."
+      ],
+      "sun/Gemini": [
+        "The relationship defines itself through exchange. Conversation, shared interests and changing perspectives keep it alive; a single fixed account of what it must be can feel restrictive."
+      ],
+      "sun/Cancer": [
+        "The relationship takes shape around belonging. Its protective quality can make private life feel secure, while family history and remembered slights may carry unusual influence."
+      ],
+      "sun/Leo": [
+        "Warmth and shared pride give the relationship a recognisable identity. It flourishes when both can take pleasure in it, and becomes more brittle when appreciation is withheld or made competitive."
+      ],
+      "sun/Virgo": [
+        "The relationship finds purpose in attentive participation. It can become stronger through everyday acts of usefulness, though the wish to improve things may overshadow the ability to enjoy what already works."
+      ],
+      "sun/Libra": [
+        "The relationship is strongly aware of itself as a partnership. Mutual consideration can be a real strength, while the wish to preserve balance may delay a frank account of unequal needs."
+      ],
+      "sun/Scorpio": [
+        "The relationship seeks a depth that changes both people. Trust and shared vulnerability matter greatly; uncertainty about either can make privacy turn into secrecy or closeness into control."
+      ],
+      "sun/Sagittarius": [
+        "A wider horizon gives this relationship direction. Learning, movement and a shared sense of possibility can sustain it, while a life governed only by maintenance may leave it restless."
+      ],
+      "sun/Capricorn": [
+        "The relationship takes itself seriously and wants a durable form. Shared responsibility can build respect over time, although duty may occupy space that warmth and enjoyment also need."
+      ],
+      "sun/Aquarius": [
+        "The relationship's identity rests on friendship and an independent outlook. It can accommodate unusual arrangements, while intellectual agreement may sometimes stand in for a more personal emotional response."
+      ],
+      "sun/Pisces": [
+        "The relationship has a receptive, imaginative character. Sympathy can create a strong sense of connection, while unclear expectations may allow each person to believe a different agreement exists."
+      ],
+      "moon/Aries": [
+        "The relationship's emotional rhythm is quick and direct. Feelings seek an immediate outlet, making honesty accessible but leaving little pause between irritation and reaction."
+      ],
+      "moon/Taurus": [
+        "The relationship settles through consistency and familiar comforts. Emotional trust can become deeply rooted, with a reluctance to disturb an arrangement even after its usefulness has changed."
+      ],
+      "moon/Gemini": [
+        "Conversation is part of the relationship's emotional life. Talking can restore contact quickly, though a painful feeling may remain unsettled when every response turns into another explanation."
+      ],
+      "moon/Cancer": [
+        "The relationship has a strong emotional memory. Care and a sense of home can be deeply reassuring, while a present disagreement may awaken feelings that belong to much earlier experiences."
+      ],
+      "moon/Leo": [
+        "Affection in this relationship wants a visible response. Generosity and shared pleasure can keep it warm, while feeling unappreciated may lead to a larger reaction than the immediate cause suggests."
+      ],
+      "moon/Virgo": [
+        "The relationship expresses care through attention to daily needs. Practical help can be reassuring, though anxiety may appear as criticism when neither person can name the feeling underneath."
+      ],
+      "moon/Libra": [
+        "The emotional atmosphere is sensitive to fairness and tone. Consideration can make the relationship restful, while unspoken disagreement may persist beneath a carefully pleasant surface."
+      ],
+      "moon/Scorpio": [
+        "The relationship's feelings run deep and are not easily put aside. Loyalty can create a powerful private bond, while uncertainty about trust may make ordinary differences feel threatening."
+      ],
+      "moon/Sagittarius": [
+        "The relationship needs emotional breathing room. Shared humour and perspective can restore goodwill, although a wish to move on quickly may leave a more difficult feeling insufficiently heard."
+      ],
+      "moon/Capricorn": [
+        "Emotional security grows through reliability and kept commitments. The relationship may carry difficulty with composure, while leaving tenderness unexpressed because there is always something that needs doing."
+      ],
+      "moon/Aquarius": [
+        "The relationship makes room for emotional independence. Friendship helps it recover perspective, though an impersonal response may disappoint either person when a warmer acknowledgement is wanted."
+      ],
+      "moon/Pisces": [
+        "The relationship is receptive to moods that neither person has fully named. Compassion can be abundant, while emotional boundaries may blur enough for one person's distress to become the atmosphere for both."
+      ],
+      "rising/Aries": [
+        "The relationship meets the world directly. Other people may notice its initiative and energy before they see the more private adjustments needed to sustain that pace."
+      ],
+      "rising/Taurus": [
+        "The relationship presents a steady, self-contained face. Its unhurried manner can convey dependability, even when important changes are taking place out of sight."
+      ],
+      "rising/Gemini": [
+        "The relationship appears lively and responsive. Conversation and curiosity shape its public manner, while its deeper commitments may be less obvious to an observer."
+      ],
+      "rising/Cancer": [
+        "The relationship approaches unfamiliar situations cautiously. Its protective manner can create a strong sense of an inside and an outside, with warmth becoming clearer after trust is established."
+      ],
+      "rising/Leo": [
+        "The relationship has a noticeable presence. Warmth, confidence or a shared sense of occasion can draw attention, while private uncertainty may be less visible than the public appearance suggests."
+      ],
+      "rising/Virgo": [
+        "The relationship meets practical demands attentively. Others may first notice competence and restraint, with affection appearing in useful details rather than an expansive display."
+      ],
+      "rising/Libra": [
+        "The relationship presents itself through courtesy and mutual awareness. It can make room for others gracefully, though an appearance of agreement does not settle every private difference."
+      ],
+      "rising/Scorpio": [
+        "The relationship has a concentrated, private presence. Others may sense strong loyalties without being admitted to their history, making trust central to how it opens outward."
+      ],
+      "rising/Sagittarius": [
+        "The relationship meets the world with openness and a wish to explore. Its outward confidence can encourage new experiences, while practical reservations may emerge later."
+      ],
+      "rising/Capricorn": [
+        "The relationship appears deliberate and responsible. Others may rely on its composure, even when that public role makes it harder to show uncertainty or ask for help."
+      ],
+      "rising/Aquarius": [
+        "The relationship presents an independent face. Shared ideas or an unconventional arrangement can be visible, with less concern for matching other people's expectations of partnership."
+      ],
+      "rising/Pisces": [
+        "The relationship has a receptive, changeable outward manner. Others may find it sympathetic or hard to define, while its practical boundaries remain less obvious than its emotional atmosphere."
+      ],
+      "houses/Sun|1": [
+        "The relationship's identity is closely tied to how it presents itself. Being together can feel like a stronger public presence, with a risk that maintaining that image becomes a purpose of its own."
+      ],
+      "houses/Sun|2": [
+        "The relationship defines itself partly through resources and shared values. What it earns, keeps or considers worth the effort can become a practical expression of what the partnership means."
+      ],
+      "houses/Sun|3": [
+        "The relationship's purpose finds an outlet in everyday exchange. Conversation, learning and local life help give it continuity, with much depending on how well the two remain interested in each other's account."
+      ],
+      "houses/Sun|4": [
+        "Private life is central to the relationship's identity. Home and belonging can give it strength, while questions about family or roots may carry more significance than outside observers realise."
+      ],
+      "houses/Sun|5": [
+        "The relationship comes alive through enjoyment and personal expression. Shared pleasures or creative interests can give it a distinct identity, with appreciation important to its vitality."
+      ],
+      "houses/Sun|6": [
+        "The relationship takes shape through the daily work of living. Reliability and practical contribution matter, though being useful may become too narrow a measure of the partnership's worth."
+      ],
+      "houses/Sun|7": [
+        "Partnership is a central concern of the relationship itself. Mutual recognition can give it purpose, while disagreement over what the two owe each other can reach into its sense of identity."
+      ],
+      "houses/Sun|8": [
+        "The relationship's identity is involved in what the people share deeply. Trust, joint resources and experiences of change can reveal how much each is willing to place in the other's hands."
+      ],
+      "houses/Sun|9": [
+        "The relationship gains purpose from a wider view of life. Shared beliefs, learning or unfamiliar experiences can bring direction, while differences in meaning may become more important than practical disagreements."
+      ],
+      "houses/Sun|10": [
+        "The relationship has a strong connection with public life and achievement. Building something recognised can unite the people, with care needed when reputation becomes the main evidence that the bond is working."
+      ],
+      "houses/Sun|11": [
+        "The relationship finds part of its identity in friendship and a shared future. Groups and common aims can sustain it, while the private needs of the two may receive less attention than their wider commitments."
+      ],
+      "houses/Sun|12": [
+        "Much of the relationship's identity develops privately or without clear definition. Shared retreat can be meaningful, though its purpose may be difficult to explain even to the people involved."
+      ],
+      "houses/Moon|1": [
+        "The relationship's feelings are readily visible in its manner. Others may register the atmosphere between the two before hearing an explanation, making changes in mood hard to conceal."
+      ],
+      "houses/Moon|2": [
+        "Emotional security is closely connected with the relationship's resources and routines. Practical continuity can be soothing, while uncertainty about money may touch deeper concerns about safety and worth."
+      ],
+      "houses/Moon|3": [
+        "The relationship processes feeling through everyday contact. Small conversations can maintain closeness, while silence or a changed tone may carry more emotional weight than intended."
+      ],
+      "houses/Moon|4": [
+        "The relationship's emotional centre is private life. A home or shared sense of origin can offer deep reassurance, with family memories continuing to shape present reactions."
+      ],
+      "houses/Moon|5": [
+        "Shared enjoyment is an important form of emotional contact. Affection can appear through play and spontaneity, while a lack of response to a personal offering may feel especially hurtful."
+      ],
+      "houses/Moon|6": [
+        "The relationship's feelings enter its daily habits and obligations. Care is often practical, while a strained routine can become the place where emotional dissatisfaction is expressed."
+      ],
+      "houses/Moon|7": [
+        "The emotional atmosphere depends strongly on responsiveness between the two. Feeling met matters, and a temporary withdrawal may be taken as a statement about the partnership as a whole."
+      ],
+      "houses/Moon|8": [
+        "Emotional attachment runs into questions of trust and dependence. Deep sharing can create security, while uncertainty about what is held jointly may stir unusually strong feelings."
+      ],
+      "houses/Moon|9": [
+        "A shared sense of meaning helps the relationship feel secure. Travel, learning or belief can renew emotional contact, while a narrowed horizon may make the atmosphere restless."
+      ],
+      "houses/Moon|10": [
+        "The relationship's emotional life is connected with its public position. Recognition may feel reassuring, while outside demands can make private needs more difficult to acknowledge."
+      ],
+      "houses/Moon|11": [
+        "Friendship and shared hopes are part of the relationship's emotional foundation. Belonging to a wider circle can support the bond, though group expectations may complicate what the two need privately."
+      ],
+      "houses/Moon|12": [
+        "The relationship holds feelings that may be difficult to name. Quiet companionship can be deeply restorative, while unspoken distress may accumulate without an obvious point of entry."
+      ]
+    },
+    "interpretations": {
+      "planetInSign/Sun|Aries": [
+        "Identity is closely tied to initiative. There is satisfaction in acting under one's own authority, and frustration when circumstances require long dependence on another person's decision."
+      ],
+      "planetInSign/Sun|Taurus": [
+        "Self-respect gathers around continuity, skill and a reliable sense of value. A durable contribution matters more than a brief impression, though an established identity can become difficult to revise."
+      ],
+      "planetInSign/Sun|Gemini": [
+        "Identity develops through learning, language and the discovery of another possibility. Variety keeps the sense of self alive; choosing one direction can feel like neglecting several equally real capacities."
+      ],
+      "planetInSign/Sun|Cancer": [
+        "Identity is closely connected to belonging and the care of a particular circle. Private loyalties can sustain effort long after external recognition has ceased to matter."
+      ],
+      "planetInSign/Sun|Leo": [
+        "Self-expression has a strong personal center. Being able to contribute wholeheartedly is important, and a lack of response can be felt as more than a simple difference in taste."
+      ],
+      "planetInSign/Sun|Virgo": [
+        "Identity takes shape through discrimination and useful effort. Competence can become a secure resource, while being unable to improve something may feel unusually personal."
+      ],
+      "planetInSign/Sun|Libra": [
+        "Identity is developed in relation to others and to a considered standard of fairness. There is strength in perspective, with a possible hesitation when a definite preference will disappoint someone."
+      ],
+      "planetInSign/Sun|Scorpio": [
+        "Identity draws strength from emotional concentration and the willingness to face difficult material. A committed position can feel more real than an easy one, even when ease would not diminish its value."
+      ],
+      "planetInSign/Sun|Sagittarius": [
+        "Purpose expands through discovery, conviction and the sense of a further horizon. Confidence can open a path that caution would miss, while making it harder to acknowledge a limit without losing heart."
+      ],
+      "planetInSign/Sun|Capricorn": [
+        "Identity is strongly invested in responsibility and the ability to sustain a demanding aim. Authority can be earned patiently, but external achievement may be asked to settle an inward uncertainty."
+      ],
+      "planetInSign/Sun|Aquarius": [
+        "Identity depends in part on the freedom to think independently. A shared ideal can attract substantial loyalty, provided belonging does not require the abandonment of an individual judgment."
+      ],
+      "planetInSign/Sun|Pisces": [
+        "Identity is receptive to images, feelings and meanings that cross ordinary boundaries. Imagination can supply direction, while the distinction between a personal aim and a shared need takes more attention."
+      ],
+      "planetInSign/Moon|Aries": [
+        "Emotional reactions are immediate and closely linked to the need to act. A direct response can restore equilibrium quickly, while waiting without a clear reason can intensify the original feeling."
+      ],
+      "planetInSign/Moon|Taurus": [
+        "Emotional security depends on continuity that can be felt in ordinary life. Trust forms through repeated evidence; once an attachment has settled, changing its terms takes time."
+      ],
+      "planetInSign/Moon|Gemini": [
+        "Feelings seek language, comparison and response. An engaged conversation can be settling, although the search for an explanation may outlast the moment when a need could have been stated simply."
+      ],
+      "planetInSign/Moon|Cancer": [
+        "Feelings carry memory with them. Familiar people, places and acts of care can be deeply reassuring, while an interruption may awaken a larger history than the present event alone accounts for."
+      ],
+      "planetInSign/Moon|Leo": [
+        "Emotional life needs warmth and a sense of being personally recognized. Generosity comes readily when affection feels mutual; an impersonal response may be more painful than its outward form suggests."
+      ],
+      "planetInSign/Moon|Virgo": [
+        "Emotional security is supported by manageable routines and attentive practical care. Anxiety can express itself as correction or preparation when reassurance and shared responsibility are more directly needed."
+      ],
+      "planetInSign/Moon|Libra": [
+        "Feelings are strongly affected by the balance of an exchange. Consideration matters, but a calm relationship may still feel insecure if only one person is stating a preference."
+      ],
+      "planetInSign/Moon|Scorpio": [
+        "Emotional attachments are concentrated and slow to become casual. Candor can be reassuring even when it is difficult; incomplete reassurance may leave more room for vigilance than silence would."
+      ],
+      "planetInSign/Moon|Sagittarius": [
+        "Emotional recovery often involves movement, perspective or the return of hope. Freedom is reassuring when it remains compatible with a bond, rather than becoming the only available response to difficulty."
+      ],
+      "planetInSign/Moon|Capricorn": [
+        "Feelings are contained within a strong awareness of responsibility. Practical reliability can carry considerable affection, while an unmanageable need may be difficult to acknowledge without self-criticism."
+      ],
+      "planetInSign/Moon|Aquarius": [
+        "Emotional security includes room to differ and time to find a considered response. Friendship can offer deep belonging without requiring continuous demonstrations of agreement or closeness."
+      ],
+      "planetInSign/Moon|Pisces": [
+        "Feelings are highly responsive to atmosphere and identification with others. Sympathy can be immediate, while knowing which part of a shared emotional situation is one's own may take longer."
+      ],
+      "planetInSign/Mercury|Aries": [
+        "Thinking favors a direct route from question to answer. Speech can be decisive and enlivening, with a tendency to reach the point before every qualification has been considered."
+      ],
+      "planetInSign/Mercury|Taurus": [
+        "Thinking proceeds through what is concrete and dependable. An idea is tested against experience and usefulness; once accepted, it may be held with more persistence than speed."
+      ],
+      "planetInSign/Mercury|Gemini": [
+        "Thinking is quick to connect, compare and change perspective. Language is a flexible instrument, though the ability to see another possibility can make a final conclusion difficult to leave alone."
+      ],
+      "planetInSign/Mercury|Cancer": [
+        "Thinking is colored by memory and emotional significance. An account may retain the feeling of an event with great accuracy while giving less space to another person's different interpretation."
+      ],
+      "planetInSign/Mercury|Leo": [
+        "Thinking and speech carry personal conviction. A clear account can inspire confidence, while disagreement may be heard as a challenge to the person rather than to one part of the argument."
+      ],
+      "planetInSign/Mercury|Virgo": [
+        "Thinking favors distinctions, practical accuracy and finding the part that does not fit. This supports careful work, with a risk of giving an error more attention than the whole it belongs to."
+      ],
+      "planetInSign/Mercury|Libra": [
+        "Thinking compares positions and considers their social consequences. Judgment can be balanced and tactful, although a decision may remain open after the available evidence has stopped changing."
+      ],
+      "planetInSign/Mercury|Scorpio": [
+        "Thinking goes beneath a surface account and notices what has been withheld. Concentration is a resource; suspicion can also give an incomplete explanation more coherence than the evidence warrants."
+      ],
+      "planetInSign/Mercury|Sagittarius": [
+        "Thinking seeks a larger pattern or principle. A broad view can make the significance of a detail clear, while moving too quickly past the detail's capacity to complicate the principle."
+      ],
+      "planetInSign/Mercury|Capricorn": [
+        "Thinking is organized around consequences, structure and what can be carried out. Speech may be restrained because a commitment is taken seriously, rather than because there is little to say."
+      ],
+      "planetInSign/Mercury|Aquarius": [
+        "Thinking tests assumptions and makes unexpected connections. Intellectual independence can widen an account, with a possible preference for a consistent system over an inconvenient personal exception."
+      ],
+      "planetInSign/Mercury|Pisces": [
+        "Thinking works through association, image and sensitivity to context. It can register a meaning before finding exact language for it, making the distinction between an impression and a conclusion important."
+      ],
+      "planetInSign/Venus|Aries": [
+        "Affection is expressed through initiative and a clear sign of interest. Attraction can be immediate, while patience with an uncertain or slow-moving exchange is less automatic."
+      ],
+      "planetInSign/Venus|Taurus": [
+        "Affection gathers through reliable presence, sensual pleasure and shared continuity. Attachment can be generous and durable, with a corresponding reluctance to alter an established bond."
+      ],
+      "planetInSign/Venus|Gemini": [
+        "Affection grows through curiosity, conversation and variety. Interest remains lively when the exchange keeps developing, while an unspoken expectation of consistency can become a source of misunderstanding."
+      ],
+      "planetInSign/Venus|Cancer": [
+        "Affection is protective and attentive to private needs. Familiarity deepens attachment, though care can carry an expectation of return that has not been made explicit."
+      ],
+      "planetInSign/Venus|Leo": [
+        "Affection is warm, expressive and invested in making the other person feel chosen. Recognition matters in return; indifference can be felt more keenly than a straightforward disagreement."
+      ],
+      "planetInSign/Venus|Virgo": [
+        "Affection often appears as attention to an ordinary need or a practical improvement. Care is specific, although a helpful correction may not always be received as the kindness that was intended."
+      ],
+      "planetInSign/Venus|Libra": [
+        "Affection seeks reciprocity, grace and terms that leave both people a place. Accommodation can support a bond or gradually conceal a preference that the relationship needs to know."
+      ],
+      "planetInSign/Venus|Scorpio": [
+        "Affection is concentrated and concerned with the depth of a bond. Intimacy carries weight, and a casual or ambiguous exchange may invite a stronger response than the other person anticipates."
+      ],
+      "planetInSign/Venus|Sagittarius": [
+        "Affection needs room for discovery and a shared sense of possibility. Openness can be generous, while an obligation that seems to close the horizon may be met with distance."
+      ],
+      "planetInSign/Venus|Capricorn": [
+        "Affection is shown through reliability and a serious regard for the relationship's future. Reserve can conceal substantial attachment, and practical loyalty may be easier to offer than unguarded reassurance."
+      ],
+      "planetInSign/Venus|Aquarius": [
+        "Affection is connected to friendship, independence and respect for difference. A bond can be deeply valued without being expressed through conventional signs of possession or constant togetherness."
+      ],
+      "planetInSign/Venus|Pisces": [
+        "Affection is imaginative and readily identifies with another person's experience. Compassion can enrich a bond, while an ideal image may make its actual terms harder to see clearly."
+      ],
+      "planetInSign/Mars|Aries": [
+        "Action is direct and readily mobilized by a clear obstacle. Initiative can cut through hesitation, while anger may arrive before the consequences of acting have received equal attention."
+      ],
+      "planetInSign/Mars|Taurus": [
+        "Action gathers gradually and can become difficult to stop once committed. Persistence supports demanding work, although pressure to change pace may be experienced as a challenge to the whole undertaking."
+      ],
+      "planetInSign/Mars|Gemini": [
+        "Action is stimulated by information, argument and a changing problem. Several approaches can be tried quickly, with a risk of dispersing effort before one of them has been fully tested."
+      ],
+      "planetInSign/Mars|Cancer": [
+        "Action is strongly affected by emotional security and the wish to protect. Resistance can become indirect when a personal grievance feels too exposing to state plainly."
+      ],
+      "planetInSign/Mars|Leo": [
+        "Action carries pride and a wish to stand behind its result. Generosity can make effort expansive, while a slight to dignity may draw energy away from the original purpose."
+      ],
+      "planetInSign/Mars|Virgo": [
+        "Action favors precision, practical usefulness and improving the method. Irritation may collect around small failures, especially when effort is being measured against an exacting inward standard."
+      ],
+      "planetInSign/Mars|Libra": [
+        "Action is shaped by competing claims and awareness of the other person's response. Cooperation can be skillful, while anger may remain in negotiation longer than its cause requires."
+      ],
+      "planetInSign/Mars|Scorpio": [
+        "Action is concentrated and capable of sustained engagement with a difficult aim. Will and emotional stakes are closely joined, making it important to distinguish persistence from an inability to release control."
+      ],
+      "planetInSign/Mars|Sagittarius": [
+        "Action is energized by conviction, exploration and a larger purpose. Momentum can be substantial, though the enthusiasm of the beginning may exceed the attention given to later practical demands."
+      ],
+      "planetInSign/Mars|Capricorn": [
+        "Action is strategic and able to work within a demanding structure. Patience can serve a long aim, while blocked ambition may express itself through an increasingly rigid insistence on results."
+      ],
+      "planetInSign/Mars|Aquarius": [
+        "Action is mobilized by independence or a principle. An unconventional method can solve a problem, while resistance may sharpen when another person's authority seems to rest only on convention."
+      ],
+      "planetInSign/Mars|Pisces": [
+        "Action responds to atmosphere, sympathy and an inward sense of direction. Effort may be indirect or intermittent when the aim is unclear, and can become persistent when it has an emotionally meaningful form."
+      ],
+      "planetInSign/Jupiter|Aries": [
+        "Growth is associated with initiative and confidence in direct experience. Opportunity is readily met, with a possible tendency to treat enthusiasm as sufficient evidence that a risk is worthwhile."
+      ],
+      "planetInSign/Jupiter|Taurus": [
+        "Growth is associated with increasing substance, stability and practical value. Patience can support expansion, while comfort with a sound arrangement may make a new possibility harder to recognize."
+      ],
+      "planetInSign/Jupiter|Gemini": [
+        "Growth is associated with learning, connections and the exchange of ideas. Range can increase quickly, while the integration of what has been learned may require a slower kind of attention."
+      ],
+      "planetInSign/Jupiter|Cancer": [
+        "Growth is associated with belonging and the enlargement of a protective circle. Generosity can be personal and sustaining, though loyalty may make an established group seem more universally right than it is."
+      ],
+      "planetInSign/Jupiter|Leo": [
+        "Growth is associated with creative confidence and generous participation. Encouragement can draw more out of others, while belief in a personal mission may need an independent measure of its effects."
+      ],
+      "planetInSign/Jupiter|Virgo": [
+        "Growth is associated with competence, useful service and a better understanding of how things work. Improvement can be substantial even when it arrives through small, cumulative changes."
+      ],
+      "planetInSign/Jupiter|Libra": [
+        "Growth is associated with cooperation, fair exchange and access to a wider range of perspectives. A workable agreement can create opportunity, provided appearance is not mistaken for a settled balance."
+      ],
+      "planetInSign/Jupiter|Scorpio": [
+        "Growth is associated with depth, committed inquiry and the capacity to meet difficult truths. Confidence may increase through a demanding experience that also changes what is considered worth pursuing."
+      ],
+      "planetInSign/Jupiter|Sagittarius": [
+        "Growth is associated with exploration, meaning and a larger frame of reference. Confidence can extend a genuine capacity, while an attractive belief still has to answer to what experience reveals."
+      ],
+      "planetInSign/Jupiter|Capricorn": [
+        "Growth is associated with organized effort and accepting the demands of a substantial aim. Expansion tends to be valued when it can be sustained, although caution can become a limit of its own."
+      ],
+      "planetInSign/Jupiter|Aquarius": [
+        "Growth is associated with shared ideals, independent inquiry and less conventional arrangements. Opportunity can come through a wider network, while a general principle may overlook a particular person's circumstances."
+      ],
+      "planetInSign/Jupiter|Pisces": [
+        "Growth is associated with imagination, sympathy and a sense of connection beyond immediate boundaries. Generosity can be expansive, making the distinction between a meaningful commitment and an unlimited obligation important."
+      ],
+      "planetInSign/Saturn|Aries": [
+        "Limits are encountered around initiative and the right to act independently. Confidence can be developed through deliberate effort, while inhibition may alternate with a forceful attempt to prove it has been overcome."
+      ],
+      "planetInSign/Saturn|Taurus": [
+        "Limits are encountered around security, material continuity and what can be relied on. Careful stewardship is possible, with a risk of preserving an arrangement primarily because change feels unsafe."
+      ],
+      "planetInSign/Saturn|Gemini": [
+        "Limits are encountered around speech, learning and confidence in one's own account. Thought can become careful and disciplined, while an ordinary uncertainty may be treated as evidence that nothing should yet be said."
+      ],
+      "planetInSign/Saturn|Cancer": [
+        "Limits are encountered around belonging, care and the expression of private need. Responsibility can support a bond, but may also make receiving protection feel less acceptable than providing it."
+      ],
+      "planetInSign/Saturn|Leo": [
+        "Limits are encountered around visibility, pride and free self-expression. A creative capacity can acquire discipline, while fear of judgment can make an unguarded contribution feel unusually consequential."
+      ],
+      "planetInSign/Saturn|Virgo": [
+        "Limits are encountered through standards, practical duty and the question of being useful enough. Discipline can become mastery, while a continually receding standard can prevent competence from bringing relief."
+      ],
+      "planetInSign/Saturn|Libra": [
+        "Limits are encountered through agreements, fairness and responsibility to another person. Commitment can be durable, though a wish to make every term defensible may delay a necessary decision."
+      ],
+      "planetInSign/Saturn|Scorpio": [
+        "Limits are encountered around trust, exposure and the management of shared stakes. Emotional discipline can support depth, while protective control may continue after its original necessity has passed."
+      ],
+      "planetInSign/Saturn|Sagittarius": [
+        "Limits are encountered around belief, education and the authority of a larger account. Conviction can become more considered through testing, while uncertainty may be managed by an increasingly rigid principle."
+      ],
+      "planetInSign/Saturn|Capricorn": [
+        "Limits are encountered through responsibility, achievement and relations with authority. Sustained effort can earn real standing, though duty may become too closely identified with the right to rest or belong."
+      ],
+      "planetInSign/Saturn|Aquarius": [
+        "Limits are encountered around groups, independence and the practical form of an ideal. A shared project can gain structure, while belonging may be made conditional on an overly exact standard of agreement."
+      ],
+      "planetInSign/Saturn|Pisces": [
+        "Limits are encountered around boundaries, uncertainty and responsibility for suffering. Compassion can acquire a workable form, while guilt may otherwise make an undefined obligation difficult to question."
+      ],
+      "balanceNotes/modalitiesEven": [
+        "Initiating, sustaining and adapting have similar representation. No single mode supplies the chart's default response to every kind of situation.",
+        "The chart distributes its emphasis across beginning, maintaining and changing course. The circumstances and the planets involved matter more than one prevailing mode.",
+        "Cardinal, fixed and mutable points are balanced. There is no clear modal preference for starting, staying or adjusting."
+      ],
+      "sunSigns/Aries": [
+        "{name} is most engaged when there is a clear decision to make and room to act on it. Confidence grows through direct experience. Starting is often easier than accepting the slower, less visible work of continuation.",
+        "Independence is central to {name}'s sense of purpose. Opposition can sharpen resolve, but may also turn an ordinary difference into a test of personal freedom. Courage is strongest when it has an aim beyond winning the moment."
+      ],
+      "moonSigns/Aries": [
+        "{name} responds emotionally before much interpretation has taken place. Independence and a direct exchange restore equilibrium; delay can feel more disturbing than a frank disagreement.",
+        "An immediate response helps {name} feel present in their own life. Feelings can flare and pass quickly, leaving a mismatch with people who need more time to recover from the exchange."
+      ],
+      "risingSigns/Aries": [
+        "{name} comes across as ready to engage. Decisions, reactions and preferences tend to be visible early, which can be refreshing to others and occasionally more forceful than intended.",
+        "The visible approach is brisk and self-directed. {name} often establishes a position before the social terms are settled; an appearance of certainty may arrive before any private doubt has been resolved."
+      ],
+      "sunSigns/Taurus": [
+        "{name} builds confidence through continuity: a useful skill, a dependable arrangement or something tangible that improves through care. Persistence is a resource, while changing direction can feel disproportionately costly.",
+        "Durability matters to {name}. Effort is easiest to sustain when its value can be felt or demonstrated. Attachment can preserve something worthwhile or outlast the circumstances that once made it worthwhile."
+      ],
+      "moonSigns/Taurus": [
+        "Familiar rhythms help {name} feel secure. Emotional trust accumulates through repeated practical evidence, and a sudden change in an ordinary routine can matter more than its outward scale suggests.",
+        "{name}'s feelings tend to settle into place rather than pass quickly through. Sensory comfort and dependable company are restorative; being hurried into a new emotional position is less helpful."
+      ],
+      "risingSigns/Taurus": [
+        "{name} appears deliberate and difficult to rush. Others may experience this as reassuring steadiness or discover, after an apparently quiet beginning, that a firm preference has already been formed.",
+        "The first impression is grounded and composed. {name} usually takes in the practical reality of a situation before moving, and may be more receptive to consistency than to a persuasive performance."
+      ],
+      "sunSigns/Gemini": [
+        "{name} finds purpose in discovering connections and keeping possibilities in circulation. An agile perspective is a strength; committing to one account becomes harder when several alternatives remain intellectually persuasive.",
+        "Understanding is a central activity for {name}. Information, conversation and contrast keep life moving. There can be more ease in explaining a choice than in accepting what making it excludes."
+      ],
+      "moonSigns/Gemini": [
+        "{name} often needs to put a feeling into words before knowing where it stands. Responsive conversation restores a sense of connection, while an unexplained silence can invite many competing interpretations.",
+        "Emotional experience reaches {name} through curiosity and association. Thinking about a feeling can provide useful distance, although the explanation may sometimes continue after a simpler need is already clear."
+      ],
+      "risingSigns/Gemini": [
+        "{name} meets others with alertness and a changing register. Questions and quick observations can establish contact easily; a different audience may encounter a different part of the same person.",
+        "The visible manner is mobile and interested. {name} can move between viewpoints without much ceremony, which makes for social flexibility and can leave others uncertain which preference is finally meant."
+      ],
+      "sunSigns/Cancer": [
+        "{name}'s purpose is often tied to belonging, continuity and responsibility for particular people. Sensitivity to what is needed can become sustained care, though protecting a bond and directing it are not always the same thing.",
+        "Home, memory or a chosen circle can give {name} a durable center of effort. Loyalty carries real weight. It can also make a present decision answer to an older relationship that is no longer quite the same."
+      ],
+      "moonSigns/Cancer": [
+        "{name} needs emotional familiarity before defenses fully relax. Repeated evidence of care is important, and an absence can carry meanings that the absent person has not considered.",
+        "Private feeling is closely connected to memory for {name}. A familiar place or act of care can be deeply reassuring, while a current disappointment may awaken an older and larger sense of loss."
+      ],
+      "risingSigns/Cancer": [
+        "{name} tends to register the emotional atmosphere before declaring a position. A protective welcome can coexist with considerable privacy about their own history and needs.",
+        "The first impression is responsive and cautious about exposure. {name} may make room for another person's comfort while allowing access to their own vulnerabilities more slowly."
+      ],
+      "sunSigns/Leo": [
+        "{name} wants to invest wholeheartedly in something that has personal meaning. Creative confidence and generosity can bring others with it; dependence on recognition can make an ordinary setback feel like a verdict on the self.",
+        "Being able to stand visibly behind a contribution matters to {name}. Pride can sustain effort and responsibility. It becomes more difficult when the contribution must continue without a confirming audience."
+      ],
+      "moonSigns/Leo": [
+        "{name} needs warmth that feels personally offered. Recognition is most reassuring when it singles out the individual rather than merely rewarding a performance or fulfilling a social obligation.",
+        "Pleasure, loyalty and being chosen have emotional importance for {name}. A small private affirmation can matter more than a large public compliment when the latter feels impersonal."
+      ],
+      "risingSigns/Leo": [
+        "{name} often creates a clear sense of presence. Expressiveness can invite people into a shared experience, while a composed appearance may conceal the effort involved in looking sure enough to lead.",
+        "The outward manner has warmth and definition. {name} is likely to be noticed, and others may assume that visibility means a greater immunity to embarrassment or rejection than actually exists."
+      ],
+      "sunSigns/Virgo": [
+        "{name} develops confidence by making a difficult situation workable. Precision and practical discrimination are strengths. The cost can be an internal standard that keeps moving further away as competence grows.",
+        "Usefulness has personal meaning for {name}. Attention goes to the part that can be improved, repaired or understood more exactly. Satisfaction can be delayed when every completion reveals another imperfection."
+      ],
+      "moonSigns/Virgo": [
+        "{name} feels steadier when ordinary life is manageable and expectations are clear. Practical help can convey care directly; unsolicited correction is more complicated when reassurance was what was needed.",
+        "An attentive response to small needs is emotionally important to {name}. The wish to be useful can be generous, but it can also make receiving care feel like an unearned exception."
+      ],
+      "risingSigns/Virgo": [
+        "{name} often notices the discrepancy, the unfinished task or the useful detail. An understated manner can conceal both anxiety about getting things right and considerable dry humor.",
+        "The first impression is observant and economical. {name} may establish a place by contributing something practical before revealing much about a private preference."
+      ],
+      "sunSigns/Libra": [
+        "{name} finds purpose in creating terms that more than one person can inhabit. Perspective and social judgment are resources; a necessary decision can become difficult when somebody must bear its disappointment.",
+        "Fairness and proportion help organize {name}'s aims. There is an ability to understand another position without adopting it, alongside a temptation to keep a conflict open rather than state a final refusal."
+      ],
+      "moonSigns/Libra": [
+        "{name} needs reciprocal attention. Emotional peace is reassuring when it includes their own wishes, and less so when it has been achieved by quietly setting those wishes aside.",
+        "An exchange feels safer to {name} when both people remain participants in it. Being left to arrange all the compromises can feel lonely even in an outwardly agreeable relationship."
+      ],
+      "risingSigns/Libra": [
+        "{name} usually seeks a workable point of contact. Courtesy can make a difficult exchange possible, but may conceal how firmly an issue has already been judged.",
+        "The visible approach is composed and relational. {name} may accommodate small differences easily while holding a much stronger boundary around something perceived as unfair."
+      ],
+      "sunSigns/Scorpio": [
+        "{name} is drawn toward what remains important when appearances and easy assurances fall away. Persistence and emotional concentration are strengths; vigilance can also make an uncertain situation harder to release.",
+        "Trust, power and the value of a serious commitment are central questions for {name}. There is often an ability to remain with difficult material, with a corresponding difficulty accepting that not everything can be secured against loss."
+      ],
+      "moonSigns/Scorpio": [
+        "{name} needs trust that can bear uncomfortable knowledge. Privacy is protective, while reassurance that avoids a difficult truth may deepen uncertainty instead of settling it.",
+        "Emotional safety for {name} includes knowing that vulnerability will not be used against them. A wish to relax control can coexist with close attention to every possible reason not to."
+      ],
+      "risingSigns/Scorpio": [
+        "{name} often reveals selectively and listens beneath the stated account. Concentrated attention can create intimacy or make others feel more exposed than they expected.",
+        "The first impression is contained and penetrating. {name} may seem certain while withholding judgment, and may notice the real stakes in an exchange before choosing how much to acknowledge."
+      ],
+      "sunSigns/Sagittarius": [
+        "{name} needs aims that connect present effort with a wider possibility. Confidence and a capacity to recover perspective are strengths; a large promise can become harder to honor in its small particulars.",
+        "Meaning and freedom organize much of {name}'s purpose. An expansive view can draw people forward, but can also pass too quickly over an experience that does not fit the larger account."
+      ],
+      "moonSigns/Sagittarius": [
+        "{name} feels restored by room to move, question and discover a further horizon. Perspective is helpful provided it does not become a way of leaving an unresolved feeling behind.",
+        "Hope has an emotional function for {name}. Humor and possibility can make trouble bearable, while an insistence on finding the positive may leave some experiences insufficiently acknowledged."
+      ],
+      "risingSigns/Sagittarius": [
+        "{name} often brings openness and an account of what might be possible. Enthusiasm can include people readily, sometimes before the practical terms have received the same attention.",
+        "The visible manner is candid and expansive. {name} may speak from a broad principle with confidence, leaving a particular person's exception to complicate the picture later."
+      ],
+      "sunSigns/Capricorn": [
+        "{name} takes purpose seriously and can sustain effort without immediate recognition. Responsibility and strategic patience are strengths; achievement can become too heavily charged with the question of personal worth.",
+        "Something durable and accountable gives {name} a direction. There is respect for what work actually requires, alongside a risk of continuing to carry a duty after its original terms have become questionable."
+      ],
+      "moonSigns/Capricorn": [
+        "{name} needs dependable structures and respect for the burdens they carry. Shared responsibility can communicate emotional loyalty more convincingly than consolation without practical support.",
+        "Private reassurance for {name} often comes through knowing that a necessary task is in trustworthy hands. Rest becomes difficult when relaxing control seems to put everyone else's security at risk."
+      ],
+      "risingSigns/Capricorn": [
+        "{name} appears measured and aware of consequences. Reserve may express a wish to remain dependable rather than a lack of feeling or interest.",
+        "The outward approach is purposeful and cautious about promising too much. {name} may accept an unglamorous responsibility that another person would avoid, while revealing less of its personal cost."
+      ],
+      "sunSigns/Aquarius": [
+        "{name} finds purpose in questioning an arrangement that other people accept as inevitable. Independent thought and systems insight are strengths; a consistent principle can sometimes take precedence over a particular relationship.",
+        "Freedom to think differently matters to {name}. Commitment to a shared ideal can be substantial, though belonging becomes complicated when the group begins requiring agreement as evidence of loyalty."
+      ],
+      "moonSigns/Aquarius": [
+        "{name} needs connection that leaves room for difference. Time to think can support emotional honesty, while demands for an immediate and fully formed response may produce greater distance.",
+        "Friendship and permission to dissent are emotionally reassuring to {name}. The need for space can preserve a relationship or, when left unexplained, become difficult for the other person to distinguish from withdrawal."
+      ],
+      "risingSigns/Aquarius": [
+        "{name} often approaches a situation from a slightly unexpected angle. Independence can make room for others to differ, or leave others unsure how to reach the person behind the position.",
+        "The first impression is self-directed and observant of unwritten rules. {name} may be socially engaged without offering the conventional signs of closeness that another person expects."
+      ],
+      "sunSigns/Pisces": [
+        "{name} is responsive to meanings and experiences that resist a simple practical account. Imagination and sympathy are resources, while a poorly defined limit can leave personal aims entangled with other people's needs.",
+        "An image, feeling or sense of connection can give {name} a strong direction. The difficulty is less an absence of commitment than distinguishing which part of a shared emotional atmosphere is actually theirs to carry."
+      ],
+      "moonSigns/Pisces": [
+        "{name} needs emotional shelter and time in which experience does not immediately have to become a decision. Receptivity is a strength when it remains possible to distinguish sympathy from obligation.",
+        "Being understood without having to argue every feeling matters to {name}. Sensitivity can register a subtle change accurately, while uncertainty makes it important not to confuse an impression with an established fact."
+      ],
+      "risingSigns/Pisces": [
+        "{name} often responds to the atmosphere before the formal agenda. An apparently yielding manner can conceal a firm allegiance to a private feeling or value.",
+        "The outward manner is receptive and sometimes difficult to define. {name} may notice a need that a more visibly organized person has missed, while leaving their own position insufficiently stated."
+      ],
+      "balanceNotes/elementsEven": [
+        "Fire, earth, air and water have comparable representation. The chart does not show one elemental approach consistently taking precedence over the others.",
+        "No single element clearly dominates. Action, practical judgment, ideas and feeling each have a substantial place in the chart's distribution."
+      ],
+      "elementStrong/Fire": [
+        "A strong fire emphasis favors direct engagement, enthusiasm and confidence in what may be possible. Energy can establish momentum before the practical terms are settled; maintaining the interest after the beginning is a separate demand.",
+        "With fire prominent, experience tends to be met through initiative and personal conviction. This can animate a group or make necessary limits feel more restrictive than they are."
+      ],
+      "elementStrong/Earth": [
+        "A strong earth emphasis gives weight to continuity, tangible results and practical competence. It supports work that needs patient attention, while uncertainty without a concrete next step can be difficult to accommodate.",
+        "With earth prominent, the chart places substantial emphasis on what can be sustained and made useful. Caution can protect a sound investment or delay a change whose value cannot yet be demonstrated."
+      ],
+      "elementStrong/Air": [
+        "A strong air emphasis gives ideas, language and comparison considerable authority. It supports perspective and exchange, with a possible distance between understanding a feeling and fully experiencing it.",
+        "With air prominent, connections and explanations help organize experience. This can make room for more than one viewpoint, while leaving practical or emotional commitments less clearly settled."
+      ],
+      "elementStrong/Water": [
+        "A strong water emphasis makes emotional significance difficult to separate from other kinds of information. Sympathy and imagination are resources; another person's mood may also be taken in before a boundary is established.",
+        "With water prominent, attachment, memory and atmosphere carry considerable weight. Depth of response can sustain intimacy, although a feeling's intensity is not always a measure of the present situation's scale."
+      ],
+      "elementWeak/Fire": [
+        "No body is in a fire sign. Open enthusiasm and immediate self-assertion may not be the first available response; motivation can depend more on a practical purpose, an idea or a relationship.",
+        "No body is in a fire sign. Confidence through action may require a definite reason to begin, rather than appearing as a general readiness to take the lead."
+      ],
+      "elementWeak/Earth": [
+        "No body is in an earth sign. An idea or feeling may move ahead of the arrangements needed to sustain it. Practical consistency can require more conscious organization than inspiration does.",
+        "No body is in an earth sign. Material limits and repeated maintenance may attract less immediate attention, even when there are strong reasons to care about the outcome."
+      ],
+      "elementWeak/Air": [
+        "No body is in an air sign. Experience may be acted on or felt before it is compared and articulated; an explanation can be harder to find than a definite response.",
+        "No body is in an air sign. Distance, discussion and the exchange of alternatives may be less familiar ways of approaching a situation than direct, practical or emotional engagement."
+      ],
+      "elementWeak/Water": [
+        "No body is in a water sign. Emotional meanings may receive less immediate acknowledgment than practical facts, ideas or intentions. Sensitivity can be present without supplying the default way of understanding a situation.",
+        "No body is in a water sign. Feelings may become clearer through their consequences than through immediate inward recognition, and an unspoken need may require explicit expression."
+      ],
+      "modalityStrong/Cardinal": [
+        "Cardinal emphasis favors establishing a direction and changing the conditions at hand. It can supply initiative under pressure, while repeated beginnings may compete with the work of sustaining what has already been started.",
+        "An initiating mode predominates. The chart tends to place effort at the point of decision, where an intention becomes an action and somebody accepts responsibility for moving matters forward."
+      ],
+      "modalityStrong/Fixed": [
+        "Fixed emphasis supports concentration, continuity and resistance to distraction. It can maintain a worthwhile course through difficulty, while making a necessary revision feel like the loss of an established commitment.",
+        "A sustaining mode predominates. Effort gathers around what is already valued, with strength in persistence and a possible delay in recognizing when persistence has ceased to serve its purpose."
+      ],
+      "modalityStrong/Mutable": [
+        "Mutable emphasis supports adjustment, comparison and responsiveness to changing conditions. It can find a workable alternative quickly, while leaving several possibilities open beyond the point at which a choice is needed.",
+        "An adapting mode predominates. The chart gives considerable room to revision and transition, with flexibility as a resource and the maintenance of one definite course as a separate demand."
+      ],
+      "modalityWeak/Cardinal": [
+        "No body is in a cardinal sign. Initiating a change may take a definite external necessity, while responding to or sustaining an existing situation can come more readily.",
+        "No body is in a cardinal sign. A clear opening or outside demand may help convert an available capacity into a definite first action."
+      ],
+      "modalityWeak/Fixed": [
+        "No body is in a fixed sign. Holding one position through changing circumstances may be less familiar than beginning a new course or adjusting the present one.",
+        "No body is in a fixed sign. Continuity may depend more on a clear purpose or external structure than on an instinctive attachment to an established course."
+      ],
+      "modalityWeak/Mutable": [
+        "No body is in a mutable sign. A transition may need a definite reason and a clear new form, rather than being accepted as an ordinary stage of a process.",
+        "No body is in a mutable sign. Beginning or maintaining a course may be more familiar than remaining flexible while its terms are unsettled."
+      ]
+    },
+    "synastry": {
+      "sunElements/Fire|Fire": [
+        "Both fire Suns put emphasis on initiative and enthusiasm. They recognise each other's need to act, though neither may readily accept the slower or supporting role."
+      ],
+      "sunElements/Fire|Earth": [
+        "{a}'s fire Sun supplies momentum, while {b}'s earth Sun tests what can be sustained. Their different paces can turn an impulse into a result, or leave each feeling that the other is obstructing it."
+      ],
+      "sunElements/Fire|Air": [
+        "{a}'s fire Sun responds to the possibilities raised by {b}'s air Sun. Ideas and enthusiasm reinforce one another, with less natural emphasis on the practical work that follows."
+      ],
+      "sunElements/Fire|Water": [
+        "{a}'s fire Sun meets life through action, while {b}'s water Sun registers its emotional meaning. The same exchange may feel refreshingly direct to {a} and more personally charged to {b}."
+      ],
+      "sunElements/Earth|Earth": [
+        "Both earth Suns understand the value of consistency and tangible results. Shared practical priorities offer stability, although an established arrangement may outlast their willingness to question it."
+      ],
+      "sunElements/Earth|Air": [
+        "{a}'s earth Sun looks for something workable, while {b}'s air Sun wants an idea that makes sense. They bring useful checks to one another, but may disagree about whether a proposal has been sufficiently tested."
+      ],
+      "sunElements/Earth|Water": [
+        "{a}'s earth Sun gives form to what {b}'s water Sun values emotionally. Practical reliability and personal care can support each other, with attachment sometimes making change harder."
+      ],
+      "sunElements/Air|Air": [
+        "Both air Suns place weight on ideas and exchange. Conversation gives them common ground, though intellectual agreement may leave practical or emotional differences unresolved."
+      ],
+      "sunElements/Air|Water": [
+        "{a}'s air Sun seeks perspective, while {b}'s water Sun seeks personal meaning. {a} may explain what {b} needs acknowledged, and {b} may feel more than {a} has realised is at stake."
+      ],
+      "sunElements/Water|Water": [
+        "Both water Suns respond strongly to atmosphere, memory and attachment. Their sensitivity can create a private understanding, while making it difficult to separate one person's feeling from the other's."
+      ],
+      "moonElements/Fire|Fire": [
+        "Both fire Moons respond quickly and visibly. Shared excitement is easy to generate, while a disagreement can become heated before either has considered its cause."
+      ],
+      "moonElements/Fire|Earth": [
+        "{a}'s fire Moon seeks an immediate response; {b}'s earth Moon settles through continuity. {a} can energise {b}, while {b}'s slower pace may reassure or frustrate {a}."
+      ],
+      "moonElements/Fire|Air": [
+        "{a}'s fire Moon finds company in {b}'s air Moon through lively exchange. {a} brings emotional heat and {b} brings perspective, with a shared preference for movement over prolonged heaviness."
+      ],
+      "moonElements/Fire|Water": [
+        "{a}'s fire Moon expresses a reaction directly, while {b}'s water Moon stays with its emotional consequences. What is over quickly for {a} may still need attention from {b}."
+      ],
+      "moonElements/Earth|Earth": [
+        "Both earth Moons look for reassurance in what is dependable. Familiar habits and practical kindness can establish trust, although neither may easily name a need that has no obvious solution."
+      ],
+      "moonElements/Earth|Air": [
+        "{a}'s earth Moon wants reassurance that can be felt in daily life; {b}'s air Moon wants room to discuss and understand. Each can offer care in a form the other does not immediately recognise."
+      ],
+      "moonElements/Earth|Water": [
+        "{a}'s earth Moon gives {b}'s water Moon a steadier emotional setting. {b} brings responsiveness to {a}'s practical care, making reliability feel personal rather than merely efficient."
+      ],
+      "moonElements/Air|Air": [
+        "Both air Moons use thought and conversation to process feeling. They can give one another breathing room, though a difficult emotion may be explained repeatedly without being fully felt."
+      ],
+      "moonElements/Air|Water": [
+        "{a}'s air Moon gains comfort from perspective; {b}'s water Moon gains it from closeness. {a}'s wish to step back can unsettle {b}, while {b}'s emotional intensity can make {a} seek more distance."
+      ],
+      "moonElements/Water|Water": [
+        "Both water Moons notice shifts in feeling readily. Sympathy can be immediate, but a shared atmosphere of worry or hurt may deepen unless they can distinguish their separate needs."
+      ],
+      "aspects/Sun|Conjunction|Moon": [
+        "{a}'s Sun and {b}'s Moon bring identity and emotional habit into close contact. {b} may feel that {a} gives shape to something familiar, while {a} finds a personal response in {b}."
+      ],
+      "aspects/Sun|Flow|Moon": [
+        "{a}'s self-expression makes room for {b}'s emotional responses. {b} can offer support without much explanation, and {a} tends to find that support easy to accept."
+      ],
+      "aspects/Sun|Tension|Moon": [
+        "{a}'s way of asserting a direction can unsettle what {b} needs emotionally. {b}'s responses may in turn feel obstructive to {a}, even when both are trying to stay connected."
+      ],
+      "aspects/Moon|Conjunction|Moon": [
+        "Their emotional rhythms are closely aligned. Familiar reactions can make them feel immediately at home, while also reinforcing a habit neither has questioned."
+      ],
+      "aspects/Moon|Flow|Moon": [
+        "{a} and {b} tend to recognise each other's moods without much translation. Their needs can fit comfortably into the same daily life, making care feel relatively unforced."
+      ],
+      "aspects/Moon|Tension|Moon": [
+        "{a} and {b} look for comfort in different ways. A response that settles one may disturb the other, so emotional goodwill does not always produce an easy shared rhythm."
+      ],
+      "aspects/Mercury|Conjunction|Mercury": [
+        "They approach a subject along similar mental lines. They can follow one another quickly, although shared assumptions may escape the scrutiny they would receive from someone less alike."
+      ],
+      "aspects/Mercury|Flow|Mercury": [
+        "They can exchange ideas with relatively little resistance. Different details tend to extend the conversation rather than interrupt its underlying sense."
+      ],
+      "aspects/Mercury|Tension|Mercury": [
+        "They organise thoughts differently enough to talk past one another. The disagreement may concern the framing of a question before it ever reaches the answer."
+      ],
+      "aspects/Venus|Conjunction|Venus": [
+        "They share closely related preferences in affection, pleasure and taste. Enjoying the same things can make company easy, with less pressure to justify what each values."
+      ],
+      "aspects/Venus|Flow|Venus": [
+        "They can accommodate each other's tastes and ways of showing affection. Their preferences need not be identical for enjoyment and goodwill to pass easily between them."
+      ],
+      "aspects/Venus|Tension|Venus": [
+        "They may like one another while differing over what feels affectionate, enjoyable or worth spending on. A gesture meant warmly by one can miss the other's preference."
+      ],
+      "aspects/Mars|Conjunction|Mars": [
+        "They bring their drive into the same space. Shared aims can gather force quickly, while competing aims can produce a direct contest of wills."
+      ],
+      "aspects/Mars|Flow|Mars": [
+        "They can coordinate effort without constantly renegotiating the pace. Each person's initiative tends to give the other something useful to act on."
+      ],
+      "aspects/Mars|Tension|Mars": [
+        "They can interfere with each other's momentum. Timing, methods or competing aims may turn useful energy into friction, especially when both press harder at once."
+      ],
+      "tones/Soulmates": [
+        "These charts have an unusually strong balance of easy contacts. There is considerable support for mutual understanding, with fewer strong points of friction in Lore's measure.",
+        "The close contacts are numerous and overwhelmingly supportive. The charts suggest ready cooperation across several parts of life, although the measure cannot establish how the people actually related.",
+        "This pair sits at the easy end of Lore's comparison scale. Several different contacts reinforce the sense that one person's natural responses can accommodate the other's."
+      ],
+      "tones/Adversaries": [
+        "Difficult contacts strongly outweigh easy ones in this comparison. The charts describe repeated points of opposition and sensitivity, with substantial effort needed to find a workable response.",
+        "This pair sits at the strained end of Lore's comparison scale. Strong reactions may sustain attention between them, but the contact pattern offers comparatively little ease.",
+        "The close contacts repeatedly bring the two charts into tension. Rivalry, defensiveness or competing aims are possible expressions; the measure describes pressure rather than a documented relationship."
+      ],
+      "tones/Harmonious": [
+        "Easy contacts outweigh difficult ones here. The charts offer several ways to cooperate, with enough common ground to soften some of their differences.",
+        "This comparison leans toward support. The people need not be alike for their responses to fit together with less friction than most pairs show.",
+        "The overall balance is favourable in Lore's measure. Differences remain, but the close contacts provide more help than obstruction."
+      ],
+      "tones/Challenging": [
+        "The balance of contacts is more demanding than usual. The charts repeatedly bring different needs into contact, making adjustment an important part of the relationship reading.",
+        "This pair has a greater share of difficult contacts. There can be considerable engagement between them, alongside recurring pressure on patience and understanding.",
+        "Strain is more prominent than ease in this comparison. The charts can stimulate one another strongly, while leaving fewer matters to take care of themselves."
+      ],
+      "tones/Light": [
+        "There are relatively few close contacts in this comparison. The chart reading offers less evidence of a strongly interlocking pattern, leaving much to circumstances and individual choice.",
+        "This is a light connection by Lore's measure. Fewer close aspects means fewer specific claims can be made from the comparison alone.",
+        "The charts touch at comparatively few close points. That can leave room for independence, though it supplies less of the repeated astrological emphasis found in a more tightly connected pair."
+      ],
+      "trioTones/Golden": [
+        "All three pairs meet Lore's minimum balance, their combined contacts lean easy, and a strong grand trine includes a point from each person. The group has both pairwise support and a shared circuit.",
+        "This trio meets the Golden measure: no pair falls below the required balance, the total leans easy, and a sufficiently strong grand trine links all three charts. Each person contributes to the same supportive pattern.",
+        "The group combines a favourable pairwise balance with a strong grand trine spanning all three people. That is the specific pattern Lore calls Golden; it suggests mutual reinforcement across the whole trio."
+      ],
+      "trioTones/Harmonious": [
+        "No pair falls into difficulty in Lore's measure, and the combined contacts lean easy. The support comes through the pairs, without a grand trine strong enough to meet the Golden threshold.",
+        "The three pairwise readings are broadly cooperative. A shared grand trine does not reach the Golden threshold, but the overall balance still gives the group several routes to agreement.",
+        "This trio's ease is distributed through its pairs. None is below the required balance, and together they have more support than strain, without the strong three-person circuit used for Golden."
+      ],
+      "trioTones/Mixed": [
+        "The combined pairwise balance contains both support and friction. Different alliances or differences in ease may become apparent depending on which two people are interacting.",
+        "The group has no uniformly easy or strained pattern. Some contacts assist cooperation while others complicate it, so the three pair readings matter more than a single overall label.",
+        "Support and pressure coexist in this trio. One pair's ease may not be shared equally by the third person, and the group's balance depends on those differences."
+      ],
+      "trioTones/Strained": [
+        "At least one pair is sufficiently difficult that the others do not restore the overall balance. The group's main pressure may therefore be concentrated in a particular connection.",
+        "The trio's combined pattern is strained in Lore's measure. A difficult pair carries enough weight to affect the group, even where the remaining connections offer some support.",
+        "This group includes a substantial point of pairwise friction that the other contacts do not offset. The individual pair readings show where that pressure is concentrated."
+      ],
+      "tones/Mixed": [
+        "The easy and difficult contacts carry comparable weight. These charts can support one another in some exchanges while repeatedly encountering friction in others.",
+        "Neither ease nor strain dominates this comparison. Affinity and disagreement coexist; the closer personal contacts show where each is concentrated.",
+        "This pair falls near the middle of Lore's scale. There is enough ease for recognition and enough tension for the two sets of needs to remain distinct."
+      ]
+    },
+    "daily": {
+      "transits/Sun|Conjunction|Sun": [
+        "The Sun returns to its natal place, bringing the annual emphasis back to identity and direction. What feels personally meaningful may be clearer, alongside awareness of how the past year has changed it."
+      ],
+      "transits/Sun|Flow|Sun": [
+        "The Sun makes a supportive contact to your natal Sun. Self-expression can feel less forced, with more room to act from an established sense of who you are."
+      ],
+      "transits/Sun|Tension|Sun": [
+        "The Sun presses against your natal Sun. A present demand can conflict with the direction you regard as your own, making questions of pride, purpose and authority more noticeable."
+      ],
+      "transits/Sun|Conjunction|Moon": [
+        "The Sun brings emphasis to your natal Moon. Emotional needs and familiar reactions become more visible, with private concerns asking for a more conscious response."
+      ],
+      "transits/Sun|Flow|Moon": [
+        "The Sun supports your natal Moon. There can be greater agreement between what you intend and what feels comfortable, making a personal response easier to give."
+      ],
+      "transits/Sun|Tension|Moon": [
+        "The Sun challenges your natal Moon. What the day seems to ask may sit awkwardly with your emotional needs, bringing a familiar sensitivity into clearer view."
+      ],
+      "transits/Moon|Conjunction|Sun": [
+        "The Moon passes over your natal Sun, briefly bringing feeling close to your sense of self. Recognition or a personal response may matter more than the practical size of the occasion."
+      ],
+      "transits/Moon|Flow|Sun": [
+        "The Moon supports your natal Sun. Emotional responses can fit your intentions more comfortably for a time, giving ordinary interactions a warmer personal tone."
+      ],
+      "transits/Moon|Tension|Sun": [
+        "The Moon presses against your natal Sun. A passing mood may not agree with what you want to accomplish, and a small slight can touch a larger question of recognition."
+      ],
+      "transits/Moon|Conjunction|Moon": [
+        "The Moon returns to its natal position, bringing familiar emotional habits to the foreground. The need for comfort or reassurance may be especially recognisable."
+      ],
+      "transits/Moon|Flow|Moon": [
+        "The Moon makes an easy contact to its natal place. Familiar surroundings or a sympathetic exchange can help your mood settle without much effort."
+      ],
+      "transits/Moon|Tension|Moon": [
+        "The Moon challenges its natal place. A passing circumstance may interrupt your usual way of finding comfort, making an ordinary need feel more urgent for a while."
+      ],
+      "transits/Mercury|Conjunction|Mercury": [
+        "Mercury returns to its natal place, putting your usual way of thinking and speaking in the foreground. Conversations can reveal the assumptions you most readily begin from."
+      ],
+      "transits/Mercury|Flow|Mercury": [
+        "Mercury supports your natal Mercury. Ideas can connect more readily, with a better fit between what you mean and the words available to explain it."
+      ],
+      "transits/Mercury|Tension|Mercury": [
+        "Mercury challenges your natal Mercury. A different account or an awkward detail may resist your first explanation, making misunderstanding or revision more likely."
+      ],
+      "transits/Venus|Conjunction|Venus": [
+        "Venus returns to its natal place, renewing attention to affection, pleasure and personal value. Your familiar tastes may feel especially definite, including what you want to give and receive."
+      ],
+      "transits/Venus|Flow|Venus": [
+        "Venus supports your natal Venus. Enjoyment and goodwill can be easier to express, with less need to negotiate every difference in preference."
+      ],
+      "transits/Venus|Tension|Venus": [
+        "Venus challenges its natal place. What appeals now may differ from an established preference, or a gesture of affection may arrive in a form you do not readily recognise."
+      ],
+      "transits/Mars|Conjunction|Mars": [
+        "Mars returns to its natal place, bringing your characteristic drive into sharper expression. The wish to act can be strong, along with impatience when there is no clear outlet."
+      ],
+      "transits/Mars|Flow|Mars": [
+        "Mars supports your natal Mars. Effort and intention can fit together more readily, making a practical outlet for energy easier to sustain."
+      ],
+      "transits/Mars|Tension|Mars": [
+        "Mars challenges its natal place. Competing demands or a difference in pace can make effort feel obstructed, with a stronger temptation to answer resistance by pressing harder."
+      ],
+      "transits/Jupiter|Flow|Sun": [
+        "Jupiter supports your natal Sun. A wider possibility can encourage confidence and a clearer sense of purpose, while the scale of the opportunity still needs a realistic measure."
+      ],
+      "transits/Jupiter|Tension|Sun": [
+        "Jupiter challenges your natal Sun. Ambition or confidence can expand beyond what the present situation supports, exposing a difference between a promising aim and the promises made for it."
+      ],
+      "transits/Saturn|Conjunction|Sun": [
+        "Saturn meets your natal Sun, bringing identity and responsibility into close contact. A limit may require a more deliberate choice about what deserves sustained commitment."
+      ],
+      "transits/Saturn|Flow|Sun": [
+        "Saturn supports your natal Sun. Steady effort can give purpose a workable form, with confidence coming more from what can be relied on than from a sudden lift in mood."
+      ],
+      "transits/Saturn|Tension|Sun": [
+        "Saturn challenges your natal Sun. Responsibility or restriction may weigh on self-confidence, making the distinction between a real limit and a discouraging judgement especially relevant."
+      ],
+      "transits/Saturn|Conjunction|Moon": [
+        "Saturn meets your natal Moon. Emotional needs may feel more exposed to duty or limitation, with familiar sources of reassurance seeming less immediately available."
+      ],
+      "transits/Saturn|Flow|Moon": [
+        "Saturn supports your natal Moon. Consistency and practical care can provide reassurance, allowing feeling to have a dependable place within ordinary obligations."
+      ],
+      "transits/Saturn|Tension|Moon": [
+        "Saturn challenges your natal Moon. Duty and emotional need may pull apart, with a risk of treating a temporary lack of comfort as evidence that support is unavailable altogether."
+      ],
+      "transits/Venus|Flow|Mars": [
+        "Venus supports your natal Mars. Affection and initiative can cooperate, making it easier to pursue something you enjoy without losing sensitivity to another person's response."
+      ],
+      "moonInSign/Aries": [
+        "The Moon in Aries brings a quick emotional response. Independence matters, irritation is easy to show, and a fresh task can hold more appeal than waiting for agreement.",
+        "With the Moon in Aries, the mood favours initiative. Feelings move rapidly into action, although the first reaction may pass as quickly as it arrived."
+      ],
+      "moonInSign/Taurus": [
+        "The Moon in Taurus draws attention to what feels dependable. Familiar surroundings and physical comforts help settle the mood; sudden changes can meet quiet resistance.",
+        "With the Moon in Taurus, feelings take time to shift. There is satisfaction in a steady pace and something tangible, with less appetite for disruption."
+      ],
+      "moonInSign/Gemini": [
+        "The Moon in Gemini brings feelings into conversation. Curiosity can lighten the atmosphere, while too many messages or choices can scatter attention.",
+        "With the Moon in Gemini, the mood changes through contact with other people and ideas. Talking something through may matter more than reaching a final answer."
+      ],
+      "moonInSign/Cancer": [
+        "The Moon in Cancer heightens attachment to familiar people and places. Care comes readily, and a change in tone can be felt before anyone explains it.",
+        "With the Moon in Cancer, the emotional atmosphere is receptive and easily disturbed. Privacy, continuity and a sense of being welcome carry extra weight."
+      ],
+      "moonInSign/Leo": [
+        "The Moon in Leo makes appreciation especially noticeable. Warmth and generosity are close to the surface, and being overlooked may sting more than usual.",
+        "With the Moon in Leo, the mood seeks enjoyment and a personal response. A little recognition can lift spirits; wounded pride can make a small disappointment feel larger."
+      ],
+      "moonInSign/Virgo": [
+        "The Moon in Virgo finds reassurance in putting things in order. Useful work can settle the feelings, although attention to flaws may become its own source of unease.",
+        "With the Moon in Virgo, care tends to appear in small practical acts. The mood is observant and selective, with a need to distinguish a solvable detail from an endless worry."
+      ],
+      "moonInSign/Libra": [
+        "The Moon in Libra makes the atmosphere between people particularly important. Courtesy helps, while an unresolved disagreement can occupy more attention than expected.",
+        "With the Moon in Libra, feelings look for a fair hearing and a measured response. Company can be restorative, though keeping everyone pleased may delay a necessary choice."
+      ],
+      "moonInSign/Scorpio": [
+        "The Moon in Scorpio brings a private intensity to the mood. Trust matters more than easy conversation, and what remains unsaid may feel especially significant.",
+        "With the Moon in Scorpio, emotional reactions have depth and persistence. There is little taste for superficial reassurance, and a stronger need to know where loyalty stands."
+      ],
+      "moonInSign/Sagittarius": [
+        "The Moon in Sagittarius brings a need for perspective and room to move. Optimism comes more easily when daily concerns can be seen against a wider horizon.",
+        "With the Moon in Sagittarius, the mood responds to possibility. Candour and humour can clear the air, though impatience with detail may leave someone feeling unheard."
+      ],
+      "moonInSign/Capricorn": [
+        "The Moon in Capricorn gives feelings a restrained expression. Reliability can communicate care more clearly than display, while unfinished obligations may weigh on the mood.",
+        "With the Moon in Capricorn, composure and practical progress feel reassuring. Emotion may be kept private until there is enough time and safety to attend to it."
+      ],
+      "moonInSign/Aquarius": [
+        "The Moon in Aquarius brings some distance from immediate feeling. Friendship and shared ideas can be welcome, alongside a need for freedom from emotional demands.",
+        "With the Moon in Aquarius, the mood is drawn to a wider social view. An independent response feels natural, though detachment may be read as indifference by someone seeking closeness."
+      ],
+      "moonInSign/Pisces": [
+        "The Moon in Pisces makes the emotional atmosphere permeable. Imagination and sympathy come readily, while the distinction between one's own mood and someone else's can be less clear.",
+        "With the Moon in Pisces, impressions may arrive before explanations. Quiet, music or unstructured time can feel more nourishing than a tightly managed schedule."
+      ],
+      "moonPhases/NewMoon": [
+        "At the New Moon, the monthly cycle begins in relative quiet. A sense of direction may be forming before there is much visible evidence of it.",
+        "The New Moon marks a beginning in the lunar cycle. The mood may be inward, with possibilities still less defined than the energy behind them."
+      ],
+      "moonPhases/WaxingCrescent": [
+        "The waxing crescent belongs to the early part of the cycle. Interest is gathering, but an emerging direction may still need time before it feels established.",
+        "With the Moon waxing as a crescent, small beginnings gain momentum. Commitment can be tentative while the practical shape of an intention becomes clearer."
+      ],
+      "moonPhases/FirstQuarter": [
+        "At the First Quarter, the cycle reaches a point of adjustment. Initial enthusiasm meets competing demands, bringing the practical consequences of a choice into view.",
+        "The First Quarter often feels more active than settled. What began earlier in the cycle now encounters resistance or a decision about how to proceed."
+      ],
+      "moonPhases/WaxingGibbous": [
+        "The waxing gibbous Moon brings the cycle toward fullness. Attention turns to what is nearly ready and to details that become more visible as expectations rise.",
+        "With the Moon waxing toward full, effort can feel concentrated. There is a sense of development under way, accompanied by greater awareness of what remains unfinished."
+      ],
+      "moonPhases/FullMoon": [
+        "At the Full Moon, the cycle reaches its most visible phase. Feelings and opposing needs can become easier to recognise, even when agreement takes longer.",
+        "The Full Moon brings emphasis to culmination and contrast. What has been developing may now feel harder to overlook, with a stronger emotional response around it."
+      ],
+      "moonPhases/WaningGibbous": [
+        "The waning gibbous Moon follows the cycle's peak. There is more room to absorb what happened and to understand the experience beyond its immediate intensity.",
+        "With the Moon waning after full, the emphasis shifts toward making sense of recent developments. Conversation and reflection may carry more weight than another fresh start."
+      ],
+      "moonPhases/LastQuarter": [
+        "At the Last Quarter, the cycle turns toward completion. Habits and commitments can be seen more critically, especially where their usefulness has diminished.",
+        "The Last Quarter brings a separating mood: a clearer sense of what still matters and what has run its course. Closure may require a practical decision."
+      ],
+      "moonPhases/WaningCrescent": [
+        "The waning crescent is the closing phase of the monthly cycle. Energy can be quieter, with unfinished feelings asking for space rather than another demand.",
+        "With the Moon a waning crescent, the emphasis is on rest and completion. A new direction may be sensed, but its shape can remain indistinct until the next cycle."
+      ],
+      "dayTones/Mixed": [
+        "The day's selected contacts pull in different directions. Some matters move easily while others need more effort, so one difficult exchange need not describe the whole day.",
+        "Ease and pressure share the day. The useful distinction is between what has support already and what keeps asking for attention.",
+        "There is no single dominant mood in these contacts. Encouragement and resistance coexist, and the experience may vary considerably from one part of life to another."
+      ],
+      "dayTones/Demanding": [
+        "The selected contacts place more emphasis on strain than ease. Ordinary tasks may call for greater patience, particularly where expectations and available energy differ.",
+        "Pressure is the stronger theme in this selection. Frustration can reveal a real limit, though it may also make a temporary obstacle feel more final than it is.",
+        "This is a more demanding set of contacts. Competing needs or delays can take extra effort, with progress depending on how clearly the difficulty is understood."
+      ],
+      "dayTones/Focused": [
+        "The selected contacts are conjunctions with no assigned easy or difficult weight. Their subjects are emphasised without giving the day an overall direction toward ease or pressure.",
+        "Conjunctions concentrate the reading on particular themes. They bring the moving and natal points together without tipping this selection toward either a flowing or demanding tone.",
+        "The day's selected contacts emphasise connection through conjunctions. Their individual subjects matter more here than an overall balance of support against strain."
+      ],
+      "dayTones/Quiet": [
+        "No close contacts were selected for this chart today. The reading leaves more room for ordinary circumstances and for matters already under way.",
+        "Neither the highlights nor the background contains a selected contact today. The day's familiar rhythms have no particular transit emphasis in this reading.",
+        "This chart has no selected close contacts today. That leaves the reading quiet, while the circumstances of daily life retain their own importance."
+      ],
+      "retrogrades/Mercury": [
+        "Mercury is retrograde. In the traditional reading, attention turns toward unfinished conversations, revised decisions and details that deserve another look; this does not make every new undertaking unsuccessful.",
+        "Mercury's retrograde period gives the reading a reviewing emphasis. Earlier assumptions and messages may need clarification, with more value in checking the meaning than in rushing the reply."
+      ],
+      "retrogrades/Venus": [
+        "Venus is retrograde. The traditional emphasis falls on reconsidering affection, taste and value, including the difference between what once appealed and what matters now.",
+        "Venus's retrograde period turns the reading toward reassessment in relationships and resources. Familiar preferences may be questioned rather than simply repeated."
+      ],
+      "retrogrades/Mars": [
+        "Mars is retrograde. The traditional reading places more emphasis on the use of effort: frustration can expose a conflict between the aim and the method used to pursue it.",
+        "Mars's retrograde period gives action a less direct course. Energy may go into revisiting an old struggle or understanding why a familiar approach no longer produces the same result."
+      ],
+      "dayTones/Flowing": [
+        "The day's selected contacts lean toward ease. Several parts of the chart receive cooperative aspects, although the individual contacts retain their own subjects and timing.",
+        "Supportive contacts outweigh the tense ones in this reading. The emphasis is on connections between the moving sky and the natal chart that tend to work together.",
+        "The balance is relatively flowing today: the strongest selected contacts offer more agreement than resistance. This is a description of the transit pattern, rather than a promise about events."
+      ]
+    }
+  }
+}

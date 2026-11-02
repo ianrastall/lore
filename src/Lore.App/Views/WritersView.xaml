@@ -9,7 +9,7 @@
         <StackPanel Padding="24,16,24,12" Spacing="12">
             <TextBlock Text="Writers" Style="{StaticResource JupiterPageHeadingTextStyle}" />
             <StackPanel x:Name="SearchForm" Spacing="12">
-                <ComboBox x:Name="ModeBox" Header="Work with" SelectedIndex="0" SelectionChanged="Mode_Changed" HorizontalAlignment="Stretch" MaxWidth="480">
+                <ComboBox x:Name="ModeBox" Header="Work with" SelectedIndex="0" SelectionChanged="Mode_Changed" HorizontalAlignment="Left" MinWidth="240" MaxWidth="480">
                     <ComboBoxItem Content="Create a character" /><ComboBoxItem Content="Find famous groups" /><ComboBoxItem Content="Saved briefs" />
                 </ComboBox>
             <Expander x:Name="SearchOptions" Header="Search options" IsExpanded="True" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">

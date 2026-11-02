@@ -158,6 +158,10 @@ public sealed class MirrorInterpreter
 
     private readonly Corpus _c;
     private readonly ChartInterpreter? _report;
+    private readonly ReadingAlternatives<Corpus>? _alternatives;
+    private readonly bool _materialized;
+    private MirrorInterpreter(Corpus corpus, ChartInterpreter? report, ReadingAlternatives<Corpus> alternatives)
+    { _c = corpus; _report = report; _alternatives = alternatives; _materialized = true; }
 
     // `report`: the natal interpreter, for the Report's own words on a planet in its sign.
     public MirrorInterpreter(string mirrorJsonPath, ChartInterpreter? report = null)
@@ -172,6 +176,7 @@ public sealed class MirrorInterpreter
         {
             _c = new Corpus();
         }
+        _alternatives = ReadingAlternatives<Corpus>.Load(mirrorJsonPath, _c, JsonOpts);
     }
 
     public bool IsAvailable => _c.Planets.Count > 0;
@@ -188,6 +193,8 @@ public sealed class MirrorInterpreter
     // missing, and the reading is of whatever there is.
     public MirrorReading Compose(NatalChart chart, SelfReport report, TimeSensitivity? day = null, DateOnly? today = null)
     {
+        if (!_materialized && _alternatives is { } text)
+            return new MirrorInterpreter(text.For(ReadingAlternatives.Seed(chart)), _report, text).Compose(chart, report, day, today);
         IReadOnlyList<ZodiacSign>? Doubt(Planet planet) => TimeSensitivity.SignsInDoubt(chart, day, planet);
         var profile = report.Personality;
 

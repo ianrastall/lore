@@ -45,6 +45,10 @@ public sealed class DavisonInterpreter
     public const double ContactOrb = 3.0;
 
     private readonly Corpus _c;
+    private readonly ReadingAlternatives<Corpus>? _alternatives;
+    private readonly bool _materialized;
+    private DavisonInterpreter(Corpus corpus, ReadingAlternatives<Corpus> alternatives)
+    { _c = corpus; _alternatives = alternatives; _materialized = true; }
 
     public DavisonInterpreter(string davisonJsonPath)
     {
@@ -57,12 +61,15 @@ public sealed class DavisonInterpreter
         {
             _c = new Corpus();
         }
+        _alternatives = ReadingAlternatives<Corpus>.Load(davisonJsonPath, _c, JsonOpts);
     }
 
     // Null if the comparison carries no Davison chart.
     public DavisonReading? Compose(Synastry s)
     {
         if (s.Davison is not { } d) return null;
+        if (!_materialized && _alternatives is { } text)
+            return new DavisonInterpreter(text.For(ReadingAlternatives.GroupSeed(s.First, s.Second)), text).Compose(s);
         var (a, b) = ShortNames(s);
 
         var sections = new List<DailySection> { Opening(d) };

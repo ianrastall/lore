@@ -50,6 +50,10 @@ public sealed class DailyInterpreter
     private const int MaxBackground = 3;
 
     private readonly Corpus _c;
+    private readonly ReadingAlternatives<Corpus>? _alternatives;
+    private readonly bool _materialized;
+    private DailyInterpreter(Corpus corpus, ReadingAlternatives<Corpus> alternatives)
+    { _c = corpus; _alternatives = alternatives; _materialized = true; }
 
     public DailyInterpreter(string dailyJsonPath)
     {
@@ -62,6 +66,7 @@ public sealed class DailyInterpreter
         {
             _c = new Corpus();
         }
+        _alternatives = ReadingAlternatives<Corpus>.Load(dailyJsonPath, _c, JsonOpts);
     }
 
     // What a house is about, in the corpus's few words ("home, family and private
@@ -74,6 +79,8 @@ public sealed class DailyInterpreter
     // that is likely to bear on the day. Ignored unless it was made for this chart.
     public DailyReading Compose(NatalChart natal, DaySky sky, DateTimeZone zone, MirrorReading? answers = null)
     {
+        if (!_materialized && _alternatives is { } text)
+            return new DailyInterpreter(text.For(ReadingAlternatives.Seed(natal) + "|" + sky.Date.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture) + "|" + zone.Id), text).Compose(natal, sky, zone, answers);
         (_answers, _answersChart, _answersSaid) = (answers, natal, null);
         try { return ComposeDay(natal, sky, zone); }
         finally { (_answers, _answersChart, _answersSaid) = (null, null, null); }
@@ -373,6 +380,9 @@ public sealed class DailyInterpreter
         NatalChart natal, IReadOnlyList<TransitPass> passes, DateOnly start, int days, DateTimeZone zone,
         IReadOnlyList<SkyEvent>? sky = null, MirrorReading? answers = null)
     {
+        if (!_materialized && _alternatives is { } text)
+            return new DailyInterpreter(text.For(ReadingAlternatives.Seed(natal) + "|" + start.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture) + "|" + days.ToString(System.Globalization.CultureInfo.InvariantCulture) + "|" + zone.Id), text)
+                .ComposeForecast(natal, passes, start, days, zone, sky, answers);
         (_answers, _answersChart, _answersSaid) = (answers, natal, null);
         try { return ComposeAhead(natal, passes, start, days, zone, sky); }
         finally { (_answers, _answersChart, _answersSaid) = (null, null, null); }
