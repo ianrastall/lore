@@ -75,4 +75,10 @@ public sealed record SkyDayTone(DateOnly Date, DayTone Tone)
     public string DayText => Date.ToString("d MMM");
     public string ColorHex => Tone.ColorHex();
     public string Label => Tone.Label();
+
+    // What a screen reader says for the day: the date as well as the tone.
+    public string AccessibleName => $"{Date:dddd d MMMM}: {Label}";
+
+    // A list item is announced by its ToString.
+    public override string ToString() => AccessibleName;
 }

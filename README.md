@@ -4,16 +4,16 @@ A Windows desktop application for computing and exploring astrological natal cha
 
 Part of Jupiter. Follows Jupiter style standard 1.1.
 
-**Latest release: v5.2.0** · [Download](../../releases/latest)
+**Latest release: v5.2.1** · [Download](../../releases/latest)
 
 ### Installing
 
 Lore 4 needs **Windows 11 24H2** or later, 64-bit.
 
-1. From the [latest release](../../releases/latest), download **`Lore-5.2.0-win-x64-setup.exe`**. It is a single file with everything inside it; there is nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`Lore-5.2.1-win-x64-setup.exe`**. It is a single file with everything inside it; there is nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user, adds **Lore** to the Start menu, and can be removed from *Settings > Apps* like any other program. An earlier Lore is upgraded in place, and your saved charts, answers and settings stay as they are.
 
-**Prefer not to install?** `Lore-5.2.0-win-x64-portable.zip` is the same program as a folder. Unzip it anywhere and run `Lore.exe` from inside it. Delete the folder to remove it.
+**Prefer not to install?** `Lore-5.2.1-win-x64-portable.zip` is the same program as a folder. Unzip it anywhere and run `Lore.exe` from inside it. Delete the folder to remove it.
 
 > **The installer is not code-signed.** Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"*. Choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -635,7 +635,10 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 5.2.0 (current)
+### 5.2.1 (current)
+- **Sky week strip.** "Demanding" is no longer cut off, and a screen reader names each day by its date as well as its tone.
+
+### 5.2.0
 - **Sky.** A tenth view that reads the planetary mood of any day for everyone, with no chart: the aspects the planets make to one another, the Moon's contacts and the day's sky events, a tone for the day and for each day of its week, a sky wheel, and export to PDF, text or PNG. Ctrl+Shift+4 opens it.
 - **Writers to Synastry.** A historical pair or trio found in Writers opens in Synastry with **Open in Synastry**.
 

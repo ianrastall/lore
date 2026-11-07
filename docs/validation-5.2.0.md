@@ -56,6 +56,20 @@ Installed on Ian's machine with his approval on 6 November 2026.
 | Saved data | All five existing files retain their SHA-256 checksums; HUD daily caches excluded |
 | Release | GitHub release 5.2.0 at `c65fdee`, marked Latest, with the installer and portable zip |
 
-The installed check was headless. The Sky view has not yet been looked at on screen;
-no window was opened. Install logs, checksums and self-check output are under the
+The installed check was headless.
+
+## On-screen check (5.2.1)
+
+A debug build with made-up data (`LORE_HOME`, no personal charts) was opened on the
+Sky view at Ian's request, driven through UI Automation and captured with
+`PrintWindow`; no input reached other windows. Checked: the heading, date controls,
+week strip, tone, reading and wheel for 6 November 2026 (all week Flowing: its only
+aspects are Venus sextile Jupiter, Venus sextile Mars and the neutral Sun–Mercury
+conjunction); selecting a day in the strip and stepping into the next week; 16
+November (Demanding: Mars conjunct Jupiter exact, the Sun's squares to Jupiter and
+Mars building); planetary hours with a home place; the Legend's Sky group.
+
+Two faults were found and fixed in 5.2.1: "Demanding" was cut off in the week strip,
+and each day in it was announced to screen readers by its tone alone, so all seven
+could sound the same. They now read "Monday 16 November: Demanding". Install logs, checksums and self-check output are under the
 ignored `artifacts/qa-5.2.0`.

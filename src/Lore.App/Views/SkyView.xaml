@@ -50,7 +50,7 @@
                 </ListView.ItemsPanel>
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="models:SkyDayTone">
-                        <StackPanel Spacing="4" Width="84" Padding="0,8" AutomationProperties.Name="{x:Bind Label}">
+                        <StackPanel Spacing="4" Width="112" Padding="0,8" AutomationProperties.Name="{x:Bind AccessibleName}">
                             <TextBlock Text="{x:Bind Weekday}" Style="{StaticResource JupiterCaptionTextStyle}" />
                             <TextBlock Text="{x:Bind DayText}" Style="{StaticResource JupiterBodyStrongTextStyle}" />
                             <StackPanel Orientation="Horizontal" Spacing="8">
