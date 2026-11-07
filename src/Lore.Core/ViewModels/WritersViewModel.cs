@@ -35,9 +35,10 @@ public sealed partial class WritersViewModel : ObservableObject
     [ObservableProperty] public partial string BriefName { get; set; } = "Untitled character";
     [ObservableProperty] public partial string SaveProblem { get; set; } = "";
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(HasBrief), nameof(Sections), nameof(BirthNames))]
+    [NotifyPropertyChangedFor(nameof(HasBrief), nameof(Sections), nameof(BirthNames), nameof(CanOpenSynastry))]
     public partial WriterBrief? Brief { get; set; }
     public bool HasBrief => Brief is not null;
+    public bool CanOpenSynastry => Brief is { Kind: "Pair", Births.Count: 2 } or { Kind: "Trio", Births.Count: 3 };
     public IReadOnlyList<DailySection> Sections => Brief?.Sections ?? [];
     public IReadOnlyList<string> BirthNames => Brief?.Births.Select(b => b.Person.Name).ToArray() ?? [];
 

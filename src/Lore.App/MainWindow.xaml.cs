@@ -34,6 +34,10 @@ public sealed partial class MainWindow : Window
         App.Current.Accent.Attach(Root);
         WritersViewControl.ExportRequested += ExportWriterBrief;
         WritersViewControl.ChartRequested += OpenWriterChart;
+        WritersViewControl.SynastryRequested += brief =>
+        {
+            if (ViewModel.OpenWriterGroup(brief)) ShowView("Synastry");
+        };
 
         RestorePlacement();
         ReadingText.Current.Step = _preferences.ReadingSize;

@@ -289,6 +289,43 @@ public sealed partial class MainViewModel : ObservableObject
     partial void OnShowForecastChanged(bool value) => ForecastVM.IsActive = value;
     partial void OnShowSynastryChanged(bool value) => SynastryVM.IsActive = value;
 
+    // Writers discovers the whole group without a selected natal chart. Hand all its
+    // members to the ordinary comparison, replacing any previous partner and third.
+    public bool OpenWriterGroup(WriterBrief brief)
+    {
+        if (!(brief.Kind == "Pair" && brief.Births.Count == 2 || brief.Kind == "Trio" && brief.Births.Count == 3) ||
+            brief.Births.Select(b => b.Person.Id).Distinct().Count() != brief.Births.Count)
+        {
+            StatusMessage = "Choose a historical pair or trio to open in Synastry.";
+            return false;
+        }
+        var members = brief.Births.Select(b => _all.FirstOrDefault(p => p.Id == b.Person.Id)).ToArray();
+        if (members.Any(p => p is null))
+        {
+            StatusMessage = "This group's figures are no longer all in the chart library. Find the group again before opening it in Synastry.";
+            return false;
+        }
+        var first = members[0]!;
+        if (!DisplayedCelebrities.Contains(first))
+        {
+            SearchText = "";
+            SelectedCategory = AllCategories;
+        }
+
+        // Clear the old comparison before setting the other members: the first
+        // person's chart may still be calculating, so no mixed group may be shown.
+        SynastryVM.Chart = null;
+        SynastryVM.Partner = null;
+        SynastryVM.Third = null;
+        SynastryVM.ShowDavison = false;
+        SynastryVM.Partner = members[1];
+        SynastryVM.Third = members.Length == 3 ? members[2] : null;
+        SynastryVM.ShowTrine = members.Length == 3;
+        SelectedCelebrity = first;
+        if (ChartIsCurrent) SynastryVM.Chart = ChartVM.Chart;
+        return true;
+    }
+
     // Where the reader is, for the Daily view's sunrise, sunset and planetary hours; null
     // if no city has been chosen. Saved as soon as it is set or cleared.
     public HomePlace? Home

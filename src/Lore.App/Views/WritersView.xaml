@@ -116,6 +116,9 @@
                         Visibility="{x:Bind WhenEmpty(ViewModel.HasBrief), Mode=OneWay}" />
                     <StackPanel Spacing="12" Visibility="{x:Bind When(ViewModel.HasBrief), Mode=OneWay}">
                         <TextBlock Text="{x:Bind ViewModel.Brief.Title, Mode=OneWay}" Style="{StaticResource JupiterSectionHeadingTextStyle}" TextWrapping="Wrap" />
+                        <Button Content="Open in Synastry" Click="OpenSynastry_Click"
+                            Visibility="{x:Bind When(ViewModel.CanOpenSynastry), Mode=OneWay}"
+                            ToolTipService.ToolTip="Open the whole group with the normal reading and wheel, using current chart settings." />
                         <Expander Header="Save, export or view chart" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
                         <StackPanel Spacing="12">
                         <TextBox Header="Character or cast name" Text="{x:Bind ViewModel.BriefName, Mode=TwoWay}" />

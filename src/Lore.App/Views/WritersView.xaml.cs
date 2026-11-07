@@ -13,6 +13,7 @@ public sealed partial class WritersView : UserControl
     private bool _ready, _showDetail;
     public event Action<WriterBrief, bool>? ExportRequested;
     public event Action<NatalChart>? ChartRequested;
+    public event Action<WriterBrief>? SynastryRequested;
 
     public WritersViewModel ViewModel
     {
@@ -141,6 +142,10 @@ public sealed partial class WritersView : UserControl
     private async void Preview_Click(object sender, RoutedEventArgs e)
     {
         if (await ViewModel.PreviewAsync(Math.Max(0, PreviewBox.SelectedIndex)) is { } chart) ChartRequested?.Invoke(chart);
+    }
+    private void OpenSynastry_Click(object sender, RoutedEventArgs e)
+    {
+        if (ViewModel.CanOpenSynastry && ViewModel.Brief is { } brief) SynastryRequested?.Invoke(brief);
     }
     private void Back_Click(object sender, RoutedEventArgs e) { _showDetail = false; ApplyLayout(); }
     private void View_SizeChanged(object sender, SizeChangedEventArgs e) { if (_ready) ApplyLayout(); }

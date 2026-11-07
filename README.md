@@ -141,6 +141,8 @@ Astrology has no agreed score for three people. The scale is Lore's own, and it 
 
 Results use the same Synastry and Trine levels, order and readings as the rest of Lore. Field, birth period, biography search and prominence can narrow the search. All qualifying groups are assessed; up to 10,000 results are retained, with both counts shown. Birthplace proximity does not assert that the figures met.
 
+Choose a historical pair or trio, then **Open in Synastry** above its brief to see the normal reading and wheel. Pairs open in Comparison; trios open in Trine with all three people selected. This also works from saved group briefs and uses the current chart settings.
+
 Named character and group readings can be saved separately from My Charts, reopened exactly as written, exported as text or PDF, and opened as their underlying charts. Writers provides no writing prompts, scene suggestions or invented interaction categories.
 
 ### Personality Inventory

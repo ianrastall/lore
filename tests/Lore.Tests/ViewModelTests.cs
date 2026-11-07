@@ -69,6 +69,84 @@ public sealed class ViewModelTests : IDisposable
     };
 
     [Fact]
+    public void Writers_groups_open_the_normal_trio_and_pair_readings_and_exports() => UiThread.Run(async () =>
+    {
+        var vm = await Start();
+        vm.SelectedCelebrity = Row(vm, "albert-einstein");
+        await Settled(vm);
+        var people = new[] { Row(vm, "elvis-presley"), Row(vm, "marilyn-monroe"), Row(vm, "albert-einstein") };
+        WriterBrief Brief(params Celebrity[] members) => new()
+        {
+            Kind = members.Length == 3 ? "Trio" : "Pair",
+            Births = members.Select(p => new WriterBirth(p, BirthTimeResolver.ToUtc(p))).ToArray(),
+        };
+        async Task Built()
+        {
+            await Settled(vm);
+            for (int i = 0; vm.SynastryVM.IsBusy || vm.SynastryVM.IsFindingThird || vm.SynastryVM.IsSearching; i++)
+            {
+                Assert.True(i < 3000, "The group reading did not settle.");
+                await Task.Delay(10);
+            }
+            Assert.Equal("", vm.SynastryVM.ErrorText);
+        }
+
+        // Saved briefs contain deserialized people, rather than the library's instances.
+        var saved = JsonSerializer.Deserialize<WriterBrief>(JsonSerializer.Serialize(Brief(people)))!;
+        vm.SearchText = "Einstein";
+        vm.SelectedCategory = "Scientist";
+        vm.SynastryVM.ShowDavison = true;
+        Assert.True(vm.OpenWriterGroup(saved));
+        vm.ShowSynastry = true;
+        Assert.Null(vm.SynastryVM.Comparison);
+        await Built();
+
+        Assert.Same(people[0], vm.SelectedCelebrity);
+        Assert.Contains(people[0], vm.DisplayedCelebrities);
+        Assert.Same(people[1], vm.SynastryVM.Partner);
+        Assert.Same(people[2], vm.SynastryVM.Third);
+        Assert.True(vm.SynastryVM.TrioShown);
+        Assert.False(vm.SynastryVM.ShowDavison);
+        Assert.Equal(people.Select(p => p.Id), vm.SynastryVM.TrioReading!.Trio.Charts.Select(c => c.Celebrity.Id));
+        Assert.NotNull(vm.PrepareExport("trinetxt", out _));
+
+        // Reopening with the same first person must not wait for a chart-change event.
+        Assert.True(vm.OpenWriterGroup(saved));
+        await Built();
+        Assert.True(vm.SynastryVM.TrioShown);
+
+        // A second group overtakes a pending trio; a pair drops the old third and mode.
+        Assert.True(vm.OpenWriterGroup(Brief(people[2], people[0], people[1])));
+        Assert.True(vm.OpenWriterGroup(Brief(people[1], people[2])));
+        await Built();
+        Assert.Same(people[1], vm.SelectedCelebrity);
+        Assert.False(vm.SynastryVM.ShowTrine);
+        Assert.Null(vm.SynastryVM.Third);
+        Assert.Null(vm.SynastryVM.TrioReading);
+        Assert.True(vm.SynastryVM.ComparisonShown);
+        Assert.Equal(people[1].Id, vm.SynastryVM.Comparison!.First.Celebrity.Id);
+        Assert.Equal(people[2].Id, vm.SynastryVM.Comparison.Second.Celebrity.Id);
+        Assert.NotNull(vm.PrepareExport("synastrypdf", out _));
+    });
+
+    [Fact]
+    public void Writers_only_offers_group_handoffs_and_rejects_missing_figures() => UiThread.Run(async () =>
+    {
+        var vm = await Start();
+        var writers = new WritersViewModel();
+        writers.ShowBrief(new WriterBrief { Births = [new(Repo.Figure("elvis-presley"), DateTime.UtcNow)] });
+        Assert.False(writers.CanOpenSynastry);
+        Assert.False(vm.OpenWriterGroup(writers.Brief!));
+        var missing = new Celebrity { Id = "removed", Name = "Removed" };
+        writers.ShowBrief(new WriterBrief { Kind = "Pair", Births = [new(Repo.Figure("elvis-presley"), DateTime.UtcNow), new(missing, DateTime.UtcNow)] });
+        Assert.True(writers.CanOpenSynastry);
+        var selected = vm.SelectedCelebrity;
+        Assert.False(vm.OpenWriterGroup(writers.Brief!));
+        Assert.Same(selected, vm.SelectedCelebrity);
+        Assert.Contains("no longer all in the chart library", vm.StatusMessage);
+    });
+
+    [Fact]
     public void Nothing_is_exported_while_the_chart_on_screen_is_the_previous_persons() => UiThread.Run(async () =>
     {
         var vm = await Start();
