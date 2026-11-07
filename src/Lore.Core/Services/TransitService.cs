@@ -74,6 +74,33 @@ public sealed partial class TransitService
     {
         if (!_pinned) return For(natal).Scan(natal, date, zone, home, cancel);
 
+        var s = SampleDay(date, zone, cancel);
+        var (jds, tracks) = (s.Jds, s.Tracks);
+
+        bool timed = natal.Celebrity.BirthTimeKnown;
+        var targets = Targets(natal, timed);
+
+        var events = new List<TransitEvent>();
+        foreach (var (mover, track) in tracks)
+        {
+            cancel.ThrowIfCancellationRequested();
+            foreach (var (point, lon) in targets)
+                foreach (var aspect in AspectTypeExtensions.Majors)
+                    if (FindEvent(natal, timed, mover, track, jds, point, lon, aspect) is { } e)
+                        events.Add(e);
+        }
+        cancel.ThrowIfCancellationRequested();
+
+        return DayOf(s, date, zone, events, home, voids: true);
+    }
+
+    // The sky sampled across one local calendar day, hour by hour.
+    private sealed record DaySamples(
+        DateTime StartUtc, DateTime EndUtc, double[] Jds, IReadOnlyList<PlanetPosition>[] Skies,
+        Dictionary<Planet, PlanetPosition[]> Tracks);
+
+    private DaySamples SampleDay(DateOnly date, DateTimeZone zone, CancellationToken cancel)
+    {
         // The day runs from one local midnight to the next. Both ends are resolved
         // separately, so a 23- or 25-hour daylight-saving day comes out right.
         var local = new LocalDate(date.Year, date.Month, date.Day);
@@ -105,39 +132,35 @@ public sealed partial class TransitService
             }
             if (complete) tracks[planet] = track;
         }
+        return new DaySamples(startUtc, endUtc, jds, skies, tracks);
+    }
 
-        bool timed = natal.Celebrity.BirthTimeKnown;
-        var targets = Targets(natal, timed);
-
-        var events = new List<TransitEvent>();
-        foreach (var (mover, track) in tracks)
-        {
-            cancel.ThrowIfCancellationRequested();
-            foreach (var (point, lon) in targets)
-                foreach (var aspect in AspectTypeExtensions.Majors)
-                    if (FindEvent(natal, timed, mover, track, jds, point, lon, aspect) is { } e)
-                        events.Add(e);
-        }
-        cancel.ThrowIfCancellationRequested();
-
-        var (phase, phaseExact) = MoonPhaseFor(tracks, jds);
-        var (moonSign, moonEnters, moonIngress) = MoonSignFor(tracks, jds);
+    // What the day's sky does for everyone, around the events found for a chart (none
+    // for the Sky view). `voids`: false leaves out the void-of-course search, for a
+    // scan that only wants the day's aspects.
+    private DaySky DayOf(DaySamples s, DateOnly date, DateTimeZone zone, IReadOnlyList<TransitEvent> events,
+        HomePlace? home, bool voids)
+    {
+        int n = s.Jds.Length - 1;
+        double jd0 = s.Jds[0], jd1 = s.Jds[n];
+        var (phase, phaseExact) = MoonPhaseFor(s.Tracks, s.Jds);
+        var (moonSign, moonEnters, moonIngress) = MoonSignFor(s.Tracks, s.Jds);
 
         return new DaySky
         {
             Date = date,
             ZoneId = zone.Id,
-            StartUtc = startUtc,
-            EndUtc = endUtc,
-            Midday = skies[n / 2],
+            StartUtc = s.StartUtc,
+            EndUtc = s.EndUtc,
+            Midday = s.Skies[n / 2],
             Events = events,
             Phase = phase,
             PhaseExactUtc = phaseExact,
             MoonSign = moonSign,
             MoonEnters = moonEnters,
             MoonIngressUtc = moonIngress,
-            Stations = StationsFor(tracks),
-            Voids = VoidOfCourse(jd0, jd1),
+            Stations = StationsFor(s.Tracks),
+            Voids = voids ? VoidOfCourse(jd0, jd1) : [],
             Hours = home is null ? null : PlanetaryHours(date, jd0, jd1, home),
         };
     }

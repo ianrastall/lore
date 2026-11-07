@@ -84,6 +84,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>Data\daily.json</TargetPath>
     </Content>
+    <Content Include="$(RepoRoot)content\sky.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>Data\sky.json</TargetPath>
+    </Content>
     <!-- Corpus for the synastry reading (aspect lines between two charts, house overlays) -->
     <Content Include="$(RepoRoot)content\synastry.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

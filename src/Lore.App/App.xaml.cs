@@ -115,7 +115,8 @@ public partial class App : Application
                                             new MirrorInterpreter(mirrorPath, interpreter),
                                             new CharacterService(characterPath), new LifeAreaService(lifeAreasPath),
                                             new WritersViewModel(chartSvc, new WriterInterpreter(chartSvc, interpreter, synastry),
-                                                cities, new WriterStore()))
+                                                cities, new WriterStore()),
+                                            new SkyInterpreter(Path.Combine(baseDir, "Data", "sky.json"), daily))
         {
             // Anything Lore is installed with that is not there is said, not left to
             // show as a reading that is empty. (coreclr.dll is beside a published build

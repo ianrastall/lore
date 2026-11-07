@@ -47,6 +47,11 @@
                         <MenuFlyoutItem Text="Daily horoscope as text…" Tag="dailytxt" Click="Export_Click" />
                         <MenuFlyoutItem Text="Transit wheel as PNG…" Tag="dailypng" Click="Export_Click" />
                     </MenuFlyoutSubItem>
+                    <MenuFlyoutSubItem Text="Sky">
+                        <MenuFlyoutItem Text="Planetary mood as PDF…" Tag="skypdf" Click="Export_Click" />
+                        <MenuFlyoutItem Text="Planetary mood as text…" Tag="skytxt" Click="Export_Click" />
+                        <MenuFlyoutItem Text="Sky wheel as PNG…" Tag="skypng" Click="Export_Click" />
+                    </MenuFlyoutSubItem>
                     <MenuFlyoutSubItem Text="Forecast">
                         <MenuFlyoutItem Text="Forecast as PDF…" Tag="forecastpdf" Click="Export_Click" />
                         <MenuFlyoutItem Text="Forecast as text…" Tag="forecasttxt" Click="Export_Click" />
@@ -123,6 +128,9 @@
                 </MenuFlyoutItem>
                 <MenuFlyoutItem Text="Writers" Tag="Writers" Click="ViewMenu_Click">
                     <MenuFlyoutItem.KeyboardAccelerators><KeyboardAccelerator Modifiers="Control" Key="Number9" /></MenuFlyoutItem.KeyboardAccelerators>
+                </MenuFlyoutItem>
+                <MenuFlyoutItem Text="Sky" Tag="Sky" Click="ViewMenu_Click">
+                    <MenuFlyoutItem.KeyboardAccelerators><KeyboardAccelerator Modifiers="Control,Shift" Key="Number4" /></MenuFlyoutItem.KeyboardAccelerators>
                 </MenuFlyoutItem>
                 <MenuFlyoutSeparator />
                 <MenuFlyoutItem Text="Larger reading text" Click="ReadingLarger_Click" KeyboardAcceleratorTextOverride="Ctrl++" />
@@ -270,6 +278,7 @@
                     <SelectorBarItem Text="Synastry" Tag="Synastry" ToolTipService.ToolTip="Compare this chart with another person's (Ctrl+7)" />
                     <SelectorBarItem Text="Inventory" Tag="Inventory" ToolTipService.ToolTip="Personality, character and life-area questionnaires for one of your own charts, and what they do to its readings (Ctrl+8)" />
                     <SelectorBarItem Text="Writers" Tag="Writers" ToolTipService.ToolTip="Create fictional characters and discover famous pairs or trios (Ctrl+9)" />
+                    <SelectorBarItem Text="Sky" Tag="Sky" ToolTipService.ToolTip="The planetary mood of a day for everyone, from the aspects the planets make to one another (Ctrl+Shift+4)" />
                     <SelectorBarItem Text="Legend" Tag="Legend" ToolTipService.ToolTip="What every symbol, color and term means (F1)" />
                 </SelectorBar>
 
@@ -289,6 +298,7 @@
                     <views:SynastryView x:Name="SynastryViewControl" ViewModel="{x:Bind ViewModel.SynastryVM}" Visibility="Collapsed" />
                     <views:InventoryView x:Name="InventoryViewControl" ViewModel="{x:Bind ViewModel.InventoryVM}" Visibility="Collapsed" />
                     <views:WritersView x:Name="WritersViewControl" ViewModel="{x:Bind ViewModel.WritersVM}" Visibility="Collapsed" />
+                    <views:SkyView x:Name="SkyViewControl" ViewModel="{x:Bind ViewModel.SkyVM}" Visibility="Collapsed" />
                     <views:LegendView x:Name="LegendViewControl" Visibility="Collapsed" />
                 </Grid>
             </Grid>

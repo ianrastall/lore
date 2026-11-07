@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="Lore.Views.SkyView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:canvas="using:Microsoft.Graphics.Canvas.UI.Xaml"
+    xmlns:models="using:Lore.Models"
+    xmlns:views="using:Lore.Views">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Which day, its week, and how it reads -->
+        <StackPanel Spacing="8" Padding="24,16,24,8">
+            <StackPanel Spacing="4">
+                <TextBlock Text="Planetary mood" Style="{StaticResource JupiterPageHeadingTextStyle}" />
+                <TextBlock Text="The day's sky for everyone, from the aspects the planets make to one another. No chart is used. A prompt for reflection, not a prediction."
+                           Style="{StaticResource JupiterCaptionTextStyle}" TextWrapping="Wrap" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button Command="{x:Bind ViewModel.PreviousDayCommand}"
+                        AutomationProperties.Name="Previous day" ToolTipService.ToolTip="Previous day">
+                    <FontIcon Glyph="&#xE76B;" Style="{StaticResource JupiterSmallIconStyle}" />
+                </Button>
+                <CalendarDatePicker Date="{x:Bind ViewModel.PickerDate, Mode=TwoWay}"
+                                    DateFormat="{}{dayofweek.full} {day.integer} {month.full} {year.full}"
+                                    MinWidth="232" AutomationProperties.Name="Date" />
+                <Button Command="{x:Bind ViewModel.NextDayCommand}"
+                        AutomationProperties.Name="Next day" ToolTipService.ToolTip="Next day">
+                    <FontIcon Glyph="&#xE76C;" Style="{StaticResource JupiterSmallIconStyle}" />
+                </Button>
+                <Button Content="Today" Command="{x:Bind ViewModel.TodayCommand}" IsEnabled="{x:Bind Not(ViewModel.IsToday), Mode=OneWay}" />
+                <ProgressRing IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}" Width="16" Height="16" />
+            </StackPanel>
+
+            <!-- The week around the date, Monday to Sunday, each day with its tone -->
+            <ListView x:Name="WeekList" ItemsSource="{x:Bind ViewModel.Week, Mode=OneWay}"
+                      SelectionMode="Single" SelectionChanged="WeekList_SelectionChanged"
+                      ScrollViewer.HorizontalScrollMode="Enabled" ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                      ScrollViewer.VerticalScrollMode="Disabled"
+                      AutomationProperties.Name="The week: each day's tone">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" Spacing="4" />
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="models:SkyDayTone">
+                        <StackPanel Spacing="4" Width="84" Padding="0,8" AutomationProperties.Name="{x:Bind Label}">
+                            <TextBlock Text="{x:Bind Weekday}" Style="{StaticResource JupiterCaptionTextStyle}" />
+                            <TextBlock Text="{x:Bind DayText}" Style="{StaticResource JupiterBodyStrongTextStyle}" />
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <Border Width="10" Height="10" VerticalAlignment="Center" CornerRadius="{StaticResource ControlCornerRadius}"
+                                        Background="{x:Bind views:HexBrushConverter.ToBrush(ColorHex)}" />
+                                <TextBlock Text="{x:Bind Label}" Style="{StaticResource JupiterCaptionTextStyle}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <InfoBar Severity="Error" Title="The reading could not be made" IsClosable="False"
+                     Message="{x:Bind ViewModel.ErrorText, Mode=OneWay}"
+                     IsOpen="{x:Bind IsNotEmpty(ViewModel.ErrorText), Mode=OneWay}" />
+
+            <StackPanel Orientation="Horizontal" Spacing="8" Visibility="{x:Bind HasText(ViewModel.ToneText), Mode=OneWay}">
+                <Border Width="12" Height="12" VerticalAlignment="Center" CornerRadius="{StaticResource ControlCornerRadius}"
+                        Background="{x:Bind BrushOf(ViewModel.ToneColorHex), Mode=OneWay}" />
+                <TextBlock Text="{x:Bind ViewModel.ToneText, Mode=OneWay}" Style="{StaticResource JupiterBodyStrongTextStyle}" />
+            </StackPanel>
+        </StackPanel>
+
+        <!-- Reading on the left, the day's sky on the right -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MaxWidth="720" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="24,8,24,24">
+                <StackPanel Spacing="16">
+                    <views:ReadingList Sections="{x:Bind ViewModel.Sections, Mode=OneWay}" />
+
+                    <Expander HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                              Visibility="{x:Bind HasText(ViewModel.TraceHeader), Mode=OneWay}">
+                        <Expander.Header>
+                            <TextBlock Text="{x:Bind ViewModel.TraceHeader, Mode=OneWay}" Style="{StaticResource JupiterBodyTextStyle}" TextWrapping="Wrap" />
+                        </Expander.Header>
+                        <StackPanel Spacing="8">
+                            <TextBlock Style="{StaticResource JupiterCaptionTextStyle}" TextWrapping="Wrap"
+                                       Text="Each line is an aspect between two planets. The reading uses up to four from the Sun, Mercury, Venus and Mars, up to three between the slower planets, and every contact the Moon makes exactly during the day. Aspects among Uranus, Neptune and Pluto last for years, so they are listed but do not set the day's tone." />
+                            <ItemsControl ItemsSource="{x:Bind ViewModel.Trace, Mode=OneWay}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="x:String">
+                                        <TextBlock Text="{x:Bind}" Style="{StaticResource JupiterCaptionTextStyle}" TextWrapping="Wrap" Margin="0,0,0,4" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Expander>
+                </StackPanel>
+            </ScrollViewer>
+
+            <Grid Grid.Column="1" Visibility="{x:Bind HasText(ViewModel.WheelCaption), Mode=OneWay}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <canvas:CanvasControl x:Name="WheelCanvas" Margin="8"
+                                      Draw="WheelCanvas_Draw" SizeChanged="WheelCanvas_SizeChanged"
+                                      AutomationProperties.Name="Sky wheel: the planets at the middle of the day and the aspects between them" />
+                <TextBlock Grid.Row="1" Text="{x:Bind ViewModel.WheelCaption, Mode=OneWay}"
+                           Style="{StaticResource JupiterCaptionTextStyle}"
+                           HorizontalAlignment="Center" Margin="8,0,8,12" TextWrapping="Wrap" />
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -24,14 +24,14 @@ public sealed class LegendAndSelfCheckTests : IDisposable
     {
         var legend = new LegendService(Repo.Data("legend.json"));
         Assert.True(legend.IsAvailable);
-        Assert.Equal(114, legend.Items.Count);
+        Assert.Equal(116, legend.Items.Count);
         Assert.Equal("Reading a chart", legend.Items[0].Name);   // what the Legend opens on
 
         // Everything a reader meets on a chart has an entry.
         var names = legend.Items.Select(i => i.Name).ToHashSet();
         Assert.All(Enum.GetValues<Planet>(), p => Assert.Contains(names, n => n.Contains(p.Name())));   // "Black Moon Lilith"
         Assert.All(Enum.GetValues<ZodiacSign>(), s => Assert.Contains(s.Name(), names));
-        Assert.Equal(16, legend.Items.Select(i => i.Group).Distinct().Count());
+        Assert.Equal(17, legend.Items.Select(i => i.Group).Distinct().Count());
 
         // Only the aspects carry a colour, and each of them does.
         var coloured = legend.Items.Where(i => i.ColorHex is not null).ToList();

@@ -73,6 +73,14 @@ public sealed class DailyInterpreter
     // life"); empty if the corpus has no line for it.
     public string HouseTopic(int house) => Lookup(_c.Houses, house.ToString(), "");
 
+    // This interpreter with its alternative wordings chosen for `seed`, so that a reading
+    // with no chart (the Sky view's) varies by day as the chart readings do.
+    public DailyInterpreter Varied(string seed) =>
+        !_materialized && _alternatives is { } text ? new DailyInterpreter(text.For(seed), text) : this;
+
+    // "Thursday is Jupiter's day: …"
+    public string PlanetaryDayText(Planet ruler) => Lookup(_c.PlanetaryDays, ruler.Name(), "");
+
     // `answers` (here and in ComposeForecast): the reading that sets this person's
     // inventory profile beside their chart, if there is one. A transit to a planet the
     // answers describe as lived with strain, or lived well, then gains a line saying how
@@ -249,26 +257,7 @@ public sealed class DailyInterpreter
             new() { Text = Lookup(_c.DayTones, tone.ToString(), "") }
         };
 
-        string moon = Lookup(_c.MoonInSign, sky.MoonSign.Name(), "");
-        if (sky.MoonEnters is { } next && sky.MoonIngressUtc is { } ingress)
-        {
-            // The corpus lines read "The Moon in Cancer turns the mood …"; after a sign
-            // change that becomes "… it moves into Cancer and turns the mood …". A line
-            // edited into some other shape is simply appended as its own sentence.
-            string line = Lookup(_c.MoonInSign, next.Name(), "");
-            string lead = $"The Moon in {next.Name()} ";
-            moon += line.StartsWith(lead, StringComparison.Ordinal)
-                ? $" Around {Time(ingress, zone)} it moves into {next.Name()} and {line[lead.Length..]}"
-                : $" Around {Time(ingress, zone)} it moves into {next.Name()}. {line}";
-        }
-        string phase = Lookup(_c.MoonPhases, sky.Phase.ToString(), "");
-        if (sky.PhaseExactUtc is { } exact)
-            phase = $"The {sky.Phase.Name()} is exact at {Time(exact, zone)}. " + phase;
-        items.Add(new DailyItem
-        {
-            Title = $"☽ Moon in {sky.MoonSign.Name()}  ·  {sky.Phase.Name()}",
-            Text = $"{moon} {phase}".Trim()
-        });
+        items.Add(MoonItem(sky, zone));
 
         if (timed)
         {
@@ -302,6 +291,31 @@ public sealed class DailyInterpreter
 
         items.RemoveAll(i => string.IsNullOrWhiteSpace(i.Text));
         return new DailySection { Heading = "The day at a glance", Items = items };
+    }
+
+    // The Moon's sign (and any change of sign) and phase for the day.
+    public DailyItem MoonItem(DaySky sky, DateTimeZone zone)
+    {
+        string moon = Lookup(_c.MoonInSign, sky.MoonSign.Name(), "");
+        if (sky.MoonEnters is { } next && sky.MoonIngressUtc is { } ingress)
+        {
+            // The corpus lines read "The Moon in Cancer turns the mood …"; after a sign
+            // change that becomes "… it moves into Cancer and turns the mood …". A line
+            // edited into some other shape is simply appended as its own sentence.
+            string line = Lookup(_c.MoonInSign, next.Name(), "");
+            string lead = $"The Moon in {next.Name()} ";
+            moon += line.StartsWith(lead, StringComparison.Ordinal)
+                ? $" Around {Time(ingress, zone)} it moves into {next.Name()} and {line[lead.Length..]}"
+                : $" Around {Time(ingress, zone)} it moves into {next.Name()}. {line}";
+        }
+        string phase = Lookup(_c.MoonPhases, sky.Phase.ToString(), "");
+        if (sky.PhaseExactUtc is { } exact)
+            phase = $"The {sky.Phase.Name()} is exact at {Time(exact, zone)}. " + phase;
+        return new DailyItem
+        {
+            Title = $"☽ Moon in {sky.MoonSign.Name()}  ·  {sky.Phase.Name()}",
+            Text = $"{moon} {phase}".Trim()
+        };
     }
 
     private DailyItem Item(TransitEvent e, DaySky sky, DateTimeZone zone)
@@ -441,6 +455,44 @@ public sealed class DailyInterpreter
             };
         }
 
+        var sections = passes.Select(p => (Utc: p.PeakUtc, Item: Item(p)))
+            .Concat(sky.Select(e => (e.Utc, Item: SkyEventItem(e, zone))))
+            .Where(x => !string.IsNullOrWhiteSpace(x.Item.Text))
+            .OrderBy(x => x.Utc)
+            .GroupBy(x => { var d = Local(x.Utc); return (d.Year, d.Month); })
+            .OrderBy(g => g.Key)
+            .Select(g => new DailySection
+            {
+                Heading = new DateOnly(g.Key.Year, g.Key.Month, 1).ToString("MMMM yyyy"),
+                Items = g.Select(x => x.Item).ToList(),
+            })
+            .ToList();
+
+        if (sections.Count == 0)
+            sections.Add(new DailySection
+            {
+                Heading = "Nothing in this stretch",
+                Items = [new DailyItem { Text = "No planet comes within a degree of an aspect to this chart in these days. Try a longer stretch, or include the faster planets." }],
+            });
+
+        return new ForecastReading
+        {
+            Name = natal.Celebrity.Name,
+            Start = start,
+            Days = days,
+            ZoneId = zone.Id,
+            Sections = sections,
+            Passes = passes,
+            Sky = sky,
+        };
+    }
+
+    // A New or Full Moon, eclipse, station or change of sign, as the Forecast and Sky
+    // views list it.
+    public DailyItem SkyEventItem(SkyEvent e, DateTimeZone zone)
+    {
+        LocalDateTime Local(DateTime utc) => Instant.FromDateTimeUtc(DateTime.SpecifyKind(utc, DateTimeKind.Utc)).InZone(zone).LocalDateTime;
+        string Moment(DateTime utc) => Local(utc).ToString("d MMM, HH:mm", null);
         string InHouse(SkyEvent e, string lead) => e.NatalHouse is { } house
             ? $"  ·  {lead} your {ChartInterpreter.Ordinal(house)} house ({Lookup(_c.Houses, house.ToString(), "this area of life")})"
             : "";
@@ -490,36 +542,7 @@ public sealed class DailyInterpreter
             }
         }
 
-        var sections = passes.Select(p => (Utc: p.PeakUtc, Item: Item(p)))
-            .Concat(sky.Select(e => (e.Utc, Item: SkyItem(e))))
-            .Where(x => !string.IsNullOrWhiteSpace(x.Item.Text))
-            .OrderBy(x => x.Utc)
-            .GroupBy(x => { var d = Local(x.Utc); return (d.Year, d.Month); })
-            .OrderBy(g => g.Key)
-            .Select(g => new DailySection
-            {
-                Heading = new DateOnly(g.Key.Year, g.Key.Month, 1).ToString("MMMM yyyy"),
-                Items = g.Select(x => x.Item).ToList(),
-            })
-            .ToList();
-
-        if (sections.Count == 0)
-            sections.Add(new DailySection
-            {
-                Heading = "Nothing in this stretch",
-                Items = [new DailyItem { Text = "No planet comes within a degree of an aspect to this chart in these days. Try a longer stretch, or include the faster planets." }],
-            });
-
-        return new ForecastReading
-        {
-            Name = natal.Celebrity.Name,
-            Start = start,
-            Days = days,
-            ZoneId = zone.Id,
-            Sections = sections,
-            Passes = passes,
-            Sky = sky,
-        };
+        return SkyItem(e);
     }
 
     // "0°23'"
@@ -553,7 +576,7 @@ public sealed class DailyInterpreter
     }
 
     // Sunrise, sunset and the twenty-four planetary hours where the reader is.
-    private DailySection HoursSection(PlanetaryHours h, DateTimeZone zone)
+    public DailySection HoursSection(PlanetaryHours h, DateTimeZone zone)
     {
         string Lines(IReadOnlyList<PlanetaryHour> hours) => string.Join("\n", hours.Select(x =>
             $"{Time(x.StartUtc, zone)} – {Time(x.EndUtc, zone)}   {x.Ruler.Symbol()} {x.Ruler.Name()}"));
@@ -582,7 +605,12 @@ public sealed class DailyInterpreter
         };
     }
 
-    private List<DailyItem> SkyNotes(NatalChart natal, DaySky sky, DateTimeZone zone, bool timed)
+    // The void-of-course Moon, stations and retrogrades for a day read with no chart.
+    // `stations`: false when the stations are reported elsewhere (as timed sky events).
+    public List<DailyItem> SkyNotes(DaySky sky, DateTimeZone zone, bool stations) =>
+        SkyNotes(null, sky, zone, timed: false, stations);
+
+    private List<DailyItem> SkyNotes(NatalChart? natal, DaySky sky, DateTimeZone zone, bool timed, bool stations = true)
     {
         var items = new List<DailyItem>();
 
@@ -610,7 +638,7 @@ public sealed class DailyInterpreter
             });
         }
 
-        foreach (var station in sky.Stations)
+        foreach (var station in stations ? sky.Stations : [])
         {
             string direction = station.TurnsRetrograde ? "Retrograde" : "Direct";
             string text = Lookup(_c.Stations, direction, "").Replace("{planet}", station.Planet.Name());
@@ -632,7 +660,7 @@ public sealed class DailyInterpreter
             if (text.Length == 0) continue;
 
             string? meta = null;
-            if (timed)
+            if (timed && natal is not null)
             {
                 int house = natal.GetHouseForLongitude(p.Longitude);
                 meta = $"Passing through your {ChartInterpreter.Ordinal(house)} house " +

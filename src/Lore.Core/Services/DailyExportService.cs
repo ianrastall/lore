@@ -76,6 +76,13 @@ public static class DailyExportService
         $"{timing.Name} — Solar return, profection and progressions", $"As of {timing.AsOf:d MMMM yyyy}",
         timing.Sections, returnWheelPng, closing: null);
 
+    // The Sky view's reading of a day for everyone, with its wheel and every aspect in effect.
+    public static byte[] SkyToPdf(SkyReading sky, byte[]? wheelPng) => SectionsPdf(
+        "Planetary mood", $"{sky.DateText}  ·  the day reads as {sky.Tone.Label()}",
+        [.. sky.Sections, new DailySection { Heading = "All aspects in effect", Items = [new DailyItem { Text = string.Join("\n", sky.Trace) }] }],
+        wheelPng,
+        "Generated from the aspects the planets make to one another — a prompt for reflection, not a prediction.");
+
     public static byte[] WritersToPdf(WriterBrief brief) => SectionsPdf(brief.Title,
         $"{brief.Kind} · {brief.Anchor} · corpus {brief.CorpusVersion}", brief.Sections, null, null);
 

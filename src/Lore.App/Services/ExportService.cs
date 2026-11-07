@@ -29,6 +29,9 @@ public static class ExportService
     public static Task<byte[]> RenderTransitWheelPngAsync(NatalChart natal, DailyReading reading, int size = 1600) =>
         RenderPngAsync(size, ds => ChartRenderer.DrawTransitWheel(ds, natal, reading, size, size));
 
+    public static Task<byte[]> RenderSkyWheelPngAsync(SkyReading reading, int size = 1600) =>
+        RenderPngAsync(size, ds => ChartRenderer.DrawSkyWheel(ds, reading, size, size));
+
     // The wheel with the Worksheet's tables around and under it. The page is drawn on a
     // surface taller than it can need, then cut to the height it used.
     public static async Task<byte[]> RenderChartSheetPngAsync(NatalChart chart, bool showVerdict = true)

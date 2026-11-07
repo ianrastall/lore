@@ -192,6 +192,35 @@ internal static class ChartRenderer
         DrawBiWheelKey(ds, r, height, $"Inner wheel: {natal.Celebrity.Name}", $"Outer wheel: the sky on {reading.Date:d MMMM yyyy}");
     }
 
+    // ── Sky wheel ──────────────────────────────────────────────────────────────
+    // The day's sky alone, with no chart: the zodiac turned to 0° Aries at the left, the
+    // ten planets at the middle of the day, and the day's aspects between them as lines,
+    // the ones the reading uses heavier and the closer ones stronger.
+    public static void DrawSkyWheel(CanvasDrawingSession ds, SkyReading reading, float width, float height)
+    {
+        float cx = width / 2f;
+        float cy = height / 2f;
+        float r = Math.Min(cx, cy) * 0.93f;
+
+        ds.Clear(Background);
+        DrawZodiacRing(ds, cx, cy, r, 0);
+        ds.DrawEllipse(cx, cy, r * AspectInner, r * AspectInner, RingOuter, 1f);
+
+        foreach (var a in reading.Aspects)
+        {
+            if (reading.Midday.FirstOrDefault(p => p.Planet == a.First) is not { } p1 ||
+                reading.Midday.FirstOrDefault(p => p.Planet == a.Second) is not { } p2) continue;
+            var color = AspectColors[(int)a.Aspect];
+            double closeness = 1 - Math.Min(1, a.MinOrb / Services.TransitService.SkyOrb(a.First));
+            byte alpha = (byte)(a.Shown ? 150 + (int)(closeness * 90) : 50 + (int)(closeness * 70));
+            ds.DrawLine(ToPoint(cx, cy, r * AspectInner, p1.Longitude, 0), ToPoint(cx, cy, r * AspectInner, p2.Longitude, 0),
+                Color.FromArgb(alpha, color.R, color.G, color.B), a.Shown ? 2f : 1f);
+        }
+
+        var planets = reading.Midday.Where(p => Services.TransitService.SkyPlanets.Contains(p.Planet)).ToList();
+        DrawPlanets(ds, cx, cy, r, planets, 0, PlanetRing, HouseOuter * 0.88f, 0.072f);
+    }
+
     // The day's transits, each a line from the moving planet (where it stands at the
     // middle of the day) to the natal point it aspects. The ones the reading writes up
     // are drawn heavier.

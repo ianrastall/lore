@@ -108,6 +108,17 @@ public static class SelfCheck
                     Need(reading.Sections.Count > 0, $"the daily reading for {person.Name} is empty");
                 }
             }
+
+            // The Sky view: its corpus is whole, and today's sky is read.
+            if (daily is not null)
+                Try("sky.json", () =>
+                {
+                    var sky = new SkyInterpreter(Data("sky.json"), daily);
+                    Need(sky.IsAvailable, "sky.json: the Sky view's text is missing or not whole");
+                    var zone = NodaTime.DateTimeZone.Utc;
+                    var day = new TransitService(charts).ScanSky(DateOnly.FromDateTime(DateTime.UtcNow), zone);
+                    Need(sky.Compose(day, zone).Sections.Count >= 3, "the Sky reading for today is short of sections");
+                });
         });
 
         return problems;

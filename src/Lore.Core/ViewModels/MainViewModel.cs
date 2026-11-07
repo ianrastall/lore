@@ -42,6 +42,9 @@ public sealed partial class MainViewModel : ObservableObject
     // The Forecast view's state: the transits coming up for ChartVM's chart.
     public ForecastViewModel ForecastVM { get; }
 
+    // The Sky view: the day's sky for everyone, with no chart.
+    public SkyViewModel SkyVM { get; }
+
     // The Timing view's state: the solar return and progressions for ChartVM's chart.
     public TimingViewModel TimingVM { get; }
 
@@ -147,6 +150,10 @@ public sealed partial class MainViewModel : ObservableObject
     [ObservableProperty]
     public partial bool ShowForecast { get; set; }
 
+    // The Sky view (likewise).
+    [ObservableProperty]
+    public partial bool ShowSky { get; set; }
+
     // The Timing view (likewise).
     [ObservableProperty]
     public partial bool ShowTiming { get; set; }
@@ -187,7 +194,8 @@ public sealed partial class MainViewModel : ObservableObject
         MirrorInterpreter? mirror = null,
         CharacterService? character = null,
         LifeAreaService? lifeAreas = null,
-        WritersViewModel? writers = null)
+        WritersViewModel? writers = null,
+        SkyInterpreter? skyInterpreter = null)
     {
         _settings = settings;
         _celebrities = celebrities;
@@ -202,6 +210,7 @@ public sealed partial class MainViewModel : ObservableObject
         // is worked out when its view is first opened for a chart, not for every chart
         // passed in the list (see OnShowForecastChanged, OnShowSynastryChanged).
         ForecastVM = new ForecastViewModel(transits, dailyInterpreter) { IsActive = false };
+        SkyVM = new SkyViewModel(transits, skyInterpreter) { IsActive = false, Home = DailyVM.Home };
         TimingVM = new TimingViewModel(new TimingService(charts, dailyInterpreter.HouseTopic), cities);
         SynastryVM = new SynastryViewModel(charts, synastryInterpreter, davisonInterpreter) { IsActive = false };
         _inventoryStore = inventoryStore;
@@ -287,6 +296,7 @@ public sealed partial class MainViewModel : ObservableObject
 
     // The Forecast and the Synastry view's search work only while their view is open.
     partial void OnShowForecastChanged(bool value) => ForecastVM.IsActive = value;
+    partial void OnShowSkyChanged(bool value) => SkyVM.IsActive = value;
     partial void OnShowSynastryChanged(bool value) => SynastryVM.IsActive = value;
 
     // Writers discovers the whole group without a selected natal chart. Hand all its
@@ -335,10 +345,11 @@ public sealed partial class MainViewModel : ObservableObject
         {
             if (value == DailyVM.Home) return;
             DailyVM.Home = value;
+            SkyVM.Home = value;
             _settings?.SaveHome(value);
             StatusMessage = value is null
-                ? "Your place is cleared; the Daily view no longer shows the planetary hours."
-                : $"Sunrise, sunset and the planetary hours in the Daily view are now for {value.Name}.";
+                ? "Your place is cleared; the Daily and Sky views no longer show the planetary hours."
+                : $"Sunrise, sunset and the planetary hours in the Daily and Sky views are now for {value.Name}.";
         }
     }
 

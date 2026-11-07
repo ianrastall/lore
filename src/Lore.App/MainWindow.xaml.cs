@@ -451,6 +451,7 @@ public sealed partial class MainWindow : Window
         ViewModel.ShowTiming = view == "Timing";
         ViewModel.ShowSynastry = view == "Synastry";
         ViewModel.ShowInventory = view == "Inventory";
+        ViewModel.ShowSky = view == "Sky";
 
         ChartViewControl.Visibility = Shown(view == "Chart");
         ReportViewControl.Visibility = Shown(view == "Report");
@@ -461,11 +462,12 @@ public sealed partial class MainWindow : Window
         SynastryViewControl.Visibility = Shown(view == "Synastry");
         InventoryViewControl.Visibility = Shown(view == "Inventory");
         WritersViewControl.Visibility = Shown(view == "Writers");
+        SkyViewControl.Visibility = Shown(view == "Sky");
         LegendViewControl.Visibility = Shown(legend);
 
-        // Writers starts without a natal-chart anchor and uses the whole workspace.
-        // Its library search is inside the view; the Charts pane preference is retained.
-        bool writers = view == "Writers";
+        // Writers and Sky start without a natal-chart anchor and use the whole workspace.
+        // Writers' library search is inside the view; the Charts pane preference is retained.
+        bool writers = view is "Writers" or "Sky";
         Grid.SetColumn(ViewWorkspace, writers ? 0 : 2);
         Grid.SetColumnSpan(ViewWorkspace, writers ? 3 : 1);
         ChartsPane.Visibility = ChartsSplitter.Visibility = Shown(!writers && _preferences.ChartsPaneVisible);
@@ -559,6 +561,11 @@ public sealed partial class MainWindow : Window
 
     private async Task ExportCoreAsync(string kind)
     {
+        if (kind.StartsWith("sky", StringComparison.Ordinal))
+        {
+            await ExportSkyAsync(kind);
+            return;
+        }
         try
         {
             // Everything the export will use is taken now, before the save dialog is shown:
@@ -622,6 +629,47 @@ public sealed partial class MainWindow : Window
                 _      => throw new ArgumentOutOfRangeException(nameof(kind)),
             });
 
+            await FileIO.WriteBytesAsync(file, bytes);
+            ViewModel.StatusMessage = $"Exported {file.Name}";
+        }
+        catch (Exception ex)
+        {
+            ViewModel.StatusMessage = "Export failed.";
+            ViewModel.Notice = $"The export could not be written: {ex.Message} Nothing else is affected; try again, or choose another folder.";
+            Diagnostics.Log($"Export {kind} failed: {ex}");
+        }
+    }
+
+    // The Sky view's reading, which needs no chart: written as it is on screen.
+    private async Task ExportSkyAsync(string kind)
+    {
+        try
+        {
+            if (ViewModel.SkyVM.Reading is not { } reading || ViewModel.SkyVM.IsBusy || reading.Date != ViewModel.SkyVM.Date)
+            {
+                ViewModel.StatusMessage = "The reading of the sky is not ready yet — open the Sky view, then try again in a moment.";
+                return;
+            }
+            var (label, extension) = kind switch
+            {
+                "skypdf" => ("PDF document", ".pdf"),
+                "skytxt" => ("Text file", ".txt"),
+                _ => ("PNG image", ".png"),
+            };
+            var picker = new FileSavePicker { SuggestedStartLocation = PickerLocationId.DocumentsLibrary };
+            InitializeWithWindow.Initialize(picker, WindowNative.GetWindowHandle(this));
+            picker.FileTypeChoices.Add(label, [extension]);
+            picker.SuggestedFileName = $"Sky {reading.Date.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture)}";
+            if (await picker.PickSaveFileAsync() is not { } file) return;
+
+            ViewModel.StatusMessage = $"Exporting {file.Name}…";
+            byte[]? wheel = kind is "skypdf" or "skypng" ? await ExportService.RenderSkyWheelPngAsync(reading) : null;
+            byte[] bytes = await Task.Run(() => kind switch
+            {
+                "skypdf" => DailyExportService.SkyToPdf(reading, wheel),
+                "skytxt" => SkyInterpreter.ToText(reading),
+                _ => wheel!,
+            });
             await FileIO.WriteBytesAsync(file, bytes);
             ViewModel.StatusMessage = $"Exported {file.Name}";
         }

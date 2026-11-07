@@ -1,6 +1,6 @@
 # Lore handoff
 
-Version 5.1.0 · 1 November 2026 · Repository `D:/jupiter/lore`, branch `main`, remote `ianrastall/lore`
+Version 5.2.0 · 6 November 2026 · Repository `D:/jupiter/lore`, branch `main`, remote `ianrastall/lore`
 
 ## Where things live
 
@@ -35,6 +35,25 @@ When the XAML compiler reports unknown types with `WMC9999` or `WMC1509`, the ca
 ## Delivered
 
 See [reading expansion validation](docs/validation-5.1.0.md), [Writers validation](docs/validation-5.0.0.md), [4.5.1](docs/validation-4.5.1.md) for the startup-close fix, [4.5](docs/validation-4.5.0.md), [4.4](docs/validation-4.4.0.md), [4.3](docs/validation-4.3.0.md) and [4.2](docs/validation-4.2.0.md) before it, [migration](docs/jupiter-migration.md) for what moved, and [exceptions](docs/jupiter-exceptions.md) for recorded departures.
+
+## Sky (5.2)
+
+Ian asked on 6 November 2026 for "planetary mood": the day itself run through Lore,
+for the world in general. The **Sky** view reads a day with no chart, from the
+aspects the planets make to one another. See the [plan](docs/planetary-mood-plan.md).
+
+- Scan: `TransitService.ScanSky` (`TransitService.Sky.cs`), sharing the Daily scan's
+  hourly sampling (`SampleDay`, `DayOf`). The Moon's contacts use 1°, the others 2°
+  (`SkyOrb`). The Sun–Moon pair is left out: its aspects are the lunar phases.
+- Reading: `SkyInterpreter`, from `content/sky.json` (127 pair lines, one for every
+  pair and tone that can occur; `SkyInterpreter.PossibleKeys`) plus the Moon, phase,
+  sky-event and planetary-hour lines of `daily.json`, through public helpers on
+  `DailyInterpreter` (`MoonItem`, `SkyEventItem`, `SkyNotes`, `HoursSection`, `Varied`).
+- Tone: the Daily view's steps and thresholds. Aspects among Uranus, Neptune and Pluto
+  (`SkyAspect.IsGenerational`) do not count: the decades-long sextiles otherwise made
+  most days Flowing.
+- View: `SkyView`, full workspace like Writers, Ctrl+Shift+4. Exports are handled by
+  `MainWindow.ExportSkyAsync`, outside `ExportRequest`, which requires a chart.
 
 ## Next
 

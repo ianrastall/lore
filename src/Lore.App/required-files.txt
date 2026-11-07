@@ -32,6 +32,7 @@ Data\hospitals.json
 Data\interpretations.json
 Data\reading-variants.json
 Data\daily.json
+Data\sky.json
 Data\synastry.json
 Data\davison.json
 Data\inventory.json

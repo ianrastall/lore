@@ -4,16 +4,16 @@ A Windows desktop application for computing and exploring astrological natal cha
 
 Part of Jupiter. Follows Jupiter style standard 1.1.
 
-**Latest release: v5.1.0** · [Download](../../releases/latest)
+**Latest release: v5.2.0** · [Download](../../releases/latest)
 
 ### Installing
 
 Lore 4 needs **Windows 11 24H2** or later, 64-bit.
 
-1. From the [latest release](../../releases/latest), download **`Lore-5.1.0-win-x64-setup.exe`**. It is a single file with everything inside it; there is nothing else to install (no .NET, no runtimes).
+1. From the [latest release](../../releases/latest), download **`Lore-5.2.0-win-x64-setup.exe`**. It is a single file with everything inside it; there is nothing else to install (no .NET, no runtimes).
 2. Double-click it. It installs for the current user, adds **Lore** to the Start menu, and can be removed from *Settings > Apps* like any other program. An earlier Lore is upgraded in place, and your saved charts, answers and settings stay as they are.
 
-**Prefer not to install?** `Lore-5.1.0-win-x64-portable.zip` is the same program as a folder. Unzip it anywhere and run `Lore.exe` from inside it. Delete the folder to remove it.
+**Prefer not to install?** `Lore-5.2.0-win-x64-portable.zip` is the same program as a folder. Unzip it anywhere and run `Lore.exe` from inside it. Delete the folder to remove it.
 
 > **The installer is not code-signed.** Windows cannot verify who published it and will warn you:
 > - Your browser may say the file *"isn't commonly downloaded"*. Choose **Keep** (in Edge: **⋯ → Keep → Show more → Keep anyway**).
@@ -64,9 +64,10 @@ Lore 4 needs **Windows 11 24H2** or later, 64-bit.
 | **Synastry** | The selected chart compared with a second person's: a written reading and a bi-wheel of the two charts. See below. |
 | **Inventory** | A standard personality questionnaire (the public-domain IPIP-NEO-120) for any chart of your own; the profile it gives, five broad traits and thirty facets, each set beside a reference group; and a reading that sets that profile beside the chart, planet by planet. See below. |
 | **Writers** | Discover notable birth moments for fictional characters, and historical pairs or trios without a starting person. Uses the existing natal, Synastry and Trine readings. Every historical group shares a field, has nearby birthplaces and an oldest-to-youngest gap of at most ten years, and every member must have died at least fifty years ago. |
+| **Sky** | The planetary mood of any day for everyone, with no chart: the aspects the planets make to one another, the Moon, the day's sky events and a tone for each day of the week. See below. |
 | **Legend** | Full-page reference — a grouped list of every glyph, colour, angle, house, and term; click any item for a fuller explanation. |
 
-Ctrl+1 to Ctrl+9 switch between the nine views, F1 opens the Legend, Ctrl+N adds a chart, Ctrl+F jumps to the search box, Ctrl+B shows or hides the Charts pane and Ctrl+, opens Settings. Lore reopens on the chart and view you last had open.
+Ctrl+1 to Ctrl+9 switch between the first nine views, Ctrl+Shift+4 opens Sky, F1 opens the Legend, Ctrl+N adds a chart, Ctrl+F jumps to the search box, Ctrl+B shows or hides the Charts pane and Ctrl+, opens Settings. Lore reopens on the chart and view you last had open.
 
 ![Lore showing the written Report for Albert Einstein](docs/images/screenshot-einstein-report.png)
 
@@ -88,6 +89,22 @@ The **Daily** view writes a horoscope for the selected chart, for today or any d
 - **Transit wheel.** Beside the reading, the birth chart drawn inside and the moving planets (as they stand at the middle of the day) in a band around it, with each transit as an aspect line; the ones the reading uses are drawn heavier.
 
 It is a prompt for reflection, not a prediction: the ranking of transits is an editorial priority, not a probability.
+
+### Sky: the planetary mood of a day
+The **Sky** view reads a day for everyone. No chart is selected or used: the planets are the same for the whole world, so the reading comes from the **aspects they make to one another** (Mars square Saturn, Venus trine Jupiter), the Moon and what the sky itself does that day.
+
+- **Your calendar day.** The day runs from midnight to midnight on your own clock, sampled hour by hour, with each aspect refined to the time it is exact.
+- **Today's aspects.** Up to four aspects involving the Sun, Mercury, Venus or Mars, within 2°, in the order they peak.
+- **The Moon's contacts.** Every aspect the Moon makes exactly during the day, with its time, alongside its sign, phase and void-of-course hours.
+- **Also in the sky.** New and Full Moons, eclipses, stations, planets changing sign, and the retrogrades of Mercury, Venus and Mars.
+- **Longer-running themes.** Up to three aspects between Jupiter and the planets beyond it, marked building, exact or easing with their dates.
+- **The day's tone and the week.** The Daily view's five steps (Flowing, Mixed, Demanding, Focused, Quiet), from the balance of easy and hard aspects. Aspects among Uranus, Neptune and Pluto last for years, so they are read but do not set a day's tone. A strip above the reading gives the tone of each day of the week; click a day to read it.
+- **Sky wheel.** The planets at the middle of the day, 0° Aries at the left, with the day's aspects as lines.
+- **Planetary hours.** With a city chosen under **Settings → Where you are**, sunrise, sunset and the planetary hours there.
+- **Deterministic and offline.** Every sentence comes from an editable corpus, `content\sky.json` (127 lines, one for each pair of planets and each kind of aspect that can occur), with the Moon, phases and sky events from `content\daily.json`.
+- **Explainable and exportable.** *Why this reading?* lists every aspect in effect and which ones the reading used. **File → Export → Sky** saves it as PDF or text, or the wheel as PNG.
+
+Astrology has no agreed way to read a day for the world; the ranking and the tone are Lore's own. It is a prompt for reflection, not a prediction.
 
 ### Synastry
 The **Synastry** view compares the selected chart with a second person's — any bundled figure or any of your own charts. Press **+** beside a name in the Charts list, or type in the **Compare with…** box. The **+** fills the next empty place, and in Trine that is the third person once there is a second; the selected chart stays selected. Right-clicking a name offers the same from any view.
@@ -618,7 +635,11 @@ Lore itself is free software under the **GNU Affero General Public License v3.0*
 
 ## Version History
 
-### 5.1.0 (current)
+### 5.2.0 (current)
+- **Sky.** A tenth view that reads the planetary mood of any day for everyone, with no chart: the aspects the planets make to one another, the Moon's contacts and the day's sky events, a tone for the day and for each day of its week, a sky wheel, and export to PDF, text or PNG. Ctrl+Shift+4 opens it.
+- **Writers to Synastry.** A historical pair or trio found in Writers opens in Synastry with **Open in Synastry**.
+
+### 5.1.0
 - **Broader readings.** 431 additional authored paragraphs across 325 existing entries in the natal, daily, synastry, Davison and self-report readers. They are in `content/reading-variants.json`, alongside the original corpora. Selection is deterministic; reading the same chart again does not shuffle its wording.
 - **Less repetition in trios.** Three pairs with the same relationship category receive distinct descriptions of that category. Scores, thresholds, selected contacts and relationship labels retain their existing rules.
 - **Shared with Writers.** Writers receives the same expanded readings. Previously saved briefs retain their frozen text. No writing prompts are added.
