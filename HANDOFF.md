@@ -11,7 +11,7 @@ Version 5.2.0 · 6 November 2026 · Repository `D:/jupiter/lore`, branch `main`,
 | Content | `content/` in the repository, `Data\` in the installed app |
 | Swiss Ephemeris | `third_party/swisseph`, compiled to `Native/sweph.dll` (not committed) |
 | Release | `build/build.ps1`, `build/installer.iss` |
-| Installed app | Ian's machine: `D:\Lore`, all-users install, 5.1.0 (admin needed to upgrade) |
+| Installed app | Ian's machine: `D:\Lore`, all-users install, 5.2.0 (admin needed to upgrade) |
 | Other apps | Jupiter HUD 0.4.1 runs `Lore.exe --daily-reading`; keep `lore.daily.v1` stable |
 | Reader's data | `%LOCALAPPDATA%\Lore`. Never in the repository. |
 
@@ -41,6 +41,8 @@ See [reading expansion validation](docs/validation-5.1.0.md), [Writers validatio
 Ian asked on 6 November 2026 for "planetary mood": the day itself run through Lore,
 for the world in general. The **Sky** view reads a day with no chart, from the
 aspects the planets make to one another. See the [plan](docs/planetary-mood-plan.md).
+Installed and released 6 November 2026 ([validation](docs/validation-5.2.0.md)); the
+view has not been checked on screen yet.
 
 - Scan: `TransitService.ScanSky` (`TransitService.Sky.cs`), sharing the Daily scan's
   hourly sampling (`SampleDay`, `DayOf`). The Moon's contacts use 1°, the others 2°

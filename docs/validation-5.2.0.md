@@ -45,5 +45,17 @@ not set the tone: 2026 reads 149 Flowing, 121 Mixed, 91 Demanding and 4 Quiet da
 
 ## Installation
 
-Not yet installed on Ian's machine: the all-users install at `D:\Lore` needs an
-administrator prompt, and Ian is asked before any installer or window is opened.
+Installed on Ian's machine with his approval on 6 November 2026.
+
+| Check | Result |
+| --- | --- |
+| Upgrade | 5.1.0 to 5.2.0 at `D:\Lore`, all-users; installer exit 0; no restart |
+| Version | `Lore.exe` reports `5.2.0+c65fdee`. A first install from a build made before the commit carried the previous commit's hash; it was rebuilt from the committed tree and installed again. |
+| Uninstaller | Registered as Lore 5.2.0, install location `D:\Lore\` |
+| Start Menu | `Lore.lnk` targets `D:\Lore\Lore.exe`; launched it with `--self-check`, exit 0, OK (including the Sky check) |
+| Saved data | All five existing files retain their SHA-256 checksums; HUD daily caches excluded |
+| Release | GitHub release 5.2.0 at `c65fdee`, marked Latest, with the installer and portable zip |
+
+The installed check was headless. The Sky view has not yet been looked at on screen;
+no window was opened. Install logs, checksums and self-check output are under the
+ignored `artifacts/qa-5.2.0`.
