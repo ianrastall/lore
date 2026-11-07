@@ -71,5 +71,18 @@ Mars building); planetary hours with a home place; the Legend's Sky group.
 
 Two faults were found and fixed in 5.2.1: "Demanding" was cut off in the week strip,
 and each day in it was announced to screen readers by its tone alone, so all seven
-could sound the same. They now read "Monday 16 November: Demanding". Install logs, checksums and self-check output are under the
-ignored `artifacts/qa-5.2.0`.
+could sound the same. They now read "Monday 16 November: Demanding".
+
+## Installed (5.2.1)
+
+| Check | Result |
+| --- | --- |
+| Upgrade | 5.2.0 to 5.2.1 at `D:\Lore`, all-users; installer exit 0; no restart |
+| Version | `Lore.exe` reports `5.2.1+7b3cbe5` |
+| Uninstaller | Registered as Lore 5.2.1 |
+| Start Menu | `Lore.lnk` targets `D:\Lore\Lore.exe`; `--self-check` exit 0, OK |
+| Saved data | All five existing files retain their SHA-256 checksums |
+| Release | GitHub release 5.2.1 at `7b3cbe5`, marked Latest |
+
+Install logs, checksums and self-check output are under the ignored
+`artifacts/qa-5.2.0`.
