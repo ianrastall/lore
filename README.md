@@ -1,5 +1,8 @@
 # Lore
 
+> [!NOTE]
+> I wrote Lore for a friend who never ended up using it. Development is frozen, and the project has been abandoned.
+
 A Windows desktop application for computing and exploring astrological natal charts, and reading a daily horoscope from them, powered by the Swiss Ephemeris. Browse a curated library of historical figures, every one with a documented birth time, or add your own.
 
 Part of Jupiter. Follows Jupiter style standard 1.1.
