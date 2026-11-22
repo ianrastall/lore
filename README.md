@@ -1,7 +1,7 @@
 # Lore
 
 > [!NOTE]
-> I wrote Lore for a friend who never ended up using it. Development is frozen, and the project has been abandoned.
+> Development has resumed. An Android version is being built; until it is released, Lore runs on Windows only.
 
 A Windows desktop application for computing and exploring astrological natal charts, and reading a daily horoscope from them, powered by the Swiss Ephemeris. Browse a curated library of historical figures, every one with a documented birth time, or add your own.
 
