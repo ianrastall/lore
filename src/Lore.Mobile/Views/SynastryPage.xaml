@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Two layouts: with no one chosen, the library's best matches for this chart (a list
+     that can run to every figure, so it is a virtualised CollectionView with the search
+     at its head); with someone chosen, the reading. -->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Lore.ViewModels;assembly=Lore.Core"
+             xmlns:models="clr-namespace:Lore.Models;assembly=Lore.Core"
+             xmlns:views="clr-namespace:Lore.Mobile.Views"
+             x:Class="Lore.Mobile.Views.SynastryPage"
+             x:DataType="vm:SynastryViewModel"
+             Title="Synastry">
+    <Grid>
+        <Label x:Name="NoChart" Text="Choose someone in Charts, then compare their chart with another person's here." Style="{StaticResource Secondary}"
+               HorizontalOptions="Center" VerticalOptions="Center" Padding="24" />
+
+        <!-- No one chosen yet: search, or pick from the matches. -->
+        <CollectionView x:Name="Finder" ItemsSource="{Binding ShownMatches}" SelectionMode="None" Margin="12,0">
+            <CollectionView.Header>
+                <VerticalStackLayout Spacing="8" Padding="0,12,0,0">
+                    <Label Text="{Binding Title}" Style="{StaticResource Title}" SemanticProperties.HeadingLevel="Level1" />
+                    <SearchBar x:Name="PartnerSearch" Placeholder="Compare with…" TextChanged="OnPartnerTyped" />
+                    <VerticalStackLayout x:Name="PartnerResults" />
+                    <Label Text="{Binding PromptText, Converter={StaticResource PhonePrompt}}" Style="{StaticResource Secondary}"
+                           IsVisible="{Binding PromptText, Converter={StaticResource HasText}}" />
+                    <ActivityIndicator x:Name="FinderBusy" HeightRequest="24" />
+                    <Label Text="{Binding ErrorText}" Style="{StaticResource Error}" IsVisible="{Binding ErrorText, Converter={StaticResource HasText}}" />
+                    <VerticalStackLayout IsVisible="{Binding ShowMatches}" Spacing="6">
+                        <Label Text="{Binding ResultsHeading}" Style="{StaticResource Heading}" SemanticProperties.HeadingLevel="Level2" />
+                        <Label Text="{Binding ResultsSummary}" Style="{StaticResource Secondary}" />
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="6">
+                            <Entry Text="{Binding ResultSearch}" Placeholder="Filter by name" />
+                            <Picker x:Name="SortPicker" Grid.Column="1" Title="Order" SelectedItem="{Binding SelectedSort}" />
+                        </Grid>
+                        <Label Text="{Binding ResultsCount}" Style="{StaticResource Secondary}" />
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </CollectionView.Header>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:SynastryMatch">
+                    <Grid ColumnDefinitions="6,*" ColumnSpacing="10" Padding="0,8">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnMatchTapped" CommandParameter="{Binding .}" />
+                        </Grid.GestureRecognizers>
+                        <BoxView Color="{Binding ColorHex, Converter={StaticResource HexColor}}" />
+                        <VerticalStackLayout Grid.Column="1" Spacing="1">
+                            <Label Text="{Binding Name}" FontAttributes="Bold" />
+                            <Label Text="{Binding Detail}" Style="{StaticResource Secondary}" />
+                            <Label Style="{StaticResource Secondary}">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{Binding ToneLabel}" />
+                                        <Span Text=" · " />
+                                        <Span Text="{Binding LevelText}" />
+                                        <Span Text=" · " />
+                                        <Span Text="{Binding ShareText}" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </VerticalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Someone chosen: the reading. -->
+        <ScrollView x:Name="Reading">
+            <VerticalStackLayout Padding="12" Spacing="8">
+                <Label Text="{Binding Title}" Style="{StaticResource Title}" SemanticProperties.HeadingLevel="Level1" />
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Text="{Binding PartnerText}" FontAttributes="Bold" VerticalOptions="Center" />
+                    <Button Grid.Column="1" Text="Someone else" Command="{Binding ClearPartnerCommand}" />
+                </Grid>
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="4">
+                    <CheckBox IsChecked="{Binding ShowDavison}" VerticalOptions="Center" />
+                    <Label Grid.Column="1" Text="Show the Davison chart (the relationship's own chart)" VerticalOptions="Center" />
+                </Grid>
+                <Label Text="{Binding PromptText, Converter={StaticResource PhonePrompt}}" Style="{StaticResource Secondary}"
+                       IsVisible="{Binding PromptText, Converter={StaticResource HasText}}" />
+                <ActivityIndicator x:Name="ReadingBusy" HeightRequest="24" />
+                <Label Text="{Binding ErrorText}" Style="{StaticResource Error}" IsVisible="{Binding ErrorText, Converter={StaticResource HasText}}" />
+                <Label Text="{Binding ToneText}" TextColor="{Binding ToneColorHex, Converter={StaticResource HexColor}}" FontAttributes="Bold" FontSize="17" />
+                <views:WheelView x:Name="Wheel"
+                                 SemanticProperties.Description="The two charts on one wheel: the first person inside, the second around them." />
+                <Label Text="{Binding WheelCaption, Converter={StaticResource Glyphs}}" Style="{StaticResource Secondary}" />
+                <views:SectionsView Sections="{Binding Sections}" />
+                <Button Text="{Binding TraceHeader}" Clicked="OnToggleTrace" HorizontalOptions="Start" Margin="0,16,0,0"
+                        IsVisible="{Binding TraceHeader, Converter={StaticResource HasText}}" LineBreakMode="WordWrap" />
+                <Label x:Name="TraceText" Text="{Binding Trace, Converter={StaticResource Glyphs}}" Style="{StaticResource Secondary}" IsVisible="False" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

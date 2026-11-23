@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:Lore.Mobile.Views"
+             x:Class="Lore.Mobile.App">
+    <!-- Jupiter's palette (Jupiter.UI's Themes/Jupiter.xaml), following the phone's light
+         or dark setting. -->
+    <Application.Resources>
+        <ResourceDictionary>
+            <Color x:Key="WindowDark">#1C1B19</Color>
+            <Color x:Key="WindowLight">#F3F1EC</Color>
+            <Color x:Key="SurfaceDark">#24221F</Color>
+            <Color x:Key="SurfaceLight">#FAF9F6</Color>
+            <Color x:Key="SeparatorDark">#3B3732</Color>
+            <Color x:Key="SeparatorLight">#DCD7CE</Color>
+            <Color x:Key="TextDark">#E8E4DC</Color>
+            <Color x:Key="TextLight">#1C1B19</Color>
+            <Color x:Key="SecondaryDark">#B8B2A8</Color>
+            <Color x:Key="SecondaryLight">#57524B</Color>
+            <Color x:Key="AccentDark">#A7BDCF</Color>
+            <Color x:Key="AccentLight">#2F5F84</Color>
+            <Color x:Key="ErrorDark">#E99A91</Color>
+            <Color x:Key="ErrorLight">#A3362A</Color>
+
+            <views:GlyphText x:Key="Glyphs" />
+            <views:HexColor x:Key="HexColor" />
+            <views:HasText x:Key="HasText" />
+            <views:IsNotNull x:Key="IsNotNull" />
+            <views:Not x:Key="Not" />
+            <views:PickerDate x:Key="PickerDate" />
+            <views:PhonePrompt x:Key="PhonePrompt" />
+
+            <Style TargetType="ContentPage" ApplyToDerivedTypes="True">
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark={StaticResource WindowDark}, Light={StaticResource WindowLight}}" />
+            </Style>
+            <Style TargetType="Label">
+                <Setter Property="TextColor" Value="{AppThemeBinding Dark={StaticResource TextDark}, Light={StaticResource TextLight}}" />
+                <Setter Property="FontSize" Value="15" />
+            </Style>
+            <Style x:Key="Title" TargetType="Label">
+                <Setter Property="FontSize" Value="22" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="TextColor" Value="{AppThemeBinding Dark={StaticResource TextDark}, Light={StaticResource TextLight}}" />
+            </Style>
+            <Style x:Key="Heading" TargetType="Label">
+                <Setter Property="FontSize" Value="18" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="Margin" Value="0,16,0,4" />
+                <Setter Property="TextColor" Value="{AppThemeBinding Dark={StaticResource TextDark}, Light={StaticResource TextLight}}" />
+            </Style>
+            <Style x:Key="Secondary" TargetType="Label">
+                <Setter Property="FontSize" Value="13" />
+                <Setter Property="TextColor" Value="{AppThemeBinding Dark={StaticResource SecondaryDark}, Light={StaticResource SecondaryLight}}" />
+            </Style>
+            <Style x:Key="Body" TargetType="Label">
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="LineHeight" Value="1.3" />
+                <Setter Property="TextColor" Value="{AppThemeBinding Dark={StaticResource TextDark}, Light={StaticResource TextLight}}" />
+            </Style>
+            <Style x:Key="Error" TargetType="Label">
+                <Setter Property="TextColor" Value="{AppThemeBinding Dark={StaticResource ErrorDark}, Light={StaticResource ErrorLight}}" />
+            </Style>
+            <Style TargetType="Button">
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark={StaticResource SurfaceDark}, Light={StaticResource SurfaceLight}}" />
+                <Setter Property="TextColor" Value="{AppThemeBinding Dark={StaticResource AccentDark}, Light={StaticResource AccentLight}}" />
+                <Setter Property="BorderColor" Value="{AppThemeBinding Dark={StaticResource SeparatorDark}, Light={StaticResource SeparatorLight}}" />
+                <Setter Property="BorderWidth" Value="1" />
+                <Setter Property="CornerRadius" Value="6" />
+                <Setter Property="Padding" Value="12,6" />
+                <Setter Property="MinimumHeightRequest" Value="44" />
+            </Style>
+            <Style TargetType="Entry">
+                <Setter Property="TextColor" Value="{AppThemeBinding Dark={StaticResource TextDark}, Light={StaticResource TextLight}}" />
+                <Setter Property="PlaceholderColor" Value="{AppThemeBinding Dark={StaticResource SecondaryDark}, Light={StaticResource SecondaryLight}}" />
+            </Style>
+            <Style TargetType="SearchBar">
+                <Setter Property="TextColor" Value="{AppThemeBinding Dark={StaticResource TextDark}, Light={StaticResource TextLight}}" />
+                <Setter Property="PlaceholderColor" Value="{AppThemeBinding Dark={StaticResource SecondaryDark}, Light={StaticResource SecondaryLight}}" />
+                <Setter Property="CancelButtonColor" Value="{AppThemeBinding Dark={StaticResource SecondaryDark}, Light={StaticResource SecondaryLight}}" />
+            </Style>
+            <Style TargetType="Picker">
+                <Setter Property="TextColor" Value="{AppThemeBinding Dark={StaticResource TextDark}, Light={StaticResource TextLight}}" />
+                <Setter Property="TitleColor" Value="{AppThemeBinding Dark={StaticResource SecondaryDark}, Light={StaticResource SecondaryLight}}" />
+            </Style>
+            <Style TargetType="DatePicker">
+                <Setter Property="TextColor" Value="{AppThemeBinding Dark={StaticResource TextDark}, Light={StaticResource TextLight}}" />
+            </Style>
+            <Style TargetType="TimePicker">
+                <Setter Property="TextColor" Value="{AppThemeBinding Dark={StaticResource TextDark}, Light={StaticResource TextLight}}" />
+            </Style>
+            <Style TargetType="CheckBox">
+                <Setter Property="Color" Value="{AppThemeBinding Dark={StaticResource AccentDark}, Light={StaticResource AccentLight}}" />
+            </Style>
+            <Style TargetType="ActivityIndicator">
+                <Setter Property="Color" Value="{AppThemeBinding Dark={StaticResource AccentDark}, Light={StaticResource AccentLight}}" />
+            </Style>
+            <Style TargetType="BoxView" x:Key="Rule">
+                <Setter Property="HeightRequest" Value="1" />
+                <Setter Property="Color" Value="{AppThemeBinding Dark={StaticResource SeparatorDark}, Light={StaticResource SeparatorLight}}" />
+            </Style>
+            <Style TargetType="Shell" ApplyToDerivedTypes="True">
+                <Setter Property="Shell.BackgroundColor" Value="{AppThemeBinding Dark={StaticResource SurfaceDark}, Light={StaticResource SurfaceLight}}" />
+                <Setter Property="Shell.ForegroundColor" Value="{AppThemeBinding Dark={StaticResource TextDark}, Light={StaticResource TextLight}}" />
+                <Setter Property="Shell.TitleColor" Value="{AppThemeBinding Dark={StaticResource TextDark}, Light={StaticResource TextLight}}" />
+                <Setter Property="Shell.TabBarBackgroundColor" Value="{AppThemeBinding Dark={StaticResource SurfaceDark}, Light={StaticResource SurfaceLight}}" />
+                <Setter Property="Shell.TabBarForegroundColor" Value="{AppThemeBinding Dark={StaticResource AccentDark}, Light={StaticResource AccentLight}}" />
+                <Setter Property="Shell.TabBarTitleColor" Value="{AppThemeBinding Dark={StaticResource AccentDark}, Light={StaticResource AccentLight}}" />
+                <Setter Property="Shell.TabBarUnselectedColor" Value="{AppThemeBinding Dark={StaticResource SecondaryDark}, Light={StaticResource SecondaryLight}}" />
+                <Setter Property="Shell.UnselectedColor" Value="{AppThemeBinding Dark={StaticResource SecondaryDark}, Light={StaticResource SecondaryLight}}" />
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

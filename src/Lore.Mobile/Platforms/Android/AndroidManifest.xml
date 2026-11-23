@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Lore needs no permissions: everything it reads is inside the app, and nothing is sent
+     anywhere. Backups of the app's own folder are off, so a person's charts and answers
+     are not copied to a cloud account without their choosing. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+  <application android:allowBackup="false" android:fullBackupContent="false" android:dataExtractionRules="@xml/data_extraction_rules"
+               android:icon="@mipmap/appicon" android:roundIcon="@mipmap/appicon_round" android:supportsRtl="true" android:label="Lore" />
+</manifest>

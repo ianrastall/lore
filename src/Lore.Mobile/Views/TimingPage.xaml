@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Lore.ViewModels;assembly=Lore.Core"
+             xmlns:models="clr-namespace:Lore.Models;assembly=Lore.Core"
+             xmlns:views="clr-namespace:Lore.Mobile.Views"
+             x:Class="Lore.Mobile.Views.TimingPage"
+             x:DataType="vm:TimingViewModel"
+             Title="Timing">
+    <Grid>
+        <Label x:Name="NoChart" Text="Choose someone in Charts to see the timing of their chart." Style="{StaticResource Secondary}"
+               HorizontalOptions="Center" VerticalOptions="Center" Padding="24" />
+        <ScrollView x:Name="Body">
+            <VerticalStackLayout Padding="12" Spacing="8">
+                <Label Text="{Binding Title}" Style="{StaticResource Title}" SemanticProperties.HeadingLevel="Level1" />
+                <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="6">
+                    <Button Text="‹" Command="{Binding PreviousYearCommand}" SemanticProperties.Description="A year earlier" />
+                    <DatePicker Grid.Column="1" Date="{Binding PickerDate, Converter={StaticResource PickerDate}}" Format="d MMM yyyy" HorizontalOptions="Center" />
+                    <Button Grid.Column="2" Text="›" Command="{Binding NextYearCommand}" SemanticProperties.Description="A year later" />
+                    <Button Grid.Column="3" Text="Today" Command="{Binding TodayCommand}" />
+                </Grid>
+
+                <Label Text="{Binding PlaceText}" Style="{StaticResource Secondary}" />
+                <VerticalStackLayout IsVisible="{Binding CanChoosePlace}" Spacing="4">
+                    <SearchBar x:Name="CitySearch" Placeholder="Cast the return for another city" TextChanged="OnCityTyped" />
+                    <VerticalStackLayout x:Name="CityResults" />
+                    <Button Text="Use the birthplace" Command="{Binding UseBirthplaceCommand}" IsVisible="{Binding HasPlace}" HorizontalOptions="Start" />
+                </VerticalStackLayout>
+
+                <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" HeightRequest="24" />
+                <Label Text="{Binding ErrorText}" Style="{StaticResource Error}" IsVisible="{Binding ErrorText, Converter={StaticResource HasText}}" />
+                <views:WheelView x:Name="Wheel" IsVisible="{Binding HasReturnChart}" SemanticProperties.Description="The solar return chart." />
+                <Label Text="{Binding WheelCaption, Converter={StaticResource Glyphs}}" Style="{StaticResource Secondary}" />
+                <views:SectionsView Sections="{Binding Sections}" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

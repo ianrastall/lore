@@ -401,6 +401,16 @@ The 507 tests cover the parts that must stay right: birth-time resolution (dayli
 
 > **Note:** The installer is unsigned, so Windows will warn about it the first time; see [Installing](#installing).
 
+### Building for Android
+
+An Android version is in development: `src/Lore.Mobile`, a .NET MAUI app that runs the same `Lore.Core` as Windows. It needs a .NET 10 SDK with the `maui-android` workload, the Android SDK and NDK (`ANDROID_HOME`) and a JDK (`JAVA_HOME`).
+
+```powershell
+pwsh build\build-android.ps1   # tests, Swiss Ephemeris for Android, signed APK in dist\
+```
+
+See [docs/android.md](docs/android.md) for what it covers so far and how it is built and signed.
+
 ---
 
 ## Data Files

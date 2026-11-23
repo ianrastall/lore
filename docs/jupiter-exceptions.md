@@ -57,3 +57,12 @@ are separate windows, sized in effective pixels and attached to the shared accen
 **Splitter.** The Charts pane uses the toolkit `GridSplitter` at 8 pixels with the window background, as in Audio Bookshelf.
 
 **Status bar progress.** A `ProgressRing` at the end of the status bar marks calculation, which is usually under five seconds but can run longer for a large library rescoring.
+
+## Android edition
+
+Decided 22 November 2026 ([Android](android.md)). Jupiter's standard and Jupiter.UI cover Windows desktop apps; there is no Android standard, so the phone app records its choices here.
+
+- **Stack: .NET MAUI with the C# core**, not Kotlin and Jetpack Compose as in Offline Maps. Offline Maps' core is Rust and reachable from Kotlin; Lore's is C#, which Kotlin cannot call, and rewriting it would give two engines to keep in step. MAUI runs `Lore.Core`'s own source (built for Android by `src/Lore.Core.Android`) and binds its view models directly.
+- **No Jupiter.UI.** It is WinUI-only. The phone app takes Jupiter's colours by value (window, surface, text, separator) and follows the phone's light or dark setting; the accent is Jupiter's info blue rather than the system accent.
+- **The wheel is a second renderer** (SkiaSharp), ported from the Win2D one with the same layout and colours. Drawing has no shared abstraction yet.
+- **Distribution:** a signed APK, as Offline Maps. The Windows installer rule does not apply; install, upgrade with data kept, and uninstall are checked on a real phone.

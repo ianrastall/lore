@@ -1,0 +1,7 @@
+<Project>
+  <!-- Lore.Core as the Android app uses it (see Lore.Core.Android.csproj). -->
+  <PropertyGroup>
+    <LoreAndroid>true</LoreAndroid>
+  </PropertyGroup>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+</Project>

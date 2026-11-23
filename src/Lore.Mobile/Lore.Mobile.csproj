@@ -1,0 +1,83 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Lore for Android: .NET MAUI over the same Lore.Core the Windows app uses, so the
+       charts, readings and figure library are the tested ones. See docs/android.md. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0-android</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <UseMaui>true</UseMaui>
+    <SingleProject>true</SingleProject>
+    <RootNamespace>Lore.Mobile</RootNamespace>
+    <AssemblyName>Lore.Mobile</AssemblyName>
+    <ApplicationTitle>Lore</ApplicationTitle>
+    <ApplicationId>io.github.ianrastall.lore</ApplicationId>
+    <!-- Android versions are separate from the Windows versions. ApplicationVersion must
+         go up with every release that is to install over the one before. -->
+    <ApplicationDisplayVersion>0.1.0</ApplicationDisplayVersion>
+    <ApplicationVersion>1</ApplicationVersion>
+    <Version>0.1.0</Version>
+    <!-- Android 10, as Offline Maps. -->
+    <SupportedOSPlatformVersion>29</SupportedOSPlatformVersion>
+    <RuntimeIdentifiers>android-arm64;android-x64</RuntimeIdentifiers>
+    <MauiEnableXamlCBindingWithSourceCompilation>true</MauiEnableXamlCBindingWithSourceCompilation>
+    <MauiStrictXamlCompilation>true</MauiStrictXamlCompilation>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <SweRoot>$(RepoRoot)third_party\swisseph\</SweRoot>
+    <!-- The core's JSON uses reflection; trimming would remove what it needs. Mono's
+         ahead-of-time compilation needs trimming, so it is off too: the app is compiled
+         as it runs. -->
+    <PublishTrimmed>false</PublishTrimmed>
+    <AndroidLinkMode>None</AndroidLinkMode>
+    <RunAOTCompilation>false</RunAOTCompilation>
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <AndroidKeyStore Condition="'$(LoreKeystore)' != ''">true</AndroidKeyStore>
+    <AndroidSigningKeyStore>$(LoreKeystore)</AndroidSigningKeyStore>
+    <AndroidSigningKeyAlias>lore</AndroidSigningKeyAlias>
+    <AndroidSigningStorePass>env:LORE_KEYSTORE_PASSWORD</AndroidSigningStorePass>
+    <AndroidSigningKeyPass>env:LORE_KEYSTORE_PASSWORD</AndroidSigningKeyPass>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Lore.Core.Android\Lore.Core.Android.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="SkiaSharp.Views.Maui.Controls" />
+    <!-- The core's PDF exports are not offered on Android, and QuestPDF has no Android
+         build: its Linux libraries would only be dead weight in the app. -->
+    <PackageReference Include="QuestPDF" ExcludeAssets="native" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <MauiIcon Include="Resources\AppIcon\appicon.png" Color="#1C1B19" ForegroundScale="0.8" />
+    <MauiSplashScreen Include="Resources\Splash\splash.png" Color="#1C1B19" BaseSize="200,200" />
+    <MauiFont Include="Resources\Fonts\*" />
+    <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <!-- What Lore reads, unpacked from the app on first start (ContentFiles). The same
+       files the Windows app installs under Data\ and Assets\Ephemeris\. -->
+  <ItemGroup>
+    <MauiAsset Include="$(RepoRoot)content\*.json" LogicalName="content\%(Filename)%(Extension)" />
+    <MauiAsset Include="$(SweRoot)ephe\*.se1" LogicalName="ephe\%(Filename)%(Extension)" />
+    <MauiAsset Include="$(SweRoot)seleapsec.txt" LogicalName="ephe\seleapsec.txt" />
+    <MauiAsset Include="$(RepoRoot)LICENSE" LogicalName="LICENSE.txt" />
+  </ItemGroup>
+
+  <!-- Swiss Ephemeris, built by build\build-sweph-android.ps1. -->
+  <ItemGroup>
+    <AndroidNativeLibrary Include="$(RepoRoot)Native\android\arm64-v8a\libsweph.so" Abi="arm64-v8a" />
+    <AndroidNativeLibrary Include="$(RepoRoot)Native\android\x86_64\libsweph.so" Abi="x86_64" />
+  </ItemGroup>
+
+  <Target Name="RequireSwephAndroid" BeforeTargets="Build"
+          Condition="!Exists('$(RepoRoot)Native\android\arm64-v8a\libsweph.so') or !Exists('$(RepoRoot)Native\android\x86_64\libsweph.so')">
+    <Error Text="Swiss Ephemeris for Android is missing. Run: pwsh build\build-sweph-android.ps1" />
+  </Target>
+
+</Project>

@@ -7,12 +7,14 @@ using System.Runtime.InteropServices;
 
 namespace Lore.Services;
 
-// P/Invoke wrapper for the Swiss Ephemeris C library (sweph.dll, x64).
-// Build-SwephDll.ps1 compiles the DLL into Native\ from the source bundled under Data\;
-// the .csproj copies it beside the exe and the *.se1 data files to Assets\Ephemeris\.
+// P/Invoke wrapper for the Swiss Ephemeris C library: sweph.dll on Windows, libsweph.so
+// on Android. build\build-sweph.ps1 compiles the DLL into Native\ from the source in
+// third_party\swisseph, and build\build-sweph-android.ps1 the Android libraries into
+// Native\android\; each app's project packs its own beside it, with the *.se1 data files.
 internal static partial class SwissEphemeris
 {
-    private const string Dll = "sweph.dll";
+    // No extension: .NET adds ".dll" on Windows and looks for "libsweph.so" on Android.
+    private const string Dll = "sweph";
 
     // Planet body numbers (ipl parameter)
     public const int SE_SUN        = 0;

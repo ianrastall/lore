@@ -7,11 +7,6 @@
     <Version>5.2.1</Version>
     <Authors>Ian Rastall</Authors>
     <Product>Lore</Product>
-    <Platforms>x64</Platforms>
-    <!-- An unspecified platform (the SDK default AnyCPU) means x64; any other platform is rejected below. -->
-    <Platform Condition="'$(Platform)' == '' or '$(Platform)' == 'AnyCPU'">x64</Platform>
-    <PlatformTarget>x64</PlatformTarget>
-    <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <RestoreLockedMode Condition="'$(ContinuousIntegrationBuild)' == 'true'">true</RestoreLockedMode>
@@ -19,7 +14,19 @@
     <RepoRoot>$([MSBuild]::NormalizeDirectory('$(MSBuildThisFileDirectory)'))</RepoRoot>
   </PropertyGroup>
 
-  <Target Name="RejectUnsupportedPlatform" BeforeTargets="Restore;Build" Condition="'$(Platform)' != 'x64' or '$(RuntimeIdentifier)' != 'win-x64'">
+  <!-- The Windows app, the core and the tests build for x64 Windows only. The Android app
+       (src/Lore.Mobile) and its build of the core (src/Lore.Core.Android) set LoreAndroid
+       in their own Directory.Build.props and choose their own platforms. -->
+  <PropertyGroup Condition="'$(LoreAndroid)' != 'true'">
+    <Platforms>x64</Platforms>
+    <!-- An unspecified platform (the SDK default AnyCPU) means x64; any other platform is rejected below. -->
+    <Platform Condition="'$(Platform)' == '' or '$(Platform)' == 'AnyCPU'">x64</Platform>
+    <PlatformTarget>x64</PlatformTarget>
+    <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == ''">win-x64</RuntimeIdentifier>
+  </PropertyGroup>
+
+  <Target Name="RejectUnsupportedPlatform" BeforeTargets="Restore;Build"
+          Condition="'$(LoreAndroid)' != 'true' and ('$(Platform)' != 'x64' or '$(RuntimeIdentifier)' != 'win-x64')">
     <Error Text="Lore builds only for Platform x64 and RuntimeIdentifier win-x64 (got $(Platform) / $(RuntimeIdentifier))." />
   </Target>
 </Project>

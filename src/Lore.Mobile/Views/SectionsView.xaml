@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- The written reading of the Daily, Sky, Timing and Synastry views: headed sections of
+     items, each with an optional title and a smaller line under it (as ReadingList on
+     Windows). -->
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:Lore.Models;assembly=Lore.Core"
+             xmlns:views="clr-namespace:Lore.Mobile.Views"
+             x:Class="Lore.Mobile.Views.SectionsView"
+             x:DataType="views:SectionsView"
+             x:Name="Root">
+    <VerticalStackLayout x:Name="List" BindableLayout.ItemsSource="{Binding Sections, Source={x:Reference Root}}">
+        <BindableLayout.ItemTemplate>
+            <DataTemplate x:DataType="models:DailySection">
+                <VerticalStackLayout>
+                    <Label Text="{Binding Heading, Converter={StaticResource Glyphs}}" Style="{StaticResource Heading}" SemanticProperties.HeadingLevel="Level2" />
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding Items}" Spacing="10">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="models:DailyItem">
+                                <VerticalStackLayout Spacing="2">
+                                    <Label Text="{Binding Title, Converter={StaticResource Glyphs}}" FontAttributes="Bold" IsVisible="{Binding HasTitle}" />
+                                    <Label Text="{Binding Meta, Converter={StaticResource Glyphs}}" Style="{StaticResource Secondary}" IsVisible="{Binding HasMeta}" />
+                                    <Label Text="{Binding Text, Converter={StaticResource Glyphs}}" Style="{StaticResource Body}" />
+                                </VerticalStackLayout>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </DataTemplate>
+        </BindableLayout.ItemTemplate>
+    </VerticalStackLayout>
+</ContentView>

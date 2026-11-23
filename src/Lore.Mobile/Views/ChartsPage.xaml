@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Lore.ViewModels;assembly=Lore.Core"
+             xmlns:models="clr-namespace:Lore.Models;assembly=Lore.Core"
+             x:Class="Lore.Mobile.Views.ChartsPage"
+             x:DataType="vm:MainViewModel"
+             Title="Charts">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="New chart" Order="Primary" Clicked="OnNewChart" />
+        <ToolbarItem Text="About Lore" Order="Secondary" Clicked="OnAbout" />
+    </ContentPage.ToolbarItems>
+
+    <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="12,4,12,0">
+        <SearchBar Text="{Binding SearchText}" Placeholder="Search by name or birthplace" />
+        <Picker Grid.Row="1" Title="Category" ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}" />
+        <VerticalStackLayout Grid.Row="2" Spacing="4">
+            <Label Text="{Binding Notice}" Style="{StaticResource Error}" IsVisible="{Binding Notice, Converter={StaticResource HasText}}" />
+            <Label Text="{Binding StatusMessage}" Style="{StaticResource Secondary}" IsVisible="{Binding StatusMessage, Converter={StaticResource HasText}}" />
+            <ActivityIndicator IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" HeightRequest="24" />
+        </VerticalStackLayout>
+
+        <CollectionView x:Name="People" Grid.Row="3" ItemsSource="{Binding DisplayedCelebrities}" SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Celebrity">
+                    <Grid ColumnDefinitions="*,Auto" Padding="4,10" ColumnSpacing="8">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnPersonTapped" CommandParameter="{Binding .}" />
+                        </Grid.GestureRecognizers>
+                        <VerticalStackLayout Spacing="1">
+                            <Label Text="{Binding Name}" FontAttributes="Bold" LineBreakMode="TailTruncation" />
+                            <Label Style="{StaticResource Secondary}" LineBreakMode="TailTruncation">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{Binding Category}" />
+                                        <Span Text=" · " />
+                                        <Span Text="{Binding BirthDateLabel}" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                            <Label Text="{Binding BirthPlace}" Style="{StaticResource Secondary}" LineBreakMode="TailTruncation" />
+                        </VerticalStackLayout>
+                        <!-- Green for an Extraordinary chart, red for an Alarming one, nothing for the rest. -->
+                        <Ellipse Grid.Column="1" WidthRequest="10" HeightRequest="10" VerticalOptions="Center"
+                                 Fill="{Binding VerdictColorHex, Converter={StaticResource HexColor}}"
+                                 SemanticProperties.Description="{Binding VerdictLabel}" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            <CollectionView.EmptyView>
+                <Label Text="No one matches." Style="{StaticResource Secondary}" HorizontalOptions="Center" Margin="0,24" />
+            </CollectionView.EmptyView>
+        </CollectionView>
+    </Grid>
+</ContentPage>

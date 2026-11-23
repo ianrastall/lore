@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Five places along the bottom. Chart holds the wheel, the written report and the
+     timing of the chosen person's chart, as tabs along its top. -->
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:views="clr-namespace:Lore.Mobile.Views"
+       x:Class="Lore.Mobile.AppShell"
+       FlyoutBehavior="Disabled">
+    <TabBar>
+        <Tab Title="Charts" Route="charts">
+            <Tab.Icon><FontImageSource FontFamily="Symbols2" Glyph="&#x2630;" /></Tab.Icon>
+            <ShellContent Title="Charts" ContentTemplate="{DataTemplate views:ChartsPage}" Route="list" />
+        </Tab>
+        <Tab Title="Chart" Route="chart">
+            <Tab.Icon><FontImageSource FontFamily="Symbols2" Glyph="&#x2609;" /></Tab.Icon>
+            <ShellContent Title="Wheel" ContentTemplate="{DataTemplate views:WheelPage}" Route="wheel" />
+            <ShellContent Title="Report" ContentTemplate="{DataTemplate views:ReportPage}" Route="report" />
+            <ShellContent Title="Timing" ContentTemplate="{DataTemplate views:TimingPage}" Route="timing" />
+        </Tab>
+        <Tab Title="Daily" Route="daily">
+            <Tab.Icon><FontImageSource FontFamily="Symbols" Glyph="&#x263D;" /></Tab.Icon>
+            <ShellContent Title="Daily" ContentTemplate="{DataTemplate views:DailyPage}" Route="day" />
+        </Tab>
+        <Tab Title="Synastry" Route="synastry">
+            <Tab.Icon><FontImageSource FontFamily="Symbols" Glyph="&#x260C;" /></Tab.Icon>
+            <ShellContent Title="Synastry" ContentTemplate="{DataTemplate views:SynastryPage}" Route="pair" />
+        </Tab>
+        <Tab Title="Sky" Route="sky">
+            <Tab.Icon><FontImageSource FontFamily="Symbols2" Glyph="&#x2736;" /></Tab.Icon>
+            <ShellContent Title="Sky" ContentTemplate="{DataTemplate views:SkyPage}" Route="today" />
+        </Tab>
+    </TabBar>
+</Shell>

@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Lore.Core for the Android app: the same source files as src/Lore.Core, built into an
+       assembly of the same name for any processor rather than for x64 Windows. Nothing is
+       written here; a change to the core is made in src/Lore.Core, where the tests run. -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>Lore</RootNamespace>
+    <AssemblyName>Lore.Core</AssemblyName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <IsPackable>false</IsPackable>
+    <CoreSource>$(MSBuildThisFileDirectory)..\Lore.Core\</CoreSource>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="$(CoreSource)**\*.cs" Exclude="$(CoreSource)obj\**;$(CoreSource)bin\**" LinkBase="Core" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Lore.Mobile" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="QuestPDF" />
+    <PackageReference Include="NodaTime" />
+    <PackageReference Include="GeoTimeZone" />
+  </ItemGroup>
+
+</Project>

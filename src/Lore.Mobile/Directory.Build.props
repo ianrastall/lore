@@ -1,0 +1,8 @@
+<Project>
+  <!-- The Android app: it and the core it builds choose their own platforms (see the
+       repository's Directory.Build.props, imported below). -->
+  <PropertyGroup>
+    <LoreAndroid>true</LoreAndroid>
+  </PropertyGroup>
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+</Project>

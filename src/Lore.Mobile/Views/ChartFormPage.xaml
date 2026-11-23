@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- A new chart, or one of the person's own charts changed: the Windows app's Add Chart
+     dialog, with the fields a phone needs. A chart's other details (an Old Style date, a
+     birth time's margin, an offset set by hand, a rating and source) are kept as they are
+     when it is changed here. -->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Lore.Mobile.Views.ChartFormPage"
+             Title="New chart">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem x:Name="SaveItem" Text="Save" Clicked="OnSave" />
+    </ContentPage.ToolbarItems>
+    <ScrollView>
+        <VerticalStackLayout Padding="12" Spacing="6">
+            <Label Text="Name" FontAttributes="Bold" />
+            <Entry x:Name="NameBox" Placeholder="Whose chart" />
+
+            <Label Text="Birth date" FontAttributes="Bold" Margin="0,8,0,0" />
+            <DatePicker x:Name="DateBox" Format="d MMMM yyyy" DateSelected="OnWhenChanged" />
+            <Label x:Name="JulianNote" Text="This date is recorded Old Style (Julian calendar) and is kept so." Style="{StaticResource Secondary}" IsVisible="False" />
+
+            <Label Text="Birth time" FontAttributes="Bold" Margin="0,8,0,0" />
+            <TimePicker x:Name="TimeBox" Format="HH:mm" PropertyChanged="OnTimeChanged" />
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="4">
+                <CheckBox x:Name="TimeUnknown" CheckedChanged="OnTimeUnknownChanged" VerticalOptions="Center" />
+                <Label Grid.Column="1" Text="Birth time not known (the chart is placed for noon, without houses)" VerticalOptions="Center" />
+            </Grid>
+
+            <Label Text="Birthplace" FontAttributes="Bold" Margin="0,8,0,0" />
+            <SearchBar x:Name="CitySearch" Placeholder="Search cities: Paris France" TextChanged="OnCityTyped" />
+            <VerticalStackLayout x:Name="CityResults" />
+            <SearchBar x:Name="HospitalSearch" Placeholder="Or search hospitals, for closer coordinates" TextChanged="OnHospitalTyped" />
+            <VerticalStackLayout x:Name="HospitalResults" />
+            <Entry x:Name="PlaceBox" Placeholder="Place name" />
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                <VerticalStackLayout>
+                    <Label Text="Latitude (north +)" Style="{StaticResource Secondary}" />
+                    <Entry x:Name="LatBox" Keyboard="Text" TextChanged="OnCoordinatesTyped" />
+                </VerticalStackLayout>
+                <VerticalStackLayout Grid.Column="1">
+                    <Label Text="Longitude (east +)" Style="{StaticResource Secondary}" />
+                    <Entry x:Name="LonBox" Keyboard="Text" TextChanged="OnCoordinatesTyped" />
+                </VerticalStackLayout>
+            </Grid>
+            <Label x:Name="OffsetText" Style="{StaticResource Secondary}" Text="Pick a birthplace to resolve its time zone." />
+
+            <Label Text="Note" FontAttributes="Bold" Margin="0,8,0,0" />
+            <Editor x:Name="NoteBox" AutoSize="TextChanges" Placeholder="Optional" />
+
+            <Label x:Name="ErrorText" Style="{StaticResource Error}" IsVisible="False" />
+            <HorizontalStackLayout x:Name="SavingRow" Spacing="8" IsVisible="False">
+                <ActivityIndicator IsRunning="True" HeightRequest="20" WidthRequest="20" />
+                <Label Text="Saving, and scoring the list again…" Style="{StaticResource Secondary}" VerticalOptions="Center" />
+            </HorizontalStackLayout>
+            <Button x:Name="SaveButton" Text="Save" Clicked="OnSave" HorizontalOptions="Start" Margin="0,8,0,24" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

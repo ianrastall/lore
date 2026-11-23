@@ -14,6 +14,7 @@ Version 5.2.1 · 6 November 2026 · Repository `D:/jupiter/lore`, branch `main`,
 | Installed app | Ian's machine: `D:\Lore`, all-users install, 5.2.1 (admin needed to upgrade) |
 | Other apps | Jupiter HUD 0.4.1 runs `Lore.exe --daily-reading`; keep `lore.daily.v1` stable |
 | Reader's data | `%LOCALAPPDATA%\Lore`. Never in the repository. |
+| Android app | `src/Lore.Mobile` (MAUI) over `src/Lore.Core.Android`; `build/build-android.ps1`. See [Android](docs/android.md). |
 
 ## Commands
 
@@ -56,6 +57,18 @@ test copy fixed the week strip ([validation](docs/validation-5.2.0.md)).
   most days Flowing.
 - View: `SkyView`, full workspace like Writers, Ctrl+Shift+4. Exports are handled by
   `MainWindow.ExportSkyAsync`, outside `ExportRequest`, which requires a chart.
+
+## Android (from 22 November 2026)
+
+Ian resumed Lore on 22 November 2026 (the README's "abandoned" note of 9 November is
+replaced) and asked for an Android version. He chose .NET MAUI over the existing core,
+and a first scope of the library and My Charts, wheel and Report, Daily and Sky,
+Synastry and Timing. Version 0.1.0 runs on the emulator, debug and signed release;
+it is not yet installed on his Galaxy S26 FE (ADB dropped) or published. Build with
+`pwsh build\build-android.ps1`, which uses the .NET in `C:\Program Files\dotnet`: the
+`D:\lang` SDK's workload manifests are stale. Keep the signing key folder
+`%LOCALAPPDATA%\Jupiter\Lore\AndroidSigning`. Details, verification and what is left:
+[docs/android.md](docs/android.md).
 
 ## Next
 
