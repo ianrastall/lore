@@ -50,4 +50,6 @@ On the Android 16 emulator (x86_64, API 36), debug build:
 
 The signed release APK (92,135,497 bytes, SHA-256 `9afc713d9e492de6eeeb87059ae11947d972d27e65b5c5102a35f611a5ef7671`) verifies with `apksigner`, is 16 KB aligned, and installed and loaded the library on the emulator.
 
-**Not yet done:** installing on Ian's Galaxy S26 FE (its ADB connection dropped before the install), timing the first start and the scoring pass on the phone, an upgrade install that keeps My Charts, dark theme, TalkBack, and publication.
+On Ian's Galaxy S26 FE (SM-S741U, Android 17), the same signed APK installed over ADB on 22 November 2026. The first start, unpacking the content and scoring the whole library, took 14 seconds to "11163 people loaded". The phone's dark theme was followed, and Einstein's wheel, dignity score and summary matched the emulator. No crash or ANR was logged.
+
+**Not yet done:** an upgrade install that keeps My Charts, the other views on the phone, TalkBack, and publication. On the wheel the green or red verdict rim runs through the ASC and DSC labels, as on Windows.

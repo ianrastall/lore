@@ -64,7 +64,7 @@ Ian resumed Lore on 22 November 2026 (the README's "abandoned" note of 9 Novembe
 replaced) and asked for an Android version. He chose .NET MAUI over the existing core,
 and a first scope of the library and My Charts, wheel and Report, Daily and Sky,
 Synastry and Timing. Version 0.1.0 runs on the emulator, debug and signed release;
-it is not yet installed on his Galaxy S26 FE (ADB dropped) or published. Build with
+installed on his Galaxy S26 FE the same day (first start 14 s); not yet published. Build with
 `pwsh build\build-android.ps1`, which uses the .NET in `C:\Program Files\dotnet`: the
 `D:\lang` SDK's workload manifests are stale. Keep the signing key folder
 `%LOCALAPPDATA%\Jupiter\Lore\AndroidSigning`. Details, verification and what is left:
